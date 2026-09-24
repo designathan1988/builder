@@ -270,6 +270,7 @@ export const PLANTS: Plant[] = [
         feature: 'quick-panel',
         control: 'gap',
         labelKey: 'property.gap',
+        faceLabelKey: null,
         icon: null,
         disabledReasonKey: 'common.notAvailableYet',
         placement: { region: 'quick-panel', order: 99 },
@@ -525,11 +526,12 @@ export const PLANTS: Plant[] = [
   {
     id: 'chord-conflict',
     rule: 'chord-conflict',
-    description: 'Duplicate also binds Shift+Ctrl+z anywhere, the chord of Redo',
+    description: 'Preview also binds Shift+Ctrl+z anywhere, the chord of Redo',
     apply: (m) => {
-      const duplicate = command(m, 'element.duplicate');
-      const doors = list(duplicate.entryPoints);
-      doors.push({ ...structuredClone(doors[0]), id: 'key-planted', chord: 'Shift+Ctrl+z' } as Json);
+      const preview = command(m, 'view.enterPreview');
+      const doors = list(preview.entryPoints);
+      const shortcut = doors.find((d) => d.kind === 'shortcut' && d.context === 'global');
+      doors.push({ ...structuredClone(shortcut), id: 'key-planted', chord: 'Shift+Ctrl+z' } as Json);
     },
   },
   {
@@ -775,10 +777,10 @@ export const PLANTS: Plant[] = [
   {
     id: 'feature-command-link',
     rule: 'feature-command-link',
-    description: 'hide-element introduces element.toggleHidden but does not list it',
+    description: 'layers-expand-collapse-all introduces layers.expandAll but does not list it',
     apply: (m) => {
-      const hide = feature(m, 'hide-element');
-      hide.commands = strings(hide.commands).filter((c) => c !== 'element.toggleHidden');
+      const expand = feature(m, 'layers-expand-collapse-all');
+      expand.commands = strings(expand.commands).filter((c) => c !== 'layers.expandAll');
     },
   },
 ];
@@ -806,6 +808,7 @@ PLANTS.push(
         toolbar: 'canvas-toolbar',
         drawnAs: 'button',
         labelKey: 'styleState.hover',
+        faceLabelKey: null,
         icon: 'mouse-pointer-2',
         disabledReasonKey: 'common.notAvailableYet',
         placement: { region: 'canvas-toolbar', order: 13 },
@@ -877,6 +880,14 @@ PLANTS.push(
     description: 'both the Explorer and Insert are open at the first start, and the sidebar shows one view',
     apply: (m) => {
       obj(obj(obj(m.files['layout.json']).panels).elements).open = true;
+    },
+  },
+  {
+    id: 'default-theme-unknown',
+    rule: 'unknown-reference',
+    description: 'environment.json gives a fresh profile the theme "sepia", which preferences.setTheme does not offer',
+    apply: (m) => {
+      obj(obj(m.files['environment.json']).theme).default = 'sepia';
     },
   },
   {

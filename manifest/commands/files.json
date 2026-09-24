@@ -39,6 +39,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.pages.add",
+          "faceLabelKey": null,
           "icon": "plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -98,6 +99,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.pages.rename",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -150,6 +152,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.pages.duplicate",
+          "faceLabelKey": null,
           "icon": "copy",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -208,6 +211,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.pages.delete",
+          "faceLabelKey": null,
           "icon": "trash",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -256,6 +260,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.pages.switch",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -280,6 +285,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.pages.switch",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -301,6 +307,7 @@
           "feature": "explorer-pages",
           "toolbar": "top-bar",
           "labelKey": "topbar.pageSwitcher",
+          "faceLabelKey": null,
           "icon": "file",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -356,6 +363,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.files.newFolder",
+          "faceLabelKey": null,
           "icon": "folder-plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -411,6 +419,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.files.newFile",
+          "faceLabelKey": null,
           "icon": "file-plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -471,6 +480,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.files.rename",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -529,6 +539,7 @@
           "zone": "folder",
           "gesture": "explorer-drag",
           "labelKey": "command.files.moveTo",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -550,6 +561,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.files.moveTo",
+          "faceLabelKey": null,
           "icon": "folder-input",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -609,6 +621,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.files.delete",
+          "faceLabelKey": null,
           "icon": "trash",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -657,6 +670,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.files.open",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -681,6 +695,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.files.open",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -729,6 +744,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.files.closeTab",
+          "faceLabelKey": null,
           "icon": "x",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -789,6 +805,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.files.upload",
+          "faceLabelKey": null,
           "icon": "arrow-up-to-line",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -811,6 +828,7 @@
           "zone": "explorer-folder",
           "gesture": "file-drag",
           "labelKey": "command.files.upload",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -868,6 +886,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.files.save",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -890,6 +909,7 @@
           "context": "code-editor",
           "gesture": null,
           "labelKey": "command.files.save",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -956,6 +976,7 @@
           "zone": "drop-proposal",
           "gesture": "file-drag",
           "labelKey": "command.assets.insertImage",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",

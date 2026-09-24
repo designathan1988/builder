@@ -2,7 +2,7 @@
 
 The single interface contract. It says what every region of the window holds, where every door of the manifest is drawn and in which order, how the canvas behaves, and which tokens the interface uses. The builder never invents where a control lives: if a control is not placed by this document and by the manifest, stop and ask.
 
-The interface combines direction A "classic refined" (top bar, inspector, element grid, rulers, breakpoint warning) with direction C "studio" (activity bar, explorer, file tabs, Canvas / Split / Code). Only B's canvas behaviour is kept (number field on a handle, hover measurement, drop indicator).
+The interface has the look of direction C "studio" and the structure of direction A "classic refined". C gives the look: dark by default, its colours and teal accent, small radii, the code font, IDE-compact rows and the coloured status bar. A gives the structure (top bar, inspector, element grid, rulers, breakpoint warning, region sizes) and its visual inspector controls (the alignment matrix, the box model, segmented keyword buttons, value fields), laid out in C's compact rows. C also gives the activity bar, the explorer, the file tabs and Canvas / Split / Code; Canvas stays the default view. Only B's canvas behaviour is kept (number field on a handle, hover measurement, drop indicator).
 
 Sources, in this order of authority:
 
@@ -12,7 +12,7 @@ Sources, in this order of authority:
 | The breakpoints in cascade order, the first the base | `breakpoints` of `manifest/properties.json` (`base: true` on the first and only there) |
 | The categories of the Checks tab | `manifest/checks.json` |
 | The region and order of every door | `placement` of each door in `manifest/commands/*.json` |
-| The visual source | `design/final/index.html` (12 states, the Split view, light and dark, English and pt-BR) and its screenshots in `design/final/shots/` |
+| The visual source | `design/final/index.html` (12 states, the Split view, dark (a fresh profile's theme) and light, English and pt-BR) and its screenshots in `design/final/shots/` |
 | Design tokens | `design/final/tokens.json` (DTCG), built by `npm run gen` into `src/ui/tokens.css` |
 | One term per concept | `src/i18n/glossary.json` |
 | Icons | Lucide, the one icon library (see "Icons"); each icon named in the manifest |
@@ -39,7 +39,7 @@ Checks that hold this contract (both are part of the evidence of every session t
 
 Sizes come from the tokens: top bar 40, activity bar 40, sidebar 224, inspector 288, file tabs 34, canvas toolbar 36, rulers 20, frame tabs 28, dock strip 28 (open dock 212), status bar 24, code pane 400. In the default Canvas view the canvas area (file tabs, canvas toolbar, rulers and stage) is 888 px wide at 1440 × 900, the width it had in direction A, and 1368 px at 1920 × 1080. The sidebar, the inspector and the dock are fixed, resizable with their splitters and collapsible (Ctrl+B, Ctrl+Alt+B, Ctrl+\\); nothing floats except menus, the palette, popovers, the quick panel and the text toolbar.
 
-Theme: it follows the system setting (`prefers-color-scheme`); the Theme menu (View > Theme) can force Light or Dark. Light and dark are both complete token sets.
+Theme: a fresh profile opens in Dark: the default theme is data, `theme.default` of `manifest/environment.json`, beside the default locale. View > Theme offers Light, Dark and System; System follows the system setting (`prefers-color-scheme`). The choice is stored with the preferences and survives a reload. Light and dark are both complete token sets.
 
 ## Regions
 
@@ -123,7 +123,9 @@ Every region below is an id of `manifest/layout.json`. "Order" is the `order` of
 
 What is not a command, and so not a door (`data-local` in the mockup): opening a menu, a popover or the quick panel (its chip); typing in a search field (the Insert search, the property search) before choosing a result; the palette's scope filters; starting to pick an interaction's target (the pick itself is a door); scrolling a panel. Read-only displays are not controls: the active breakpoint in the selector bar, the save state, sizes, counts, the class list of the Styles view, the check preview, key hints.
 
-Build order. A door is shown disabled with "not available yet" until its feature is built, except in the context menu, which leaves it out. The activity bar's Insert and Explorer buttons arrive with `palette-click-insert` and `layers-tree`, so `workspace.setPanelOpen` is introduced by `editor-shell`; the inspector's Style and Settings tabs arrive with `inspector-panel`, so `workspace.setActiveTab` is introduced there; the Interactions tab arrives with `events-actions`. Before `explorer-pages`, the Explorer view shows only Layers.
+Build order. A door is shown disabled with "not available yet" until its feature is built, except in the context menu, which leaves it out. The activity bar's Insert and Explorer buttons arrive with `palette-click-insert` and `layers-tree`, so `workspace.setPanelOpen` is introduced by `editor-shell`; the inspector's Style and Settings tabs arrive with `inspector-panel`, so `workspace.setActiveTab` is introduced there; the Interactions tab arrives with `events-actions`. The Explorer view draws Pages, Files and Layers from the start: until `explorer-pages` and the file features are built, the doors of Pages and Files are drawn disabled with "not available yet".
+
+Face text. A control shows its door's label, or, when the drawing shows a shorter text, the door's face label (`faceLabelKey` in the manifest): "+ Class" for Apply a class, "Add" for Add an interaction. The label stays the control's accessible name and tooltip. A control that stands for an item (a palette entry, a section, a panel, an element) shows the item's name.
 
 ## Canvas
 
@@ -195,7 +197,7 @@ The project is a file tree and the export is that same tree as a ZIP.
 
 The bottom dock is collapsed to its strip by default. Its tabs are **Timeline** and **Checks**; Keyboard shortcuts (Help) and Document (developer tools) open there as tabs when asked. Checks is one list with the categories Accessibility, Links, SEO and Export; the collapsed strip previews the first issue. Checks never block editing or export.
 
-The status bar shows the last message, the selection path, the size, the breakpoint, the element count, the zoom, the language and the save state.
+The status bar shows the last message, the selection path, the size, the breakpoint, the element count, the zoom, the language and the save state. It is the one coloured bar of the window (direction C): `--color-status-bar` with `--color-on-status-bar` for its text and icons.
 
 ## Keyboard model
 
@@ -262,6 +264,7 @@ Colours, type, spacing, sizes, radii and shadows come only from the custom prope
 - Type: micro 10/14 semibold (badges, ruler numbers, file-type tags), overline 11/16 semibold with 0.66 px letter spacing (upper-case sidebar headers), caption 11/16, body 12/18, label 12/16 semibold, title 13/18 semibold, dialog 14/20, input 15/22, code 12/18 mono.
 - Spacing scale: 0, 2, 4, 6, 8, 10, 12, 16, 20, 24, 32.
 - Targets: 24 × 24 px at least (`--size-target-min`); rows 24; fields 24; top bar and picker controls 28.
-- Radii: 3, 4, 6, 8, pill. Shadows: three elevations per theme.
-- Colours per theme: surfaces, borders, text (muted and subtle keep 4.5:1 on the surface), accent, focus, the five value origins and their soft backgrounds, the canvas overlay colours (selection, hover, measure, padding, margin, gap, drop, target, handle), the mode colours (breakpoint, state, text editing) with their on-colours, syntax colours for the code view, danger, warning, success and the scrim.
-- High density like direction A: every inspector section present and open until collapsed, labels in a 100 px column, values in the rest.
+- Radii: 2, 3, 4, 6, pill (direction C). Shadows: three elevations per theme.
+- Code font (`--font-mono`: Cascadia Code, Cascadia Mono, Consolas, monospace) for code and for everything that is code-like wherever it appears: the code view, file names (the Explorer, the file tabs, the page picker), tags (Layers rows, the selector bar), class names (the selector bar's chips, canvas labels), and CSS values (every inspector value field, the box model's numbers, a collapsed section's summary).
+- Colours per theme (direction C's palette, teal accent): surfaces, borders, text, accent, focus, the five value origins and their soft backgrounds, the canvas overlay colours (selection, hover, measure, padding, margin, gap, drop, target, handle), the mode colours (breakpoint, state, text editing) with their on-colours, the status bar and its on-colour, syntax colours for the code view, danger, warning, success and the scrim. `npm run gen` fails when an on-colour reads below 4.5:1 on its colour (on-accent, on-status-bar, on-mode-*, on-canvas-hover), or when text, muted or subtle text does on the surfaces it sits on.
+- IDE-compact density (direction C): every row is one row high (24): sidebar rows and section titles, inspector section heads (upper-case overline) and property rows, one row per property, a label column (100 px) and a value column. A's visual controls (the alignment matrix, the box model, segmented keyword buttons, value fields) sit in the value column. Every inspector section is present and open until collapsed.

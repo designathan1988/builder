@@ -27,6 +27,7 @@
           "context": "global",
           "gesture": null,
           "labelKey": "command.zoomIn",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -46,6 +47,7 @@
           "context": "global",
           "gesture": null,
           "labelKey": "command.zoomIn",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -64,6 +66,7 @@
           "feature": "zoom-keyboard-buttons",
           "toolbar": "status-bar",
           "labelKey": "command.zoomIn",
+          "faceLabelKey": null,
           "icon": "plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -84,6 +87,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.zoomIn",
+          "faceLabelKey": null,
           "icon": "plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -126,6 +130,7 @@
           "context": "global",
           "gesture": null,
           "labelKey": "command.zoomOut",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -144,6 +149,7 @@
           "feature": "zoom-keyboard-buttons",
           "toolbar": "status-bar",
           "labelKey": "command.zoomOut",
+          "faceLabelKey": null,
           "icon": "minus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -164,6 +170,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.zoomOut",
+          "faceLabelKey": null,
           "icon": "minus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -204,6 +211,7 @@
           "context": "global",
           "gesture": null,
           "labelKey": "command.zoomReset",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -221,6 +229,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.zoomReset",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -265,6 +274,7 @@
           "feature": "zoom-keyboard-buttons",
           "menu": "zoom",
           "labelKey": "view.zoomPreset.25",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -287,6 +297,7 @@
           "feature": "zoom-keyboard-buttons",
           "menu": "zoom",
           "labelKey": "view.zoomPreset.50",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -309,6 +320,7 @@
           "feature": "zoom-keyboard-buttons",
           "menu": "zoom",
           "labelKey": "view.zoomPreset.100",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -331,6 +343,7 @@
           "feature": "zoom-keyboard-buttons",
           "menu": "zoom",
           "labelKey": "view.zoomPreset.200",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -353,6 +366,7 @@
           "feature": "zoom-keyboard-buttons",
           "menu": "zoom",
           "labelKey": "view.zoomPreset.400",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -394,6 +408,7 @@
           "feature": "zoom-keyboard-buttons",
           "toolbar": "status-bar",
           "labelKey": "command.zoomFit",
+          "faceLabelKey": null,
           "icon": "scan",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -414,6 +429,7 @@
           "feature": "zoom-keyboard-buttons",
           "menu": "zoom",
           "labelKey": "command.zoomFit",
+          "faceLabelKey": null,
           "icon": "scan",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -434,6 +450,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.zoomFit",
+          "faceLabelKey": null,
           "icon": "scan",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -486,6 +503,7 @@
           "modifier": "Ctrl",
           "gesture": "wheel",
           "labelKey": "command.zoomAt",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -533,6 +551,7 @@
           "modifier": null,
           "gesture": "wheel",
           "labelKey": "command.pan",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -551,6 +570,7 @@
           "modifier": "Shift",
           "gesture": "wheel",
           "labelKey": "command.pan",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -570,6 +590,7 @@
           "zone": "stage",
           "gesture": "space-pan",
           "labelKey": "command.pan",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -589,6 +610,7 @@
           "zone": "stage",
           "gesture": "space-pan",
           "labelKey": "command.pan",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -631,6 +653,7 @@
           "feature": "breakpoints-switch",
           "toolbar": "breakpoint-tabs",
           "labelKey": "breakpoint.desktop",
+          "faceLabelKey": null,
           "icon": "monitor",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -654,6 +677,7 @@
           "feature": "breakpoints-switch",
           "toolbar": "breakpoint-tabs",
           "labelKey": "breakpoint.laptop",
+          "faceLabelKey": null,
           "icon": "laptop",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -677,6 +701,7 @@
           "feature": "breakpoints-switch",
           "toolbar": "breakpoint-tabs",
           "labelKey": "breakpoint.tablet",
+          "faceLabelKey": null,
           "icon": "tablet",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -700,6 +725,7 @@
           "feature": "breakpoints-switch",
           "toolbar": "breakpoint-tabs",
           "labelKey": "breakpoint.phone",
+          "faceLabelKey": null,
           "icon": "smartphone",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -723,6 +749,7 @@
           "feature": "preview-mode",
           "toolbar": "preview-bar",
           "labelKey": "breakpoint.desktop",
+          "faceLabelKey": null,
           "icon": "monitor",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -746,6 +773,7 @@
           "feature": "preview-mode",
           "toolbar": "preview-bar",
           "labelKey": "breakpoint.laptop",
+          "faceLabelKey": null,
           "icon": "laptop",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -769,6 +797,7 @@
           "feature": "preview-mode",
           "toolbar": "preview-bar",
           "labelKey": "breakpoint.tablet",
+          "faceLabelKey": null,
           "icon": "tablet",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -792,6 +821,7 @@
           "feature": "preview-mode",
           "toolbar": "preview-bar",
           "labelKey": "breakpoint.phone",
+          "faceLabelKey": null,
           "icon": "smartphone",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -843,6 +873,7 @@
           "feature": "code-panel-view",
           "toolbar": "canvas-toolbar",
           "labelKey": "editorView.canvas",
+          "faceLabelKey": null,
           "icon": "app-window",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -866,6 +897,7 @@
           "feature": "code-panel-view",
           "toolbar": "canvas-toolbar",
           "labelKey": "editorView.split",
+          "faceLabelKey": null,
           "icon": "columns-2",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -889,6 +921,7 @@
           "feature": "code-panel-view",
           "toolbar": "canvas-toolbar",
           "labelKey": "editorView.code",
+          "faceLabelKey": null,
           "icon": "code",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -911,6 +944,7 @@
           "feature": "code-panel-view",
           "menu": "view",
           "labelKey": "editorView.split",
+          "faceLabelKey": null,
           "icon": "columns-2",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -957,6 +991,7 @@
           "feature": "state-styles",
           "menu": "style-state",
           "labelKey": "styleState.base",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -979,6 +1014,7 @@
           "feature": "state-styles",
           "menu": "style-state",
           "labelKey": "styleState.hover",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1001,6 +1037,7 @@
           "feature": "state-styles",
           "menu": "style-state",
           "labelKey": "styleState.focus",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1023,6 +1060,7 @@
           "feature": "state-styles",
           "menu": "style-state",
           "labelKey": "styleState.active",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1045,6 +1083,7 @@
           "feature": "state-styles",
           "menu": "style-state",
           "labelKey": "styleState.disabled",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1067,6 +1106,7 @@
           "feature": "state-styles",
           "menu": "style-state",
           "labelKey": "styleState.invalid",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1089,6 +1129,7 @@
           "feature": "state-styles",
           "menu": "style-state",
           "labelKey": "styleState.placeholderShown",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1131,6 +1172,7 @@
           "context": "global",
           "gesture": null,
           "labelKey": "command.preview",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -1150,6 +1192,7 @@
           "context": "global",
           "gesture": null,
           "labelKey": "command.preview",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -1168,6 +1211,7 @@
           "feature": "preview-mode",
           "toolbar": "top-bar",
           "labelKey": "command.preview",
+          "faceLabelKey": null,
           "icon": "play",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1188,6 +1232,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.preview",
+          "faceLabelKey": null,
           "icon": "play",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1228,6 +1273,7 @@
           "context": "preview",
           "gesture": null,
           "labelKey": "command.exitPreview",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -1247,6 +1293,7 @@
           "context": "preview",
           "gesture": null,
           "labelKey": "command.exitPreview",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -1265,6 +1312,7 @@
           "feature": "preview-mode",
           "toolbar": "preview-bar",
           "labelKey": "command.exitPreview",
+          "faceLabelKey": null,
           "icon": "x",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1307,6 +1355,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.toggleOutlines",
+          "faceLabelKey": null,
           "icon": "square-dashed",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1349,6 +1398,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.toggleZones",
+          "faceLabelKey": null,
           "icon": "square-square",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1391,6 +1441,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.toggleRulers",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1433,6 +1484,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.toggleSmartGuides",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1475,6 +1527,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.toggleEqualSpacing",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1519,6 +1572,7 @@
           "context": "global",
           "gesture": null,
           "labelKey": "command.grid.columns",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -1540,6 +1594,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.grid.columns",
+          "faceLabelKey": null,
           "icon": "columns-3",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1564,6 +1619,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.grid.columns",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1610,6 +1666,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.grid.rows",
+          "faceLabelKey": null,
           "icon": "rows-3",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1634,6 +1691,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.grid.rows",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1680,6 +1738,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.grid.dots",
+          "faceLabelKey": null,
           "icon": "grip",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1704,6 +1763,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.grid.dots",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1767,6 +1827,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.grid.settings",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1793,6 +1854,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.grid.settings",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1819,6 +1881,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.grid.settings",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1879,6 +1942,7 @@
           "zone": "page",
           "gesture": "guide-drag",
           "labelKey": "command.guides.create",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -1898,6 +1962,7 @@
           "zone": "page",
           "gesture": "guide-drag",
           "labelKey": "command.guides.create",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -1919,6 +1984,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.guides.create",
+          "faceLabelKey": null,
           "icon": "plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1976,6 +2042,7 @@
           "zone": "page",
           "gesture": "guide-drag",
           "labelKey": "command.guides.move",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -1995,6 +2062,7 @@
           "context": "guide",
           "gesture": "guide-keys",
           "labelKey": "command.guides.move",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -2014,6 +2082,7 @@
           "context": "guide",
           "gesture": "guide-keys",
           "labelKey": "command.guides.move",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -2033,6 +2102,7 @@
           "context": "guide",
           "gesture": "guide-keys",
           "labelKey": "command.guides.move",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -2052,6 +2122,7 @@
           "context": "guide",
           "gesture": "guide-keys",
           "labelKey": "command.guides.move",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -2099,6 +2170,7 @@
           "zone": "own-ruler",
           "gesture": "guide-drag",
           "labelKey": "command.guides.delete",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -2118,6 +2190,7 @@
           "context": "guide",
           "gesture": null,
           "labelKey": "command.guides.delete",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -2137,6 +2210,7 @@
           "context": "guide",
           "gesture": null,
           "labelKey": "command.guides.delete",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -2158,6 +2232,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.guides.delete",
+          "faceLabelKey": null,
           "icon": "x",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2208,6 +2283,7 @@
           "context": "guide",
           "gesture": null,
           "labelKey": "command.guides.lock",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -2247,6 +2323,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.guides.visible",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2296,6 +2373,7 @@
           "feature": "snap-toggle-settings",
           "toolbar": "canvas-toolbar",
           "labelKey": "command.snap",
+          "faceLabelKey": null,
           "icon": "magnet",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2318,6 +2396,7 @@
           "feature": "snap-toggle-settings",
           "menu": "snap",
           "labelKey": "topbar.snap.on",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2340,6 +2419,7 @@
           "feature": "snap-toggle-settings",
           "menu": "snap",
           "labelKey": "topbar.snap.off",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2397,6 +2477,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.snap.settings",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2444,6 +2525,7 @@
           "feature": "workspace-settings-dialog",
           "menu": "view",
           "labelKey": "panel.guidesGrids",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2466,6 +2548,7 @@
           "feature": "snap-toggle-settings",
           "menu": "snap",
           "labelKey": "snap.settings",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {

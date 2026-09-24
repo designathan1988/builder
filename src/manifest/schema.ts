@@ -42,6 +42,8 @@ export const environmentSchema = z.strictObject({
     .array(z.strictObject({ id: kebabId, width: z.number().int().positive(), height: z.number().int().positive() }))
     .min(1),
   locales: z.strictObject({ default: localeSchema, available: z.array(localeSchema).min(1) }),
+  // a fresh profile's theme: one of the themes preferences.setTheme offers (manifest:check rule unknown-reference)
+  theme: z.strictObject({ default: kebabId }),
   zoomLevels: z.array(z.number().int().positive()).min(1),
   reducedMotion: z.boolean(),
 });
@@ -431,6 +433,9 @@ const doorCommon = {
   id: doorId,
   feature: featureId,
   labelKey: i18nKey,
+  // the shorter text its control shows when the drawing does not show the label ("+ Class" for "Apply a class"); the
+  // label stays its accessible name and tooltip. null: the control shows its label, or the item it stands for.
+  faceLabelKey: i18nKey.nullable(),
   // the icon its control shows; null for a key or a pointer gesture, a text-only control, or an item whose icon
   // comes from the item (an element's icon, a file's type). A toolbar door and an icon button always have one.
   icon: iconName.nullable(),

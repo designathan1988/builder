@@ -47,6 +47,7 @@
           "attribute": "tag",
           "control": "field",
           "labelKey": "command.setTag",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -67,6 +68,7 @@
           "feature": "quick-panel",
           "control": "tag",
           "labelKey": "quickPanel.tag",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -128,6 +130,7 @@
           "attribute": "title",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -152,6 +155,7 @@
           "attribute": "src",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -176,6 +180,7 @@
           "attribute": "alt",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -200,6 +205,7 @@
           "attribute": "srcset",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -224,6 +230,7 @@
           "attribute": "media",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -248,6 +255,7 @@
           "attribute": "placeholder",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -272,6 +280,7 @@
           "attribute": "value",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -296,6 +305,7 @@
           "attribute": "name",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -320,6 +330,7 @@
           "attribute": "required",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -344,6 +355,7 @@
           "attribute": "pattern",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -368,6 +380,7 @@
           "attribute": "min",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -392,6 +405,7 @@
           "attribute": "max",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -416,6 +430,7 @@
           "attribute": "step",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -440,6 +455,7 @@
           "attribute": "autocomplete",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -464,6 +480,7 @@
           "attribute": "disabled",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -488,6 +505,7 @@
           "attribute": "readonly",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -512,6 +530,7 @@
           "attribute": "checked",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -536,6 +555,7 @@
           "attribute": "action",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -560,6 +580,7 @@
           "attribute": "method",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -584,6 +605,7 @@
           "attribute": "buttonType",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -608,6 +630,7 @@
           "attribute": "rows",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -632,6 +655,7 @@
           "attribute": "groupLabel",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -656,6 +680,7 @@
           "attribute": "selected",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -680,6 +705,7 @@
           "attribute": "poster",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -704,6 +730,7 @@
           "attribute": "controls",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -728,6 +755,7 @@
           "attribute": "autoplay",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -752,6 +780,7 @@
           "attribute": "loop",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -776,6 +805,7 @@
           "attribute": "muted",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -800,6 +830,7 @@
           "attribute": "trackKind",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -824,6 +855,7 @@
           "attribute": "canvasWidth",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -848,6 +880,7 @@
           "attribute": "canvasHeight",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -872,6 +905,7 @@
           "attribute": "open",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -896,6 +930,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "assets.picker.choose",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -954,6 +989,7 @@
           "attribute": "id",
           "control": "field",
           "labelKey": "command.setId",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1009,6 +1045,7 @@
           "attribute": "classes",
           "control": "field",
           "labelKey": "command.setClasses",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1079,6 +1116,7 @@
           "attribute": "href",
           "control": "field",
           "labelKey": "command.setLink",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1103,6 +1141,7 @@
           "attribute": "newTab",
           "control": "field",
           "labelKey": "inspector.link.openInNewTab",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1127,6 +1166,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "linkPicker.page",
+          "faceLabelKey": null,
           "icon": "file",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1151,6 +1191,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "linkPicker.anchor",
+          "faceLabelKey": null,
           "icon": "hash",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1175,6 +1216,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "linkPicker.url",
+          "faceLabelKey": null,
           "icon": "globe",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1199,6 +1241,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "linkPicker.email",
+          "faceLabelKey": null,
           "icon": "mail",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1223,6 +1266,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "linkPicker.phone",
+          "faceLabelKey": null,
           "icon": "phone",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1292,6 +1336,7 @@
           "attribute": "inputType",
           "control": "field",
           "labelKey": "command.setInputType",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1346,6 +1391,7 @@
           "attribute": "labelFor",
           "control": "field",
           "labelKey": "command.setLabelTarget",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1407,6 +1453,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "inspector.customAttribute.add",
+          "faceLabelKey": null,
           "icon": "plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1431,6 +1478,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "inspector.customAttribute.value",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1485,6 +1533,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.removeCustomAttribute",
+          "faceLabelKey": null,
           "icon": "x",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1540,6 +1589,7 @@
           "attribute": "svgMarkup",
           "control": "field",
           "labelKey": "command.setSvgMarkup",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1594,6 +1644,7 @@
           "attribute": "embedMarkup",
           "control": "field",
           "labelKey": "command.setEmbedMarkup",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1656,6 +1707,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.applyHtml",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1714,6 +1766,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "inspector.table.caption",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1740,6 +1793,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "inspector.table.tableHead",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1766,6 +1820,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "inspector.table.tableFoot",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1837,6 +1892,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "inspector.parts.add.option",
+          "faceLabelKey": null,
           "icon": "plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1863,6 +1919,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "inspector.parts.add.optionGroup",
+          "faceLabelKey": null,
           "icon": "plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1889,6 +1946,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "inspector.parts.add.source",
+          "faceLabelKey": null,
           "icon": "plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1915,6 +1973,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "inspector.parts.add.track",
+          "faceLabelKey": null,
           "icon": "plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1941,6 +2000,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "inspector.parts.add.rectangle",
+          "faceLabelKey": null,
           "icon": "plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1967,6 +2027,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "inspector.parts.add.ellipse",
+          "faceLabelKey": null,
           "icon": "plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1993,6 +2054,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "inspector.parts.add.line",
+          "faceLabelKey": null,
           "icon": "plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2019,6 +2081,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "inspector.parts.add.source",
+          "faceLabelKey": null,
           "icon": "plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2080,6 +2143,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "inspector.parts.moveUp",
+          "faceLabelKey": null,
           "icon": "arrow-up",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2106,6 +2170,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "inspector.parts.moveDown",
+          "faceLabelKey": null,
           "icon": "arrow-down",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2162,6 +2227,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.parts.remove",
+          "faceLabelKey": null,
           "icon": "x",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2205,6 +2271,7 @@
           "kind": "context-menu",
           "feature": "table-commands",
           "labelKey": "command.table.addColumnAfter",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "status.table.selectCell",
           "placement": {
@@ -2225,6 +2292,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.table.addColumnAfter",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "status.table.selectCell",
           "placement": {
@@ -2268,6 +2336,7 @@
           "kind": "context-menu",
           "feature": "table-commands",
           "labelKey": "command.table.addColumnEnd",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "status.table.selectPart",
           "placement": {
@@ -2288,6 +2357,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.table.addColumnEnd",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "status.table.selectPart",
           "placement": {
@@ -2332,6 +2402,7 @@
           "kind": "context-menu",
           "feature": "table-commands",
           "labelKey": "command.table.removeColumn",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "status.table.selectCell",
           "placement": {
@@ -2352,6 +2423,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.table.removeColumn",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "status.table.selectCell",
           "placement": {
@@ -2395,6 +2467,7 @@
           "kind": "context-menu",
           "feature": "table-commands",
           "labelKey": "command.table.addRowAfter",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "status.table.selectCell",
           "placement": {
@@ -2415,6 +2488,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.table.addRowAfter",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "status.table.selectCell",
           "placement": {
@@ -2459,6 +2533,7 @@
           "kind": "context-menu",
           "feature": "table-commands",
           "labelKey": "command.table.removeRow",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "status.table.selectCell",
           "placement": {
@@ -2479,6 +2554,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.table.removeRow",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "status.table.selectCell",
           "placement": {

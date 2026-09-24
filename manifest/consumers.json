@@ -37,6 +37,14 @@
       "reader": "tools/runner/environment.ts"
     },
     {
+      "field": "environment:theme",
+      "reader": "src/editor/preferences/preferences.ts"
+    },
+    {
+      "field": "environment:theme.default",
+      "reader": "src/editor/preferences/preferences.ts"
+    },
+    {
       "field": "environment:zoomLevels",
       "reader": "tools/runner/environment.ts"
     },
@@ -759,6 +767,10 @@
     {
       "field": "commands:commands[].entryPoints[].labelKey",
       "reader": "src/editor/doors/registry.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].faceLabelKey",
+      "reader": "src/editor/doors/door.tsx"
     },
     {
       "field": "commands:commands[].entryPoints[].disabledReasonKey",

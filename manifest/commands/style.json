@@ -45,6 +45,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -76,6 +77,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -107,6 +109,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -138,6 +141,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -169,6 +173,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -200,6 +205,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -231,6 +237,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -263,6 +270,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -294,6 +302,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -325,6 +334,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -356,6 +366,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -387,6 +398,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -418,6 +430,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -449,6 +462,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -480,6 +494,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -506,6 +521,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -532,6 +548,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -563,6 +580,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -594,6 +612,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -625,6 +644,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -651,6 +671,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -678,6 +699,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -705,6 +727,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -737,6 +760,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -768,6 +792,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -799,6 +824,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -830,6 +856,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -861,6 +888,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -887,6 +915,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -918,6 +947,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -949,6 +979,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -980,6 +1011,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1011,6 +1043,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1042,6 +1075,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1073,6 +1107,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1104,6 +1139,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1135,6 +1171,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1166,6 +1203,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1197,6 +1235,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1228,6 +1267,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1259,6 +1299,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1290,6 +1331,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1321,6 +1363,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1352,6 +1395,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1383,6 +1427,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1414,6 +1459,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1445,6 +1491,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1476,6 +1523,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1507,6 +1555,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1538,6 +1587,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1569,6 +1619,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1600,6 +1651,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1632,6 +1684,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1663,6 +1716,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1694,6 +1748,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1725,6 +1780,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1756,6 +1812,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1787,6 +1844,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1818,6 +1876,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1849,6 +1908,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1880,6 +1940,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1911,6 +1972,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1942,6 +2004,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -1973,6 +2036,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2004,6 +2068,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2030,6 +2095,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2061,6 +2127,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2093,6 +2160,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2124,6 +2192,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2155,6 +2224,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2186,6 +2256,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2217,6 +2288,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2248,6 +2320,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2279,6 +2352,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2310,6 +2384,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2341,6 +2416,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2374,6 +2450,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2405,6 +2482,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2431,6 +2509,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2462,6 +2541,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2493,6 +2573,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2524,6 +2605,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2555,6 +2637,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2586,6 +2669,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2617,6 +2701,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2648,6 +2733,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2679,6 +2765,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2713,6 +2800,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2744,6 +2832,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2775,6 +2864,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2806,6 +2896,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2838,6 +2929,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2869,6 +2961,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2900,6 +2993,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2931,6 +3025,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2967,6 +3062,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -2998,6 +3094,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -3029,6 +3126,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -3060,6 +3158,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -3090,6 +3189,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -3121,6 +3221,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -3152,6 +3253,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -3183,6 +3285,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -3214,6 +3317,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -3245,6 +3349,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -3276,6 +3381,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -3307,6 +3413,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -3338,6 +3445,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -3369,6 +3477,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -3395,6 +3504,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -3426,6 +3536,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -3457,6 +3568,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -3488,6 +3600,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -3519,6 +3632,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -3550,6 +3664,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -3582,6 +3697,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -3613,6 +3729,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -3644,6 +3761,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -3675,6 +3793,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -3706,6 +3825,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -3737,6 +3857,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -3768,6 +3889,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -3799,6 +3921,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -3830,6 +3953,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -3861,6 +3985,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -3892,6 +4017,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -3927,6 +4053,7 @@
           "attribute": null,
           "control": "stretch-button",
           "labelKey": "inspector.flex.stretch",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -3956,6 +4083,7 @@
           "attribute": null,
           "control": "spread-button",
           "labelKey": "inspector.flex.spread",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -3985,6 +4113,7 @@
           "attribute": null,
           "control": "add-track",
           "labelKey": "inspector.grid.addColumn",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -4012,6 +4141,7 @@
           "feature": "quick-panel",
           "control": "width",
           "labelKey": "quickPanel.width",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -4039,6 +4169,7 @@
           "feature": "quick-panel",
           "control": "height",
           "labelKey": "quickPanel.height",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -4066,6 +4197,7 @@
           "feature": "quick-panel",
           "control": "background",
           "labelKey": "property.backgroundColor",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -4088,6 +4220,7 @@
           "feature": "quick-panel",
           "control": "fill",
           "labelKey": "quickPanel.fill",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -4110,6 +4243,7 @@
           "feature": "quick-panel",
           "control": "text-colour",
           "labelKey": "quickPanel.textColour",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -4132,6 +4266,7 @@
           "feature": "quick-panel",
           "control": "font-size",
           "labelKey": "quickPanel.fontSize",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -4159,6 +4294,7 @@
           "feature": "quick-panel",
           "control": "font-family",
           "labelKey": "property.fontFamily",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -4186,6 +4322,7 @@
           "feature": "quick-panel",
           "control": "font-weight",
           "labelKey": "property.fontWeight",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -4213,6 +4350,7 @@
           "feature": "quick-panel",
           "control": "line-height",
           "labelKey": "property.lineHeight",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -4240,6 +4378,7 @@
           "feature": "quick-panel",
           "control": "letter-spacing",
           "labelKey": "property.letterSpacing",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -4267,6 +4406,7 @@
           "feature": "quick-panel",
           "control": "text-align",
           "labelKey": "property.textAlign",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -4294,6 +4434,7 @@
           "feature": "quick-panel",
           "control": "opacity",
           "labelKey": "quickPanel.opacity",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -4316,6 +4457,7 @@
           "feature": "command-bar-set-property",
           "entry": "set-property",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -4337,6 +4479,7 @@
           "handle": "gap-band",
           "gesture": "property-handle",
           "labelKey": "canvas.handle.gap",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -4358,6 +4501,7 @@
           "handle": "row-gap-band",
           "gesture": "property-handle",
           "labelKey": "canvas.handle.rowGap",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -4378,6 +4522,7 @@
           "handle": "column-gap-band",
           "gesture": "property-handle",
           "labelKey": "canvas.handle.columnGap",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -4401,6 +4546,7 @@
           "attribute": null,
           "control": "translate-x",
           "labelKey": "inspector.transform.moveX",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -4432,6 +4578,7 @@
           "attribute": null,
           "control": "translate-y",
           "labelKey": "inspector.transform.moveY",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -4463,6 +4610,7 @@
           "attribute": null,
           "control": "rotate",
           "labelKey": "inspector.transform.rotate",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -4494,6 +4642,7 @@
           "attribute": null,
           "control": "scale",
           "labelKey": "inspector.transform.scale",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -4521,6 +4670,7 @@
           "feature": "quick-panel",
           "control": "translate-x",
           "labelKey": "inspector.transform.moveX",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -4548,6 +4698,7 @@
           "feature": "quick-panel",
           "control": "rotate",
           "labelKey": "inspector.transform.rotate",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -4575,6 +4726,7 @@
           "feature": "quick-panel",
           "control": "scale",
           "labelKey": "inspector.transform.scale",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -4603,6 +4755,7 @@
           "handle": "rotate",
           "gesture": "rotate",
           "labelKey": "canvas.handle.rotate",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -4677,6 +4830,7 @@
           "attribute": null,
           "control": "box-model",
           "labelKey": "command.setSpacing",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -4711,6 +4865,7 @@
           "attribute": null,
           "control": "box-model",
           "labelKey": "command.setSpacing",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -4742,6 +4897,7 @@
           "attribute": null,
           "control": "box-model",
           "labelKey": "command.setSpacing",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -4773,6 +4929,7 @@
           "attribute": null,
           "control": "box-model",
           "labelKey": "command.setSpacing",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -4804,6 +4961,7 @@
           "attribute": null,
           "control": "box-model",
           "labelKey": "command.setSpacing",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -4835,6 +4993,7 @@
           "attribute": null,
           "control": "box-model",
           "labelKey": "command.setSpacing",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -4869,6 +5028,7 @@
           "attribute": null,
           "control": "box-model",
           "labelKey": "command.setSpacing",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -4900,6 +5060,7 @@
           "attribute": null,
           "control": "box-model",
           "labelKey": "command.setSpacing",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -4931,6 +5092,7 @@
           "attribute": null,
           "control": "box-model",
           "labelKey": "command.setSpacing",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -4962,6 +5124,7 @@
           "attribute": null,
           "control": "box-model",
           "labelKey": "command.setSpacing",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -4989,6 +5152,7 @@
           "feature": "command-bar-set-property",
           "entry": "set-property",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -5010,6 +5174,7 @@
           "handle": "padding-top-band",
           "gesture": "spacing-band",
           "labelKey": "canvas.handle.paddingTop",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -5030,6 +5195,7 @@
           "handle": "margin-top-band",
           "gesture": "spacing-band",
           "labelKey": "canvas.handle.marginTop",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -5050,6 +5216,7 @@
           "handle": "padding-right-band",
           "gesture": "spacing-band",
           "labelKey": "canvas.handle.paddingRight",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -5070,6 +5237,7 @@
           "handle": "margin-right-band",
           "gesture": "spacing-band",
           "labelKey": "canvas.handle.marginRight",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -5090,6 +5258,7 @@
           "handle": "padding-bottom-band",
           "gesture": "spacing-band",
           "labelKey": "canvas.handle.paddingBottom",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -5110,6 +5279,7 @@
           "handle": "margin-bottom-band",
           "gesture": "spacing-band",
           "labelKey": "canvas.handle.marginBottom",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -5130,6 +5300,7 @@
           "handle": "padding-left-band",
           "gesture": "spacing-band",
           "labelKey": "canvas.handle.paddingLeft",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -5150,6 +5321,7 @@
           "handle": "margin-left-band",
           "gesture": "spacing-band",
           "labelKey": "canvas.handle.marginLeft",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -5200,6 +5372,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "inspector.spacing.linkAll",
+          "faceLabelKey": null,
           "icon": "link",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -5276,6 +5449,7 @@
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -5318,6 +5492,7 @@
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -5352,6 +5527,7 @@
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -5386,6 +5562,7 @@
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -5415,6 +5592,7 @@
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -5448,6 +5626,7 @@
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -5479,6 +5658,7 @@
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -5512,6 +5692,7 @@
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -5543,6 +5724,7 @@
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -5576,6 +5758,7 @@
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -5607,6 +5790,7 @@
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -5640,6 +5824,7 @@
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -5667,6 +5852,7 @@
           "feature": "quick-panel",
           "control": "border",
           "labelKey": "quickPanel.border",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -5705,6 +5891,7 @@
           "feature": "command-bar-set-property",
           "entry": "set-property",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -5726,6 +5913,7 @@
           "handle": "border-top",
           "gesture": "property-handle",
           "labelKey": "canvas.handle.borderTop",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -5746,6 +5934,7 @@
           "handle": "border-right",
           "gesture": "property-handle",
           "labelKey": "canvas.handle.borderRight",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -5766,6 +5955,7 @@
           "handle": "border-bottom",
           "gesture": "property-handle",
           "labelKey": "canvas.handle.borderBottom",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -5786,6 +5976,7 @@
           "handle": "border-left",
           "gesture": "property-handle",
           "labelKey": "canvas.handle.borderLeft",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -5851,6 +6042,7 @@
           "attribute": null,
           "control": "radius-editor",
           "labelKey": "command.setRadius",
+          "faceLabelKey": null,
           "icon": "square-round-corner",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -5885,6 +6077,7 @@
           "attribute": null,
           "control": "radius-editor",
           "labelKey": "command.setRadius",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -5916,6 +6109,7 @@
           "attribute": null,
           "control": "radius-editor",
           "labelKey": "command.setRadius",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -5947,6 +6141,7 @@
           "attribute": null,
           "control": "radius-editor",
           "labelKey": "command.setRadius",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -5978,6 +6173,7 @@
           "attribute": null,
           "control": "radius-editor",
           "labelKey": "command.setRadius",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -6005,6 +6201,7 @@
           "feature": "command-bar-set-property",
           "entry": "set-property",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -6026,6 +6223,7 @@
           "handle": "radius-corner",
           "gesture": "property-handle",
           "labelKey": "canvas.handle.radius",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -6084,6 +6282,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setBackgroundImage",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -6115,6 +6314,7 @@
           "attribute": null,
           "control": "gradient-add",
           "labelKey": "inspector.gradient.add",
+          "faceLabelKey": null,
           "icon": "plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -6153,6 +6353,7 @@
           "attribute": null,
           "control": "gradient-type",
           "labelKey": "inspector.gradient.type",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -6184,6 +6385,7 @@
           "attribute": null,
           "control": "gradient-bar",
           "labelKey": "inspector.gradient.addStopHere",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -6215,6 +6417,7 @@
           "attribute": null,
           "control": "gradient-stop-colour",
           "labelKey": "inspector.gradient.stopColour",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -6246,6 +6449,7 @@
           "attribute": null,
           "control": "gradient-stop-position",
           "labelKey": "inspector.gradient.stopPosition",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -6277,6 +6481,7 @@
           "attribute": null,
           "control": "gradient-angle",
           "labelKey": "inspector.gradient.angle",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -6308,6 +6513,7 @@
           "attribute": null,
           "control": "gradient-reverse",
           "labelKey": "inspector.gradient.reverse",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -6339,6 +6545,7 @@
           "attribute": null,
           "control": "gradient-distribute",
           "labelKey": "inspector.gradient.distribute",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -6370,6 +6577,7 @@
           "attribute": null,
           "control": "gradient-add-stop",
           "labelKey": "inspector.gradient.addStop",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -6401,6 +6609,7 @@
           "attribute": null,
           "control": "gradient-remove-stop",
           "labelKey": "inspector.gradient.removeStop",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -6432,6 +6641,7 @@
           "attribute": null,
           "control": "gradient-reset",
           "labelKey": "inspector.gradient.remove",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -6468,6 +6678,7 @@
           "zone": "gradient-bar",
           "gesture": "gradient-stop-drag",
           "labelKey": "inspector.gradient.dragStop",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -6489,6 +6700,7 @@
           "context": "gradient-stop",
           "gesture": "gradient-stop-keys",
           "labelKey": "inspector.gradient.stopLeft",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -6508,6 +6720,7 @@
           "context": "gradient-stop",
           "gesture": "gradient-stop-keys",
           "labelKey": "inspector.gradient.stopRight",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -6527,6 +6740,7 @@
           "context": "gradient-stop",
           "gesture": null,
           "labelKey": "inspector.gradient.removeStop",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -6546,6 +6760,7 @@
           "context": "gradient-stop",
           "gesture": null,
           "labelKey": "inspector.gradient.removeStop",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -6563,6 +6778,7 @@
           "feature": "quick-panel",
           "control": "fill-gradient",
           "labelKey": "quickPanel.fillGradient",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -6585,6 +6801,7 @@
           "feature": "command-bar-set-property",
           "entry": "set-property",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -6648,6 +6865,7 @@
           "attribute": null,
           "control": "shadow-add",
           "labelKey": "inspector.shadow.add",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -6676,6 +6894,7 @@
           "attribute": null,
           "control": "shadow-x",
           "labelKey": "inspector.shadow.x",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -6706,6 +6925,7 @@
           "attribute": null,
           "control": "shadow-y",
           "labelKey": "inspector.shadow.y",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -6736,6 +6956,7 @@
           "attribute": null,
           "control": "shadow-blur",
           "labelKey": "inspector.shadow.blur",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -6766,6 +6987,7 @@
           "attribute": null,
           "control": "shadow-spread",
           "labelKey": "inspector.shadow.spread",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -6796,6 +7018,7 @@
           "attribute": null,
           "control": "shadow-inset",
           "labelKey": "inspector.shadow.inset",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -6826,6 +7049,7 @@
           "attribute": null,
           "control": "shadow-colour",
           "labelKey": "inspector.shadow.colour",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -6856,6 +7080,7 @@
           "attribute": null,
           "control": "shadow-visibility",
           "labelKey": "inspector.shadow.visibility",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -6886,6 +7111,7 @@
           "attribute": null,
           "control": "shadow-remove",
           "labelKey": "inspector.shadow.remove",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -6914,6 +7140,7 @@
           "attribute": null,
           "control": "shadow-reset",
           "labelKey": "inspector.shadow.reset",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -6942,6 +7169,7 @@
           "attribute": null,
           "control": "shadow-add",
           "labelKey": "inspector.shadow.add",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -6970,6 +7198,7 @@
           "attribute": null,
           "control": "shadow-x",
           "labelKey": "inspector.shadow.x",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -7000,6 +7229,7 @@
           "attribute": null,
           "control": "shadow-y",
           "labelKey": "inspector.shadow.y",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -7030,6 +7260,7 @@
           "attribute": null,
           "control": "shadow-blur",
           "labelKey": "inspector.shadow.blur",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -7060,6 +7291,7 @@
           "attribute": null,
           "control": "shadow-colour",
           "labelKey": "inspector.shadow.colour",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -7090,6 +7322,7 @@
           "attribute": null,
           "control": "shadow-visibility",
           "labelKey": "inspector.shadow.visibility",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -7120,6 +7353,7 @@
           "attribute": null,
           "control": "shadow-remove",
           "labelKey": "inspector.shadow.remove",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -7148,6 +7382,7 @@
           "attribute": null,
           "control": "shadow-reset",
           "labelKey": "inspector.shadow.reset",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -7174,6 +7409,7 @@
           "zone": "pad",
           "gesture": "shadow-pad-drag",
           "labelKey": "inspector.shadow.lightPad",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -7200,6 +7436,7 @@
           "zone": "pad",
           "gesture": "shadow-pad-drag",
           "labelKey": "inspector.shadow.lightPad",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -7226,6 +7463,7 @@
           "context": "shadow-pad",
           "gesture": "shadow-pad-keys",
           "labelKey": "inspector.shadow.lightPad",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -7250,6 +7488,7 @@
           "context": "shadow-pad",
           "gesture": "shadow-pad-keys",
           "labelKey": "inspector.shadow.lightPad",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -7274,6 +7513,7 @@
           "context": "shadow-pad",
           "gesture": "shadow-pad-keys",
           "labelKey": "inspector.shadow.lightPad",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -7298,6 +7538,7 @@
           "context": "shadow-pad",
           "gesture": "shadow-pad-keys",
           "labelKey": "inspector.shadow.lightPad",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -7320,6 +7561,7 @@
           "feature": "command-bar-set-property",
           "entry": "set-property",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -7341,6 +7583,7 @@
           "handle": "shadow-offset",
           "gesture": "shadow-handle",
           "labelKey": "canvas.handle.shadowOffset",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -7365,6 +7608,7 @@
           "handle": "shadow-blur",
           "gesture": "shadow-handle",
           "labelKey": "canvas.handle.shadowBlur",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -7422,6 +7666,7 @@
           "attribute": null,
           "control": "filter-blur",
           "labelKey": "inspector.filters.blur",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -7453,6 +7698,7 @@
           "attribute": null,
           "control": "filter-brightness",
           "labelKey": "inspector.filters.brightness",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -7484,6 +7730,7 @@
           "attribute": null,
           "control": "filter-contrast",
           "labelKey": "inspector.filters.contrast",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -7515,6 +7762,7 @@
           "attribute": null,
           "control": "filter-saturate",
           "labelKey": "inspector.filters.saturate",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -7546,6 +7794,7 @@
           "attribute": null,
           "control": "filter-hue-rotate",
           "labelKey": "inspector.filters.hueRotate",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -7577,6 +7826,7 @@
           "attribute": null,
           "control": "filter-grayscale",
           "labelKey": "inspector.filters.grayscale",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -7608,6 +7858,7 @@
           "attribute": null,
           "control": "filter-invert",
           "labelKey": "inspector.filters.invert",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -7639,6 +7890,7 @@
           "attribute": null,
           "control": "filter-sepia",
           "labelKey": "inspector.filters.sepia",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -7670,6 +7922,7 @@
           "attribute": null,
           "control": "filter-remove",
           "labelKey": "inspector.filters.remove",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -7697,6 +7950,7 @@
           "feature": "quick-panel",
           "control": "effects",
           "labelKey": "quickPanel.effects",
+          "faceLabelKey": null,
           "icon": "sparkles",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -7719,6 +7973,7 @@
           "feature": "command-bar-set-property",
           "entry": "set-property",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -7774,6 +8029,7 @@
           "attribute": null,
           "control": "transform-skew-x",
           "labelKey": "inspector.transform.skewX",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -7801,6 +8057,7 @@
           "feature": "quick-panel",
           "control": "skew-x",
           "labelKey": "inspector.transform.skewX",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -7832,6 +8089,7 @@
           "attribute": null,
           "control": "transform-skew-y",
           "labelKey": "inspector.transform.skewY",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -7859,6 +8117,7 @@
           "feature": "quick-panel",
           "control": "skew-y",
           "labelKey": "inspector.transform.skewY",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -7886,6 +8145,7 @@
           "feature": "command-bar-set-property",
           "entry": "set-property",
           "labelKey": "command.setProperty",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -7953,6 +8213,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.setAlignment",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "status.layout.notFlex",
           "placement": {
@@ -8011,6 +8272,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.setCustomDeclarations",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -8066,6 +8328,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.applyCss",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -8120,6 +8383,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.resetValue",
+          "faceLabelKey": null,
           "icon": "rotate-ccw",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -8164,6 +8428,7 @@
           "feature": "inspector-provenance-reset",
           "menu": "element-actions",
           "labelKey": "command.resetAllValues",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
@@ -8184,6 +8449,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.resetAllValues",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
@@ -8245,6 +8511,7 @@
           "context": "number-field",
           "gesture": "number-field-keys",
           "labelKey": "field.stepUp",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -8267,6 +8534,7 @@
           "context": "number-field",
           "gesture": "number-field-keys",
           "labelKey": "field.stepDown",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -8289,6 +8557,7 @@
           "context": "number-field",
           "gesture": null,
           "labelKey": "field.pageUp",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -8311,6 +8580,7 @@
           "context": "number-field",
           "gesture": null,
           "labelKey": "field.pageDown",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -8335,6 +8605,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "field.stepUp",
+          "faceLabelKey": null,
           "icon": "chevron-up",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -8362,6 +8633,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "field.stepDown",
+          "faceLabelKey": null,
           "icon": "chevron-down",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -8409,6 +8681,7 @@
           "zone": "horizontal",
           "gesture": "number-scrub",
           "labelKey": "command.fieldScrub",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -8460,6 +8733,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.fieldSetUnit",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {

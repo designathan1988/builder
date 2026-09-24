@@ -27,6 +27,7 @@
           "feature": "new-blank-page",
           "menu": "file",
           "labelKey": "command.newBlankPage",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -47,6 +48,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.newBlankPage",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -95,6 +97,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.restoreVersion",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -137,6 +140,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "tabGuard.takeOver",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -175,6 +179,7 @@
           "feature": "project-save-json",
           "menu": "file",
           "labelKey": "command.saveProject",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -195,6 +200,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.saveProject",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -240,6 +246,7 @@
           "feature": "project-open-json",
           "menu": "file",
           "labelKey": "command.openProject",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -260,6 +267,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.openProject",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -304,6 +312,7 @@
           "feature": "explorer-open-folder",
           "menu": "file",
           "labelKey": "command.openFolder",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -324,6 +333,7 @@
           "feature": "explorer-open-folder",
           "entry": "command",
           "labelKey": "command.openFolder",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -372,6 +382,7 @@
           "feature": "html-import-structure",
           "menu": "file",
           "labelKey": "command.importHtml",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -392,6 +403,7 @@
           "feature": "html-import-structure",
           "entry": "command",
           "labelKey": "command.importHtml",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -430,6 +442,7 @@
           "feature": "export-zip",
           "menu": "file",
           "labelKey": "command.exportPage",
+          "faceLabelKey": null,
           "icon": "share",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -451,6 +464,7 @@
           "feature": "export-zip",
           "toolbar": "top-bar",
           "labelKey": "command.exportPage",
+          "faceLabelKey": null,
           "icon": "share",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -472,6 +486,7 @@
           "feature": "preview-mode",
           "toolbar": "preview-bar",
           "labelKey": "command.exportPage",
+          "faceLabelKey": null,
           "icon": "share",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -492,6 +507,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.exportPage",
+          "faceLabelKey": null,
           "icon": "share",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {

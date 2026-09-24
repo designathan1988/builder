@@ -28,7 +28,10 @@ export function isDoorBuilt(entry: DoorEntry): boolean {
 }
 
 export interface DoorState {
+  // the accessible name and the tooltip's text
   readonly label: string;
+  // the text the control shows: the door's face label when the drawing shows a shorter text ("+ Class"), else the label
+  readonly face: string;
   readonly title: string;
   readonly built: boolean;
   // built and its availability predicate holds now (Undo with an empty history does not)
@@ -52,6 +55,7 @@ export function useDoor(entry: DoorEntry, args: Readonly<Record<string, unknown>
   const current = useEditorState((s) => built && isCurrent(entry, s, args));
   const available = useEditorState((s) => built && ((PREDICATES as PredicateTable<EditorUi>)[entry.command.availability.predicate as PredicateId]?.test(s) ?? true));
   const label = labelled ?? t(entry.door.labelKey as MessageId);
+  const face = labelled === undefined && entry.door.faceLabelKey !== null ? t(entry.door.faceLabelKey as MessageId) : label;
   const chord = chordHint(entry.command.id);
   const reason: MessageId | null = !built ? 'common.notAvailableYet' : available ? null : (entry.door.disabledReasonKey as MessageId);
   const title = reason !== null ? t('common.disabledTitle', { label, reason: { key: reason } }) : chord !== null ? t('common.withShortcut', { label, shortcut: chord }) : label;
@@ -60,7 +64,7 @@ export function useDoor(entry: DoorEntry, args: Readonly<Record<string, unknown>
     const dispatch = store.dispatch as (id: CommandId, args: unknown) => DispatchResult;
     dispatch(entry.command.id, { ...entry.door.args, ...args });
   };
-  return { label, title, built, available, current, chord, reason, run };
+  return { label, face, title, built, available, current, chord, reason, run };
 }
 
 export interface DoorControlProps {
@@ -99,16 +103,16 @@ export function DoorControl({ entry, args = {}, children, expanded, className, l
       );
     case 'tab':
       return (
-        <button {...common} role="tab" aria-selected={door.current}>
+        <button {...common} role="tab" aria-selected={door.current} aria-label={door.face !== door.label ? door.label : undefined}>
           {icon}
-          {children ?? <span className="door__label">{door.label}</span>}
+          {children ?? <span className="door__label">{door.face}</span>}
         </button>
       );
     case 'segment':
       return (
         <button {...common} aria-pressed={door.current} aria-label={door.label}>
           {icon}
-          {children ?? <span className="door__label">{door.label}</span>}
+          {children ?? <span className="door__label">{door.face}</span>}
         </button>
       );
     case 'disclosure':
@@ -120,9 +124,9 @@ export function DoorControl({ entry, args = {}, children, expanded, className, l
       );
     default:
       return (
-        <button {...common} aria-label={children !== undefined ? door.label : undefined}>
+        <button {...common} aria-label={children !== undefined || door.face !== door.label ? door.label : undefined}>
           {icon}
-          {children ?? <span className="door__label">{door.label}</span>}
+          {children ?? <span className="door__label">{door.face}</span>}
         </button>
       );
   }

@@ -27,6 +27,7 @@
           "context": "canvas",
           "gesture": null,
           "labelKey": "command.rename",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "status.needsSingleSelection",
           "placement": "none",
@@ -48,6 +49,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "layers.renameByDoubleClick",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "status.needsSingleSelection",
           "placement": {
@@ -67,6 +69,7 @@
           "kind": "context-menu",
           "feature": "rename-element",
           "labelKey": "command.rename",
+          "faceLabelKey": null,
           "icon": "type",
           "disabledReasonKey": "status.needsSingleSelection",
           "placement": {
@@ -87,6 +90,7 @@
           "feature": "app-menu",
           "menu": "arrange",
           "labelKey": "command.rename",
+          "faceLabelKey": null,
           "icon": "type",
           "disabledReasonKey": "status.needsSingleSelection",
           "placement": {
@@ -109,6 +113,7 @@
           "context": "layers-tree",
           "gesture": null,
           "labelKey": "command.rename",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "status.needsSingleSelection",
           "placement": "none",
@@ -126,6 +131,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.rename",
+          "faceLabelKey": null,
           "icon": "type",
           "disabledReasonKey": "status.needsSingleSelection",
           "placement": {
@@ -185,6 +191,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "layers.renameField",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -239,6 +246,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.lock",
+          "faceLabelKey": null,
           "icon": "lock-open",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
@@ -258,6 +266,7 @@
           "kind": "context-menu",
           "feature": "lock-element",
           "labelKey": "command.lock",
+          "faceLabelKey": null,
           "icon": "lock",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
@@ -278,6 +287,7 @@
           "feature": "inspector-panel",
           "menu": "element-actions",
           "labelKey": "command.lock",
+          "faceLabelKey": null,
           "icon": "lock",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
@@ -298,6 +308,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.lock",
+          "faceLabelKey": null,
           "icon": "lock",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
@@ -352,6 +363,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.hide",
+          "faceLabelKey": null,
           "icon": "eye",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
@@ -371,6 +383,7 @@
           "kind": "context-menu",
           "feature": "hide-element",
           "labelKey": "command.hide",
+          "faceLabelKey": null,
           "icon": "eye-off",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
@@ -391,6 +404,7 @@
           "feature": "inspector-panel",
           "menu": "element-actions",
           "labelKey": "command.hide",
+          "faceLabelKey": null,
           "icon": "eye-off",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
@@ -411,6 +425,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.hide",
+          "faceLabelKey": null,
           "icon": "eye-off",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
@@ -468,6 +483,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.setLayerColor",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {

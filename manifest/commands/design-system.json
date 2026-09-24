@@ -37,6 +37,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "colorPicker.saveCurrent",
+          "faceLabelKey": null,
           "icon": "plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -89,6 +90,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "colorPicker.removeSwatch",
+          "faceLabelKey": null,
           "icon": "x",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -157,6 +159,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.tokens.create",
+          "faceLabelKey": null,
           "icon": "plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -216,6 +219,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.tokens.update",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -275,6 +279,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.tokens.rename",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -329,6 +334,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.tokens.delete",
+          "faceLabelKey": null,
           "icon": "trash",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -383,6 +389,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.classes.create",
+          "faceLabelKey": null,
           "icon": "component",
           "disabledReasonKey": "status.needsSingleSelection",
           "placement": {
@@ -437,6 +444,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.classes.apply",
+          "faceLabelKey": "inspector.addClass",
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -491,6 +499,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.classes.detach",
+          "faceLabelKey": null,
           "icon": "x",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -547,6 +556,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.inspector.styleTarget",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -590,6 +600,7 @@
           "kind": "context-menu",
           "feature": "reusable-components",
           "labelKey": "command.components.create",
+          "faceLabelKey": null,
           "icon": "component",
           "disabledReasonKey": "status.needsSingleSelection",
           "placement": {
@@ -610,6 +621,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.components.create",
+          "faceLabelKey": null,
           "icon": "component",
           "disabledReasonKey": "status.needsSingleSelection",
           "placement": {
@@ -681,6 +693,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.components.insertInstance",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -703,6 +716,7 @@
           "zone": "drop-proposal",
           "gesture": "palette-drag",
           "labelKey": "command.components.insertInstance",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -741,6 +755,7 @@
           "kind": "context-menu",
           "feature": "reusable-components",
           "labelKey": "command.components.detach",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "status.components.notInstance",
           "placement": {
@@ -761,6 +776,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.components.detach",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "status.components.notInstance",
           "placement": {

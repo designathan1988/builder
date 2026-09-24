@@ -21,6 +21,9 @@
       "pt-BR"
     ]
   },
+  "theme": {
+    "default": "dark"
+  },
   "zoomLevels": [
     50,
     100,

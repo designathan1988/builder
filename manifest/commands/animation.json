@@ -39,6 +39,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "timeline.newAnimation",
+          "faceLabelKey": null,
           "icon": "plus",
           "disabledReasonKey": "status.needsSingleSelection",
           "placement": {
@@ -98,6 +99,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.animation.rename",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -150,6 +152,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.animation.delete",
+          "faceLabelKey": null,
           "icon": "trash",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -207,6 +210,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "timeline.addKeyframe",
+          "faceLabelKey": null,
           "icon": "diamond",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -262,6 +266,7 @@
           "zone": "track",
           "gesture": "keyframe-drag",
           "labelKey": "command.animation.moveKeyframe",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -316,6 +321,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.animation.easing",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -368,6 +374,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.animation.deleteKeyframe",
+          "faceLabelKey": null,
           "icon": "trash",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -390,6 +397,7 @@
           "context": "timeline",
           "gesture": null,
           "labelKey": "command.animation.deleteKeyframe",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -459,6 +467,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "timeline.setting.duration",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -485,6 +494,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "timeline.setting.delay",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -511,6 +521,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "timeline.setting.iterations",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -537,6 +548,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "timeline.setting.direction",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -563,6 +575,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "timeline.setting.fill",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -589,6 +602,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "timeline.setting.timing",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -615,6 +629,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "timeline.setting.playState",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -663,6 +678,7 @@
           "zone": "ruler",
           "gesture": "playhead-drag",
           "labelKey": "command.timeline.playhead",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -684,6 +700,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.timeline.playhead",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -726,6 +743,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "timeline.play",
+          "faceLabelKey": null,
           "icon": "play",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -768,6 +786,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "timeline.pause",
+          "faceLabelKey": null,
           "icon": "pause",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -810,6 +829,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "timeline.stop",
+          "faceLabelKey": null,
           "icon": "square",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -852,6 +872,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "timeline.toggleLoop",
+          "faceLabelKey": null,
           "icon": "repeat",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {

@@ -25,6 +25,7 @@
           "context": "global",
           "gesture": null,
           "labelKey": "command.undo",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "status.undo.nothing",
           "placement": "none",
@@ -43,6 +44,7 @@
           "feature": "undo-redo",
           "toolbar": "top-bar",
           "labelKey": "command.undo",
+          "faceLabelKey": null,
           "icon": "undo-2",
           "disabledReasonKey": "status.undo.nothing",
           "placement": {
@@ -67,6 +69,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "toast.undo",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "status.undo.nothing",
           "placement": {
@@ -87,6 +90,7 @@
           "feature": "app-menu",
           "menu": "edit",
           "labelKey": "command.undo",
+          "faceLabelKey": null,
           "icon": "undo-2",
           "disabledReasonKey": "status.undo.nothing",
           "placement": {
@@ -107,6 +111,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.undo",
+          "faceLabelKey": null,
           "icon": "undo-2",
           "disabledReasonKey": "status.undo.nothing",
           "placement": {
@@ -147,6 +152,7 @@
           "context": "global",
           "gesture": null,
           "labelKey": "command.redo",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "status.redo.nothing",
           "placement": "none",
@@ -166,6 +172,7 @@
           "context": "global",
           "gesture": null,
           "labelKey": "command.redo",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "status.redo.nothing",
           "placement": "none",
@@ -184,6 +191,7 @@
           "feature": "undo-redo",
           "toolbar": "top-bar",
           "labelKey": "command.redo",
+          "faceLabelKey": null,
           "icon": "redo-2",
           "disabledReasonKey": "status.redo.nothing",
           "placement": {
@@ -204,6 +212,7 @@
           "feature": "app-menu",
           "menu": "edit",
           "labelKey": "command.redo",
+          "faceLabelKey": null,
           "icon": "redo-2",
           "disabledReasonKey": "status.redo.nothing",
           "placement": {
@@ -224,6 +233,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.redo",
+          "faceLabelKey": null,
           "icon": "redo-2",
           "disabledReasonKey": "status.redo.nothing",
           "placement": {

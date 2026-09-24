@@ -3,7 +3,7 @@
 import { DEFAULT_LOCALE, LOCALES, type Locale } from '../../generated/ids.ts';
 import type { CommandArgs } from '../../generated/commands.ts';
 import { registerHandler } from '../../core/commands/registry.ts';
-import { commandOf } from '../../manifest/runtime.ts';
+import { commandOf, manifest } from '../../manifest/runtime.ts';
 import type { Store } from '../../core/store/store.ts';
 import type { EditorUi } from '../state.ts';
 
@@ -17,8 +17,10 @@ export interface Preferences {
   readonly theme: Theme;
 }
 
-// a fresh profile: the default UI language of environment.json, and the system's colour scheme
-export const INITIAL_PREFERENCES: Preferences = { locale: DEFAULT_LOCALE, theme: 'system' };
+// a fresh profile: the default UI language and the default theme of environment.json
+const DEFAULT_THEME = manifest.environment.theme.default;
+if (!isTheme(DEFAULT_THEME)) throw new Error(`environment.json: the default theme "${DEFAULT_THEME}" is not a theme of preferences.setTheme`);
+export const INITIAL_PREFERENCES: Preferences = { locale: DEFAULT_LOCALE, theme: DEFAULT_THEME };
 
 // Where preferences are kept between sessions; the browser's localStorage by default, a map in tests.
 export interface PreferenceStorage {

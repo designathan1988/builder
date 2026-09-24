@@ -22,8 +22,11 @@ const STATES = ['default', 'hover', 'selection', 'drag', 'multi', 'breakpoint', 
 const SHOTS: Shot[] = [
   ...STATES.map((state, i) => ({ file: `1440-${String(i + 1).padStart(2, '0')}-${state}.png`, width: 1440, height: 900, hash: `state=${state}` })),
   { file: '1440-13-split.png', width: 1440, height: 900, hash: 'state=default&view=split' },
+  // dark is a fresh profile's theme, so every state above is drawn dark; the default state is also drawn light, and in
+  // pt-BR in both themes
+  { file: '1440-01-default-light.png', width: 1440, height: 900, hash: 'state=default&theme=light' },
   { file: '1440-01-default-pt-BR.png', width: 1440, height: 900, hash: 'state=default&lang=pt-BR' },
-  { file: '1440-01-default-dark.png', width: 1440, height: 900, hash: 'state=default&theme=dark' },
+  { file: '1440-01-default-pt-BR-light.png', width: 1440, height: 900, hash: 'state=default&lang=pt-BR&theme=light' },
   { file: '1920-01-default.png', width: 1920, height: 1080, hash: 'state=default' },
 ];
 const OUT = 'design/final/shots';

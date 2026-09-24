@@ -292,7 +292,9 @@ export function Inspector() {
           <Slots region="inspector-style" render={(slot) => (slot.kind === 'door' && slot.entry.door.kind === 'panel-control' && slot.entry.door.drawnAs === 'segment' ? undefined : null)} />
         </div>
         <input className="search" type="search" placeholder={t('inspector.searchProperty')} aria-label={t('inspector.searchProperty')} data-local="search" />
-        <StyleSections />
+        <div className="inspector-sections">
+          <StyleSections />
+        </div>
       </div>
     </aside>
   );

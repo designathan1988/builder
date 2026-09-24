@@ -660,6 +660,8 @@ export function checkManifest(input: ManifestInput): CheckResult {
   const ref = (ok: boolean, file: string, path: string, message: string) => {
     if (!ok) report('unknown-reference', file, path, message);
   };
+  const themes = commandById.get('preferences.setTheme')?.args.theme?.values ?? [];
+  ref(themes.includes(p.environment.theme.default), 'environment.json', 'theme.default', `default theme "${p.environment.theme.default}" is not a theme of preferences.setTheme (${themes.join(', ')})`);
   if (!p.environment.locales.available.includes(p.environment.locales.default)) {
     report('unknown-reference', 'environment.json', 'locales.default', `default locale "${p.environment.locales.default}" is not an available locale`);
   }
@@ -857,6 +859,7 @@ export function checkManifest(input: ManifestInput): CheckResult {
   }
   for (const { file, path, door } of doors) {
     noteKey(door.labelKey, `${file} ${path}.labelKey`);
+    if (door.faceLabelKey !== null) noteKey(door.faceLabelKey, `${file} ${path}.faceLabelKey`);
     noteKey(door.disabledReasonKey, `${file} ${path}.disabledReasonKey`);
   }
   for (const { file, data } of p.featureFiles) {

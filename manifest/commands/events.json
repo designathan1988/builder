@@ -68,6 +68,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.interactions.add",
+          "faceLabelKey": "inspector.addInteraction",
           "icon": "plus",
           "disabledReasonKey": "status.needsSingleSelection",
           "placement": {
@@ -127,6 +128,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.interactions.update",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -151,6 +153,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.interactions.update",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -175,6 +178,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.interactions.update",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -199,6 +203,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "inspector.interactionScope",
+          "faceLabelKey": null,
           "icon": "locate-fixed",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -223,6 +228,7 @@
           "modifier": null,
           "gesture": "pick-target",
           "labelKey": "interactions.pickTarget",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
@@ -244,6 +250,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "interactions.pickTarget",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -298,6 +305,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.interactions.remove",
+          "faceLabelKey": null,
           "icon": "trash",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {

@@ -69,20 +69,28 @@ test('View › Workbench opens the dock under the canvas and closes it again', a
   expect(await box(page, '.centre')).toEqual(canvas);
 });
 
-test('View › Theme › Dark repaints the editor with the dark tokens and keeps them after reload', async ({ page }) => {
+test('a fresh profile opens in Dark whatever the system says; Light survives an immediate reload; System follows the system', async ({ page }) => {
   const background = () => page.locator('body').evaluate((el) => getComputedStyle(el).backgroundColor);
+  const chooseTheme = async (name: string) => {
+    await page.getByRole('button', { name: 'View', exact: true }).click();
+    await page.getByRole('menuitem', { name: 'Theme', exact: true }).hover();
+    await page.getByRole('menuitemradio', { name, exact: true }).click();
+  };
+  // the system asks for light; a fresh profile is still dark (environment.json theme.default)
   await page.emulateMedia({ colorScheme: 'light' });
-  const light = await background();
-
-  await page.getByRole('button', { name: 'View', exact: true }).click();
-  await page.getByRole('menuitem', { name: 'Theme', exact: true }).hover();
-  await page.getByRole('menuitemradio', { name: 'Dark', exact: true }).click();
   const dark = await background();
-  expect(dark).not.toBe(light);
+  await chooseTheme('Light');
+  const light = await background();
+  expect(light).not.toBe(dark);
 
   await page.reload();
+  expect(await background()).toBe(light);
+  expect(await storedPreferences(page)).toEqual({ locale: 'en', theme: 'light' });
+
+  await chooseTheme('System');
+  expect(await background()).toBe(light);
+  await page.emulateMedia({ colorScheme: 'dark' });
   expect(await background()).toBe(dark);
-  expect(await storedPreferences(page)).toEqual({ locale: 'en', theme: 'dark' });
 });
 
 test('the language menu of the status bar switches the editor to Portuguese and keeps it after reload', async ({ page }) => {
@@ -92,6 +100,6 @@ test('the language menu of the status bar switches the editor to Portuguese and 
 
   await page.reload();
   await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR');
-  expect(await storedPreferences(page)).toEqual({ locale: 'pt-BR', theme: 'system' });
+  expect(await storedPreferences(page)).toEqual({ locale: 'pt-BR', theme: 'dark' });
   await expect(page.getByRole('button', { name: 'Exibir', exact: true })).toBeVisible();
 });

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { sequentialIds } from '../../core/ports/ids.ts';
 import { manualClock } from '../../core/ports/clock.ts';
 import type { PreferenceStorage } from '../preferences/preferences.ts';
+import { manifest } from '../../manifest/runtime.ts';
 import { createEditorStore } from '../store.ts';
 import { PANELS, isPanelOpen, type Panel } from './panels.ts';
 
@@ -116,24 +117,25 @@ describe('panel visibility (workspace/panels.ts)', () => {
 });
 
 describe('preferences (preferences/preferences.ts)', () => {
-  it('starts in English with the system theme, stores every change and restores it in the next session', () => {
+  it('starts in the default language and theme of environment.json (English, Dark), stores every change and restores it in the next session', () => {
+    expect(manifest.environment.theme.default).toBe('dark');
     const storage = memory();
     const first = createEditorStore({ storage, ids: sequentialIds('n'), clock: manualClock() });
-    expect(first.getState().ui.preferences).toEqual({ locale: 'en', theme: 'system' });
+    expect(first.getState().ui.preferences).toEqual({ locale: 'en', theme: 'dark' });
     first.dispatch('preferences.setLanguage', { locale: 'pt-BR' });
-    first.dispatch('preferences.setTheme', { theme: 'dark' });
-    expect(JSON.parse(storage.text ?? '')).toEqual({ locale: 'pt-BR', theme: 'dark' });
+    first.dispatch('preferences.setTheme', { theme: 'light' });
+    expect(JSON.parse(storage.text ?? '')).toEqual({ locale: 'pt-BR', theme: 'light' });
     const second = createEditorStore({ storage, ids: sequentialIds('m'), clock: manualClock() });
-    expect(second.getState().ui.preferences).toEqual({ locale: 'pt-BR', theme: 'dark' });
+    expect(second.getState().ui.preferences).toEqual({ locale: 'pt-BR', theme: 'light' });
     // the empty project of a Portuguese session is named in Portuguese
     expect(second.getState().document.pages[0]?.name).toBe('Início');
   });
 
   it('ignores a stored value that is not a language or a theme of the manifest', () => {
     const s = createEditorStore({ storage: memory('{"locale":"fr","theme":"sepia"}'), ids: sequentialIds('n'), clock: manualClock() });
-    expect(s.getState().ui.preferences).toEqual({ locale: 'en', theme: 'system' });
+    expect(s.getState().ui.preferences).toEqual({ locale: 'en', theme: 'dark' });
     const broken = createEditorStore({ storage: memory('{not json'), ids: sequentialIds('n'), clock: manualClock() });
-    expect(broken.getState().ui.preferences).toEqual({ locale: 'en', theme: 'system' });
+    expect(broken.getState().ui.preferences).toEqual({ locale: 'en', theme: 'dark' });
   });
 
   it('changes nothing when the chosen language is already the language', () => {

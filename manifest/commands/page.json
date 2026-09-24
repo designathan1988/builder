@@ -27,6 +27,7 @@
           "modifier": null,
           "gesture": null,
           "labelKey": "command.pageProperties",
+          "faceLabelKey": null,
           "icon": "sliders-horizontal",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -47,6 +48,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.pageProperties",
+          "faceLabelKey": null,
           "icon": "sliders-horizontal",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -106,6 +108,7 @@
           "attribute": "pageTitle",
           "control": "field",
           "labelKey": "command.setPageSetting",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -130,6 +133,7 @@
           "attribute": "pageLanguage",
           "control": "field",
           "labelKey": "command.setPageSetting",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -154,6 +158,7 @@
           "attribute": "pageDirection",
           "control": "field",
           "labelKey": "command.setPageSetting",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -178,6 +183,7 @@
           "attribute": "pageDescription",
           "control": "field",
           "labelKey": "command.setPageSetting",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -202,6 +208,7 @@
           "attribute": "pageCanonical",
           "control": "field",
           "labelKey": "command.setPageSetting",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -226,6 +233,7 @@
           "attribute": "pageOgTitle",
           "control": "field",
           "labelKey": "command.setPageSetting",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -250,6 +258,7 @@
           "attribute": "pageOgImage",
           "control": "field",
           "labelKey": "command.setPageSetting",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -274,6 +283,7 @@
           "attribute": "pageFavicon",
           "control": "field",
           "labelKey": "command.setPageSetting",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
@@ -298,6 +308,7 @@
           "attribute": "pageScripts",
           "control": "field",
           "labelKey": "command.setPageSetting",
+          "faceLabelKey": null,
           "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
