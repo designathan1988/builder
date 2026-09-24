@@ -1,1 +1,7 @@
-{}
+{
+  "claudeMdExcludes": ["**/reference/**", "**/.cache/**"],
+  "enabledMcpjsonServers": ["playwright"],
+  "permissions": {
+    "deny": ["Edit(reference/**)"]
+  }
+}
