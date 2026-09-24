@@ -390,6 +390,24 @@ describe('manifest:check', () => {
     expect([...new Set(checkManifest(input).problems.map((p) => p.rule))]).toEqual(['owner']);
   });
 
+  it('lets a scenario start at a zoom level once zoom-keyboard-buttons is built, and at "fit" before', () => {
+    const zoomCommands = ['view.zoomIn', 'view.zoomOut', 'view.zoomReset', 'view.zoomTo', 'view.zoomFit'];
+    const at = (zoom: unknown, built: boolean) =>
+      valid((m) => {
+        const [remove] = plantDeleteScenarios(m);
+        (remove.setup as Record<string, unknown>).zoom = zoom;
+        if (!built) return;
+        m.registered = { ...m.registered, handler: [...m.registered.handler, ...zoomCommands] };
+        for (const r of (m.files['references.json'] as { references: { kind: string; id: string; status: string }[] }).references) {
+          if (r.kind === 'handler' && zoomCommands.includes(r.id)) r.status = 'registered';
+        }
+      }).map((p) => p.rule);
+    expect(at('fit', false)).toEqual([]);
+    expect(at(50, false)).toEqual(['zoom']);
+    expect(at(50, true)).toEqual([]);
+    expect(at(75, true)).toEqual(['unknown-reference']);
+  });
+
   it('never changes the real manifest when planting', () => {
     for (const plant of PLANTS) planted(loaded.input, plant);
     expect(checkManifest(loaded.input).problems).toEqual([]);

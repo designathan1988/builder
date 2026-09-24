@@ -107,6 +107,7 @@ export const RULES = [
   'step',
   'door-coverage',
   'tooth-proof',
+  'zoom',
 ] as const;
 
 export type RuleId = (typeof RULES)[number];
@@ -778,7 +779,7 @@ export function checkManifest(input: ManifestInput): CheckResult {
       ref(breakpointIds.has(s.setup.breakpoint), f.file, `${path}.breakpoint`, `unknown breakpoint "${s.setup.breakpoint}"`);
       ref(stateIds.has(s.setup.state), f.file, `${path}.state`, `unknown state "${s.setup.state}"`);
       ref(viewportIds.has(s.setup.viewport), f.file, `${path}.viewport`, `unknown viewport "${s.setup.viewport}"`);
-      ref(p.environment.zoomLevels.includes(s.setup.zoom), f.file, `${path}.zoom`, `zoom ${s.setup.zoom} is not one of the environment's zoom levels`);
+      if (s.setup.zoom !== 'fit') ref(p.environment.zoomLevels.includes(s.setup.zoom), f.file, `${path}.zoom`, `zoom ${s.setup.zoom} is not one of the environment's zoom levels`);
       ref(p.environment.locales.available.includes(s.setup.locale), f.file, `${path}.locale`, `locale "${s.setup.locale}" is not available`);
       const editor = s.expect.editor;
       const at = `${f.path}.scenarios[${si}].expect.editor`;
@@ -1619,6 +1620,20 @@ export function checkManifest(input: ManifestInput): CheckResult {
         report('modifier-conflict', 'interactions.json', `gestures[${gi}].modifiers[${mi}]`, `${m.key} means both "${first}" and "${m.meaning}" in gesture "${g.id}"`);
       } else meanings.set(m.key, m.meaning);
     }
+  }
+
+  // ---- zoom: a scenario starts at a canvas zoom level only once the zoom doors exist (zoom-keyboard-buttons built:
+  // every command of it registered); before that it starts with the canvas as it opens ("fit"). 100 is accepted for
+  // one commit while the scenarios move to "fit" (TRANSITIONAL_ZOOM).
+  const TRANSITIONAL_ZOOM = 100;
+  const zoomFeature = features.find((f) => f.feature.id === 'zoom-keyboard-buttons');
+  const registeredHandlers = new Set(input.registered.handler);
+  const zoomBuilt = zoomFeature !== undefined && zoomFeature.feature.commands.every((c) => registeredHandlers.has(c));
+  for (const f of features) {
+    f.feature.scenarios.forEach((s, si) => {
+      if (s.setup.zoom === 'fit' || s.setup.zoom === TRANSITIONAL_ZOOM || zoomBuilt) return;
+      report('zoom', f.file, `${f.path}.scenarios[${si}].setup.zoom`, `scenario ${s.id} starts at zoom ${s.setup.zoom}, but zoom-keyboard-buttons is not built: start with the canvas as it opens ("fit")`);
+    });
   }
 
   // ---- exclusion: every excluded keyword names its evidence, is a keyword of its property, is marked unsupported

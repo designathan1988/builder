@@ -127,7 +127,7 @@ function scenario(id: string, steps: Json[], doors: string[], expect: Json): Jso
       state: 'base',
       locale: 'pt-BR',
       viewport: 'desktop-1440',
-      zoom: 100,
+      zoom: 'fit',
     },
     steps,
     doors,
@@ -915,6 +915,15 @@ PLANTS.push(
     apply: (m) => {
       list(composite(m, 'columns').subsets).push({ id: 'planted-presets', values: null, units: ['%'], reason: 'planted' });
       obj(obj(door(m, 'style.set', 'inspector-columns').adapter).offers).presets = 'planted-presets';
+    },
+  },
+  {
+    id: 'zoom-before-zoom-doors',
+    rule: 'zoom',
+    description: 'a scenario of delete-element starts at a canvas zoom of 50 % although zoom-keyboard-buttons is not built',
+    apply: (m) => {
+      const [remove] = plantDeleteScenarios(m);
+      obj(remove.setup).zoom = 50;
     },
   },
   {

@@ -44,6 +44,7 @@ export const environmentSchema = z.strictObject({
   locales: z.strictObject({ default: localeSchema, available: z.array(localeSchema).min(1) }),
   // a fresh profile's theme: one of the themes preferences.setTheme offers (manifest:check rule unknown-reference)
   theme: z.strictObject({ default: kebabId }),
+  // the canvas zoom levels, in percent, a scenario may start at (setup.zoom)
   zoomLevels: z.array(z.number().int().positive()).min(1),
   reducedMotion: z.boolean(),
 });
@@ -701,7 +702,11 @@ export const scenarioSchema = z.strictObject({
     state: kebabId,
     locale: localeSchema,
     viewport: kebabId,
-    zoom: z.number().int().positive(),
+    // "fit": the canvas as it opens, the frame fitted to the stage; a number: the canvas zoom in percent, one of
+    // environment.zoomLevels, which the runner sets through View › Zoom before the steps, so only once the feature
+    // zoom-keyboard-buttons is built (manifest:check rule zoom). 100 is accepted for one commit while the scenarios
+    // move to "fit".
+    zoom: z.union([z.literal('fit'), z.number().int().positive()]),
   }),
   // run in order after the fixture is loaded; exactly one is the action step
   steps: z.array(stepSchema).min(1),
