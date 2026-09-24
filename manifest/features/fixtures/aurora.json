@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "pages": [
+    {
+      "id": "p-home",
+      "name": "Home",
+      "file": "index.html",
+      "tree": {
+        "id": "n-page", "type": "page", "name": "Page", "tag": "body", "attributes": {}, "classes": [], "styles": {}, "text": null,
+        "children": [
+          {
+            "id": "n-hero", "type": "section", "name": "Hero", "tag": "section", "attributes": {}, "classes": [],
+            "styles": { "desktop": { "base": { "padding-top": "56px", "padding-right": "40px", "padding-bottom": "56px", "padding-left": "40px" } } },
+            "text": null,
+            "children": [
+              { "id": "n-title", "type": "heading", "name": "Title", "tag": "h1", "attributes": {}, "classes": [], "styles": {}, "text": "Welcome to Aurora", "children": [] },
+              { "id": "n-intro", "type": "paragraph", "name": "Intro", "tag": "p", "attributes": {}, "classes": [], "styles": {}, "text": "Fresh coffee, roasted every week.", "children": [] },
+              { "id": "n-actions", "type": "div", "name": "Actions", "tag": "div", "attributes": {}, "classes": [], "styles": {}, "text": null, "children": [] }
+            ]
+          },
+          {
+            "id": "n-plans", "type": "section", "name": "Plans", "tag": "section", "attributes": {}, "classes": [], "styles": {}, "text": null,
+            "children": [
+              {
+                "id": "n-grid", "type": "div", "name": "Grid", "tag": "div", "attributes": {}, "classes": [], "styles": {}, "text": null,
+                "children": [
+                  {
+                    "id": "n-card-a", "type": "article", "name": "CardA", "tag": "article", "attributes": {}, "classes": ["card"], "styles": {}, "text": null,
+                    "children": [
+                      { "id": "n-card-a-title", "type": "heading", "name": "CardATitle", "tag": "h3", "attributes": {}, "classes": [], "styles": {}, "text": "Monthly", "children": [] }
+                    ]
+                  },
+                  {
+                    "id": "n-card-b", "type": "article", "name": "CardB", "tag": "article", "attributes": {}, "classes": ["card"], "styles": {}, "text": null,
+                    "children": [
+                      { "id": "n-card-b-title", "type": "heading", "name": "CardBTitle", "tag": "h3", "attributes": {}, "classes": [], "styles": {}, "text": "Weekly", "children": [] }
+                    ]
+                  },
+                  { "id": "n-card-c", "type": "article", "name": "CardC", "tag": "article", "attributes": {}, "classes": ["card"], "styles": {}, "text": null, "children": [] }
+                ]
+              },
+              {
+                "id": "n-perks", "type": "list", "name": "Perks", "tag": "ul", "attributes": {}, "classes": [], "styles": {}, "text": null,
+                "children": [
+                  {
+                    "id": "n-perk-one", "type": "listItem", "name": "PerkOne", "tag": "li", "attributes": {}, "classes": [], "styles": {}, "text": null,
+                    "children": [
+                      { "id": "n-perk-one-text", "type": "paragraph", "name": "PerkOneText", "tag": "p", "attributes": {}, "classes": [], "styles": {}, "text": "Free delivery", "children": [] }
+                    ]
+                  },
+                  {
+                    "id": "n-perk-two", "type": "listItem", "name": "PerkTwo", "tag": "li", "attributes": {}, "classes": [], "styles": {}, "text": null,
+                    "children": [
+                      { "id": "n-perk-two-text", "type": "paragraph", "name": "PerkTwoText", "tag": "p", "attributes": {}, "classes": [], "styles": {}, "text": "Pause anytime", "children": [] }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "n-footer", "type": "footer", "name": "Footer", "tag": "footer", "attributes": {}, "classes": [], "styles": {}, "text": null,
+            "children": [
+              { "id": "n-note", "type": "paragraph", "name": "Note", "tag": "p", "attributes": {}, "classes": [], "styles": {}, "text": "Aurora Coffee", "children": [] }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

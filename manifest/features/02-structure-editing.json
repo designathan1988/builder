@@ -29,7 +29,553 @@
           "The status bar reads 'Placed <name> in <parent>, position N of M.' [status.placed] after each insert."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "insert-section-into-empty-page",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "section"
+              },
+              "target": null,
+              "drop": null,
+              "action": true
+            }
+          ],
+          "doors": [
+            "element.insert#elements-tile",
+            "element.insert#key-enter-in-palette",
+            "element.insert#key-space-in-palette"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "section",
+                    "name": "Section",
+                    "tag": "section",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "padding-top": "56px",
+                          "padding-right": "40px",
+                          "padding-bottom": "56px",
+                          "padding-left": "40px"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Section"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Section",
+                  "property": "padding-top",
+                  "value": "56px"
+                },
+                {
+                  "node": "/Page/Section",
+                  "property": "padding-left",
+                  "value": "40px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.placed",
+                  "params": {
+                    "element": "Section",
+                    "parent": "Page",
+                    "position": 1,
+                    "count": 1
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "insert-heading-into-selected-container",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Actions"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "heading"
+              },
+              "target": null,
+              "drop": null,
+              "action": true
+            }
+          ],
+          "doors": [
+            "element.insert#elements-tile",
+            "element.insert#key-enter-in-palette",
+            "element.insert#key-space-in-palette"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Actions/@children",
+                "value": [
+                  {
+                    "type": "heading",
+                    "name": "Heading",
+                    "tag": "h2",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "New heading",
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Actions/Heading"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Actions/Heading",
+                  "property": "font-weight",
+                  "value": "700"
+                }
+              ],
+              "geometry": [
+                {
+                  "node": "/Page/Hero/Actions/Heading",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": "/Page/Hero/Intro"
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.placed",
+                  "params": {
+                    "element": "Heading",
+                    "parent": "Actions",
+                    "position": 1,
+                    "count": 1
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "insert-paragraph-after-selected-leaf",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "paragraph"
+              },
+              "target": null,
+              "drop": null,
+              "action": true
+            }
+          ],
+          "doors": [
+            "element.insert#elements-tile",
+            "element.insert#key-enter-in-palette",
+            "element.insert#key-space-in-palette"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@children",
+                "value": [
+                  {
+                    "type": "heading",
+                    "name": "Title",
+                    "tag": "h1",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Welcome to Aurora",
+                    "children": []
+                  },
+                  {
+                    "type": "paragraph",
+                    "name": "Paragraph",
+                    "tag": "p",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "A freshly created paragraph.",
+                    "children": []
+                  },
+                  {
+                    "type": "paragraph",
+                    "name": "Intro",
+                    "tag": "p",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Fresh coffee, roasted every week.",
+                    "children": []
+                  },
+                  {
+                    "type": "div",
+                    "name": "Actions",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Paragraph"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [
+                {
+                  "node": "/Page/Hero/Paragraph",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": "/Page/Hero/Title"
+                },
+                {
+                  "node": "/Page/Hero/Paragraph",
+                  "measure": "y",
+                  "relation": "less-than",
+                  "value": 0,
+                  "reference": "/Page/Hero/Intro"
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.placed",
+                  "params": {
+                    "element": "Paragraph",
+                    "parent": "Hero",
+                    "position": 2,
+                    "count": 4
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "insert-keeps-names-unique",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "paragraph"
+              },
+              "target": null,
+              "drop": null,
+              "action": false
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "paragraph"
+              },
+              "target": null,
+              "drop": null,
+              "action": true
+            }
+          ],
+          "doors": [
+            "element.insert#elements-tile",
+            "element.insert#key-enter-in-palette",
+            "element.insert#key-space-in-palette"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@children",
+                "value": [
+                  {
+                    "type": "heading",
+                    "name": "Title",
+                    "tag": "h1",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Welcome to Aurora",
+                    "children": []
+                  },
+                  {
+                    "type": "paragraph",
+                    "name": "Intro",
+                    "tag": "p",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Fresh coffee, roasted every week.",
+                    "children": []
+                  },
+                  {
+                    "type": "paragraph",
+                    "name": "Paragraph",
+                    "tag": "p",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "A freshly created paragraph.",
+                    "children": []
+                  },
+                  {
+                    "type": "paragraph",
+                    "name": "Paragraph 2",
+                    "tag": "p",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "A freshly created paragraph.",
+                    "children": []
+                  },
+                  {
+                    "type": "div",
+                    "name": "Actions",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Paragraph 2"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [
+                {
+                  "node": "/Page/Hero/Paragraph 2",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": "/Page/Hero/Paragraph"
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.placed",
+                  "params": {
+                    "element": "Paragraph 2",
+                    "parent": "Hero",
+                    "position": 4,
+                    "count": 5
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "insert-refused-where-the-parent-does-not-accept-it",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Plans/Perks"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "section"
+              },
+              "target": null,
+              "drop": null,
+              "action": true
+            }
+          ],
+          "doors": [
+            "element.insert#elements-tile",
+            "element.insert#key-enter-in-palette",
+            "element.insert#key-space-in-palette"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Plans/Perks"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.refused.onlyAccepts",
+                  "params": {
+                    "parent": "<ul>",
+                    "children": "<li>"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": [
+            {
+              "key": "status.refused.onlyAccepts",
+              "document": "unchanged"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "select-click",
