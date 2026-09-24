@@ -214,9 +214,9 @@ export const PLANTS: Plant[] = [
   {
     id: 'command-without-door',
     rule: 'command-without-door',
-    description: 'history.redo has no door',
+    description: 'codePanel.downloadPane has no door',
     apply: (m) => {
-      command(m, 'history.redo').entryPoints = [];
+      command(m, 'codePanel.downloadPane').entryPoints = [];
     },
   },
   {

@@ -80,10 +80,11 @@ export function generateTypes(root: string): { file: string; content: string }[]
   // the manifest as tools/manifest/load.ts reads it for manifest:check: one reader of the files
   const { input } = loadManifest(root);
   const file = (name: string) => input.files[name];
-  const sorted = (dir: string) => Object.keys(input.files).filter((f) => f.startsWith(`${dir}/`)).sort();
+  const sorted = (dir: string, only: RegExp = /./) => Object.keys(input.files).filter((f) => f.startsWith(`${dir}/`) && only.test(f)).sort();
   const commandFiles = sorted('commands').map((f) => commandsFileSchema.parse(file(f)));
   const commands = commandFiles.flatMap((f) => f.commands);
-  const featureFiles = sorted('features').map((f) => featuresFileSchema.parse(file(f)));
+  // the feature groups only: features/fixtures/ holds the scenarios' project documents
+  const featureFiles = sorted('features', /^features\/\d{2}-[a-z0-9-]+\.json$/).map((f) => featuresFileSchema.parse(file(f)));
   const properties = propertiesFileSchema.parse(file('properties.json'));
   const elements = elementsFileSchema.parse(file('elements.json'));
   const interactions = interactionsFileSchema.parse(file('interactions.json'));
