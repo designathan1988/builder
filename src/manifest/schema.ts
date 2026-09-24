@@ -932,15 +932,18 @@ export const generatedHtmlSchema = z.strictObject({
 
 // The icons of the editor's one icon library (Lucide), by name.
 // ---------------------------------------------------------------- css-exclusions (generator input)
-// Keywords every browser parses but none implements, which BCD cannot tell apart because it has no entry of their own
-// (css-compat.json then gives each the support of its property). npm run gen marks each one unsupported in every
-// browser, so it leaves every generated list; manifest:check rule exclusion requires the evidence and refuses an
-// excluded value in any declared list. Never a menu subset: the exclusion is data about the browsers.
+// Values the browsers do not act on although the data says they do: a keyword every browser parses but none
+// implements (BCD has no entry of its own, so css-compat.json gives it the support of its property), or a keyword or a
+// unit the installed Chrome's own parser refuses (tests/e2e/css-support.spec.ts, CSS.supports). npm run gen marks an
+// excluded keyword unsupported in every browser and leaves an excluded unit out of the property's list, so neither is
+// in any generated list; manifest:check rule exclusion requires the evidence and refuses an excluded value in any
+// declared list. Each entry names a keyword or a unit, not both. Never a menu subset: this is data about the browsers.
 export const exclusionsFileSchema = z.strictObject({
   exclusions: z.array(
     z.strictObject({
       property: cssName,
-      keyword: z.string().min(1),
+      keyword: z.string().min(1).nullable(),
+      unit: z.string().min(1).nullable(),
       evidence: z.strictObject({
         // what shows the keyword does nothing: the specification's status, BCD, or the observed behaviour in Chrome
         kind: z.enum(['spec', 'bcd', 'chrome']),

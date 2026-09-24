@@ -233,6 +233,9 @@ export const EXCLUSIONS_FILE = 'manifest/css-exclusions.json';
 function applyExclusions(properties: Record<string, { keywords: Record<string, { chrome: unknown; firefox: unknown; safari: unknown; why: Record<string, string> }> }>): void {
   const { exclusions } = exclusionsFileSchema.parse(JSON.parse(fs.readFileSync(path.join(REPO_ROOT, EXCLUSIONS_FILE), 'utf8')));
   for (const x of exclusions) {
+    // an excluded unit leaves the property's list in tools/gen/types.ts (generatedUnits); css-compat.json keeps units
+    // per browser for every property alike
+    if (x.keyword === null) continue;
     const entry = properties[x.property]?.keywords[x.keyword.toLowerCase()];
     if (entry === undefined) throw new Error(`${EXCLUSIONS_FILE}: ${x.property} has no keyword ${x.keyword} in the generated data`);
     const why = `excluded (${EXCLUSIONS_FILE}): ${x.evidence.note}`;

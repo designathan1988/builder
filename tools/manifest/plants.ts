@@ -909,6 +909,15 @@ PLANTS.push(
     },
   },
   {
+    id: 'excluded-unit-offered',
+    rule: 'exclusion',
+    description: 'the columns field offers the unit % among its presets, which Chrome refuses',
+    apply: (m) => {
+      list(composite(m, 'columns').subsets).push({ id: 'planted-presets', values: null, units: ['%'], reason: 'planted' });
+      obj(obj(door(m, 'style.set', 'inspector-columns').adapter).offers).presets = 'planted-presets';
+    },
+  },
+  {
     id: 'label-names-two-properties',
     rule: 'label-term',
     description: 'pt-BR labels gap "Preenchimento", the term of the SVG fill (the mockups used it for padding and fill)',

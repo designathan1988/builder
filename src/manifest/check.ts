@@ -475,6 +475,13 @@ export interface OfferData {
   properties: PropertiesFile;
   css: GeneratedCss;
   compat: GeneratedCompat;
+  // the units css-exclusions.json takes out of a property's, composite's or recipe's list, as "id:unit"
+  excludedUnits: ReadonlySet<string>;
+}
+
+// the units css-exclusions.json excludes, as "property:unit"
+export function excludedUnitsOf(exclusions: ExclusionsFile): Set<string> {
+  return new Set(exclusions.exclusions.flatMap((x) => (x.unit === null ? [] : [`${x.property}:${x.unit.toLowerCase()}`])));
 }
 
 // The keywords a door's "generated" list offers for a property, composite or recipe id: the generated
@@ -484,11 +491,12 @@ export interface OfferData {
 // The units a door's "generated" list offers for a property or composite id (see supportedUnits); a recipe
 // offers the units of the declarations that carry its value; null for an unknown id.
 export function generatedUnits(data: OfferData, id: string): string[] | null {
-  if (data.properties.properties.some((p) => p.id === id)) return supportedUnits(data.css, data.compat, id);
+  const kept = (units: string[]) => units.filter((u) => !data.excludedUnits.has(`${id}:${u.toLowerCase()}`));
+  if (data.properties.properties.some((p) => p.id === id)) return kept(supportedUnits(data.css, data.compat, id));
   const composite = data.properties.composites.find((c) => c.id === id);
-  if (composite) return composite.shorthand === null ? [] : supportedUnits(data.css, data.compat, composite.shorthand);
+  if (composite) return composite.shorthand === null ? [] : kept(supportedUnits(data.css, data.compat, composite.shorthand));
   const recipe = data.properties.recipes.find((r) => r.id === id);
-  if (recipe) return [...new Set(recipe.declarations.filter((d) => d.value === null).flatMap((d) => supportedUnits(data.css, data.compat, d.property)))];
+  if (recipe) return kept([...new Set(recipe.declarations.filter((d) => d.value === null).flatMap((d) => supportedUnits(data.css, data.compat, d.property)))]);
   return null;
 }
 
@@ -597,7 +605,7 @@ export function checkManifest(input: ManifestInput): CheckResult {
   // Browser support (css-compat.json). Keyword keys are lower-case.
   const compat = p.compat.properties;
   // the keywords css-exclusions.json excludes: rule exclusion, not browser-support, reports a list that offers one
-  const excludedKeyword = new Set(p.exclusions.exclusions.map((x) => `${x.property}:${x.keyword.toLowerCase()}`));
+  const excludedKeyword = new Set(p.exclusions.exclusions.flatMap((x) => (x.keyword === null ? [] : [`${x.property}:${x.keyword.toLowerCase()}`])));
   type Support = { chrome: string | false; firefox: string | false; safari: string | false; why: Partial<Record<Browser, string>> };
   const lacking = (s: Support): Browser[] => BROWSERS.filter((b) => s[b] === false);
   const describeLack = (s: Support) => lacking(s).map((b) => `${b} (${s.why[b] ?? 'not supported'})`).join(', ');
@@ -944,7 +952,7 @@ export function checkManifest(input: ManifestInput): CheckResult {
   const subsetsOf = (target: string): Subset[] => propertyById.get(target)?.subsets ?? compositeById.get(target)?.subsets ?? [];
   const controlOf = (target: string): string | undefined => propertyById.get(target)?.control ?? compositeById.get(target)?.control ?? recipeById.get(target)?.control;
   const KEYWORD_CONTROLS = new Set(['keyword-menu', 'keyword-buttons', 'font-menu']);
-  const offerData: OfferData = { properties: p.properties, css: p.css, compat: p.compat };
+  const offerData: OfferData = { properties: p.properties, css: p.css, compat: p.compat, excludedUnits: excludedUnitsOf(p.exclusions) };
   const offeredGenerated = new Map<string, string>(); // css name → first door that offers its generated list
   let keywordsLeftOut = 0;
   let unitsLeftOut = 0;
@@ -1617,13 +1625,24 @@ export function checkManifest(input: ManifestInput): CheckResult {
   // by npm run gen, and no declared list (a subset: presets, Essentials only, a quick panel list) offers it
   p.exclusions.exclusions.forEach((x, i) => {
     const at = `exclusions[${i}]`;
-    if (x.evidence.source.trim() === '' || x.evidence.note.trim() === '') report('exclusion', 'css-exclusions.json', `${at}.evidence`, `${x.property}: ${x.keyword} is excluded without evidence: name its source and what it shows`);
-    const keyword = x.keyword.toLowerCase();
+    const what = x.keyword ?? `the unit ${x.unit ?? ''}`;
+    if (x.evidence.source.trim() === '' || x.evidence.note.trim() === '') report('exclusion', 'css-exclusions.json', `${at}.evidence`, `${x.property}: ${what} is excluded without evidence: name its source and what it shows`);
+    if ((x.keyword === null) === (x.unit === null)) {
+      report('exclusion', 'css-exclusions.json', at, `${x.property}: an exclusion names a keyword or a unit, not both and not neither`);
+      return;
+    }
+    if (x.unit !== null) {
+      const unit = x.unit.toLowerCase();
+      const syntaxOf = propertyById.has(x.property) ? x.property : (compositeById.get(x.property)?.shorthand ?? x.property);
+      if (!(p.css.properties[syntaxOf]?.units ?? []).some((u) => u.toLowerCase() === unit)) report('exclusion', 'css-exclusions.json', `${at}.unit`, `${x.unit} is not a unit of ${x.property} in css-properties.json`);
+      return;
+    }
+    const keyword = (x.keyword ?? '').toLowerCase();
     const entry = compat[x.property]?.keywords[keyword];
     if (!(p.css.properties[x.property]?.keywords ?? []).some((k) => k.toLowerCase() === keyword)) {
-      report('exclusion', 'css-exclusions.json', `${at}.keyword`, `${x.keyword} is not a keyword of ${x.property} in css-properties.json`);
+      report('exclusion', 'css-exclusions.json', `${at}.keyword`, `${x.keyword ?? ''} is not a keyword of ${x.property} in css-properties.json`);
     } else if (entry === undefined || BROWSERS.some((b) => entry[b] !== false)) {
-      report('exclusion', 'css-exclusions.json', at, `${x.property}: ${x.keyword} is excluded but css-compat.json still gives it support: run npm run gen`);
+      report('exclusion', 'css-exclusions.json', at, `${x.property}: ${x.keyword ?? ''} is excluded but css-compat.json still gives it support: run npm run gen`);
     }
   });
   const declaredLists = [
@@ -1634,8 +1653,11 @@ export function checkManifest(input: ManifestInput): CheckResult {
     owner.subsets.forEach((subset, si) => {
       for (const value of subset.values ?? []) {
         for (const word of value.toLowerCase().split(/\s+/)) {
-          if (excludedKeyword.has(`${owner.id}:${word}`)) report('exclusion', 'properties.json', `${owner.path}.subsets[${si}]`, `the list "${subset.id}" of ${owner.id} offers ${word}, which css-exclusions.json excludes: no browser implements it`);
+          if (excludedKeyword.has(`${owner.id}:${word}`)) report('exclusion', 'properties.json', `${owner.path}.subsets[${si}]`, `the list "${subset.id}" of ${owner.id} offers ${word}, which css-exclusions.json excludes: the browsers do not act on it`);
         }
+      }
+      for (const unit of subset.units ?? []) {
+        if (offerData.excludedUnits.has(`${owner.id}:${unit.toLowerCase()}`)) report('exclusion', 'properties.json', `${owner.path}.subsets[${si}]`, `the list "${subset.id}" of ${owner.id} offers the unit ${unit}, which css-exclusions.json excludes: the browsers do not act on it`);
       }
     });
   }
@@ -2118,7 +2140,7 @@ export function checkManifest(input: ManifestInput): CheckResult {
     keyContexts: p.interactions.keyContexts.length,
     scenarios: features.reduce((n, f) => n + f.feature.scenarios.length, 0),
     fixtures: p.fixtures.size,
-    exclusions: p.exclusions.exclusions.map((x) => `${x.property}: ${x.keyword}`),
+    exclusions: p.exclusions.exclusions.map((x) => `${x.property}: ${x.keyword ?? `the unit ${x.unit ?? ''}`}`),
     i18nKeys: keyUses.size,
   };
   return { problems, summary };

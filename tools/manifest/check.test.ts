@@ -551,11 +551,15 @@ describe('generated web data', () => {
     expect(supportedKeywords(css, compat, 'object-position')).toEqual(['left', 'center', 'right', 'top', 'bottom']);
     // one definition of "generated" for properties, composites and recipes
     const properties = propertiesFileSchema.parse(loaded.input.files['properties.json']);
-    expect(generatedOffer({ properties, css, compat }, 'user-select')).toEqual(['auto', 'text', 'none', 'all']);
-    expect(generatedOffer({ properties, css, compat }, 'overflow')).toEqual(supportedKeywords(css, compat, 'overflow'));
-    expect(generatedOffer({ properties, css, compat }, 'not-an-id')).toBeNull();
-    expect(generatedUnits({ properties, css, compat }, 'width')).toEqual(css.properties.width?.units);
-    expect(generatedUnits({ properties, css, compat }, 'line-clamp')).toEqual([]);
+    const none = new Set<string>();
+    expect(generatedOffer({ properties, css, compat, excludedUnits: none }, 'user-select')).toEqual(['auto', 'text', 'none', 'all']);
+    expect(generatedOffer({ properties, css, compat, excludedUnits: none }, 'overflow')).toEqual(supportedKeywords(css, compat, 'overflow'));
+    expect(generatedOffer({ properties, css, compat, excludedUnits: none }, 'not-an-id')).toBeNull();
+    expect(generatedUnits({ properties, css, compat, excludedUnits: none }, 'width')).toEqual(css.properties.width?.units);
+    expect(generatedUnits({ properties, css, compat, excludedUnits: none }, 'line-clamp')).toEqual([]);
+    // an excluded unit leaves the list of the property, composite or recipe it is excluded from
+    expect(generatedUnits({ properties, css, compat, excludedUnits: none }, 'columns')).toContain('%');
+    expect(generatedUnits({ properties, css, compat, excludedUnits: new Set(['columns:%']) }, 'columns')).not.toContain('%');
   });
 
   it('refuses an HTML placement the content model does not permit', () => {

@@ -1829,6 +1829,10 @@
       "reader": "tools/gen/generate.ts"
     },
     {
+      "field": "css-exclusions:exclusions[].unit",
+      "reader": "src/manifest/check.ts"
+    },
+    {
       "field": "css-exclusions:exclusions[].evidence",
       "reader": "tools/gen/generate.ts"
     },

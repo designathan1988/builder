@@ -8,7 +8,7 @@
 // The files hold data and types only.
 import fs from 'node:fs';
 import path from 'node:path';
-import { generatedOffer, generatedUnits, type OfferData } from '../../src/manifest/check.ts';
+import { excludedUnitsOf, generatedOffer, generatedUnits, type OfferData } from '../../src/manifest/check.ts';
 import { loadManifest } from '../manifest/load.ts';
 import {
   checksFileSchema,
@@ -16,6 +16,7 @@ import {
   elementsFileSchema,
   environmentSchema,
   featuresFileSchema,
+  exclusionsFileSchema,
   generatedCompatSchema,
   generatedCssSchema,
   interactionsFileSchema,
@@ -159,6 +160,7 @@ export type CommandArgsOf<Id extends CommandId> = CommandArgs[Id];
     properties,
     css: generatedCssSchema.parse(file('generated/css-properties.json')),
     compat: generatedCompatSchema.parse(file('generated/css-compat.json')),
+    excludedUnits: excludedUnitsOf(exclusionsFileSchema.parse(file('css-exclusions.json'))),
   };
   const offered = [...new Set(commands.flatMap((c) => c.entryPoints.flatMap((d) => (d.adapter.offers?.list === 'generated' ? [d.adapter.offers.property] : []))))].sort();
   const lists = offered
