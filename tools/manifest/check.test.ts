@@ -377,6 +377,19 @@ describe('manifest:check', () => {
     }
   });
 
+  it('leaves a missing ARCHITECTURE.md to rule owner, also when a feature names its tooth-proof module', () => {
+    const input = planted(loaded.input, {
+      id: 'no-architecture',
+      rule: 'owner',
+      description: '',
+      apply: (m) => {
+        plantRenderScenario(m).toothProof = 'src/core/render/render.ts';
+        m.architecture = null;
+      },
+    });
+    expect([...new Set(checkManifest(input).problems.map((p) => p.rule))]).toEqual(['owner']);
+  });
+
   it('never changes the real manifest when planting', () => {
     for (const plant of PLANTS) planted(loaded.input, plant);
     expect(checkManifest(loaded.input).problems).toEqual([]);

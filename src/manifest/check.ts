@@ -2030,7 +2030,8 @@ export function checkManifest(input: ManifestInput): CheckResult {
       const tooth = f.feature.toothProof;
       if (tooth !== undefined) {
         if (f.feature.commands.length > 0) report('tooth-proof', f.file, `${f.path}.toothProof`, `${f.feature.id} has commands: its tooth proof disables their handlers, so it names no module`);
-        else if (!architectureModules.has(tooth)) report('tooth-proof', f.file, `${f.path}.toothProof`, `${tooth} is not a module of ARCHITECTURE.md`);
+        // without ARCHITECTURE.md rule owner reports the missing file; the module cannot be confirmed either way
+        else if (input.architecture !== null && !architectureModules.has(tooth)) report('tooth-proof', f.file, `${f.path}.toothProof`, `${tooth} is not a module of ARCHITECTURE.md`);
       } else if (scenarios.length > 0 && f.feature.commands.length === 0) {
         report('tooth-proof', f.file, `${f.path}`, `${f.feature.id} has scenarios and no commands: name the module its tooth proof replaces with a no-op (toothProof)`);
       }
