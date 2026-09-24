@@ -12,8 +12,8 @@ Each module below exists by the end of part 1; until a module lands, its line is
 |---|---|---|---|
 | Generated types and registries | `tools/gen/types.ts` | Writes `src/generated/` from the manifest and the catalogues: the id unions (CommandId, DoorRef, PropertyId, ElementType, MessageId…), each command's argument types, the value lists the "generated" doors offer. | Hand edits in `src/generated/` (gen:check fails); logic in generated files. |
 | Manifest at runtime | `src/manifest/runtime.ts` | Loads the manifest JSON once, parsed by its schemas, and answers lookups: a command, a door, a region's doors, the menus, the properties, the elements. | Re-listing manifest data in code; writing the manifest. |
-| Command registry and the "not available yet" marker | `src/core/commands/registry.ts` | The registry type (one entry per CommandId: a handler registered with `registerHandler`, or `NOT_AVAILABLE_YET`), availability predicates, the handler contract. | Doors, React, a second list of commands. |
-| The command table | `src/app/commands.ts` | The one object with an entry for every command; a missing or extra entry is a type error. | Handlers written inline; any other table of commands. |
+| Command registry and the "not available yet" marker | `src/core/commands/registry.ts` | The contract of the command table: its type `CommandTable` (a key for every CommandId), `registerHandler`, the `NOT_AVAILABLE_YET` marker, `registerPredicate`, the handler's context and outcome. It holds no entries. | Doors, React, entries. |
+| The command table | `src/app/commands.ts` | The one map from every command to its handler or `NOT_AVAILABLE_YET`, and the table of registered predicates; a missing or extra entry is a type error. | Handlers written inline; any other map of commands. |
 | Document model | `src/core/document/model.ts` | The document JSON types (pages, the node tree, attributes, classes, styles by breakpoint and state) with ids from the manifest, and the empty project. | DOM, rendering, storage. |
 | Validation | `src/core/document/validate.ts` | Whole-tree validation of a document and its selection against the model and the manifest, on every commit. | Repairing or changing a document. |
 | Store and dispatch | `src/core/store/store.ts` | The one store: document, selection, history, last message and the editor state; changes only through `dispatch(command)`; deep-freezes every state in development and tests. | Changing state outside dispatch; React. |
@@ -25,8 +25,8 @@ Each module below exists by the end of part 1; until a module lands, its line is
 | Tokens | `src/ui/tokens.css` | Every colour, type style, spacing, size, radius and shadow, generated from `design/final/tokens.json` by `tools/gen/tokens.ts`. | A literal colour, spacing or font value in any other stylesheet (lint rule `builder-css/use-tokens`). |
 | Icons | `src/ui/icons.svg` | The icon sprite of the interface, taken from `design/final/index.html`; the manifest names the icon of each door that has a control. | Inline SVG icons in components. |
 | Lint rules of the contract | `tools/lint/plugin.ts` | The ESLint rules for literal UI strings, literal style values and the time and id ports. | Exceptions outside the owners named above. |
-| Workspace (docks and panels) | `src/editor/workspace/panels.ts` | Which sidebar view, sections, docks and dock tabs are open; the commands that toggle them. | Document or selection state. |
-| Workbench state | `src/editor/workspace/layout.ts` | Collapsed, open or maximised dock. | Panel visibility (panels.ts owns it). |
+| Panel visibility | `src/editor/workspace/panels.ts` | Which sidebar view is shown, and whether the sidebar, the Layers section, the inspector and each dock tab are open: `workspace.setPanelOpen`, `toggleLeftDock`, `toggleInspector`, `collapseDocks`, `toggleDeveloperTools`. | Sizes, positions, the dock's state or the active tab (layout.ts); the inspector's sections (`src/editor/inspector/sections.ts`); document or selection state. |
+| Workspace layout | `src/editor/workspace/layout.ts` | The dock's state (collapsed, open, maximised), the active tab of each tab group, splitter sizes and floating panel positions: `workspace.setWorkbenchState`, `setActiveTab`, `resizeSplitter`, `movePanel`, `reset`. Part 1 builds the dock's state. | Which panels are open (panels.ts). |
 | Preferences | `src/editor/preferences/preferences.ts` | The UI language and theme, stored and restored after reload. | Document state. |
 | Keymap | `src/editor/input/keymap.ts` | Runs the shortcut doors of the manifest in their key contexts. | A second key table; keys that are not doors. |
 | The editor store binding | `src/editor/store.ts` | Creates the store with the command table and the editor state, and exposes it to React. | Holding state in `useState` or `useRef`. |
@@ -44,6 +44,7 @@ Each module below exists by the end of part 1; until a module lands, its line is
 | Coordinates under zoom | `src/editor/canvas/coordinates.ts` | planned: page, frame and screen coordinates at any zoom. |
 | Pointer input | `src/editor/input/pointer.ts` | planned: the one owner of pointer gestures, which run the canvas and drag doors as one transaction per gesture. |
 | Test suite from the manifest | `tools/runner/scenarios.ts` | planned: one Playwright test per scenario and door, through real input, reading the read-only test port. |
+| Read-only test port | `src/editor/test-port.ts` | planned: what tests read: the document, the selection, the history and the export. It never writes, loads, creates or selects anything. |
 
 ## Command owners
 

@@ -1,5 +1,5 @@
 // npm run gen:check (first step of verify:fast)
-// Regenerates manifest/generated/ and src/ui/tokens.css and fails when git sees any difference: a generated
+// Regenerates manifest/generated/, src/ui/tokens.css and src/generated/ and fails when git sees any difference: a generated
 // file that was edited by hand, or is stale because a source (a package, design/final/tokens.json) changed,
 // or was never added to git.
 import { execFileSync } from 'node:child_process';
@@ -8,6 +8,7 @@ import path from 'node:path';
 import { REPO_ROOT } from '../manifest/load.ts';
 import { GENERATED_DIR, generate } from './generate.ts';
 import { TOKENS_CSS } from './tokens.ts';
+import { TYPES_DIR } from './types.ts';
 import { packageVersion } from './versions.ts';
 const git = (...args: string[]) => execFileSync('git', args, { cwd: REPO_ROOT, encoding: 'utf8' });
 
@@ -22,8 +23,8 @@ for (const file of fs.readdirSync(path.join(REPO_ROOT, GENERATED_DIR))) {
 }
 
 const written = await generate();
-const untracked = git('ls-files', '--others', '--exclude-standard', '--', GENERATED_DIR, TOKENS_CSS).trim();
-const diff = git('diff', '--stat', '--', GENERATED_DIR, TOKENS_CSS).trim();
+const untracked = git('ls-files', '--others', '--exclude-standard', '--', GENERATED_DIR, TOKENS_CSS, TYPES_DIR).trim();
+const diff = git('diff', '--stat', '--', GENERATED_DIR, TOKENS_CSS, TYPES_DIR).trim();
 if (untracked === '' && diff === '') {
   console.log(`gen:check: ${written.join(', ')} are up to date.`);
   process.exit(0);

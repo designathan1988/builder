@@ -1,5 +1,6 @@
 // npm run gen
-// Writes src/ui/tokens.css from design/final/tokens.json (tools/gen/tokens.ts, Style Dictionary), and
+// Writes src/ui/tokens.css from design/final/tokens.json (tools/gen/tokens.ts, Style Dictionary), src/generated/
+// from the manifest (tools/gen/types.ts), and
 // manifest/generated/css-properties.json, css-compat.json and html-elements.json from the web
 // platform's published data: @webref/css (W3C) for every CSS property definition, CSSTree's lexer for
 // the keyword and unit lists each official syntax accepts, MDN's browser-compat-data for which of them
@@ -14,6 +15,7 @@ import { createCssMatcher, type CssMatcher } from '../../src/manifest/css.ts';
 import { REPO_ROOT } from '../manifest/load.ts';
 import { bcdVersion, generateCompatProperties, generateUnits, generateValueFunctions } from './compat.ts';
 import { TOKENS_CSS, generateTokens } from './tokens.ts';
+import { writeTypes } from './types.ts';
 import { packageVersion } from './versions.ts';
 
 const require = createRequire(import.meta.url);
@@ -344,6 +346,7 @@ export async function generate(root: string = REPO_ROOT): Promise<string[]> {
   fs.mkdirSync(path.dirname(tokens), { recursive: true });
   fs.writeFileSync(tokens, await generateTokens(root));
   written.push(TOKENS_CSS);
+  written.push(...writeTypes(root));
   return written;
 }
 
