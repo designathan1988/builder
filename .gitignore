@@ -8,3 +8,5 @@ playwright-report/
 coverage/
 blob-report/
 *.tsbuildinfo
+.cache/
+.playwright-mcp/

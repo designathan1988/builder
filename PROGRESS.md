@@ -2,6 +2,26 @@
 
 Handoff notes between sessions. Newest entry first.
 
+## 2026-09-24 — features.json written
+
+Done:
+- `features.json` has 161 entries ordered by dependency, all `"passes": false`. Build them strictly top to bottom. An independent reviewer checked the order three times for forward references, oversized entries, contradictions and tests that later entries would break.
+- Found by running Pager and using it in Chrome: served from a copy at `.cache/pager-run` (`node tools/serve.mjs . 8125` inside that folder). Nothing was written inside `reference/`.
+- The first entries are the editor layout and structural editing (select, layers, undo/redo, delete, drag reorder/inside, drag level keys, palette drag, layers drag, move up/down, wrap, context menu, unwrap, nest, promote, duplicate, copy/paste, keyboard walk, hand mode).
+- Entries for what Pager lacks: `unsaved-work-guard`, `autosave-crash-recovery`, `autosave-corruption-recovery`, `multi-tab-guard`, `clipboard-cut-system`, `clipboard-paste-external`, `keyboard-panel-navigation`, `layers-keyboard-navigation`, `html-import-*`, `code-panel-*`, `timeline-*`, `export-keyframes`, `explorer-*`, `export-multi-page`, `export-assets`.
+- `.gitignore` now ignores `.cache/` and `.playwright-mcp/` (the Playwright MCP tool writes snapshots there).
+
+Worth knowing for the work ahead:
+- Menus and the context menu arrive before most of their commands. Items for unbuilt features are shown disabled with 'not available yet' (CLAUDE.md rule). Which features are built must come from ONE feature registry, and tests compare the UI with that registry, never with a fixed list, or they break when later features land (tests may never be edited).
+- Tests of early entries assert "at least these, in this order", never "only these", for menus and inspector sections.
+- The canvas reserves 20 px bands for rulers from the first entry; the bottom workbench dock is closed by default.
+- `shortcuts-e2e-sweep` is deliberately last: each keymap row carries its own sweep case.
+- Tests need to read the document JSON. Plan a read-only test accessor (or read the IndexedDB record) in the first feature and use it everywhere.
+- Pager facts worth copying as behaviour (not code): desktop-first breakpoints 1440/1180/834/390; states Base, Hover, Focus, Active, Disabled, Invalid, Placeholder shown; 95 palette entries = 74 element types + 21 templates.
+
+Next:
+- Take `editor-shell`, the first feature with `"passes": false`.
+
 ## 2026-09-24 — Project initialized
 
 Done:
@@ -18,7 +38,3 @@ How to run:
 
 Fragile / worth knowing:
 - `reference/` has its own HTML entries. `vite.config.ts` restricts `optimizeDeps.entries` to `index.html` and does not watch `reference/`. Without that, Vite's dependency scan crawls Brickflow and complains about missing packages.
-- `features.json` does not exist yet. The session workflow in CLAUDE.md needs it before feature work can start.
-
-Next:
-- Add `features.json` (from the user), then take the first feature with `"passes": false`.
