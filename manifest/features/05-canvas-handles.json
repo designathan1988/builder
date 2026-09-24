@@ -1,0 +1,115 @@
+{
+  "group": "canvas-handles",
+  "titleKey": "featureGroup.canvasHandles",
+  "features": [
+    {
+      "id": "resize-handles",
+      "titleKey": "feature.resizeHandles",
+      "commands": [
+        "geometry.resize"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/resize-handles.md",
+      "intent": {
+        "title": "Resize an element with its eight handles",
+        "steps": [
+          "Select a Container with a fixed size.",
+          "Drag the E handle 100 screen px left, the S handle 80 px down, the SE handle diagonally.",
+          "Drag the SE handle with Shift held.",
+          "Drag the W handle with Alt held."
+        ],
+        "expected": [
+          "Eight handles sit on the corners and edge centres of the selection outline.",
+          "Edge handles change one dimension and corner handles both; the change in CSS px equals the pointer movement divided by the zoom; width and height are written to the document JSON.",
+          "Shift keeps the aspect ratio; Alt resizes symmetrically around the centre.",
+          "The status bar shows the live size while dragging and 'Resized to W x H' [status.resized] at the end; each resize is one undo step."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "spacing-handles",
+      "titleKey": "feature.spacingHandles",
+      "commands": [
+        "style.setSpacing",
+        "canvas.setEditMode"
+      ],
+      "dependsOn": [
+        "quick-panel",
+        "props-spacing"
+      ],
+      "spec": "spec/behavior/spacing-handles.md",
+      "intent": {
+        "title": "Edit padding and margin by dragging on the canvas",
+        "steps": [
+          "Select a Section and choose Padding in 'Edit on canvas' [quickPanel.editOnCanvas].",
+          "Drag the top padding band down by 20 screen px.",
+          "Drag the left band with Alt held; drag the bottom band with Shift held.",
+          "Choose Margin and drag the top margin band."
+        ],
+        "expected": [
+          "In Padding or Margin mode the four sides are drawn as bands with their values.",
+          "Dragging a band changes only that side; Alt changes the opposite side by the same amount; Shift changes all four sides.",
+          "The status bar shows the live value; the value is written to the document JSON as one undo step."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "radius-border-gap-handles",
+      "titleKey": "feature.radiusBorderGapHandles",
+      "commands": [
+        "style.set",
+        "style.setBorder",
+        "style.setRadius",
+        "handle.step"
+      ],
+      "dependsOn": [
+        "spacing-handles",
+        "props-border-outline"
+      ],
+      "spec": "spec/behavior/radius-border-gap-handles.md",
+      "intent": {
+        "title": "Edit radius, border width and gaps by dragging on the canvas",
+        "steps": [
+          "Select a Container and choose Radius in 'Edit on canvas' [quickPanel.editOnCanvas]; drag the corner handle inward.",
+          "Choose Border and drag an edge handle.",
+          "Select a flex Container with children; choose Gap, Row gap and Column gap and drag the gap bands."
+        ],
+        "expected": [
+          "Radius mode shows a corner handle labelled with the current radius and writes border-radius.",
+          "Border mode writes border width of the dragged side.",
+          "Gap modes show bands between children and write gap, row-gap or column-gap; the measured distance between children in the iframe matches."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "shadow-handles",
+      "titleKey": "feature.shadowHandles",
+      "commands": [
+        "style.setShadows"
+      ],
+      "dependsOn": [
+        "spacing-handles",
+        "shadow-editor"
+      ],
+      "spec": "spec/behavior/shadow-handles.md",
+      "intent": {
+        "title": "Edit shadow offset and blur by dragging on the canvas",
+        "steps": [
+          "Select a Container with a box shadow.",
+          "Choose Shadow offset in 'Edit on canvas' [quickPanel.editOnCanvas] and drag the handle.",
+          "Choose Shadow blur and drag the handle.",
+          "Select a Paragraph with a text shadow and repeat both modes."
+        ],
+        "expected": [
+          "Shadow offset mode moves the first shadow's X and Y with the pointer; Shadow blur mode changes its blur.",
+          "On a text element with a text shadow the same modes edit the first text shadow: X, Y and blur.",
+          "The box-shadow or text-shadow in the document JSON and the computed style update; each drag is one undo step."
+        ]
+      },
+      "scenarios": []
+    }
+  ]
+}

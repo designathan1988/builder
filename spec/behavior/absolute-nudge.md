@@ -47,4 +47,4 @@ This is the keyboard feature.
 
 ## Problems in Pager
 
-1. **A burst of nudges is many undo steps.** Required: arrow presses in a quick burst on the same selection, with no other command in between, are one undo step (features.json `absolute-nudge`); the burst window is a named constant in the history owner.
+1. **A burst of nudges is many undo steps.** Required: arrow presses in a quick burst on the same selection, with no other command in between, are one undo step (manifest feature `absolute-nudge`); the burst window is a named constant in the history owner.

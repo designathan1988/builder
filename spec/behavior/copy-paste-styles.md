@@ -36,7 +36,7 @@ None in Pager.
 
 ## Problems in Pager
 
-1. **Styles cannot be copied from one element to another.** Required (features.json `copy-paste-styles`):
+1. **Styles cannot be copied from one element to another.** Required (manifest feature `copy-paste-styles`):
    - Ctrl+Alt+C (Copy style) puts every style value of the selected element on the system clipboard in the app format.
    - Ctrl+Alt+V (Paste style) replaces the target's style values with the copied ones as one undo step; text, children and attributes stay.
    - Both commands are in the context menu and the Edit menu with their shortcuts.

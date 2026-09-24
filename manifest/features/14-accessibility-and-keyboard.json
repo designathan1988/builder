@@ -1,0 +1,96 @@
+{
+  "group": "accessibility-and-keyboard",
+  "titleKey": "featureGroup.accessibilityAndKeyboard",
+  "features": [
+    {
+      "id": "accessibility-checks",
+      "titleKey": "feature.accessibilityChecks",
+      "commands": [
+        "selection.select",
+        "workspace.setPanelOpen"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/accessibility-checks.md",
+      "intent": {
+        "title": "Accessibility and structure checks",
+        "steps": [
+          "Build a page with an image without alt, a skipped heading level, low-contrast text and a link without text.",
+          "Open the Checks panel and click each issue."
+        ],
+        "expected": [
+          "Each issue is listed with its rule, the element and a suggested fix; clicking it selects the element on the canvas and in Layers.",
+          "The list updates after every command.",
+          "Checks never block editing or export."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "keyboard-panel-navigation",
+      "titleKey": "feature.keyboardPanelNavigation",
+      "commands": [
+        "focus.next",
+        "focus.previous",
+        "focus.first",
+        "focus.last",
+        "focus.activate",
+        "focus.nextRegion",
+        "focus.previousRegion",
+        "focus.canvas"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/keyboard-panel-navigation.md",
+      "intent": {
+        "title": "Move between panels and inside them with the keyboard",
+        "steps": [
+          "Press F6 repeatedly, then Shift+F6.",
+          "In a tab strip press ArrowRight, Home, End and Enter.",
+          "In the top bar toolbar press ArrowRight and ArrowLeft.",
+          "Press Escape inside a panel."
+        ],
+        "expected": [
+          "F6 and Shift+F6 cycle focus between top bar, left dock, canvas, inspector, workbench and status bar; the focused region shows a visible focus ring.",
+          "Tab strips and toolbars use roving tabindex: arrows move, Home/End jump, Enter/Space activate.",
+          "Escape inside a panel returns focus to the canvas with the selection intact.",
+          "An automated sweep that presses F6 and Tab through the whole UI reaches every enabled button, input, tab and tree of every open panel."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "layers-keyboard-navigation",
+      "titleKey": "feature.layersKeyboardNavigation",
+      "commands": [
+        "selection.select",
+        "focus.next",
+        "focus.previous",
+        "focus.first",
+        "focus.last",
+        "element.moveUp",
+        "element.moveDown",
+        "element.delete",
+        "layers.startRename",
+        "layers.expandOrFocusChild",
+        "layers.collapseOrFocusParent"
+      ],
+      "dependsOn": [
+        "keyboard-panel-navigation"
+      ],
+      "spec": "spec/behavior/layers-keyboard-navigation.md",
+      "intent": {
+        "title": "Operate the Layers tree with the keyboard",
+        "steps": [
+          "Focus the Layers tree.",
+          "Press ArrowDown, ArrowUp, ArrowRight on a collapsed row, ArrowLeft on an expanded row, Home, End.",
+          "Press Enter, F2, Delete and Alt+ArrowUp on a row."
+        ],
+        "expected": [
+          "The tree has role tree with treeitems, aria-level and aria-expanded; one row is focusable at a time.",
+          "Arrows move focus and expand/collapse as in the WAI-ARIA tree pattern; Home/End jump to first/last visible row.",
+          "Enter selects the element, F2 renames, Delete deletes and Alt+ArrowUp moves it, with the same commands as the canvas."
+        ]
+      },
+      "scenarios": []
+    }
+  ]
+}

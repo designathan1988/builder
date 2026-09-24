@@ -43,5 +43,5 @@ Enter on a selected input starts value editing (same door as double-click).
 
 ## Problems in Pager
 
-1. **Double-click (or Enter) lets the input take focus and text on the canvas.** Required: inputs on the canvas never take focus or text while editing; the value is edited in the Inspector (features.json `elements-form-inputs-rules`). Double-click on an input selects it and moves focus to its Value field in the Inspector.
+1. **Double-click (or Enter) lets the input take focus and text on the canvas.** Required: inputs on the canvas never take focus or text while editing; the value is edited in the Inspector (manifest feature `elements-form-inputs-rules`). Double-click on an input selects it and moves focus to its Value field in the Inspector.
 2. **Typing on a selected input runs single-letter shortcuts without warning** (`c` wrapped the input). Required: keep the shortcuts (they are the canvas keymap), but when the selection is a form control the status bar hint says `Type in the Inspector's Value field to change the value`, so a person who starts typing learns why the letters did not go into the field.

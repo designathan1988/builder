@@ -42,5 +42,5 @@ The status bar is a Tab stop (`data-region="status"`), but its breadcrumb button
 
 ## Problems in Pager
 
-1. **Messages go stale:** the last message stays until another command writes one (e.g. `Text edit cancelled — …` remained while other things happened), with no time or fading. Required: the message line shows the last command's message in an aria-live region and is cleared or replaced when the context changes (features.json `status-bar`).
+1. **Messages go stale:** the last message stays until another command writes one (e.g. `Text edit cancelled — …` remained while other things happened), with no time or fading. Required: the message line shows the last command's message in an aria-live region and is cleared or replaced when the context changes (manifest feature `status-bar`).
 2. **The breadcrumb is not reachable by keyboard.** Required: breadcrumb items are buttons reachable with Tab/arrow keys inside the status region.

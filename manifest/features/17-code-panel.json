@@ -1,0 +1,128 @@
+{
+  "group": "code-panel",
+  "titleKey": "featureGroup.codePanel",
+  "features": [
+    {
+      "id": "code-panel-view",
+      "titleKey": "feature.codePanelView",
+      "commands": [
+        "workspace.setPanelOpen"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Code panel shows the generated HTML and CSS",
+        "steps": [
+          "Open the Code panel.",
+          "Switch between the HTML and CSS tabs.",
+          "Change a style and insert an element."
+        ],
+        "expected": [
+          "View > Code opens the Code panel as a tab in the bottom workbench.",
+          "The panel shows index.html and styles.css with line numbers and syntax colouring, identical to the files the export writes.",
+          "It updates after every command.",
+          "It can be resized and floated like other panels."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "code-panel-selection-sync",
+      "titleKey": "feature.codePanelSelectionSync",
+      "commands": [
+        "selection.select"
+      ],
+      "dependsOn": [
+        "code-panel-view"
+      ],
+      "spec": "spec/behavior/code-panel-selection-sync.md",
+      "intent": {
+        "title": "Code panel follows the selection",
+        "steps": [
+          "Open the Code panel and select an element on the canvas.",
+          "Click a line inside another element's markup in the HTML tab."
+        ],
+        "expected": [
+          "Selecting an element highlights its markup lines in HTML and its rules in CSS and scrolls them into view.",
+          "Clicking inside an element's markup selects that element on the canvas and in Layers."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "code-panel-copy-download",
+      "titleKey": "feature.codePanelCopyDownload",
+      "commands": [
+        "codePanel.copyPane",
+        "codePanel.downloadPane"
+      ],
+      "dependsOn": [
+        "code-panel-view"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Copy or download what the Code panel shows",
+        "steps": [
+          "In the Code panel click 'Copy this pane' [codePanel.copyPane].",
+          "Click 'Download this pane' [codePanel.downloadPane]."
+        ],
+        "expected": [
+          "The clipboard receives exactly the text of the open tab.",
+          "The download is the open file (index.html or styles.css) with exactly the shown content."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "code-panel-edit-css",
+      "titleKey": "feature.codePanelEditCss",
+      "commands": [
+        "style.applyCssRule"
+      ],
+      "dependsOn": [
+        "code-panel-view"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Edit an element's CSS in the Code panel",
+        "steps": [
+          "Select a Heading and open the CSS tab.",
+          "Edit its rule: change a value, add a declaration, remove one, then apply.",
+          "Type invalid CSS and apply."
+        ],
+        "expected": [
+          "Applying replaces the element's styles in the document JSON with the declarations of its rule as one undo step; the inspector and canvas update.",
+          "Invalid CSS is refused with the line and reason, and the document JSON is unchanged.",
+          "The rule is edited for the active breakpoint and state."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "code-panel-edit-html",
+      "titleKey": "feature.codePanelEditHtml",
+      "commands": [
+        "element.applyHtml"
+      ],
+      "dependsOn": [
+        "code-panel-view",
+        "html-import-cleaning"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Edit HTML in the Code panel",
+        "steps": [
+          "Select a Section and open the HTML tab.",
+          "Edit its markup: change a text, add a paragraph, change an attribute; apply.",
+          "Type markup that breaks the nesting rules (an li outside a list) and apply; type unparsable markup and apply."
+        ],
+        "expected": [
+          "Applying parses the markup with the HTML importer's rules and replaces the element's subtree in the document JSON as one undo step; the canvas, Layers and the inspector update.",
+          "Unchanged nodes keep their ids, names and styles.",
+          "Markup that breaks the nesting rules or cannot be parsed is refused with the line and the reason, and the document JSON is unchanged."
+        ]
+      },
+      "scenarios": []
+    }
+  ]
+}

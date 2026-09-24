@@ -60,7 +60,7 @@ Canvas zoom does not affect Layers.
 
 ## Problems in Pager
 
-1. **Hovering a collapsed row during a drag never expands it,** so a node cannot be dropped at a precise position inside a collapsed branch. Required: hovering a collapsed container row for 600 ms during a drag expands it (features.json `layers-drag`); leaving it before 600 ms cancels the timer.
+1. **Hovering a collapsed row during a drag never expands it,** so a node cannot be dropped at a precise position inside a collapsed branch. Required: hovering a collapsed container row for 600 ms during a drag expands it (manifest feature `layers-drag`); leaving it before 600 ms cancels the timer.
 2. **The canvas shows nothing during a Layers drag.** Required: while the pointer is over Layers, the canvas mirrors the same proposal (receiver tint and insertion line on the canvas, when the receiver is visible), so both views show one decision.
 3. **No label chip in Layers.** The only text is in the status bar. Required: the same one-line label as on the canvas appears next to the pointer in Layers (`Position 1 of 2 in Section, before Heading`).
 4. **The receiver row stays highlighted in the receiver colour while the proposal is refused** (Container stays `.rc` while its child row shows the refusal). Required: during a refusal no row is marked as receiver; only the refused target row is outlined in the danger colour.

@@ -1,0 +1,1536 @@
+{
+  "domain": "structure",
+  "commands": [
+    {
+      "id": "element.insert",
+      "labelKey": "command.insertElement",
+      "owner": "src/core/structure/insert.ts",
+      "introducedBy": "palette-click-insert",
+      "args": {
+        "entry": {
+          "type": "palette-entry",
+          "values": [],
+          "optional": false
+        },
+        "parent": {
+          "type": "node",
+          "values": [],
+          "optional": true
+        },
+        "index": {
+          "type": "integer",
+          "values": [],
+          "optional": true
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.refused.onlyAccepts",
+        "status.refused.requiresParent",
+        "status.refused.interactiveInside",
+        "status.refused.formInForm",
+        "status.refused.singleChild",
+        "status.refused.labelOneControl",
+        "status.refused.noChildren",
+        "status.locked.insert",
+        "status.drop.outsidePage",
+        "status.readOnlyTab"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "elements-tile",
+          "kind": "panel-control",
+          "feature": "palette-click-insert",
+          "panel": "elements",
+          "control": "tile",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.insertElement",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "primary",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-enter-in-palette",
+          "kind": "shortcut",
+          "feature": "palette-click-insert",
+          "chord": "Enter",
+          "context": "palette",
+          "gesture": null,
+          "labelKey": "command.insertElement",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "primary",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-space-in-palette",
+          "kind": "shortcut",
+          "feature": "palette-click-insert",
+          "chord": "Space",
+          "context": "palette",
+          "gesture": null,
+          "labelKey": "command.insertElement",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "primary",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "canvas-drag-palette-tile-drop-proposal",
+          "kind": "canvas-drag",
+          "feature": "palette-drag-insert",
+          "source": "palette-tile",
+          "zone": "drop-proposal",
+          "gesture": "palette-drag",
+          "labelKey": "command.insertElement",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "primary",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar-insert",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "insert",
+          "labelKey": "command.insertElement",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "primary",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "element.moveTo",
+      "labelKey": "command.moveTo",
+      "owner": "src/core/structure/move.ts",
+      "introducedBy": "drag-reorder-canvas",
+      "args": {
+        "parent": {
+          "type": "node",
+          "values": [],
+          "optional": false
+        },
+        "index": {
+          "type": "integer",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.refused.onlyAccepts",
+        "status.refused.requiresParent",
+        "status.refused.interactiveInside",
+        "status.refused.formInForm",
+        "status.refused.singleChild",
+        "status.refused.labelOneControl",
+        "status.refused.noChildren",
+        "status.refused.intoItself",
+        "status.locked.move",
+        "status.drop.outsidePage"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "canvas-drag-canvas-element-before-after",
+          "kind": "canvas-drag",
+          "feature": "drag-reorder-canvas",
+          "source": "canvas-element",
+          "zone": "before-after",
+          "gesture": "element-drag",
+          "labelKey": "command.moveTo",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "roots",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "canvas-drag-canvas-element-inside",
+          "kind": "canvas-drag",
+          "feature": "drag-drop-inside",
+          "source": "canvas-element",
+          "zone": "inside",
+          "gesture": "element-drag",
+          "labelKey": "command.moveTo",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "roots",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "layers-drag-layers-row-row-zones",
+          "kind": "layers-drag",
+          "feature": "layers-drag",
+          "source": "layers-row",
+          "zone": "row-zones",
+          "gesture": "layers-drag",
+          "labelKey": "command.moveTo",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "roots",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-enter-in-hand",
+          "kind": "shortcut",
+          "feature": "hand-keyboard-move",
+          "chord": "Enter",
+          "context": "hand",
+          "gesture": null,
+          "labelKey": "command.hand.place",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "roots",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "drag.levelUp",
+      "labelKey": "command.drag.levelUp",
+      "owner": "src/editor/drag/drag-session.ts",
+      "introducedBy": "drag-level-keys-escape",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.drop.topLevel"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-arrow-up-in-drag",
+          "kind": "shortcut",
+          "feature": "drag-level-keys-escape",
+          "chord": "ArrowUp",
+          "context": "drag",
+          "gesture": null,
+          "labelKey": "command.drag.levelUp",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "drag.levelDown",
+      "labelKey": "command.drag.levelDown",
+      "owner": "src/editor/drag/drag-session.ts",
+      "introducedBy": "drag-level-keys-escape",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-arrow-down-in-drag",
+          "kind": "shortcut",
+          "feature": "drag-level-keys-escape",
+          "chord": "ArrowDown",
+          "context": "drag",
+          "gesture": null,
+          "labelKey": "command.drag.levelDown",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "drag.cancel",
+      "labelKey": "command.drag.cancel",
+      "owner": "src/editor/drag/drag-session.ts",
+      "introducedBy": "drag-level-keys-escape",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-escape-in-drag",
+          "kind": "shortcut",
+          "feature": "drag-level-keys-escape",
+          "chord": "Escape",
+          "context": "drag",
+          "gesture": null,
+          "labelKey": "command.drag.cancel",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "element.moveUp",
+      "labelKey": "command.moveUp",
+      "owner": "src/core/structure/move.ts",
+      "introducedBy": "move-up-down",
+      "args": {},
+      "availability": {
+        "predicate": "hasSelection",
+        "refusalKey": "refusal.nothingSelected"
+      },
+      "refusals": [
+        "status.move.alreadyFirst",
+        "status.wrap.needsSameParent",
+        "status.locked.move"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-alt-arrow-up-in-canvas",
+          "kind": "shortcut",
+          "feature": "move-up-down",
+          "chord": "Alt+ArrowUp",
+          "context": "canvas",
+          "gesture": null,
+          "labelKey": "command.moveUp",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "none",
+          "adapter": {
+            "selection": "roots-same-parent",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-alt-arrow-up-in-layers-tree",
+          "kind": "shortcut",
+          "feature": "layers-keyboard-navigation",
+          "chord": "Alt+ArrowUp",
+          "context": "layers-tree",
+          "gesture": null,
+          "labelKey": "command.moveUp",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "none",
+          "adapter": {
+            "selection": "focused-row",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "context-menu",
+          "kind": "context-menu",
+          "feature": "context-menu",
+          "labelKey": "command.moveUp",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": {
+            "region": "context-menu",
+            "order": 6
+          },
+          "adapter": {
+            "selection": "roots-same-parent",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "menu-arrange",
+          "kind": "menu",
+          "feature": "app-menu",
+          "menu": "arrange",
+          "labelKey": "command.moveUp",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": {
+            "region": "menu:arrange",
+            "order": 1
+          },
+          "adapter": {
+            "selection": "roots-same-parent",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.moveUp",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "roots-same-parent",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "element.moveDown",
+      "labelKey": "command.moveDown",
+      "owner": "src/core/structure/move.ts",
+      "introducedBy": "move-up-down",
+      "args": {},
+      "availability": {
+        "predicate": "hasSelection",
+        "refusalKey": "refusal.nothingSelected"
+      },
+      "refusals": [
+        "status.move.alreadyLast",
+        "status.wrap.needsSameParent",
+        "status.locked.move"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-alt-arrow-down-in-canvas",
+          "kind": "shortcut",
+          "feature": "move-up-down",
+          "chord": "Alt+ArrowDown",
+          "context": "canvas",
+          "gesture": null,
+          "labelKey": "command.moveDown",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "none",
+          "adapter": {
+            "selection": "roots-same-parent",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-alt-arrow-down-in-layers-tree",
+          "kind": "shortcut",
+          "feature": "layers-keyboard-navigation",
+          "chord": "Alt+ArrowDown",
+          "context": "layers-tree",
+          "gesture": null,
+          "labelKey": "command.moveDown",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "none",
+          "adapter": {
+            "selection": "focused-row",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "context-menu",
+          "kind": "context-menu",
+          "feature": "context-menu",
+          "labelKey": "command.moveDown",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": {
+            "region": "context-menu",
+            "order": 7
+          },
+          "adapter": {
+            "selection": "roots-same-parent",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "menu-arrange",
+          "kind": "menu",
+          "feature": "app-menu",
+          "menu": "arrange",
+          "labelKey": "command.moveDown",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": {
+            "region": "menu:arrange",
+            "order": 2
+          },
+          "adapter": {
+            "selection": "roots-same-parent",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.moveDown",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "roots-same-parent",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "element.wrapRow",
+      "labelKey": "command.wrapRow",
+      "owner": "src/core/structure/wrap.ts",
+      "introducedBy": "wrap-row-column",
+      "args": {},
+      "availability": {
+        "predicate": "hasSelection",
+        "refusalKey": "refusal.nothingSelected"
+      },
+      "refusals": [
+        "status.wrap.root",
+        "status.wrap.needsSameParent",
+        "status.refused.onlyAccepts",
+        "status.refused.requiresParent",
+        "status.refused.interactiveInside",
+        "status.refused.formInForm",
+        "status.refused.singleChild",
+        "status.refused.labelOneControl",
+        "status.refused.noChildren",
+        "status.locked.edit"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-r-in-canvas",
+          "kind": "shortcut",
+          "feature": "wrap-row-column",
+          "chord": "R",
+          "context": "canvas",
+          "gesture": null,
+          "labelKey": "command.wrapRow",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "none",
+          "adapter": {
+            "selection": "roots-same-parent",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "context-menu",
+          "kind": "context-menu",
+          "feature": "context-menu",
+          "labelKey": "command.wrapRow",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": {
+            "region": "context-menu",
+            "order": 8
+          },
+          "adapter": {
+            "selection": "roots-same-parent",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "menu-arrange",
+          "kind": "menu",
+          "feature": "app-menu",
+          "menu": "arrange",
+          "labelKey": "command.wrapRow",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": {
+            "region": "menu:arrange",
+            "order": 3
+          },
+          "adapter": {
+            "selection": "roots-same-parent",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.wrapRow",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "roots-same-parent",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "element.wrapColumn",
+      "labelKey": "command.wrapColumn",
+      "owner": "src/core/structure/wrap.ts",
+      "introducedBy": "wrap-row-column",
+      "args": {},
+      "availability": {
+        "predicate": "hasSelection",
+        "refusalKey": "refusal.nothingSelected"
+      },
+      "refusals": [
+        "status.wrap.root",
+        "status.wrap.needsSameParent",
+        "status.refused.onlyAccepts",
+        "status.refused.requiresParent",
+        "status.refused.interactiveInside",
+        "status.refused.formInForm",
+        "status.refused.singleChild",
+        "status.refused.labelOneControl",
+        "status.refused.noChildren",
+        "status.locked.edit"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-c-in-canvas",
+          "kind": "shortcut",
+          "feature": "wrap-row-column",
+          "chord": "C",
+          "context": "canvas",
+          "gesture": null,
+          "labelKey": "command.wrapColumn",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "none",
+          "adapter": {
+            "selection": "roots-same-parent",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "context-menu",
+          "kind": "context-menu",
+          "feature": "context-menu",
+          "labelKey": "command.wrapColumn",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": {
+            "region": "context-menu",
+            "order": 9
+          },
+          "adapter": {
+            "selection": "roots-same-parent",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "menu-arrange",
+          "kind": "menu",
+          "feature": "app-menu",
+          "menu": "arrange",
+          "labelKey": "command.wrapColumn",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": {
+            "region": "menu:arrange",
+            "order": 4
+          },
+          "adapter": {
+            "selection": "roots-same-parent",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.wrapColumn",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "roots-same-parent",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "element.nestIntoPrevious",
+      "labelKey": "command.nestIntoPrevious",
+      "owner": "src/core/structure/move.ts",
+      "introducedBy": "nest-into-previous",
+      "args": {},
+      "availability": {
+        "predicate": "canNestIntoPrevious",
+        "refusalKey": "status.nest.noPrevious"
+      },
+      "refusals": [
+        "status.refused.onlyAccepts",
+        "status.refused.requiresParent",
+        "status.refused.interactiveInside",
+        "status.refused.formInForm",
+        "status.refused.singleChild",
+        "status.refused.labelOneControl",
+        "status.refused.noChildren",
+        "status.locked.move"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "context-menu",
+          "kind": "context-menu",
+          "feature": "nest-into-previous",
+          "labelKey": "command.nestIntoPrevious",
+          "disabledReasonKey": "status.nest.noPrevious",
+          "placement": {
+            "region": "context-menu",
+            "order": 11
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-alt-arrow-right-in-canvas",
+          "kind": "shortcut",
+          "feature": "nest-into-previous",
+          "chord": "Alt+ArrowRight",
+          "context": "canvas",
+          "gesture": null,
+          "labelKey": "command.nestIntoPrevious",
+          "disabledReasonKey": "status.nest.noPrevious",
+          "placement": "none",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "menu-arrange",
+          "kind": "menu",
+          "feature": "app-menu",
+          "menu": "arrange",
+          "labelKey": "command.nestIntoPrevious",
+          "disabledReasonKey": "status.nest.noPrevious",
+          "placement": {
+            "region": "menu:arrange",
+            "order": 6
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.nestIntoPrevious",
+          "disabledReasonKey": "status.nest.noPrevious",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "element.promote",
+      "labelKey": "command.promote",
+      "owner": "src/core/structure/move.ts",
+      "introducedBy": "promote-out",
+      "args": {},
+      "availability": {
+        "predicate": "singleSelection",
+        "refusalKey": "status.needsSingleSelection"
+      },
+      "refusals": [
+        "status.promote.topLevel",
+        "status.refused.onlyAccepts",
+        "status.refused.requiresParent",
+        "status.refused.interactiveInside",
+        "status.refused.formInForm",
+        "status.refused.singleChild",
+        "status.refused.labelOneControl",
+        "status.refused.noChildren",
+        "status.locked.move"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-p-in-canvas",
+          "kind": "shortcut",
+          "feature": "promote-out",
+          "chord": "P",
+          "context": "canvas",
+          "gesture": null,
+          "labelKey": "command.promote",
+          "disabledReasonKey": "status.needsSingleSelection",
+          "placement": "none",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "context-menu",
+          "kind": "context-menu",
+          "feature": "promote-out",
+          "labelKey": "command.promote",
+          "disabledReasonKey": "status.needsSingleSelection",
+          "placement": {
+            "region": "context-menu",
+            "order": 12
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "menu-arrange",
+          "kind": "menu",
+          "feature": "app-menu",
+          "menu": "arrange",
+          "labelKey": "command.promote",
+          "disabledReasonKey": "status.needsSingleSelection",
+          "placement": {
+            "region": "menu:arrange",
+            "order": 7
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.promote",
+          "disabledReasonKey": "status.needsSingleSelection",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "element.duplicate",
+      "labelKey": "command.duplicate",
+      "owner": "src/core/structure/duplicate.ts",
+      "introducedBy": "duplicate",
+      "args": {},
+      "availability": {
+        "predicate": "hasSelection",
+        "refusalKey": "refusal.nothingSelected"
+      },
+      "refusals": [
+        "status.duplicate.root",
+        "status.refused.singleChild",
+        "status.locked.edit"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-ctrl-d-in-global",
+          "kind": "shortcut",
+          "feature": "duplicate",
+          "chord": "Ctrl+D",
+          "context": "global",
+          "gesture": null,
+          "labelKey": "command.duplicate",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "none",
+          "adapter": {
+            "selection": "roots",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "context-menu",
+          "kind": "context-menu",
+          "feature": "duplicate",
+          "labelKey": "command.duplicate",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": {
+            "region": "context-menu",
+            "order": 5
+          },
+          "adapter": {
+            "selection": "roots",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "menu-edit",
+          "kind": "menu",
+          "feature": "app-menu",
+          "menu": "edit",
+          "labelKey": "command.duplicate",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": {
+            "region": "menu:edit",
+            "order": 3
+          },
+          "adapter": {
+            "selection": "roots",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.duplicate",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "roots",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "element.delete",
+      "labelKey": "command.delete",
+      "owner": "src/core/structure/remove.ts",
+      "introducedBy": "delete-element",
+      "args": {},
+      "availability": {
+        "predicate": "hasSelection",
+        "refusalKey": "refusal.nothingSelected"
+      },
+      "refusals": [
+        "status.delete.root",
+        "status.locked.delete"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-delete-in-canvas",
+          "kind": "shortcut",
+          "feature": "delete-element",
+          "chord": "Delete",
+          "context": "canvas",
+          "gesture": null,
+          "labelKey": "command.delete",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "none",
+          "adapter": {
+            "selection": "roots",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-backspace-in-canvas",
+          "kind": "shortcut",
+          "feature": "delete-element",
+          "chord": "Backspace",
+          "context": "canvas",
+          "gesture": null,
+          "labelKey": "command.delete",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "none",
+          "adapter": {
+            "selection": "roots",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-delete-in-layers-tree",
+          "kind": "shortcut",
+          "feature": "layers-keyboard-navigation",
+          "chord": "Delete",
+          "context": "layers-tree",
+          "gesture": null,
+          "labelKey": "command.delete",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "none",
+          "adapter": {
+            "selection": "focused-row",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-backspace-in-layers-tree",
+          "kind": "shortcut",
+          "feature": "layers-keyboard-navigation",
+          "chord": "Backspace",
+          "context": "layers-tree",
+          "gesture": null,
+          "labelKey": "command.delete",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "none",
+          "adapter": {
+            "selection": "focused-row",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "context-menu",
+          "kind": "context-menu",
+          "feature": "context-menu",
+          "labelKey": "command.delete",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": {
+            "region": "context-menu",
+            "order": 16
+          },
+          "adapter": {
+            "selection": "roots",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "menu-edit",
+          "kind": "menu",
+          "feature": "app-menu",
+          "menu": "edit",
+          "labelKey": "command.delete",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": {
+            "region": "menu:edit",
+            "order": 7
+          },
+          "adapter": {
+            "selection": "roots",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.delete",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "roots",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "element.unwrap",
+      "labelKey": "command.unwrap",
+      "owner": "src/core/structure/wrap.ts",
+      "introducedBy": "unwrap",
+      "args": {},
+      "availability": {
+        "predicate": "canUnwrap",
+        "refusalKey": "status.unwrap.unavailable"
+      },
+      "refusals": [
+        "status.unwrap.noChildren",
+        "status.refused.onlyAccepts",
+        "status.refused.requiresParent",
+        "status.refused.interactiveInside",
+        "status.refused.formInForm",
+        "status.refused.singleChild",
+        "status.refused.labelOneControl",
+        "status.refused.noChildren",
+        "status.locked.edit"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "context-menu",
+          "kind": "context-menu",
+          "feature": "unwrap",
+          "labelKey": "command.unwrap",
+          "disabledReasonKey": "status.unwrap.unavailable",
+          "placement": {
+            "region": "context-menu",
+            "order": 10
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "menu-arrange",
+          "kind": "menu",
+          "feature": "app-menu",
+          "menu": "arrange",
+          "labelKey": "command.unwrap",
+          "disabledReasonKey": "status.unwrap.unavailable",
+          "placement": {
+            "region": "menu:arrange",
+            "order": 5
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.unwrap",
+          "disabledReasonKey": "status.unwrap.unavailable",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "element.createNaturalChild",
+      "labelKey": "command.createNaturalChild",
+      "owner": "src/core/structure/insert.ts",
+      "introducedBy": "natural-child-command",
+      "args": {},
+      "availability": {
+        "predicate": "hasNaturalChild",
+        "refusalKey": "status.naturalChild.none"
+      },
+      "refusals": [
+        "status.naturalChild.present",
+        "status.locked.insert"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "context-menu",
+          "kind": "context-menu",
+          "feature": "natural-child-command",
+          "labelKey": "command.createNaturalChild",
+          "disabledReasonKey": "status.naturalChild.none",
+          "placement": {
+            "region": "context-menu",
+            "order": 17
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.createNaturalChild",
+          "disabledReasonKey": "status.naturalChild.none",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "hand.take",
+      "labelKey": "command.takeIntoHand",
+      "owner": "src/core/structure/hand.ts",
+      "introducedBy": "hand-keyboard-move",
+      "args": {},
+      "availability": {
+        "predicate": "singleSelection",
+        "refusalKey": "status.needsSingleSelection"
+      },
+      "refusals": [
+        "status.hand.root",
+        "status.locked.move",
+        "status.hand.hidden"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-m-in-canvas",
+          "kind": "shortcut",
+          "feature": "hand-keyboard-move",
+          "chord": "M",
+          "context": "canvas",
+          "gesture": null,
+          "labelKey": "command.takeIntoHand",
+          "disabledReasonKey": "status.needsSingleSelection",
+          "placement": "none",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "context-menu",
+          "kind": "context-menu",
+          "feature": "hand-keyboard-move",
+          "labelKey": "command.takeIntoHand",
+          "disabledReasonKey": "status.needsSingleSelection",
+          "placement": {
+            "region": "context-menu",
+            "order": 13
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "menu-arrange",
+          "kind": "menu",
+          "feature": "app-menu",
+          "menu": "arrange",
+          "labelKey": "command.takeIntoHand",
+          "disabledReasonKey": "status.needsSingleSelection",
+          "placement": {
+            "region": "menu:arrange",
+            "order": 8
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.takeIntoHand",
+          "disabledReasonKey": "status.needsSingleSelection",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "hand.aimNext",
+      "labelKey": "command.hand.aimNext",
+      "owner": "src/core/structure/hand.ts",
+      "introducedBy": "hand-keyboard-move",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-arrow-down-in-hand",
+          "kind": "shortcut",
+          "feature": "hand-keyboard-move",
+          "chord": "ArrowDown",
+          "context": "hand",
+          "gesture": null,
+          "labelKey": "command.hand.aimNext",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-arrow-right-in-hand",
+          "kind": "shortcut",
+          "feature": "hand-keyboard-move",
+          "chord": "ArrowRight",
+          "context": "hand",
+          "gesture": null,
+          "labelKey": "command.hand.aimNext",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "hand.aimPrevious",
+      "labelKey": "command.hand.aimPrevious",
+      "owner": "src/core/structure/hand.ts",
+      "introducedBy": "hand-keyboard-move",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-shift-arrow-down-in-hand",
+          "kind": "shortcut",
+          "feature": "hand-keyboard-move",
+          "chord": "Shift+ArrowDown",
+          "context": "hand",
+          "gesture": null,
+          "labelKey": "command.hand.aimPrevious",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-shift-arrow-right-in-hand",
+          "kind": "shortcut",
+          "feature": "hand-keyboard-move",
+          "chord": "Shift+ArrowRight",
+          "context": "hand",
+          "gesture": null,
+          "labelKey": "command.hand.aimPrevious",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "hand.climb",
+      "labelKey": "command.hand.climb",
+      "owner": "src/core/structure/hand.ts",
+      "introducedBy": "hand-keyboard-move",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-arrow-up-in-hand",
+          "kind": "shortcut",
+          "feature": "hand-keyboard-move",
+          "chord": "ArrowUp",
+          "context": "hand",
+          "gesture": null,
+          "labelKey": "command.hand.climb",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "hand.descend",
+      "labelKey": "command.hand.descend",
+      "owner": "src/core/structure/hand.ts",
+      "introducedBy": "hand-keyboard-move",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-arrow-left-in-hand",
+          "kind": "shortcut",
+          "feature": "hand-keyboard-move",
+          "chord": "ArrowLeft",
+          "context": "hand",
+          "gesture": null,
+          "labelKey": "command.hand.descend",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "hand.drop",
+      "labelKey": "command.hand.drop",
+      "owner": "src/core/structure/hand.ts",
+      "introducedBy": "hand-keyboard-move",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-escape-in-hand",
+          "kind": "shortcut",
+          "feature": "hand-keyboard-move",
+          "chord": "Escape",
+          "context": "hand",
+          "gesture": null,
+          "labelKey": "command.hand.drop",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    }
+  ]
+}

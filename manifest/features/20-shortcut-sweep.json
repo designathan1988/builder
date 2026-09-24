@@ -1,0 +1,27 @@
+{
+  "group": "shortcut-sweep",
+  "titleKey": "featureGroup.shortcutSweep",
+  "features": [
+    {
+      "id": "shortcuts-e2e-sweep",
+      "titleKey": "feature.shortcutsE2eSweep",
+      "commands": [],
+      "dependsOn": [
+        "shortcuts-panel"
+      ],
+      "spec": "spec/behavior/shortcuts-e2e-sweep.md",
+      "intent": {
+        "title": "Every listed shortcut works in its context",
+        "steps": [
+          "Run the shortcut sweep test: for each row of the keymap, set up its context and press its keys."
+        ],
+        "expected": [
+          "Every binding listed in the Keyboard shortcuts panel runs its command in its context, checked by the document JSON, the selection or the UI state it changes.",
+          "No two bindings in the same context use the same keys (unit test on the keymap); a context includes what is selected or focused, so the arrow keys nudge a positioned selection and walk the tree otherwise, and keys handled inside a tree, tab strip, splitter or field belong to that control.",
+          "Each keymap row declares its own context setup and check next to its binding, so rows added by any entry are swept without editing the sweep test."
+        ]
+      },
+      "scenarios": []
+    }
+  ]
+}

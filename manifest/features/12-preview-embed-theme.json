@@ -1,0 +1,82 @@
+{
+  "group": "preview-embed-theme",
+  "titleKey": "featureGroup.previewEmbedTheme",
+  "features": [
+    {
+      "id": "preview-mode",
+      "titleKey": "feature.previewMode",
+      "commands": [
+        "view.setBreakpoint",
+        "view.enterPreview",
+        "view.exitPreview",
+        "project.export"
+      ],
+      "dependsOn": [
+        "state-styles"
+      ],
+      "spec": "spec/behavior/preview-mode.md",
+      "intent": {
+        "title": "Preview the page without editor chrome",
+        "steps": [
+          "Build a page with a Button that has a hover state and a Details element.",
+          "Press Ctrl+P (or click Preview).",
+          "Hover the button, open the details, switch to Phone.",
+          "Press Escape."
+        ],
+        "expected": [
+          "Preview hides docks, selection, guides and handles; only a slim bar with the breakpoint switcher, Exit preview and Export remains.",
+          "The page renders exactly like the export: hover states apply and details open; links do not navigate the editor away.",
+          "Escape or Ctrl+Enter exits preview and restores the previous selection and zoom.",
+          "Preview never changes the document JSON."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "embed-html",
+      "titleKey": "feature.embedHtml",
+      "commands": [
+        "element.setEmbedMarkup"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Embed custom HTML",
+        "steps": [
+          "Insert an Embed and paste third-party widget markup with a script.",
+          "Preview the page.",
+          "Export."
+        ],
+        "expected": [
+          "The markup is stored as-is and shown sandboxed on the editing canvas, where its scripts never run.",
+          "Preview runs it.",
+          "The export writes it verbatim at its place; Layers marks it as an embed."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "theme-switch",
+      "titleKey": "feature.themeSwitch",
+      "commands": [
+        "preferences.setTheme"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Light, dark and system theme",
+        "steps": [
+          "Choose Theme > Light, then Dark, then System.",
+          "With System chosen, switch the OS/browser colour scheme emulation.",
+          "Reload."
+        ],
+        "expected": [
+          "The editor chrome switches its colour tokens; the page inside the iframe keeps its own colours.",
+          "System follows prefers-color-scheme live.",
+          "The choice is stored in the preferences store and restored after reload."
+        ]
+      },
+      "scenarios": []
+    }
+  ]
+}

@@ -36,7 +36,7 @@ None in Pager.
 
 ## Problems in Pager
 
-1. **Elements cannot react to events.** Required (features.json `events-actions`):
+1. **Elements cannot react to events.** Required (manifest feature `events-actions`):
    - An Interactions section in the inspector adds, edits and removes interactions on the selected element.
    - Triggers are click, hover (enter and leave), scroll into view, page load and form submit.
    - Actions are show, hide, toggle class, play animation, scroll to and open link.
@@ -45,4 +45,4 @@ None in Pager.
    - Combinations that cannot apply (form submit on a non-form) are not offered.
 3. **Storage.** Required:
    - Interactions are stored per element in the document JSON; each add, edit and remove is one undo step.
-   - The editing canvas never runs them; preview and the exported page run them once they are exported as JavaScript (features.json `export-events-js`).
+   - The editing canvas never runs them; preview and the exported page run them once they are exported as JavaScript (manifest feature `export-events-js`).

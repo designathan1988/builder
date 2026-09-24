@@ -50,7 +50,7 @@ Values are CSS px; tabs keep their screen size.
 
 ## Problems in Pager
 
-1. **Anchor distances are computed against the page** when the parent is static (see `absolute-free-drag.md` problem 1), so "anchored right" means "right of the page". Required: anchors are relative to the parent, which rule 1 of `absolute-free-drag.md` makes the containing block; after resizing the parent the element keeps its distances to the anchored edges (features.json `absolute-anchors`).
-2. **Centre anchors have no key and no tab.** Required: the Inspector's anchor control offers left / centre / right / both and top / centre / bottom / both, running the same command as the keys (features.json: "Use the anchor control in the inspector to anchor horizontally to the centre").
+1. **Anchor distances are computed against the page** when the parent is static (see `absolute-free-drag.md` problem 1), so "anchored right" means "right of the page". Required: anchors are relative to the parent, which rule 1 of `absolute-free-drag.md` makes the containing block; after resizing the parent the element keeps its distances to the anchored edges (manifest feature `absolute-anchors`).
+2. **Centre anchors have no key and no tab.** Required: the Inspector's anchor control offers left / centre / right / both and top / centre / bottom / both, running the same command as the keys (manifest intent: "Use the anchor control in the inspector to anchor horizontally to the centre").
 3. **The top tab is hidden under the selection chip.** Required: anchor tabs are never covered by other canvas chrome.
 4. **`height: 19px` is frozen when anchoring left and right,** turning an auto-height text box into a fixed height. Required: toggling a horizontal anchor never changes the vertical size mode, and vice versa.

@@ -55,5 +55,5 @@ This is the keyboard counterpart of drag and drop.
 
 ## Problems in Pager
 
-1. **The aim cannot move backwards.** ArrowDown and ArrowRight both step forward and ArrowUp/ArrowLeft change level, so an earlier slot is only reachable by dropping the hand and starting again. Required: keep the features.json keys (ArrowDown/ArrowRight next position, ArrowUp climbs a receiver level, ArrowLeft descends) and add one binding in the keymap owner that aims at the previous position, listed in the shortcuts panel.
+1. **The aim cannot move backwards.** ArrowDown and ArrowRight both step forward and ArrowUp/ArrowLeft change level, so an earlier slot is only reachable by dropping the hand and starting again. Required: keep the the manifest intent keys (ArrowDown/ArrowRight next position, ArrowUp climbs a receiver level, ArrowLeft descends) and add one binding in the keymap owner that aims at the previous position, listed in the shortcuts panel.
 2. **ArrowUp jumps to the end of the ancestor** rather than to the slot right after the current receiver, which is where "one level out" lands during a mouse drag. Required: climbing aims at the slot right after the current receiver inside its parent, the same result as ArrowUp during a mouse drag (see `drag-level-keys-escape.md`).

@@ -43,6 +43,6 @@ Tab strip arrows/Home/End; no shortcut for show/hide or maximise.
 
 ## Problems in Pager
 
-1. **Tabs cannot be closed.** Required: each tab has a close button; closing the last tab collapses the workbench (features.json `workbench-panel`).
+1. **Tabs cannot be closed.** Required: each tab has a close button; closing the last tab collapses the workbench (manifest feature `workbench-panel`).
 2. **Developer tools add no Document tab.** Required: Developer tools adds a `Document` tab showing the live document JSON read-only, updated after every command; the choice is stored in preferences.
 3. **Maximised covers only part of the canvas area.** Required: maximise covers the whole canvas area, then restores.

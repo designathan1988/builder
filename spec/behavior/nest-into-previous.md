@@ -45,6 +45,6 @@ None in Pager.
 
 ## Problems in Pager
 
-1. **The item is always enabled and fails silently** when there is no previous sibling or it cannot contain the element. Required: the item is disabled in those cases (with the reason in its tooltip) and the document JSON is unchanged (features.json `nest-into-previous`).
+1. **The item is always enabled and fails silently** when there is no previous sibling or it cannot contain the element. Required: the item is disabled in those cases (with the reason in its tooltip) and the document JSON is unchanged (manifest feature `nest-into-previous`).
 2. **No keyboard shortcut and no Arrange menu entry.** Required: the command is in the Arrange menu and in the keymap owner, so the shortcuts panel lists it (the key choice belongs to the keymap; it must not collide with R, C, P, M).
 3. **The status wording (`Placed. … position 1 of 1.`) is the hand's wording.** Required: `Moved <name> into <receiver>, position N of M.`

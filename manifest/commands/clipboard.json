@@ -1,0 +1,437 @@
+{
+  "domain": "clipboard",
+  "commands": [
+    {
+      "id": "clipboard.copy",
+      "labelKey": "command.copy",
+      "owner": "src/core/clipboard/clipboard.ts",
+      "introducedBy": "clipboard-copy-paste",
+      "args": {},
+      "availability": {
+        "predicate": "hasSelection",
+        "refusalKey": "refusal.nothingSelected"
+      },
+      "refusals": [
+        "status.clipboard.denied"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-ctrl-c-in-global",
+          "kind": "shortcut",
+          "feature": "clipboard-copy-paste",
+          "chord": "Ctrl+C",
+          "context": "global",
+          "gesture": null,
+          "labelKey": "command.copy",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "none",
+          "adapter": {
+            "selection": "roots",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "context-menu",
+          "kind": "context-menu",
+          "feature": "clipboard-copy-paste",
+          "labelKey": "command.copy",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": {
+            "region": "context-menu",
+            "order": 2
+          },
+          "adapter": {
+            "selection": "roots",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "menu-edit",
+          "kind": "menu",
+          "feature": "app-menu",
+          "menu": "edit",
+          "labelKey": "command.copy",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": {
+            "region": "menu:edit",
+            "order": 4
+          },
+          "adapter": {
+            "selection": "roots",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.copy",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "roots",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "clipboard.paste",
+      "labelKey": "command.paste",
+      "owner": "src/core/clipboard/clipboard.ts",
+      "introducedBy": "clipboard-copy-paste",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.paste.empty",
+        "status.clipboard.denied",
+        "status.refused.onlyAccepts",
+        "status.refused.requiresParent",
+        "status.refused.interactiveInside",
+        "status.refused.formInForm",
+        "status.refused.singleChild",
+        "status.refused.labelOneControl",
+        "status.refused.noChildren",
+        "status.locked.insert"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-ctrl-v-in-global",
+          "kind": "shortcut",
+          "feature": "clipboard-copy-paste",
+          "chord": "Ctrl+V",
+          "context": "global",
+          "gesture": null,
+          "labelKey": "command.paste",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "primary",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "context-menu",
+          "kind": "context-menu",
+          "feature": "clipboard-copy-paste",
+          "labelKey": "command.paste",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "context-menu",
+            "order": 4
+          },
+          "adapter": {
+            "selection": "primary",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "menu-edit",
+          "kind": "menu",
+          "feature": "app-menu",
+          "menu": "edit",
+          "labelKey": "command.paste",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:edit",
+            "order": 6
+          },
+          "adapter": {
+            "selection": "primary",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.paste",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "primary",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "clipboard.cut",
+      "labelKey": "command.cut",
+      "owner": "src/core/clipboard/clipboard.ts",
+      "introducedBy": "clipboard-cut-system",
+      "args": {},
+      "availability": {
+        "predicate": "hasSelection",
+        "refusalKey": "refusal.nothingSelected"
+      },
+      "refusals": [
+        "status.clipboard.denied",
+        "status.locked.delete"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-ctrl-x-in-global",
+          "kind": "shortcut",
+          "feature": "clipboard-cut-system",
+          "chord": "Ctrl+X",
+          "context": "global",
+          "gesture": null,
+          "labelKey": "command.cut",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "none",
+          "adapter": {
+            "selection": "roots",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "context-menu",
+          "kind": "context-menu",
+          "feature": "clipboard-cut-system",
+          "labelKey": "command.cut",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": {
+            "region": "context-menu",
+            "order": 3
+          },
+          "adapter": {
+            "selection": "roots",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "menu-edit",
+          "kind": "menu",
+          "feature": "clipboard-cut-system",
+          "menu": "edit",
+          "labelKey": "command.cut",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": {
+            "region": "menu:edit",
+            "order": 5
+          },
+          "adapter": {
+            "selection": "roots",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "clipboard-cut-system",
+          "entry": "command",
+          "labelKey": "command.cut",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "roots",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "clipboard.copyStyle",
+      "labelKey": "command.copyStyle",
+      "owner": "src/core/clipboard/clipboard.ts",
+      "introducedBy": "copy-paste-styles",
+      "args": {},
+      "availability": {
+        "predicate": "hasSelection",
+        "refusalKey": "refusal.nothingSelected"
+      },
+      "refusals": [
+        "status.clipboard.denied"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-ctrl-alt-c-in-global",
+          "kind": "shortcut",
+          "feature": "copy-paste-styles",
+          "chord": "Ctrl+Alt+C",
+          "context": "global",
+          "gesture": null,
+          "labelKey": "command.copyStyle",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "none",
+          "adapter": {
+            "selection": "primary",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "context-menu",
+          "kind": "context-menu",
+          "feature": "copy-paste-styles",
+          "labelKey": "command.copyStyle",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": {
+            "region": "context-menu",
+            "order": 23
+          },
+          "adapter": {
+            "selection": "primary",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "menu-edit",
+          "kind": "menu",
+          "feature": "copy-paste-styles",
+          "menu": "edit",
+          "labelKey": "command.copyStyle",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": {
+            "region": "menu:edit",
+            "order": 10
+          },
+          "adapter": {
+            "selection": "primary",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "copy-paste-styles",
+          "entry": "command",
+          "labelKey": "command.copyStyle",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "primary",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "clipboard.pasteStyle",
+      "labelKey": "command.pasteStyle",
+      "owner": "src/core/clipboard/clipboard.ts",
+      "introducedBy": "copy-paste-styles",
+      "args": {},
+      "availability": {
+        "predicate": "hasSelection",
+        "refusalKey": "refusal.nothingSelected"
+      },
+      "refusals": [
+        "status.paste.empty",
+        "status.clipboard.denied",
+        "status.locked.edit"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-ctrl-alt-v-in-global",
+          "kind": "shortcut",
+          "feature": "copy-paste-styles",
+          "chord": "Ctrl+Alt+V",
+          "context": "global",
+          "gesture": null,
+          "labelKey": "command.pasteStyle",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "none",
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "context-menu",
+          "kind": "context-menu",
+          "feature": "copy-paste-styles",
+          "labelKey": "command.pasteStyle",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": {
+            "region": "context-menu",
+            "order": 24
+          },
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "menu-edit",
+          "kind": "menu",
+          "feature": "copy-paste-styles",
+          "menu": "edit",
+          "labelKey": "command.pasteStyle",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": {
+            "region": "menu:edit",
+            "order": 11
+          },
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "copy-paste-styles",
+          "entry": "command",
+          "labelKey": "command.pasteStyle",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    }
+  ]
+}

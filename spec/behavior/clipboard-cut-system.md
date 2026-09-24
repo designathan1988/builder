@@ -37,5 +37,5 @@ Not applicable.
 
 ## Problems in Pager
 
-1. **No Cut.** Required: `Ctrl+X` copies and deletes the selection as one undo step (features.json `clipboard-cut-system`); Cut appears in the context menu and the Edit menu.
-2. **No system clipboard.** Required: the app's element format on the system clipboard is covered by `clipboard-copy-paste.md`. This entry adds that Copy also writes `text/html` of the element's exported markup with its CSS rules, next to the app format, and that `text/html` has no editor attributes, ids or inline styles (features.json `clipboard-cut-system`).
+1. **No Cut.** Required: `Ctrl+X` copies and deletes the selection as one undo step (manifest feature `clipboard-cut-system`); Cut appears in the context menu and the Edit menu.
+2. **No system clipboard.** Required: the app's element format on the system clipboard is covered by `clipboard-copy-paste.md`. This entry adds that Copy also writes `text/html` of the element's exported markup with its CSS rules, next to the app format, and that `text/html` has no editor attributes, ids or inline styles (manifest feature `clipboard-cut-system`).

@@ -64,7 +64,7 @@ Not affected (the picker is outside the canvas).
 
 ## Problems in Pager
 
-1. **Invalid channel values are stored** (`rgb(255 999 254 / 1)`, `rgb(255 -5 254 / 1)`). Required: invalid channel values are rejected and the field shows the last valid value (features.json `color-picker`).
+1. **Invalid channel values are stored** (`rgb(255 999 254 / 1)`, `rgb(255 -5 254 / 1)`). Required: invalid channel values are rejected and the field shows the last valid value (manifest feature `color-picker`).
 2. **Dragging from a colour with alpha < 1 stores unrounded channels**, e.g. `rgba(35.70001628905948, 41.93642646917034, 51.00000926426479, 0.6)` (the rgb from HSB is not rounded before `ppColourOut`). Required: RGB channels are integers 0–255 in the stored value.
 3. **Invalid text in the text field gives no feedback** and stays displayed. Required: on Enter or blur, an invalid colour is rejected with a message and the field shows the current colour again.
 4. **The area and sliders are mouse-only.** Required: they are focusable sliders (`role="slider"` with value text); arrow keys move 1 % (Shift 10 %) on their axis.

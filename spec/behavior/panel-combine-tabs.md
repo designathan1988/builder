@@ -43,5 +43,5 @@ Tab strips: ArrowLeft/ArrowRight/Home/End switch tabs (`:511-519`); no keyboard 
 
 ## Problems in Pager
 
-1. **The hints are bare 3 px lines.** Required: over the upper part of a panel a `Combine as tabs` hint appears and over the lower part a `Stack panels` hint (features.json `panel-combine-tabs`), drawn as labelled areas.
+1. **The hints are bare 3 px lines.** Required: over the upper part of a panel a `Combine as tabs` hint appears and over the lower part a `Stack panels` hint (manifest feature `panel-combine-tabs`), drawn as labelled areas.
 2. **The tabs zone is only the 26 px header** for Elements/Layers but 45 % of the panel for other panels. Required: one rule for every panel (upper part = tabs, lower part = stack), from the workspace owner.

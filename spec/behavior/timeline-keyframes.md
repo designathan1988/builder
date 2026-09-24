@@ -40,7 +40,7 @@ None in Pager.
 
 ## Problems in Pager
 
-1. **No keyframes.** Required (features.json `timeline-keyframes`):
+1. **No keyframes.** Required (manifest feature `timeline-keyframes`):
    - An animation's keyframes are drawn as diamonds on its track, at their percentage along the track.
    - `Add keyframe` adds one at the playhead.
    - Dragging a diamond along the track changes its offset (the offset follows the pointer as a percentage of the track width, clamped to 0–100 %). The whole drag is one undo step.

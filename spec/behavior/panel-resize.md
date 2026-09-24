@@ -53,7 +53,7 @@ Arrows on a focused splitter.
 
 ## Problems in Pager
 
-1. **The step is 8 px (Shift 24 or 32 px), not 20 px, and differs between the two splitter kinds.** Required: every splitter resizes its neighbours by 20 px per arrow key, within minimum and maximum sizes (features.json `panel-resize`).
+1. **The step is 8 px (Shift 24 or 32 px), not 20 px, and differs between the two splitter kinds.** Required: every splitter resizes its neighbours by 20 px per arrow key, within minimum and maximum sizes (manifest feature `panel-resize`).
 2. **Shell splitters have no `aria-valuenow` and are removed from the Tab order** (`tabindex="-1"` via `sealRegions`, `src/features/input/index.js:403-408`). Required: every splitter has `role="separator"` with `aria-valuenow` (and min/max) and is reachable by keyboard.
 3. **The default inspector width (300 px) is below its own minimum (320 px),** so the first keyboard step jumps. Required: defaults respect the limits.
 4. **1 px shell splitters are hard to grab.** Required: every splitter has a pointer target of at least 6 px, with the visible line centred on it.

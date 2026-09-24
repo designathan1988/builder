@@ -66,6 +66,6 @@ Not affected (the pad maps screen pixels to CSS pixels regardless of canvas zoom
 
 ## Problems in Pager
 
-1. **Hiding a layer destroys it.** Required: a hidden layer stays in the editor (row shown dimmed with the eye crossed) and in the document JSON, marked hidden; only the CSS leaves it out; Show puts it back in its place (features.json `shadow-editor`).
+1. **Hiding a layer destroys it.** Required: a hidden layer stays in the editor (row shown dimmed with the eye crossed) and in the document JSON, marked hidden; only the CSS leaves it out; Show puts it back in its place (manifest feature `shadow-editor`).
 2. **No text-shadow editor.** Required: a Paragraph's text shadow uses the same layered editor (X, Y, blur, colour; no spread or inset) and writes `text-shadow`; the computed `text-shadow` in the iframe matches.
 3. **Keyboard on the light pad works for one key only,** because focus jumps to the X field after the first move. Required: focus stays on the handle; arrows move X/Y by 1 px (Shift 10 px) for as long as it is focused.

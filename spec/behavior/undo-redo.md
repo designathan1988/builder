@@ -64,5 +64,5 @@ The shortcuts above.
 
 ## Problems in Pager
 
-1. **Redo restores the selection that existed when Undo was pressed,** not the one that belonged to that document state: after inserting Badge (Badge selected), selecting the Heading and pressing Ctrl+Z three times then redo three times, the final state showed Badge in the tree but the Heading selected. The undo entry saves the current selection at the moment it is pushed (`transactions.js:152`). Required: every history entry stores the selection that belongs to its document state; undo restores the selection before the command, redo the selection after it (features.json `undo-redo`).
-2. **The status text carries arrow glyphs (`↶ Undone`, `↷ Redone`).** Required: the status reads exactly `Undone` or `Redone` (features.json `undo-redo`), through i18n.
+1. **Redo restores the selection that existed when Undo was pressed,** not the one that belonged to that document state: after inserting Badge (Badge selected), selecting the Heading and pressing Ctrl+Z three times then redo three times, the final state showed Badge in the tree but the Heading selected. The undo entry saves the current selection at the moment it is pushed (`transactions.js:152`). Required: every history entry stores the selection that belongs to its document state; undo restores the selection before the command, redo the selection after it (manifest feature `undo-redo`).
+2. **The status text carries arrow glyphs (`↶ Undone`, `↷ Redone`).** Required: the status reads exactly `Undone` or `Redone` (manifest feature `undo-redo`), through i18n.

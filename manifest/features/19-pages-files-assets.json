@@ -1,0 +1,338 @@
+{
+  "group": "pages-files-assets",
+  "titleKey": "featureGroup.pagesFilesAssets",
+  "features": [
+    {
+      "id": "explorer-pages",
+      "titleKey": "feature.explorerPages",
+      "commands": [
+        "pages.add",
+        "pages.rename",
+        "pages.duplicate",
+        "pages.delete",
+        "pages.switch",
+        "workspace.setPanelOpen"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "File explorer: add, rename, duplicate, delete and switch pages",
+        "steps": [
+          "Open the Explorer panel.",
+          "Add a page 'About', rename it 'About us', duplicate it, delete the duplicate after confirming.",
+          "Switch between the pages; undo the delete."
+        ],
+        "expected": [
+          "View > Explorer opens the Explorer as a tab next to Elements in the left dock; Elements stays the default tab.",
+          "The Explorer lists the project pages as .html files; the active page is highlighted and shown on the canvas.",
+          "Each page has its own document tree, guides and settings in the project JSON; page names are unique; each page is an .html file whose path follows its name: the home page is index.html and the others take their file name from their name (about-us.html).",
+          "The home page cannot be deleted; delete asks for confirmation; every page operation is an undo step.",
+          "File > New blank page now empties only the active page; File > Open project replaces all pages.",
+          "The active page is restored after reload."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "explorer-file-system",
+      "titleKey": "feature.explorerFileSystem",
+      "commands": [
+        "files.createFolder",
+        "files.createFile",
+        "files.rename",
+        "files.move",
+        "files.delete",
+        "files.open"
+      ],
+      "dependsOn": [
+        "explorer-pages"
+      ],
+      "spec": "spec/behavior/explorer-file-system.md",
+      "intent": {
+        "title": "File explorer with a virtual file system",
+        "steps": [
+          "Open the Explorer.",
+          "Create the folders 'js' and 'img/icons' and the file 'js/main.js'.",
+          "Rename a folder; drag a file into another folder; delete a folder that holds files, after confirming.",
+          "Click css/styles.css and a page file in the tree.",
+          "Undo the delete; reload."
+        ],
+        "expected": [
+          "The Explorer shows the project's file tree (pages, CSS, JS, images, fonts) with folders: one .html per page, css/styles.css, js/interactions.js when the project has interactions, and every file the project holds.",
+          "Files and folders can be created, renamed, moved (drag and drop, and a Move to… command) and deleted; names are unique per folder.",
+          "css/styles.css and js/interactions.js are generated from the document and keep fixed paths: they cannot be renamed, moved or deleted, neither can a folder that holds one of them, and creating or moving another file to either path is refused, even before js/interactions.js exists.",
+          "Pages can be moved into folders; a page file is deleted by deleting its page, and a folder that holds a page file cannot be deleted; renaming a page file renames its page and moving it moves the page; a page stores its file name, so a renamed or imported file keeps its exact name (Contact Us.html stays Contact Us.html) while a new page still gets a file name derived from its name (about-us.html); page names are unique within each folder, and pages in different folders may share a name (about/index.html and blog/index.html); the home page's index.html cannot be renamed or moved out of the root.",
+          "Deleting a folder that holds files asks for confirmation; every operation is one undo step.",
+          "Clicking a page file or css/styles.css opens it in the Code panel; the tree updates when pages or files change.",
+          "The tree is stored with the project in IndexedDB and restored after reload; File > Save project and Open project include every file of the tree. The product is new, so there is no earlier saved format to open: the saved format has carried a schema version since the first save, and every future migration is tested on the real loading path (Open project, and the autosaved project and its saved versions when the app loads them)."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "link-picker",
+      "titleKey": "feature.linkPicker",
+      "commands": [
+        "element.setLink"
+      ],
+      "dependsOn": [
+        "explorer-pages"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Link to pages, anchors, email and phone",
+        "steps": [
+          "Select a Link and pick another page as its target.",
+          "Pick an element of the current page as an anchor target.",
+          "Enter an email address and a phone number as targets.",
+          "Rename and move the target page."
+        ],
+        "expected": [
+          "The picker offers the pages of the file tree, the elements of a page (giving them an id if they have none), a URL, email (mailto:) and phone (tel:); unsafe URLs are refused.",
+          "Page links are stored as references to the page file.",
+          "Renaming or moving the target page updates every link to it."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "export-multi-page",
+      "titleKey": "feature.exportMultiPage",
+      "commands": [
+        "element.setLink",
+        "project.export",
+        "pages.add",
+        "files.move"
+      ],
+      "dependsOn": [
+        "link-picker",
+        "explorer-file-system"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Export every page of the project",
+        "steps": [
+          "Create a project with pages Home and About us, move About us into a folder 'company', link from Home to About us with the link picker, and export."
+        ],
+        "expected": [
+          "The ZIP contains index.html, company/about-us.html and one shared css/styles.css, each at its path in the file tree.",
+          "Links chosen with the link picker are written as relative links computed from the two files' paths (company/about-us.html from index.html, ../index.html back).",
+          "Each page file has its own title, lang and dir, and links the shared stylesheet with a path relative to its folder."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "explorer-assets",
+      "titleKey": "feature.explorerAssets",
+      "commands": [
+        "files.upload"
+      ],
+      "dependsOn": [
+        "explorer-file-system"
+      ],
+      "spec": "spec/behavior/explorer-assets.md",
+      "intent": {
+        "title": "Upload and manage image and font files",
+        "steps": [
+          "In the Explorer upload two images and a font file with the file picker.",
+          "Drop a third image file onto a folder in the Explorer (the test dispatches a drop whose DataTransfer holds the file).",
+          "Rename a file; delete a file."
+        ],
+        "expected": [
+          "Uploaded files are ordinary files of the file tree, stored in IndexedDB, placed in the folder they were uploaded or dropped into (img/ by default for images, fonts/ for fonts), and listed with a thumbnail for images, their name and size.",
+          "Renaming changes the listed name; names stay unique per folder.",
+          "Deleting an unused file removes it from the tree and from IndexedDB, as an undo step."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "explorer-assets-use",
+      "titleKey": "feature.explorerAssetsUse",
+      "commands": [
+        "element.setAttribute",
+        "assets.insertImageFile"
+      ],
+      "dependsOn": [
+        "explorer-assets"
+      ],
+      "spec": "spec/behavior/explorer-assets-use.md",
+      "intent": {
+        "title": "Use assets in Image elements and drop images onto the canvas",
+        "steps": [
+          "Select an Image and choose an uploaded asset with the asset picker of its Source field.",
+          "Drop an image file onto the canvas between two elements (the test dispatches a drop whose DataTransfer holds the file).",
+          "Rename an asset that is in use; try to delete it."
+        ],
+        "expected": [
+          "The Image stores a reference to the asset in the document JSON and renders it on the canvas.",
+          "Dropping an image file on the canvas uploads it as an asset and inserts an Image that uses it at the drop position, as one undo step.",
+          "Renaming an asset keeps every Image that uses it working.",
+          "Deleting an asset in use, or a folder that holds one, asks for confirmation and lists where it is used."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "export-file-tree",
+      "titleKey": "feature.exportFileTree",
+      "commands": [
+        "project.export",
+        "files.createFolder"
+      ],
+      "dependsOn": [
+        "export-multi-page"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Export the file tree as a ZIP",
+        "steps": [
+          "Create folders and files in the Explorer, including a page inside a folder and an image used by it, and export."
+        ],
+        "expected": [
+          "The ZIP holds exactly the Explorer's tree: every folder and file at its path, pages generated from the document, CSS in separate files with BEM classes.",
+          "Relative links between pages and to files (stylesheets, scripts, images) are computed from their paths, so they follow a moved or renamed file.",
+          "Two exports without changes are byte-identical."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "export-assets",
+      "titleKey": "feature.exportAssets",
+      "commands": [
+        "project.export",
+        "files.upload"
+      ],
+      "dependsOn": [
+        "explorer-assets-use",
+        "export-file-tree"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Export includes every file of the tree",
+        "steps": [
+          "Use two uploaded images in Images, leave a third image unused in its folder, and export."
+        ],
+        "expected": [
+          "The ZIP contains every file of the tree at its path, byte-identical to the uploads, the unused image included.",
+          "The img src attributes are relative paths to those files and the exported page shows the images."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "page-seo-meta",
+      "titleKey": "feature.pageSeoMeta",
+      "commands": [
+        "page.setSetting",
+        "project.export"
+      ],
+      "dependsOn": [
+        "page-properties",
+        "explorer-assets"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Page metadata for search and sharing",
+        "steps": [
+          "Open Page properties and set the description, the canonical URL, the Open Graph title and image, and the favicon.",
+          "Export."
+        ],
+        "expected": [
+          "The values are stored in the page settings of the document JSON; image fields pick files from the file tree.",
+          "The exported page head has meta description, link rel=canonical, the og: tags and link rel=icon with paths relative to the page file."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "custom-fonts",
+      "titleKey": "feature.customFonts",
+      "commands": [
+        "style.set",
+        "project.export",
+        "files.upload"
+      ],
+      "dependsOn": [
+        "explorer-assets"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Use custom font files",
+        "steps": [
+          "Add two .woff2 font files to the project.",
+          "Select a Heading and choose the new font in the font menu.",
+          "Export."
+        ],
+        "expected": [
+          "The font menu lists the project fonts above the system stacks, each previewed in its own face.",
+          "The canvas renders the Heading with the font.",
+          "The export writes @font-face rules in the CSS pointing to the font files at their paths in the tree, and the exported page renders with the font."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "explorer-open-folder",
+      "titleKey": "feature.explorerOpenFolder",
+      "commands": [
+        "project.openFolder",
+        "project.export"
+      ],
+      "dependsOn": [
+        "html-import-styles",
+        "explorer-file-system"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Open a whole folder from disk",
+        "steps": [
+          "Choose File > Open folder and pick a folder with index.html, about/index.html, css/site.css, js/app.js and img/logo.png.",
+          "Confirm replacing the project.",
+          "Export."
+        ],
+        "expected": [
+          "The folder is read with Chrome's directory picker and every file lands at the same path in the virtual file system, except a file whose path belongs to a generated file (css/styles.css, js/interactions.js): it is kept under a new name (css/styles-1.css) and the import report lists it.",
+          "HTML pages go through the HTML importer: the stylesheets they link are resolved from the folder and parsed into the document's styles, because the document JSON is the source of truth; each page becomes a page named after its file, at its path (about/index.html is the page index in the folder about), and the root index.html is the home page (a folder without one gets an empty home page index.html, listed in the report); the original .css files stay in the tree as ordinary files that no page links any more, and the import report says so; JS, images and fonts are kept as files.",
+          "The import report lists what was converted, kept as-is or dropped.",
+          "The export right after reproduces the same folder structure."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "code-panel-edit-js",
+      "titleKey": "feature.codePanelEditJs",
+      "commands": [
+        "page.setSetting",
+        "view.enterPreview",
+        "project.export",
+        "files.createFile",
+        "files.saveContent"
+      ],
+      "dependsOn": [
+        "explorer-file-system",
+        "code-panel-view"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Edit JavaScript files in the Code panel",
+        "steps": [
+          "Create js/main.js in the Explorer, open it in the Code panel, type code and save.",
+          "Type a syntax error and save.",
+          "Link the script to the page in Page properties and open Preview."
+        ],
+        "expected": [
+          "JS files open with line numbers and syntax colouring; saving writes the file in the file tree as one undo step; js/interactions.js, which is generated, opens read-only.",
+          "Syntax errors are shown with the line and the reason.",
+          "Preview runs the linked scripts and reloads after each save; the editing canvas never runs them.",
+          "The export writes the files unchanged and links them from their pages.",
+          "Deleting a JS file that a page links, or a folder that holds one, asks for confirmation and lists those pages."
+        ]
+      },
+      "scenarios": []
+    }
+  ]
+}

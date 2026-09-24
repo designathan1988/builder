@@ -42,6 +42,6 @@ Preview always shows 100 %; the editing zoom comes back on exit.
 
 ## Problems in Pager
 
-1. **`Ctrl+Enter` enters preview but does not leave it.** Required: `Escape` or `Ctrl+Enter` exits preview and restores the previous selection and zoom (features.json `preview-mode`).
+1. **`Ctrl+Enter` enters preview but does not leave it.** Required: `Escape` or `Ctrl+Enter` exits preview and restores the previous selection and zoom (manifest feature `preview-mode`).
 2. **Ruler pointer marks leak into preview.** Required: no editor chrome is visible in preview except the slim bar.
 3. **The preview status text is hard-coded English** (`'Preview — interact with the page. Press Esc to return to editing.'` is a literal in `camera.js:822`). Required: all preview texts go through i18n.

@@ -53,7 +53,7 @@ As described in Trigger.
 
 ## Problems in Pager
 
-1. **Rows are missing:** File lacks Open folder and Import HTML; Edit lacks Cut and Select all in container; Arrange lacks Remove wrapper and Make child of previous layer; View lacks Explorer, Code, Timeline, Workbench, Canvas tools, Collapse every dock (Ctrl+\) and Developer tools as described; Help lacks a Keyboard shortcuts row; there is no Language submenu. Required: the rows listed in features.json `app-menu`, in that order; rows whose feature is not built yet are disabled and labelled "not available yet", read from the one feature registry.
+1. **Rows are missing:** File lacks Open folder and Import HTML; Edit lacks Cut and Select all in container; Arrange lacks Remove wrapper and Make child of previous layer; View lacks Explorer, Code, Timeline, Workbench, Canvas tools, Collapse every dock (Ctrl+\) and Developer tools as described; Help lacks a Keyboard shortcuts row; there is no Language submenu. Required: the rows listed in manifest feature `app-menu`, in that order; rows whose feature is not built yet are disabled and labelled "not available yet", read from the one feature registry.
 5. **Edit has "Why is it laid out like this?" and View has "Engine read-out",** doors to Pager's engine read-out. Required: neither row exists; the new app has no layout read-out.
 2. **Menu rows dispatch fake keyboard events** for Duplicate, Copy and Paste. Required: every row calls its command directly (the same command its shortcut calls).
 3. **Help is a list of runnable shortcuts** rather than a door to the shortcuts panel. Required: Help → Keyboard shortcuts opens the shortcuts panel (see `shortcuts-panel.md`).

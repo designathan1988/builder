@@ -42,4 +42,4 @@ None for collapse/expand all. Single branches: ArrowRight / ArrowLeft on a focus
 
 ## Problems in Pager
 
-1. **Selecting a hidden descendant does not reveal it in Layers.** Required: selecting a node whose row is inside a collapsed branch (from the canvas or anywhere else) expands its ancestors and scrolls its row into view (features.json `layers-expand-collapse-all`).
+1. **Selecting a hidden descendant does not reveal it in Layers.** Required: selecting a node whose row is inside a collapsed branch (from the canvas or anywhere else) expands its ancestors and scrolls its row into view (manifest feature `layers-expand-collapse-all`).

@@ -36,7 +36,7 @@ None in Pager.
 
 ## Problems in Pager
 
-1. **No file tree.** Required (features.json `explorer-file-system`):
+1. **No file tree.** Required (manifest feature `explorer-file-system`):
    - The Explorer shows the project's file tree (pages, CSS, JS, images, fonts) with folders: one .html per page, css/styles.css, js/interactions.js when the project has interactions, and every file the project holds.
    - Files and folders can be created, renamed, moved and deleted. Moving works by drag and drop and by a Move to… command. Names are unique per folder.
 2. **Generated files and pages.** Required:
@@ -49,4 +49,4 @@ None in Pager.
    - Clicking a page file or css/styles.css opens it in the Code panel; the tree updates when pages or files change.
    - The tree is stored with the project in IndexedDB and restored after reload.
    - File > Save project and Open project include every file of the tree.
-   - An archive saved in the earlier format (before pages and the file tree) opens and is migrated to the current format; the autosaved project and its saved versions from that format are migrated the same way when the app loads them.
+   - The product is new, so there is no earlier saved format to open. The saved format carries a schema version from the first save (project.json in the archive and the IndexedDB record alike), and every future migration is tested on the real loading path: Open project, and the autosaved project and its saved versions when the app loads them.

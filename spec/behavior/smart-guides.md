@@ -41,6 +41,6 @@ None.
 
 ## Problems in Pager
 
-1. **Smart guides and snap are one switch.** Required: the Guides & Grids dialog has a Smart guides toggle under Visibility and an Equal spacing toggle; turning smart guides off removes the alignment lines and equal-spacing markers but does not turn snap off; the snap distance comes from Snap settings (one setting) (features.json `smart-guides`).
+1. **Smart guides and snap are one switch.** Required: the Guides & Grids dialog has a Smart guides toggle under Visibility and an Equal spacing toggle; turning smart guides off removes the alignment lines and equal-spacing markers but does not turn snap off; the snap distance comes from Snap settings (one setting) (manifest feature `smart-guides`).
 2. **Equal spacing is invisible.** Required: when the gaps are equal, equal-spacing markers are drawn on both gaps with their value, and with snap on the box snaps to the equal-gap position.
 3. **Alignment lines appear only when a snap happened.** Required: alignment lines appear whenever edges or centres align with other elements (within the snap distance), whether or not snap is on.

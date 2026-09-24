@@ -77,10 +77,10 @@ This is the keyboard feature.
 
 ## Problems in Pager
 
-1. **Bindings are spread over several tables, and the shortcuts panel shows only one of them.** So no single list can be swept, and a chord such as Ctrl+D, Ctrl+B or Ctrl+' is invisible in the panel. Required (features.json `shortcuts-e2e-sweep`):
+1. **Bindings are spread over several tables, and the shortcuts panel shows only one of them.** So no single list can be swept, and a chord such as Ctrl+D, Ctrl+B or Ctrl+' is invisible in the panel. Required (manifest feature `shortcuts-e2e-sweep`):
    - One keymap table holds every binding.
    - Each row declares its context setup and its check next to its binding, so a sweep test runs every row in its context and checks the document JSON, the selection or the UI state it changes.
    - Rows added later are swept without editing the test.
    - A unit test on the table proves that no two bindings in the same context use the same keys.
 2. **The drag level keys act only on the next pointer move** (observed lag). Required: pressing ArrowUp/ArrowDown during a drag updates the proposal and its indicator at once.
-3. **Ctrl+Enter enters preview but does not leave it** (see `preview-mode.md`). Required: Ctrl+Enter also leaves preview (features.json `preview-mode`), and the sweep checks it.
+3. **Ctrl+Enter enters preview but does not leave it** (see `preview-mode.md`). Required: Ctrl+Enter also leaves preview (manifest feature `preview-mode`), and the sweep checks it.

@@ -59,5 +59,5 @@ The chords above.
 
 ## Problems in Pager
 
-1. **Closing or reopening a single panel says nothing.** Required: the status bar reports each change (`Layers closed.` / `Layers opened.`), for every door (features.json `dock-toggles`).
+1. **Closing or reopening a single panel says nothing.** Required: the status bar reports each change (`Layers closed.` / `Layers opened.`), for every door (manifest feature `dock-toggles`).
 2. **Two parallel panel systems** (independent Elements/Layers groups and the older dock layout) decide visibility; `Ctrl+B` goes through one or the other depending on a body class (`dock.js:174-180`). Required: one workspace owner for docks and panel visibility.

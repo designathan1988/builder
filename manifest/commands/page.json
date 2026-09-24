@@ -1,0 +1,249 @@
+{
+  "domain": "page",
+  "commands": [
+    {
+      "id": "page.openProperties",
+      "labelKey": "command.pageProperties",
+      "owner": "src/editor/inspector/page-properties.ts",
+      "introducedBy": "page-properties",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "toolbar-top-bar-page",
+          "kind": "toolbar",
+          "feature": "page-properties",
+          "toolbar": "top-bar",
+          "labelKey": "topbar.page",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-page-properties-button",
+          "kind": "panel-control",
+          "feature": "page-properties",
+          "panel": "inspector",
+          "control": "page-properties-button",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.pageProperties",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.pageProperties",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "page.setSetting",
+      "labelKey": "command.setPageSetting",
+      "owner": "src/core/page/settings.ts",
+      "introducedBy": "page-properties",
+      "args": {
+        "setting": {
+          "type": "attribute",
+          "values": [],
+          "optional": false
+        },
+        "value": {
+          "type": "json",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.url.unsafe"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "inspector-page-title",
+          "kind": "inspector-field",
+          "feature": "page-properties",
+          "property": null,
+          "attribute": "pageTitle",
+          "control": "field",
+          "labelKey": "command.setPageSetting",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-page-language",
+          "kind": "inspector-field",
+          "feature": "page-properties",
+          "property": null,
+          "attribute": "pageLanguage",
+          "control": "field",
+          "labelKey": "command.setPageSetting",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-page-direction",
+          "kind": "inspector-field",
+          "feature": "page-properties",
+          "property": null,
+          "attribute": "pageDirection",
+          "control": "field",
+          "labelKey": "command.setPageSetting",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-page-description",
+          "kind": "inspector-field",
+          "feature": "page-seo-meta",
+          "property": null,
+          "attribute": "pageDescription",
+          "control": "field",
+          "labelKey": "command.setPageSetting",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-page-canonical",
+          "kind": "inspector-field",
+          "feature": "page-seo-meta",
+          "property": null,
+          "attribute": "pageCanonical",
+          "control": "field",
+          "labelKey": "command.setPageSetting",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-page-og-title",
+          "kind": "inspector-field",
+          "feature": "page-seo-meta",
+          "property": null,
+          "attribute": "pageOgTitle",
+          "control": "field",
+          "labelKey": "command.setPageSetting",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-page-og-image",
+          "kind": "inspector-field",
+          "feature": "page-seo-meta",
+          "property": null,
+          "attribute": "pageOgImage",
+          "control": "field",
+          "labelKey": "command.setPageSetting",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-page-favicon",
+          "kind": "inspector-field",
+          "feature": "page-seo-meta",
+          "property": null,
+          "attribute": "pageFavicon",
+          "control": "field",
+          "labelKey": "command.setPageSetting",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-page-scripts",
+          "kind": "inspector-field",
+          "feature": "code-panel-edit-js",
+          "property": null,
+          "attribute": "pageScripts",
+          "control": "field",
+          "labelKey": "command.setPageSetting",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    }
+  ]
+}

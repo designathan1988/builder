@@ -1,0 +1,87 @@
+{
+  "group": "responsive-and-states",
+  "titleKey": "featureGroup.responsiveAndStates",
+  "features": [
+    {
+      "id": "breakpoints-switch",
+      "titleKey": "feature.breakpointsSwitch",
+      "commands": [
+        "view.setBreakpoint"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Switch between Desktop, Laptop, Tablet and Phone breakpoints",
+        "steps": [
+          "Click Laptop, Tablet, Phone and Desktop in the top bar."
+        ],
+        "expected": [
+          "The page width inside the iframe becomes 1180 CSS px for Laptop, 834 for Tablet, 390 for Phone and 1440 for Desktop; in Fit mode the canvas refits the zoom.",
+          "The status bar shows the active breakpoint; the buttons show their widths in tooltips.",
+          "The breakpoint buttons and the canvas widths read one breakpoint table (a unit test checks it).",
+          "The active breakpoint is restored after a reload."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "breakpoint-overrides",
+      "titleKey": "feature.breakpointOverrides",
+      "commands": [
+        "style.set",
+        "style.reset",
+        "view.setBreakpoint"
+      ],
+      "dependsOn": [
+        "breakpoints-switch"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Style overrides per breakpoint, desktop first",
+        "steps": [
+          "Select a Heading at Desktop with font size 32px.",
+          "Switch to Tablet and set font size 24px; switch to Phone and look at it.",
+          "Switch to Desktop and Laptop.",
+          "At Tablet reset the override.",
+          "Export."
+        ],
+        "expected": [
+          "The Tablet value is stored as an override for tablet in the document JSON; at Tablet and Phone the computed font size is 24px, at Desktop and Laptop 32px.",
+          "Fields with an override at the active breakpoint show a badge naming the breakpoint; inherited values show where they come from.",
+          "Resetting the override returns Tablet and Phone to 32px.",
+          "styles.css contains the base rule and @media (max-width: 834px) with the override, in cascade order.",
+          "The export media queries read the same breakpoint table as the buttons and the canvas (unit test)."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "state-styles",
+      "titleKey": "feature.stateStyles",
+      "commands": [
+        "style.set",
+        "view.setBreakpoint",
+        "view.setStyleState"
+      ],
+      "dependsOn": [
+        "breakpoint-overrides"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Style states: hover, focus, active, disabled, invalid and placeholder shown",
+        "steps": [
+          "Select a Button, choose State Hover and set background colour and opacity.",
+          "Choose Focus and set an outline; choose Base.",
+          "Switch to Tablet and set a Hover value there.",
+          "Export."
+        ],
+        "expected": [
+          "The State menu lists Base, Hover, Focus, Active, Disabled, Invalid and Placeholder shown; while a state is chosen a canvas badge reads 'Editing Hover' [canvas.badge.editingState] and the canvas shows the element with that state's values.",
+          "State values are stored per state (and per breakpoint) in the document JSON and do not change the base values.",
+          "styles.css contains :hover, :focus and @media rules for them; in the exported page hovering the button changes its computed background."
+        ]
+      },
+      "scenarios": []
+    }
+  ]
+}

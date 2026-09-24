@@ -57,5 +57,5 @@ Ctrl+K, type, Enter. No direct keys.
 
 ## Problems in Pager
 
-1. **No row commands.** Required: `Add a row after this one` copies the row's cell structure (same count, `th`/`td` per position) with empty cells, and `Remove this row` removes it; each is one undo step (features.json `table-commands`).
+1. **No row commands.** Required: `Add a row after this one` copies the row's cell structure (same count, `th`/`td` per position) with empty cells, and `Remove this row` removes it; each is one undo step (manifest feature `table-commands`).
 2. **Table commands are missing from the context menu.** Required: with a cell selected, the context menu offers `Add a column after this one`, `Add a column at the end`, `Remove this column`, `Add a row after this one` and `Remove this row`, running the same commands as the command bar.

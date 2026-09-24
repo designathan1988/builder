@@ -60,8 +60,8 @@ Focus a band (it is focusable) and press Enter to type a value; the Inspector's 
 
 ## Problems in Pager
 
-1. **The bands are invisible except for their value chips.** Required: in Padding or Margin mode the four sides are drawn as tinted bands with their values (features.json `spacing-handles`), padding and margin in different design-token colours.
-2. **The modifiers differ from features.json:** Ctrl changes the opposite pair and Alt does nothing. Required: Alt changes the opposite side by the same amount; Shift changes all four sides.
-3. **Ctrl both pairs sides and disables snapping** in the same gesture. Required: one modifier per meaning, from the keymap owner.
+1. **The bands are invisible except for their value chips.** Required: in Padding or Margin mode the four sides are drawn as tinted bands with their values (manifest feature `spacing-handles`), padding and margin in different design-token colours.
+2. **The modifiers differ from the manifest intent:** Ctrl changes the opposite pair and Alt does nothing. Required: Alt changes the opposite side by the same amount; Shift changes all four sides.
+3. **Ctrl both pairs sides and disables snapping** in the same gesture. Required: one modifier per meaning, declared once in the `spacing-band` gesture of `manifest/interactions.json`: **Shift** changes all four sides, **Alt** changes the opposite side by the same amount, **Ctrl** suspends snapping.
 4. **The drag writes longhands next to an existing shorthand** (`padding: 56px 40px` plus `paddingTop: 76px`), so the Inspector and export must resolve two sources. Required: the written result is one coherent value per side (update the shorthand when all four sides are known, otherwise replace it by four longhands).
 5. **A click on a band does not reliably open the typed field** (observed: no field after a click in the middle of the top band). Required: a click without drag opens the typed field; Enter commits, Escape cancels.

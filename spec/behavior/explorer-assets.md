@@ -41,7 +41,7 @@ None in Pager.
 
 ## Problems in Pager
 
-1. **No file uploads.** Required (features.json `explorer-assets`):
+1. **No file uploads.** Required (manifest feature `explorer-assets`):
    - The Explorer uploads images and font files with the file picker and accepts image files dropped onto a folder.
    - Uploaded files are ordinary files of the file tree, stored in IndexedDB, placed in the folder they were uploaded or dropped into (img/ by default for images, fonts/ for fonts), and listed with a thumbnail for images, their name and size.
 2. **Rename and delete.** Required:

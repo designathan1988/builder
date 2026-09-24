@@ -1,0 +1,110 @@
+{
+  "group": "page-and-export",
+  "titleKey": "featureGroup.pageAndExport",
+  "features": [
+    {
+      "id": "page-properties",
+      "titleKey": "feature.pageProperties",
+      "commands": [
+        "page.openProperties",
+        "page.setSetting"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Page properties: title, language, direction and page styles",
+        "steps": [
+          "Click Page in the top bar (or Page properties in the empty inspector).",
+          "Set the title 'Landing', language 'pt-BR', direction rtl.",
+          "Set the page background colour, text colour and base font."
+        ],
+        "expected": [
+          "The Page root is selected and the inspector shows page settings above the page styles.",
+          "Title, language and direction are stored in the page settings of the document JSON; the iframe html element gets lang and dir.",
+          "Page background, colour and font are stored on the Page root styles and computed in the iframe."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "export-zip",
+      "titleKey": "feature.exportZip",
+      "commands": [
+        "page.setSetting",
+        "project.export"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Export the page as a ZIP with HTML and a separate CSS file",
+        "steps": [
+          "Build a page with a Section, a Heading with bold text, a Paragraph containing a link made with Ctrl+K, a Container with padding and a hidden Paragraph, with page title and language set.",
+          "Click Export."
+        ],
+        "expected": [
+          "A ZIP is downloaded containing index.html and css/styles.css, and index.html links css/styles.css.",
+          "index.html has a doctype, <html lang dir>, <meta charset>, viewport meta and the page <title>; every node is written with its semantic tag, text is escaped and inline marks are kept.",
+          "No element in index.html has a style attribute, an editor-generated data-* attribute or an editor-generated id; hidden elements carry the hidden attribute.",
+          "The exported page opened in Chrome renders every element with the same computed styles as the canvas, apart from editor-only aids (empty-container minimum height, closed details and dialogs shown while selected, selection chrome)."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "css-variables-tokens",
+      "titleKey": "feature.cssVariablesTokens",
+      "commands": [
+        "tokens.create",
+        "tokens.update",
+        "tokens.rename",
+        "tokens.delete",
+        "workspace.setPanelOpen"
+      ],
+      "dependsOn": [
+        "color-picker"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Design tokens as CSS variables",
+        "steps": [
+          "Open the Variables panel and create a colour, a spacing and a font-size variable.",
+          "Use the colour variable as a Section's background and the spacing variable as its padding.",
+          "Change the colour variable."
+        ],
+        "expected": [
+          "Variables are stored in the project; colour, length and font fields offer them next to typed values.",
+          "Every element that uses a variable updates when it changes, as one undo step.",
+          "The export writes the variables in :root and uses var(--name) where they are used."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "export-bem-css",
+      "titleKey": "feature.exportBemCss",
+      "commands": [
+        "element.setClasses",
+        "project.export"
+      ],
+      "dependsOn": [
+        "export-zip"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Exported CSS uses readable BEM classes and is deterministic",
+        "steps": [
+          "Build a page with a Section named 'Hero' containing a styled Heading 'Title' and a styled Paragraph 'Call to action', plus a second element with the same name.",
+          "Add user classes to one element.",
+          "Export twice without changes."
+        ],
+        "expected": [
+          "Styled elements get BEM classes derived from their names, e.g. .hero, .hero__title, .hero__call-to-action; name collisions get a numeric suffix; user classes are kept alongside.",
+          "styles.css contains one rule per styled element and no rule for unstyled ones; no selector uses ids or data attributes.",
+          "The product name appears in no class and no CSS.",
+          "The two ZIPs are byte-identical."
+        ]
+      },
+      "scenarios": []
+    }
+  ]
+}

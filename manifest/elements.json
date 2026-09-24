@@ -1,0 +1,2794 @@
+{
+  "elements": [
+    {
+      "id": "page",
+      "tag": "body",
+      "alternativeTags": [],
+      "labelKey": "element.page.label",
+      "palette": false,
+      "content": "children",
+      "allowedChildren": "flow",
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": null,
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {
+        "backgroundColor": "#FFFFFF",
+        "color": "#0F172A"
+      },
+      "defaultTextKey": null
+    },
+    {
+      "id": "div",
+      "tag": "div",
+      "alternativeTags": [
+        "div",
+        "section",
+        "header",
+        "main",
+        "footer",
+        "nav",
+        "aside",
+        "article"
+      ],
+      "labelKey": "element.div.label",
+      "palette": true,
+      "content": "children",
+      "allowedChildren": "flow",
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": null,
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {
+        "padding": "0px"
+      },
+      "defaultTextKey": null
+    },
+    {
+      "id": "header",
+      "tag": "header",
+      "alternativeTags": [
+        "div",
+        "section",
+        "header",
+        "main",
+        "footer",
+        "nav",
+        "aside",
+        "article"
+      ],
+      "labelKey": "element.header.label",
+      "palette": true,
+      "content": "children",
+      "allowedChildren": "flow",
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": null,
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {
+        "padding": "20px 40px"
+      },
+      "defaultTextKey": null
+    },
+    {
+      "id": "nav",
+      "tag": "nav",
+      "alternativeTags": [
+        "div",
+        "section",
+        "header",
+        "main",
+        "footer",
+        "nav",
+        "aside",
+        "article"
+      ],
+      "labelKey": "element.nav.label",
+      "palette": true,
+      "content": "children",
+      "allowedChildren": "flow",
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": null,
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {
+        "padding": "20px 40px"
+      },
+      "defaultTextKey": null
+    },
+    {
+      "id": "main",
+      "tag": "main",
+      "alternativeTags": [
+        "div",
+        "section",
+        "header",
+        "main",
+        "footer",
+        "nav",
+        "aside",
+        "article"
+      ],
+      "labelKey": "element.main.label",
+      "palette": true,
+      "content": "children",
+      "allowedChildren": "flow",
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": null,
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {
+        "padding": "56px 40px"
+      },
+      "defaultTextKey": null
+    },
+    {
+      "id": "section",
+      "tag": "section",
+      "alternativeTags": [
+        "div",
+        "section",
+        "header",
+        "main",
+        "footer",
+        "nav",
+        "aside",
+        "article"
+      ],
+      "labelKey": "element.section.label",
+      "palette": true,
+      "content": "children",
+      "allowedChildren": "flow",
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": null,
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {
+        "padding": "56px 40px"
+      },
+      "defaultTextKey": null
+    },
+    {
+      "id": "article",
+      "tag": "article",
+      "alternativeTags": [
+        "div",
+        "section",
+        "header",
+        "main",
+        "footer",
+        "nav",
+        "aside",
+        "article"
+      ],
+      "labelKey": "element.article.label",
+      "palette": true,
+      "content": "children",
+      "allowedChildren": "flow",
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": null,
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {
+        "padding": "56px 40px"
+      },
+      "defaultTextKey": null
+    },
+    {
+      "id": "aside",
+      "tag": "aside",
+      "alternativeTags": [
+        "div",
+        "section",
+        "header",
+        "main",
+        "footer",
+        "nav",
+        "aside",
+        "article"
+      ],
+      "labelKey": "element.aside.label",
+      "palette": true,
+      "content": "children",
+      "allowedChildren": "flow",
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": null,
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {
+        "padding": "24px"
+      },
+      "defaultTextKey": null
+    },
+    {
+      "id": "footer",
+      "tag": "footer",
+      "alternativeTags": [
+        "div",
+        "section",
+        "header",
+        "main",
+        "footer",
+        "nav",
+        "aside",
+        "article"
+      ],
+      "labelKey": "element.footer.label",
+      "palette": true,
+      "content": "children",
+      "allowedChildren": "flow",
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": null,
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {
+        "padding": "20px 40px"
+      },
+      "defaultTextKey": null
+    },
+    {
+      "id": "linkBlock",
+      "tag": "a",
+      "alternativeTags": [],
+      "labelKey": "element.linkBlock.label",
+      "palette": true,
+      "content": "children",
+      "allowedChildren": "flow",
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": null,
+      "interactive": true,
+      "excludesInteractive": true,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "heading",
+      "tag": "h2",
+      "alternativeTags": [
+        "h1",
+        "h2",
+        "h3",
+        "h4",
+        "h5",
+        "h6"
+      ],
+      "labelKey": "element.heading.label",
+      "palette": true,
+      "content": "text",
+      "allowedChildren": "none",
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": null,
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": "element.heading.defaultText"
+    },
+    {
+      "id": "paragraph",
+      "tag": "p",
+      "alternativeTags": [
+        "p",
+        "span",
+        "pre"
+      ],
+      "labelKey": "element.paragraph.label",
+      "palette": true,
+      "content": "text",
+      "allowedChildren": "none",
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": null,
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": "element.paragraph.defaultText"
+    },
+    {
+      "id": "link",
+      "tag": "a",
+      "alternativeTags": [
+        "a",
+        "button"
+      ],
+      "labelKey": "element.link.label",
+      "palette": true,
+      "content": "text",
+      "allowedChildren": "none",
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": null,
+      "interactive": true,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": "element.link.defaultText"
+    },
+    {
+      "id": "blockquote",
+      "tag": "blockquote",
+      "alternativeTags": [],
+      "labelKey": "element.blockquote.label",
+      "palette": true,
+      "content": "children",
+      "allowedChildren": "flow",
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": "paragraph",
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "pre",
+      "tag": "pre",
+      "alternativeTags": [],
+      "labelKey": "element.pre.label",
+      "palette": true,
+      "content": "text",
+      "allowedChildren": "none",
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": null,
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": "element.pre.defaultText"
+    },
+    {
+      "id": "rule",
+      "tag": "hr",
+      "alternativeTags": [],
+      "labelKey": "element.rule.label",
+      "palette": true,
+      "content": "void",
+      "allowedChildren": "none",
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": null,
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "list",
+      "tag": "ul",
+      "alternativeTags": [],
+      "labelKey": "element.list.label",
+      "palette": true,
+      "content": "children",
+      "allowedChildren": [
+        "listItem"
+      ],
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": "listItem",
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "orderedList",
+      "tag": "ol",
+      "alternativeTags": [],
+      "labelKey": "element.orderedList.label",
+      "palette": true,
+      "content": "children",
+      "allowedChildren": [
+        "listItem"
+      ],
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": "listItem",
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "definitionList",
+      "tag": "dl",
+      "alternativeTags": [],
+      "labelKey": "element.definitionList.label",
+      "palette": true,
+      "content": "children",
+      "allowedChildren": [
+        "term",
+        "description"
+      ],
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": "term",
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "listItem",
+      "tag": "li",
+      "alternativeTags": [],
+      "labelKey": "element.listItem.label",
+      "palette": false,
+      "content": "children",
+      "allowedChildren": "flow",
+      "requiredParent": [
+        "list",
+        "orderedList"
+      ],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": "paragraph",
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "term",
+      "tag": "dt",
+      "alternativeTags": [],
+      "labelKey": "element.term.label",
+      "palette": false,
+      "content": "children",
+      "allowedChildren": "flow",
+      "requiredParent": [
+        "definitionList"
+      ],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": "paragraph",
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "description",
+      "tag": "dd",
+      "alternativeTags": [],
+      "labelKey": "element.description.label",
+      "palette": false,
+      "content": "children",
+      "allowedChildren": "flow",
+      "requiredParent": [
+        "definitionList"
+      ],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": "paragraph",
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "table",
+      "tag": "table",
+      "alternativeTags": [],
+      "labelKey": "element.table.label",
+      "palette": true,
+      "content": "children",
+      "allowedChildren": [
+        "caption",
+        "tableHead",
+        "tableBody",
+        "tableFoot"
+      ],
+      "requiredParent": [],
+      "uniqueChildren": [
+        "caption",
+        "tableHead",
+        "tableFoot"
+      ],
+      "requiredChildren": [],
+      "firstChild": "caption",
+      "naturalChild": "tableBody",
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "caption",
+      "tag": "caption",
+      "alternativeTags": [],
+      "labelKey": "element.caption.label",
+      "palette": false,
+      "content": "children",
+      "allowedChildren": "flow",
+      "requiredParent": [
+        "table"
+      ],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": "paragraph",
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "tableHead",
+      "tag": "thead",
+      "alternativeTags": [],
+      "labelKey": "element.tableHead.label",
+      "palette": false,
+      "content": "children",
+      "allowedChildren": [
+        "tableRow"
+      ],
+      "requiredParent": [
+        "table"
+      ],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": "tableRow",
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "tableBody",
+      "tag": "tbody",
+      "alternativeTags": [],
+      "labelKey": "element.tableBody.label",
+      "palette": false,
+      "content": "children",
+      "allowedChildren": [
+        "tableRow"
+      ],
+      "requiredParent": [
+        "table"
+      ],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": "tableRow",
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "tableFoot",
+      "tag": "tfoot",
+      "alternativeTags": [],
+      "labelKey": "element.tableFoot.label",
+      "palette": false,
+      "content": "children",
+      "allowedChildren": [
+        "tableRow"
+      ],
+      "requiredParent": [
+        "table"
+      ],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": "tableRow",
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "tableRow",
+      "tag": "tr",
+      "alternativeTags": [],
+      "labelKey": "element.tableRow.label",
+      "palette": false,
+      "content": "children",
+      "allowedChildren": [
+        "headerCell",
+        "cell"
+      ],
+      "requiredParent": [
+        "tableHead",
+        "tableBody",
+        "tableFoot"
+      ],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": "cell",
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "headerCell",
+      "tag": "th",
+      "alternativeTags": [],
+      "labelKey": "element.headerCell.label",
+      "palette": false,
+      "content": "children",
+      "allowedChildren": "flow",
+      "requiredParent": [
+        "tableRow"
+      ],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": "paragraph",
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "cell",
+      "tag": "td",
+      "alternativeTags": [],
+      "labelKey": "element.cell.label",
+      "palette": false,
+      "content": "children",
+      "allowedChildren": "flow",
+      "requiredParent": [
+        "tableRow"
+      ],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": "paragraph",
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "form",
+      "tag": "form",
+      "alternativeTags": [],
+      "labelKey": "element.form.label",
+      "palette": true,
+      "content": "children",
+      "allowedChildren": "flow",
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": "label",
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [
+        "form"
+      ],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "fieldset",
+      "tag": "fieldset",
+      "alternativeTags": [],
+      "labelKey": "element.fieldset.label",
+      "palette": true,
+      "content": "children",
+      "allowedChildren": "flow",
+      "requiredParent": [],
+      "uniqueChildren": [
+        "legend"
+      ],
+      "requiredChildren": [],
+      "firstChild": "legend",
+      "naturalChild": "legend",
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "legend",
+      "tag": "legend",
+      "alternativeTags": [],
+      "labelKey": "element.legend.label",
+      "palette": false,
+      "content": "children",
+      "allowedChildren": "flow",
+      "requiredParent": [
+        "fieldset"
+      ],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": "paragraph",
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "label",
+      "tag": "label",
+      "alternativeTags": [],
+      "labelKey": "element.label.label",
+      "palette": true,
+      "content": "children",
+      "allowedChildren": "flow",
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": "input",
+      "interactive": true,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": 1,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "input",
+      "tag": "input",
+      "alternativeTags": [],
+      "labelKey": "element.input.label",
+      "palette": true,
+      "content": "void",
+      "allowedChildren": "none",
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": null,
+      "interactive": true,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": true,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "textarea",
+      "tag": "textarea",
+      "alternativeTags": [],
+      "labelKey": "element.textarea.label",
+      "palette": true,
+      "content": "raw-text",
+      "allowedChildren": "none",
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": null,
+      "interactive": true,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": true,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "select",
+      "tag": "select",
+      "alternativeTags": [],
+      "labelKey": "element.select.label",
+      "palette": true,
+      "content": "children",
+      "allowedChildren": [
+        "option",
+        "optionGroup"
+      ],
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": "option",
+      "interactive": true,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": true,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "optionGroup",
+      "tag": "optgroup",
+      "alternativeTags": [],
+      "labelKey": "element.optionGroup.label",
+      "palette": false,
+      "content": "children",
+      "allowedChildren": [
+        "option"
+      ],
+      "requiredParent": [
+        "select"
+      ],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": "option",
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "option",
+      "tag": "option",
+      "alternativeTags": [],
+      "labelKey": "element.option.label",
+      "palette": false,
+      "content": "text",
+      "allowedChildren": "none",
+      "requiredParent": [
+        "select",
+        "optionGroup"
+      ],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": null,
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": "element.option.defaultText"
+    },
+    {
+      "id": "button",
+      "tag": "button",
+      "alternativeTags": [],
+      "labelKey": "element.button.label",
+      "palette": true,
+      "content": "text",
+      "allowedChildren": "none",
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": null,
+      "interactive": true,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": "element.button.defaultText"
+    },
+    {
+      "id": "progress",
+      "tag": "progress",
+      "alternativeTags": [],
+      "labelKey": "element.progress.label",
+      "palette": true,
+      "content": "empty",
+      "allowedChildren": "none",
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": null,
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "meter",
+      "tag": "meter",
+      "alternativeTags": [],
+      "labelKey": "element.meter.label",
+      "palette": true,
+      "content": "empty",
+      "allowedChildren": "none",
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": null,
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "output",
+      "tag": "output",
+      "alternativeTags": [],
+      "labelKey": "element.output.label",
+      "palette": true,
+      "content": "text",
+      "allowedChildren": "none",
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": null,
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": "element.output.defaultText"
+    },
+    {
+      "id": "image",
+      "tag": "img",
+      "alternativeTags": [],
+      "labelKey": "element.image.label",
+      "palette": true,
+      "content": "void",
+      "allowedChildren": "none",
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": null,
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "picture",
+      "tag": "picture",
+      "alternativeTags": [],
+      "labelKey": "element.picture.label",
+      "palette": true,
+      "content": "children",
+      "allowedChildren": [
+        "source",
+        "image"
+      ],
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": "source",
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "figure",
+      "tag": "figure",
+      "alternativeTags": [],
+      "labelKey": "element.figure.label",
+      "palette": true,
+      "content": "children",
+      "allowedChildren": "flow",
+      "requiredParent": [],
+      "uniqueChildren": [
+        "figureCaption"
+      ],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": "figureCaption",
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "figureCaption",
+      "tag": "figcaption",
+      "alternativeTags": [],
+      "labelKey": "element.figureCaption.label",
+      "palette": false,
+      "content": "text",
+      "allowedChildren": "none",
+      "requiredParent": [
+        "figure"
+      ],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": null,
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": "element.figureCaption.defaultText"
+    },
+    {
+      "id": "video",
+      "tag": "video",
+      "alternativeTags": [],
+      "labelKey": "element.video.label",
+      "palette": true,
+      "content": "children",
+      "allowedChildren": [
+        "source",
+        "track"
+      ],
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": "source",
+      "interactive": true,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "audio",
+      "tag": "audio",
+      "alternativeTags": [],
+      "labelKey": "element.audio.label",
+      "palette": true,
+      "content": "children",
+      "allowedChildren": [
+        "source",
+        "track"
+      ],
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": "source",
+      "interactive": true,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "source",
+      "tag": "source",
+      "alternativeTags": [],
+      "labelKey": "element.source.label",
+      "palette": false,
+      "content": "void",
+      "allowedChildren": "none",
+      "requiredParent": [
+        "video",
+        "audio",
+        "picture"
+      ],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": null,
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "track",
+      "tag": "track",
+      "alternativeTags": [],
+      "labelKey": "element.track.label",
+      "palette": false,
+      "content": "void",
+      "allowedChildren": "none",
+      "requiredParent": [
+        "video",
+        "audio"
+      ],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": null,
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "iframe",
+      "tag": "iframe",
+      "alternativeTags": [],
+      "labelKey": "element.iframe.label",
+      "palette": true,
+      "content": "empty",
+      "allowedChildren": "none",
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": null,
+      "interactive": true,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {
+        "width": "420px",
+        "height": "240px"
+      },
+      "defaultTextKey": null
+    },
+    {
+      "id": "canvas",
+      "tag": "canvas",
+      "alternativeTags": [],
+      "labelKey": "element.canvas.label",
+      "palette": true,
+      "content": "empty",
+      "allowedChildren": "none",
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": null,
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {
+        "width": "320px",
+        "height": "160px"
+      },
+      "defaultTextKey": null
+    },
+    {
+      "id": "svg",
+      "tag": "svg",
+      "alternativeTags": [],
+      "labelKey": "element.svg.label",
+      "palette": true,
+      "content": "children",
+      "allowedChildren": [
+        "rectangle",
+        "ellipse",
+        "line"
+      ],
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": null,
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {
+        "width": "32px",
+        "height": "32px"
+      },
+      "defaultTextKey": null
+    },
+    {
+      "id": "rectangle",
+      "tag": "rect",
+      "alternativeTags": [],
+      "labelKey": "element.rectangle.label",
+      "palette": false,
+      "content": "empty",
+      "allowedChildren": "none",
+      "requiredParent": [
+        "svg"
+      ],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": null,
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {
+        "fill": "#dbe7ff",
+        "stroke": "#2b5fe3",
+        "strokeWidth": "1.5px"
+      },
+      "defaultTextKey": null
+    },
+    {
+      "id": "ellipse",
+      "tag": "ellipse",
+      "alternativeTags": [],
+      "labelKey": "element.ellipse.label",
+      "palette": false,
+      "content": "empty",
+      "allowedChildren": "none",
+      "requiredParent": [
+        "svg"
+      ],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": null,
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {
+        "fill": "#dbe7ff",
+        "stroke": "#2b5fe3",
+        "strokeWidth": "1.5px"
+      },
+      "defaultTextKey": null
+    },
+    {
+      "id": "line",
+      "tag": "line",
+      "alternativeTags": [],
+      "labelKey": "element.line.label",
+      "palette": false,
+      "content": "empty",
+      "allowedChildren": "none",
+      "requiredParent": [
+        "svg"
+      ],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": null,
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {
+        "fill": "none",
+        "stroke": "#2b5fe3",
+        "strokeWidth": "2px"
+      },
+      "defaultTextKey": null
+    },
+    {
+      "id": "details",
+      "tag": "details",
+      "alternativeTags": [],
+      "labelKey": "element.details.label",
+      "palette": true,
+      "content": "children",
+      "allowedChildren": "flow",
+      "requiredParent": [],
+      "uniqueChildren": [
+        "summary"
+      ],
+      "requiredChildren": [
+        "summary"
+      ],
+      "firstChild": "summary",
+      "naturalChild": "summary",
+      "interactive": true,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "summary",
+      "tag": "summary",
+      "alternativeTags": [],
+      "labelKey": "element.summary.label",
+      "palette": false,
+      "content": "children",
+      "allowedChildren": "flow",
+      "requiredParent": [
+        "details"
+      ],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": "paragraph",
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "dialog",
+      "tag": "dialog",
+      "alternativeTags": [],
+      "labelKey": "element.dialog.label",
+      "palette": true,
+      "content": "children",
+      "allowedChildren": "flow",
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": null,
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    },
+    {
+      "id": "embed",
+      "tag": null,
+      "alternativeTags": [],
+      "labelKey": "element.embed.label",
+      "palette": true,
+      "content": "markup",
+      "allowedChildren": "none",
+      "requiredParent": [],
+      "uniqueChildren": [],
+      "requiredChildren": [],
+      "firstChild": null,
+      "naturalChild": null,
+      "interactive": false,
+      "excludesInteractive": false,
+      "forbiddenAncestors": [],
+      "control": false,
+      "maxControls": null,
+      "defaultStyles": {},
+      "defaultTextKey": null
+    }
+  ],
+  "attributes": [
+    {
+      "id": "text",
+      "html": null,
+      "labelKey": "attribute.text.label",
+      "valueType": "text",
+      "keywords": [],
+      "elements": [
+        "heading",
+        "paragraph",
+        "link",
+        "pre",
+        "button",
+        "figureCaption",
+        "output",
+        "option"
+      ],
+      "command": "text.set"
+    },
+    {
+      "id": "tag",
+      "html": null,
+      "labelKey": "attribute.tag.label",
+      "valueType": "tag",
+      "keywords": [],
+      "elements": [
+        "div",
+        "header",
+        "nav",
+        "main",
+        "section",
+        "article",
+        "aside",
+        "footer",
+        "heading",
+        "paragraph",
+        "link"
+      ],
+      "command": "element.setTag"
+    },
+    {
+      "id": "id",
+      "html": "id",
+      "labelKey": "attribute.id.label",
+      "valueType": "text",
+      "keywords": [],
+      "elements": "all",
+      "command": "element.setId"
+    },
+    {
+      "id": "classes",
+      "html": "class",
+      "labelKey": "attribute.classes.label",
+      "valueType": "class-list",
+      "keywords": [],
+      "elements": "all",
+      "command": "element.setClasses"
+    },
+    {
+      "id": "title",
+      "html": "title",
+      "labelKey": "attribute.title.label",
+      "valueType": "text",
+      "keywords": [],
+      "elements": "all",
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "href",
+      "html": "href",
+      "labelKey": "attribute.href.label",
+      "valueType": "url",
+      "keywords": [],
+      "elements": [
+        "linkBlock",
+        "link"
+      ],
+      "command": "element.setLink"
+    },
+    {
+      "id": "newTab",
+      "html": "target",
+      "labelKey": "attribute.newTab.label",
+      "valueType": "boolean",
+      "keywords": [],
+      "elements": [
+        "linkBlock",
+        "link"
+      ],
+      "command": "element.setLink"
+    },
+    {
+      "id": "src",
+      "html": "src",
+      "labelKey": "attribute.src.label",
+      "valueType": "url",
+      "keywords": [],
+      "elements": [
+        "image",
+        "source",
+        "track",
+        "video",
+        "audio",
+        "iframe"
+      ],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "alt",
+      "html": "alt",
+      "labelKey": "attribute.alt.label",
+      "valueType": "text",
+      "keywords": [],
+      "elements": [
+        "image"
+      ],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "srcset",
+      "html": "srcset",
+      "labelKey": "attribute.srcset.label",
+      "valueType": "text",
+      "keywords": [],
+      "elements": [
+        "source"
+      ],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "media",
+      "html": "media",
+      "labelKey": "attribute.media.label",
+      "valueType": "text",
+      "keywords": [],
+      "elements": [
+        "source"
+      ],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "placeholder",
+      "html": "placeholder",
+      "labelKey": "attribute.placeholder.label",
+      "valueType": "text",
+      "keywords": [],
+      "elements": [
+        "input",
+        "textarea"
+      ],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "value",
+      "html": "value",
+      "labelKey": "attribute.value.label",
+      "valueType": "text",
+      "keywords": [],
+      "elements": [
+        "input",
+        "textarea",
+        "option",
+        "progress",
+        "meter"
+      ],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "name",
+      "html": "name",
+      "labelKey": "attribute.name.label",
+      "valueType": "text",
+      "keywords": [],
+      "elements": [
+        "input",
+        "textarea",
+        "select",
+        "button"
+      ],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "required",
+      "html": "required",
+      "labelKey": "attribute.required.label",
+      "valueType": "boolean",
+      "keywords": [],
+      "elements": [
+        "input",
+        "textarea",
+        "select"
+      ],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "pattern",
+      "html": "pattern",
+      "labelKey": "attribute.pattern.label",
+      "valueType": "text",
+      "keywords": [],
+      "elements": [
+        "input"
+      ],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "min",
+      "html": "min",
+      "labelKey": "attribute.min.label",
+      "valueType": "text",
+      "keywords": [],
+      "elements": [
+        "input",
+        "meter"
+      ],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "max",
+      "html": "max",
+      "labelKey": "attribute.max.label",
+      "valueType": "text",
+      "keywords": [],
+      "elements": [
+        "input",
+        "progress",
+        "meter"
+      ],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "step",
+      "html": "step",
+      "labelKey": "attribute.step.label",
+      "valueType": "text",
+      "keywords": [],
+      "elements": [
+        "input"
+      ],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "autocomplete",
+      "html": "autocomplete",
+      "labelKey": "attribute.autocomplete.label",
+      "valueType": "text",
+      "keywords": [],
+      "elements": [
+        "input",
+        "textarea",
+        "select",
+        "form"
+      ],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "disabled",
+      "html": "disabled",
+      "labelKey": "attribute.disabled.label",
+      "valueType": "boolean",
+      "keywords": [],
+      "elements": [
+        "input",
+        "textarea",
+        "select",
+        "button",
+        "fieldset",
+        "optionGroup",
+        "option"
+      ],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "readonly",
+      "html": "readonly",
+      "labelKey": "attribute.readonly.label",
+      "valueType": "boolean",
+      "keywords": [],
+      "elements": [
+        "input",
+        "textarea"
+      ],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "checked",
+      "html": "checked",
+      "labelKey": "attribute.checked.label",
+      "valueType": "boolean",
+      "keywords": [],
+      "elements": [
+        "input"
+      ],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "inputType",
+      "html": "type",
+      "labelKey": "attribute.inputType.label",
+      "valueType": "keyword",
+      "keywords": [
+        "text",
+        "email",
+        "password",
+        "number",
+        "tel",
+        "url",
+        "search",
+        "date",
+        "time",
+        "color",
+        "range",
+        "checkbox",
+        "radio",
+        "file"
+      ],
+      "elements": [
+        "input"
+      ],
+      "command": "element.setInputType"
+    },
+    {
+      "id": "labelFor",
+      "html": "for",
+      "labelKey": "attribute.labelFor.label",
+      "valueType": "id-ref",
+      "keywords": [],
+      "elements": [
+        "label"
+      ],
+      "command": "element.setLabelTarget"
+    },
+    {
+      "id": "action",
+      "html": "action",
+      "labelKey": "attribute.action.label",
+      "valueType": "url",
+      "keywords": [],
+      "elements": [
+        "form"
+      ],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "method",
+      "html": "method",
+      "labelKey": "attribute.method.label",
+      "valueType": "keyword",
+      "keywords": [
+        "get",
+        "post"
+      ],
+      "elements": [
+        "form"
+      ],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "buttonType",
+      "html": "type",
+      "labelKey": "attribute.buttonType.label",
+      "valueType": "keyword",
+      "keywords": [
+        "submit",
+        "button",
+        "reset"
+      ],
+      "elements": [
+        "button"
+      ],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "rows",
+      "html": "rows",
+      "labelKey": "attribute.rows.label",
+      "valueType": "number",
+      "keywords": [],
+      "elements": [
+        "textarea"
+      ],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "groupLabel",
+      "html": "label",
+      "labelKey": "attribute.groupLabel.label",
+      "valueType": "text",
+      "keywords": [],
+      "elements": [
+        "optionGroup"
+      ],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "selected",
+      "html": "selected",
+      "labelKey": "attribute.selected.label",
+      "valueType": "boolean",
+      "keywords": [],
+      "elements": [
+        "option"
+      ],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "poster",
+      "html": "poster",
+      "labelKey": "attribute.poster.label",
+      "valueType": "url",
+      "keywords": [],
+      "elements": [
+        "video"
+      ],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "controls",
+      "html": "controls",
+      "labelKey": "attribute.controls.label",
+      "valueType": "boolean",
+      "keywords": [],
+      "elements": [
+        "video",
+        "audio"
+      ],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "autoplay",
+      "html": "autoplay",
+      "labelKey": "attribute.autoplay.label",
+      "valueType": "boolean",
+      "keywords": [],
+      "elements": [
+        "video",
+        "audio"
+      ],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "loop",
+      "html": "loop",
+      "labelKey": "attribute.loop.label",
+      "valueType": "boolean",
+      "keywords": [],
+      "elements": [
+        "video",
+        "audio"
+      ],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "muted",
+      "html": "muted",
+      "labelKey": "attribute.muted.label",
+      "valueType": "boolean",
+      "keywords": [],
+      "elements": [
+        "video",
+        "audio"
+      ],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "trackKind",
+      "html": "kind",
+      "labelKey": "attribute.trackKind.label",
+      "valueType": "keyword",
+      "keywords": [
+        "subtitles",
+        "captions",
+        "descriptions",
+        "chapters",
+        "metadata"
+      ],
+      "elements": [
+        "track"
+      ],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "canvasWidth",
+      "html": "width",
+      "labelKey": "attribute.canvasWidth.label",
+      "valueType": "number",
+      "keywords": [],
+      "elements": [
+        "canvas"
+      ],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "canvasHeight",
+      "html": "height",
+      "labelKey": "attribute.canvasHeight.label",
+      "valueType": "number",
+      "keywords": [],
+      "elements": [
+        "canvas"
+      ],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "open",
+      "html": "open",
+      "labelKey": "attribute.open.label",
+      "valueType": "boolean",
+      "keywords": [],
+      "elements": [
+        "details",
+        "dialog"
+      ],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "svgMarkup",
+      "html": null,
+      "labelKey": "attribute.svgMarkup.label",
+      "valueType": "markup",
+      "keywords": [],
+      "elements": [
+        "svg"
+      ],
+      "command": "element.setSvgMarkup"
+    },
+    {
+      "id": "embedMarkup",
+      "html": null,
+      "labelKey": "attribute.embedMarkup.label",
+      "valueType": "markup",
+      "keywords": [],
+      "elements": [
+        "embed"
+      ],
+      "command": "element.setEmbedMarkup"
+    },
+    {
+      "id": "pageTitle",
+      "html": null,
+      "labelKey": "attribute.pageTitle.label",
+      "valueType": "text",
+      "keywords": [],
+      "elements": [
+        "page"
+      ],
+      "command": "page.setSetting"
+    },
+    {
+      "id": "pageLanguage",
+      "html": "lang",
+      "labelKey": "attribute.pageLanguage.label",
+      "valueType": "text",
+      "keywords": [],
+      "elements": [
+        "page"
+      ],
+      "command": "page.setSetting"
+    },
+    {
+      "id": "pageDirection",
+      "html": "dir",
+      "labelKey": "attribute.pageDirection.label",
+      "valueType": "keyword",
+      "keywords": [
+        "ltr",
+        "rtl",
+        "auto"
+      ],
+      "elements": [
+        "page"
+      ],
+      "command": "page.setSetting"
+    },
+    {
+      "id": "pageDescription",
+      "html": null,
+      "labelKey": "attribute.pageDescription.label",
+      "valueType": "text",
+      "keywords": [],
+      "elements": [
+        "page"
+      ],
+      "command": "page.setSetting"
+    },
+    {
+      "id": "pageCanonical",
+      "html": null,
+      "labelKey": "attribute.pageCanonical.label",
+      "valueType": "url",
+      "keywords": [],
+      "elements": [
+        "page"
+      ],
+      "command": "page.setSetting"
+    },
+    {
+      "id": "pageOgTitle",
+      "html": null,
+      "labelKey": "attribute.pageOgTitle.label",
+      "valueType": "text",
+      "keywords": [],
+      "elements": [
+        "page"
+      ],
+      "command": "page.setSetting"
+    },
+    {
+      "id": "pageOgImage",
+      "html": null,
+      "labelKey": "attribute.pageOgImage.label",
+      "valueType": "url",
+      "keywords": [],
+      "elements": [
+        "page"
+      ],
+      "command": "page.setSetting"
+    },
+    {
+      "id": "pageFavicon",
+      "html": null,
+      "labelKey": "attribute.pageFavicon.label",
+      "valueType": "url",
+      "keywords": [],
+      "elements": [
+        "page"
+      ],
+      "command": "page.setSetting"
+    },
+    {
+      "id": "pageScripts",
+      "html": null,
+      "labelKey": "attribute.pageScripts.label",
+      "valueType": "path-list",
+      "keywords": [],
+      "elements": [
+        "page"
+      ],
+      "command": "page.setSetting"
+    }
+  ],
+  "palette": [
+    {
+      "id": "structure",
+      "labelKey": "palette.group.structure",
+      "entries": [
+        {
+          "id": "container",
+          "labelKey": "palette.entry.container",
+          "element": "div",
+          "kind": "element",
+          "inputType": null,
+          "feature": "palette-click-insert"
+        },
+        {
+          "id": "header",
+          "labelKey": "palette.entry.header",
+          "element": "header",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-structure"
+        },
+        {
+          "id": "navigation",
+          "labelKey": "palette.entry.navigation",
+          "element": "nav",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-structure"
+        },
+        {
+          "id": "main",
+          "labelKey": "palette.entry.main",
+          "element": "main",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-structure"
+        },
+        {
+          "id": "section",
+          "labelKey": "palette.entry.section",
+          "element": "section",
+          "kind": "element",
+          "inputType": null,
+          "feature": "palette-click-insert"
+        },
+        {
+          "id": "article",
+          "labelKey": "palette.entry.article",
+          "element": "article",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-structure"
+        },
+        {
+          "id": "aside",
+          "labelKey": "palette.entry.aside",
+          "element": "aside",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-structure"
+        },
+        {
+          "id": "footer",
+          "labelKey": "palette.entry.footer",
+          "element": "footer",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-structure"
+        },
+        {
+          "id": "link-block",
+          "labelKey": "palette.entry.linkBlock",
+          "element": "linkBlock",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-structure"
+        }
+      ]
+    },
+    {
+      "id": "text",
+      "labelKey": "palette.group.text",
+      "entries": [
+        {
+          "id": "heading",
+          "labelKey": "palette.entry.heading",
+          "element": "heading",
+          "kind": "element",
+          "inputType": null,
+          "feature": "palette-click-insert"
+        },
+        {
+          "id": "paragraph",
+          "labelKey": "palette.entry.paragraph",
+          "element": "paragraph",
+          "kind": "element",
+          "inputType": null,
+          "feature": "palette-click-insert"
+        },
+        {
+          "id": "link",
+          "labelKey": "palette.entry.link",
+          "element": "link",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-text"
+        },
+        {
+          "id": "blockquote",
+          "labelKey": "palette.entry.blockquote",
+          "element": "blockquote",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-text"
+        },
+        {
+          "id": "preformatted",
+          "labelKey": "palette.entry.preformatted",
+          "element": "pre",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-text"
+        },
+        {
+          "id": "divider",
+          "labelKey": "palette.entry.divider",
+          "element": "rule",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-text"
+        }
+      ]
+    },
+    {
+      "id": "lists",
+      "labelKey": "palette.group.lists",
+      "entries": [
+        {
+          "id": "unordered-list",
+          "labelKey": "palette.entry.unorderedList",
+          "element": "list",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-lists"
+        },
+        {
+          "id": "ordered-list",
+          "labelKey": "palette.entry.orderedList",
+          "element": "orderedList",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-lists"
+        },
+        {
+          "id": "definition-list",
+          "labelKey": "palette.entry.definitionList",
+          "element": "definitionList",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-lists"
+        }
+      ]
+    },
+    {
+      "id": "tables",
+      "labelKey": "palette.group.tables",
+      "entries": [
+        {
+          "id": "table",
+          "labelKey": "palette.entry.table",
+          "element": "table",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-tables"
+        }
+      ]
+    },
+    {
+      "id": "forms",
+      "labelKey": "palette.group.forms",
+      "entries": [
+        {
+          "id": "form",
+          "labelKey": "palette.entry.form",
+          "element": "form",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-form-structure"
+        },
+        {
+          "id": "fieldset",
+          "labelKey": "palette.entry.fieldset",
+          "element": "fieldset",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-form-structure"
+        },
+        {
+          "id": "label",
+          "labelKey": "palette.entry.label",
+          "element": "label",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-form-structure"
+        },
+        {
+          "id": "input-text",
+          "labelKey": "palette.entry.inputText",
+          "element": "input",
+          "kind": "element",
+          "inputType": "text",
+          "feature": "elements-form-inputs"
+        },
+        {
+          "id": "input-email",
+          "labelKey": "palette.entry.inputEmail",
+          "element": "input",
+          "kind": "element",
+          "inputType": "email",
+          "feature": "elements-form-inputs"
+        },
+        {
+          "id": "input-password",
+          "labelKey": "palette.entry.inputPassword",
+          "element": "input",
+          "kind": "element",
+          "inputType": "password",
+          "feature": "elements-form-inputs"
+        },
+        {
+          "id": "input-number",
+          "labelKey": "palette.entry.inputNumber",
+          "element": "input",
+          "kind": "element",
+          "inputType": "number",
+          "feature": "elements-form-inputs"
+        },
+        {
+          "id": "input-tel",
+          "labelKey": "palette.entry.inputTel",
+          "element": "input",
+          "kind": "element",
+          "inputType": "tel",
+          "feature": "elements-form-inputs"
+        },
+        {
+          "id": "input-url",
+          "labelKey": "palette.entry.inputUrl",
+          "element": "input",
+          "kind": "element",
+          "inputType": "url",
+          "feature": "elements-form-inputs"
+        },
+        {
+          "id": "input-search",
+          "labelKey": "palette.entry.inputSearch",
+          "element": "input",
+          "kind": "element",
+          "inputType": "search",
+          "feature": "elements-form-inputs"
+        },
+        {
+          "id": "input-date",
+          "labelKey": "palette.entry.inputDate",
+          "element": "input",
+          "kind": "element",
+          "inputType": "date",
+          "feature": "elements-form-inputs"
+        },
+        {
+          "id": "input-time",
+          "labelKey": "palette.entry.inputTime",
+          "element": "input",
+          "kind": "element",
+          "inputType": "time",
+          "feature": "elements-form-inputs"
+        },
+        {
+          "id": "input-color",
+          "labelKey": "palette.entry.inputColor",
+          "element": "input",
+          "kind": "element",
+          "inputType": "color",
+          "feature": "elements-form-inputs"
+        },
+        {
+          "id": "input-range",
+          "labelKey": "palette.entry.inputRange",
+          "element": "input",
+          "kind": "element",
+          "inputType": "range",
+          "feature": "elements-form-inputs"
+        },
+        {
+          "id": "input-checkbox",
+          "labelKey": "palette.entry.inputCheckbox",
+          "element": "input",
+          "kind": "element",
+          "inputType": "checkbox",
+          "feature": "elements-form-inputs"
+        },
+        {
+          "id": "input-radio",
+          "labelKey": "palette.entry.inputRadio",
+          "element": "input",
+          "kind": "element",
+          "inputType": "radio",
+          "feature": "elements-form-inputs"
+        },
+        {
+          "id": "input-file",
+          "labelKey": "palette.entry.inputFile",
+          "element": "input",
+          "kind": "element",
+          "inputType": "file",
+          "feature": "elements-form-inputs"
+        },
+        {
+          "id": "textarea",
+          "labelKey": "palette.entry.textarea",
+          "element": "textarea",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-form-controls"
+        },
+        {
+          "id": "select",
+          "labelKey": "palette.entry.select",
+          "element": "select",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-form-controls"
+        },
+        {
+          "id": "button",
+          "labelKey": "palette.entry.button",
+          "element": "button",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-form-structure"
+        },
+        {
+          "id": "progress",
+          "labelKey": "palette.entry.progress",
+          "element": "progress",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-form-controls"
+        },
+        {
+          "id": "meter",
+          "labelKey": "palette.entry.meter",
+          "element": "meter",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-form-controls"
+        },
+        {
+          "id": "output",
+          "labelKey": "palette.entry.output",
+          "element": "output",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-form-structure"
+        }
+      ]
+    },
+    {
+      "id": "media",
+      "labelKey": "palette.group.media",
+      "entries": [
+        {
+          "id": "image",
+          "labelKey": "palette.entry.image",
+          "element": "image",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-media-images"
+        },
+        {
+          "id": "picture",
+          "labelKey": "palette.entry.picture",
+          "element": "picture",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-media-images"
+        },
+        {
+          "id": "figure",
+          "labelKey": "palette.entry.figure",
+          "element": "figure",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-media-images"
+        },
+        {
+          "id": "video",
+          "labelKey": "palette.entry.video",
+          "element": "video",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-media-embeds"
+        },
+        {
+          "id": "audio",
+          "labelKey": "palette.entry.audio",
+          "element": "audio",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-media-embeds"
+        },
+        {
+          "id": "embedded-frame",
+          "labelKey": "palette.entry.embeddedFrame",
+          "element": "iframe",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-media-embeds"
+        },
+        {
+          "id": "canvas",
+          "labelKey": "palette.entry.canvas",
+          "element": "canvas",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-media-embeds"
+        },
+        {
+          "id": "svg",
+          "labelKey": "palette.entry.svg",
+          "element": "svg",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-svg-shapes"
+        },
+        {
+          "id": "embed-html",
+          "labelKey": "palette.entry.embedHtml",
+          "element": "embed",
+          "kind": "element",
+          "inputType": null,
+          "feature": "embed-html"
+        }
+      ]
+    },
+    {
+      "id": "interactive",
+      "labelKey": "palette.group.interactive",
+      "entries": [
+        {
+          "id": "details",
+          "labelKey": "palette.entry.details",
+          "element": "details",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-interactive"
+        },
+        {
+          "id": "dialog",
+          "labelKey": "palette.entry.dialog",
+          "element": "dialog",
+          "kind": "element",
+          "inputType": null,
+          "feature": "elements-interactive"
+        }
+      ]
+    },
+    {
+      "id": "templates",
+      "labelKey": "palette.group.templates",
+      "entries": [
+        {
+          "id": "template-container",
+          "labelKey": "palette.entry.templateContainer",
+          "element": "div",
+          "kind": "template",
+          "inputType": null,
+          "feature": "templates-layout"
+        },
+        {
+          "id": "template-row",
+          "labelKey": "palette.entry.templateRow",
+          "element": "div",
+          "kind": "template",
+          "inputType": null,
+          "feature": "templates-layout"
+        },
+        {
+          "id": "template-column",
+          "labelKey": "palette.entry.templateColumn",
+          "element": "div",
+          "kind": "template",
+          "inputType": null,
+          "feature": "templates-layout"
+        },
+        {
+          "id": "template-grid",
+          "labelKey": "palette.entry.templateGrid",
+          "element": "div",
+          "kind": "template",
+          "inputType": null,
+          "feature": "templates-layout"
+        },
+        {
+          "id": "template-list",
+          "labelKey": "palette.entry.templateList",
+          "element": "list",
+          "kind": "template",
+          "inputType": null,
+          "feature": "templates-content"
+        },
+        {
+          "id": "template-ordered-list",
+          "labelKey": "palette.entry.templateOrderedList",
+          "element": "orderedList",
+          "kind": "template",
+          "inputType": null,
+          "feature": "templates-content"
+        },
+        {
+          "id": "template-definition-list",
+          "labelKey": "palette.entry.templateDefinitionList",
+          "element": "definitionList",
+          "kind": "template",
+          "inputType": null,
+          "feature": "templates-content"
+        },
+        {
+          "id": "template-table",
+          "labelKey": "palette.entry.templateTable",
+          "element": "table",
+          "kind": "template",
+          "inputType": null,
+          "feature": "templates-content"
+        },
+        {
+          "id": "template-form",
+          "labelKey": "palette.entry.templateForm",
+          "element": "form",
+          "kind": "template",
+          "inputType": null,
+          "feature": "templates-content"
+        },
+        {
+          "id": "template-select",
+          "labelKey": "palette.entry.templateSelect",
+          "element": "select",
+          "kind": "template",
+          "inputType": null,
+          "feature": "templates-content"
+        },
+        {
+          "id": "template-figure",
+          "labelKey": "palette.entry.templateFigure",
+          "element": "figure",
+          "kind": "template",
+          "inputType": null,
+          "feature": "templates-content"
+        },
+        {
+          "id": "template-card",
+          "labelKey": "palette.entry.templateCard",
+          "element": "article",
+          "kind": "template",
+          "inputType": null,
+          "feature": "templates-sections"
+        },
+        {
+          "id": "template-hero",
+          "labelKey": "palette.entry.templateHero",
+          "element": "section",
+          "kind": "template",
+          "inputType": null,
+          "feature": "templates-sections"
+        },
+        {
+          "id": "template-navbar",
+          "labelKey": "palette.entry.templateNavbar",
+          "element": "header",
+          "kind": "template",
+          "inputType": null,
+          "feature": "templates-sections"
+        },
+        {
+          "id": "template-sidebar",
+          "labelKey": "palette.entry.templateSidebar",
+          "element": "aside",
+          "kind": "template",
+          "inputType": null,
+          "feature": "templates-sections"
+        },
+        {
+          "id": "template-gallery",
+          "labelKey": "palette.entry.templateGallery",
+          "element": "section",
+          "kind": "template",
+          "inputType": null,
+          "feature": "templates-sections"
+        },
+        {
+          "id": "template-form-group",
+          "labelKey": "palette.entry.templateFormGroup",
+          "element": "div",
+          "kind": "template",
+          "inputType": null,
+          "feature": "templates-components"
+        },
+        {
+          "id": "template-button-group",
+          "labelKey": "palette.entry.templateButtonGroup",
+          "element": "div",
+          "kind": "template",
+          "inputType": null,
+          "feature": "templates-components"
+        },
+        {
+          "id": "template-tabs",
+          "labelKey": "palette.entry.templateTabs",
+          "element": "div",
+          "kind": "template",
+          "inputType": null,
+          "feature": "templates-components"
+        },
+        {
+          "id": "template-accordion",
+          "labelKey": "palette.entry.templateAccordion",
+          "element": "div",
+          "kind": "template",
+          "inputType": null,
+          "feature": "templates-components"
+        },
+        {
+          "id": "template-modal",
+          "labelKey": "palette.entry.templateModal",
+          "element": "dialog",
+          "kind": "template",
+          "inputType": null,
+          "feature": "templates-components"
+        }
+      ]
+    }
+  ]
+}

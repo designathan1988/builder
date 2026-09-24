@@ -62,8 +62,8 @@ None for resizing in Pager (the Size fields in the Inspector and quick panel are
 
 ## Problems in Pager
 
-1. **The status bar shows `Coordinates (0, 0)` while resizing.** Required: the status bar shows the live size `W × H` during the drag and `Resized to W × H` at the end (features.json `resize-handles`).
+1. **The status bar shows `Coordinates (0, 0)` while resizing.** Required: the status bar shows the live size `W × H` during the drag and `Resized to W × H` at the end (manifest feature `resize-handles`).
 2. **Shift writes fractional pixels** (`381.54px`). Required: resize results are rounded to whole CSS px (the aspect ratio is kept to the nearest pixel).
 3. **Alt on a flow element doubles the change on one side instead of resizing around the centre.** Required: Alt resizes symmetrically around the centre; for an element whose left edge cannot move in its flow, the status explains that the change is applied to the width (`Width changed on both sides by N px`), and the preview shows the true result.
-4. **Ctrl suspends snapping here, while features.json assigns that role to Alt** (`snap-while-moving`: "Holding Alt suspends snapping for that gesture"). features.json also gives Alt the symmetric resize (`resize-handles`). Required: the modifiers come from one table in the keymap owner; during a resize, Shift keeps the aspect ratio and Alt both resizes symmetrically and suspends snapping, as the two entries together state; Ctrl has no role in a resize.
+4. **The resize modifiers had two readings:** the old `snap-while-moving` entry gave Alt the snap switch while `resize-handles` gave Alt the symmetric resize, so Alt would have meant two things in one gesture (report PG-14). Required, one meaning per modifier: during a resize **Shift** keeps the aspect ratio, **Alt** resizes from the centre, and **Ctrl** suspends snapping for that gesture. The modifiers are declared once, in the `resize` gesture of `manifest/interactions.json`.
 5. **Handles are 8 px circles,** hard to hit. Required: handles have the minimum target size given in `DESIGN.md`, and a hover state.

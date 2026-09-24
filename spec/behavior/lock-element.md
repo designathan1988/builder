@@ -48,6 +48,6 @@ None in Pager.
 
 ## Problems in Pager
 
-1. **The refusal message points to the wrong place** (`click the lock in its bar`), while the lock is on the Layers row. Required: messages such as `Unlock <name> before deleting it` / `Unlock <name> before moving it`, naming the locked ancestor (features.json `lock-element`).
+1. **The refusal message points to the wrong place** (`click the lock in its bar`), while the lock is on the Layers row. Required: messages such as `Unlock <name> before deleting it` / `Unlock <name> before moving it`, naming the locked ancestor (manifest feature `lock-element`).
 2. **Toggling the lock from Layers says nothing.** Required: the status bar reads `Locked: <name>` / `Unlocked: <name>` for every door (the selection bar already does).
 3. **A double-click on locked text does nothing and says nothing.** Required: the status bar says `Unlock <name> before editing its text`.

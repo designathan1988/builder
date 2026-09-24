@@ -58,4 +58,4 @@ Enter/Space on a focused tile.
    - The Row template has `gap: 16px`, the `R` wrapper has none and sometimes adds `align-items: center` (`src/features/input/index.js:801-810`).
    - The template columns are flex columns, the side-drop wrappers are built by other code (`src/features/drag/drag.js:1192-1198`, `:1259-1262`).
 
-   Required: templates and wrap commands take their Row/Column layout styles from the same owner (features.json `templates-layout`).
+   Required: templates and wrap commands take their Row/Column layout styles from the same owner (manifest feature `templates-layout`).

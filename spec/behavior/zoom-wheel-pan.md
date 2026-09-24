@@ -45,5 +45,5 @@ This is the zoom feature.
 
 ## Problems in Pager
 
-1. **The wheel zoom is limited to 40-200 %** (same clamp as the keys). Required: 10-800 % (features.json `zoom-keyboard-buttons`).
-2. **The Space pan arm stays active only while the stage has no focused control,** so pressing Space while a panel button has focus scrolls or activates that button instead of panning, without feedback. Required: Space pans whenever the pointer is over the canvas and no text field or contenteditable has focus; the grab cursor shows while Space is held and disappears when it is released (features.json `zoom-wheel-pan`).
+1. **The wheel zoom is limited to 40-200 %** (same clamp as the keys). Required: 10-800 % (manifest feature `zoom-keyboard-buttons`).
+2. **The Space pan arm stays active only while the stage has no focused control,** so pressing Space while a panel button has focus scrolls or activates that button instead of panning, without feedback. Required: Space pans whenever the pointer is over the canvas and no text field or contenteditable has focus; the grab cursor shows while Space is held and disappears when it is released (manifest feature `zoom-wheel-pan`).

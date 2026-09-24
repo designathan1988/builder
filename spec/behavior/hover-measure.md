@@ -51,6 +51,6 @@ Ctrl is the modifier; there is no keyboard way to pick the measured element.
 
 ## Problems in Pager
 
-1. **The modifier is Ctrl, which the new app uses for Ctrl+click toggling.** Required: hovering an element always shows its size (W × H in CSS px) next to its hover outline, and holding **Alt** shows distances (features.json `hover-measure`).
+1. **The modifier is Ctrl, which the new app uses for Ctrl+click toggling.** Required: hovering an element always shows its size (W × H in CSS px) next to its hover outline, and holding **Alt** shows distances (manifest feature `hover-measure`).
 2. **Distances are measured to the hovered element's parent, not from the selection.** Required: with a selection, holding Alt over another element draws distance lines between the nearest edges of the selection and that element, each labelled in CSS px; over an ancestor of the selection it shows the distances from the selection to the ancestor's inner edges.
 3. **A measurement line is also a padding handle,** so a measuring gesture can change the document. Required: measuring never changes the selection or the document JSON.

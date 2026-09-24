@@ -42,5 +42,5 @@ None.
 
 ## Problems in Pager
 
-1. **Label spacing can drop to 30 screen px** (for example at 60 %, where the 10 px step gives 6 screen px ticks and labels every 50 px = 30 screen px). Required: labelled ticks sit on round values (10, 25, 50, 100, 250, 500…) chosen so neighbouring labels are at least 40 screen px apart at any zoom (features.json `rulers`).
+1. **Label spacing can drop to 30 screen px** (for example at 60 %, where the 10 px step gives 6 screen px ticks and labels every 50 px = 30 screen px). Required: labelled ticks sit on round values (10, 25, 50, 100, 250, 500…) chosen so neighbouring labels are at least 40 screen px apart at any zoom (manifest feature `rulers`).
 2. **The pointer markers stay visible in preview** (two blue ticks at the left edge in `preview-mode--01-preview.png`). Required: rulers and their markers are hidden in preview.

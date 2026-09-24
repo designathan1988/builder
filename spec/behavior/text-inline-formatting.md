@@ -57,6 +57,6 @@ The shortcuts are the doors; there is no toolbar for marks.
 
 ## Problems in Pager
 
-1. **An unsafe link is dropped silently.** Required: the prompt shows an error (`Links must start with http, https, mailto or tel`) and stays open; nothing is written (features.json: unsafe URLs such as `javascript:` are refused).
+1. **An unsafe link is dropped silently.** Required: the prompt shows an error (`Links must start with http, https, mailto or tel`) and stays open; nothing is written (manifest intent: unsafe URLs such as `javascript:` are refused).
 2. **Ctrl+B inside part of a bold run removes the whole run.** Required: toggling a mark applies to the selected range only (splitting the run when needed).
-3. **Pasting rich text drops all formatting:** the paste inserts `text/plain` only (`src/app/boot.js:661-665`). Required: pasted content keeps the supported marks (strong, em, and links with safe URLs) and drops everything else, other tags becoming their plain text and scripts removed (features.json `text-inline-formatting`).
+3. **Pasting rich text drops all formatting:** the paste inserts `text/plain` only (`src/app/boot.js:661-665`). Required: pasted content keeps the supported marks (strong, em, and links with safe URLs) and drops everything else, other tags becoming their plain text and scripts removed (manifest feature `text-inline-formatting`).

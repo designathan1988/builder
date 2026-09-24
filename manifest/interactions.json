@@ -1,0 +1,1336 @@
+{
+  "keyContexts": [
+    {
+      "id": "global",
+      "labelKey": "keyContext.global",
+      "inherits": null
+    },
+    {
+      "id": "canvas",
+      "labelKey": "keyContext.canvas",
+      "inherits": "global"
+    },
+    {
+      "id": "canvas-positioned",
+      "labelKey": "keyContext.canvasPositioned",
+      "inherits": "canvas"
+    },
+    {
+      "id": "canvas-edit-mode",
+      "labelKey": "keyContext.canvasEditMode",
+      "inherits": "canvas"
+    },
+    {
+      "id": "canvas-handle",
+      "labelKey": "keyContext.canvasHandle",
+      "inherits": null
+    },
+    {
+      "id": "text-editing",
+      "labelKey": "keyContext.textEditing",
+      "inherits": null
+    },
+    {
+      "id": "drag",
+      "labelKey": "keyContext.drag",
+      "inherits": null
+    },
+    {
+      "id": "hand",
+      "labelKey": "keyContext.hand",
+      "inherits": null
+    },
+    {
+      "id": "preview",
+      "labelKey": "keyContext.preview",
+      "inherits": null
+    },
+    {
+      "id": "layers-tree",
+      "labelKey": "keyContext.layersTree",
+      "inherits": "global"
+    },
+    {
+      "id": "palette",
+      "labelKey": "keyContext.palette",
+      "inherits": "global"
+    },
+    {
+      "id": "menu",
+      "labelKey": "keyContext.menu",
+      "inherits": null
+    },
+    {
+      "id": "command-bar",
+      "labelKey": "keyContext.commandBar",
+      "inherits": null
+    },
+    {
+      "id": "dialog",
+      "labelKey": "keyContext.dialog",
+      "inherits": null
+    },
+    {
+      "id": "tab-strip",
+      "labelKey": "keyContext.tabStrip",
+      "inherits": "global"
+    },
+    {
+      "id": "toolbar",
+      "labelKey": "keyContext.toolbar",
+      "inherits": "global"
+    },
+    {
+      "id": "splitter",
+      "labelKey": "keyContext.splitter",
+      "inherits": "global"
+    },
+    {
+      "id": "field",
+      "labelKey": "keyContext.field",
+      "inherits": null
+    },
+    {
+      "id": "number-field",
+      "labelKey": "keyContext.numberField",
+      "inherits": "field"
+    },
+    {
+      "id": "guide",
+      "labelKey": "keyContext.guide",
+      "inherits": null
+    },
+    {
+      "id": "gradient-stop",
+      "labelKey": "keyContext.gradientStop",
+      "inherits": null
+    },
+    {
+      "id": "shadow-pad",
+      "labelKey": "keyContext.shadowPad",
+      "inherits": null
+    },
+    {
+      "id": "timeline",
+      "labelKey": "keyContext.timeline",
+      "inherits": "global"
+    },
+    {
+      "id": "code-editor",
+      "labelKey": "keyContext.codeEditor",
+      "inherits": null
+    }
+  ],
+  "constants": [
+    {
+      "id": "drag.threshold",
+      "value": 4,
+      "unit": "screen-px",
+      "source": "spec/behavior/drag-reorder-canvas.md",
+      "note": "Euclidean pointer movement that turns a press into a drag; below it a release is a click. Shared by canvas, palette and Layers drags, the marquee, resize, spacing and property handles, guides and panel drags. Independent of the zoom."
+    },
+    {
+      "id": "drag.hysteresis",
+      "value": 4,
+      "unit": "screen-px",
+      "source": "spec/behavior/drag-reorder-canvas.md",
+      "note": "A new drop decision replaces the drawn one only after the pointer has moved this far from where the drawn one was taken."
+    },
+    {
+      "id": "drop.leafSplit",
+      "value": 0.5,
+      "unit": "fraction",
+      "source": "spec/behavior/drag-reorder-canvas.md",
+      "note": "On a leaf, the first half along the parent flow axis means before it and the second half after it. A leaf is never a receiver."
+    },
+    {
+      "id": "drop.emptyEdgeMax",
+      "value": 8,
+      "unit": "screen-px",
+      "source": "spec/behavior/drag-drop-inside.md",
+      "note": "Edge band of an empty container: min(8, 0.25 × extent) at both ends means before/after; the rest is inside."
+    },
+    {
+      "id": "drop.emptyEdgeFraction",
+      "value": 0.25,
+      "unit": "fraction",
+      "source": "spec/behavior/drag-drop-inside.md",
+      "note": "Fraction of the extent in the edge band of an empty container: min(8, 0.25 × extent)."
+    },
+    {
+      "id": "drop.edgeFraction",
+      "value": 0.25,
+      "unit": "fraction",
+      "source": "spec/behavior/drag-reorder-canvas.md",
+      "note": "Edge band of a container with children: min(clamp(0.25 × extent, 8, 32), 0.4 × extent)."
+    },
+    {
+      "id": "drop.edgeMin",
+      "value": 8,
+      "unit": "screen-px",
+      "source": "spec/behavior/drag-reorder-canvas.md",
+      "note": "Lower clamp of the edge band of a container with children."
+    },
+    {
+      "id": "drop.edgeMax",
+      "value": 32,
+      "unit": "screen-px",
+      "source": "spec/behavior/drag-reorder-canvas.md",
+      "note": "Upper clamp of the edge band of a container with children."
+    },
+    {
+      "id": "drop.edgeCapFraction",
+      "value": 0.4,
+      "unit": "fraction",
+      "source": "spec/behavior/drag-reorder-canvas.md",
+      "note": "The edge band of a container with children never exceeds 0.4 × its extent."
+    },
+    {
+      "id": "drop.escapeBandMax",
+      "value": 12,
+      "unit": "screen-px",
+      "source": "spec/behavior/drag-reorder-canvas.md",
+      "note": "Escape ladder band from an ancestor real edge: min(12, extent / 2 − 8), plus the slop."
+    },
+    {
+      "id": "drop.escapeBandInset",
+      "value": 8,
+      "unit": "screen-px",
+      "source": "spec/behavior/drag-reorder-canvas.md",
+      "note": "Subtracted from half the extent in the escape ladder band: min(12, extent / 2 − 8)."
+    },
+    {
+      "id": "drop.escapeBandSlop",
+      "value": 2,
+      "unit": "screen-px",
+      "source": "spec/behavior/drag-reorder-canvas.md",
+      "note": "Slop added to the escape ladder band."
+    },
+    {
+      "id": "drop.emptyAimMin",
+      "value": 40,
+      "unit": "screen-px",
+      "source": "spec/behavior/drag-drop-inside.md",
+      "note": "The aim area of an empty container is widened to at least 40 × 40 screen px, centred and shared with its neighbours."
+    },
+    {
+      "id": "canvas.emptyContainerMinHeight",
+      "value": 40,
+      "unit": "css-px",
+      "source": "spec/behavior/drag-drop-inside.md",
+      "note": "Editor-only minimum height of an empty container on the canvas; never exported."
+    },
+    {
+      "id": "drop.autoscrollZone",
+      "value": 56,
+      "unit": "screen-px",
+      "source": "spec/behavior/drag-reorder-canvas.md",
+      "note": "Autoscroll starts within this distance of a scroll container edge, only after the pointer has once been further inside the stage."
+    },
+    {
+      "id": "drop.autoscrollMaxStep",
+      "value": 22,
+      "unit": "screen-px",
+      "source": "spec/behavior/drag-reorder-canvas.md",
+      "note": "Largest autoscroll step per animation frame."
+    },
+    {
+      "id": "drop.outsideStageTolerance",
+      "value": 8,
+      "unit": "screen-px",
+      "source": "spec/behavior/drag-reorder-canvas.md",
+      "note": "A proposal whose line lies outside the visible stage by more than this is drawn as a warning and refused on release."
+    },
+    {
+      "id": "drag.ghostOffset",
+      "value": [
+        14,
+        16
+      ],
+      "unit": "screen-px",
+      "source": "spec/behavior/drag-reorder-canvas.md",
+      "note": "Offset (x, y) of the ghost chip from the pointer."
+    },
+    {
+      "id": "drag.labelOffset",
+      "value": 20,
+      "unit": "screen-px",
+      "source": "spec/behavior/drag-reorder-canvas.md",
+      "note": "The label chip sits this far above the receiver box top-left corner, clamped inside the stage."
+    },
+    {
+      "id": "drop.flashDuration",
+      "value": 900,
+      "unit": "ms",
+      "source": "spec/behavior/drag-reorder-canvas.md",
+      "note": "The dropped or inserted element flashes for this long."
+    },
+    {
+      "id": "drag.cancelReturnMin",
+      "value": 150,
+      "unit": "ms",
+      "source": "spec/behavior/drag-level-keys-escape.md",
+      "note": "On Escape the ghost returns to the source element over 150 to 250 ms (the motion token); lower bound."
+    },
+    {
+      "id": "drag.cancelReturnMax",
+      "value": 250,
+      "unit": "ms",
+      "source": "spec/behavior/drag-level-keys-escape.md",
+      "note": "Upper bound of the ghost return on Escape."
+    },
+    {
+      "id": "layers.rowHeight",
+      "value": 28,
+      "unit": "screen-px",
+      "source": "spec/behavior/layers-tree.md",
+      "note": "Height of a Layers row."
+    },
+    {
+      "id": "layers.indentPerLevel",
+      "value": 12,
+      "unit": "screen-px",
+      "source": "spec/behavior/layers-tree.md",
+      "note": "Indentation of a Layers row per tree level."
+    },
+    {
+      "id": "layers.rowButtonSize",
+      "value": [
+        24,
+        28
+      ],
+      "unit": "screen-px",
+      "source": "spec/behavior/layers-tree.md",
+      "note": "Width and height of the lock and eye buttons at the right end of a row."
+    },
+    {
+      "id": "layers.dropBefore",
+      "value": 0.25,
+      "unit": "fraction",
+      "source": "spec/behavior/layers-drag.md",
+      "note": "On a container row, a pointer above this fraction of the row height means before the node."
+    },
+    {
+      "id": "layers.dropAfter",
+      "value": 0.75,
+      "unit": "fraction",
+      "source": "spec/behavior/layers-drag.md",
+      "note": "On a container row, a pointer below this fraction of the row height means after the node; between the two it means inside."
+    },
+    {
+      "id": "layers.dropLeafSplit",
+      "value": 0.5,
+      "unit": "fraction",
+      "source": "spec/behavior/layers-drag.md",
+      "note": "On a leaf row, the upper half means before and the lower half after."
+    },
+    {
+      "id": "layers.expandDwell",
+      "value": 600,
+      "unit": "ms",
+      "source": "spec/behavior/layers-drag.md",
+      "note": "Hovering a collapsed container row during a drag expands it after this long; leaving earlier cancels the timer."
+    },
+    {
+      "id": "wrap.sideBandMax",
+      "value": 26,
+      "unit": "screen-px",
+      "source": "spec/behavior/wrap-row-column.md",
+      "note": "Side band of the side-drop wrapper: min(26, 0.22 × width) from the target left or right edge. Applies only if a side-drop door is declared."
+    },
+    {
+      "id": "wrap.sideBandFraction",
+      "value": 0.22,
+      "unit": "fraction",
+      "source": "spec/behavior/wrap-row-column.md",
+      "note": "Fraction in the side-drop band min(26, 0.22 × width)."
+    },
+    {
+      "id": "wrap.sideTargetMin",
+      "value": 72,
+      "unit": "screen-px",
+      "source": "spec/behavior/wrap-row-column.md",
+      "note": "A side-drop target must be at least this wide (or tall in a row flex), unless it is self-sized."
+    },
+    {
+      "id": "wrap.sideFill",
+      "value": 0.82,
+      "unit": "fraction",
+      "source": "spec/behavior/wrap-row-column.md",
+      "note": "A side-drop target must fill at least this fraction of its parent content box on the cross axis."
+    },
+    {
+      "id": "wrap.sideEdgeExclusion",
+      "value": 8,
+      "unit": "screen-px",
+      "source": "spec/behavior/wrap-row-column.md",
+      "note": "No side-drop band within this distance of the target top and bottom (left and right in a row flex)."
+    },
+    {
+      "id": "wrap.sideDwell",
+      "value": 400,
+      "unit": "ms",
+      "source": "spec/behavior/wrap-row-column.md",
+      "note": "Dwell in a side band before the side-drop wrapper is confirmed and its explanation pill appears."
+    },
+    {
+      "id": "wrap.pillFreeze",
+      "value": 22,
+      "unit": "screen-px",
+      "source": "spec/behavior/wrap-row-column.md",
+      "note": "While the pointer is within this distance of the pill the proposal is frozen."
+    },
+    {
+      "id": "wrap.pillOffset",
+      "value": [
+        20,
+        26
+      ],
+      "unit": "screen-px",
+      "source": "spec/behavior/wrap-row-column.md",
+      "note": "Offset (x, y) of the side-drop pill from the pointer."
+    },
+    {
+      "id": "history.depth",
+      "value": 80,
+      "unit": "count",
+      "source": "spec/behavior/undo-redo.md",
+      "note": "At most this many undo entries are kept; the oldest is dropped."
+    },
+    {
+      "id": "history.nudgeBurstWindow",
+      "value": 1000,
+      "unit": "ms",
+      "source": "spec/behavior/absolute-nudge.md",
+      "note": "Arrow nudges on the same selection with no other command in between, each within this time of the previous one, are one undo step. The spec requires the named constant without a value; 1000 ms is chosen here."
+    },
+    {
+      "id": "nudge.step",
+      "value": 1,
+      "unit": "css-px",
+      "source": "spec/behavior/absolute-nudge.md",
+      "note": "Arrow nudge of a positioned selection, independent of the zoom."
+    },
+    {
+      "id": "nudge.shiftStep",
+      "value": 10,
+      "unit": "css-px",
+      "source": "spec/behavior/absolute-nudge.md",
+      "note": "Shift+arrow nudge of a positioned selection."
+    },
+    {
+      "id": "textEdit.twoClickWindow",
+      "value": 450,
+      "unit": "ms",
+      "source": "spec/behavior/text-edit-inline.md",
+      "note": "Two single clicks on the same selected text element within this window start editing, like a double-click."
+    },
+    {
+      "id": "textEdit.insertBurstGuard",
+      "value": 250,
+      "unit": "ms",
+      "source": "spec/behavior/text-edit-inline.md",
+      "note": "A multi-character insert repeated within this window is ignored (IME and autofill guard)."
+    },
+    {
+      "id": "numberField.step",
+      "value": 1,
+      "unit": "count",
+      "source": "spec/behavior/inspector-number-fields.md",
+      "note": "Default step of ArrowUp/ArrowDown and the step buttons in a number field."
+    },
+    {
+      "id": "numberField.shiftFactor",
+      "value": 10,
+      "unit": "factor",
+      "source": "spec/behavior/inspector-number-fields.md",
+      "note": "Shift multiplies a number field step or scrub by this."
+    },
+    {
+      "id": "numberField.altFactor",
+      "value": 0.1,
+      "unit": "factor",
+      "source": "spec/behavior/inspector-number-fields.md",
+      "note": "Alt multiplies a number field step or scrub by this."
+    },
+    {
+      "id": "numberField.pageStep",
+      "value": 10,
+      "unit": "count",
+      "source": "spec/behavior/inspector-number-fields.md",
+      "note": "PageUp/PageDown step in a number field."
+    },
+    {
+      "id": "numberField.scrubPixelsPerStep",
+      "value": 2,
+      "unit": "screen-px",
+      "source": "spec/behavior/inspector-number-fields.md",
+      "note": "Dragging a field label scrubs one step per this many pixels: round(dx / 2) × step."
+    },
+    {
+      "id": "numberField.scrubDeadZone",
+      "value": 0,
+      "unit": "screen-px",
+      "source": "spec/behavior/inspector-number-fields.md",
+      "note": "A scrub starts on the press, with no dead zone."
+    },
+    {
+      "id": "colorPicker.sliderStep",
+      "value": 1,
+      "unit": "percent",
+      "source": "spec/behavior/color-picker.md",
+      "note": "Arrow key step on the colour area and sliders."
+    },
+    {
+      "id": "colorPicker.sliderShiftStep",
+      "value": 10,
+      "unit": "percent",
+      "source": "spec/behavior/color-picker.md",
+      "note": "Shift+arrow step on the colour area and sliders."
+    },
+    {
+      "id": "colorPicker.savedMax",
+      "value": 48,
+      "unit": "count",
+      "source": "spec/behavior/color-picker.md",
+      "note": "Most saved colours kept."
+    },
+    {
+      "id": "colorPicker.recentMax",
+      "value": 10,
+      "unit": "count",
+      "source": "spec/behavior/color-picker.md",
+      "note": "Recent colours listed: the last 10 applied colours (the capability requires 10; Pager kept 12)."
+    },
+    {
+      "id": "gradient.stopRemovalDistance",
+      "value": 46,
+      "unit": "screen-px",
+      "source": "spec/behavior/gradient-editor.md",
+      "note": "A stop released farther than this from the bar centre line is removed; beyond it the stop is drawn detached with a \"Release to remove\" hint."
+    },
+    {
+      "id": "gradient.minStops",
+      "value": 2,
+      "unit": "count",
+      "source": "spec/behavior/gradient-editor.md",
+      "note": "A gradient keeps at least two stops."
+    },
+    {
+      "id": "gradient.stopStep",
+      "value": 1,
+      "unit": "percent",
+      "source": "spec/behavior/gradient-editor.md",
+      "note": "ArrowLeft/ArrowRight on a focused stop."
+    },
+    {
+      "id": "gradient.stopShiftStep",
+      "value": 10,
+      "unit": "percent",
+      "source": "spec/behavior/gradient-editor.md",
+      "note": "Shift+ArrowLeft/ArrowRight on a focused stop."
+    },
+    {
+      "id": "gradient.addStopAt",
+      "value": 50,
+      "unit": "percent",
+      "source": "spec/behavior/gradient-editor.md",
+      "note": "Position of a stop added with the Add a stop button."
+    },
+    {
+      "id": "shadow.padStep",
+      "value": 1,
+      "unit": "css-px",
+      "source": "spec/behavior/shadow-editor.md",
+      "note": "Arrow key step of the focused light pad handle."
+    },
+    {
+      "id": "shadow.padShiftStep",
+      "value": 10,
+      "unit": "css-px",
+      "source": "spec/behavior/shadow-editor.md",
+      "note": "Shift+arrow step of the focused light pad handle."
+    },
+    {
+      "id": "shadow.handleDrawClamp",
+      "value": [
+        46,
+        34
+      ],
+      "unit": "screen-px",
+      "source": "spec/behavior/shadow-editor.md",
+      "note": "The light pad handle is drawn at most this far from the centre (x, y); the values keep growing past it."
+    },
+    {
+      "id": "quickPanel.stageInset",
+      "value": 20,
+      "unit": "screen-px",
+      "source": "spec/behavior/quick-panel.md",
+      "note": "The quick panel is placed inside the stage minus this inset."
+    },
+    {
+      "id": "quickPanel.gap",
+      "value": 12,
+      "unit": "screen-px",
+      "source": "spec/behavior/quick-panel.md",
+      "note": "Gap between the quick panel and the element, plus the chip allowance when above."
+    },
+    {
+      "id": "quickPanel.chipAllowance",
+      "value": 20,
+      "unit": "screen-px",
+      "source": "spec/behavior/quick-panel.md",
+      "note": "Room kept for the element chip when the quick panel sits above the element."
+    },
+    {
+      "id": "quickPanel.minStage",
+      "value": 40,
+      "unit": "screen-px",
+      "source": "spec/behavior/quick-panel.md",
+      "note": "The quick panel appears only when the stage is at least 40 × 40 screen px."
+    },
+    {
+      "id": "quickPanel.widthMargin",
+      "value": 40,
+      "unit": "screen-px",
+      "source": "spec/behavior/quick-panel.md",
+      "note": "The quick panel is at most the stage width minus this."
+    },
+    {
+      "id": "resize.minBox",
+      "value": 8,
+      "unit": "css-px",
+      "source": "spec/behavior/resize-handles.md",
+      "note": "Smallest box a resize can produce on each axis."
+    },
+    {
+      "id": "resize.compactBelow",
+      "value": 48,
+      "unit": "screen-px",
+      "source": "spec/behavior/resize-handles.md",
+      "note": "Below this size on either axis the selection uses compact handles."
+    },
+    {
+      "id": "spacing.minBand",
+      "value": 6,
+      "unit": "screen-px",
+      "source": "spec/behavior/spacing-handles.md",
+      "note": "A padding or margin band is never thinner than this, however small the value."
+    },
+    {
+      "id": "spacing.keyStep",
+      "value": 1,
+      "unit": "css-px",
+      "source": "spec/behavior/spacing-handles.md",
+      "note": "ArrowUp/ArrowDown step in the typed field of a band."
+    },
+    {
+      "id": "spacing.keyShiftStep",
+      "value": 10,
+      "unit": "css-px",
+      "source": "spec/behavior/spacing-handles.md",
+      "note": "Shift+ArrowUp/ArrowDown step in the typed field of a band."
+    },
+    {
+      "id": "handle.directSize",
+      "value": 16,
+      "unit": "screen-px",
+      "source": "spec/behavior/radius-border-gap-handles.md",
+      "note": "Size of a radius, border, gap or shadow handle; kept at any zoom."
+    },
+    {
+      "id": "handle.keyStep",
+      "value": 1,
+      "unit": "css-px",
+      "source": "spec/behavior/radius-border-gap-handles.md",
+      "note": "Arrow key step on a focused canvas handle, committed at once."
+    },
+    {
+      "id": "handle.keyShiftStep",
+      "value": 10,
+      "unit": "css-px",
+      "source": "spec/behavior/radius-border-gap-handles.md",
+      "note": "Shift+arrow step on a focused canvas handle."
+    },
+    {
+      "id": "gap.minBand",
+      "value": 6,
+      "unit": "screen-px",
+      "source": "spec/behavior/radius-border-gap-handles.md",
+      "note": "A gap band between children is never thinner than this."
+    },
+    {
+      "id": "rotate.snapStep",
+      "value": 15,
+      "unit": "deg",
+      "source": "spec/behavior/rotation-handle.md",
+      "note": "Shift snaps the rotation angle to multiples of this."
+    },
+    {
+      "id": "anchors.tabSize",
+      "value": 14,
+      "unit": "screen-px",
+      "source": "spec/behavior/absolute-anchors.md",
+      "note": "Anchor tabs just outside the middle of each edge of a positioned selection."
+    },
+    {
+      "id": "zoom.step",
+      "value": 10,
+      "unit": "zoom-percent",
+      "source": "spec/behavior/zoom-keyboard-buttons.md",
+      "note": "Ctrl+= and Ctrl+- change the zoom by this many points."
+    },
+    {
+      "id": "zoom.min",
+      "value": 10,
+      "unit": "zoom-percent",
+      "source": "spec/behavior/zoom-keyboard-buttons.md",
+      "note": "Lowest zoom, for every zoom door."
+    },
+    {
+      "id": "zoom.max",
+      "value": 800,
+      "unit": "zoom-percent",
+      "source": "spec/behavior/zoom-keyboard-buttons.md",
+      "note": "Highest zoom, for every zoom door."
+    },
+    {
+      "id": "zoom.presets",
+      "value": [
+        25,
+        50,
+        100,
+        200,
+        400
+      ],
+      "unit": "zoom-percent",
+      "source": "spec/behavior/zoom-keyboard-buttons.md",
+      "note": "Zoom levels offered by the zoom percentage menu, before Fit."
+    },
+    {
+      "id": "zoom.fitMargin",
+      "value": 24,
+      "unit": "screen-px",
+      "source": "spec/behavior/zoom-keyboard-buttons.md",
+      "note": "Fit leaves this margin on each side of the page: zoom = (canvas width − 2 × 24) ÷ page width."
+    },
+    {
+      "id": "zoom.wheelFactor",
+      "value": 0.002,
+      "unit": "factor",
+      "source": "spec/behavior/zoom-wheel-pan.md",
+      "note": "Ctrl+wheel multiplies the zoom by exp(−deltaY × 0.002) per event, around the pointer."
+    },
+    {
+      "id": "wheel.lineHeight",
+      "value": 16,
+      "unit": "screen-px",
+      "source": "spec/behavior/zoom-wheel-pan.md",
+      "note": "A line-mode wheel delta counts this many pixels per line."
+    },
+    {
+      "id": "rulers.band",
+      "value": 20,
+      "unit": "screen-px",
+      "source": "spec/behavior/rulers.md",
+      "note": "Rulers fill bands this wide along the top and left of the canvas."
+    },
+    {
+      "id": "rulers.minTick",
+      "value": 6,
+      "unit": "screen-px",
+      "source": "spec/behavior/rulers.md",
+      "note": "The tick step is the smallest round step whose screen size is at least this."
+    },
+    {
+      "id": "rulers.minLabelSpacing",
+      "value": 40,
+      "unit": "screen-px",
+      "source": "spec/behavior/rulers.md",
+      "note": "Neighbouring ruler labels are at least this far apart at any zoom."
+    },
+    {
+      "id": "rulers.steps",
+      "value": [
+        1,
+        2,
+        5,
+        10,
+        25,
+        50,
+        100,
+        250,
+        500,
+        1000
+      ],
+      "unit": "css-px",
+      "source": "spec/behavior/rulers.md",
+      "note": "Round values that ruler ticks and labels sit on."
+    },
+    {
+      "id": "guides.keyStep",
+      "value": 1,
+      "unit": "css-px",
+      "source": "spec/behavior/guides-manual.md",
+      "note": "Arrow key move of a focused guide."
+    },
+    {
+      "id": "guides.keyShiftStep",
+      "value": 10,
+      "unit": "css-px",
+      "source": "spec/behavior/guides-manual.md",
+      "note": "Shift+arrow move of a focused guide."
+    },
+    {
+      "id": "grid.columns",
+      "value": 12,
+      "unit": "count",
+      "source": "spec/behavior/layout-grid-overlay.md",
+      "note": "Default number of columns of the column grid."
+    },
+    {
+      "id": "grid.width",
+      "value": 1280,
+      "unit": "css-px",
+      "source": "spec/behavior/layout-grid-overlay.md",
+      "note": "Default width of the column grid."
+    },
+    {
+      "id": "grid.gutter",
+      "value": 24,
+      "unit": "css-px",
+      "source": "spec/behavior/layout-grid-overlay.md",
+      "note": "Default gutter of the column grid."
+    },
+    {
+      "id": "grid.margin",
+      "value": 80,
+      "unit": "css-px",
+      "source": "spec/behavior/layout-grid-overlay.md",
+      "note": "Default margin of the column grid: inset = max(margin, (page width − grid width) ÷ 2)."
+    },
+    {
+      "id": "grid.rowHeight",
+      "value": 80,
+      "unit": "css-px",
+      "source": "spec/behavior/layout-grid-overlay.md",
+      "note": "Default row height of the row grid."
+    },
+    {
+      "id": "grid.rowGutter",
+      "value": 24,
+      "unit": "css-px",
+      "source": "spec/behavior/layout-grid-overlay.md",
+      "note": "Default gutter of the row grid."
+    },
+    {
+      "id": "grid.dotSpacing",
+      "value": 24,
+      "unit": "css-px",
+      "source": "spec/behavior/layout-grid-overlay.md",
+      "note": "Default spacing of the dot grid."
+    },
+    {
+      "id": "snap.distance",
+      "value": 6,
+      "unit": "css-px",
+      "source": "spec/behavior/snap-toggle-settings.md",
+      "note": "Default snap distance; compared with screen positions multiplied by the zoom. One setting for snapping and smart guides."
+    },
+    {
+      "id": "snap.distanceMin",
+      "value": 0,
+      "unit": "css-px",
+      "source": "spec/behavior/snap-toggle-settings.md",
+      "note": "Lowest snap distance accepted in Snap settings."
+    },
+    {
+      "id": "snap.distanceMax",
+      "value": 64,
+      "unit": "css-px",
+      "source": "spec/behavior/snap-toggle-settings.md",
+      "note": "Highest snap distance accepted in Snap settings."
+    },
+    {
+      "id": "snap.equalSpacingRadius",
+      "value": 1.5,
+      "unit": "factor",
+      "source": "spec/behavior/smart-guides.md",
+      "note": "Equal spacing pulls the box within 1.5 × the snap distance, only on an axis where no edge snapped."
+    },
+    {
+      "id": "snap.equalSpacingOverlap",
+      "value": 0.25,
+      "unit": "fraction",
+      "source": "spec/behavior/smart-guides.md",
+      "note": "Two siblings form an equal-spacing candidate when they overlap by at least this on the other axis."
+    },
+    {
+      "id": "menu.windowMargin",
+      "value": 8,
+      "unit": "screen-px",
+      "source": "spec/behavior/context-menu.md",
+      "note": "A menu opened at the pointer is shifted to stay this far inside the window."
+    },
+    {
+      "id": "preview.zoom",
+      "value": 100,
+      "unit": "zoom-percent",
+      "source": "spec/behavior/preview-mode.md",
+      "note": "Preview always shows the page at 100 %; the editing zoom comes back on exit."
+    },
+    {
+      "id": "splitter.keyStep",
+      "value": 20,
+      "unit": "screen-px",
+      "source": "spec/behavior/panel-resize.md",
+      "note": "Arrow key step of a focused splitter, for every splitter."
+    },
+    {
+      "id": "splitter.minTarget",
+      "value": 6,
+      "unit": "screen-px",
+      "source": "spec/behavior/panel-resize.md",
+      "note": "Every splitter has a pointer target at least this wide, with the visible line centred on it."
+    },
+    {
+      "id": "dock.minWidth",
+      "value": 200,
+      "unit": "screen-px",
+      "source": "spec/behavior/panel-resize.md",
+      "note": "Smallest width of a side dock."
+    },
+    {
+      "id": "panels.minStackedHeight",
+      "value": 72,
+      "unit": "screen-px",
+      "source": "spec/behavior/panel-resize.md",
+      "note": "Smallest height of a stacked panel."
+    },
+    {
+      "id": "floating.minSize",
+      "value": [
+        240,
+        180
+      ],
+      "unit": "screen-px",
+      "source": "spec/behavior/panel-resize.md",
+      "note": "Smallest width and height of a floating panel."
+    },
+    {
+      "id": "inspector.minWidth",
+      "value": 320,
+      "unit": "screen-px",
+      "source": "spec/behavior/panel-resize.md",
+      "note": "Smallest inspector width; the default respects it."
+    },
+    {
+      "id": "inspector.maxWidth",
+      "value": 520,
+      "unit": "screen-px",
+      "source": "spec/behavior/panel-resize.md",
+      "note": "Largest inspector width, or less when the room left is smaller."
+    },
+    {
+      "id": "workbench.maxFraction",
+      "value": 0.6,
+      "unit": "fraction",
+      "source": "spec/behavior/panel-resize.md",
+      "note": "The workbench is at most this fraction of the window height."
+    },
+    {
+      "id": "workbench.collapsedHeight",
+      "value": 40,
+      "unit": "screen-px",
+      "source": "spec/behavior/workbench-panel.md",
+      "note": "Height of the collapsed workbench (its tab strip)."
+    },
+    {
+      "id": "floating.width",
+      "value": [
+        240,
+        280
+      ],
+      "unit": "screen-px",
+      "source": "spec/behavior/floating-panels.md",
+      "note": "Width range of a floating panel window."
+    },
+    {
+      "id": "floating.height",
+      "value": [
+        180,
+        520
+      ],
+      "unit": "screen-px",
+      "source": "spec/behavior/floating-panels.md",
+      "note": "Height range of a floating panel window."
+    },
+    {
+      "id": "floating.minTop",
+      "value": 44,
+      "unit": "screen-px",
+      "source": "spec/behavior/floating-panels.md",
+      "note": "A floating panel never goes above this."
+    },
+    {
+      "id": "panels.dockEdgeZone",
+      "value": 80,
+      "unit": "screen-px",
+      "source": "spec/behavior/floating-panels.md",
+      "note": "Near the left or right window edge a dragged panel offers Dock left / Dock right. One rule for every panel (Pager used 12 px for Elements and Layers and 80 px for the others)."
+    },
+    {
+      "id": "panels.combineTabsFraction",
+      "value": 0.45,
+      "unit": "fraction",
+      "source": "spec/behavior/panel-combine-tabs.md",
+      "note": "Over the upper part of a panel (this fraction of its height) a dragged panel combines as tabs; over the rest it stacks. One rule for every panel."
+    },
+    {
+      "id": "commandBar.maxResults",
+      "value": 12,
+      "unit": "count",
+      "source": "spec/behavior/command-bar.md",
+      "note": "Most results listed by the command bar."
+    },
+    {
+      "id": "commandBar.recentCount",
+      "value": 5,
+      "unit": "count",
+      "source": "spec/behavior/command-bar.md",
+      "note": "Recently run commands listed first when the query is empty."
+    },
+    {
+      "id": "timeline.offsetRange",
+      "value": [
+        0,
+        100
+      ],
+      "unit": "percent",
+      "source": "spec/behavior/timeline-keyframes.md",
+      "note": "A dragged keyframe offset follows the pointer as a percentage of the track width, clamped to this range."
+    }
+  ],
+  "gestures": [
+    {
+      "id": "canvas-click",
+      "source": "spec/behavior/multi-select-click.md",
+      "modifiers": [
+        {
+          "key": "Shift",
+          "meaning": "add-to-selection"
+        },
+        {
+          "key": "Ctrl",
+          "meaning": "toggle-in-selection"
+        }
+      ]
+    },
+    {
+      "id": "layers-row-click",
+      "source": "spec/behavior/multi-select-click.md",
+      "modifiers": [
+        {
+          "key": "Shift",
+          "meaning": "add-to-selection"
+        },
+        {
+          "key": "Ctrl",
+          "meaning": "toggle-in-selection"
+        }
+      ]
+    },
+    {
+      "id": "marquee",
+      "source": "spec/behavior/marquee-select.md",
+      "modifiers": [
+        {
+          "key": "Shift",
+          "meaning": "add-to-selection"
+        },
+        {
+          "key": "Ctrl",
+          "meaning": "toggle-in-selection"
+        }
+      ]
+    },
+    {
+      "id": "element-drag",
+      "source": "spec/behavior/drag-reorder-canvas.md",
+      "modifiers": []
+    },
+    {
+      "id": "palette-drag",
+      "source": "spec/behavior/palette-drag-insert.md",
+      "modifiers": []
+    },
+    {
+      "id": "layers-drag",
+      "source": "spec/behavior/layers-drag.md",
+      "modifiers": []
+    },
+    {
+      "id": "file-drag",
+      "source": "spec/behavior/explorer-assets-use.md",
+      "modifiers": []
+    },
+    {
+      "id": "free-drag",
+      "source": "spec/behavior/absolute-free-drag.md",
+      "modifiers": [
+        {
+          "key": "Ctrl",
+          "meaning": "suspend-snapping"
+        }
+      ]
+    },
+    {
+      "id": "resize",
+      "source": "spec/behavior/resize-handles.md",
+      "modifiers": [
+        {
+          "key": "Shift",
+          "meaning": "keep-aspect-ratio"
+        },
+        {
+          "key": "Alt",
+          "meaning": "resize-from-centre"
+        },
+        {
+          "key": "Ctrl",
+          "meaning": "suspend-snapping"
+        }
+      ]
+    },
+    {
+      "id": "spacing-band",
+      "source": "spec/behavior/spacing-handles.md",
+      "modifiers": [
+        {
+          "key": "Shift",
+          "meaning": "change-all-four-sides"
+        },
+        {
+          "key": "Alt",
+          "meaning": "change-opposite-side"
+        },
+        {
+          "key": "Ctrl",
+          "meaning": "suspend-snapping"
+        }
+      ]
+    },
+    {
+      "id": "property-handle",
+      "source": "spec/behavior/radius-border-gap-handles.md",
+      "modifiers": [
+        {
+          "key": "Ctrl",
+          "meaning": "suspend-snapping"
+        }
+      ]
+    },
+    {
+      "id": "shadow-handle",
+      "source": "spec/behavior/shadow-handles.md",
+      "modifiers": [
+        {
+          "key": "Ctrl",
+          "meaning": "suspend-snapping"
+        }
+      ]
+    },
+    {
+      "id": "rotate",
+      "source": "spec/behavior/rotation-handle.md",
+      "modifiers": [
+        {
+          "key": "Shift",
+          "meaning": "snap-to-15-degree-steps"
+        }
+      ]
+    },
+    {
+      "id": "anchor-tab",
+      "source": "spec/behavior/absolute-anchors.md",
+      "modifiers": []
+    },
+    {
+      "id": "guide-drag",
+      "source": "spec/behavior/guides-manual.md",
+      "modifiers": [
+        {
+          "key": "Ctrl",
+          "meaning": "suspend-snapping"
+        }
+      ]
+    },
+    {
+      "id": "handle-keys",
+      "source": "spec/behavior/radius-border-gap-handles.md",
+      "modifiers": [
+        {
+          "key": "Shift",
+          "meaning": "step-times-10"
+        }
+      ]
+    },
+    {
+      "id": "guide-keys",
+      "source": "spec/behavior/guides-manual.md",
+      "modifiers": [
+        {
+          "key": "Shift",
+          "meaning": "step-10-px"
+        }
+      ]
+    },
+    {
+      "id": "nudge-keys",
+      "source": "spec/behavior/absolute-nudge.md",
+      "modifiers": [
+        {
+          "key": "Shift",
+          "meaning": "step-10-px"
+        }
+      ]
+    },
+    {
+      "id": "number-field-keys",
+      "source": "spec/behavior/inspector-number-fields.md",
+      "modifiers": [
+        {
+          "key": "Shift",
+          "meaning": "step-times-10"
+        },
+        {
+          "key": "Alt",
+          "meaning": "step-times-0-1"
+        }
+      ]
+    },
+    {
+      "id": "number-scrub",
+      "source": "spec/behavior/inspector-number-fields.md",
+      "modifiers": [
+        {
+          "key": "Shift",
+          "meaning": "step-times-10"
+        },
+        {
+          "key": "Alt",
+          "meaning": "step-times-0-1"
+        }
+      ]
+    },
+    {
+      "id": "gradient-stop-keys",
+      "source": "spec/behavior/gradient-editor.md",
+      "modifiers": [
+        {
+          "key": "Shift",
+          "meaning": "step-10-percent"
+        }
+      ]
+    },
+    {
+      "id": "gradient-stop-drag",
+      "source": "spec/behavior/gradient-editor.md",
+      "modifiers": []
+    },
+    {
+      "id": "shadow-pad-keys",
+      "source": "spec/behavior/shadow-editor.md",
+      "modifiers": [
+        {
+          "key": "Shift",
+          "meaning": "step-10-px"
+        }
+      ]
+    },
+    {
+      "id": "shadow-pad-drag",
+      "source": "spec/behavior/shadow-editor.md",
+      "modifiers": []
+    },
+    {
+      "id": "color-slider-keys",
+      "source": "spec/behavior/color-picker.md",
+      "modifiers": [
+        {
+          "key": "Shift",
+          "meaning": "step-10-percent"
+        }
+      ]
+    },
+    {
+      "id": "hover-measure",
+      "source": "spec/behavior/hover-measure.md",
+      "modifiers": [
+        {
+          "key": "Alt",
+          "meaning": "show-distances"
+        }
+      ]
+    },
+    {
+      "id": "wheel",
+      "source": "spec/behavior/zoom-wheel-pan.md",
+      "modifiers": [
+        {
+          "key": "Ctrl",
+          "meaning": "zoom-around-pointer"
+        },
+        {
+          "key": "Shift",
+          "meaning": "scroll-horizontally"
+        }
+      ]
+    },
+    {
+      "id": "space-pan",
+      "source": "spec/behavior/zoom-wheel-pan.md",
+      "modifiers": [
+        {
+          "key": "Space",
+          "meaning": "pan-the-view"
+        }
+      ]
+    },
+    {
+      "id": "splitter-drag",
+      "source": "spec/behavior/panel-resize.md",
+      "modifiers": []
+    },
+    {
+      "id": "panel-drag",
+      "source": "spec/behavior/floating-panels.md",
+      "modifiers": []
+    },
+    {
+      "id": "keyframe-drag",
+      "source": "spec/behavior/timeline-keyframes.md",
+      "modifiers": []
+    },
+    {
+      "id": "playhead-drag",
+      "source": "spec/behavior/timeline-preview.md",
+      "modifiers": []
+    },
+    {
+      "id": "quick-panel-grip",
+      "source": "spec/behavior/quick-panel.md",
+      "modifiers": []
+    },
+    {
+      "id": "explorer-drag",
+      "source": "spec/behavior/explorer-file-system.md",
+      "modifiers": []
+    },
+    {
+      "id": "pick-target",
+      "source": "spec/behavior/events-actions.md",
+      "modifiers": []
+    }
+  ]
+}

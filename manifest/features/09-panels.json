@@ -1,0 +1,143 @@
+{
+  "group": "panels",
+  "titleKey": "featureGroup.panels",
+  "features": [
+    {
+      "id": "palette-search-groups",
+      "titleKey": "feature.paletteSearchGroups",
+      "commands": [
+        "element.insert",
+        "palette.toggleGroup"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Search the Elements panel and collapse its groups",
+        "steps": [
+          "Type 'inp' in Search elements.",
+          "Type 'zzzz'.",
+          "Clear the search; collapse the Text group and reload."
+        ],
+        "expected": [
+          "Groups are Structure and layout, Text, Lists, Tables, Forms, Images and media, Interactive and Templates, each with its count; internal parts of composite elements (list items, table parts, options and option groups, sources, tracks, captions, legend, summary, SVG shapes) are not listed.",
+          "Searching filters by label and tag; 'inp' shows the 14 input types; the footer reads 'N of M elements match' [palette.search.matchCount], where M is the number of entries in the Elements panel.",
+          "A search with no match says so.",
+          "Collapsed groups stay collapsed after reload."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "palette-density",
+      "titleKey": "feature.paletteDensity",
+      "commands": [
+        "palette.setDensity"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Elements panel view density",
+        "steps": [
+          "Click List view, Two columns, Three columns and Icon grid in the Elements panel.",
+          "Reload."
+        ],
+        "expected": [
+          "Each density lays items out as described (one per row with tag, two or three per row, icons only with the label as tooltip); measured item sizes change accordingly.",
+          "The chosen density is stored in the single preferences store and restored after reload."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "layers-expand-collapse-all",
+      "titleKey": "feature.layersExpandCollapseAll",
+      "commands": [
+        "layers.collapseAll",
+        "layers.expandAll"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/layers-expand-collapse-all.md",
+      "intent": {
+        "title": "Collapse and expand every branch in Layers",
+        "steps": [
+          "Insert several nested templates.",
+          "Click 'Collapse every branch' [layers.collapseAll], then 'Expand every branch' [layers.expandAll].",
+          "Collapse all, then select a deeply nested element on the canvas."
+        ],
+        "expected": [
+          "Collapse all leaves only top-level rows visible; expand all shows every row.",
+          "Selecting a hidden descendant expands its ancestors and scrolls its row into view."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "layers-search",
+      "titleKey": "feature.layersSearch",
+      "commands": [
+        "selection.select"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Search the Layers panel",
+        "steps": [
+          "Insert the Card and Navbar templates.",
+          "Type 'card' in Search layers.",
+          "Clear the search."
+        ],
+        "expected": [
+          "Only rows whose name, tag, id or class matches are shown, with their ancestors for context and the match highlighted.",
+          "Clicking a result selects the element.",
+          "Clearing restores the previous expansion state."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "layers-row-columns",
+      "titleKey": "feature.layersRowColumns",
+      "commands": [
+        "layers.setRowDetails"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Choose what each Layers row shows",
+        "steps": [
+          "Open 'What each row shows' [layers.rowDetails] in the Layers toolbar.",
+          "Turn on ID, Classes and Attributes; turn off HTML tag.",
+          "Reload."
+        ],
+        "expected": [
+          "Rows show the chosen details (name, HTML tag, id, classes, attributes) next to the name.",
+          "The choice is stored in the preferences store and restored after reload."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "layers-row-colours",
+      "titleKey": "feature.layersRowColours",
+      "commands": [
+        "element.setLayerColor"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Colour labels on Layers rows",
+        "steps": [
+          "Click the colour dot of a Section row and choose a colour.",
+          "Select the Section on the canvas.",
+          "Reload."
+        ],
+        "expected": [
+          "The colour dot opens a small palette; the chosen colour tints the row and is stored in the page settings of the document JSON.",
+          "The canvas selection outline of that element uses its label colour.",
+          "The colour is restored after reload and never exported."
+        ]
+      },
+      "scenarios": []
+    }
+  ]
+}

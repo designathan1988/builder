@@ -42,7 +42,7 @@ None in Pager.
 
 ## Problems in Pager
 
-1. **An Image cannot use an uploaded asset.** Required: the Image's Source field has an asset picker. Choosing an asset stores a reference to the asset in the document JSON and the canvas renders it (features.json `explorer-assets-use`).
+1. **An Image cannot use an uploaded asset.** Required: the Image's Source field has an asset picker. Choosing an asset stores a reference to the asset in the document JSON and the canvas renders it (manifest feature `explorer-assets-use`).
 2. **Image files dropped on the canvas are ignored.** Required:
    - While an image file is dragged over the canvas, the same drop indicator as a palette drag is shown (receiver tint, insertion line, label; see `palette-drag-insert.md`) at the same drop positions.
    - On drop, the file is uploaded as an asset and an Image that uses it is inserted at the indicated position, as one undo step.

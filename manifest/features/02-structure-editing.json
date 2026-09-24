@@ -1,0 +1,798 @@
+{
+  "group": "structure-editing",
+  "titleKey": "featureGroup.structureEditing",
+  "features": [
+    {
+      "id": "palette-click-insert",
+      "titleKey": "feature.paletteClickInsert",
+      "commands": [
+        "element.insert"
+      ],
+      "dependsOn": [
+        "canvas-page-iframe"
+      ],
+      "spec": "spec/behavior/palette-click-insert.md",
+      "intent": {
+        "title": "Insert Section, Container, Heading and Paragraph by clicking the Elements panel",
+        "steps": [
+          "With nothing selected, click Section in the Elements panel.",
+          "Click Heading.",
+          "Click Paragraph.",
+          "Click Container."
+        ],
+        "expected": [
+          "The Elements panel lists each element type with its label and HTML tag under a group heading with a count.",
+          "With nothing selected, the Section is appended as the last child of Page in the document JSON and becomes the selection.",
+          "With a container selected, the Heading is appended as its last child; with a non-container selected, the Paragraph is inserted right after it in the same parent.",
+          "Every inserted element becomes the selection; the iframe shows <section>, <h2> 'New heading' [element.heading.defaultText], <p> with default text and an empty <div> with a visible minimum height.",
+          "The status bar reads 'Placed <name> in <parent>, position N of M.' [status.placed] after each insert."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "select-click",
+      "titleKey": "feature.selectClick",
+      "commands": [
+        "selection.select",
+        "selection.clear"
+      ],
+      "dependsOn": [
+        "palette-click-insert"
+      ],
+      "spec": "spec/behavior/select-click.md",
+      "intent": {
+        "title": "Select an element by clicking it on the canvas",
+        "steps": [
+          "Insert a Section containing a Heading and a Paragraph.",
+          "Click the Paragraph on the canvas.",
+          "Click inside the Section's padding, away from its children.",
+          "Click the empty page area below the Section.",
+          "Hover the Heading without clicking.",
+          "Press Escape."
+        ],
+        "expected": [
+          "After each click the document selection is the clicked element; a selection outline matches the element's measured bounding box on the canvas and a label shows its tag and name.",
+          "Clicking the Section's padding selects the Section, not a child; clicking empty page area selects the Page root.",
+          "Hovering shows a thinner hover outline around the Heading and does not change the selection.",
+          "Escape clears the selection and removes the selection outline."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "layers-tree",
+      "titleKey": "feature.layersTree",
+      "commands": [
+        "selection.select",
+        "layers.setExpanded"
+      ],
+      "dependsOn": [
+        "select-click"
+      ],
+      "spec": "spec/behavior/layers-tree.md",
+      "intent": {
+        "title": "Layers panel shows the document tree and selects in sync with the canvas",
+        "steps": [
+          "Insert a Section containing a Heading and a Paragraph, then a Container after the Section.",
+          "Click the Paragraph row in the Layers panel.",
+          "Click the Container on the canvas.",
+          "Click the caret of the Section row twice."
+        ],
+        "expected": [
+          "Layers shows one row per node in document order, indented by depth, with a caret on rows that have children and an icon per element type.",
+          "Clicking a row selects that element: the canvas selection outline moves to it.",
+          "Selecting on the canvas highlights the matching row and scrolls it into view.",
+          "The caret collapses and expands the branch without changing the selection.",
+          "The panel header shows the node count, and it updates after every insert."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "undo-redo",
+      "titleKey": "feature.undoRedo",
+      "commands": [
+        "history.undo",
+        "history.redo"
+      ],
+      "dependsOn": [
+        "palette-click-insert"
+      ],
+      "spec": "spec/behavior/undo-redo.md",
+      "intent": {
+        "title": "Undo and redo every document change",
+        "steps": [
+          "Insert three elements.",
+          "Press Ctrl+Z three times.",
+          "Press Ctrl+Shift+Z twice and Ctrl+Y once.",
+          "Undo once, then insert a new element.",
+          "Use the Undo and Redo buttons in the top bar."
+        ],
+        "expected": [
+          "Each Ctrl+Z restores the document JSON to exactly its state before the matching command; Ctrl+Shift+Z and Ctrl+Y redo it.",
+          "The top bar Undo and Redo buttons do the same and are disabled when there is nothing to undo or redo.",
+          "A new command after an undo empties the redo stack (Redo becomes disabled).",
+          "After undo or redo the selection is the one that belonged to that document state.",
+          "The status bar reads 'Undone' [status.undone] or 'Redone' [status.redone]."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "delete-element",
+      "titleKey": "feature.deleteElement",
+      "commands": [
+        "history.undo",
+        "element.delete"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/delete-element.md",
+      "intent": {
+        "title": "Delete the selected element with Delete or Backspace",
+        "steps": [
+          "Insert a Section with a Heading and two Paragraphs.",
+          "Select the first Paragraph and press Delete.",
+          "Select the Section and press Backspace.",
+          "Select the Page root and press Delete.",
+          "Press Ctrl+Z twice."
+        ],
+        "expected": [
+          "Delete and Backspace remove the selected node and its whole subtree from the document JSON.",
+          "After a delete the selection moves to the next sibling, else the previous sibling, else the parent.",
+          "The Page root is never deleted; the status bar explains why.",
+          "Undo restores each deleted subtree at its original index with its original ids."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "drag-reorder-canvas",
+      "titleKey": "feature.dragReorderCanvas",
+      "commands": [
+        "element.moveTo"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/drag-reorder-canvas.md",
+      "intent": {
+        "title": "Drag an element before or after a sibling on the canvas",
+        "steps": [
+          "Insert a Section with a Heading and two Paragraphs.",
+          "Press on the second Paragraph, drag it over the upper half of the Heading and release.",
+          "Drag the Heading over the lower half of the Paragraph that is now last and release.",
+          "Press and release on a Paragraph moving the mouse less than 4 px."
+        ],
+        "expected": [
+          "While dragging, an insertion line is drawn in the gap where the element will land, the receiving parent is tinted, a chip with the element name follows the pointer, and a label reads 'Move to position N · <parent> · before <sibling>' [drag.label.before].",
+          "On release the order of children in the document JSON matches the last indicator exactly and the dragged element stays selected.",
+          "A press and release under the drag threshold only selects; the document JSON is unchanged.",
+          "Each drop is exactly one undo step."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "drag-drop-inside",
+      "titleKey": "feature.dragDropInside",
+      "commands": [
+        "element.moveTo"
+      ],
+      "dependsOn": [
+        "drag-reorder-canvas"
+      ],
+      "spec": "spec/behavior/drag-drop-inside.md",
+      "intent": {
+        "title": "Drop an element inside a container and move it across parents",
+        "steps": [
+          "Insert a Section with a Heading and a Paragraph, then an empty Container after the Section.",
+          "Drag the Heading onto the empty Container and release.",
+          "Drag the Paragraph into the Container above the Heading and release.",
+          "Drag the Container onto the Paragraph inside it and release."
+        ],
+        "expected": [
+          "The empty Container shows a minimum drop area, is outlined as the receiver and the label reads 'Into <container>' [drag.label.into].",
+          "The Heading becomes the Container's only child, then the Paragraph becomes its first child, in the document JSON.",
+          "Leaf elements (heading, paragraph) are never offered as receivers.",
+          "Dropping an element into itself or one of its descendants is refused: the indicator shows the refusal and release leaves the document JSON unchanged."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "drag-level-keys-escape",
+      "titleKey": "feature.dragLevelKeysEscape",
+      "commands": [
+        "drag.levelUp",
+        "drag.levelDown",
+        "drag.cancel"
+      ],
+      "dependsOn": [
+        "drag-reorder-canvas"
+      ],
+      "spec": "spec/behavior/drag-level-keys-escape.md",
+      "intent": {
+        "title": "Change the drop level with arrow keys and cancel a drag with Escape",
+        "steps": [
+          "Insert a Section containing a Container that contains a Paragraph, and a Heading after the Section.",
+          "Drag the Heading over the lower half of the Paragraph; without releasing press ArrowUp twice, then ArrowDown once, then release.",
+          "Start another drag of the Heading, press Escape, then release the mouse."
+        ],
+        "expected": [
+          "ArrowUp moves the target out one level at a time and the status bar names it ('After Paragraph' [status.drop.after] -> 'After Container' [status.drop.after] -> 'After Section' [status.drop.after]); ArrowDown moves it back one level; the indicator and label follow.",
+          "Release drops exactly at the level last shown ('After Container' [status.drop.after] in the status bar).",
+          "Escape removes every drag indicator and the following release changes nothing in the document JSON."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "palette-drag-insert",
+      "titleKey": "feature.paletteDragInsert",
+      "commands": [
+        "element.insert"
+      ],
+      "dependsOn": [
+        "drag-reorder-canvas"
+      ],
+      "spec": "spec/behavior/palette-drag-insert.md",
+      "intent": {
+        "title": "Drag an element type from the Elements panel to a position on the canvas",
+        "steps": [
+          "Insert a Section with a Heading and a Paragraph.",
+          "Drag Paragraph from the Elements panel between the Heading and the Paragraph on the canvas and release.",
+          "Drag Container from the Elements panel below the Section and release.",
+          "Drag Heading from the Elements panel onto the dark area outside the page and release.",
+          "Drag Heading onto the page and press Escape before releasing."
+        ],
+        "expected": [
+          "During the drag the same insertion line, receiver tint and label as a canvas move are shown.",
+          "The new Paragraph lands at index 1 of the Section and the Container lands after the Section in the document JSON; each new element becomes selected.",
+          "Releasing outside the page or after Escape inserts nothing.",
+          "Each insert is one undo step."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "layers-drag",
+      "titleKey": "feature.layersDrag",
+      "commands": [
+        "element.moveTo",
+        "layers.setExpanded"
+      ],
+      "dependsOn": [
+        "layers-tree",
+        "drag-reorder-canvas"
+      ],
+      "spec": "spec/behavior/layers-drag.md",
+      "intent": {
+        "title": "Reorder and nest by dragging rows in the Layers panel",
+        "steps": [
+          "Insert a Section with a Heading and a Paragraph, and an empty Container after it.",
+          "In Layers, drag the Paragraph row over the top quarter of the Heading row and release.",
+          "Drag the Heading row over the middle of the Container row and release.",
+          "Collapse the Section row, drag the Container row over it and hold still for 600 ms."
+        ],
+        "expected": [
+          "Over the top or bottom quarter of a row a line shows 'before' or 'after'; over the middle of a container row the row is outlined for 'inside'.",
+          "Release moves the node in the document JSON to that place and the canvas updates.",
+          "Hovering a collapsed container row during a drag expands it after 600 ms.",
+          "For the same source and target, a drop in Layers and a drop on the canvas produce identical document JSON, including refusals."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "move-up-down",
+      "titleKey": "feature.moveUpDown",
+      "commands": [
+        "element.moveUp",
+        "element.moveDown"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/move-up-down.md",
+      "intent": {
+        "title": "Move the selection up or down among its siblings with Alt+ArrowUp and Alt+ArrowDown",
+        "steps": [
+          "Insert a Section with a Heading and two Paragraphs.",
+          "Select the last Paragraph on the canvas and press Alt+ArrowUp twice.",
+          "Press Alt+ArrowUp again.",
+          "Press Alt+ArrowDown."
+        ],
+        "expected": [
+          "Each Alt+ArrowUp swaps the element with its previous sibling in the document JSON; Alt+ArrowDown with its next sibling.",
+          "At the first or last position the document JSON is unchanged and the status bar reads 'Already at the start of <parent>' [status.move.alreadyFirst] or 'Already at the end of <parent>' [status.move.alreadyLast].",
+          "The element stays selected and each move is one undo step."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "wrap-row-column",
+      "titleKey": "feature.wrapRowColumn",
+      "commands": [
+        "element.wrapRow",
+        "element.wrapColumn"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/wrap-row-column.md",
+      "intent": {
+        "title": "Wrap the selection in a Row or a Column with R and C",
+        "steps": [
+          "Insert a Section with a Heading and a Paragraph.",
+          "Select the Paragraph on the canvas and press R.",
+          "Press Ctrl+Z, then press C.",
+          "Select the Page root and press R."
+        ],
+        "expected": [
+          "R replaces the Paragraph at its index with a new div named 'Row' [node.name.row] whose only child is the Paragraph; the Row has display:flex and flex-direction:row in the document JSON and its computed style.",
+          "C does the same with a div named 'Column' [node.name.column] and flex-direction:column.",
+          "The new wrapper is selected; one undo restores the original tree.",
+          "The Page root cannot be wrapped and the status bar says so."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "context-menu",
+      "titleKey": "feature.contextMenu",
+      "commands": [
+        "contextMenu.open",
+        "focus.next",
+        "focus.previous",
+        "focus.first",
+        "focus.last",
+        "focus.activate",
+        "ui.dismiss",
+        "element.moveUp",
+        "element.moveDown",
+        "element.wrapRow",
+        "element.wrapColumn",
+        "element.delete"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/context-menu.md",
+      "intent": {
+        "title": "Right-click context menu on the canvas and in Layers",
+        "steps": [
+          "Insert a Container and a Paragraph after it.",
+          "Right-click the Paragraph on the canvas.",
+          "Move through the items with ArrowDown and ArrowUp and run one with Enter.",
+          "Hover each item to read its tooltip, then run each enabled item on a Paragraph inside a Section.",
+          "Right-click a row in Layers and press Escape.",
+          "Right-click an element near the right edge of the canvas."
+        ],
+        "expected": [
+          "Right-click selects the element and opens a menu at the pointer that contains at least, in this order, Rename [command.rename], Copy [command.copy], Cut [command.cut], Paste [command.paste], Duplicate [command.duplicate], Move up [command.moveUp], Move down [command.moveDown], Wrap in a row [command.wrapRow], Wrap in a column [command.wrapColumn], Remove wrapper [command.unwrap], Make child of previous layer [command.nestIntoPrevious], Move out of parent [command.promote], Take into the hand [command.takeIntoHand], Lock [command.lock], Hide [command.hide] and Delete [command.delete]; later entries may add items.",
+          "Each item has a tooltip naming its action and its shortcut where it has one, and runs the same command as its shortcut or menu row, producing the same document JSON; items that cannot apply to the selection are disabled; items whose feature is not built yet are disabled and labelled 'not available yet' [common.notAvailableYet] — which features are built is read from one feature registry, and the test checks the UI against that registry instead of a fixed list, so it stays valid as later entries are built.",
+          "The menu is operable with ArrowUp/ArrowDown and Enter, closes with Escape or a click outside, and always stays fully inside the window.",
+          "The same menu opens on Layers rows."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "nest-into-previous",
+      "titleKey": "feature.nestIntoPrevious",
+      "commands": [
+        "element.nestIntoPrevious"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/nest-into-previous.md",
+      "intent": {
+        "title": "Nest the selection into its previous sibling",
+        "steps": [
+          "Insert a Container, then a Paragraph after it, both in Page.",
+          "Right-click the Paragraph and choose 'Make child of previous layer' [command.nestIntoPrevious].",
+          "Right-click the Container, which has no previous sibling, and open the same menu."
+        ],
+        "expected": [
+          "The Paragraph becomes the last child of the Container in the document JSON and stays selected.",
+          "When there is no previous sibling, or the previous sibling cannot contain the element, the command is disabled and the document JSON is unchanged.",
+          "One undo restores the original tree."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "promote-out",
+      "titleKey": "feature.promoteOut",
+      "commands": [
+        "element.promote"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/promote-out.md",
+      "intent": {
+        "title": "Move the selection out of its parent with P",
+        "steps": [
+          "Insert a Section containing a Container that contains a Paragraph.",
+          "Select the Paragraph on the canvas and press P.",
+          "Right-click the Paragraph and choose 'Move out of parent' [command.promote].",
+          "Select a direct child of Page and press P."
+        ],
+        "expected": [
+          "P and the 'Move out of parent' [command.promote] menu item move the element into its grandparent, directly after its former parent, in the document JSON.",
+          "The status bar reads 'Promoted <name> into <parent>, position N' [status.promoted].",
+          "A direct child of Page cannot be promoted and the status bar says there is nothing to promote to.",
+          "Each promotion is one undo step and the element stays selected."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "duplicate",
+      "titleKey": "feature.duplicate",
+      "commands": [
+        "element.duplicate"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/duplicate.md",
+      "intent": {
+        "title": "Duplicate the selection with Ctrl+D",
+        "steps": [
+          "Insert a Section with a Heading and a Paragraph.",
+          "Select the Section and press Ctrl+D."
+        ],
+        "expected": [
+          "A deep copy of the Section with its children, texts and styles is inserted directly after it in the document JSON.",
+          "Every node of the copy has a new unique id and a unique name.",
+          "The copy is selected and the duplicate is one undo step."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "clipboard-copy-paste",
+      "titleKey": "feature.clipboardCopyPaste",
+      "commands": [
+        "clipboard.copy",
+        "clipboard.paste"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/clipboard-copy-paste.md",
+      "intent": {
+        "title": "Copy and paste elements through the system clipboard with Ctrl+C and Ctrl+V",
+        "steps": [
+          "Insert a Section with a Heading, and an empty Container after the Section.",
+          "Select the Heading, press Ctrl+C.",
+          "Select the Container and press Ctrl+V.",
+          "Select the Section and press Ctrl+V.",
+          "Read the system clipboard."
+        ],
+        "expected": [
+          "Ctrl+C writes the selected element to the system clipboard in the app's element format (its subtree with texts and styles); nothing is kept only in memory, and reading the system clipboard after Ctrl+C returns that element.",
+          "Ctrl+V reads the system clipboard: with a container selected the copy is appended as its last child; with a non-container selected it is inserted right after it.",
+          "The pasted subtree has new ids and unique names, and the same styles and text as the source.",
+          "The pasted element is selected and each paste is one undo step."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "keyboard-tree-walk",
+      "titleKey": "feature.keyboardTreeWalk",
+      "commands": [
+        "selection.walkNextSibling",
+        "selection.walkPreviousSibling",
+        "selection.walkParent",
+        "selection.walkFirstChild"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/keyboard-tree-walk.md",
+      "intent": {
+        "title": "Walk the tree with the arrow keys",
+        "steps": [
+          "Insert a Section with a Heading and a Paragraph.",
+          "Select the Heading on the canvas.",
+          "Press ArrowRight, ArrowLeft, ArrowUp, ArrowDown, and ArrowUp twice."
+        ],
+        "expected": [
+          "ArrowRight selects the next sibling and ArrowLeft the previous one; ArrowUp selects the parent; ArrowDown selects the first child.",
+          "The status bar announces each move, e.g. 'Paragraph selected. Sibling 2 of 2.' [status.walk.sibling].",
+          "At the ends and at the Page root the selection stays and the status bar explains why.",
+          "Walking never changes the document JSON."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "hand-keyboard-move",
+      "titleKey": "feature.handKeyboardMove",
+      "commands": [
+        "element.moveTo",
+        "hand.take",
+        "hand.aimNext",
+        "hand.aimPrevious",
+        "hand.climb",
+        "hand.descend",
+        "hand.drop"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/hand-keyboard-move.md",
+      "intent": {
+        "title": "Take the selection into the hand with M and place it with the keyboard",
+        "steps": [
+          "Insert a Section with a Heading and a Paragraph, and a Container after the Section.",
+          "Select the Heading and press M.",
+          "Press ArrowDown, then ArrowUp to climb a level, then ArrowLeft to descend, then Enter.",
+          "Select the Paragraph, press M, move the aim and press Escape."
+        ],
+        "expected": [
+          "After M the status bar reads 'Holding <name>. Arrows aim, Enter places, Esc drops.' [status.hand.holding] and the canvas shows the same insertion indicator a mouse drag shows.",
+          "ArrowDown/ArrowRight aim at the next position, ArrowUp climbs a receiver level, ArrowLeft descends; the status bar names the receiver, position and level after each key.",
+          "Enter moves the element to the aimed place in the document JSON (one undo step).",
+          "Escape drops the hand and leaves the document JSON unchanged."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "text-edit-inline",
+      "titleKey": "feature.textEditInline",
+      "commands": [
+        "text.startEdit",
+        "text.set",
+        "text.cancelEdit",
+        "text.insertLineBreak"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/text-edit-inline.md",
+      "intent": {
+        "title": "Edit text in place with double-click or Enter",
+        "steps": [
+          "Insert a Paragraph.",
+          "Double-click it on the canvas, select all, type 'Hello world' and press Enter.",
+          "Press Enter on the selected Paragraph, type more text and press Escape.",
+          "Double-click it, type text and click elsewhere on the canvas."
+        ],
+        "expected": [
+          "Double-click or Enter makes the element's text editable in place with a caret; the status bar says 'Editing text — Enter or click away to keep it, Escape to cancel' [status.textEdit.editing].",
+          "Enter or clicking away writes the new text into the document JSON as one undo step.",
+          "Escape restores the text that was there before editing and leaves the document JSON unchanged.",
+          "While editing, Delete, arrow keys and letter shortcuts act on the text, not on the tree."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "text-inline-formatting",
+      "titleKey": "feature.textInlineFormatting",
+      "commands": [
+        "text.toggleBold",
+        "text.toggleItalic",
+        "text.editLink",
+        "text.paste"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/text-inline-formatting.md",
+      "intent": {
+        "title": "Bold, italic and links inside text with Ctrl+B, Ctrl+I and Ctrl+K",
+        "steps": [
+          "Insert a Paragraph and double-click it.",
+          "Select a word and press Ctrl+B; select another word and press Ctrl+I.",
+          "Select a word, press Ctrl+K and enter https://example.com.",
+          "Select the bold word and press Ctrl+B again.",
+          "Put HTML with bold, italic, a link, a heading and a script on the system clipboard, paste it and press Enter."
+        ],
+        "expected": [
+          "Ctrl+B wraps the selection in <strong>, Ctrl+I in <em>, Ctrl+K in <a href>; pressing the shortcut again inside the mark removes it.",
+          "Pasted content keeps the supported marks (strong, em, and links with safe URLs) and drops everything else: other tags become their plain text and scripts are removed.",
+          "After Enter the document JSON stores the text as a tree of plain strings, strong, em and a nodes; unsafe URLs such as javascript: are refused."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "rename-element",
+      "titleKey": "feature.renameElement",
+      "commands": [
+        "layers.startRename",
+        "element.rename"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/rename-element.md",
+      "intent": {
+        "title": "Rename an element with F2 or inline in Layers",
+        "steps": [
+          "Insert a Section.",
+          "Select it on the canvas, press F2, type 'Intro' and press Enter.",
+          "Double-click its row in Layers, type 'Hero' and press Enter.",
+          "Double-click the row again, clear the name and press Enter; do it again and press Escape."
+        ],
+        "expected": [
+          "F2 edits the selection's name in place in its Layers row, the same inline edit as double-clicking the row name, with the current name selected; no dialog opens.",
+          "Enter commits the new name into the document JSON; Escape cancels.",
+          "An empty name keeps the previous name.",
+          "The new name appears in Layers and on the canvas label; each rename is one undo step."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "multi-select-click",
+      "titleKey": "feature.multiSelectClick",
+      "commands": [
+        "selection.add",
+        "selection.toggle"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/multi-select-click.md",
+      "intent": {
+        "title": "Select several elements with Shift+click and Ctrl+click",
+        "steps": [
+          "Insert a Section with a Heading and two Paragraphs.",
+          "Click the Heading, Shift+click the first Paragraph, Shift+click the second Paragraph.",
+          "Ctrl+click the first Paragraph.",
+          "Shift+click a row in Layers.",
+          "Press Escape."
+        ],
+        "expected": [
+          "Shift+click adds to the selection and Ctrl+click toggles an element in or out; each selected element has its own outline and its Layers row is highlighted.",
+          "The canvas label reads 'N elements' [canvas.label.selectionCount].",
+          "Shift+click in Layers adds to the selection the same way.",
+          "Escape clears the whole selection."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "unwrap",
+      "titleKey": "feature.unwrap",
+      "commands": [
+        "element.unwrap"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/unwrap.md",
+      "intent": {
+        "title": "Remove a wrapper and lift its children into its place",
+        "steps": [
+          "Insert a Section containing a Container with a Heading and a Paragraph.",
+          "Right-click the Container and choose 'Remove wrapper' [command.unwrap].",
+          "Undo, right-click the Page root and open the same menu."
+        ],
+        "expected": [
+          "The Container disappears from the document JSON and the Heading and Paragraph take its index in the Section, in their original order.",
+          "The lifted children become the selection.",
+          "The command is unavailable for the Page root and for elements without children.",
+          "One undo restores the Container with its children."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "marquee-select",
+      "titleKey": "feature.marqueeSelect",
+      "commands": [
+        "selection.marquee"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/marquee-select.md",
+      "intent": {
+        "title": "Select elements by dragging a marquee on the page",
+        "steps": [
+          "Insert a Section with a Heading and two Paragraphs.",
+          "Press on empty page area below the Section and drag a rectangle over the Heading and first Paragraph, then release.",
+          "Hold Shift and drag another rectangle over the second Paragraph.",
+          "Hold Ctrl and drag a rectangle over the Heading."
+        ],
+        "expected": [
+          "While dragging a translucent rectangle follows the pointer.",
+          "On release every element the rectangle touches, except the elements that contain the start point, is selected; the status bar reads 'N elements selected.' [status.selection.count].",
+          "Shift adds to the existing selection; Ctrl toggles the touched elements.",
+          "Pressing on an element starts a move drag, never a marquee."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "multi-select-actions",
+      "titleKey": "feature.multiSelectActions",
+      "commands": [
+        "element.moveUp",
+        "element.wrapRow",
+        "element.wrapColumn",
+        "element.promote",
+        "element.duplicate",
+        "element.delete",
+        "hand.take",
+        "layers.startRename",
+        "text.startEdit"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/multi-select-actions.md",
+      "intent": {
+        "title": "Delete, move and duplicate several selected elements at once",
+        "steps": [
+          "Insert a Section with a Heading and three Paragraphs.",
+          "Select two Paragraphs and press Alt+ArrowUp.",
+          "Press Ctrl+D.",
+          "Press Delete.",
+          "Select the Heading and the last Paragraph and press R; undo; press C.",
+          "Select a Paragraph and the Section and press R.",
+          "Select two Paragraphs and press P."
+        ],
+        "expected": [
+          "Alt+ArrowUp moves every selected element one position up keeping their relative order.",
+          "Ctrl+D duplicates each selected element right after itself; Delete removes all of them; each is one undo step.",
+          "R (or C) with several siblings of one parent selected wraps them together in one new Row (or Column) placed where the first of them was, keeping their order, as one undo step; a selection whose elements have different parents is refused with 'These elements must share a parent' [status.wrap.needsSameParent] and the document JSON is unchanged.",
+          "Commands that need a single element (promote, hand, rename, edit text) are refused with 'This needs a single selection' [status.needsSingleSelection] and the document JSON is unchanged."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "select-container-children",
+      "titleKey": "feature.selectContainerChildren",
+      "commands": [
+        "selection.selectAllInContainer",
+        "text.selectAll"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/select-container-children.md",
+      "intent": {
+        "title": "Select every element in the current container with Ctrl+A",
+        "steps": [
+          "Insert a Section with three Paragraphs, and a Container after the Section.",
+          "Select the second Paragraph on the canvas and press Ctrl+A.",
+          "Press Escape, then press Ctrl+A with nothing selected.",
+          "Double-click a Paragraph to edit its text and press Ctrl+A."
+        ],
+        "expected": [
+          "With an element selected, Ctrl+A selects it and all its siblings (the three Paragraphs).",
+          "With nothing selected, Ctrl+A selects every child of Page.",
+          "While editing text Ctrl+A selects the text and does not change the element selection.",
+          "The document JSON never changes."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "lock-element",
+      "titleKey": "feature.lockElement",
+      "commands": [
+        "element.toggleLock"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/lock-element.md",
+      "intent": {
+        "title": "Lock an element so it cannot be moved, edited or deleted",
+        "steps": [
+          "Insert a Section with a Paragraph.",
+          "Lock the Section with the lock toggle on its Layers row.",
+          "Try to drag the Section, drag its Paragraph, press Delete, press R, double-click the Paragraph text.",
+          "Unlock it."
+        ],
+        "expected": [
+          "The lock flag is stored in the document JSON and a lock icon shows on the row.",
+          "Every structural change to the locked element or its descendants is refused with a status message such as 'Unlock <name> before deleting it' [status.locked.delete]; the document JSON does not change.",
+          "Locked elements can still be selected.",
+          "Unlocking restores all actions; lock and unlock are undo steps."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "hide-element",
+      "titleKey": "feature.hideElement",
+      "commands": [
+        "element.toggleHidden"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/hide-element.md",
+      "intent": {
+        "title": "Hide and show an element",
+        "steps": [
+          "Insert a Section with two Paragraphs.",
+          "Click the eye toggle on the first Paragraph's Layers row.",
+          "Click it again."
+        ],
+        "expected": [
+          "The hidden flag is stored in the document JSON; the element has computed display:none in the iframe and its row is dimmed with a crossed eye.",
+          "Hidden elements can still be selected from Layers.",
+          "Showing it restores its layout exactly; both actions are undo steps."
+        ]
+      },
+      "scenarios": []
+    }
+  ]
+}

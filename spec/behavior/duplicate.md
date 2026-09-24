@@ -44,5 +44,5 @@ Not affected.
 
 ## Problems in Pager
 
-1. **Descendants of a duplicated element keep their original names,** so the document has several `Heading` nodes that the BEM export must disambiguate later. Required: every node of the copy gets a new unique id **and** a unique name (features.json `duplicate`).
+1. **Descendants of a duplicated element keep their original names,** so the document has several `Heading` nodes that the BEM export must disambiguate later. Required: every node of the copy gets a new unique id **and** a unique name (manifest feature `duplicate`).
 2. **The Edit menu item dispatches a fake keyboard event** instead of calling the command. Required: every door calls the one duplicate command directly.

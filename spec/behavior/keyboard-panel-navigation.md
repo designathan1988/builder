@@ -40,7 +40,7 @@ This is the keyboard feature.
 
 ## Problems in Pager
 
-1. **No F6 / Shift+F6.** Required: F6 and Shift+F6 cycle focus between top bar, left dock, canvas, inspector, workbench and status bar, and the focused region shows a visible focus ring (features.json `keyboard-panel-navigation`).
+1. **No F6 / Shift+F6.** Required: F6 and Shift+F6 cycle focus between top bar, left dock, canvas, inspector, workbench and status bar, and the focused region shows a visible focus ring (manifest feature `keyboard-panel-navigation`).
 2. **Controls inside panels are removed from the Tab order,** so most buttons, inputs and trees cannot be reached by keyboard. Required: an automated sweep pressing F6 and Tab reaches every enabled button, input, tab and tree of every open panel.
 3. **Escape inside a panel does not reliably return to the canvas** (only the palette handles Escape, and it goes to the palette region). Required: Escape inside a panel returns focus to the canvas with the selection intact.
 4. **Unnamed focus stops** (a bare `DIV` in the Tab order). Required: every focusable element has an accessible name.

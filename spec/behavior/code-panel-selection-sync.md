@@ -41,6 +41,6 @@ None in Pager.
 
 ## Problems in Pager
 
-1. **No Code panel, so nothing follows the selection.** Required (features.json `code-panel-selection-sync`):
+1. **No Code panel, so nothing follows the selection.** Required (manifest feature `code-panel-selection-sync`):
    - Selecting an element on the canvas or in Layers highlights its markup lines in the HTML tab and its rules in the CSS tab, and scrolls them into view.
    - Clicking a line inside an element's markup in the HTML tab selects that element on the canvas and in Layers, through the same selection command as a canvas click. For nested markup, the innermost element whose markup contains the clicked line is selected.

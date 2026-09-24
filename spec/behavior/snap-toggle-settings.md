@@ -49,7 +49,7 @@ None (the code comment mentions a `G` key, but no binding exists).
 
 ## Problems in Pager
 
-1. **The top-bar button does not toggle;** it opens a menu, so switching snap takes two clicks. Required: the button toggles between `Snap: Off` and `Snap: On`; the chevron opens the menu with Snap settings (features.json `snap-toggle-settings`).
-2. **Apply silently turns snap on.** Required: Apply stores the settings in the preferences store and leaves the on/off state as it was (features.json: "Apply stores the settings in preferences").
+1. **The top-bar button does not toggle;** it opens a menu, so switching snap takes two clicks. Required: the button toggles between `Snap: Off` and `Snap: On`; the chevron opens the menu with Snap settings (manifest feature `snap-toggle-settings`).
+2. **Apply silently turns snap on.** Required: Apply stores the settings in the preferences store and leaves the on/off state as it was (manifest intent: "Apply stores the settings in preferences").
 3. **Snap targets and distance are stored in the page document** while the on/off switch is a preference. Required: all snap settings are workspace preferences, in the one preferences store.
 4. **"Smart guides" and "Snap" are one flag under two names.** Required: separate settings, as `smart-guides.md` requires (smart guides can be visible while snap is off and vice versa).

@@ -43,5 +43,5 @@ The keys are the primary door.
 
 ## Problems in Pager
 
-1. **After a delete nothing is selected,** so the next keyboard command has no target. Required: after a delete the selection moves to the next sibling, else the previous sibling, else the parent (features.json `delete-element`).
+1. **After a delete nothing is selected,** so the next keyboard command has no target. Required: after a delete the selection moves to the next sibling, else the previous sibling, else the parent (manifest feature `delete-element`).
 2. **Toasts pile up** (one per delete, each with its own Undo). Required: at most one delete toast is visible; a new delete replaces it, and its Undo undoes the most recent delete only.

@@ -48,6 +48,6 @@ Arrows / Shift+arrows move the active guide, Delete removes it, L locks it; the 
 
 ## Problems in Pager
 
-1. **Dropping a guide on its ruler does not delete it** (it is clamped to 0). Required: a guide released over its own ruler is deleted (features.json `guides-manual`); the ruler shows a delete hint while the guide is over it.
+1. **Dropping a guide on its ruler does not delete it** (it is clamped to 0). Required: a guide released over its own ruler is deleted (manifest feature `guides-manual`); the ruler shows a delete hint while the guide is over it.
 2. **A guide appears on press, before any movement,** so a click on a ruler creates nothing but flickers a guide. Required: the guide is created after 4 px of movement out of the ruler (the shared drag threshold).
 3. **The guide keyboard handler captures arrows, Delete, Backspace, L and Escape globally while a guide is active,** even when the person has moved on to the canvas selection (it deactivates only on a press outside rulers and guides). Required: guide keys act only while the guide has focus; the canvas keys work as usual otherwise.

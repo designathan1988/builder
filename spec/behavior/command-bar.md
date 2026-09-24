@@ -44,6 +44,6 @@ This is the keyboard feature.
 
 ## Problems in Pager
 
-1. **Structural commands are missing** (wrap, promote, move, hand, rename, delete, select all in container are key rows or other code paths, not commands). Required: the bar lists every command of the keymap and the menus, each with its shortcut, from the one command registry (features.json `command-bar`: typing `wrap` and Enter wraps).
+1. **Structural commands are missing** (wrap, promote, move, hand, rename, delete, select all in container are key rows or other code paths, not commands). Required: the bar lists every command of the keymap and the menus, each with its shortcut, from the one command registry (manifest feature `command-bar`: typing `wrap` and Enter wraps).
 2. **Commands that cannot apply are not always filtered:** `Edit property …` is offered for every property, including properties that do not apply to the selected element. Required: commands that cannot apply to the current selection are not offered.
 3. **Fuzzy search is substring-only.** Required: fuzzy matching (initials and out-of-order words, e.g. `insert hero`, `ins hero`).

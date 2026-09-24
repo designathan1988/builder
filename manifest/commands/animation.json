@@ -1,0 +1,687 @@
+{
+  "domain": "animation",
+  "commands": [
+    {
+      "id": "animation.create",
+      "labelKey": "timeline.newAnimation",
+      "owner": "src/core/animation/animation.ts",
+      "introducedBy": "timeline-animations",
+      "args": {
+        "name": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "singleSelection",
+        "refusalKey": "status.needsSingleSelection"
+      },
+      "refusals": [
+        "status.animation.nameTaken"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "timeline-new-animation",
+          "kind": "panel-control",
+          "feature": "timeline-animations",
+          "panel": "timeline",
+          "control": "new-animation",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "timeline.newAnimation",
+          "disabledReasonKey": "status.needsSingleSelection",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "animation.rename",
+      "labelKey": "command.animation.rename",
+      "owner": "src/core/animation/animation.ts",
+      "introducedBy": "timeline-animations",
+      "args": {
+        "animation": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        },
+        "name": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.animation.nameTaken"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "timeline-animation-name-field",
+          "kind": "panel-control",
+          "feature": "timeline-animations",
+          "panel": "timeline",
+          "control": "animation-name-field",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.animation.rename",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "animation.delete",
+      "labelKey": "command.animation.delete",
+      "owner": "src/core/animation/animation.ts",
+      "introducedBy": "timeline-animations",
+      "args": {
+        "animation": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "timeline-animation-delete",
+          "kind": "panel-control",
+          "feature": "timeline-animations",
+          "panel": "timeline",
+          "control": "animation-delete",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.animation.delete",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "animation.addKeyframe",
+      "labelKey": "timeline.addKeyframe",
+      "owner": "src/core/animation/animation.ts",
+      "introducedBy": "timeline-keyframes",
+      "args": {
+        "animation": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        },
+        "offset": {
+          "type": "number",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "timeline-add-keyframe",
+          "kind": "panel-control",
+          "feature": "timeline-keyframes",
+          "panel": "timeline",
+          "control": "add-keyframe",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "timeline.addKeyframe",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "animation.moveKeyframe",
+      "labelKey": "command.animation.moveKeyframe",
+      "owner": "src/core/animation/animation.ts",
+      "introducedBy": "timeline-keyframes",
+      "args": {
+        "keyframe": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        },
+        "offset": {
+          "type": "number",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "panel-drag-keyframe-track",
+          "kind": "panel-drag",
+          "feature": "timeline-keyframes",
+          "source": "keyframe",
+          "zone": "track",
+          "gesture": "keyframe-drag",
+          "labelKey": "command.animation.moveKeyframe",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "animation.setKeyframeEasing",
+      "labelKey": "command.animation.easing",
+      "owner": "src/core/animation/animation.ts",
+      "introducedBy": "timeline-keyframes",
+      "args": {
+        "keyframe": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        },
+        "easing": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "timeline-keyframe-easing",
+          "kind": "panel-control",
+          "feature": "timeline-keyframes",
+          "panel": "timeline",
+          "control": "keyframe-easing",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.animation.easing",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "animation.deleteKeyframe",
+      "labelKey": "command.animation.deleteKeyframe",
+      "owner": "src/core/animation/animation.ts",
+      "introducedBy": "timeline-keyframes",
+      "args": {
+        "keyframe": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "timeline-keyframe-delete",
+          "kind": "panel-control",
+          "feature": "timeline-keyframes",
+          "panel": "timeline",
+          "control": "keyframe-delete",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.animation.deleteKeyframe",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-delete-in-timeline",
+          "kind": "shortcut",
+          "feature": "timeline-keyframes",
+          "chord": "Delete",
+          "context": "timeline",
+          "gesture": null,
+          "labelKey": "command.animation.deleteKeyframe",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "animation.setSettings",
+      "labelKey": "command.animation.settings",
+      "owner": "src/core/animation/animation.ts",
+      "introducedBy": "timeline-animation-settings",
+      "args": {
+        "animation": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        },
+        "setting": {
+          "type": "enum",
+          "values": [
+            "duration",
+            "delay",
+            "iterations",
+            "direction",
+            "fill",
+            "timing",
+            "play-state"
+          ],
+          "optional": false
+        },
+        "value": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.animation.invalidSetting"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "timeline-setting-duration",
+          "kind": "panel-control",
+          "feature": "timeline-animation-settings",
+          "panel": "timeline",
+          "control": "setting-duration",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "timeline.setting.duration",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "setting": "duration"
+          }
+        },
+        {
+          "id": "timeline-setting-delay",
+          "kind": "panel-control",
+          "feature": "timeline-animation-settings",
+          "panel": "timeline",
+          "control": "setting-delay",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "timeline.setting.delay",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "setting": "delay"
+          }
+        },
+        {
+          "id": "timeline-setting-iterations",
+          "kind": "panel-control",
+          "feature": "timeline-animation-settings",
+          "panel": "timeline",
+          "control": "setting-iterations",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "timeline.setting.iterations",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "setting": "iterations"
+          }
+        },
+        {
+          "id": "timeline-setting-direction",
+          "kind": "panel-control",
+          "feature": "timeline-animation-settings",
+          "panel": "timeline",
+          "control": "setting-direction",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "timeline.setting.direction",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "setting": "direction"
+          }
+        },
+        {
+          "id": "timeline-setting-fill",
+          "kind": "panel-control",
+          "feature": "timeline-animation-settings",
+          "panel": "timeline",
+          "control": "setting-fill",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "timeline.setting.fill",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "setting": "fill"
+          }
+        },
+        {
+          "id": "timeline-setting-timing",
+          "kind": "panel-control",
+          "feature": "timeline-animation-settings",
+          "panel": "timeline",
+          "control": "setting-timing",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "timeline.setting.timing",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "setting": "timing"
+          }
+        },
+        {
+          "id": "timeline-setting-play-state",
+          "kind": "panel-control",
+          "feature": "timeline-animation-settings",
+          "panel": "timeline",
+          "control": "setting-play-state",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "timeline.setting.playState",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "setting": "play-state"
+          }
+        }
+      ]
+    },
+    {
+      "id": "timeline.setPlayhead",
+      "labelKey": "command.timeline.playhead",
+      "owner": "src/editor/timeline/playhead.ts",
+      "introducedBy": "timeline-keyframes",
+      "args": {
+        "time": {
+          "type": "number",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "panel-drag-playhead-ruler",
+          "kind": "panel-drag",
+          "feature": "timeline-keyframes",
+          "source": "playhead",
+          "zone": "ruler",
+          "gesture": "playhead-drag",
+          "labelKey": "command.timeline.playhead",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "timeline-ruler-click",
+          "kind": "panel-control",
+          "feature": "timeline-keyframes",
+          "panel": "timeline",
+          "control": "ruler-click",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.timeline.playhead",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "timeline.play",
+      "labelKey": "timeline.play",
+      "owner": "src/editor/timeline/preview.ts",
+      "introducedBy": "timeline-preview",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "timeline-play",
+          "kind": "panel-control",
+          "feature": "timeline-preview",
+          "panel": "timeline",
+          "control": "play",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "timeline.play",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "timeline.pause",
+      "labelKey": "timeline.pause",
+      "owner": "src/editor/timeline/preview.ts",
+      "introducedBy": "timeline-preview",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "timeline-pause",
+          "kind": "panel-control",
+          "feature": "timeline-preview",
+          "panel": "timeline",
+          "control": "pause",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "timeline.pause",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "timeline.stop",
+      "labelKey": "timeline.stop",
+      "owner": "src/editor/timeline/preview.ts",
+      "introducedBy": "timeline-preview",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "timeline-stop",
+          "kind": "panel-control",
+          "feature": "timeline-preview",
+          "panel": "timeline",
+          "control": "stop",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "timeline.stop",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "timeline.toggleLoop",
+      "labelKey": "timeline.toggleLoop",
+      "owner": "src/editor/timeline/preview.ts",
+      "introducedBy": "timeline-preview",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "timeline-loop",
+          "kind": "panel-control",
+          "feature": "timeline-preview",
+          "panel": "timeline",
+          "control": "loop",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "timeline.toggleLoop",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    }
+  ]
+}

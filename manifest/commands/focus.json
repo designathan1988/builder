@@ -1,0 +1,958 @@
+{
+  "domain": "focus",
+  "commands": [
+    {
+      "id": "focus.next",
+      "labelKey": "command.focusNext",
+      "owner": "src/editor/focus/focus.ts",
+      "introducedBy": "context-menu",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-arrow-down-in-menu",
+          "kind": "shortcut",
+          "feature": "context-menu",
+          "chord": "ArrowDown",
+          "context": "menu",
+          "gesture": null,
+          "labelKey": "command.focusNext",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-arrow-down-in-command-bar",
+          "kind": "shortcut",
+          "feature": "command-bar",
+          "chord": "ArrowDown",
+          "context": "command-bar",
+          "gesture": null,
+          "labelKey": "command.focusNext",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-arrow-down-in-layers-tree",
+          "kind": "shortcut",
+          "feature": "layers-keyboard-navigation",
+          "chord": "ArrowDown",
+          "context": "layers-tree",
+          "gesture": null,
+          "labelKey": "layers.key.nextRow",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-arrow-right-in-tab-strip",
+          "kind": "shortcut",
+          "feature": "keyboard-panel-navigation",
+          "chord": "ArrowRight",
+          "context": "tab-strip",
+          "gesture": null,
+          "labelKey": "command.focusNext",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-arrow-down-in-tab-strip",
+          "kind": "shortcut",
+          "feature": "keyboard-panel-navigation",
+          "chord": "ArrowDown",
+          "context": "tab-strip",
+          "gesture": null,
+          "labelKey": "command.focusNext",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-arrow-right-in-toolbar",
+          "kind": "shortcut",
+          "feature": "keyboard-panel-navigation",
+          "chord": "ArrowRight",
+          "context": "toolbar",
+          "gesture": null,
+          "labelKey": "command.focusNext",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-arrow-down-in-toolbar",
+          "kind": "shortcut",
+          "feature": "keyboard-panel-navigation",
+          "chord": "ArrowDown",
+          "context": "toolbar",
+          "gesture": null,
+          "labelKey": "command.focusNext",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-arrow-right-in-palette",
+          "kind": "shortcut",
+          "feature": "keyboard-panel-navigation",
+          "chord": "ArrowRight",
+          "context": "palette",
+          "gesture": null,
+          "labelKey": "command.focusNext",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-arrow-down-in-palette",
+          "kind": "shortcut",
+          "feature": "keyboard-panel-navigation",
+          "chord": "ArrowDown",
+          "context": "palette",
+          "gesture": null,
+          "labelKey": "command.focusNext",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "focus.previous",
+      "labelKey": "command.focusPrevious",
+      "owner": "src/editor/focus/focus.ts",
+      "introducedBy": "context-menu",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-arrow-up-in-menu",
+          "kind": "shortcut",
+          "feature": "context-menu",
+          "chord": "ArrowUp",
+          "context": "menu",
+          "gesture": null,
+          "labelKey": "command.focusPrevious",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-arrow-up-in-command-bar",
+          "kind": "shortcut",
+          "feature": "command-bar",
+          "chord": "ArrowUp",
+          "context": "command-bar",
+          "gesture": null,
+          "labelKey": "command.focusPrevious",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-arrow-up-in-layers-tree",
+          "kind": "shortcut",
+          "feature": "layers-keyboard-navigation",
+          "chord": "ArrowUp",
+          "context": "layers-tree",
+          "gesture": null,
+          "labelKey": "layers.key.previousRow",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-arrow-left-in-tab-strip",
+          "kind": "shortcut",
+          "feature": "keyboard-panel-navigation",
+          "chord": "ArrowLeft",
+          "context": "tab-strip",
+          "gesture": null,
+          "labelKey": "command.focusPrevious",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-arrow-up-in-tab-strip",
+          "kind": "shortcut",
+          "feature": "keyboard-panel-navigation",
+          "chord": "ArrowUp",
+          "context": "tab-strip",
+          "gesture": null,
+          "labelKey": "command.focusPrevious",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-arrow-left-in-toolbar",
+          "kind": "shortcut",
+          "feature": "keyboard-panel-navigation",
+          "chord": "ArrowLeft",
+          "context": "toolbar",
+          "gesture": null,
+          "labelKey": "command.focusPrevious",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-arrow-up-in-toolbar",
+          "kind": "shortcut",
+          "feature": "keyboard-panel-navigation",
+          "chord": "ArrowUp",
+          "context": "toolbar",
+          "gesture": null,
+          "labelKey": "command.focusPrevious",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-arrow-left-in-palette",
+          "kind": "shortcut",
+          "feature": "keyboard-panel-navigation",
+          "chord": "ArrowLeft",
+          "context": "palette",
+          "gesture": null,
+          "labelKey": "command.focusPrevious",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-arrow-up-in-palette",
+          "kind": "shortcut",
+          "feature": "keyboard-panel-navigation",
+          "chord": "ArrowUp",
+          "context": "palette",
+          "gesture": null,
+          "labelKey": "command.focusPrevious",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "focus.first",
+      "labelKey": "command.focusFirst",
+      "owner": "src/editor/focus/focus.ts",
+      "introducedBy": "context-menu",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-home-in-menu",
+          "kind": "shortcut",
+          "feature": "context-menu",
+          "chord": "Home",
+          "context": "menu",
+          "gesture": null,
+          "labelKey": "command.focusFirst",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-home-in-layers-tree",
+          "kind": "shortcut",
+          "feature": "layers-keyboard-navigation",
+          "chord": "Home",
+          "context": "layers-tree",
+          "gesture": null,
+          "labelKey": "command.focusFirst",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-home-in-tab-strip",
+          "kind": "shortcut",
+          "feature": "keyboard-panel-navigation",
+          "chord": "Home",
+          "context": "tab-strip",
+          "gesture": null,
+          "labelKey": "command.focusFirst",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-home-in-toolbar",
+          "kind": "shortcut",
+          "feature": "keyboard-panel-navigation",
+          "chord": "Home",
+          "context": "toolbar",
+          "gesture": null,
+          "labelKey": "command.focusFirst",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-home-in-palette",
+          "kind": "shortcut",
+          "feature": "keyboard-panel-navigation",
+          "chord": "Home",
+          "context": "palette",
+          "gesture": null,
+          "labelKey": "command.focusFirst",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "focus.last",
+      "labelKey": "command.focusLast",
+      "owner": "src/editor/focus/focus.ts",
+      "introducedBy": "context-menu",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-end-in-menu",
+          "kind": "shortcut",
+          "feature": "context-menu",
+          "chord": "End",
+          "context": "menu",
+          "gesture": null,
+          "labelKey": "command.focusLast",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-end-in-layers-tree",
+          "kind": "shortcut",
+          "feature": "layers-keyboard-navigation",
+          "chord": "End",
+          "context": "layers-tree",
+          "gesture": null,
+          "labelKey": "command.focusLast",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-end-in-tab-strip",
+          "kind": "shortcut",
+          "feature": "keyboard-panel-navigation",
+          "chord": "End",
+          "context": "tab-strip",
+          "gesture": null,
+          "labelKey": "command.focusLast",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-end-in-toolbar",
+          "kind": "shortcut",
+          "feature": "keyboard-panel-navigation",
+          "chord": "End",
+          "context": "toolbar",
+          "gesture": null,
+          "labelKey": "command.focusLast",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-end-in-palette",
+          "kind": "shortcut",
+          "feature": "keyboard-panel-navigation",
+          "chord": "End",
+          "context": "palette",
+          "gesture": null,
+          "labelKey": "command.focusLast",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "focus.activate",
+      "labelKey": "command.focusActivate",
+      "owner": "src/editor/focus/focus.ts",
+      "introducedBy": "context-menu",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-enter-in-menu",
+          "kind": "shortcut",
+          "feature": "context-menu",
+          "chord": "Enter",
+          "context": "menu",
+          "gesture": null,
+          "labelKey": "command.focusActivate",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-enter-in-command-bar",
+          "kind": "shortcut",
+          "feature": "command-bar",
+          "chord": "Enter",
+          "context": "command-bar",
+          "gesture": null,
+          "labelKey": "command.focusActivate",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-enter-in-tab-strip",
+          "kind": "shortcut",
+          "feature": "keyboard-panel-navigation",
+          "chord": "Enter",
+          "context": "tab-strip",
+          "gesture": null,
+          "labelKey": "command.focusActivate",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-space-in-tab-strip",
+          "kind": "shortcut",
+          "feature": "keyboard-panel-navigation",
+          "chord": "Space",
+          "context": "tab-strip",
+          "gesture": null,
+          "labelKey": "command.focusActivate",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-enter-in-toolbar",
+          "kind": "shortcut",
+          "feature": "keyboard-panel-navigation",
+          "chord": "Enter",
+          "context": "toolbar",
+          "gesture": null,
+          "labelKey": "command.focusActivate",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-space-in-toolbar",
+          "kind": "shortcut",
+          "feature": "keyboard-panel-navigation",
+          "chord": "Space",
+          "context": "toolbar",
+          "gesture": null,
+          "labelKey": "command.focusActivate",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "focus.nextRegion",
+      "labelKey": "command.focusNextRegion",
+      "owner": "src/editor/focus/focus.ts",
+      "introducedBy": "keyboard-panel-navigation",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-f6-in-global",
+          "kind": "shortcut",
+          "feature": "keyboard-panel-navigation",
+          "chord": "F6",
+          "context": "global",
+          "gesture": null,
+          "labelKey": "command.focusNextRegion",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-f6-in-field",
+          "kind": "shortcut",
+          "feature": "keyboard-panel-navigation",
+          "chord": "F6",
+          "context": "field",
+          "gesture": null,
+          "labelKey": "command.focusNextRegion",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "focus.previousRegion",
+      "labelKey": "command.focusPreviousRegion",
+      "owner": "src/editor/focus/focus.ts",
+      "introducedBy": "keyboard-panel-navigation",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-shift-f6-in-global",
+          "kind": "shortcut",
+          "feature": "keyboard-panel-navigation",
+          "chord": "Shift+F6",
+          "context": "global",
+          "gesture": null,
+          "labelKey": "command.focusPreviousRegion",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-shift-f6-in-field",
+          "kind": "shortcut",
+          "feature": "keyboard-panel-navigation",
+          "chord": "Shift+F6",
+          "context": "field",
+          "gesture": null,
+          "labelKey": "command.focusPreviousRegion",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "focus.canvas",
+      "labelKey": "command.focusCanvas",
+      "owner": "src/editor/focus/focus.ts",
+      "introducedBy": "keyboard-panel-navigation",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-escape-in-layers-tree",
+          "kind": "shortcut",
+          "feature": "keyboard-panel-navigation",
+          "chord": "Escape",
+          "context": "layers-tree",
+          "gesture": null,
+          "labelKey": "command.focusCanvas",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-escape-in-palette",
+          "kind": "shortcut",
+          "feature": "keyboard-panel-navigation",
+          "chord": "Escape",
+          "context": "palette",
+          "gesture": null,
+          "labelKey": "command.focusCanvas",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-escape-in-tab-strip",
+          "kind": "shortcut",
+          "feature": "keyboard-panel-navigation",
+          "chord": "Escape",
+          "context": "tab-strip",
+          "gesture": null,
+          "labelKey": "command.focusCanvas",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-escape-in-toolbar",
+          "kind": "shortcut",
+          "feature": "keyboard-panel-navigation",
+          "chord": "Escape",
+          "context": "toolbar",
+          "gesture": null,
+          "labelKey": "command.focusCanvas",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-escape-in-splitter",
+          "kind": "shortcut",
+          "feature": "keyboard-panel-navigation",
+          "chord": "Escape",
+          "context": "splitter",
+          "gesture": null,
+          "labelKey": "command.focusCanvas",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "ui.dismiss",
+      "labelKey": "command.dismiss",
+      "owner": "src/editor/menus/overlays.ts",
+      "introducedBy": "context-menu",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-escape-in-menu",
+          "kind": "shortcut",
+          "feature": "context-menu",
+          "chord": "Escape",
+          "context": "menu",
+          "gesture": null,
+          "labelKey": "command.dismiss",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "overlay-backdrop",
+          "kind": "panel-control",
+          "feature": "context-menu",
+          "panel": "overlay",
+          "control": "backdrop",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.dismiss",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-escape-in-command-bar",
+          "kind": "shortcut",
+          "feature": "command-bar",
+          "chord": "Escape",
+          "context": "command-bar",
+          "gesture": null,
+          "labelKey": "command.dismiss",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-escape-in-dialog",
+          "kind": "shortcut",
+          "feature": "workspace-settings-dialog",
+          "chord": "Escape",
+          "context": "dialog",
+          "gesture": null,
+          "labelKey": "command.dismiss",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "dialog-close",
+          "kind": "panel-control",
+          "feature": "workspace-settings-dialog",
+          "panel": "dialog",
+          "control": "close",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.dismiss",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    }
+  ]
+}

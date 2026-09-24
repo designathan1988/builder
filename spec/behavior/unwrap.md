@@ -44,6 +44,6 @@ None in Pager.
 
 ## Problems in Pager
 
-1. **Remove wrapper is only reachable through the selection bar's icon strip.** Required: a context-menu item "Remove wrapper" and an Arrange menu item, running the same command (features.json `unwrap`, `context-menu`, `app-menu`).
+1. **Remove wrapper is only reachable through the selection bar's icon strip.** Required: a context-menu item "Remove wrapper" and an Arrange menu item, running the same command (manifest feature `unwrap`, `context-menu`, `app-menu`).
 2. **The button is hidden rather than disabled when the command cannot apply,** so the strip changes layout depending on the selection. Required: the context-menu item stays in place and is disabled, with the reason in its tooltip, for the Page root and for elements without children.
 3. **The More actions strip overlaps its own text** (the "Margin", "Padding" and "More…" labels are drawn on top of each other). Required: no overlapping text in any panel; the new app has no separate strip (see `context-menu.md`).

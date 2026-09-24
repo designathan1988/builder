@@ -1,0 +1,795 @@
+{
+  "group": "inspector",
+  "titleKey": "featureGroup.inspector",
+  "features": [
+    {
+      "id": "inspector-panel",
+      "titleKey": "feature.inspectorPanel",
+      "commands": [
+        "element.toggleLock",
+        "element.toggleHidden",
+        "text.set",
+        "inspector.toggleSection"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Inspector shows the selection's identity and collapsible property sections",
+        "steps": [
+          "With nothing selected, look at the Inspector.",
+          "Insert a Section with a Paragraph and select the Paragraph.",
+          "Collapse the Text section, select the Section, then select the Paragraph again."
+        ],
+        "expected": [
+          "With nothing selected the Inspector shows 'Nothing selected' [inspector.nothingSelected], short hints and a Page properties button (disabled and labelled 'not available yet' [common.notAvailableYet] until page properties are built — which features are built is read from one feature registry, and the test checks the UI against that registry instead of a fixed list, so it stays valid as later entries are built).",
+          "With an element selected it shows the element icon, name and tag, and, in this order, the sections that apply to the element type among Content, Layout, Space, Size, Position, Paint, Border, Text and Effects; later entries may add sections after Effects. Each section header summarises its current values (e.g. Layout: block, Size: auto x auto).",
+          "Sections collapse and expand; the collapsed state is remembered per section across selections and reloads.",
+          "For text elements the Content section shows the text in a field; editing it there updates the canvas and the document JSON as one undo step.",
+          "The element actions menu in the inspector header offers Lock and Hide, which run the same commands as the Layers toggles."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "inspector-number-fields",
+      "titleKey": "feature.inspectorNumberFields",
+      "commands": [
+        "style.set",
+        "field.step",
+        "field.scrub",
+        "field.setUnit"
+      ],
+      "dependsOn": [
+        "inspector-panel"
+      ],
+      "spec": "spec/behavior/inspector-number-fields.md",
+      "intent": {
+        "title": "Numeric property fields, built with the Size section's Width and Height: typing, units, steppers and scrubbing",
+        "steps": [
+          "Select a Container.",
+          "Type 24 in Width and press Enter; change its unit to %; type 'auto'.",
+          "Press ArrowUp, Shift+ArrowUp and Alt+ArrowUp in the field; click the step buttons.",
+          "Drag the field label to the right by 50 px; repeat with Shift and with Alt.",
+          "Type 'abc' and press Enter; type 30 and press Escape."
+        ],
+        "expected": [
+          "Enter writes the value with its unit into the document JSON and the computed style in the iframe matches it.",
+          "The unit menu offers px, %, em, rem, vw, vh and the keywords valid for the property (auto, fit-content, min-content, max-content where valid).",
+          "ArrowUp/ArrowDown step by 1, with Shift by 10, with Alt by 0.1; dragging the label scrubs with the same multipliers.",
+          "Invalid input is rejected with a message and the previous value stays; Escape restores the previous value.",
+          "A whole scrub gesture or one typed commit is exactly one undo step.",
+          "Delete, Backspace, arrows, letters and Ctrl+Z typed in a field act on the field, never on the canvas selection or the document history."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "props-display",
+      "titleKey": "feature.propsDisplay",
+      "commands": [
+        "style.set"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Edit display with every keyword",
+        "steps": [
+          "Select a Container.",
+          "Set display to each of block, inline, inline-block, flex, inline-flex, grid, inline-grid, contents and none."
+        ],
+        "expected": [
+          "The Display control offers every keyword the property catalogue has for display, and nothing else (a unit test checks that the control options equal the catalogue keyword list).",
+          "Each choice writes the value into the document JSON and the element's computed display matches."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "props-flex-container",
+      "titleKey": "feature.propsFlexContainer",
+      "commands": [
+        "style.set",
+        "style.setAlignment"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Flex container controls: direction, wrap, alignment matrix and gap",
+        "steps": [
+          "Insert a Container, set its display to flex and insert three Paragraphs into it.",
+          "Click each direction arrow (row, row-reverse, column, column-reverse).",
+          "Set wrap; click each cell of the 3x3 alignment matrix; click Stretch and Spread.",
+          "Set gap, row-gap and column-gap."
+        ],
+        "expected": [
+          "The flex controls appear in the Layout section when display is flex or inline-flex.",
+          "The direction arrows set flex-direction; wrap sets flex-wrap (nowrap, wrap, wrap-reverse).",
+          "Each matrix cell sets justify-content and align-items together, mapped to the current direction; Stretch sets align-items:stretch and Spread sets justify-content:space-between.",
+          "align-content offers every catalogue keyword.",
+          "Gap values are written to the document JSON and the measured distance between the children in the iframe equals the gap."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "props-grid-container",
+      "titleKey": "feature.propsGridContainer",
+      "commands": [
+        "style.set"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Grid container controls: column and row tracks, gap and auto flow",
+        "steps": [
+          "Select a Container, set display:grid and insert four Paragraphs into it.",
+          "Click 'Add a column' [inspector.grid.addColumn] three times, change the second track to 2fr and the third to 200px.",
+          "Edit the track expression text to 'repeat(4, minmax(0, 1fr))'.",
+          "Set rows, gap, grid-auto-flow, justify-items and grid-template-areas."
+        ],
+        "expected": [
+          "The grid controls appear in the Layout section when display is grid or inline-grid.",
+          "The track editor shows one chip per column track and writes grid-template-columns (e.g. '1fr 2fr 200px').",
+          "Typing a track expression replaces the tracks and the chips update to match.",
+          "Measured column widths of the children in the iframe match the tracks.",
+          "Rows, gap, auto flow, justify-items and template areas are written to the document JSON."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "props-layout-item",
+      "titleKey": "feature.propsLayoutItem",
+      "commands": [
+        "style.set"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Child-of-flex and child-of-grid controls (In parent)",
+        "steps": [
+          "Inside a flex Container select a child; set flex-grow, flex-shrink, flex-basis, align-self and order.",
+          "Inside a grid Container select a child; set grid-column '1 / 3', grid-row and justify-self."
+        ],
+        "expected": [
+          "An 'In parent' [inspector.group.inParent] group appears only when the parent is flex or grid and shows the item properties that apply to that parent type.",
+          "Each value is written to the document JSON and changes the measured geometry of the child as CSS predicts."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "props-spacing",
+      "titleKey": "feature.propsSpacing",
+      "commands": [
+        "style.setSpacing",
+        "inspector.toggleSpacingLink"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Margin and padding with the box model editor",
+        "steps": [
+          "Select a Section.",
+          "Click the top padding number in the box model diagram and type 32.",
+          "Turn on 'Link all four sides' [inspector.spacing.linkAll] for margin and type 16.",
+          "Set a negative margin-left; try a negative padding.",
+          "Change the padding unit to rem."
+        ],
+        "expected": [
+          "The box model diagram shows margin, padding and the element size; each side is editable in place.",
+          "Linked sides change together and write the margin shorthand; unlinked sides write per-side values.",
+          "Negative margins are accepted; negative padding is rejected with a message.",
+          "Computed margin and padding in the iframe match the document JSON."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "props-size-overflow",
+      "titleKey": "feature.propsSizeOverflow",
+      "commands": [
+        "style.set"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Size, min/max, box sizing, aspect ratio and overflow",
+        "steps": [
+          "Select a Container.",
+          "Set width 50%, height 200px, min-width 100px, max-width 600px, min-height and max-height.",
+          "Set box-sizing to content-box, aspect-ratio 16 / 9, overflow hidden, overflow-x and overflow-y."
+        ],
+        "expected": [
+          "Each value is written to the document JSON and the computed style matches.",
+          "The measured size of the element in the iframe matches the values (e.g. width is 50% of the parent's content box).",
+          "The Size section summary reads the current width x height."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "props-position",
+      "titleKey": "feature.propsPosition",
+      "commands": [
+        "style.set",
+        "position.setMode"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Position mode, offsets, z-index, float and clear",
+        "steps": [
+          "Select a Paragraph inside a Section.",
+          "Click each position button: static, relative, absolute, fixed, sticky.",
+          "With relative, set top 10px and left 20px; set z-index 5.",
+          "Set float and clear."
+        ],
+        "expected": [
+          "The position buttons write position; offset fields top/right/bottom/left appear when position is not static.",
+          "The measured position of the element in the iframe moves by the offsets.",
+          "z-index, float and clear are written to the document JSON and the computed style matches.",
+          "The test checks only the properties this entry sets (position, offsets, z-index, float, clear), not the whole style bag."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "color-picker",
+      "titleKey": "feature.colorPicker",
+      "commands": [
+        "style.set"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/color-picker.md",
+      "intent": {
+        "title": "Colour picker: area, sliders, HSB/RGB/Hex fields, preview, Apply and Cancel",
+        "steps": [
+          "Select a Container and open the background colour picker in the Paint section.",
+          "Drag in the saturation/brightness area, drag the hue and alpha sliders.",
+          "Switch the format between HSB, RGB and Hex and type values in each.",
+          "Click Apply; open it again, change the colour and click Cancel.",
+          "Select a Paragraph and open the text colour picker in the Text section."
+        ],
+        "expected": [
+          "This entry adds the background-color field (Paint) and the color field (Text); both open the picker.",
+          "The picker shows the previous and current colour, the saturation/brightness area, hue and alpha sliders, a text field and per-channel fields for the chosen format.",
+          "The canvas previews the colour live while dragging; Apply writes it to the document JSON as one undo step; Cancel restores the previous value.",
+          "Invalid channel values are rejected.",
+          "Both fields open the same picker component; the codebase has exactly one colour picker, which every later colour field reuses (evaluator checks the diff)."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "color-picker-oklch",
+      "titleKey": "feature.colorPickerOklch",
+      "commands": [],
+      "dependsOn": [
+        "color-picker"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Colour picker: OKLCH and OKLab formats and CSS colour text",
+        "steps": [
+          "Open a colour picker.",
+          "Switch the format to OKLCH and OKLab and type values in each.",
+          "Type 'rebeccapurple', '#0f172a80', 'rgb(10 20 30 / 50%)' and 'oklch(70% 0.15 260)' in the text field.",
+          "Type 'notacolour'."
+        ],
+        "expected": [
+          "OKLCH and OKLab channel fields convert to and from the same colour shown in the other formats.",
+          "Named colours, hex with 3, 4, 6 and 8 digits, rgb(), hsl(), hwb(), lab(), lch(), oklab(), oklch() and color() are parsed; the stored value is the text the user chose; colours outside sRGB show a gamut warning.",
+          "Invalid text is rejected with a message and the previous colour stays."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "color-swatches-eyedropper",
+      "titleKey": "feature.colorSwatchesEyedropper",
+      "commands": [
+        "colors.saveSwatch",
+        "colors.removeSwatch"
+      ],
+      "dependsOn": [
+        "color-picker"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Saved and recent colours and the eyedropper",
+        "steps": [
+          "Open a colour picker, pick a colour and click 'Save current' [colorPicker.saveCurrent].",
+          "Apply a few different colours to different elements.",
+          "Open the picker and click a saved swatch and a recent swatch.",
+          "Click the eyedropper button and pick a colour."
+        ],
+        "expected": [
+          "Saved colours are stored with the project and listed in every picker; recent colours list the last 10 applied colours.",
+          "Clicking a swatch sets the current colour.",
+          "The eyedropper uses Chrome's EyeDropper API and sets the current colour to the sRGBHex it returns (the test stubs window.EyeDropper); without the API the button is hidden."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "props-typography",
+      "titleKey": "feature.propsTypography",
+      "commands": [
+        "style.set"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Text properties: font, size, weight, style, spacing, alignment, colour and decoration",
+        "steps": [
+          "Select a Paragraph.",
+          "Set font family, size 18px, weight 600, italic, line-height 1.6, letter-spacing 0.02em and word-spacing.",
+          "Click each text-align button (left, right, centre, justify, start, end).",
+          "Set color, text-decoration, text-transform, text-indent, text-overflow, white-space, word-break and vertical-align."
+        ],
+        "expected": [
+          "The font menu lists system and web-safe font stacks; weight offers 100-900 with names.",
+          "Every value is written to the document JSON and the computed style of the paragraph in the iframe matches.",
+          "Each keyword control offers every keyword the property catalogue defines for it.",
+          "Each value is written by one command per property, and every other control for the same property must use that command."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "props-typography-advanced",
+      "titleKey": "feature.propsTypographyAdvanced",
+      "commands": [
+        "style.set"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Advanced text properties",
+        "steps": [
+          "Select a Paragraph.",
+          "Set font-stretch, font-variant, font-feature-settings, overflow-wrap, hyphens, line clamp 2, direction rtl, writing-mode and text-orientation."
+        ],
+        "expected": [
+          "Each value is written to the document JSON and the computed style matches.",
+          "Line clamp 2 limits the measured paragraph height to two lines of text."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "props-background",
+      "titleKey": "feature.propsBackground",
+      "commands": [
+        "style.set",
+        "style.setBackgroundImage"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Background colour, image, size, position, repeat and more",
+        "steps": [
+          "Select a Section.",
+          "Set a background colour, a background image URL, size cover, position center, repeat no-repeat and attachment fixed.",
+          "Set background-origin, background-clip and background-blend-mode."
+        ],
+        "expected": [
+          "Each value is written to the document JSON and the computed background of the section in the iframe matches.",
+          "The Paint section summary shows the colour swatch or 'None' [inspector.summary.none]."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "gradient-editor",
+      "titleKey": "feature.gradientEditor",
+      "commands": [
+        "style.setBackgroundImage"
+      ],
+      "dependsOn": [
+        "props-background",
+        "color-picker"
+      ],
+      "spec": "spec/behavior/gradient-editor.md",
+      "intent": {
+        "title": "Gradient editor: linear, radial and conic gradients with stops",
+        "steps": [
+          "Select a Section and click 'Add a gradient' [inspector.gradient.add].",
+          "Switch between Linear, Radial and Conic.",
+          "Drag a stop, click the bar to add a stop, change a stop colour and position, delete a stop.",
+          "Change the angle, click reverse and distribute evenly."
+        ],
+        "expected": [
+          "The gradient bar previews the gradient with draggable stop handles.",
+          "The CSS text of the gradient is shown and written to background-image in the document JSON after each change.",
+          "The computed background-image in the iframe equals that text.",
+          "Removing the gradient returns background-image to none.",
+          "Every gradient change is written by one command, and every other control for the background fill must use that command."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "props-border-outline",
+      "titleKey": "feature.propsBorderOutline",
+      "commands": [
+        "style.set",
+        "style.setBorder",
+        "style.setRadius"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Borders per side, radius per corner and outline",
+        "steps": [
+          "Select a Container.",
+          "Set border width 2px, style solid, colour red for all sides.",
+          "Select only the Top edge and set it to 4px dashed.",
+          "Set radius 12px for all corners, then unlink and set the top-left corner to 24px.",
+          "Set outline and outline-offset."
+        ],
+        "expected": [
+          "The border style control offers every catalogue keyword (none, solid, dashed, dotted, double, groove, ridge, inset, outset, hidden).",
+          "All-sides edits write the shorthand; single-edge edits write that side only; the computed borders in the iframe match.",
+          "Per-corner radius values are written and the computed border radii match.",
+          "Outline and outline-offset are written and computed as set.",
+          "Each value is written by one command per property, and every other control for the same property must use that command."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "props-effects-basic",
+      "titleKey": "feature.propsEffectsBasic",
+      "commands": [
+        "style.set"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Opacity, visibility, cursor, pointer events, selection and blend mode",
+        "steps": [
+          "Select a Container.",
+          "Drag the opacity slider to 50%.",
+          "Set visibility hidden, cursor pointer, pointer-events none, user-select none, mix-blend-mode multiply and isolation isolate."
+        ],
+        "expected": [
+          "Opacity 50% is written as 0.5 and the computed opacity matches.",
+          "Each other value is written to the document JSON and the computed style matches.",
+          "Each value is written by one command per property, and every other control for the same property must use that command."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "shadow-editor",
+      "titleKey": "feature.shadowEditor",
+      "commands": [
+        "style.setShadows"
+      ],
+      "dependsOn": [
+        "color-picker"
+      ],
+      "spec": "spec/behavior/shadow-editor.md",
+      "intent": {
+        "title": "Box shadow and text shadow editor",
+        "steps": [
+          "Select a Container and click 'Add a shadow' [inspector.shadow.add].",
+          "Drag the light pad; set X, Y, blur, spread, colour and inset.",
+          "Add a second shadow, hide the first, remove the second.",
+          "Select a Paragraph and set a text shadow."
+        ],
+        "expected": [
+          "Each shadow layer has X, Y, blur, spread, colour and inset controls; dragging the light pad sets X and Y.",
+          "The box-shadow list is written to the document JSON in layer order; hidden layers are left out of the CSS.",
+          "The computed box-shadow and text-shadow in the iframe match."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "props-filters-clip",
+      "titleKey": "feature.propsFiltersClip",
+      "commands": [
+        "style.set",
+        "style.setFilter"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Filters, backdrop filter, clip path and mask",
+        "steps": [
+          "Select a Container with a background colour and a Paragraph inside.",
+          "Set blur, brightness, contrast, saturate, hue-rotate, grayscale, invert and sepia with their sliders.",
+          "Set backdrop-filter, clip-path and mask-image."
+        ],
+        "expected": [
+          "The filter sliders compose one filter value in a fixed order and write it to the document JSON; the computed filter matches.",
+          "A 'Remove filters' [inspector.filters.remove] button in the filter group removes the filter property from the document JSON.",
+          "backdrop-filter, clip-path and mask-image are written and computed as set.",
+          "Each value is written by one command per property, and every other control for the same property must use that command."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "props-transforms",
+      "titleKey": "feature.propsTransforms",
+      "commands": [
+        "style.set",
+        "style.setTransform"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Move, rotate, scale, skew, origin and 3D transform properties",
+        "steps": [
+          "Select a Container.",
+          "Set Move X 20px, Move Y 10px, Rotate 15deg, Scale 1.2, Skew X 5deg, Skew Y 0.",
+          "Set transform-origin, perspective, perspective-origin, transform-style, backface-visibility and transform-box."
+        ],
+        "expected": [
+          "The transform fields compose one transform value written to the document JSON; the computed transform matrix in the iframe matches it.",
+          "The other transform properties are written and computed as set.",
+          "Move X/Y, Rotate, Scale and Skew are written by one transform command that composes the transform value, and every other control of the transform (on the canvas or elsewhere) must use that command."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "props-transition",
+      "titleKey": "feature.propsTransition",
+      "commands": [
+        "style.set"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Transition and will-change",
+        "steps": [
+          "Select a Container.",
+          "Set transition 'background-color 200ms ease-in-out' and will-change 'transform'."
+        ],
+        "expected": [
+          "The transition text is validated as CSS and written to the document JSON; the computed transition matches.",
+          "will-change offers the catalogue keywords and accepts a property name."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "props-more",
+      "titleKey": "feature.propsMore",
+      "commands": [
+        "style.set"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Remaining advanced properties",
+        "steps": [
+          "Select a Container.",
+          "Set contain, content-visibility, columns, column-span, column-fill, column-rule width/style/colour, break-before, break-after, break-inside.",
+          "Set scroll-behavior, overscroll-behavior, scroll-snap-type, scroll-snap-align, counter-reset, counter-increment and all."
+        ],
+        "expected": [
+          "Every property listed is present in the inspector with the control type the catalogue declares (keyword menu, length or text).",
+          "Each value is written to the document JSON and the computed style matches.",
+          "touch-action (touch devices only) and content (it acts only on ::before and ::after, which the editor cannot target) are not offered."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "props-attributes",
+      "titleKey": "feature.propsAttributes",
+      "commands": [
+        "style.setCustomDeclarations",
+        "element.setAttribute",
+        "element.setId",
+        "element.setClasses"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "ID, classes, title and custom declarations of an element",
+        "steps": [
+          "Select a Section.",
+          "Type 'intro' in ID; type an ID already used by another element; type '1abc'.",
+          "Add the classes 'dark wide' in Classes.",
+          "Type 'title' text and custom CSS declarations 'scroll-margin-top: 80px'."
+        ],
+        "expected": [
+          "These fields sit in the Content section under an Attributes heading.",
+          "The ID is written to the document JSON; duplicate or invalid IDs are rejected with a message.",
+          "Classes are stored as a list; custom declarations are validated and stored with the element's styles.",
+          "Nothing typed here ever produces a style attribute on the element in the iframe markup."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "inspector-provenance-reset",
+      "titleKey": "feature.inspectorProvenanceReset",
+      "commands": [
+        "style.reset",
+        "style.resetAll"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Mark set values and reset one property or all of them",
+        "steps": [
+          "Select a Paragraph and set its padding, color and font size.",
+          "Reset the color with its reset control.",
+          "Run 'Reset every value' [command.resetAllValues] from the element actions menu."
+        ],
+        "expected": [
+          "Every property with a value set on this element shows a dot; each section header shows the number of values set as a separate badge next to its summary, and the summary text itself is unchanged.",
+          "Resetting a property removes it from the element styles in the document JSON and the field shows the inherited or default value in a muted style.",
+          "The element actions menu gains 'Reset every value' [command.resetAllValues], which removes all style values of the element in one undo step."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "inspector-property-search",
+      "titleKey": "feature.inspectorPropertySearch",
+      "commands": [],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Search the inspector for a property",
+        "steps": [
+          "Select a Container.",
+          "Type 'radius' in Search properties.",
+          "Type 'padding-left'.",
+          "Clear the search."
+        ],
+        "expected": [
+          "Only properties whose label or CSS name matches are shown, inside their sections, with the matched text highlighted.",
+          "A search with no match says so.",
+          "Clearing the search restores the previous sections and their collapsed state."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "inspector-advanced-mode",
+      "titleKey": "feature.inspectorAdvancedMode",
+      "commands": [
+        "inspector.setMode"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Switch the inspector between all properties and essentials only",
+        "steps": [
+          "Select a Paragraph.",
+          "Click 'Essentials only' [inspector.mode.essentials] at the bottom of the inspector.",
+          "Set a value on a non-essential property, click 'All properties' [inspector.mode.all], then 'Essentials only' [inspector.mode.essentials] again.",
+          "Reload."
+        ],
+        "expected": [
+          "By default the inspector shows every property of the catalogue that applies to the element, grouped by section; this stays the default.",
+          "Essentials only shows the common subset (display, flex/grid basics, margin, padding, width, height, position, colour, background, border, radius, font family, size, weight, line height, alignment, opacity, shadow).",
+          "A property with a value set is always shown in essentials too.",
+          "The chosen mode is remembered across reloads; a fresh profile starts with all properties."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "inspector-add-property",
+      "titleKey": "feature.inspectorAddProperty",
+      "commands": [
+        "inspector.reveal"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Add a property that is not shown yet",
+        "steps": [
+          "Select a Container in essentials mode.",
+          "Click the + button in the inspector header.",
+          "Type 'aspect' and choose aspect-ratio."
+        ],
+        "expected": [
+          "The + menu lists the applicable properties not currently shown, grouped by section, with label and CSS name, filterable by typing.",
+          "Choosing one reveals that field in its section and focuses it."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "semantic-tag-switch",
+      "titleKey": "feature.semanticTagSwitch",
+      "commands": [
+        "element.setTag"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Switch an element between equivalent semantic tags",
+        "steps": [
+          "Insert a Section with children and styles.",
+          "Change its tag to article, then header, then div.",
+          "Select a Heading and change its level from h2 to h1 and h4.",
+          "Select a Paragraph and switch it to span and pre."
+        ],
+        "expected": [
+          "The tag menu lists only the tags equivalent to the element (div, section, header, main, footer, nav, aside, article for containers; h1-h6 for headings; p, span, pre for text).",
+          "Switching keeps children, text, name and styles; the iframe renders the new tag.",
+          "Each switch is one undo step."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "quick-panel",
+      "titleKey": "feature.quickPanel",
+      "commands": [
+        "contextMenu.open",
+        "style.set",
+        "style.setBorder",
+        "style.setBackgroundImage",
+        "style.setFilter",
+        "style.setTransform",
+        "element.setTag",
+        "quickPanel.setOffset"
+      ],
+      "dependsOn": [
+        "inspector-panel"
+      ],
+      "spec": "spec/behavior/quick-panel.md",
+      "intent": {
+        "title": "Floating quick panel over the selection",
+        "steps": [
+          "Select a Section.",
+          "Read the quick panel above it; type a new W and H value; change the tag menu; click Fill and pick a colour, then switch the fill to a gradient.",
+          "Select a Paragraph and change Size and Text colour in the quick panel.",
+          "Set Border, Opacity, Effects (blur) and Transform (Move X, Rotate, Scale) from the quick panel.",
+          "Click More actions.",
+          "Drag the quick panel by its handle to another spot, select another element and come back.",
+          "Select the first element at the very top of the page."
+        ],
+        "expected": [
+          "The quick panel shows the tag menu, a drag handle, a More actions button, W and H, Fill, Text colour and font Size for text elements, Border, Opacity, Effects, Transform and the 'Edit on canvas' [quickPanel.editOnCanvas] mode menu; controls and modes whose feature is not built yet are disabled and labelled 'not available yet' [common.notAvailableYet] — which features are built is read from one feature registry, and the test checks the UI against that registry instead of a fixed list, so it stays valid as later entries are built.",
+          "Every quick panel control runs the same command as the matching inspector field and writes the same document JSON, and both stay in sync; Fill opens the same fill editor as the inspector (solid colour or gradient), and Transform writes the same transform value as the inspector's transform fields.",
+          "More actions opens the element's context menu at the button: the same menu as a right-click on the element.",
+          "A dragged quick panel keeps its offset for that element.",
+          "The quick panel is always placed inside the canvas viewport; with no room above the element it goes below it."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "multi-select-edit",
+      "titleKey": "feature.multiSelectEdit",
+      "commands": [
+        "style.set"
+      ],
+      "dependsOn": [
+        "multi-select-click",
+        "quick-panel"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Edit a property on several selected elements at once",
+        "steps": [
+          "Insert three Paragraphs with different font sizes and select all three.",
+          "Look at Size in the quick panel and the inspector.",
+          "Type 20 in Size and press Enter.",
+          "Press Ctrl+Z."
+        ],
+        "expected": [
+          "Fields whose values differ between the selected elements show 'Mixed' [inspector.mixed]; equal values are shown normally.",
+          "A committed value is written to every selected element in the document JSON as one undo step.",
+          "Undo restores each element's own previous value."
+        ]
+      },
+      "scenarios": []
+    }
+  ]
+}

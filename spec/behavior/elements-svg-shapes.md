@@ -45,7 +45,7 @@ None beyond the Inspector's Size fields.
 
 ## Problems in Pager
 
-1. **Shapes cannot go inside an SVG, and they can go anywhere else.** Required: Rectangle, Ellipse and Line are not palette items; they are added inside a selected SVG from the SVG's own controls and only go inside an SVG; moving a shape outside an SVG is refused by the nesting rules (features.json `elements-svg-shapes`, `nesting-grammar`).
+1. **Shapes cannot go inside an SVG, and they can go anywhere else.** Required: Rectangle, Ellipse and Line are not palette items; they are added inside a selected SVG from the SVG's own controls and only go inside an SVG; moving a shape outside an SVG is refused by the nesting rules (manifest feature `elements-svg-shapes`, `nesting-grammar`).
 2. **The viewBox never matches the size** (fixed `0 0 24 24`, content stretched when resized). Required: the SVG has a viewBox that matches its size; resizing the SVG updates its viewBox, and resizing a shape with its handles changes the shape's own geometry attributes (`x`, `y`, `width`, `height`, `cx`, `cy`, `rx`, `ry`, `x1`…`y2`) in the SVG's coordinate space, with the stroke width unchanged.
 3. **A shape's handles resize its CSS box, not the shape.** Required: selecting a shape inside an SVG shows handles on the shape's own bounding box; dragging them rewrites the shape's attributes (stored in the document JSON and rendered/exported as `rect`, `ellipse`, `line` inside the one inline `<svg>`).
 4. **An icon cannot be brought in as markup.** Required: markup typed or pasted into the SVG's markup field becomes the SVG's content, rendered and exported as written, with scripts and event attributes removed.

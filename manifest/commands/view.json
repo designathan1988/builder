@@ -1,0 +1,1952 @@
+{
+  "domain": "view",
+  "commands": [
+    {
+      "id": "view.zoomIn",
+      "labelKey": "command.zoomIn",
+      "owner": "src/editor/view/camera.ts",
+      "introducedBy": "zoom-keyboard-buttons",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.zoom.limit"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-ctrl-equals-in-global",
+          "kind": "shortcut",
+          "feature": "zoom-keyboard-buttons",
+          "chord": "Ctrl+=",
+          "context": "global",
+          "gesture": null,
+          "labelKey": "command.zoomIn",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-ctrl-plus-in-global",
+          "kind": "shortcut",
+          "feature": "zoom-keyboard-buttons",
+          "chord": "Ctrl++",
+          "context": "global",
+          "gesture": null,
+          "labelKey": "command.zoomIn",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "toolbar-status-bar-zoom-in",
+          "kind": "toolbar",
+          "feature": "zoom-keyboard-buttons",
+          "toolbar": "status-bar",
+          "labelKey": "command.zoomIn",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.zoomIn",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "view.zoomOut",
+      "labelKey": "command.zoomOut",
+      "owner": "src/editor/view/camera.ts",
+      "introducedBy": "zoom-keyboard-buttons",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.zoom.limit"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-ctrl-minus-in-global",
+          "kind": "shortcut",
+          "feature": "zoom-keyboard-buttons",
+          "chord": "Ctrl+-",
+          "context": "global",
+          "gesture": null,
+          "labelKey": "command.zoomOut",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "toolbar-status-bar-zoom-out",
+          "kind": "toolbar",
+          "feature": "zoom-keyboard-buttons",
+          "toolbar": "status-bar",
+          "labelKey": "command.zoomOut",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.zoomOut",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "view.zoomReset",
+      "labelKey": "command.zoomReset",
+      "owner": "src/editor/view/camera.ts",
+      "introducedBy": "zoom-keyboard-buttons",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-ctrl-0-in-global",
+          "kind": "shortcut",
+          "feature": "zoom-keyboard-buttons",
+          "chord": "Ctrl+0",
+          "context": "global",
+          "gesture": null,
+          "labelKey": "command.zoomReset",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.zoomReset",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "view.zoomTo",
+      "labelKey": "command.zoomTo",
+      "owner": "src/editor/view/camera.ts",
+      "introducedBy": "zoom-keyboard-buttons",
+      "args": {
+        "percent": {
+          "type": "integer",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "menu-zoom-25",
+          "kind": "menu",
+          "feature": "zoom-keyboard-buttons",
+          "menu": "zoom",
+          "labelKey": "view.zoomPreset.25",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:zoom",
+            "order": 1
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "percent": 25
+          }
+        },
+        {
+          "id": "menu-zoom-50",
+          "kind": "menu",
+          "feature": "zoom-keyboard-buttons",
+          "menu": "zoom",
+          "labelKey": "view.zoomPreset.50",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:zoom",
+            "order": 2
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "percent": 50
+          }
+        },
+        {
+          "id": "menu-zoom-100",
+          "kind": "menu",
+          "feature": "zoom-keyboard-buttons",
+          "menu": "zoom",
+          "labelKey": "view.zoomPreset.100",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:zoom",
+            "order": 3
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "percent": 100
+          }
+        },
+        {
+          "id": "menu-zoom-200",
+          "kind": "menu",
+          "feature": "zoom-keyboard-buttons",
+          "menu": "zoom",
+          "labelKey": "view.zoomPreset.200",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:zoom",
+            "order": 4
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "percent": 200
+          }
+        },
+        {
+          "id": "menu-zoom-400",
+          "kind": "menu",
+          "feature": "zoom-keyboard-buttons",
+          "menu": "zoom",
+          "labelKey": "view.zoomPreset.400",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:zoom",
+            "order": 5
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "percent": 400
+          }
+        }
+      ]
+    },
+    {
+      "id": "view.zoomFit",
+      "labelKey": "command.zoomFit",
+      "owner": "src/editor/view/camera.ts",
+      "introducedBy": "zoom-keyboard-buttons",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "toolbar-status-bar-fit",
+          "kind": "toolbar",
+          "feature": "zoom-keyboard-buttons",
+          "toolbar": "status-bar",
+          "labelKey": "command.zoomFit",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "menu-zoom",
+          "kind": "menu",
+          "feature": "zoom-keyboard-buttons",
+          "menu": "zoom",
+          "labelKey": "command.zoomFit",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:zoom",
+            "order": 6
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.zoomFit",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "view.zoomAt",
+      "labelKey": "command.zoomAt",
+      "owner": "src/editor/view/camera.ts",
+      "introducedBy": "zoom-wheel-pan",
+      "args": {
+        "factor": {
+          "type": "number",
+          "values": [],
+          "optional": false
+        },
+        "point": {
+          "type": "point",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.zoom.limit"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "canvas-wheel-ctrl",
+          "kind": "canvas-wheel",
+          "feature": "zoom-wheel-pan",
+          "modifier": "Ctrl",
+          "gesture": "wheel",
+          "labelKey": "command.zoomAt",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "view.pan",
+      "labelKey": "command.pan",
+      "owner": "src/editor/view/camera.ts",
+      "introducedBy": "zoom-wheel-pan",
+      "args": {
+        "dx": {
+          "type": "number",
+          "values": [],
+          "optional": false
+        },
+        "dy": {
+          "type": "number",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "canvas-wheel",
+          "kind": "canvas-wheel",
+          "feature": "zoom-wheel-pan",
+          "modifier": null,
+          "gesture": "wheel",
+          "labelKey": "command.pan",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "canvas-wheel-shift",
+          "kind": "canvas-wheel",
+          "feature": "zoom-wheel-pan",
+          "modifier": "Shift",
+          "gesture": "wheel",
+          "labelKey": "command.pan",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "canvas-drag-space-held-stage",
+          "kind": "canvas-drag",
+          "feature": "zoom-wheel-pan",
+          "source": "space-held",
+          "zone": "stage",
+          "gesture": "space-pan",
+          "labelKey": "command.pan",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "canvas-drag-middle-button-stage",
+          "kind": "canvas-drag",
+          "feature": "zoom-wheel-pan",
+          "source": "middle-button",
+          "zone": "stage",
+          "gesture": "space-pan",
+          "labelKey": "command.pan",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "view.setBreakpoint",
+      "labelKey": "command.setBreakpoint",
+      "owner": "src/editor/view/breakpoints.ts",
+      "introducedBy": "breakpoints-switch",
+      "args": {
+        "breakpoint": {
+          "type": "breakpoint",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "toolbar-top-bar-desktop",
+          "kind": "toolbar",
+          "feature": "breakpoints-switch",
+          "toolbar": "top-bar",
+          "labelKey": "breakpoint.desktop",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "breakpoint": "desktop"
+          }
+        },
+        {
+          "id": "toolbar-top-bar-laptop",
+          "kind": "toolbar",
+          "feature": "breakpoints-switch",
+          "toolbar": "top-bar",
+          "labelKey": "breakpoint.laptop",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "breakpoint": "laptop"
+          }
+        },
+        {
+          "id": "toolbar-top-bar-tablet",
+          "kind": "toolbar",
+          "feature": "breakpoints-switch",
+          "toolbar": "top-bar",
+          "labelKey": "breakpoint.tablet",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "breakpoint": "tablet"
+          }
+        },
+        {
+          "id": "toolbar-top-bar-phone",
+          "kind": "toolbar",
+          "feature": "breakpoints-switch",
+          "toolbar": "top-bar",
+          "labelKey": "breakpoint.phone",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "breakpoint": "phone"
+          }
+        },
+        {
+          "id": "toolbar-preview-bar-desktop",
+          "kind": "toolbar",
+          "feature": "preview-mode",
+          "toolbar": "preview-bar",
+          "labelKey": "breakpoint.desktop",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "breakpoint": "desktop"
+          }
+        },
+        {
+          "id": "toolbar-preview-bar-laptop",
+          "kind": "toolbar",
+          "feature": "preview-mode",
+          "toolbar": "preview-bar",
+          "labelKey": "breakpoint.laptop",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "breakpoint": "laptop"
+          }
+        },
+        {
+          "id": "toolbar-preview-bar-tablet",
+          "kind": "toolbar",
+          "feature": "preview-mode",
+          "toolbar": "preview-bar",
+          "labelKey": "breakpoint.tablet",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "breakpoint": "tablet"
+          }
+        },
+        {
+          "id": "toolbar-preview-bar-phone",
+          "kind": "toolbar",
+          "feature": "preview-mode",
+          "toolbar": "preview-bar",
+          "labelKey": "breakpoint.phone",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "breakpoint": "phone"
+          }
+        }
+      ]
+    },
+    {
+      "id": "view.setStyleState",
+      "labelKey": "command.setStyleState",
+      "owner": "src/editor/view/style-state.ts",
+      "introducedBy": "state-styles",
+      "args": {
+        "state": {
+          "type": "state",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "menu-style-state-base",
+          "kind": "menu",
+          "feature": "state-styles",
+          "menu": "style-state",
+          "labelKey": "styleState.base",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:style-state",
+            "order": 1
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "state": "base"
+          }
+        },
+        {
+          "id": "menu-style-state-hover",
+          "kind": "menu",
+          "feature": "state-styles",
+          "menu": "style-state",
+          "labelKey": "styleState.hover",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:style-state",
+            "order": 2
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "state": "hover"
+          }
+        },
+        {
+          "id": "menu-style-state-focus",
+          "kind": "menu",
+          "feature": "state-styles",
+          "menu": "style-state",
+          "labelKey": "styleState.focus",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:style-state",
+            "order": 3
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "state": "focus"
+          }
+        },
+        {
+          "id": "menu-style-state-active",
+          "kind": "menu",
+          "feature": "state-styles",
+          "menu": "style-state",
+          "labelKey": "styleState.active",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:style-state",
+            "order": 4
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "state": "active"
+          }
+        },
+        {
+          "id": "menu-style-state-disabled",
+          "kind": "menu",
+          "feature": "state-styles",
+          "menu": "style-state",
+          "labelKey": "styleState.disabled",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:style-state",
+            "order": 5
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "state": "disabled"
+          }
+        },
+        {
+          "id": "menu-style-state-invalid",
+          "kind": "menu",
+          "feature": "state-styles",
+          "menu": "style-state",
+          "labelKey": "styleState.invalid",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:style-state",
+            "order": 6
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "state": "invalid"
+          }
+        },
+        {
+          "id": "menu-style-state-placeholder-shown",
+          "kind": "menu",
+          "feature": "state-styles",
+          "menu": "style-state",
+          "labelKey": "styleState.placeholderShown",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:style-state",
+            "order": 7
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "state": "placeholder-shown"
+          }
+        }
+      ]
+    },
+    {
+      "id": "view.enterPreview",
+      "labelKey": "command.preview",
+      "owner": "src/editor/view/preview.ts",
+      "introducedBy": "preview-mode",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-ctrl-p-in-global",
+          "kind": "shortcut",
+          "feature": "preview-mode",
+          "chord": "Ctrl+P",
+          "context": "global",
+          "gesture": null,
+          "labelKey": "command.preview",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-ctrl-enter-in-global",
+          "kind": "shortcut",
+          "feature": "preview-mode",
+          "chord": "Ctrl+Enter",
+          "context": "global",
+          "gesture": null,
+          "labelKey": "command.preview",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "toolbar-top-bar-preview",
+          "kind": "toolbar",
+          "feature": "preview-mode",
+          "toolbar": "top-bar",
+          "labelKey": "command.preview",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.preview",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "view.exitPreview",
+      "labelKey": "command.exitPreview",
+      "owner": "src/editor/view/preview.ts",
+      "introducedBy": "preview-mode",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-escape-in-preview",
+          "kind": "shortcut",
+          "feature": "preview-mode",
+          "chord": "Escape",
+          "context": "preview",
+          "gesture": null,
+          "labelKey": "command.exitPreview",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-ctrl-enter-in-preview",
+          "kind": "shortcut",
+          "feature": "preview-mode",
+          "chord": "Ctrl+Enter",
+          "context": "preview",
+          "gesture": null,
+          "labelKey": "command.exitPreview",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "toolbar-preview-bar-exit",
+          "kind": "toolbar",
+          "feature": "preview-mode",
+          "toolbar": "preview-bar",
+          "labelKey": "command.exitPreview",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "view.toggleOutlines",
+      "labelKey": "command.toggleOutlines",
+      "owner": "src/editor/view/overlays.ts",
+      "introducedBy": "canvas-outlines-zones",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "canvas-tools-outlines",
+          "kind": "panel-control",
+          "feature": "canvas-outlines-zones",
+          "panel": "canvas-tools",
+          "control": "outlines",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.toggleOutlines",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "view.toggleZones",
+      "labelKey": "command.toggleZones",
+      "owner": "src/editor/view/overlays.ts",
+      "introducedBy": "canvas-outlines-zones",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "canvas-tools-zones",
+          "kind": "panel-control",
+          "feature": "canvas-outlines-zones",
+          "panel": "canvas-tools",
+          "control": "zones",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.toggleZones",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "view.toggleRulers",
+      "labelKey": "command.toggleRulers",
+      "owner": "src/editor/view/overlays.ts",
+      "introducedBy": "workspace-settings-dialog",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "guides-grids-rulers",
+          "kind": "panel-control",
+          "feature": "workspace-settings-dialog",
+          "panel": "guides-grids",
+          "control": "rulers",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.toggleRulers",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "view.toggleSmartGuides",
+      "labelKey": "command.toggleSmartGuides",
+      "owner": "src/editor/view/overlays.ts",
+      "introducedBy": "smart-guides",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "guides-grids-smart-guides",
+          "kind": "panel-control",
+          "feature": "smart-guides",
+          "panel": "guides-grids",
+          "control": "smart-guides",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.toggleSmartGuides",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "view.toggleEqualSpacing",
+      "labelKey": "command.toggleEqualSpacing",
+      "owner": "src/editor/view/overlays.ts",
+      "introducedBy": "smart-guides",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "guides-grids-equal-spacing",
+          "kind": "panel-control",
+          "feature": "smart-guides",
+          "panel": "guides-grids",
+          "control": "equal-spacing",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.toggleEqualSpacing",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "grid.toggleColumns",
+      "labelKey": "command.grid.columns",
+      "owner": "src/core/page/grid.ts",
+      "introducedBy": "layout-grid-overlay",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-ctrl-quote-in-global",
+          "kind": "shortcut",
+          "feature": "layout-grid-overlay",
+          "chord": "Ctrl+'",
+          "context": "global",
+          "gesture": null,
+          "labelKey": "command.grid.columns",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "canvas-tools-column-grid",
+          "kind": "panel-control",
+          "feature": "layout-grid-overlay",
+          "panel": "canvas-tools",
+          "control": "column-grid",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.grid.columns",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "guides-grids-column-grid",
+          "kind": "panel-control",
+          "feature": "workspace-settings-dialog",
+          "panel": "guides-grids",
+          "control": "column-grid",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.grid.columns",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "grid.toggleRows",
+      "labelKey": "command.grid.rows",
+      "owner": "src/core/page/grid.ts",
+      "introducedBy": "layout-grid-overlay",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "canvas-tools-row-grid",
+          "kind": "panel-control",
+          "feature": "layout-grid-overlay",
+          "panel": "canvas-tools",
+          "control": "row-grid",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.grid.rows",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "guides-grids-row-grid",
+          "kind": "panel-control",
+          "feature": "workspace-settings-dialog",
+          "panel": "guides-grids",
+          "control": "row-grid",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.grid.rows",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "grid.toggleDots",
+      "labelKey": "command.grid.dots",
+      "owner": "src/core/page/grid.ts",
+      "introducedBy": "layout-grid-overlay",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "canvas-tools-dot-grid",
+          "kind": "panel-control",
+          "feature": "layout-grid-overlay",
+          "panel": "canvas-tools",
+          "control": "dot-grid",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.grid.dots",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "guides-grids-dot-grid",
+          "kind": "panel-control",
+          "feature": "workspace-settings-dialog",
+          "panel": "guides-grids",
+          "control": "dot-grid",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.grid.dots",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "grid.setSettings",
+      "labelKey": "command.grid.settings",
+      "owner": "src/core/page/grid.ts",
+      "introducedBy": "workspace-settings-dialog",
+      "args": {
+        "grid": {
+          "type": "enum",
+          "values": [
+            "columns",
+            "rows",
+            "dots"
+          ],
+          "optional": false
+        },
+        "settings": {
+          "type": "json",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.grid.invalid"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "guides-grids-columns-settings",
+          "kind": "panel-control",
+          "feature": "workspace-settings-dialog",
+          "panel": "guides-grids",
+          "control": "columns-settings",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.grid.settings",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "grid": "columns"
+          }
+        },
+        {
+          "id": "guides-grids-rows-settings",
+          "kind": "panel-control",
+          "feature": "workspace-settings-dialog",
+          "panel": "guides-grids",
+          "control": "rows-settings",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.grid.settings",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "grid": "rows"
+          }
+        },
+        {
+          "id": "guides-grids-dots-settings",
+          "kind": "panel-control",
+          "feature": "workspace-settings-dialog",
+          "panel": "guides-grids",
+          "control": "dots-settings",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.grid.settings",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "grid": "dots"
+          }
+        }
+      ]
+    },
+    {
+      "id": "guides.create",
+      "labelKey": "command.guides.create",
+      "owner": "src/core/page/guides.ts",
+      "introducedBy": "guides-manual",
+      "args": {
+        "axis": {
+          "type": "enum",
+          "values": [
+            "horizontal",
+            "vertical"
+          ],
+          "optional": false
+        },
+        "at": {
+          "type": "number",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "canvas-drag-top-ruler-page",
+          "kind": "canvas-drag",
+          "feature": "guides-manual",
+          "source": "top-ruler",
+          "zone": "page",
+          "gesture": "guide-drag",
+          "labelKey": "command.guides.create",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "canvas-drag-left-ruler-page",
+          "kind": "canvas-drag",
+          "feature": "guides-manual",
+          "source": "left-ruler",
+          "zone": "page",
+          "gesture": "guide-drag",
+          "labelKey": "command.guides.create",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "guides-grids-add-guide",
+          "kind": "panel-control",
+          "feature": "workspace-settings-dialog",
+          "panel": "guides-grids",
+          "control": "add-guide",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.guides.create",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "guides.move",
+      "labelKey": "command.guides.move",
+      "owner": "src/core/page/guides.ts",
+      "introducedBy": "guides-manual",
+      "args": {
+        "guide": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        },
+        "at": {
+          "type": "number",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.guides.locked"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "canvas-drag-guide-page",
+          "kind": "canvas-drag",
+          "feature": "guides-manual",
+          "source": "guide",
+          "zone": "page",
+          "gesture": "guide-drag",
+          "labelKey": "command.guides.move",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-arrow-up-in-guide",
+          "kind": "shortcut",
+          "feature": "guides-manual",
+          "chord": "ArrowUp",
+          "context": "guide",
+          "gesture": "guide-keys",
+          "labelKey": "command.guides.move",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-arrow-down-in-guide",
+          "kind": "shortcut",
+          "feature": "guides-manual",
+          "chord": "ArrowDown",
+          "context": "guide",
+          "gesture": "guide-keys",
+          "labelKey": "command.guides.move",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-arrow-left-in-guide",
+          "kind": "shortcut",
+          "feature": "guides-manual",
+          "chord": "ArrowLeft",
+          "context": "guide",
+          "gesture": "guide-keys",
+          "labelKey": "command.guides.move",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-arrow-right-in-guide",
+          "kind": "shortcut",
+          "feature": "guides-manual",
+          "chord": "ArrowRight",
+          "context": "guide",
+          "gesture": "guide-keys",
+          "labelKey": "command.guides.move",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "guides.delete",
+      "labelKey": "command.guides.delete",
+      "owner": "src/core/page/guides.ts",
+      "introducedBy": "guides-manual",
+      "args": {
+        "guide": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "canvas-drag-guide-own-ruler",
+          "kind": "canvas-drag",
+          "feature": "guides-manual",
+          "source": "guide",
+          "zone": "own-ruler",
+          "gesture": "guide-drag",
+          "labelKey": "command.guides.delete",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-delete-in-guide",
+          "kind": "shortcut",
+          "feature": "guides-manual",
+          "chord": "Delete",
+          "context": "guide",
+          "gesture": null,
+          "labelKey": "command.guides.delete",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-backspace-in-guide",
+          "kind": "shortcut",
+          "feature": "guides-manual",
+          "chord": "Backspace",
+          "context": "guide",
+          "gesture": null,
+          "labelKey": "command.guides.delete",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "guides-grids-remove-guide",
+          "kind": "panel-control",
+          "feature": "workspace-settings-dialog",
+          "panel": "guides-grids",
+          "control": "remove-guide",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.guides.delete",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "guides.toggleLock",
+      "labelKey": "command.guides.lock",
+      "owner": "src/core/page/guides.ts",
+      "introducedBy": "guides-manual",
+      "args": {
+        "guide": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-l-in-guide",
+          "kind": "shortcut",
+          "feature": "guides-manual",
+          "chord": "L",
+          "context": "guide",
+          "gesture": null,
+          "labelKey": "command.guides.lock",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "guides.toggleVisible",
+      "labelKey": "command.guides.visible",
+      "owner": "src/editor/view/overlays.ts",
+      "introducedBy": "workspace-settings-dialog",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "guides-grids-manual-guides",
+          "kind": "panel-control",
+          "feature": "workspace-settings-dialog",
+          "panel": "guides-grids",
+          "control": "manual-guides",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.guides.visible",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "snap.setEnabled",
+      "labelKey": "command.snap",
+      "owner": "src/editor/view/snap.ts",
+      "introducedBy": "snap-toggle-settings",
+      "args": {
+        "enabled": {
+          "type": "enum",
+          "values": [
+            "toggle",
+            "on",
+            "off"
+          ],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "toolbar-top-bar-snap",
+          "kind": "toolbar",
+          "feature": "snap-toggle-settings",
+          "toolbar": "top-bar",
+          "labelKey": "command.snap",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "enabled": "toggle"
+          }
+        },
+        {
+          "id": "menu-snap-on",
+          "kind": "menu",
+          "feature": "snap-toggle-settings",
+          "menu": "snap",
+          "labelKey": "topbar.snap.on",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:snap",
+            "order": 1
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "enabled": "on"
+          }
+        },
+        {
+          "id": "menu-snap-off",
+          "kind": "menu",
+          "feature": "snap-toggle-settings",
+          "menu": "snap",
+          "labelKey": "topbar.snap.off",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:snap",
+            "order": 2
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "enabled": "off"
+          }
+        }
+      ]
+    },
+    {
+      "id": "snap.setSettings",
+      "labelKey": "command.snap.settings",
+      "owner": "src/editor/view/snap.ts",
+      "introducedBy": "snap-toggle-settings",
+      "args": {
+        "targets": {
+          "type": "json",
+          "values": [],
+          "optional": false
+        },
+        "distance": {
+          "type": "number",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.snap.distanceRange"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "snap-settings-apply",
+          "kind": "panel-control",
+          "feature": "snap-toggle-settings",
+          "panel": "snap-settings",
+          "control": "apply",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.snap.settings",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "workspace.openDialog",
+      "labelKey": "command.openDialog",
+      "owner": "src/editor/workspace/dialogs.ts",
+      "introducedBy": "workspace-settings-dialog",
+      "args": {
+        "dialog": {
+          "type": "enum",
+          "values": [
+            "guides-grids",
+            "snap-settings"
+          ],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "menu-view-guides-grids",
+          "kind": "menu",
+          "feature": "workspace-settings-dialog",
+          "menu": "view",
+          "labelKey": "panel.guidesGrids",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:view",
+            "order": 10
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "dialog": "guides-grids"
+          }
+        },
+        {
+          "id": "menu-snap-snap-settings",
+          "kind": "menu",
+          "feature": "snap-toggle-settings",
+          "menu": "snap",
+          "labelKey": "snap.settings",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:snap",
+            "order": 3
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "dialog": "snap-settings"
+          }
+        }
+      ]
+    }
+  ]
+}

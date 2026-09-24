@@ -1,0 +1,51 @@
+{
+  "group": "foundation",
+  "titleKey": "featureGroup.foundation",
+  "features": [
+    {
+      "id": "editor-shell",
+      "titleKey": "feature.editorShell",
+      "commands": [],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Editor layout: top bar, left dock, canvas, inspector and status bar",
+        "steps": [
+          "Open the app in Chrome with a 1600x900 window.",
+          "Resize the window to 1280x800."
+        ],
+        "expected": [
+          "A top bar spans the full window width at the top and shows the product name taken from src/config/product.ts; the browser tab title is the same name.",
+          "A left dock shows the Elements panel above the Layers panel, a right dock shows the Inspector, and a status bar spans the bottom.",
+          "The canvas fills the space between the two docks, between the top bar and the status bar.",
+          "At both window sizes the measured bounding boxes of top bar, left dock, canvas, inspector and status bar do not overlap, together cover the window, and the window has no page scrollbar.",
+          "The bottom workbench dock is closed by default; panels added by later entries open as tabs in existing docks or in that workbench, so these five regions stay the default layout."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "canvas-page-iframe",
+      "titleKey": "feature.canvasPageIframe",
+      "commands": [],
+      "dependsOn": [
+        "editor-shell"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "The page renders from the document JSON inside a zoomed iframe",
+        "steps": [
+          "Open the app with no saved project.",
+          "Resize the window from 1600x900 to 1280x800."
+        ],
+        "expected": [
+          "The canvas holds exactly one iframe whose body renders the Page root node of the document JSON.",
+          "The canvas reserves a 20 px band along its top and left edges for rulers (empty until rulers are built); the remaining area is the canvas viewport. Inside the iframe the page is 1440 CSS px wide (the Desktop breakpoint); the iframe is scaled with CSS zoom so the whole page width fits in the canvas viewport, horizontally centred in it.",
+          "The zoom percentage in the status bar equals the iframe zoom factor and is recomputed after the resize.",
+          "An empty page shows the hint 'Click an element or drag it onto this page' [canvas.emptyHint]; the hint is not a node in the document JSON."
+        ]
+      },
+      "scenarios": []
+    }
+  ]
+}

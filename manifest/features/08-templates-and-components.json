@@ -1,0 +1,121 @@
+{
+  "group": "templates-and-components",
+  "titleKey": "featureGroup.templatesAndComponents",
+  "features": [
+    {
+      "id": "templates-layout",
+      "titleKey": "feature.templatesLayout",
+      "commands": [
+        "element.insert"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/templates-layout.md",
+      "intent": {
+        "title": "Layout templates: Container, Row, Column, Grid",
+        "steps": [
+          "Click each layout template in the Templates group.",
+          "Drag the Grid template onto the canvas."
+        ],
+        "expected": [
+          "Row inserts a flex row with two columns; Column inserts a flex column with two blocks; Grid inserts a grid with three cells and grid-template-columns repeat(3, minmax(0, 1fr)).",
+          "Each template is inserted as one undo step and its root is selected.",
+          "Template wrappers use the same layout styles as the wrap commands."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "templates-content",
+      "titleKey": "feature.templatesContent",
+      "commands": [
+        "element.insert"
+      ],
+      "dependsOn": [
+        "templates-layout"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Content templates: lists, table, form, select and figure",
+        "steps": [
+          "Click List 3 items, Ordered 3 items, Definition list, Table 2 x 2, Form with fields, Select with options and Figure + caption."
+        ],
+        "expected": [
+          "Each inserts a valid subtree: ul with 3 li; ol with 3 li; dl with dt and dd; table with thead (2 th) and tbody (2 rows of 2 td); form with two labelled inputs and a submit button; select with 3 options; figure with image and caption.",
+          "Every subtree passes the nesting rules and exports with the same markup."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "templates-sections",
+      "titleKey": "feature.templatesSections",
+      "commands": [
+        "element.insert"
+      ],
+      "dependsOn": [
+        "templates-layout"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Section templates: Card, Hero, Navbar, Sidebar, Gallery",
+        "steps": [
+          "Click Card, Hero, Navbar, Sidebar and Gallery in the Templates group."
+        ],
+        "expected": [
+          "Card inserts an article with image, heading, text and action; Hero a section with heading, supporting line and two buttons; Navbar a header with brand, nav links and a sign-in button; Sidebar an aside with a heading and a list of links; Gallery a section with three figures.",
+          "Each template carries default styles in the document JSON (Card: padding, border radius and border; Hero: large heading and generous padding; Navbar: flex row with space-between; Sidebar: fixed width; Gallery: three-column grid) and the export writes them to styles.css without inline styles."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "reusable-components",
+      "titleKey": "feature.reusableComponents",
+      "commands": [
+        "components.create",
+        "components.insertInstance",
+        "components.detach"
+      ],
+      "dependsOn": [
+        "templates-sections"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Reusable components with instances",
+        "steps": [
+          "Turn a Card into a component and place two more instances.",
+          "Edit the component's heading style; override the text of one instance.",
+          "Detach one instance."
+        ],
+        "expected": [
+          "Instances follow the component's structure and styles; per-instance overrides of text and attributes are kept.",
+          "Detaching turns an instance into a normal subtree.",
+          "The export writes plain HTML for every instance, with the component's styles written once."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "templates-components",
+      "titleKey": "feature.templatesComponents",
+      "commands": [
+        "element.insert"
+      ],
+      "dependsOn": [
+        "templates-layout"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Component templates: Form group, Button group, Tabs, Accordion, Modal",
+        "steps": [
+          "Click Form group, Button group, Tabs, Accordion and Modal in the Templates group."
+        ],
+        "expected": [
+          "Form group inserts labelled fields; Button group a row of buttons; Tabs a nav of tab buttons and a panel; Accordion two details with summaries; Modal a dialog with heading, content and close button.",
+          "Each passes the nesting rules and exports with the same markup."
+        ]
+      },
+      "scenarios": []
+    }
+  ]
+}

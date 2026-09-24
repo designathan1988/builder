@@ -43,5 +43,5 @@ This is keyboard-only.
 
 ## Problems in Pager
 
-1. **Invalid values are offered** and only refused after Enter. Required: `Set <property> to <value>` is offered only when the value is valid for that property (features.json `command-bar-set-property`).
+1. **Invalid values are offered** and only refused after Enter. Required: `Set <property> to <value>` is offered only when the value is valid for that property (manifest feature `command-bar-set-property`).
 2. **The quick-panel wording leaks into the status** (`W set to 50%.` for `width`). Required: the status names the CSS property (`width set to 50%.`).

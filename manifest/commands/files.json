@@ -1,0 +1,680 @@
+{
+  "domain": "files",
+  "commands": [
+    {
+      "id": "pages.add",
+      "labelKey": "command.pages.add",
+      "owner": "src/core/project/pages.ts",
+      "introducedBy": "explorer-pages",
+      "args": {
+        "name": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.pages.nameTaken"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "explorer-add-page",
+          "kind": "panel-control",
+          "feature": "explorer-pages",
+          "panel": "explorer",
+          "control": "add-page",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.pages.add",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "pages.rename",
+      "labelKey": "command.pages.rename",
+      "owner": "src/core/project/pages.ts",
+      "introducedBy": "explorer-pages",
+      "args": {
+        "page": {
+          "type": "path",
+          "values": [],
+          "optional": false
+        },
+        "name": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.pages.nameTaken"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "explorer-page-name-field",
+          "kind": "panel-control",
+          "feature": "explorer-pages",
+          "panel": "explorer",
+          "control": "page-name-field",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.pages.rename",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "pages.duplicate",
+      "labelKey": "command.pages.duplicate",
+      "owner": "src/core/project/pages.ts",
+      "introducedBy": "explorer-pages",
+      "args": {
+        "page": {
+          "type": "path",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "explorer-page-duplicate",
+          "kind": "panel-control",
+          "feature": "explorer-pages",
+          "panel": "explorer",
+          "control": "page-duplicate",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.pages.duplicate",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "pages.delete",
+      "labelKey": "command.pages.delete",
+      "owner": "src/core/project/pages.ts",
+      "introducedBy": "explorer-pages",
+      "args": {
+        "page": {
+          "type": "path",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.pages.homeUndeletable"
+      ],
+      "confirmation": {
+        "messageKey": "dialog.deletePage.message",
+        "confirmKey": "dialog.delete",
+        "cancelKey": "dialog.cancel"
+      },
+      "entryPoints": [
+        {
+          "id": "explorer-page-delete",
+          "kind": "panel-control",
+          "feature": "explorer-pages",
+          "panel": "explorer",
+          "control": "page-delete",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.pages.delete",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "pages.switch",
+      "labelKey": "command.pages.switch",
+      "owner": "src/core/project/pages.ts",
+      "introducedBy": "explorer-pages",
+      "args": {
+        "page": {
+          "type": "path",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "explorer-page-row",
+          "kind": "panel-control",
+          "feature": "explorer-pages",
+          "panel": "explorer",
+          "control": "page-row",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.pages.switch",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "files.createFolder",
+      "labelKey": "command.files.newFolder",
+      "owner": "src/core/files/files.ts",
+      "introducedBy": "explorer-file-system",
+      "args": {
+        "path": {
+          "type": "path",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.files.nameTaken",
+        "status.files.generatedPath"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "explorer-new-folder",
+          "kind": "panel-control",
+          "feature": "explorer-file-system",
+          "panel": "explorer",
+          "control": "new-folder",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.files.newFolder",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "files.createFile",
+      "labelKey": "command.files.newFile",
+      "owner": "src/core/files/files.ts",
+      "introducedBy": "explorer-file-system",
+      "args": {
+        "path": {
+          "type": "path",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.files.nameTaken",
+        "status.files.generatedPath"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "explorer-new-file",
+          "kind": "panel-control",
+          "feature": "explorer-file-system",
+          "panel": "explorer",
+          "control": "new-file",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.files.newFile",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "files.rename",
+      "labelKey": "command.files.rename",
+      "owner": "src/core/files/files.ts",
+      "introducedBy": "explorer-file-system",
+      "args": {
+        "path": {
+          "type": "path",
+          "values": [],
+          "optional": false
+        },
+        "name": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.files.nameTaken",
+        "status.files.generatedPath"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "explorer-file-name-field",
+          "kind": "panel-control",
+          "feature": "explorer-file-system",
+          "panel": "explorer",
+          "control": "file-name-field",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.files.rename",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "files.move",
+      "labelKey": "command.files.moveTo",
+      "owner": "src/core/files/files.ts",
+      "introducedBy": "explorer-file-system",
+      "args": {
+        "path": {
+          "type": "path",
+          "values": [],
+          "optional": false
+        },
+        "to": {
+          "type": "path",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.files.nameTaken",
+        "status.files.generatedPath"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "panel-drag-explorer-row-folder",
+          "kind": "panel-drag",
+          "feature": "explorer-file-system",
+          "source": "explorer-row",
+          "zone": "folder",
+          "gesture": "explorer-drag",
+          "labelKey": "command.files.moveTo",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "explorer-move-to",
+          "kind": "panel-control",
+          "feature": "explorer-file-system",
+          "panel": "explorer",
+          "control": "move-to",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.files.moveTo",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "files.delete",
+      "labelKey": "command.files.delete",
+      "owner": "src/core/files/files.ts",
+      "introducedBy": "explorer-file-system",
+      "args": {
+        "path": {
+          "type": "path",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.files.generatedPath",
+        "status.files.holdsPage"
+      ],
+      "confirmation": {
+        "messageKey": "dialog.deleteFiles.message",
+        "confirmKey": "dialog.delete",
+        "cancelKey": "dialog.cancel"
+      },
+      "entryPoints": [
+        {
+          "id": "explorer-delete",
+          "kind": "panel-control",
+          "feature": "explorer-file-system",
+          "panel": "explorer",
+          "control": "delete",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.files.delete",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "files.open",
+      "labelKey": "command.files.open",
+      "owner": "src/editor/explorer/explorer.ts",
+      "introducedBy": "explorer-file-system",
+      "args": {
+        "path": {
+          "type": "path",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "explorer-file-row",
+          "kind": "panel-control",
+          "feature": "explorer-file-system",
+          "panel": "explorer",
+          "control": "file-row",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.files.open",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "files.upload",
+      "labelKey": "command.files.upload",
+      "owner": "src/core/files/files.ts",
+      "introducedBy": "explorer-assets",
+      "args": {
+        "files": {
+          "type": "file",
+          "values": [],
+          "optional": false
+        },
+        "folder": {
+          "type": "path",
+          "values": [],
+          "optional": true
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.files.nameTaken",
+        "status.files.unsupportedType"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "explorer-upload",
+          "kind": "panel-control",
+          "feature": "explorer-assets",
+          "panel": "explorer",
+          "control": "upload",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.files.upload",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "panel-drag-os-file-explorer-folder",
+          "kind": "panel-drag",
+          "feature": "explorer-assets",
+          "source": "os-file",
+          "zone": "explorer-folder",
+          "gesture": "file-drag",
+          "labelKey": "command.files.upload",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "files.saveContent",
+      "labelKey": "command.files.save",
+      "owner": "src/core/files/files.ts",
+      "introducedBy": "code-panel-edit-js",
+      "args": {
+        "path": {
+          "type": "path",
+          "values": [],
+          "optional": false
+        },
+        "content": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.js.invalidAt",
+        "status.files.generatedPath"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "code-panel-save",
+          "kind": "panel-control",
+          "feature": "code-panel-edit-js",
+          "panel": "code-panel",
+          "control": "save",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.files.save",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-ctrl-s-in-code-editor",
+          "kind": "shortcut",
+          "feature": "code-panel-edit-js",
+          "chord": "Ctrl+S",
+          "context": "code-editor",
+          "gesture": null,
+          "labelKey": "command.files.save",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "assets.insertImageFile",
+      "labelKey": "command.assets.insertImage",
+      "owner": "src/core/files/assets.ts",
+      "introducedBy": "explorer-assets-use",
+      "args": {
+        "file": {
+          "type": "file",
+          "values": [],
+          "optional": false
+        },
+        "parent": {
+          "type": "node",
+          "values": [],
+          "optional": false
+        },
+        "index": {
+          "type": "integer",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.refused.onlyAccepts",
+        "status.refused.requiresParent",
+        "status.refused.interactiveInside",
+        "status.refused.formInForm",
+        "status.refused.singleChild",
+        "status.refused.labelOneControl",
+        "status.refused.noChildren",
+        "status.locked.insert"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "canvas-drag-os-image-file-drop-proposal",
+          "kind": "canvas-drag",
+          "feature": "explorer-assets-use",
+          "source": "os-image-file",
+          "zone": "drop-proposal",
+          "gesture": "file-drag",
+          "labelKey": "command.assets.insertImage",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    }
+  ]
+}

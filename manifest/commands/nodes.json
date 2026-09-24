@@ -1,0 +1,396 @@
+{
+  "domain": "nodes",
+  "commands": [
+    {
+      "id": "layers.startRename",
+      "labelKey": "command.rename",
+      "owner": "src/editor/layers/rename.ts",
+      "introducedBy": "rename-element",
+      "args": {},
+      "availability": {
+        "predicate": "singleSelection",
+        "refusalKey": "status.needsSingleSelection"
+      },
+      "refusals": [
+        "status.locked.rename"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-f2-in-canvas",
+          "kind": "shortcut",
+          "feature": "rename-element",
+          "chord": "F2",
+          "context": "canvas",
+          "gesture": null,
+          "labelKey": "command.rename",
+          "disabledReasonKey": "status.needsSingleSelection",
+          "placement": "none",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "layers-row-name",
+          "kind": "panel-control",
+          "feature": "rename-element",
+          "panel": "layers",
+          "control": "row-name",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "layers.renameByDoubleClick",
+          "disabledReasonKey": "status.needsSingleSelection",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "context-menu",
+          "kind": "context-menu",
+          "feature": "rename-element",
+          "labelKey": "command.rename",
+          "disabledReasonKey": "status.needsSingleSelection",
+          "placement": {
+            "region": "context-menu",
+            "order": 1
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "menu-arrange",
+          "kind": "menu",
+          "feature": "app-menu",
+          "menu": "arrange",
+          "labelKey": "command.rename",
+          "disabledReasonKey": "status.needsSingleSelection",
+          "placement": {
+            "region": "menu:arrange",
+            "order": 9
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-f2-in-layers-tree",
+          "kind": "shortcut",
+          "feature": "layers-keyboard-navigation",
+          "chord": "F2",
+          "context": "layers-tree",
+          "gesture": null,
+          "labelKey": "command.rename",
+          "disabledReasonKey": "status.needsSingleSelection",
+          "placement": "none",
+          "adapter": {
+            "selection": "focused-row",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.rename",
+          "disabledReasonKey": "status.needsSingleSelection",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "element.rename",
+      "labelKey": "command.renameCommit",
+      "owner": "src/core/nodes/names.ts",
+      "introducedBy": "rename-element",
+      "args": {
+        "target": {
+          "type": "node",
+          "values": [],
+          "optional": false
+        },
+        "name": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.locked.rename"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "layers-row-name-field",
+          "kind": "panel-control",
+          "feature": "rename-element",
+          "panel": "layers",
+          "control": "row-name-field",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "layers.renameField",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "target",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "element.toggleLock",
+      "labelKey": "command.lock",
+      "owner": "src/core/nodes/flags.ts",
+      "introducedBy": "lock-element",
+      "args": {
+        "target": {
+          "type": "node",
+          "values": [],
+          "optional": true
+        }
+      },
+      "availability": {
+        "predicate": "hasSelection",
+        "refusalKey": "refusal.nothingSelected"
+      },
+      "refusals": [
+        "status.locked.byAncestor"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "layers-row-lock",
+          "kind": "panel-control",
+          "feature": "lock-element",
+          "panel": "layers",
+          "control": "row-lock",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.lock",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "target",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "context-menu",
+          "kind": "context-menu",
+          "feature": "lock-element",
+          "labelKey": "command.lock",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": {
+            "region": "context-menu",
+            "order": 14
+          },
+          "adapter": {
+            "selection": "primary",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "menu-element-actions",
+          "kind": "menu",
+          "feature": "inspector-panel",
+          "menu": "element-actions",
+          "labelKey": "command.lock",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": {
+            "region": "menu:element-actions",
+            "order": 1
+          },
+          "adapter": {
+            "selection": "primary",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.lock",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "primary",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "element.toggleHidden",
+      "labelKey": "command.hide",
+      "owner": "src/core/nodes/flags.ts",
+      "introducedBy": "hide-element",
+      "args": {
+        "target": {
+          "type": "node",
+          "values": [],
+          "optional": true
+        }
+      },
+      "availability": {
+        "predicate": "hasSelection",
+        "refusalKey": "refusal.nothingSelected"
+      },
+      "refusals": [
+        "status.locked.byAncestor"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "layers-row-eye",
+          "kind": "panel-control",
+          "feature": "hide-element",
+          "panel": "layers",
+          "control": "row-eye",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.hide",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "target",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "context-menu",
+          "kind": "context-menu",
+          "feature": "hide-element",
+          "labelKey": "command.hide",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": {
+            "region": "context-menu",
+            "order": 15
+          },
+          "adapter": {
+            "selection": "primary",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "menu-element-actions",
+          "kind": "menu",
+          "feature": "inspector-panel",
+          "menu": "element-actions",
+          "labelKey": "command.hide",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": {
+            "region": "menu:element-actions",
+            "order": 2
+          },
+          "adapter": {
+            "selection": "primary",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.hide",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "primary",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "element.setLayerColor",
+      "labelKey": "command.setLayerColor",
+      "owner": "src/core/nodes/flags.ts",
+      "introducedBy": "layers-row-colours",
+      "args": {
+        "target": {
+          "type": "node",
+          "values": [],
+          "optional": false
+        },
+        "color": {
+          "type": "color",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "layers-row-colour-dot",
+          "kind": "panel-control",
+          "feature": "layers-row-colours",
+          "panel": "layers",
+          "control": "row-colour-dot",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.setLayerColor",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "target",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    }
+  ]
+}

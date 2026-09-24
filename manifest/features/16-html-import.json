@@ -1,0 +1,177 @@
+{
+  "group": "html-import",
+  "titleKey": "featureGroup.htmlImport",
+  "features": [
+    {
+      "id": "html-import-structure",
+      "titleKey": "feature.htmlImportStructure",
+      "commands": [
+        "project.importHtml"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Import an HTML file: tags, text, inline marks and attributes",
+        "steps": [
+          "Choose File > Import HTML and pick an .html file with headings, paragraphs with strong/em/a, lists, a table, a form, images and links.",
+          "Confirm replacing the page."
+        ],
+        "expected": [
+          "Each supported tag becomes the matching element type in the document JSON with its text, inline marks and supported attributes (href, src, alt, type, name, ...).",
+          "Element names are taken from BEM classes when present, else from the element type.",
+          "The import is one undo step."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "html-import-cleaning",
+      "titleKey": "feature.htmlImportCleaning",
+      "commands": [
+        "project.importHtml"
+      ],
+      "dependsOn": [
+        "html-import-structure"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Import cleaning: scripts, unknown elements, broken nesting and the import report",
+        "steps": [
+          "Import an HTML file that contains an inline <script>, a <script src>, onclick attributes, an unknown custom element, a <div> inside a <p> and a <li> outside any list."
+        ],
+        "expected": [
+          "Scripts are not dropped: each is kept with its page (its code or its src), never run on the editing canvas, written back by the export, and listed in the report; event handler attributes are removed and listed in the report.",
+          "Unknown elements are unwrapped into their children.",
+          "Structures that break the nesting rules are repaired (e.g. a stray li gets a ul) or dropped; the resulting document always passes the nesting rules.",
+          "An import report lists everything that was dropped, unwrapped, repaired or kept, with the source line."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "html-import-styles",
+      "titleKey": "feature.htmlImportStyles",
+      "commands": [
+        "project.importHtml"
+      ],
+      "dependsOn": [
+        "html-import-structure"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Import CSS: style attributes, style blocks and linked stylesheets",
+        "steps": [
+          "Choose File > Import HTML and pick, in one selection, an HTML file and the stylesheet it links; the page also has a <style> block with class, tag and id rules and style attributes (a fixture whose rules are all mappable).",
+          "Import the same page again without its stylesheet."
+        ],
+        "expected": [
+          "The import accepts several files at once; a linked stylesheet is found by its path among the picked files.",
+          "Declarations that apply to each element, resolved by specificity and order, become that element styles in the document JSON.",
+          "For this fixture, the computed styles of every element in the iframe match the original file opened in Chrome.",
+          "A linked stylesheet that was not picked is listed in the import report."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "html-import-media-queries",
+      "titleKey": "feature.htmlImportMediaQueries",
+      "commands": [
+        "project.importHtml"
+      ],
+      "dependsOn": [
+        "html-import-styles",
+        "breakpoint-overrides"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Import @media rules as breakpoint overrides",
+        "steps": [
+          "Import an HTML file whose CSS has @media (max-width: 834px) and @media (max-width: 390px) rules, and a @media (min-width: 1000px) rule."
+        ],
+        "expected": [
+          "max-width rules at a breakpoint width become overrides of that breakpoint; other widths map to the nearest breakpoint at or below them and are reported.",
+          "Rules that cannot be mapped (min-width, orientation, print) are listed in the import report.",
+          "At each breakpoint the computed styles in the iframe match the original page at that width for every element not affected by a reported rule."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "html-import-states",
+      "titleKey": "feature.htmlImportStates",
+      "commands": [
+        "view.enterPreview",
+        "project.importHtml"
+      ],
+      "dependsOn": [
+        "html-import-styles",
+        "state-styles"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Import pseudo-class rules as state styles",
+        "steps": [
+          "Import an HTML file whose CSS has :hover, :focus, :active, :disabled, :invalid and :placeholder-shown rules, plus a descendant selector and an @supports block."
+        ],
+        "expected": [
+          "Each supported pseudo-class rule becomes a state style of the matching element in the document JSON.",
+          "Selectors that cannot be mapped to single elements (descendant rules across unrelated elements, @supports, ::before) are listed in the import report.",
+          "In preview, hovering an imported element shows its hover styles."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "html-import-roundtrip",
+      "titleKey": "feature.htmlImportRoundtrip",
+      "commands": [
+        "project.importHtml",
+        "project.export"
+      ],
+      "dependsOn": [
+        "html-import-states",
+        "export-bem-css"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Exported pages import back unchanged",
+        "steps": [
+          "Build a page using templates, breakpoint overrides and hover states and export it.",
+          "Choose File > Import HTML and pick the exported ZIP.",
+          "Export again."
+        ],
+        "expected": [
+          "Importing a ZIP imports its pages together with their linked CSS files as a whole.",
+          "The imported document equals the original in tag structure, texts, attributes and styles per breakpoint and state; element types are compared by HTML tag (types that share a tag, such as Link and Link Block, cannot be told apart in plain HTML); ids and editor-only data (locks, layer colours, guides, grid settings, saved colours) are ignored.",
+          "Element names are recovered from their BEM classes, so the second export is byte-identical to the first."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "clipboard-paste-external",
+      "titleKey": "feature.clipboardPasteExternal",
+      "commands": [
+        "clipboard.paste"
+      ],
+      "dependsOn": [
+        "html-import-cleaning"
+      ],
+      "spec": "spec/behavior/clipboard-paste-external.md",
+      "intent": {
+        "title": "Paste HTML and text copied from outside the app",
+        "steps": [
+          "Put text/html of a small article (heading, paragraphs, a list, a script tag) on the system clipboard and press Ctrl+V with a Section selected.",
+          "Put multi-line text/plain on the system clipboard and press Ctrl+V with a Section selected."
+        ],
+        "expected": [
+          "Pasted HTML goes through the HTML importer (same cleaning and nesting rules) and is inserted into the selection as one undo step; scripts in pasted HTML are not kept, because a pasted fragment has no page to keep them with.",
+          "Plain text becomes one Paragraph per line.",
+          "Anything the importer drops is reported in the status bar."
+        ]
+      },
+      "scenarios": []
+    }
+  ]
+}

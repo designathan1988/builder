@@ -1,0 +1,262 @@
+{
+  "group": "app-and-persistence",
+  "titleKey": "featureGroup.appAndPersistence",
+  "features": [
+    {
+      "id": "app-menu",
+      "titleKey": "feature.appMenu",
+      "commands": [
+        "history.undo",
+        "history.redo",
+        "selection.clear",
+        "selection.selectAllInContainer",
+        "element.moveUp",
+        "element.moveDown",
+        "element.wrapRow",
+        "element.wrapColumn",
+        "element.nestIntoPrevious",
+        "element.promote",
+        "element.duplicate",
+        "element.delete",
+        "element.unwrap",
+        "hand.take",
+        "clipboard.copy",
+        "clipboard.paste",
+        "layers.startRename",
+        "workspace.setPanelOpen"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/app-menu.md",
+      "intent": {
+        "title": "Application menu: File, Edit, Arrange, View, Help, Theme and Language",
+        "steps": [
+          "Open the app menu from the logo button.",
+          "Open each submenu with the mouse, then again with Enter and the arrow keys.",
+          "Run Undo from Edit, and 'Wrap in a row' [command.wrapRow] from Arrange with a Paragraph selected.",
+          "Open File and look at an item whose feature is not built yet."
+        ],
+        "expected": [
+          "File [menu.file] has Save project [command.saveProject], Open project [command.openProject], Open folder [command.openFolder], Import HTML [command.importHtml], Export page [command.exportPage], New blank page [command.newBlankPage] and Commands [command.commandBar]; Edit [menu.edit] has Undo [command.undo], Redo [command.redo], Duplicate [command.duplicate], Copy [command.copy], Cut [command.cut], Paste [command.paste], Delete [command.delete], Select all in container [command.selectAllInContainer] and Clear the selection [command.clearSelection]; Arrange [menu.arrange] has Move up [command.moveUp], Move down [command.moveDown], Wrap in a row [command.wrapRow], Wrap in a column [command.wrapColumn], Remove wrapper [command.unwrap], Make child of previous layer [command.nestIntoPrevious], Move out of parent [command.promote], Take into the hand [command.takeIntoHand] and Rename [command.rename].",
+          "View [menu.view] has toggles for the Elements [panel.elements], Layers [panel.layers], Inspector [panel.inspector], Explorer [panel.explorer], Code [panel.code], Timeline [panel.timeline], Variables [panel.variables], Checks [panel.checks] and Workbench [panel.workbench] panels, Guides & Grids [panel.guidesGrids], Canvas tools [panel.canvasTools], Toggle left dock (Ctrl+B) [command.toggleLeftDock], Toggle inspector (Ctrl+Alt+B) [command.toggleInspector], Collapse every dock (Ctrl+\\) [command.collapseDocks], Developer tools [command.developerTools] and Reset workspace [command.resetWorkspace]; Help [menu.help] has Keyboard shortcuts [panel.shortcuts]; Theme [menu.theme] has Light [theme.light], Dark [theme.dark] and System [theme.system]; Language [menu.language] has Português (Brasil) [language.ptBR] and English [language.en].",
+          "Each item shows its shortcut where it has one and runs the same command as the shortcut, producing the same document JSON; items that cannot apply now are disabled; items whose feature is not built yet are disabled and labelled 'not available yet' [common.notAvailableYet] — which features are built is read from one feature registry, and the test checks the UI against that registry instead of a fixed list, so it stays valid as later entries are built.",
+          "The menu opens with Enter or ArrowDown, moves with the arrow keys, closes with Escape and returns focus to the logo button."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "ui-language",
+      "titleKey": "feature.uiLanguage",
+      "commands": [
+        "preferences.setLanguage"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "UI language: Brazilian Portuguese by default, English available",
+        "steps": [
+          "Open the app with a fresh profile.",
+          "Switch the UI language to English from the app menu, then back to Português (Brasil).",
+          "Reload."
+        ],
+        "expected": [
+          "A fresh profile shows every UI text in pt-BR: menus, panels, tooltips, status bar messages and accessible names.",
+          "Switching the language re-renders every visible text without a reload; the choice is stored in the preferences store and restored after reload.",
+          "A unit test proves that the pt-BR and en catalogues have the same keys with the same placeholders.",
+          "Tests that assert UI text set the language explicitly or read the text through its i18n key."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "autosave-restore",
+      "titleKey": "feature.autosaveRestore",
+      "commands": [],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Autosave to IndexedDB and restore the work after a reload",
+        "steps": [
+          "Insert a Section with a Heading, edit the Heading text and select the Heading.",
+          "Wait for the status bar to read 'Saved' [status.save.saved].",
+          "Reload the page."
+        ],
+        "expected": [
+          "After each change the status bar shows 'Saving…' [status.save.saving] and then 'Saved' [status.save.saved] when the project record in IndexedDB matches the document JSON.",
+          "After the reload the document JSON and the selection are exactly what they were.",
+          "A fresh profile with no saved record shows an empty page and 'Not saved' [status.save.notSaved].",
+          "The IndexedDB record carries the schema version of the saved format from the first save, the same version project.json carries; every future migration is tested on this real loading path."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "unsaved-work-guard",
+      "titleKey": "feature.unsavedWorkGuard",
+      "commands": [],
+      "dependsOn": [
+        "autosave-restore"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Never lose an edit that is not yet saved",
+        "steps": [
+          "Insert a Section and reload the page immediately, before the autosave delay has passed.",
+          "Make another change and try to close the tab while the status bar still reads 'Saving…' [status.save.saving].",
+          "Make a change, switch to another tab and back, then reload."
+        ],
+        "expected": [
+          "Pending changes are written to IndexedDB on pagehide and visibilitychange, so the Section is present after the immediate reload.",
+          "Closing or reloading while a save is pending or has failed triggers the browser's leave-page confirmation; once the status reads 'Saved' [status.save.saved] no confirmation appears.",
+          "If IndexedDB refuses a write, the status bar reads 'Not saved' [status.save.notSaved] with the reason and the change stays in memory until a later write succeeds."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "autosave-crash-recovery",
+      "titleKey": "feature.autosaveCrashRecovery",
+      "commands": [],
+      "dependsOn": [
+        "autosave-restore"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Keep saved versions and restore the work after a crash",
+        "steps": [
+          "Build a page with a few elements and wait for Saved; make 12 more changes, waiting for Saved after each.",
+          "Close the browser process without a clean unload and open the app again."
+        ],
+        "expected": [
+          "The app keeps the last 10 saved versions of the project in IndexedDB, each with its time.",
+          "After the crash the last saved document is restored and a notice says the work was recovered."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "new-blank-page",
+      "titleKey": "feature.newBlankPage",
+      "commands": [
+        "project.newBlankPage"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Start over with a new blank page",
+        "steps": [
+          "Build a page with a few elements.",
+          "Choose File > New blank page and cancel the confirmation.",
+          "Choose File > New blank page and confirm."
+        ],
+        "expected": [
+          "Cancel leaves the document JSON unchanged.",
+          "Confirming replaces the page with an empty Page root.",
+          "Selection and undo history are cleared and the empty-page hint shows.",
+          "The status bar reads that a blank page was created and the blank page is autosaved."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "autosave-corruption-recovery",
+      "titleKey": "feature.autosaveCorruptionRecovery",
+      "commands": [
+        "project.restoreVersion"
+      ],
+      "dependsOn": [
+        "autosave-crash-recovery"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Recover from a corrupted saved project",
+        "steps": [
+          "Build a page and wait for Saved.",
+          "Corrupt the current project record in IndexedDB and reload.",
+          "Open the recovery dialog and restore the newest earlier version."
+        ],
+        "expected": [
+          "A corrupted current record is left untouched in storage; the app opens with the status 'Recovery required' [status.save.recoveryRequired] and a dialog listing earlier versions with their times.",
+          "Restoring a version loads exactly that document JSON and it becomes the current saved record.",
+          "Until something is restored or a new page is started, autosave does not overwrite the corrupted record."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "multi-tab-guard",
+      "titleKey": "feature.multiTabGuard",
+      "commands": [
+        "project.takeOverEditing"
+      ],
+      "dependsOn": [
+        "autosave-restore"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Only one tab edits the project at a time",
+        "steps": [
+          "Open the app, build a page and wait for Saved.",
+          "Open the app in a second tab.",
+          "In the second tab click 'Take over editing' [tabGuard.takeOver].",
+          "Go back to the first tab and try to insert an element."
+        ],
+        "expected": [
+          "A tab that opens while another tab is editing shows the project read-only with a notice and a 'Take over editing' [tabGuard.takeOver] button; it never writes to IndexedDB.",
+          "Taking over reloads the latest saved project in that tab and makes the other tab read-only with a notice (tabs coordinate with BroadcastChannel).",
+          "A read-only tab refuses every document command with a status message, so autosave from two tabs never interleaves."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "project-save-json",
+      "titleKey": "feature.projectSaveJson",
+      "commands": [
+        "project.save"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Save the project as one archive file",
+        "steps": [
+          "Build a page with a few elements and styles.",
+          "Choose File > Save project."
+        ],
+        "expected": [
+          "A single project archive 'project.zip' is downloaded; it holds project.json and every file the project stores next to the document, at its path, so files added by later features are saved with the project.",
+          "project.json contains the format version and the whole document JSON (its page trees and every setting it holds), and nothing that depends on the editor session (no selection, no zoom, no DOM ids).",
+          "Saving the same document twice produces byte-identical archives apart from the saved timestamp."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "project-open-json",
+      "titleKey": "feature.projectOpenJson",
+      "commands": [
+        "project.open"
+      ],
+      "dependsOn": [
+        "project-save-json"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Open a project archive",
+        "steps": [
+          "Save a project to a file, then change the page.",
+          "Choose File > Open project, pick the saved archive and cancel the confirmation; do it again and confirm.",
+          "Choose File > Open project and pick a file that is not a valid project archive, then an archive whose format version is newer than the app's."
+        ],
+        "expected": [
+          "Before replacing the current project a confirmation asks; Cancel leaves the document JSON unchanged.",
+          "Opening the saved archive restores exactly the saved document JSON and every file the archive holds.",
+          "An invalid file shows an error dialog naming the problem and leaves the current document JSON unchanged.",
+          "An archive with a newer or unknown format version is refused with an error naming the version, and the current document JSON is unchanged.",
+          "After opening, the undo history is empty and the project is autosaved."
+        ]
+      },
+      "scenarios": []
+    }
+  ]
+}

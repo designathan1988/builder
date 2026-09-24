@@ -15,7 +15,7 @@ export default defineConfig(
     extends: [reactHooks.configs.flat.recommended],
   },
   {
-    files: ['*.config.{js,ts}', '.dependency-cruiser.cjs', 'tests/**/*.ts'],
+    files: ['*.config.{js,ts}', '.dependency-cruiser.cjs', 'tests/**/*.ts', 'tools/**/*.ts'],
     languageOptions: { globals: globals.node },
   },
   {

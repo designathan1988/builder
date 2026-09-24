@@ -1,0 +1,317 @@
+{
+  "group": "workspace",
+  "titleKey": "featureGroup.workspace",
+  "features": [
+    {
+      "id": "dock-toggles",
+      "titleKey": "feature.dockToggles",
+      "commands": [
+        "workspace.setPanelOpen",
+        "workspace.toggleLeftDock",
+        "workspace.toggleInspector",
+        "workspace.collapseDocks"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/dock-toggles.md",
+      "intent": {
+        "title": "Show and hide the docks and panels",
+        "steps": [
+          "Press Ctrl+B twice; press Ctrl+Alt+B twice.",
+          "Press Ctrl+\\ twice.",
+          "Close the Layers panel with its close button and reopen it from the top bar and from View."
+        ],
+        "expected": [
+          "Ctrl+B hides and shows the left dock; Ctrl+Alt+B hides and shows the inspector; the canvas grows into the freed space and refits in Fit mode. While editing text Ctrl+B keeps its bold meaning.",
+          "Ctrl+\\ collapses every dock and the second press restores exactly what was open.",
+          "Panels close and reopen from the top bar toggles and the View menu; the status bar reports each change."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "command-bar",
+      "titleKey": "feature.commandBar",
+      "commands": [
+        "history.undo",
+        "history.redo",
+        "selection.clear",
+        "selection.selectAllInContainer",
+        "focus.next",
+        "focus.previous",
+        "focus.activate",
+        "ui.dismiss",
+        "element.insert",
+        "element.moveUp",
+        "element.moveDown",
+        "element.wrapRow",
+        "element.wrapColumn",
+        "element.nestIntoPrevious",
+        "element.promote",
+        "element.duplicate",
+        "element.delete",
+        "element.unwrap",
+        "element.createNaturalChild",
+        "hand.take",
+        "clipboard.copy",
+        "clipboard.paste",
+        "layers.startRename",
+        "element.toggleLock",
+        "element.toggleHidden",
+        "text.startEdit",
+        "style.resetAll",
+        "position.align",
+        "position.distribute",
+        "table.addColumnAfter",
+        "table.addColumnEnd",
+        "table.removeColumn",
+        "table.addRowAfter",
+        "table.removeRow",
+        "components.create",
+        "components.detach",
+        "page.openProperties",
+        "view.zoomIn",
+        "view.zoomOut",
+        "view.zoomReset",
+        "view.zoomFit",
+        "view.enterPreview",
+        "project.newBlankPage",
+        "project.save",
+        "project.open",
+        "project.export",
+        "workspace.setPanelOpen",
+        "commandBar.open"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/command-bar.md",
+      "intent": {
+        "title": "Command bar with Ctrl+K",
+        "steps": [
+          "Press Ctrl+K.",
+          "Type 'wrap' and press Enter.",
+          "Press Ctrl+K, type 'insert hero', use ArrowDown and Enter.",
+          "Press Ctrl+K, type 'layers' and press Enter; press Ctrl+K and Escape."
+        ],
+        "expected": [
+          "The command bar lists commands, panels ('Open Layers' [command.openPanel]) and element types ('Insert Hero' [command.insertElement]), each with its shortcut where it has one; fuzzy search filters them.",
+          "ArrowUp/ArrowDown move the highlight, Enter runs it and closes the bar; Escape and clicking outside close it.",
+          "Commands that cannot apply to the current selection are not offered.",
+          "Recently run commands are listed first.",
+          "While editing text Ctrl+K keeps its link meaning and does not open the bar."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "command-bar-set-property",
+      "titleKey": "feature.commandBarSetProperty",
+      "commands": [
+        "style.set",
+        "style.setSpacing",
+        "style.setBorder",
+        "style.setRadius",
+        "style.setBackgroundImage",
+        "style.setShadows",
+        "style.setFilter",
+        "style.setTransform",
+        "position.setMode",
+        "inspector.reveal"
+      ],
+      "dependsOn": [
+        "command-bar"
+      ],
+      "spec": "spec/behavior/command-bar-set-property.md",
+      "intent": {
+        "title": "Set a property or jump to it from the command bar",
+        "steps": [
+          "Select a flex Container, press Ctrl+K, type 'gap 24' and press Enter.",
+          "Press Ctrl+K, type 'width 50%' and press Enter.",
+          "Press Ctrl+K, type 'border-color' and choose 'Edit property border-color' [command.editProperty]."
+        ],
+        "expected": [
+          "Typing '<property> <value>' offers 'Set <property> to <value>' [command.setProperty]; running it writes the value to the selection in the document JSON as one undo step.",
+          "Invalid values are not offered.",
+          "'Edit property X' [command.editProperty] opens the section, reveals the field in the inspector and focuses it."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "shortcuts-panel",
+      "titleKey": "feature.shortcutsPanel",
+      "commands": [
+        "workspace.setPanelOpen"
+      ],
+      "dependsOn": [
+        "app-menu"
+      ],
+      "spec": "spec/behavior/shortcuts-panel.md",
+      "intent": {
+        "title": "Keyboard shortcuts panel generated from the keymap",
+        "steps": [
+          "Open Help > Keyboard shortcuts."
+        ],
+        "expected": [
+          "The shortcuts open as a tab in the bottom workbench dock; the workbench is closed by default and opens with its first tab.",
+          "The panel lists every binding grouped by context (anywhere, on the canvas, while editing text, during a drag, with something in hand, on panels) with keys and a description.",
+          "It is rendered from the single keymap table: a unit test adds a binding to the table and the panel shows it without other changes."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "workbench-panel",
+      "titleKey": "feature.workbenchPanel",
+      "commands": [
+        "workspace.setPanelOpen",
+        "workspace.toggleDeveloperTools",
+        "workspace.setWorkbenchState",
+        "workspace.setActiveTab"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/workbench-panel.md",
+      "intent": {
+        "title": "Bottom workbench: tabs, collapse, maximise and developer tools",
+        "steps": [
+          "Open the Keyboard shortcuts tab; turn on View > Developer tools and switch between the Keyboard shortcuts and Document tabs.",
+          "Click 'Show or hide the workbench' [workbench.toggle], then 'Maximize the workbench' [workbench.maximize] and restore it.",
+          "Make a change on the canvas; close the Document tab."
+        ],
+        "expected": [
+          "The workbench shows one tab strip; the chosen tab's content fills it; tabs can be closed.",
+          "It collapses to its tab strip, expands, and maximises to cover the canvas area, then restores.",
+          "Developer tools adds a Document tab showing the live document JSON read-only, updated after every command; the choice is stored in preferences."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "panel-resize",
+      "titleKey": "feature.panelResize",
+      "commands": [
+        "workspace.resizeSplitter"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/panel-resize.md",
+      "intent": {
+        "title": "Resize docks and panels with splitters",
+        "steps": [
+          "Drag the splitter between the left dock and the canvas; drag the splitter between Elements and Layers.",
+          "Drag the inspector splitter; drag the workbench splitter.",
+          "Focus a splitter and press ArrowLeft and ArrowRight.",
+          "Reload."
+        ],
+        "expected": [
+          "Each splitter resizes its neighbours with the mouse and by 20 px per arrow key, within minimum and maximum sizes.",
+          "Splitters have role separator with aria-valuenow.",
+          "Sizes are restored after reload."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "floating-panels",
+      "titleKey": "feature.floatingPanels",
+      "commands": [
+        "workspace.movePanel"
+      ],
+      "dependsOn": [
+        "panel-resize"
+      ],
+      "spec": "spec/behavior/floating-panels.md",
+      "intent": {
+        "title": "Float a panel as a window and dock it again",
+        "steps": [
+          "Drag the Layers panel header onto the canvas and release.",
+          "Drag the floating window around; close it and reopen it.",
+          "Drag it to the right edge of the window and release; drag it to the left edge and release.",
+          "Start dragging a panel and press Escape."
+        ],
+        "expected": [
+          "A panel dragged out of its dock becomes a floating window at the drop point, kept inside the viewport.",
+          "Near the left or right edge a 'Dock left' [workspace.hint.dockLeft]/'Dock right' [workspace.hint.dockRight] hint appears and release docks the panel there.",
+          "Escape cancels the drag and returns the panel where it was.",
+          "The floating layout is restored after reload."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "panel-combine-tabs",
+      "titleKey": "feature.panelCombineTabs",
+      "commands": [
+        "workspace.movePanel"
+      ],
+      "dependsOn": [
+        "floating-panels"
+      ],
+      "spec": "spec/behavior/panel-combine-tabs.md",
+      "intent": {
+        "title": "Combine panels as tabs or stack them",
+        "steps": [
+          "Drag the Layers panel over the upper part of the Elements panel and release.",
+          "Switch between the two tabs.",
+          "Drag the Layers tab over the lower part of the Elements panel and release."
+        ],
+        "expected": [
+          "Over the upper part a 'Combine as tabs' [workspace.hint.combineTabs] hint appears and release shows both panels as tabs of one panel.",
+          "Over the lower part a 'Stack panels' [workspace.hint.stackPanels] hint appears and release stacks them vertically.",
+          "The arrangement is restored after reload."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "workspace-persist-reset",
+      "titleKey": "feature.workspacePersistReset",
+      "commands": [
+        "workspace.toggleInspector",
+        "workspace.reset",
+        "workspace.resizeSplitter",
+        "workspace.movePanel",
+        "inspector.toggleSection"
+      ],
+      "dependsOn": [
+        "panel-combine-tabs",
+        "dock-toggles"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Workspace layout persists and can be reset",
+        "steps": [
+          "Hide the inspector, resize the left dock, float the Layers panel and collapse an inspector section.",
+          "Reload.",
+          "Choose View > Reset workspace."
+        ],
+        "expected": [
+          "After reload the workspace looks exactly as it was left.",
+          "Reset workspace restores the default docks, sizes and panels and says so in the status bar; the document JSON is untouched."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "status-bar",
+      "titleKey": "feature.statusBar",
+      "commands": [
+        "selection.select",
+        "view.setBreakpoint",
+        "view.setStyleState"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/status-bar.md",
+      "intent": {
+        "title": "Status bar: messages, breadcrumb, size, context, count, zoom and save state",
+        "steps": [
+          "Select a nested element; click an ancestor in the breadcrumb.",
+          "Run a few commands, change breakpoint and state."
+        ],
+        "expected": [
+          "The status bar shows the last message (in an aria-live region), the breadcrumb of the selection, its W x H, the breakpoint and state, the node count, the zoom and the save state.",
+          "Clicking a breadcrumb ancestor selects it.",
+          "Every value updates immediately after each command."
+        ]
+      },
+      "scenarios": []
+    }
+  ]
+}

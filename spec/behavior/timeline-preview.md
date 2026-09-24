@@ -40,7 +40,7 @@ None in Pager.
 
 ## Problems in Pager
 
-1. **No preview controls.** Required (features.json `timeline-preview`):
+1. **No preview controls.** Required (manifest feature `timeline-preview`):
    - `Play` animates the element on the canvas from the stored keyframes.
    - `Pause` freezes it at the current time.
    - `Stop` returns it to its base styles.

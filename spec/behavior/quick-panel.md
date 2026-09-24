@@ -49,10 +49,10 @@ The panel's controls have `tabindex="-1"` (sealed out of the Tab order, `quick-p
 
 ## Problems in Pager
 
-1. **The remembered offset is lost on reload** (a `WeakMap` in memory). Required: a dragged quick panel keeps its offset for that element across reloads (features.json `quick-panel`), stored with the workspace preferences.
+1. **The remembered offset is lost on reload** (a `WeakMap` in memory). Required: a dragged quick panel keeps its offset for that element across reloads (manifest feature `quick-panel`), stored with the workspace preferences.
 2. **The "Edit on canvas" select shows a stale mode** after the mode ends. Required: the select always shows the active mode, or its neutral label when none is active.
 3. **Fields do not fit:** Padding and Margin fields were present but not visible in the bar. Required: every control the panel offers is visible without overlap or clipping.
 4. **Not reachable by keyboard.** Required: F6 or a shortcut from the canvas focuses the quick panel; Tab moves through its fields; Escape returns focus to the canvas.
-5. **Controls for unbuilt features must be disabled with "not available yet"** (features.json); Pager has no such distinction. Required: each control reads its availability from the one feature registry.
-6. **Several visual properties have no control on the canvas:** Pager's panel offers W, H, Fill (a colour) and font Size, but no text colour, gradient, border, opacity, effects or transform. Required: the quick panel also offers Text colour (text elements), Border, Opacity, Effects and Transform (Move X, Rotate, Scale), and Fill opens the same fill editor as the inspector (solid colour or gradient); every control runs the inspector's command for that property (features.json `quick-panel`).
+5. **Controls for unbuilt features must be disabled with "not available yet"** (the manifest intent); Pager has no such distinction. Required: each control reads its availability from the one feature registry.
+6. **Several visual properties have no control on the canvas:** Pager's panel offers W, H, Fill (a colour) and font Size, but no text colour, gradient, border, opacity, effects or transform. Required: the quick panel also offers Text colour (text elements), Border, Opacity, Effects and Transform (Move X, Rotate, Scale), and Fill opens the same fill editor as the inspector (solid colour or gradient); every control runs the inspector's command for that property (manifest feature `quick-panel`).
 7. **More actions opens a separate strip** of action buttons. Required: More actions opens the element's context menu at the button, the same menu as a right-click (see `context-menu.md`).

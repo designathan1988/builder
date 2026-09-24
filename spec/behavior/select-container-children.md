@@ -37,6 +37,6 @@ None in Pager.
 
 ## Problems in Pager
 
-1. **No `Ctrl+A` binding.** Required: `Ctrl+A` on the canvas selects the selected element and all its siblings; with nothing selected it selects every child of the Page; while editing text it selects the text and does not change the element selection (features.json `select-container-children`).
+1. **No `Ctrl+A` binding.** Required: `Ctrl+A` on the canvas selects the selected element and all its siblings; with nothing selected it selects every child of the Page; while editing text it selects the text and does not change the element selection (manifest feature `select-container-children`).
 2. **Locked and hidden siblings are silently skipped.** Required: they are skipped and the status says how many were left out (`3 elements selected, 1 locked left out.`).
 3. **With nothing selected the command is not available at all.** Required: it selects every child of the Page.

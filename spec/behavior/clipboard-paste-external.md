@@ -38,5 +38,5 @@ Not applicable.
 
 ## Problems in Pager
 
-1. **External clipboard content cannot be pasted as elements.** Required: `text/html` from the system clipboard goes through the HTML importer (same cleaning and nesting rules) and is inserted into the selection as one undo step; multi-line `text/plain` becomes one Paragraph per line; anything the importer drops is reported in the status bar (features.json `clipboard-paste-external`).
+1. **External clipboard content cannot be pasted as elements.** Required: `text/html` from the system clipboard goes through the HTML importer (same cleaning and nesting rules) and is inserted into the selection as one undo step; multi-line `text/plain` becomes one Paragraph per line; anything the importer drops is reported in the status bar (manifest feature `clipboard-paste-external`).
 2. **One paste door per source.** Required: `Ctrl+V` reads the system clipboard once and chooses in this order: the app's own element format, then `text/html`, then `text/plain`; external content uses the same placement rule as internal paste (selected container → appended as last children; otherwise inserted right after the selection).

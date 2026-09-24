@@ -51,6 +51,6 @@ This is the keyboard feature.
 
 ## Problems in Pager
 
-1. **Moving focus changes the selection on every arrow key,** so walking through the tree repaints the canvas and the Inspector for each row and loses a multi-selection. Required: arrows move focus as in the WAI-ARIA tree pattern (roving tabindex); Enter selects the focused element (features.json `layers-keyboard-navigation`).
+1. **Moving focus changes the selection on every arrow key,** so walking through the tree repaints the canvas and the Inspector for each row and loses a multi-selection. Required: arrows move focus as in the WAI-ARIA tree pattern (roving tabindex); Enter selects the focused element (manifest feature `layers-keyboard-navigation`).
 2. **F2 does nothing on a row.** Required: F2 renames the focused row's node (inline), Delete deletes it and Alt+ArrowUp moves it, with the same commands as the canvas.
 3. **The tree is not reachable with Tab.** Required: the tree is one Tab stop; focus lands on its current row.

@@ -1,0 +1,655 @@
+{
+  "domain": "selection",
+  "commands": [
+    {
+      "id": "selection.select",
+      "labelKey": "command.select",
+      "owner": "src/core/selection/selection.ts",
+      "introducedBy": "select-click",
+      "args": {
+        "target": {
+          "type": "node",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "canvas-click-element-or-page",
+          "kind": "canvas-click",
+          "feature": "select-click",
+          "target": "element-or-page",
+          "button": "primary",
+          "count": 1,
+          "modifier": null,
+          "gesture": "canvas-click",
+          "labelKey": "command.select",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "target",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "layers-row",
+          "kind": "panel-control",
+          "feature": "layers-tree",
+          "panel": "layers",
+          "control": "row",
+          "modifier": null,
+          "gesture": "layers-row-click",
+          "labelKey": "command.select",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "target",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-enter-in-layers-tree",
+          "kind": "shortcut",
+          "feature": "layers-keyboard-navigation",
+          "chord": "Enter",
+          "context": "layers-tree",
+          "gesture": null,
+          "labelKey": "command.select",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "focused-row",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "status-bar-breadcrumb-item",
+          "kind": "panel-control",
+          "feature": "status-bar",
+          "panel": "status-bar",
+          "control": "breadcrumb-item",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.select",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "target",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "checks-issue",
+          "kind": "panel-control",
+          "feature": "accessibility-checks",
+          "panel": "checks",
+          "control": "issue",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.select",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "target",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "code-panel-html-line",
+          "kind": "panel-control",
+          "feature": "code-panel-selection-sync",
+          "panel": "code-panel",
+          "control": "html-line",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.select",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "target",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "selection.clear",
+      "labelKey": "command.clearSelection",
+      "owner": "src/core/selection/selection.ts",
+      "introducedBy": "select-click",
+      "args": {},
+      "availability": {
+        "predicate": "hasSelection",
+        "refusalKey": "refusal.nothingSelected"
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-escape-in-canvas",
+          "kind": "shortcut",
+          "feature": "select-click",
+          "chord": "Escape",
+          "context": "canvas",
+          "gesture": null,
+          "labelKey": "command.clearSelection",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "canvas-click-stage-outside-page",
+          "kind": "canvas-click",
+          "feature": "select-click",
+          "target": "stage-outside-page",
+          "button": "primary",
+          "count": 1,
+          "modifier": null,
+          "gesture": "canvas-click",
+          "labelKey": "command.clearSelection",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "menu-edit",
+          "kind": "menu",
+          "feature": "app-menu",
+          "menu": "edit",
+          "labelKey": "command.clearSelection",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": {
+            "region": "menu:edit",
+            "order": 9
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.clearSelection",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "selection.add",
+      "labelKey": "command.selectionAdd",
+      "owner": "src/core/selection/selection.ts",
+      "introducedBy": "multi-select-click",
+      "args": {
+        "target": {
+          "type": "node",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "canvas-click-element-shift",
+          "kind": "canvas-click",
+          "feature": "multi-select-click",
+          "target": "element",
+          "button": "primary",
+          "count": 1,
+          "modifier": "Shift",
+          "gesture": "canvas-click",
+          "labelKey": "command.selectionAdd",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "target",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "layers-row-shift",
+          "kind": "panel-control",
+          "feature": "multi-select-click",
+          "panel": "layers",
+          "control": "row",
+          "modifier": "Shift",
+          "gesture": "layers-row-click",
+          "labelKey": "command.selectionAdd",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "target",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "selection.toggle",
+      "labelKey": "command.selectionToggle",
+      "owner": "src/core/selection/selection.ts",
+      "introducedBy": "multi-select-click",
+      "args": {
+        "target": {
+          "type": "node",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "canvas-click-element-ctrl",
+          "kind": "canvas-click",
+          "feature": "multi-select-click",
+          "target": "element",
+          "button": "primary",
+          "count": 1,
+          "modifier": "Ctrl",
+          "gesture": "canvas-click",
+          "labelKey": "command.selectionToggle",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "target",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "layers-row-ctrl",
+          "kind": "panel-control",
+          "feature": "multi-select-click",
+          "panel": "layers",
+          "control": "row",
+          "modifier": "Ctrl",
+          "gesture": "layers-row-click",
+          "labelKey": "command.selectionToggle",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "target",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "selection.walkNextSibling",
+      "labelKey": "command.walkNextSibling",
+      "owner": "src/core/selection/selection.ts",
+      "introducedBy": "keyboard-tree-walk",
+      "args": {},
+      "availability": {
+        "predicate": "hasSelection",
+        "refusalKey": "refusal.nothingSelected"
+      },
+      "refusals": [
+        "status.walk.noNext"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-arrow-right-in-canvas",
+          "kind": "shortcut",
+          "feature": "keyboard-tree-walk",
+          "chord": "ArrowRight",
+          "context": "canvas",
+          "gesture": null,
+          "labelKey": "command.walkNextSibling",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "none",
+          "adapter": {
+            "selection": "primary",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "selection.walkPreviousSibling",
+      "labelKey": "command.walkPreviousSibling",
+      "owner": "src/core/selection/selection.ts",
+      "introducedBy": "keyboard-tree-walk",
+      "args": {},
+      "availability": {
+        "predicate": "hasSelection",
+        "refusalKey": "refusal.nothingSelected"
+      },
+      "refusals": [
+        "status.walk.noPrevious"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-arrow-left-in-canvas",
+          "kind": "shortcut",
+          "feature": "keyboard-tree-walk",
+          "chord": "ArrowLeft",
+          "context": "canvas",
+          "gesture": null,
+          "labelKey": "command.walkPreviousSibling",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "none",
+          "adapter": {
+            "selection": "primary",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "selection.walkParent",
+      "labelKey": "command.walkParent",
+      "owner": "src/core/selection/selection.ts",
+      "introducedBy": "keyboard-tree-walk",
+      "args": {},
+      "availability": {
+        "predicate": "hasSelection",
+        "refusalKey": "refusal.nothingSelected"
+      },
+      "refusals": [
+        "status.walk.atRoot"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-arrow-up-in-canvas",
+          "kind": "shortcut",
+          "feature": "keyboard-tree-walk",
+          "chord": "ArrowUp",
+          "context": "canvas",
+          "gesture": null,
+          "labelKey": "command.walkParent",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "none",
+          "adapter": {
+            "selection": "primary",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "selection.walkFirstChild",
+      "labelKey": "command.walkFirstChild",
+      "owner": "src/core/selection/selection.ts",
+      "introducedBy": "keyboard-tree-walk",
+      "args": {},
+      "availability": {
+        "predicate": "hasSelection",
+        "refusalKey": "refusal.nothingSelected"
+      },
+      "refusals": [
+        "status.walk.noChildren"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-arrow-down-in-canvas",
+          "kind": "shortcut",
+          "feature": "keyboard-tree-walk",
+          "chord": "ArrowDown",
+          "context": "canvas",
+          "gesture": null,
+          "labelKey": "command.walkFirstChild",
+          "disabledReasonKey": "refusal.nothingSelected",
+          "placement": "none",
+          "adapter": {
+            "selection": "primary",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "selection.selectAllInContainer",
+      "labelKey": "command.selectAllInContainer",
+      "owner": "src/core/selection/selection.ts",
+      "introducedBy": "select-container-children",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-ctrl-a-in-canvas",
+          "kind": "shortcut",
+          "feature": "select-container-children",
+          "chord": "Ctrl+A",
+          "context": "canvas",
+          "gesture": null,
+          "labelKey": "command.selectAllInContainer",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "primary",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "menu-edit",
+          "kind": "menu",
+          "feature": "app-menu",
+          "menu": "edit",
+          "labelKey": "command.selectAllInContainer",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:edit",
+            "order": 8
+          },
+          "adapter": {
+            "selection": "primary",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.selectAllInContainer",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "primary",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "selection.marquee",
+      "labelKey": "command.marqueeSelect",
+      "owner": "src/core/selection/selection.ts",
+      "introducedBy": "marquee-select",
+      "args": {
+        "rect": {
+          "type": "rect",
+          "values": [],
+          "optional": false
+        },
+        "mode": {
+          "type": "enum",
+          "values": [
+            "replace",
+            "add",
+            "toggle"
+          ],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "canvas-drag-empty-area-page-or-container",
+          "kind": "canvas-drag",
+          "feature": "marquee-select",
+          "source": "empty-area",
+          "zone": "page-or-container",
+          "gesture": "marquee",
+          "labelKey": "command.marqueeSelect",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "contextMenu.open",
+      "labelKey": "command.openContextMenu",
+      "owner": "src/editor/menus/context-menu.ts",
+      "introducedBy": "context-menu",
+      "args": {
+        "target": {
+          "type": "node",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "canvas-right-click-element-or-page",
+          "kind": "canvas-click",
+          "feature": "context-menu",
+          "target": "element-or-page",
+          "button": "secondary",
+          "count": 1,
+          "modifier": null,
+          "gesture": "canvas-click",
+          "labelKey": "command.openContextMenu",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "target",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "layers-row-secondary-click",
+          "kind": "panel-control",
+          "feature": "context-menu",
+          "panel": "layers",
+          "control": "row-secondary-click",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.openContextMenu",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "target",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "quick-panel-more-actions",
+          "kind": "quick-panel",
+          "feature": "quick-panel",
+          "control": "more-actions",
+          "labelKey": "quickPanel.moreActions",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "target",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    }
+  ]
+}

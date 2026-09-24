@@ -13,11 +13,14 @@
     "lint": "eslint . --max-warnings 0",
     "unit": "vitest run",
     "e2e": "playwright test",
-    "verify:fast": "npm run typecheck && npm run lint && npm run unit"
+    "verify:fast": "npm run typecheck && npm run lint && npm run unit && npm run manifest:check",
+    "manifest:check": "node tools/manifest/check.ts",
+    "manifest:map": "node tools/manifest/map-features.ts"
   },
   "dependencies": {
     "react": "^19.3.0",
-    "react-dom": "^19.3.0"
+    "react-dom": "^19.3.0",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

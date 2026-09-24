@@ -50,6 +50,6 @@ See `layers-keyboard-navigation.md` (ArrowUp/ArrowDown move and select, ArrowRig
 ## Problems in Pager
 
 1. **Selecting on the canvas does not scroll the Layers row into view.** Required: whenever the selection changes from a surface other than Layers, the primary selected row is scrolled into view (nearest edge, no smooth animation longer than the motion token).
-2. **Selecting a node inside a folded branch leaves the branch folded,** so the selection is invisible in Layers. Required: selecting a hidden descendant unfolds its ancestors and scrolls its row into view (features.json `layers-expand-collapse-all`).
+2. **Selecting a node inside a folded branch leaves the branch folded,** so the selection is invisible in Layers. Required: selecting a hidden descendant unfolds its ancestors and scrolls its row into view (manifest feature `layers-expand-collapse-all`).
 3. **The header badge counts visible rows, not nodes** (32 → 2 after folding one branch). Required: the badge shows the number of nodes in the document and updates after every insert and delete, regardless of folding.
 4. **The Page row's tooltip and canvas chip say `<div>`** although the Page renders as `<body>`. Required: show the exported tag.

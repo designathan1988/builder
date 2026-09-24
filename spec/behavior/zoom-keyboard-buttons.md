@@ -53,6 +53,6 @@ The chords above.
 
 ## Problems in Pager
 
-1. **The range is 40-200 %.** Required: zoom stays between 10 % and 800 % (features.json `zoom-keyboard-buttons`).
+1. **The range is 40-200 %.** Required: zoom stays between 10 % and 800 % (manifest feature `zoom-keyboard-buttons`).
 2. **The percentage is not a menu.** Required: clicking it opens a menu with 25 %, 50 %, 100 %, 200 %, 400 % and Fit.
 3. **Zoom and Fit mode are not restored after a reload.** Required: the zoom (or Fit mode) is restored after a reload, as a workspace preference.

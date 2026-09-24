@@ -36,7 +36,7 @@ None in Pager.
 
 ## Problems in Pager
 
-1. **No alignment of positioned elements.** Required (features.json `align-distribute`):
+1. **No alignment of positioned elements.** Required (manifest feature `align-distribute`):
    - With several absolutely positioned elements selected, Align left, Align centre and Align top (and the other edges) work on the selection's bounds; with one element selected, on its parent's box.
    - Distribute horizontally makes the gaps between the selected elements equal.
    - The commands are in the quick panel and the Arrange menu; top and left are written for each element as one undo step, and the measured positions in the iframe match.

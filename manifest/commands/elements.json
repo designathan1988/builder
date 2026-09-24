@@ -1,0 +1,1881 @@
+{
+  "domain": "elements",
+  "commands": [
+    {
+      "id": "element.setTag",
+      "labelKey": "command.setTag",
+      "owner": "src/core/elements/tag.ts",
+      "introducedBy": "semantic-tag-switch",
+      "args": {
+        "tag": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.tag.notEquivalent",
+        "status.refused.onlyAccepts",
+        "status.refused.requiresParent",
+        "status.refused.interactiveInside",
+        "status.refused.formInForm",
+        "status.refused.singleChild",
+        "status.refused.labelOneControl",
+        "status.refused.noChildren",
+        "status.locked.edit"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "inspector-tag",
+          "kind": "inspector-field",
+          "feature": "semantic-tag-switch",
+          "property": null,
+          "attribute": "tag",
+          "control": "field",
+          "labelKey": "command.setTag",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "quick-panel-tag",
+          "kind": "quick-panel",
+          "feature": "quick-panel",
+          "control": "tag",
+          "labelKey": "quickPanel.tag",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "element.setAttribute",
+      "labelKey": "command.setAttribute",
+      "owner": "src/core/elements/attributes.ts",
+      "introducedBy": "props-attributes",
+      "args": {
+        "attribute": {
+          "type": "attribute",
+          "values": [],
+          "optional": false
+        },
+        "value": {
+          "type": "json",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.attribute.invalid",
+        "status.url.unsafe",
+        "status.locked.edit"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "inspector-title",
+          "kind": "inspector-field",
+          "feature": "props-attributes",
+          "property": null,
+          "attribute": "title",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-src",
+          "kind": "inspector-field",
+          "feature": "elements-media-images",
+          "property": null,
+          "attribute": "src",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-alt",
+          "kind": "inspector-field",
+          "feature": "elements-media-images",
+          "property": null,
+          "attribute": "alt",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-srcset",
+          "kind": "inspector-field",
+          "feature": "elements-media-images",
+          "property": null,
+          "attribute": "srcset",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-media",
+          "kind": "inspector-field",
+          "feature": "elements-media-images",
+          "property": null,
+          "attribute": "media",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-placeholder",
+          "kind": "inspector-field",
+          "feature": "elements-form-inputs",
+          "property": null,
+          "attribute": "placeholder",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-value",
+          "kind": "inspector-field",
+          "feature": "elements-form-inputs",
+          "property": null,
+          "attribute": "value",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-name",
+          "kind": "inspector-field",
+          "feature": "elements-form-inputs",
+          "property": null,
+          "attribute": "name",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-required",
+          "kind": "inspector-field",
+          "feature": "elements-form-inputs",
+          "property": null,
+          "attribute": "required",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-pattern",
+          "kind": "inspector-field",
+          "feature": "elements-form-inputs",
+          "property": null,
+          "attribute": "pattern",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-min",
+          "kind": "inspector-field",
+          "feature": "elements-form-inputs",
+          "property": null,
+          "attribute": "min",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-max",
+          "kind": "inspector-field",
+          "feature": "elements-form-inputs",
+          "property": null,
+          "attribute": "max",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-step",
+          "kind": "inspector-field",
+          "feature": "elements-form-inputs",
+          "property": null,
+          "attribute": "step",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-autocomplete",
+          "kind": "inspector-field",
+          "feature": "elements-form-inputs",
+          "property": null,
+          "attribute": "autocomplete",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-disabled",
+          "kind": "inspector-field",
+          "feature": "elements-form-inputs",
+          "property": null,
+          "attribute": "disabled",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-readonly",
+          "kind": "inspector-field",
+          "feature": "elements-form-inputs",
+          "property": null,
+          "attribute": "readonly",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-checked",
+          "kind": "inspector-field",
+          "feature": "elements-form-inputs",
+          "property": null,
+          "attribute": "checked",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-action",
+          "kind": "inspector-field",
+          "feature": "elements-form-structure",
+          "property": null,
+          "attribute": "action",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-method",
+          "kind": "inspector-field",
+          "feature": "elements-form-structure",
+          "property": null,
+          "attribute": "method",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-button-type",
+          "kind": "inspector-field",
+          "feature": "elements-form-structure",
+          "property": null,
+          "attribute": "buttonType",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-rows",
+          "kind": "inspector-field",
+          "feature": "elements-form-controls",
+          "property": null,
+          "attribute": "rows",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-group-label",
+          "kind": "inspector-field",
+          "feature": "elements-form-controls",
+          "property": null,
+          "attribute": "groupLabel",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-selected",
+          "kind": "inspector-field",
+          "feature": "elements-form-controls",
+          "property": null,
+          "attribute": "selected",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-poster",
+          "kind": "inspector-field",
+          "feature": "elements-media-embeds",
+          "property": null,
+          "attribute": "poster",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-controls",
+          "kind": "inspector-field",
+          "feature": "elements-media-embeds",
+          "property": null,
+          "attribute": "controls",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-autoplay",
+          "kind": "inspector-field",
+          "feature": "elements-media-embeds",
+          "property": null,
+          "attribute": "autoplay",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-loop",
+          "kind": "inspector-field",
+          "feature": "elements-media-embeds",
+          "property": null,
+          "attribute": "loop",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-muted",
+          "kind": "inspector-field",
+          "feature": "elements-media-embeds",
+          "property": null,
+          "attribute": "muted",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-track-kind",
+          "kind": "inspector-field",
+          "feature": "elements-media-embeds",
+          "property": null,
+          "attribute": "trackKind",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-canvas-width",
+          "kind": "inspector-field",
+          "feature": "elements-media-embeds",
+          "property": null,
+          "attribute": "canvasWidth",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-canvas-height",
+          "kind": "inspector-field",
+          "feature": "elements-media-embeds",
+          "property": null,
+          "attribute": "canvasHeight",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-open",
+          "kind": "inspector-field",
+          "feature": "elements-interactive",
+          "property": null,
+          "attribute": "open",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "asset-picker-choose",
+          "kind": "panel-control",
+          "feature": "explorer-assets-use",
+          "panel": "asset-picker",
+          "control": "choose",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "assets.picker.choose",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "attribute": "src"
+          }
+        }
+      ]
+    },
+    {
+      "id": "element.setId",
+      "labelKey": "command.setId",
+      "owner": "src/core/elements/attributes.ts",
+      "introducedBy": "props-attributes",
+      "args": {
+        "id": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.id.duplicate",
+        "status.id.invalid",
+        "status.locked.edit"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "inspector-id",
+          "kind": "inspector-field",
+          "feature": "props-attributes",
+          "property": null,
+          "attribute": "id",
+          "control": "field",
+          "labelKey": "command.setId",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "element.setClasses",
+      "labelKey": "command.setClasses",
+      "owner": "src/core/elements/attributes.ts",
+      "introducedBy": "props-attributes",
+      "args": {
+        "classes": {
+          "type": "json",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.attribute.invalid",
+        "status.locked.edit"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "inspector-classes",
+          "kind": "inspector-field",
+          "feature": "props-attributes",
+          "property": null,
+          "attribute": "classes",
+          "control": "field",
+          "labelKey": "command.setClasses",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "element.setLink",
+      "labelKey": "command.setLink",
+      "owner": "src/core/elements/link.ts",
+      "introducedBy": "elements-structure",
+      "args": {
+        "href": {
+          "type": "string",
+          "values": [],
+          "optional": true
+        },
+        "newTab": {
+          "type": "boolean",
+          "values": [],
+          "optional": true
+        },
+        "page": {
+          "type": "path",
+          "values": [],
+          "optional": true
+        },
+        "anchor": {
+          "type": "node",
+          "values": [],
+          "optional": true
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.url.unsafe",
+        "status.locked.edit"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "inspector-href",
+          "kind": "inspector-field",
+          "feature": "elements-structure",
+          "property": null,
+          "attribute": "href",
+          "control": "field",
+          "labelKey": "command.setLink",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-new-tab",
+          "kind": "inspector-field",
+          "feature": "elements-text",
+          "property": null,
+          "attribute": "newTab",
+          "control": "field",
+          "labelKey": "inspector.link.openInNewTab",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "link-picker-page",
+          "kind": "panel-control",
+          "feature": "link-picker",
+          "panel": "link-picker",
+          "control": "page",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "linkPicker.page",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "link-picker-anchor",
+          "kind": "panel-control",
+          "feature": "link-picker",
+          "panel": "link-picker",
+          "control": "anchor",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "linkPicker.anchor",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "link-picker-url",
+          "kind": "panel-control",
+          "feature": "link-picker",
+          "panel": "link-picker",
+          "control": "url",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "linkPicker.url",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "link-picker-email",
+          "kind": "panel-control",
+          "feature": "link-picker",
+          "panel": "link-picker",
+          "control": "email",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "linkPicker.email",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "link-picker-phone",
+          "kind": "panel-control",
+          "feature": "link-picker",
+          "panel": "link-picker",
+          "control": "phone",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "linkPicker.phone",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "element.setInputType",
+      "labelKey": "command.setInputType",
+      "owner": "src/core/elements/inputs.ts",
+      "introducedBy": "elements-form-inputs-rules",
+      "args": {
+        "type": {
+          "type": "enum",
+          "values": [
+            "text",
+            "email",
+            "password",
+            "number",
+            "tel",
+            "url",
+            "search",
+            "date",
+            "time",
+            "color",
+            "range",
+            "checkbox",
+            "radio",
+            "file"
+          ],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.locked.edit"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "inspector-input-type",
+          "kind": "inspector-field",
+          "feature": "elements-form-inputs-rules",
+          "property": null,
+          "attribute": "inputType",
+          "control": "field",
+          "labelKey": "command.setInputType",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "element.setLabelTarget",
+      "labelKey": "command.setLabelTarget",
+      "owner": "src/core/elements/inputs.ts",
+      "introducedBy": "elements-form-inputs-rules",
+      "args": {
+        "control": {
+          "type": "node",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.locked.edit"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "inspector-label-for",
+          "kind": "inspector-field",
+          "feature": "elements-form-inputs-rules",
+          "property": null,
+          "attribute": "labelFor",
+          "control": "field",
+          "labelKey": "command.setLabelTarget",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "element.setCustomAttribute",
+      "labelKey": "command.setCustomAttribute",
+      "owner": "src/core/elements/attributes.ts",
+      "introducedBy": "element-attributes-aria",
+      "args": {
+        "name": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        },
+        "value": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.attribute.eventHandler",
+        "status.attribute.invalidName",
+        "status.locked.edit"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "inspector-custom-attribute-add",
+          "kind": "panel-control",
+          "feature": "element-attributes-aria",
+          "panel": "inspector",
+          "control": "custom-attribute-add",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "inspector.customAttribute.add",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-custom-attribute-value",
+          "kind": "panel-control",
+          "feature": "element-attributes-aria",
+          "panel": "inspector",
+          "control": "custom-attribute-value",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "inspector.customAttribute.value",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "element.removeCustomAttribute",
+      "labelKey": "command.removeCustomAttribute",
+      "owner": "src/core/elements/attributes.ts",
+      "introducedBy": "element-attributes-aria",
+      "args": {
+        "name": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.locked.edit"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "inspector-custom-attribute-remove",
+          "kind": "panel-control",
+          "feature": "element-attributes-aria",
+          "panel": "inspector",
+          "control": "custom-attribute-remove",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.removeCustomAttribute",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "element.setSvgMarkup",
+      "labelKey": "command.setSvgMarkup",
+      "owner": "src/core/elements/svg.ts",
+      "introducedBy": "elements-svg-shapes",
+      "args": {
+        "markup": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.svg.invalid",
+        "status.locked.edit"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "inspector-svg-markup",
+          "kind": "inspector-field",
+          "feature": "elements-svg-shapes",
+          "property": null,
+          "attribute": "svgMarkup",
+          "control": "field",
+          "labelKey": "command.setSvgMarkup",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "element.setEmbedMarkup",
+      "labelKey": "command.setEmbedMarkup",
+      "owner": "src/core/elements/embed.ts",
+      "introducedBy": "embed-html",
+      "args": {
+        "markup": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.locked.edit"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "inspector-embed-markup",
+          "kind": "inspector-field",
+          "feature": "embed-html",
+          "property": null,
+          "attribute": "embedMarkup",
+          "control": "field",
+          "labelKey": "command.setEmbedMarkup",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "element.applyHtml",
+      "labelKey": "command.applyHtml",
+      "owner": "src/core/import/apply-html.ts",
+      "introducedBy": "code-panel-edit-html",
+      "args": {
+        "html": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.html.invalidAt",
+        "status.refused.onlyAccepts",
+        "status.refused.requiresParent",
+        "status.refused.interactiveInside",
+        "status.refused.formInForm",
+        "status.refused.singleChild",
+        "status.refused.labelOneControl",
+        "status.refused.noChildren",
+        "status.locked.edit"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "code-panel-html-apply",
+          "kind": "panel-control",
+          "feature": "code-panel-edit-html",
+          "panel": "code-panel",
+          "control": "html-apply",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.applyHtml",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "parts.toggle",
+      "labelKey": "command.parts.toggle",
+      "owner": "src/core/elements/parts.ts",
+      "introducedBy": "elements-tables",
+      "args": {
+        "type": {
+          "type": "enum",
+          "values": [
+            "caption",
+            "tableHead",
+            "tableFoot"
+          ],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.locked.edit"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "inspector-table-caption-toggle",
+          "kind": "panel-control",
+          "feature": "elements-tables",
+          "panel": "inspector",
+          "control": "table-caption-toggle",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "inspector.table.caption",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "type": "caption"
+          }
+        },
+        {
+          "id": "inspector-table-head-toggle",
+          "kind": "panel-control",
+          "feature": "elements-tables",
+          "panel": "inspector",
+          "control": "table-head-toggle",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "inspector.table.tableHead",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "type": "tableHead"
+          }
+        },
+        {
+          "id": "inspector-table-foot-toggle",
+          "kind": "panel-control",
+          "feature": "elements-tables",
+          "panel": "inspector",
+          "control": "table-foot-toggle",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "inspector.table.tableFoot",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "type": "tableFoot"
+          }
+        }
+      ]
+    },
+    {
+      "id": "parts.add",
+      "labelKey": "command.parts.add",
+      "owner": "src/core/elements/parts.ts",
+      "introducedBy": "elements-form-controls",
+      "args": {
+        "type": {
+          "type": "enum",
+          "values": [
+            "option",
+            "optionGroup",
+            "source",
+            "track",
+            "rectangle",
+            "ellipse",
+            "line"
+          ],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.refused.onlyAccepts",
+        "status.refused.requiresParent",
+        "status.refused.interactiveInside",
+        "status.refused.formInForm",
+        "status.refused.singleChild",
+        "status.refused.labelOneControl",
+        "status.refused.noChildren",
+        "status.locked.insert"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "inspector-options-editor-add-option",
+          "kind": "panel-control",
+          "feature": "elements-form-controls",
+          "panel": "inspector",
+          "control": "options-editor-add-option",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "inspector.parts.add.option",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "type": "option"
+          }
+        },
+        {
+          "id": "inspector-options-editor-add-option-group",
+          "kind": "panel-control",
+          "feature": "elements-form-controls",
+          "panel": "inspector",
+          "control": "options-editor-add-option-group",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "inspector.parts.add.optionGroup",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "type": "optionGroup"
+          }
+        },
+        {
+          "id": "inspector-picture-sources-add-source",
+          "kind": "panel-control",
+          "feature": "elements-media-images",
+          "panel": "inspector",
+          "control": "picture-sources-add-source",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "inspector.parts.add.source",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "type": "source"
+          }
+        },
+        {
+          "id": "inspector-media-sources-add-track",
+          "kind": "panel-control",
+          "feature": "elements-media-embeds",
+          "panel": "inspector",
+          "control": "media-sources-add-track",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "inspector.parts.add.track",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "type": "track"
+          }
+        },
+        {
+          "id": "inspector-svg-shapes-add-rectangle",
+          "kind": "panel-control",
+          "feature": "elements-svg-shapes",
+          "panel": "inspector",
+          "control": "svg-shapes-add-rectangle",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "inspector.parts.add.rectangle",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "type": "rectangle"
+          }
+        },
+        {
+          "id": "inspector-svg-shapes-add-ellipse",
+          "kind": "panel-control",
+          "feature": "elements-svg-shapes",
+          "panel": "inspector",
+          "control": "svg-shapes-add-ellipse",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "inspector.parts.add.ellipse",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "type": "ellipse"
+          }
+        },
+        {
+          "id": "inspector-svg-shapes-add-line",
+          "kind": "panel-control",
+          "feature": "elements-svg-shapes",
+          "panel": "inspector",
+          "control": "svg-shapes-add-line",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "inspector.parts.add.line",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "type": "line"
+          }
+        },
+        {
+          "id": "inspector-media-sources-add-source",
+          "kind": "panel-control",
+          "feature": "elements-media-embeds",
+          "panel": "inspector",
+          "control": "media-sources-add-source",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "inspector.parts.add.source",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "type": "source"
+          }
+        }
+      ]
+    },
+    {
+      "id": "parts.move",
+      "labelKey": "command.parts.move",
+      "owner": "src/core/elements/parts.ts",
+      "introducedBy": "elements-form-controls",
+      "args": {
+        "target": {
+          "type": "node",
+          "values": [],
+          "optional": false
+        },
+        "delta": {
+          "type": "integer",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.locked.move"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "inspector-part-move-up",
+          "kind": "panel-control",
+          "feature": "elements-form-controls",
+          "panel": "inspector",
+          "control": "part-move-up",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "inspector.parts.moveUp",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "target",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "delta": -1
+          }
+        },
+        {
+          "id": "inspector-part-move-down",
+          "kind": "panel-control",
+          "feature": "elements-form-controls",
+          "panel": "inspector",
+          "control": "part-move-down",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "inspector.parts.moveDown",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "target",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "delta": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "parts.remove",
+      "labelKey": "command.parts.remove",
+      "owner": "src/core/elements/parts.ts",
+      "introducedBy": "elements-form-controls",
+      "args": {
+        "target": {
+          "type": "node",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.locked.edit"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "inspector-part-remove",
+          "kind": "panel-control",
+          "feature": "elements-form-controls",
+          "panel": "inspector",
+          "control": "part-remove",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.parts.remove",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "target",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "table.addColumnAfter",
+      "labelKey": "command.table.addColumnAfter",
+      "owner": "src/core/elements/table.ts",
+      "introducedBy": "table-commands",
+      "args": {},
+      "availability": {
+        "predicate": "cellSelected",
+        "refusalKey": "status.table.selectCell"
+      },
+      "refusals": [
+        "status.locked.edit"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "context-menu",
+          "kind": "context-menu",
+          "feature": "table-commands",
+          "labelKey": "command.table.addColumnAfter",
+          "disabledReasonKey": "status.table.selectCell",
+          "placement": {
+            "region": "context-menu",
+            "order": 18
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.table.addColumnAfter",
+          "disabledReasonKey": "status.table.selectCell",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "table.addColumnEnd",
+      "labelKey": "command.table.addColumnEnd",
+      "owner": "src/core/elements/table.ts",
+      "introducedBy": "table-commands",
+      "args": {},
+      "availability": {
+        "predicate": "inTable",
+        "refusalKey": "status.table.selectPart"
+      },
+      "refusals": [
+        "status.locked.edit"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "context-menu",
+          "kind": "context-menu",
+          "feature": "table-commands",
+          "labelKey": "command.table.addColumnEnd",
+          "disabledReasonKey": "status.table.selectPart",
+          "placement": {
+            "region": "context-menu",
+            "order": 19
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.table.addColumnEnd",
+          "disabledReasonKey": "status.table.selectPart",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "table.removeColumn",
+      "labelKey": "command.table.removeColumn",
+      "owner": "src/core/elements/table.ts",
+      "introducedBy": "table-commands",
+      "args": {},
+      "availability": {
+        "predicate": "cellSelected",
+        "refusalKey": "status.table.selectCell"
+      },
+      "refusals": [
+        "status.table.lastColumn",
+        "status.locked.edit"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "context-menu",
+          "kind": "context-menu",
+          "feature": "table-commands",
+          "labelKey": "command.table.removeColumn",
+          "disabledReasonKey": "status.table.selectCell",
+          "placement": {
+            "region": "context-menu",
+            "order": 20
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.table.removeColumn",
+          "disabledReasonKey": "status.table.selectCell",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "table.addRowAfter",
+      "labelKey": "command.table.addRowAfter",
+      "owner": "src/core/elements/table.ts",
+      "introducedBy": "table-commands",
+      "args": {},
+      "availability": {
+        "predicate": "cellSelected",
+        "refusalKey": "status.table.selectCell"
+      },
+      "refusals": [
+        "status.locked.edit"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "context-menu",
+          "kind": "context-menu",
+          "feature": "table-commands",
+          "labelKey": "command.table.addRowAfter",
+          "disabledReasonKey": "status.table.selectCell",
+          "placement": {
+            "region": "context-menu",
+            "order": 21
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.table.addRowAfter",
+          "disabledReasonKey": "status.table.selectCell",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "table.removeRow",
+      "labelKey": "command.table.removeRow",
+      "owner": "src/core/elements/table.ts",
+      "introducedBy": "table-commands",
+      "args": {},
+      "availability": {
+        "predicate": "cellSelected",
+        "refusalKey": "status.table.selectCell"
+      },
+      "refusals": [
+        "status.table.lastRow",
+        "status.locked.edit"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "context-menu",
+          "kind": "context-menu",
+          "feature": "table-commands",
+          "labelKey": "command.table.removeRow",
+          "disabledReasonKey": "status.table.selectCell",
+          "placement": {
+            "region": "context-menu",
+            "order": 22
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.table.removeRow",
+          "disabledReasonKey": "status.table.selectCell",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    }
+  ]
+}

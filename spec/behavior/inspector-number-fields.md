@@ -58,5 +58,5 @@ The keys listed under Trigger. The glyph has no keyboard action; the arrow keys 
 
 ## Problems in Pager
 
-1. **Width and Height cannot be scrubbed** (no glyph, and the label does nothing). Required: every numeric field, Width and Height included, scrubs by dragging its label (and its glyph where it has one): 1 unit per 2 px, Shift ×10, Alt ×0.1, the whole gesture one undo step (features.json `inspector-number-fields`).
+1. **Width and Height cannot be scrubbed** (no glyph, and the label does nothing). Required: every numeric field, Width and Height included, scrubs by dragging its label (and its glyph where it has one): 1 unit per 2 px, Shift ×10, Alt ×0.1, the whole gesture one undo step (manifest feature `inspector-number-fields`).
 2. **Invalid input is refused without a word.** Required: invalid text is rejected with a visible message (status bar / field hint) and the previous value stays.

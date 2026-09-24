@@ -51,7 +51,7 @@ See `select-container-children.md` and `layers-keyboard-navigation.md`.
 
 ## Problems in Pager
 
-1. **Ctrl+click does not toggle.** Required: Ctrl+click toggles an element in or out of the selection; Shift+click adds (features.json `multi-select-click`).
+1. **Ctrl+click does not toggle.** Required: Ctrl+click toggles an element in or out of the selection; Shift+click adds (manifest feature `multi-select-click`).
 2. **Shift+click toggles instead of adding,** so a second Shift+click removes an element. Required: Shift+click adds; removing is Ctrl+click.
 3. **Only one outline around the union is drawn.** Required: each selected element has its own outline, plus the count chip `N elements`.
 4. **Hover chips intercept clicks meant for the element under them** (see Hit zones). Required: chips never cover another element's content while it could be clicked; when they must overlap, clicks on them pass to the element under the pointer unless the chip itself is the intended drag handle of the selected element.

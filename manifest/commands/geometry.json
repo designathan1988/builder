@@ -1,0 +1,1261 @@
+{
+  "domain": "geometry",
+  "commands": [
+    {
+      "id": "position.setMode",
+      "labelKey": "command.setPosition",
+      "owner": "src/core/geometry/position.ts",
+      "introducedBy": "props-position",
+      "args": {
+        "mode": {
+          "type": "enum",
+          "values": [
+            "static",
+            "relative",
+            "absolute",
+            "fixed",
+            "sticky"
+          ],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.locked.edit"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "inspector-position",
+          "kind": "inspector-field",
+          "feature": "props-position",
+          "property": "position",
+          "attribute": null,
+          "control": "field",
+          "labelKey": "command.setPosition",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "all",
+            "offers": {
+              "property": "position",
+              "keywords": "all",
+              "units": "all",
+              "reason": null
+            },
+            "writes": [
+              "position"
+            ]
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar-set-property",
+          "kind": "command-bar",
+          "feature": "command-bar-set-property",
+          "entry": "set-property",
+          "labelKey": "command.setProperty",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "geometry.resize",
+      "labelKey": "command.resize",
+      "owner": "src/core/geometry/resize.ts",
+      "introducedBy": "resize-handles",
+      "args": {
+        "width": {
+          "type": "string",
+          "values": [],
+          "optional": true
+        },
+        "height": {
+          "type": "string",
+          "values": [],
+          "optional": true
+        },
+        "left": {
+          "type": "string",
+          "values": [],
+          "optional": true
+        },
+        "top": {
+          "type": "string",
+          "values": [],
+          "optional": true
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.locked.edit"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "handle-resize-n",
+          "kind": "canvas-handle",
+          "feature": "resize-handles",
+          "handle": "resize-n",
+          "gesture": "resize",
+          "labelKey": "command.resize",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [
+              "height"
+            ]
+          },
+          "args": {}
+        },
+        {
+          "id": "handle-resize-ne",
+          "kind": "canvas-handle",
+          "feature": "resize-handles",
+          "handle": "resize-ne",
+          "gesture": "resize",
+          "labelKey": "command.resize",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [
+              "width",
+              "height"
+            ]
+          },
+          "args": {}
+        },
+        {
+          "id": "handle-resize-e",
+          "kind": "canvas-handle",
+          "feature": "resize-handles",
+          "handle": "resize-e",
+          "gesture": "resize",
+          "labelKey": "command.resize",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [
+              "width"
+            ]
+          },
+          "args": {}
+        },
+        {
+          "id": "handle-resize-se",
+          "kind": "canvas-handle",
+          "feature": "resize-handles",
+          "handle": "resize-se",
+          "gesture": "resize",
+          "labelKey": "command.resize",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [
+              "width",
+              "height"
+            ]
+          },
+          "args": {}
+        },
+        {
+          "id": "handle-resize-s",
+          "kind": "canvas-handle",
+          "feature": "resize-handles",
+          "handle": "resize-s",
+          "gesture": "resize",
+          "labelKey": "command.resize",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [
+              "height"
+            ]
+          },
+          "args": {}
+        },
+        {
+          "id": "handle-resize-sw",
+          "kind": "canvas-handle",
+          "feature": "resize-handles",
+          "handle": "resize-sw",
+          "gesture": "resize",
+          "labelKey": "command.resize",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [
+              "width",
+              "height"
+            ]
+          },
+          "args": {}
+        },
+        {
+          "id": "handle-resize-w",
+          "kind": "canvas-handle",
+          "feature": "resize-handles",
+          "handle": "resize-w",
+          "gesture": "resize",
+          "labelKey": "command.resize",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [
+              "width"
+            ]
+          },
+          "args": {}
+        },
+        {
+          "id": "handle-resize-nw",
+          "kind": "canvas-handle",
+          "feature": "resize-handles",
+          "handle": "resize-nw",
+          "gesture": "resize",
+          "labelKey": "command.resize",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [
+              "width",
+              "height"
+            ]
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "position.move",
+      "labelKey": "command.movePositioned",
+      "owner": "src/core/geometry/position.ts",
+      "introducedBy": "absolute-free-drag",
+      "args": {
+        "dx": {
+          "type": "number",
+          "values": [],
+          "optional": false
+        },
+        "dy": {
+          "type": "number",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "positionedSelection",
+        "refusalKey": "status.position.notPositioned"
+      },
+      "refusals": [
+        "status.locked.move"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "canvas-drag-positioned-element-containing-block",
+          "kind": "canvas-drag",
+          "feature": "absolute-free-drag",
+          "source": "positioned-element",
+          "zone": "containing-block",
+          "gesture": "free-drag",
+          "labelKey": "command.movePositioned",
+          "disabledReasonKey": "status.position.notPositioned",
+          "placement": "none",
+          "adapter": {
+            "selection": "roots",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-arrow-left-in-canvas-positioned",
+          "kind": "shortcut",
+          "feature": "absolute-nudge",
+          "chord": "ArrowLeft",
+          "context": "canvas-positioned",
+          "gesture": "nudge-keys",
+          "labelKey": "command.nudgeLeft",
+          "disabledReasonKey": "status.position.notPositioned",
+          "placement": "none",
+          "adapter": {
+            "selection": "roots",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "dx": -1,
+            "dy": 0
+          }
+        },
+        {
+          "id": "key-arrow-right-in-canvas-positioned",
+          "kind": "shortcut",
+          "feature": "absolute-nudge",
+          "chord": "ArrowRight",
+          "context": "canvas-positioned",
+          "gesture": "nudge-keys",
+          "labelKey": "command.nudgeRight",
+          "disabledReasonKey": "status.position.notPositioned",
+          "placement": "none",
+          "adapter": {
+            "selection": "roots",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "dx": 1,
+            "dy": 0
+          }
+        },
+        {
+          "id": "key-arrow-up-in-canvas-positioned",
+          "kind": "shortcut",
+          "feature": "absolute-nudge",
+          "chord": "ArrowUp",
+          "context": "canvas-positioned",
+          "gesture": "nudge-keys",
+          "labelKey": "command.nudgeUp",
+          "disabledReasonKey": "status.position.notPositioned",
+          "placement": "none",
+          "adapter": {
+            "selection": "roots",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "dx": 0,
+            "dy": -1
+          }
+        },
+        {
+          "id": "key-arrow-down-in-canvas-positioned",
+          "kind": "shortcut",
+          "feature": "absolute-nudge",
+          "chord": "ArrowDown",
+          "context": "canvas-positioned",
+          "gesture": "nudge-keys",
+          "labelKey": "command.nudgeDown",
+          "disabledReasonKey": "status.position.notPositioned",
+          "placement": "none",
+          "adapter": {
+            "selection": "roots",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "dx": 0,
+            "dy": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "position.setAnchors",
+      "labelKey": "command.setAnchors",
+      "owner": "src/core/geometry/anchors.ts",
+      "introducedBy": "absolute-anchors",
+      "args": {
+        "edge": {
+          "type": "enum",
+          "values": [
+            "left",
+            "right",
+            "top",
+            "bottom",
+            "horizontal-center",
+            "vertical-center"
+          ],
+          "optional": false
+        },
+        "mode": {
+          "type": "enum",
+          "values": [
+            "toggle",
+            "set"
+          ],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "positionedSelection",
+        "refusalKey": "status.position.notPositioned"
+      },
+      "refusals": [
+        "status.needsSingleSelection",
+        "status.locked.edit"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-alt-shift-arrow-left-in-canvas-positioned",
+          "kind": "shortcut",
+          "feature": "absolute-anchors",
+          "chord": "Alt+Shift+ArrowLeft",
+          "context": "canvas-positioned",
+          "gesture": null,
+          "labelKey": "command.anchor.left",
+          "disabledReasonKey": "status.position.notPositioned",
+          "placement": "none",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "edge": "left",
+            "mode": "toggle"
+          }
+        },
+        {
+          "id": "key-alt-shift-arrow-right-in-canvas-positioned",
+          "kind": "shortcut",
+          "feature": "absolute-anchors",
+          "chord": "Alt+Shift+ArrowRight",
+          "context": "canvas-positioned",
+          "gesture": null,
+          "labelKey": "command.anchor.right",
+          "disabledReasonKey": "status.position.notPositioned",
+          "placement": "none",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "edge": "right",
+            "mode": "toggle"
+          }
+        },
+        {
+          "id": "key-alt-shift-arrow-up-in-canvas-positioned",
+          "kind": "shortcut",
+          "feature": "absolute-anchors",
+          "chord": "Alt+Shift+ArrowUp",
+          "context": "canvas-positioned",
+          "gesture": null,
+          "labelKey": "command.anchor.top",
+          "disabledReasonKey": "status.position.notPositioned",
+          "placement": "none",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "edge": "top",
+            "mode": "toggle"
+          }
+        },
+        {
+          "id": "key-alt-shift-arrow-down-in-canvas-positioned",
+          "kind": "shortcut",
+          "feature": "absolute-anchors",
+          "chord": "Alt+Shift+ArrowDown",
+          "context": "canvas-positioned",
+          "gesture": null,
+          "labelKey": "command.anchor.bottom",
+          "disabledReasonKey": "status.position.notPositioned",
+          "placement": "none",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "edge": "bottom",
+            "mode": "toggle"
+          }
+        },
+        {
+          "id": "handle-anchor-left",
+          "kind": "canvas-handle",
+          "feature": "absolute-anchors",
+          "handle": "anchor-left",
+          "gesture": "anchor-tab",
+          "labelKey": "command.anchor.left",
+          "disabledReasonKey": "status.position.notPositioned",
+          "placement": "none",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "edge": "left",
+            "mode": "toggle"
+          }
+        },
+        {
+          "id": "handle-anchor-right",
+          "kind": "canvas-handle",
+          "feature": "absolute-anchors",
+          "handle": "anchor-right",
+          "gesture": "anchor-tab",
+          "labelKey": "command.anchor.right",
+          "disabledReasonKey": "status.position.notPositioned",
+          "placement": "none",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "edge": "right",
+            "mode": "toggle"
+          }
+        },
+        {
+          "id": "handle-anchor-top",
+          "kind": "canvas-handle",
+          "feature": "absolute-anchors",
+          "handle": "anchor-top",
+          "gesture": "anchor-tab",
+          "labelKey": "command.anchor.top",
+          "disabledReasonKey": "status.position.notPositioned",
+          "placement": "none",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "edge": "top",
+            "mode": "toggle"
+          }
+        },
+        {
+          "id": "handle-anchor-bottom",
+          "kind": "canvas-handle",
+          "feature": "absolute-anchors",
+          "handle": "anchor-bottom",
+          "gesture": "anchor-tab",
+          "labelKey": "command.anchor.bottom",
+          "disabledReasonKey": "status.position.notPositioned",
+          "placement": "none",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "edge": "bottom",
+            "mode": "toggle"
+          }
+        },
+        {
+          "id": "inspector-anchor-control",
+          "kind": "panel-control",
+          "feature": "absolute-anchors",
+          "panel": "inspector",
+          "control": "anchor-control",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.setAnchors",
+          "disabledReasonKey": "status.position.notPositioned",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [
+              "left",
+              "right",
+              "top",
+              "bottom",
+              "translate"
+            ]
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "position.align",
+      "labelKey": "command.align",
+      "owner": "src/core/geometry/align.ts",
+      "introducedBy": "align-distribute",
+      "args": {
+        "edge": {
+          "type": "enum",
+          "values": [
+            "left",
+            "horizontal-center",
+            "right",
+            "top",
+            "vertical-center",
+            "bottom"
+          ],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "positionedSelection",
+        "refusalKey": "status.align.needsPositioned"
+      },
+      "refusals": [
+        "status.locked.move"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "quick-panel-align-left",
+          "kind": "quick-panel",
+          "feature": "align-distribute",
+          "control": "align-left",
+          "labelKey": "command.align.left",
+          "disabledReasonKey": "status.align.needsPositioned",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "edge": "left"
+          }
+        },
+        {
+          "id": "menu-arrange-left",
+          "kind": "menu",
+          "feature": "align-distribute",
+          "menu": "arrange",
+          "labelKey": "command.align.left",
+          "disabledReasonKey": "status.align.needsPositioned",
+          "placement": {
+            "region": "menu:arrange",
+            "order": 10
+          },
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "edge": "left"
+          }
+        },
+        {
+          "id": "command-bar-left",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.align.left",
+          "disabledReasonKey": "status.align.needsPositioned",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "edge": "left"
+          }
+        },
+        {
+          "id": "quick-panel-align-horizontal-center",
+          "kind": "quick-panel",
+          "feature": "align-distribute",
+          "control": "align-horizontal-center",
+          "labelKey": "command.align.horizontalCenter",
+          "disabledReasonKey": "status.align.needsPositioned",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "edge": "horizontal-center"
+          }
+        },
+        {
+          "id": "menu-arrange-horizontal-center",
+          "kind": "menu",
+          "feature": "align-distribute",
+          "menu": "arrange",
+          "labelKey": "command.align.horizontalCenter",
+          "disabledReasonKey": "status.align.needsPositioned",
+          "placement": {
+            "region": "menu:arrange",
+            "order": 11
+          },
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "edge": "horizontal-center"
+          }
+        },
+        {
+          "id": "command-bar-horizontal-center",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.align.horizontalCenter",
+          "disabledReasonKey": "status.align.needsPositioned",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "edge": "horizontal-center"
+          }
+        },
+        {
+          "id": "quick-panel-align-right",
+          "kind": "quick-panel",
+          "feature": "align-distribute",
+          "control": "align-right",
+          "labelKey": "command.align.right",
+          "disabledReasonKey": "status.align.needsPositioned",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "edge": "right"
+          }
+        },
+        {
+          "id": "menu-arrange-right",
+          "kind": "menu",
+          "feature": "align-distribute",
+          "menu": "arrange",
+          "labelKey": "command.align.right",
+          "disabledReasonKey": "status.align.needsPositioned",
+          "placement": {
+            "region": "menu:arrange",
+            "order": 12
+          },
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "edge": "right"
+          }
+        },
+        {
+          "id": "command-bar-right",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.align.right",
+          "disabledReasonKey": "status.align.needsPositioned",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "edge": "right"
+          }
+        },
+        {
+          "id": "quick-panel-align-top",
+          "kind": "quick-panel",
+          "feature": "align-distribute",
+          "control": "align-top",
+          "labelKey": "command.align.top",
+          "disabledReasonKey": "status.align.needsPositioned",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "edge": "top"
+          }
+        },
+        {
+          "id": "menu-arrange-top",
+          "kind": "menu",
+          "feature": "align-distribute",
+          "menu": "arrange",
+          "labelKey": "command.align.top",
+          "disabledReasonKey": "status.align.needsPositioned",
+          "placement": {
+            "region": "menu:arrange",
+            "order": 13
+          },
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "edge": "top"
+          }
+        },
+        {
+          "id": "command-bar-top",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.align.top",
+          "disabledReasonKey": "status.align.needsPositioned",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "edge": "top"
+          }
+        },
+        {
+          "id": "quick-panel-align-vertical-center",
+          "kind": "quick-panel",
+          "feature": "align-distribute",
+          "control": "align-vertical-center",
+          "labelKey": "command.align.verticalCenter",
+          "disabledReasonKey": "status.align.needsPositioned",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "edge": "vertical-center"
+          }
+        },
+        {
+          "id": "menu-arrange-vertical-center",
+          "kind": "menu",
+          "feature": "align-distribute",
+          "menu": "arrange",
+          "labelKey": "command.align.verticalCenter",
+          "disabledReasonKey": "status.align.needsPositioned",
+          "placement": {
+            "region": "menu:arrange",
+            "order": 14
+          },
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "edge": "vertical-center"
+          }
+        },
+        {
+          "id": "command-bar-vertical-center",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.align.verticalCenter",
+          "disabledReasonKey": "status.align.needsPositioned",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "edge": "vertical-center"
+          }
+        },
+        {
+          "id": "quick-panel-align-bottom",
+          "kind": "quick-panel",
+          "feature": "align-distribute",
+          "control": "align-bottom",
+          "labelKey": "command.align.bottom",
+          "disabledReasonKey": "status.align.needsPositioned",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "edge": "bottom"
+          }
+        },
+        {
+          "id": "menu-arrange-bottom",
+          "kind": "menu",
+          "feature": "align-distribute",
+          "menu": "arrange",
+          "labelKey": "command.align.bottom",
+          "disabledReasonKey": "status.align.needsPositioned",
+          "placement": {
+            "region": "menu:arrange",
+            "order": 15
+          },
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "edge": "bottom"
+          }
+        },
+        {
+          "id": "command-bar-bottom",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.align.bottom",
+          "disabledReasonKey": "status.align.needsPositioned",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "edge": "bottom"
+          }
+        }
+      ]
+    },
+    {
+      "id": "position.distribute",
+      "labelKey": "command.distribute",
+      "owner": "src/core/geometry/align.ts",
+      "introducedBy": "align-distribute",
+      "args": {
+        "axis": {
+          "type": "enum",
+          "values": [
+            "horizontal",
+            "vertical"
+          ],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "positionedSelection",
+        "refusalKey": "status.align.needsPositioned"
+      },
+      "refusals": [
+        "status.distribute.needsThree",
+        "status.locked.move"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "quick-panel-distribute-horizontal",
+          "kind": "quick-panel",
+          "feature": "align-distribute",
+          "control": "distribute-horizontal",
+          "labelKey": "command.distribute.horizontal",
+          "disabledReasonKey": "status.align.needsPositioned",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "axis": "horizontal"
+          }
+        },
+        {
+          "id": "menu-arrange-horizontal",
+          "kind": "menu",
+          "feature": "align-distribute",
+          "menu": "arrange",
+          "labelKey": "command.distribute.horizontal",
+          "disabledReasonKey": "status.align.needsPositioned",
+          "placement": {
+            "region": "menu:arrange",
+            "order": 16
+          },
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "axis": "horizontal"
+          }
+        },
+        {
+          "id": "command-bar-horizontal",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.distribute.horizontal",
+          "disabledReasonKey": "status.align.needsPositioned",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "axis": "horizontal"
+          }
+        },
+        {
+          "id": "quick-panel-distribute-vertical",
+          "kind": "quick-panel",
+          "feature": "align-distribute",
+          "control": "distribute-vertical",
+          "labelKey": "command.distribute.vertical",
+          "disabledReasonKey": "status.align.needsPositioned",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "axis": "vertical"
+          }
+        },
+        {
+          "id": "menu-arrange-vertical",
+          "kind": "menu",
+          "feature": "align-distribute",
+          "menu": "arrange",
+          "labelKey": "command.distribute.vertical",
+          "disabledReasonKey": "status.align.needsPositioned",
+          "placement": {
+            "region": "menu:arrange",
+            "order": 17
+          },
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "axis": "vertical"
+          }
+        },
+        {
+          "id": "command-bar-vertical",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.distribute.vertical",
+          "disabledReasonKey": "status.align.needsPositioned",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "axis": "vertical"
+          }
+        }
+      ]
+    },
+    {
+      "id": "handle.step",
+      "labelKey": "command.handleStep",
+      "owner": "src/editor/canvas/handles.ts",
+      "introducedBy": "radius-border-gap-handles",
+      "args": {
+        "direction": {
+          "type": "enum",
+          "values": [
+            "increase",
+            "decrease"
+          ],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-arrow-right-in-canvas-handle",
+          "kind": "shortcut",
+          "feature": "radius-border-gap-handles",
+          "chord": "ArrowRight",
+          "context": "canvas-handle",
+          "gesture": "handle-keys",
+          "labelKey": "canvas.handle.increase",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "direction": "increase"
+          }
+        },
+        {
+          "id": "key-arrow-up-in-canvas-handle",
+          "kind": "shortcut",
+          "feature": "radius-border-gap-handles",
+          "chord": "ArrowUp",
+          "context": "canvas-handle",
+          "gesture": "handle-keys",
+          "labelKey": "canvas.handle.increase",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "direction": "increase"
+          }
+        },
+        {
+          "id": "key-arrow-left-in-canvas-handle",
+          "kind": "shortcut",
+          "feature": "radius-border-gap-handles",
+          "chord": "ArrowLeft",
+          "context": "canvas-handle",
+          "gesture": "handle-keys",
+          "labelKey": "canvas.handle.decrease",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "direction": "decrease"
+          }
+        },
+        {
+          "id": "key-arrow-down-in-canvas-handle",
+          "kind": "shortcut",
+          "feature": "radius-border-gap-handles",
+          "chord": "ArrowDown",
+          "context": "canvas-handle",
+          "gesture": "handle-keys",
+          "labelKey": "canvas.handle.decrease",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "direction": "decrease"
+          }
+        }
+      ]
+    },
+    {
+      "id": "canvas.setEditMode",
+      "labelKey": "quickPanel.editOnCanvas",
+      "owner": "src/editor/canvas/edit-mode.ts",
+      "introducedBy": "spacing-handles",
+      "args": {
+        "mode": {
+          "type": "enum",
+          "values": [
+            "none",
+            "padding",
+            "margin",
+            "radius",
+            "border",
+            "gap",
+            "row-gap",
+            "column-gap",
+            "shadow-offset",
+            "shadow-blur"
+          ],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.gap.notContainer",
+        "status.shadow.none"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "quick-panel-edit-on-canvas",
+          "kind": "quick-panel",
+          "feature": "spacing-handles",
+          "control": "edit-on-canvas",
+          "labelKey": "quickPanel.editOnCanvas",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-escape-in-canvas-edit-mode",
+          "kind": "shortcut",
+          "feature": "spacing-handles",
+          "chord": "Escape",
+          "context": "canvas-edit-mode",
+          "gesture": null,
+          "labelKey": "canvas.editMode.leave",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "mode": "none"
+          }
+        }
+      ]
+    }
+  ]
+}

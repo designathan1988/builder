@@ -1,0 +1,190 @@
+{
+  "group": "animation-and-events",
+  "titleKey": "featureGroup.animationAndEvents",
+  "features": [
+    {
+      "id": "timeline-animations",
+      "titleKey": "feature.timelineAnimations",
+      "commands": [
+        "workspace.setPanelOpen",
+        "animation.create",
+        "animation.rename",
+        "animation.delete"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Timeline panel: create animations for an element",
+        "steps": [
+          "Select a Heading and open the Timeline panel.",
+          "Click 'New animation' [timeline.newAnimation], name it 'fade-in'.",
+          "Create a second animation and rename and delete it."
+        ],
+        "expected": [
+          "View > Timeline opens the Timeline panel as a tab in the bottom workbench.",
+          "The Timeline panel lists the animations of the selected element with a time ruler.",
+          "New animations are stored in the document JSON with a unique keyframes name, a 1 s duration and keyframes at 0% and 100%.",
+          "Rename and delete are undo steps; a deleted animation leaves no animation properties on the element."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "timeline-keyframes",
+      "titleKey": "feature.timelineKeyframes",
+      "commands": [
+        "animation.addKeyframe",
+        "animation.moveKeyframe",
+        "animation.setKeyframeEasing",
+        "animation.deleteKeyframe",
+        "timeline.setPlayhead"
+      ],
+      "dependsOn": [
+        "timeline-animations"
+      ],
+      "spec": "spec/behavior/timeline-keyframes.md",
+      "intent": {
+        "title": "Add, edit, move and delete keyframes on the timeline",
+        "steps": [
+          "Select the 'fade-in' animation, move the playhead to 50% and click 'Add keyframe' [timeline.addKeyframe].",
+          "With the playhead on the 0% keyframe set opacity 0 and Move Y 20px in the inspector; on 100% set opacity 1 and Move Y 0.",
+          "Drag the 50% keyframe to 30%; set its easing to ease-out; delete it."
+        ],
+        "expected": [
+          "Keyframes show as diamonds on the track at their percentage.",
+          "While the playhead sits on a keyframe the inspector edits that keyframe's values (a badge says so) and not the base styles.",
+          "Keyframe offsets, values and per-keyframe easing are stored in the document JSON; moving and deleting are undo steps."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "timeline-animation-settings",
+      "titleKey": "feature.timelineAnimationSettings",
+      "commands": [
+        "animation.setSettings"
+      ],
+      "dependsOn": [
+        "timeline-animations"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Animation duration, delay, repeat, direction and fill",
+        "steps": [
+          "Set duration 800 ms, delay 200 ms, iteration count infinite, direction alternate, fill mode both, timing function ease-in-out and play state paused, then running."
+        ],
+        "expected": [
+          "Each setting is stored with the animation in the document JSON.",
+          "The animation has no trigger setting of its own."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "timeline-preview",
+      "titleKey": "feature.timelinePreview",
+      "commands": [
+        "timeline.play",
+        "timeline.pause",
+        "timeline.stop",
+        "timeline.toggleLoop"
+      ],
+      "dependsOn": [
+        "timeline-keyframes"
+      ],
+      "spec": "spec/behavior/timeline-preview.md",
+      "intent": {
+        "title": "Preview animations by playing and scrubbing the timeline",
+        "steps": [
+          "Click Play on the 'fade-in' animation, then Pause, then Stop.",
+          "Drag the playhead from 0% to 100%.",
+          "Turn on Loop and play."
+        ],
+        "expected": [
+          "Play animates the element on the canvas using the stored keyframes; Pause freezes it; Stop returns it to its base styles.",
+          "Scrubbing shows the interpolated state at the playhead: at 50% of a linear 0-to-1 opacity animation the computed opacity is 0.5.",
+          "Previewing never changes the document JSON."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "export-keyframes",
+      "titleKey": "feature.exportKeyframes",
+      "commands": [
+        "project.export"
+      ],
+      "dependsOn": [
+        "timeline-animation-settings",
+        "export-zip"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Export animations as @keyframes",
+        "steps": [
+          "Build an element with the 'fade-in' animation and settings, and export."
+        ],
+        "expected": [
+          "styles.css contains @keyframes fade-in with every keyframe and its values, and the animation properties on the element's base rule, so the animation plays when the page loads.",
+          "A @media (prefers-reduced-motion: reduce) block turns the animations off; it is written only when the page has animations, so pages without animations export exactly as before.",
+          "In the exported page the element's computed animation-name is fade-in and two exports are byte-identical."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "events-actions",
+      "titleKey": "feature.eventsActions",
+      "commands": [
+        "interactions.add",
+        "interactions.update",
+        "interactions.remove"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/events-actions.md",
+      "intent": {
+        "title": "Events and actions per element",
+        "steps": [
+          "Select a Button, open the Interactions section and add: on click, toggle the class 'is-open' on a Container.",
+          "Add: on hover, show a hidden element; on scroll into view, play the 'fade-in' animation; on page load, scroll to an element; on submit of a Form, hide the form and show a message; on click, open a link in a new tab.",
+          "Remove an action and undo."
+        ],
+        "expected": [
+          "Triggers are click, hover (enter and leave), scroll into view, page load and form submit; actions are show, hide, toggle class, play animation, scroll to and open link.",
+          "Targets are picked from the page or Layers, never typed ids; combinations that cannot apply (form submit on a non-form) are not offered.",
+          "Interactions are stored per element in the document JSON; each add, edit and remove is one undo step.",
+          "The editing canvas never runs them."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "export-events-js",
+      "titleKey": "feature.exportEventsJs",
+      "commands": [
+        "view.enterPreview",
+        "project.export"
+      ],
+      "dependsOn": [
+        "events-actions",
+        "preview-mode"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Export interactions as standard JavaScript",
+        "steps": [
+          "Build the interactions of events-actions, preview the page and trigger each event, then export."
+        ],
+        "expected": [
+          "The ZIP contains the plain JavaScript file js/interactions.js (no framework, no inline handlers), linked with <script defer> from every page that uses interactions.",
+          "Targets are addressed by their BEM class or user id, never by editor ids or data attributes.",
+          "An animation played by an event gets a class rule in styles.css, next to its @keyframes, that the script adds when the event fires.",
+          "Preview runs every interaction exactly like the exported page; an animation used by a play-animation action no longer plays on page load and plays when its event fires.",
+          "In the exported page opened in Chrome every trigger performs its action, checked by class, computed style or scroll position.",
+          "Pages without interactions export exactly as before, with no script."
+        ]
+      },
+      "scenarios": []
+    }
+  ]
+}

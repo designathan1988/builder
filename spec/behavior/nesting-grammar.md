@@ -68,6 +68,6 @@ The same checks run for the hand (see `nesting-grammar-structure.md`) and for Ct
 
 ## Problems in Pager
 
-1. **Invalid placements are silently wrapped instead of refused** (palette click, canvas drag and Layers drag create `<ul>`/`<li>` wrappers). Required: each attempt is refused with a message such as `Refused. <ul> only accepts <li>` and the document JSON is unchanged (features.json `nesting-grammar`).
+1. **Invalid placements are silently wrapped instead of refused** (palette click, canvas drag and Layers drag create `<ul>`/`<li>` wrappers). Required: each attempt is refused with a message such as `Refused. <ul> only accepts <li>` and the document JSON is unchanged (manifest feature `nesting-grammar`).
 2. **The paths disagree:** paste refuses where click and drag wrap, and they use different message texts and tags (`REFUSED` vs `ENGINE`). Required: click insert, canvas drag, Layers drag and paste call the same rule function over one rule table (allowed children, required parents, unique children, void elements, no interactive content inside interactive content) and report its refusal the same way.
 3. **The reason of a refused drag is lost on release** (`Cancelled — nothing changed`), and during the drag it is partly covered by the ghost. Required: during the drag the refused target shows the refusal indicator and the reason in full; releasing there reports `Refused. <reason>` in the status bar.

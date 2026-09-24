@@ -1,0 +1,516 @@
+{
+  "group": "elements",
+  "titleKey": "featureGroup.elements",
+  "features": [
+    {
+      "id": "elements-structure",
+      "titleKey": "feature.elementsStructure",
+      "commands": [
+        "element.insert",
+        "element.setLink"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Structure elements: Container, Header, Navigation, Main, Section, Article, Aside, Footer, Link Block",
+        "steps": [
+          "Insert each structure element from the Elements panel.",
+          "Set the Link Block's link to https://example.com.",
+          "Export."
+        ],
+        "expected": [
+          "Each element has its default name, default styles and renders as its tag: div, header, nav, main, section, article, aside, footer and a (block link); there is no Card element type.",
+          "Empty structure elements keep a visible minimum height on the canvas that is not exported.",
+          "The export writes the same tags; the Link Block has the href."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "elements-text",
+      "titleKey": "feature.elementsText",
+      "commands": [
+        "element.insert",
+        "element.setTag",
+        "element.setLink"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Text elements: Heading, Paragraph, Link, Blockquote, Preformatted, Divider",
+        "steps": [
+          "Insert each text element.",
+          "Set the Heading level to h3, the Link URL and 'open in a new tab' [inspector.link.openInNewTab].",
+          "Type multi-line text with extra spaces in Preformatted.",
+          "Export."
+        ],
+        "expected": [
+          "Elements render as h1-h6, p, a, blockquote, pre and hr with their default text and styles; there is no Badge element type.",
+          "The Link stores href and target=_blank with rel='noopener noreferrer'; unsafe URLs are refused.",
+          "Preformatted keeps line breaks and spaces; Divider is a void element with no text.",
+          "The export writes the same tags and attributes."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "elements-lists",
+      "titleKey": "feature.elementsLists",
+      "commands": [
+        "element.insert",
+        "element.duplicate"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "List elements: Unordered, Ordered and Definition lists with their items",
+        "steps": [
+          "Insert an Unordered list, an Ordered list and a Definition list from the Elements panel.",
+          "Add items by duplicating a list item (Ctrl+D); in the Definition list duplicate the term and the description.",
+          "Export."
+        ],
+        "expected": [
+          "The Elements panel offers Unordered, Ordered and Definition lists; List item, Term and Description are not palette items.",
+          "New lists come with their items so they are never empty: ul and ol with one li, dl with one dt and one dd.",
+          "The iframe and the export render ul/ol/li and dl/dt/dd with the texts and default styles."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "nesting-grammar",
+      "titleKey": "feature.nestingGrammar",
+      "commands": [
+        "element.insert",
+        "element.moveTo",
+        "clipboard.paste"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/nesting-grammar.md",
+      "intent": {
+        "title": "HTML nesting rules for inserting, dragging and pasting",
+        "steps": [
+          "Select an Unordered list and click Paragraph in the Elements panel.",
+          "Drag a Paragraph into an Unordered list on the canvas and in Layers.",
+          "Copy a List item and paste it into a Section.",
+          "Try to put a Link Block inside a Link Block."
+        ],
+        "expected": [
+          "Each attempt is refused with a message such as 'Refused. <ul> only accepts <li>' [status.refused.onlyAccepts] and the document JSON is unchanged.",
+          "During a drag the refused target shows a refusal indicator and no insertion line.",
+          "The rules live in one table covering allowed children (only), required parents (needs), unique children, void elements and no interactive content inside interactive content; a unit test checks the table.",
+          "Click insert, canvas drag, Layers drag and paste call the same rule function."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "nesting-grammar-structure",
+      "titleKey": "feature.nestingGrammarStructure",
+      "commands": [
+        "element.moveTo",
+        "element.wrapRow",
+        "element.wrapColumn",
+        "element.promote",
+        "element.unwrap",
+        "hand.take",
+        "element.setTag"
+      ],
+      "dependsOn": [
+        "nesting-grammar"
+      ],
+      "spec": "spec/behavior/nesting-grammar-structure.md",
+      "intent": {
+        "title": "HTML nesting rules for wrap, unwrap, promote, tag switch and hand",
+        "steps": [
+          "Select a List item and press R.",
+          "Select a List item and press P.",
+          "Unwrap an Unordered list that sits in a Section.",
+          "Switch the tag of a Section that contains a Main to header (a main may not sit inside a header).",
+          "Take a List item into the hand and aim it at the Page."
+        ],
+        "expected": [
+          "Each change that would break the nesting rules is refused with a message naming the rule and the document JSON is unchanged.",
+          "The hand never offers a target the rules refuse.",
+          "Wrap, unwrap, promote, tag switch and hand call the same rule function as insert, drag and paste (unit test with one table of cases run through every path)."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "elements-tables",
+      "titleKey": "feature.elementsTables",
+      "commands": [
+        "element.insert",
+        "parts.toggle"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Table elements: Table, Caption, Head, Body, Footer, Row, Header cell, Cell",
+        "steps": [
+          "Insert a Table from the Elements panel.",
+          "In the Table's controls in the Inspector turn on Caption and Footer, then turn Head off and on again.",
+          "Edit cell texts.",
+          "Export."
+        ],
+        "expected": [
+          "The Elements panel offers Table only; Caption, Head, Body, Footer, Row, Header cell and Cell are not palette items.",
+          "A new Table comes with a head row of two header cells and a body of two rows of two cells.",
+          "The Table's controls add and remove its caption, head and footer; the iframe renders caption, thead, tbody, tfoot, tr, th and td in valid order (caption first).",
+          "Only one caption, thead and tfoot are allowed per table.",
+          "The export writes the same table markup."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "table-commands",
+      "titleKey": "feature.tableCommands",
+      "commands": [
+        "table.addColumnAfter",
+        "table.addColumnEnd",
+        "table.removeColumn",
+        "table.addRowAfter",
+        "table.removeRow"
+      ],
+      "dependsOn": [
+        "elements-tables"
+      ],
+      "spec": "spec/behavior/table-commands.md",
+      "intent": {
+        "title": "Add and remove table rows and columns",
+        "steps": [
+          "Insert a Table with a Head row of two Header cells and a Body with two rows of two Cells, and select a body Cell.",
+          "Run 'Add a column after this one' [command.table.addColumnAfter], 'Add a column at the end' [command.table.addColumnEnd] and 'Remove this column' [command.table.removeColumn] from the context menu.",
+          "Run 'Add a row after this one' [command.table.addRowAfter] and 'Remove this row' [command.table.removeRow]."
+        ],
+        "expected": [
+          "Adding a column inserts a cell at the same index in every row (th in head rows, td elsewhere); the status bar reads 'Column created in N rows' [status.table.columnCreated].",
+          "Removing a column removes the cell at that index from every row.",
+          "Adding a row copies the row's cell structure with empty cells; removing a row removes it.",
+          "Each command is one undo step."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "elements-form-structure",
+      "titleKey": "feature.elementsFormStructure",
+      "commands": [
+        "element.insert",
+        "element.setTag",
+        "element.setAttribute"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Form structure elements: Form, Fieldset, Legend, Label, Button, Output",
+        "steps": [
+          "Insert a Form and set action and method.",
+          "Insert a Fieldset (it comes with its Legend) and a Label with text.",
+          "Insert a Button and set type submit/button/reset; insert an Output.",
+          "Insert a Link, switch its tag to button and back to a.",
+          "Export."
+        ],
+        "expected": [
+          "Elements render as form, fieldset, legend, label, button and output with their attributes.",
+          "A new Fieldset comes with its Legend, which is not a palette item; a Fieldset allows one Legend, as its first child.",
+          "Switching a Link to a button and back keeps its text and styles; the link URL is kept on the a and not written on the button.",
+          "Buttons and form submission do not navigate the editor when clicked on the canvas.",
+          "The export writes the same tags and attributes."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "element-attributes-aria",
+      "titleKey": "feature.elementAttributesAria",
+      "commands": [
+        "element.setCustomAttribute",
+        "element.removeCustomAttribute"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Custom attributes and accessibility fields",
+        "steps": [
+          "Select a Button and add aria-label, aria-expanded and data-state attributes and a role.",
+          "Try to add an onclick attribute and an attribute with an invalid name.",
+          "Export."
+        ],
+        "expected": [
+          "Custom attributes (aria-*, data-*, role) are stored in the document JSON and rendered in the iframe and the export; they are the user's own, unlike the editor-generated attributes that the export never writes.",
+          "on* attributes and invalid attribute names are refused with a message.",
+          "Each change is one undo step."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "shared-style-classes",
+      "titleKey": "feature.sharedStyleClasses",
+      "commands": [
+        "classes.create",
+        "classes.apply",
+        "classes.detach",
+        "inspector.setStyleTarget"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Reusable style classes",
+        "steps": [
+          "Style a Button and save its styles as the class 'button-primary'.",
+          "Apply the class to two other buttons.",
+          "Change the class's background; override the background on one button only."
+        ],
+        "expected": [
+          "A class holds styles shared by every element that uses it; editing the class updates all of them.",
+          "An element's own values override the class and the inspector shows which values come from the class.",
+          "The export writes one rule for the class and element rules only for the overrides."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "elements-form-inputs",
+      "titleKey": "feature.elementsFormInputs",
+      "commands": [
+        "element.insert",
+        "element.setAttribute"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Input elements: the 14 input types and their attributes",
+        "steps": [
+          "Insert each input: Text, Email, Password, Number, Telephone, URL, Search, Date, Time, Color, Range, Checkbox, Radio, File.",
+          "Set name, placeholder, value, required, pattern, min, max, step, autocomplete, disabled, readonly and checked where they apply.",
+          "Export."
+        ],
+        "expected": [
+          "Each input renders with its type in the iframe.",
+          "Attributes are stored in the document JSON and rendered in the iframe and the export."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "elements-form-inputs-rules",
+      "titleKey": "feature.elementsFormInputsRules",
+      "commands": [
+        "element.setInputType",
+        "element.setLabelTarget",
+        "inspector.reveal"
+      ],
+      "dependsOn": [
+        "elements-form-inputs"
+      ],
+      "spec": "spec/behavior/elements-form-inputs-rules.md",
+      "intent": {
+        "title": "Per-type input attributes, type switching, label targets and canvas focus",
+        "steps": [
+          "Select a Checkbox and a Number input and compare their attribute fields.",
+          "Change an input's type from text to email and then to checkbox.",
+          "Insert a Label and pick an input in its 'for' field.",
+          "Click into an input on the canvas and type."
+        ],
+        "expected": [
+          "The inspector shows only the attributes valid for the input type (e.g. checked for checkbox and radio; min, max and step for number, range, date and time).",
+          "Switching type keeps the attributes that stay valid and drops the others.",
+          "A Label's 'for' field offers the ids of the form controls on the page (giving the control an id if it has none) and the exported label points to that id.",
+          "Inputs on the canvas never take focus or text while editing; clicking selects the element and typing does not change its value."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "elements-form-controls",
+      "titleKey": "feature.elementsFormControls",
+      "commands": [
+        "element.insert",
+        "element.setAttribute",
+        "parts.add",
+        "parts.move",
+        "parts.remove"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Textarea, Select, Option group, Option, Progress and Meter",
+        "steps": [
+          "Insert a Textarea and set rows and placeholder.",
+          "Insert a Select; in its options editor in the Inspector add an Option group with two Options, set option values and a selected option, reorder and remove an option.",
+          "Insert a Progress and a Meter and set value, min and max.",
+          "Export."
+        ],
+        "expected": [
+          "The Elements panel offers Textarea, Select, Progress and Meter; Option group and Option are not palette items.",
+          "A new Select comes with three options; its options editor adds, reorders and removes options and option groups.",
+          "Each element renders with its attributes in the iframe.",
+          "A Select only accepts option and optgroup; an optgroup only accepts option.",
+          "The export writes the same markup and attributes."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "elements-media-images",
+      "titleKey": "feature.elementsMediaImages",
+      "commands": [
+        "element.insert",
+        "element.setAttribute",
+        "parts.add"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Image, Picture, Source, Figure and Caption",
+        "steps": [
+          "Insert an Image without a source.",
+          "Set its source URL and alt text.",
+          "Insert a Picture and add a Source (srcset, media) with the Picture's controls; insert a Figure (it comes with an Image and a Caption).",
+          "Export."
+        ],
+        "expected": [
+          "Source and Caption are not palette items: a Picture comes with an Image and its controls add, reorder and remove Sources; a Figure comes with an Image and a Caption.",
+          "An image without a source shows a placeholder with its size (e.g. '800 x 300') on the canvas.",
+          "Source URL and alt are stored in the document JSON; unsafe URLs are refused.",
+          "The iframe and the export render img, picture/source and figure/figcaption; an exported image without alt gets alt=''."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "elements-media-embeds",
+      "titleKey": "feature.elementsMediaEmbeds",
+      "commands": [
+        "element.insert",
+        "element.setAttribute",
+        "parts.add"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Video, Audio, Track, Embedded frame and Canvas",
+        "steps": [
+          "Insert a Video; add a Source and a Track with the Video's controls; set controls, autoplay, loop, muted and poster.",
+          "Insert an Audio and add a Source with its controls.",
+          "Insert an Embedded frame with a URL and title; insert a Canvas with width and height.",
+          "Export."
+        ],
+        "expected": [
+          "Source and Track are not palette items: Video and Audio add, reorder and remove their Sources and Tracks from their own controls.",
+          "Each element renders with its attributes; media do not autoplay inside the editor canvas.",
+          "The embedded frame is sandboxed in the editor so it cannot steal pointer events from the canvas.",
+          "The export writes video/audio/source/track/iframe/canvas with the attributes."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "elements-svg-shapes",
+      "titleKey": "feature.elementsSvgShapes",
+      "commands": [
+        "element.insert",
+        "style.set",
+        "geometry.resize",
+        "element.setSvgMarkup",
+        "parts.add"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/elements-svg-shapes.md",
+      "intent": {
+        "title": "SVG/Icon, Rectangle, Ellipse and Line",
+        "steps": [
+          "Insert an SVG/Icon and add a Rectangle, an Ellipse and a Line with the SVG's controls.",
+          "Set fill, stroke and stroke width on the shapes, set one shape's fill from the quick panel's Fill, and size the shapes with the handles.",
+          "Paste icon markup (an <svg> with a path) into the SVG's markup field.",
+          "Export."
+        ],
+        "expected": [
+          "Rectangle, Ellipse and Line are not palette items: they are added inside a selected SVG from its controls and only go inside an SVG; the SVG has a viewBox that matches its size.",
+          "Fill, stroke and stroke-width are stored and rendered; the quick panel's Fill writes a shape's fill with the same command as the inspector.",
+          "Markup typed or pasted into the SVG's markup field becomes the SVG's content, rendered and exported as written, with scripts and event attributes removed.",
+          "The export writes inline <svg> with its shapes and markup."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "elements-interactive",
+      "titleKey": "feature.elementsInteractive",
+      "commands": [
+        "element.insert",
+        "element.setAttribute"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Details, Summary and Dialog",
+        "steps": [
+          "Insert a Details (it comes with its Summary) and add content; toggle its open attribute.",
+          "Insert a Dialog with content; toggle its open attribute.",
+          "Export."
+        ],
+        "expected": [
+          "Summary is not a palette item: a Details always has exactly one Summary as first child.",
+          "The open attribute is stored; on the canvas a closed Details still shows its content while it or a descendant is selected.",
+          "A closed Dialog is visible on the canvas while selected and exported closed (no open attribute) unless set.",
+          "The export writes details/summary and dialog."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "natural-child-command",
+      "titleKey": "feature.naturalChildCommand",
+      "commands": [
+        "element.createNaturalChild"
+      ],
+      "dependsOn": [
+        "elements-lists",
+        "elements-tables"
+      ],
+      "spec": "spec/behavior/natural-child-command.md",
+      "intent": {
+        "title": "Create the natural child inside a container",
+        "steps": [
+          "Select an Unordered list and run 'Create <li> inside' [command.createNaturalChild] from the context menu.",
+          "Do the same on a Select (option), a Figure without caption (figcaption) and a table body (tr).",
+          "Select a Details and open the context menu."
+        ],
+        "expected": [
+          "The command label names the child tag for the selected element and appends that child with default content.",
+          "It is disabled when the element has no natural child or the child is unique and already present (a Details always has its Summary, so it is disabled there).",
+          "Each is one undo step and selects the new child."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "props-element-specific",
+      "titleKey": "feature.propsElementSpecific",
+      "commands": [
+        "style.set"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "List, table, form and media properties shown only where they apply",
+        "steps": [
+          "Select an unordered list and set list-style-type, list-style-position and list-style-image.",
+          "Select a table and set border-collapse, border-spacing, table-layout, caption-side and empty-cells.",
+          "Select a text input and set resize, accent-color, caret-color and appearance.",
+          "Select an image and set object-fit and object-position."
+        ],
+        "expected": [
+          "Each group appears only for elements of its kind.",
+          "Every value is written to the document JSON and the computed style in the iframe matches."
+        ]
+      },
+      "scenarios": []
+    }
+  ]
+}

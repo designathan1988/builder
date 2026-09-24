@@ -1,0 +1,200 @@
+{
+  "domain": "history",
+  "commands": [
+    {
+      "id": "history.undo",
+      "labelKey": "command.undo",
+      "owner": "src/core/history/history.ts",
+      "introducedBy": "undo-redo",
+      "args": {},
+      "availability": {
+        "predicate": "canUndo",
+        "refusalKey": "status.undo.nothing"
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-ctrl-z-in-global",
+          "kind": "shortcut",
+          "feature": "undo-redo",
+          "chord": "Ctrl+Z",
+          "context": "global",
+          "gesture": null,
+          "labelKey": "command.undo",
+          "disabledReasonKey": "status.undo.nothing",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "toolbar-top-bar",
+          "kind": "toolbar",
+          "feature": "undo-redo",
+          "toolbar": "top-bar",
+          "labelKey": "command.undo",
+          "disabledReasonKey": "status.undo.nothing",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "toast-undo",
+          "kind": "panel-control",
+          "feature": "delete-element",
+          "panel": "toast",
+          "control": "undo",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "toast.undo",
+          "disabledReasonKey": "status.undo.nothing",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "menu-edit",
+          "kind": "menu",
+          "feature": "app-menu",
+          "menu": "edit",
+          "labelKey": "command.undo",
+          "disabledReasonKey": "status.undo.nothing",
+          "placement": {
+            "region": "menu:edit",
+            "order": 1
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.undo",
+          "disabledReasonKey": "status.undo.nothing",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "history.redo",
+      "labelKey": "command.redo",
+      "owner": "src/core/history/history.ts",
+      "introducedBy": "undo-redo",
+      "args": {},
+      "availability": {
+        "predicate": "canRedo",
+        "refusalKey": "status.redo.nothing"
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-ctrl-shift-z-in-global",
+          "kind": "shortcut",
+          "feature": "undo-redo",
+          "chord": "Ctrl+Shift+Z",
+          "context": "global",
+          "gesture": null,
+          "labelKey": "command.redo",
+          "disabledReasonKey": "status.redo.nothing",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-ctrl-y-in-global",
+          "kind": "shortcut",
+          "feature": "undo-redo",
+          "chord": "Ctrl+Y",
+          "context": "global",
+          "gesture": null,
+          "labelKey": "command.redo",
+          "disabledReasonKey": "status.redo.nothing",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "toolbar-top-bar",
+          "kind": "toolbar",
+          "feature": "undo-redo",
+          "toolbar": "top-bar",
+          "labelKey": "command.redo",
+          "disabledReasonKey": "status.redo.nothing",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "menu-edit",
+          "kind": "menu",
+          "feature": "app-menu",
+          "menu": "edit",
+          "labelKey": "command.redo",
+          "disabledReasonKey": "status.redo.nothing",
+          "placement": {
+            "region": "menu:edit",
+            "order": 2
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "command",
+          "labelKey": "command.redo",
+          "disabledReasonKey": "status.redo.nothing",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    }
+  ]
+}

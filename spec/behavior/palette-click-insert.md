@@ -58,5 +58,5 @@ Tab to the Elements panel, arrow keys between tiles (Home/End jump; `palette/ind
 
 ## Problems in Pager
 
-1. **Types that need a parent are wrapped instead of refused.** With the Page root selected, clicking List item created a `<ul>` wrapper holding the `<li>` (`Placed. List item in Page, position 2 of 2.`); clicking Badge with a List selected created an `<li>` wrapper. The new app follows features.json `nesting-grammar`: the insert is refused with a message such as `Refused. <li> only exists inside <ul>, <ol>` and the document JSON is unchanged.
+1. **Types that need a parent are wrapped instead of refused.** With the Page root selected, clicking List item created a `<ul>` wrapper holding the `<li>` (`Placed. List item in Page, position 2 of 2.`); clicking Badge with a List selected created an `<li>` wrapper. The new app follows manifest feature `nesting-grammar`: the insert is refused with a message such as `Refused. <li> only exists inside <ul>, <ol>` and the document JSON is unchanged.
 2. **After a wrapped insert the selection is the wrapper,** not the element that was clicked (observed: `new-list` selected after clicking List item). Required: the inserted element itself is selected.

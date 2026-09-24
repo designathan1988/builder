@@ -36,7 +36,7 @@ None in Pager.
 
 ## Problems in Pager
 
-1. **No accessibility or structure checks.** Required (features.json `accessibility-checks`):
+1. **No accessibility or structure checks.** Required (manifest feature `accessibility-checks`):
    - The Checks panel lists each issue (for example an image without alt, a skipped heading level, low-contrast text, a link without text) with its rule, the element and a suggested fix.
    - Clicking an issue selects the element on the canvas and in Layers.
    - The list updates after every command.

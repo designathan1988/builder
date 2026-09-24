@@ -1,0 +1,58 @@
+{
+  "group": "clipboard-and-styles",
+  "titleKey": "featureGroup.clipboardAndStyles",
+  "features": [
+    {
+      "id": "clipboard-cut-system",
+      "titleKey": "feature.clipboardCutSystem",
+      "commands": [
+        "clipboard.cut"
+      ],
+      "dependsOn": [
+        "clipboard-copy-paste",
+        "export-bem-css"
+      ],
+      "spec": "spec/behavior/clipboard-cut-system.md",
+      "intent": {
+        "title": "Cut, and copy elements as HTML for other applications",
+        "steps": [
+          "Insert the Card template, select its root and press Ctrl+X.",
+          "Select a Section and press Ctrl+V.",
+          "Press Ctrl+C on the pasted Card and read the system clipboard's text/html."
+        ],
+        "expected": [
+          "Ctrl+X copies the element to the system clipboard and deletes it as one undo step; Cut appears in the context menu and the Edit menu.",
+          "Copy also writes text/html of the element's exported markup with its CSS rules, next to the app's element format.",
+          "The clipboard text/html contains no editor attributes, editor-generated ids or inline styles."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "copy-paste-styles",
+      "titleKey": "feature.copyPasteStyles",
+      "commands": [
+        "clipboard.copyStyle",
+        "clipboard.pasteStyle"
+      ],
+      "dependsOn": [
+        "clipboard-copy-paste"
+      ],
+      "spec": "spec/behavior/copy-paste-styles.md",
+      "intent": {
+        "title": "Copy and paste styles between elements",
+        "steps": [
+          "Select a styled Heading and press Ctrl+Alt+C.",
+          "Select a Paragraph and press Ctrl+Alt+V.",
+          "Press Ctrl+Z."
+        ],
+        "expected": [
+          "Copy style puts every style value of the element on the system clipboard in the app format.",
+          "Paste style replaces the target's style values with the copied ones as one undo step; text, children and attributes stay.",
+          "Both commands are in the context menu and the Edit menu with their shortcuts."
+        ]
+      },
+      "scenarios": []
+    }
+  ]
+}

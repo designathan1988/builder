@@ -59,6 +59,6 @@ None (panels can only be moved with the pointer).
 
 ## Problems in Pager
 
-1. **For Elements and Layers the edge hint is a 3 px line with no words.** Required: near the left or right edge a `Dock left` / `Dock right` hint appears, and release docks the panel there (features.json `floating-panels`), the same for every panel.
+1. **For Elements and Layers the edge hint is a 3 px line with no words.** Required: near the left or right edge a `Dock left` / `Dock right` hint appears, and release docks the panel there (manifest feature `floating-panels`), the same for every panel.
 2. **Two different panel-window implementations** with different thresholds (12 px vs 80 px edges), hints and limits. Required: one workspace owner and one drag behaviour for every panel.
-3. **Edge docking can create top and bottom docks** for Elements/Layers (12 px from the top or bottom edge), which the layout does not otherwise expect (features.json lists left dock, right dock and the bottom workbench). Required: panels dock to the left dock, the right dock, or the bottom workbench, and nowhere else.
+3. **Edge docking can create top and bottom docks** for Elements/Layers (12 px from the top or bottom edge), which the layout does not otherwise expect (the manifest intent lists left dock, right dock and the bottom workbench). Required: panels dock to the left dock, the right dock, or the bottom workbench, and nowhere else.

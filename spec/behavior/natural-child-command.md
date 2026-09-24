@@ -53,6 +53,6 @@ Ctrl+K, type, Enter.
 
 ## Problems in Pager
 
-1. **The command is missing from the context menu.** Required: the context menu of a container with a natural child shows `Create <tag> inside`, naming the child tag (features.json `natural-child-command`).
+1. **The command is missing from the context menu.** Required: the context menu of a container with a natural child shows `Create <tag> inside`, naming the child tag (manifest feature `natural-child-command`).
 2. **It stays enabled when it can only be refused** (Details with Summary). Required: it is disabled when the element has no natural child or the child is unique and already present.
 3. **Some children are created without default content:** an empty `<li>` and a `<tr>` with no cells. Required: the new child gets default content: an `<li>` with a text Paragraph, and a `<tr>` with as many cells as the table's other rows (`th` in a head, `td` elsewhere).

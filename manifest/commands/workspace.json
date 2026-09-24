@@ -1,0 +1,1917 @@
+{
+  "domain": "workspace",
+  "commands": [
+    {
+      "id": "workspace.setPanelOpen",
+      "labelKey": "command.togglePanel",
+      "owner": "src/editor/workspace/panels.ts",
+      "introducedBy": "app-menu",
+      "args": {
+        "panel": {
+          "type": "enum",
+          "values": [
+            "elements",
+            "layers",
+            "inspector",
+            "explorer",
+            "code",
+            "timeline",
+            "variables",
+            "checks",
+            "workbench",
+            "shortcuts",
+            "document",
+            "canvas-tools"
+          ],
+          "optional": false
+        },
+        "open": {
+          "type": "enum",
+          "values": [
+            "open",
+            "close",
+            "toggle"
+          ],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "menu-view-elements",
+          "kind": "menu",
+          "feature": "app-menu",
+          "menu": "view",
+          "labelKey": "panel.elements",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:view",
+            "order": 1
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "panel": "elements",
+            "open": "toggle"
+          }
+        },
+        {
+          "id": "menu-view-layers",
+          "kind": "menu",
+          "feature": "app-menu",
+          "menu": "view",
+          "labelKey": "panel.layers",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:view",
+            "order": 2
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "panel": "layers",
+            "open": "toggle"
+          }
+        },
+        {
+          "id": "menu-view-inspector",
+          "kind": "menu",
+          "feature": "app-menu",
+          "menu": "view",
+          "labelKey": "panel.inspector",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:view",
+            "order": 3
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "panel": "inspector",
+            "open": "toggle"
+          }
+        },
+        {
+          "id": "menu-view-explorer",
+          "kind": "menu",
+          "feature": "explorer-pages",
+          "menu": "view",
+          "labelKey": "panel.explorer",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:view",
+            "order": 4
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "panel": "explorer",
+            "open": "toggle"
+          }
+        },
+        {
+          "id": "menu-view-code",
+          "kind": "menu",
+          "feature": "code-panel-view",
+          "menu": "view",
+          "labelKey": "panel.code",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:view",
+            "order": 5
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "panel": "code",
+            "open": "toggle"
+          }
+        },
+        {
+          "id": "menu-view-timeline",
+          "kind": "menu",
+          "feature": "timeline-animations",
+          "menu": "view",
+          "labelKey": "panel.timeline",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:view",
+            "order": 6
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "panel": "timeline",
+            "open": "toggle"
+          }
+        },
+        {
+          "id": "menu-view-variables",
+          "kind": "menu",
+          "feature": "css-variables-tokens",
+          "menu": "view",
+          "labelKey": "panel.variables",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:view",
+            "order": 7
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "panel": "variables",
+            "open": "toggle"
+          }
+        },
+        {
+          "id": "menu-view-checks",
+          "kind": "menu",
+          "feature": "accessibility-checks",
+          "menu": "view",
+          "labelKey": "panel.checks",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:view",
+            "order": 8
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "panel": "checks",
+            "open": "toggle"
+          }
+        },
+        {
+          "id": "menu-view-workbench",
+          "kind": "menu",
+          "feature": "workbench-panel",
+          "menu": "view",
+          "labelKey": "panel.workbench",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:view",
+            "order": 9
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "panel": "workbench",
+            "open": "toggle"
+          }
+        },
+        {
+          "id": "menu-view-canvas-tools",
+          "kind": "menu",
+          "feature": "canvas-outlines-zones",
+          "menu": "view",
+          "labelKey": "panel.canvasTools",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:view",
+            "order": 11
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "panel": "canvas-tools",
+            "open": "toggle"
+          }
+        },
+        {
+          "id": "toolbar-top-bar-canvas-tools",
+          "kind": "toolbar",
+          "feature": "canvas-outlines-zones",
+          "toolbar": "top-bar",
+          "labelKey": "panel.canvasTools",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "panel": "canvas-tools",
+            "open": "toggle"
+          }
+        },
+        {
+          "id": "toolbar-top-bar-elements",
+          "kind": "toolbar",
+          "feature": "dock-toggles",
+          "toolbar": "top-bar",
+          "labelKey": "panel.elements",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "panel": "elements",
+            "open": "toggle"
+          }
+        },
+        {
+          "id": "toolbar-top-bar-layers",
+          "kind": "toolbar",
+          "feature": "dock-toggles",
+          "toolbar": "top-bar",
+          "labelKey": "panel.layers",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "panel": "layers",
+            "open": "toggle"
+          }
+        },
+        {
+          "id": "panel-header-close",
+          "kind": "panel-control",
+          "feature": "dock-toggles",
+          "panel": "panel-header",
+          "control": "close",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "panel.close",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "open": "close"
+          }
+        },
+        {
+          "id": "command-bar-open-panel",
+          "kind": "command-bar",
+          "feature": "command-bar",
+          "entry": "open-panel",
+          "labelKey": "command.openPanel",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "open": "open"
+          }
+        },
+        {
+          "id": "menu-help-shortcuts",
+          "kind": "menu",
+          "feature": "shortcuts-panel",
+          "menu": "help",
+          "labelKey": "panel.shortcuts",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:help",
+            "order": 1
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "panel": "shortcuts",
+            "open": "open"
+          }
+        },
+        {
+          "id": "workbench-tab-close",
+          "kind": "panel-control",
+          "feature": "workbench-panel",
+          "panel": "workbench",
+          "control": "tab-close",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "workbench.closeTab",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "open": "close"
+          }
+        }
+      ]
+    },
+    {
+      "id": "workspace.toggleLeftDock",
+      "labelKey": "command.toggleLeftDock",
+      "owner": "src/editor/workspace/panels.ts",
+      "introducedBy": "dock-toggles",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-ctrl-b-in-global",
+          "kind": "shortcut",
+          "feature": "dock-toggles",
+          "chord": "Ctrl+B",
+          "context": "global",
+          "gesture": null,
+          "labelKey": "command.toggleLeftDock",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "menu-view",
+          "kind": "menu",
+          "feature": "dock-toggles",
+          "menu": "view",
+          "labelKey": "command.toggleLeftDock",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:view",
+            "order": 12
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "workspace.toggleInspector",
+      "labelKey": "command.toggleInspector",
+      "owner": "src/editor/workspace/panels.ts",
+      "introducedBy": "dock-toggles",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-ctrl-alt-b-in-global",
+          "kind": "shortcut",
+          "feature": "dock-toggles",
+          "chord": "Ctrl+Alt+B",
+          "context": "global",
+          "gesture": null,
+          "labelKey": "command.toggleInspector",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "menu-view",
+          "kind": "menu",
+          "feature": "dock-toggles",
+          "menu": "view",
+          "labelKey": "command.toggleInspector",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:view",
+            "order": 13
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "workspace.collapseDocks",
+      "labelKey": "command.collapseDocks",
+      "owner": "src/editor/workspace/panels.ts",
+      "introducedBy": "dock-toggles",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-ctrl-backslash-in-global",
+          "kind": "shortcut",
+          "feature": "dock-toggles",
+          "chord": "Ctrl+\\",
+          "context": "global",
+          "gesture": null,
+          "labelKey": "command.collapseDocks",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "menu-view",
+          "kind": "menu",
+          "feature": "dock-toggles",
+          "menu": "view",
+          "labelKey": "command.collapseDocks",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:view",
+            "order": 14
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "workspace.toggleDeveloperTools",
+      "labelKey": "command.developerTools",
+      "owner": "src/editor/workspace/panels.ts",
+      "introducedBy": "workbench-panel",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "menu-view",
+          "kind": "menu",
+          "feature": "workbench-panel",
+          "menu": "view",
+          "labelKey": "command.developerTools",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:view",
+            "order": 15
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "workspace.reset",
+      "labelKey": "command.resetWorkspace",
+      "owner": "src/editor/workspace/layout.ts",
+      "introducedBy": "workspace-persist-reset",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "menu-view",
+          "kind": "menu",
+          "feature": "workspace-persist-reset",
+          "menu": "view",
+          "labelKey": "command.resetWorkspace",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:view",
+            "order": 16
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar",
+          "kind": "command-bar",
+          "feature": "workspace-persist-reset",
+          "entry": "command",
+          "labelKey": "command.resetWorkspace",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "workspace.setWorkbenchState",
+      "labelKey": "workbench.toggle",
+      "owner": "src/editor/workspace/layout.ts",
+      "introducedBy": "workbench-panel",
+      "args": {
+        "state": {
+          "type": "enum",
+          "values": [
+            "collapsed",
+            "open",
+            "max",
+            "toggle",
+            "toggle-max"
+          ],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "toolbar-workbench-strip-toggle",
+          "kind": "toolbar",
+          "feature": "workbench-panel",
+          "toolbar": "workbench-strip",
+          "labelKey": "workbench.toggle",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "state": "toggle"
+          }
+        },
+        {
+          "id": "toolbar-workbench-strip-maximize",
+          "kind": "toolbar",
+          "feature": "workbench-panel",
+          "toolbar": "workbench-strip",
+          "labelKey": "workbench.maximize",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "state": "toggle-max"
+          }
+        }
+      ]
+    },
+    {
+      "id": "workspace.setActiveTab",
+      "labelKey": "command.showTab",
+      "owner": "src/editor/workspace/layout.ts",
+      "introducedBy": "workbench-panel",
+      "args": {
+        "group": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        },
+        "panel": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "tab-strip-tab",
+          "kind": "panel-control",
+          "feature": "workbench-panel",
+          "panel": "tab-strip",
+          "control": "tab",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.showTab",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "workspace.resizeSplitter",
+      "labelKey": "command.resizeSplitter",
+      "owner": "src/editor/workspace/layout.ts",
+      "introducedBy": "panel-resize",
+      "args": {
+        "splitter": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        },
+        "size": {
+          "type": "number",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "panel-drag-splitter-workspace",
+          "kind": "panel-drag",
+          "feature": "panel-resize",
+          "source": "splitter",
+          "zone": "workspace",
+          "gesture": "splitter-drag",
+          "labelKey": "command.resizeSplitter",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-arrow-left-in-splitter",
+          "kind": "shortcut",
+          "feature": "panel-resize",
+          "chord": "ArrowLeft",
+          "context": "splitter",
+          "gesture": null,
+          "labelKey": "command.resizeSplitter",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-arrow-right-in-splitter",
+          "kind": "shortcut",
+          "feature": "panel-resize",
+          "chord": "ArrowRight",
+          "context": "splitter",
+          "gesture": null,
+          "labelKey": "command.resizeSplitter",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-arrow-up-in-splitter",
+          "kind": "shortcut",
+          "feature": "panel-resize",
+          "chord": "ArrowUp",
+          "context": "splitter",
+          "gesture": null,
+          "labelKey": "command.resizeSplitter",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-arrow-down-in-splitter",
+          "kind": "shortcut",
+          "feature": "panel-resize",
+          "chord": "ArrowDown",
+          "context": "splitter",
+          "gesture": null,
+          "labelKey": "command.resizeSplitter",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "workspace.movePanel",
+      "labelKey": "command.movePanel",
+      "owner": "src/editor/workspace/layout.ts",
+      "introducedBy": "floating-panels",
+      "args": {
+        "panel": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        },
+        "to": {
+          "type": "enum",
+          "values": [
+            "float",
+            "dock-left",
+            "dock-right",
+            "workbench",
+            "tabs",
+            "stack"
+          ],
+          "optional": false
+        },
+        "at": {
+          "type": "point",
+          "values": [],
+          "optional": true
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "panel-drag-panel-header-canvas",
+          "kind": "panel-drag",
+          "feature": "floating-panels",
+          "source": "panel-header",
+          "zone": "canvas",
+          "gesture": "panel-drag",
+          "labelKey": "command.movePanel",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "panel-drag-panel-header-left-edge",
+          "kind": "panel-drag",
+          "feature": "floating-panels",
+          "source": "panel-header",
+          "zone": "left-edge",
+          "gesture": "panel-drag",
+          "labelKey": "workspace.hint.dockLeft",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "panel-drag-panel-header-right-edge",
+          "kind": "panel-drag",
+          "feature": "floating-panels",
+          "source": "panel-header",
+          "zone": "right-edge",
+          "gesture": "panel-drag",
+          "labelKey": "workspace.hint.dockRight",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "panel-drag-floating-header-anywhere",
+          "kind": "panel-drag",
+          "feature": "floating-panels",
+          "source": "floating-header",
+          "zone": "anywhere",
+          "gesture": "panel-drag",
+          "labelKey": "command.movePanel",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "panel-drag-panel-header-panel-upper-part",
+          "kind": "panel-drag",
+          "feature": "panel-combine-tabs",
+          "source": "panel-header",
+          "zone": "panel-upper-part",
+          "gesture": "panel-drag",
+          "labelKey": "workspace.hint.combineTabs",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "panel-drag-panel-header-panel-lower-part",
+          "kind": "panel-drag",
+          "feature": "panel-combine-tabs",
+          "source": "panel-header",
+          "zone": "panel-lower-part",
+          "gesture": "panel-drag",
+          "labelKey": "workspace.hint.stackPanels",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "quickPanel.setOffset",
+      "labelKey": "command.quickPanel.move",
+      "owner": "src/editor/quick-panel/quick-panel.ts",
+      "introducedBy": "quick-panel",
+      "args": {
+        "target": {
+          "type": "node",
+          "values": [],
+          "optional": false
+        },
+        "offset": {
+          "type": "point",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "panel-drag-quick-panel-grip-canvas",
+          "kind": "panel-drag",
+          "feature": "quick-panel",
+          "source": "quick-panel-grip",
+          "zone": "canvas",
+          "gesture": "quick-panel-grip",
+          "labelKey": "command.quickPanel.move",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "preferences.setLanguage",
+      "labelKey": "command.setLanguage",
+      "owner": "src/editor/preferences/preferences.ts",
+      "introducedBy": "ui-language",
+      "args": {
+        "locale": {
+          "type": "enum",
+          "values": [
+            "pt-BR",
+            "en"
+          ],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "menu-language-pt-br",
+          "kind": "menu",
+          "feature": "ui-language",
+          "menu": "language",
+          "labelKey": "language.ptBR",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:language",
+            "order": 1
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "locale": "pt-BR"
+          }
+        },
+        {
+          "id": "menu-language-en",
+          "kind": "menu",
+          "feature": "ui-language",
+          "menu": "language",
+          "labelKey": "language.en",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:language",
+            "order": 2
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "locale": "en"
+          }
+        }
+      ]
+    },
+    {
+      "id": "preferences.setTheme",
+      "labelKey": "command.setTheme",
+      "owner": "src/editor/preferences/preferences.ts",
+      "introducedBy": "theme-switch",
+      "args": {
+        "theme": {
+          "type": "enum",
+          "values": [
+            "light",
+            "dark",
+            "system"
+          ],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "menu-theme-light",
+          "kind": "menu",
+          "feature": "theme-switch",
+          "menu": "theme",
+          "labelKey": "theme.light",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:theme",
+            "order": 1
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "theme": "light"
+          }
+        },
+        {
+          "id": "menu-theme-dark",
+          "kind": "menu",
+          "feature": "theme-switch",
+          "menu": "theme",
+          "labelKey": "theme.dark",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:theme",
+            "order": 2
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "theme": "dark"
+          }
+        },
+        {
+          "id": "menu-theme-system",
+          "kind": "menu",
+          "feature": "theme-switch",
+          "menu": "theme",
+          "labelKey": "theme.system",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:theme",
+            "order": 3
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "theme": "system"
+          }
+        }
+      ]
+    },
+    {
+      "id": "commandBar.open",
+      "labelKey": "command.commandBar",
+      "owner": "src/editor/command-bar/command-bar.ts",
+      "introducedBy": "command-bar",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-ctrl-k-in-global",
+          "kind": "shortcut",
+          "feature": "command-bar",
+          "chord": "Ctrl+K",
+          "context": "global",
+          "gesture": null,
+          "labelKey": "command.commandBar",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "menu-file",
+          "kind": "menu",
+          "feature": "command-bar",
+          "menu": "file",
+          "labelKey": "command.commandBar",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:file",
+            "order": 7
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "palette.toggleGroup",
+      "labelKey": "command.palette.toggleGroup",
+      "owner": "src/editor/palette/palette.ts",
+      "introducedBy": "palette-search-groups",
+      "args": {
+        "group": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "elements-group-header",
+          "kind": "panel-control",
+          "feature": "palette-search-groups",
+          "panel": "elements",
+          "control": "group-header",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.palette.toggleGroup",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "palette.setDensity",
+      "labelKey": "command.palette.density",
+      "owner": "src/editor/palette/palette.ts",
+      "introducedBy": "palette-density",
+      "args": {
+        "density": {
+          "type": "enum",
+          "values": [
+            "list",
+            "two-columns",
+            "three-columns",
+            "icons"
+          ],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "elements-density-list",
+          "kind": "panel-control",
+          "feature": "palette-density",
+          "panel": "elements",
+          "control": "density-list",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "palette.density.list",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "density": "list"
+          }
+        },
+        {
+          "id": "elements-density-two-columns",
+          "kind": "panel-control",
+          "feature": "palette-density",
+          "panel": "elements",
+          "control": "density-two-columns",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "palette.density.twoColumns",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "density": "two-columns"
+          }
+        },
+        {
+          "id": "elements-density-three-columns",
+          "kind": "panel-control",
+          "feature": "palette-density",
+          "panel": "elements",
+          "control": "density-three-columns",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "palette.density.threeColumns",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "density": "three-columns"
+          }
+        },
+        {
+          "id": "elements-density-icons",
+          "kind": "panel-control",
+          "feature": "palette-density",
+          "panel": "elements",
+          "control": "density-icons",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "palette.density.icons",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "density": "icons"
+          }
+        }
+      ]
+    },
+    {
+      "id": "layers.setExpanded",
+      "labelKey": "command.layers.toggleBranch",
+      "owner": "src/editor/layers/tree.ts",
+      "introducedBy": "layers-tree",
+      "args": {
+        "target": {
+          "type": "node",
+          "values": [],
+          "optional": false
+        },
+        "expanded": {
+          "type": "enum",
+          "values": [
+            "expand",
+            "collapse",
+            "toggle"
+          ],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "layers-caret",
+          "kind": "panel-control",
+          "feature": "layers-tree",
+          "panel": "layers",
+          "control": "caret",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.layers.toggleBranch",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "expanded": "toggle"
+          }
+        },
+        {
+          "id": "layers-drag-layers-row-collapsed-row-dwell",
+          "kind": "layers-drag",
+          "feature": "layers-drag",
+          "source": "layers-row",
+          "zone": "collapsed-row-dwell",
+          "gesture": "layers-drag",
+          "labelKey": "command.layers.toggleBranch",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "expanded": "expand"
+          }
+        }
+      ]
+    },
+    {
+      "id": "layers.collapseAll",
+      "labelKey": "layers.collapseAll",
+      "owner": "src/editor/layers/tree.ts",
+      "introducedBy": "layers-expand-collapse-all",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "toolbar-layers-header-collapse-all",
+          "kind": "toolbar",
+          "feature": "layers-expand-collapse-all",
+          "toolbar": "layers-header",
+          "labelKey": "layers.collapseAll",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "layers.expandAll",
+      "labelKey": "layers.expandAll",
+      "owner": "src/editor/layers/tree.ts",
+      "introducedBy": "layers-expand-collapse-all",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "toolbar-layers-header-expand-all",
+          "kind": "toolbar",
+          "feature": "layers-expand-collapse-all",
+          "toolbar": "layers-header",
+          "labelKey": "layers.expandAll",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "layers.expandOrFocusChild",
+      "labelKey": "command.layers.expandOrChild",
+      "owner": "src/editor/layers/tree.ts",
+      "introducedBy": "layers-keyboard-navigation",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-arrow-right-in-layers-tree",
+          "kind": "shortcut",
+          "feature": "layers-keyboard-navigation",
+          "chord": "ArrowRight",
+          "context": "layers-tree",
+          "gesture": null,
+          "labelKey": "command.layers.expandOrChild",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "layers.collapseOrFocusParent",
+      "labelKey": "command.layers.collapseOrParent",
+      "owner": "src/editor/layers/tree.ts",
+      "introducedBy": "layers-keyboard-navigation",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "key-arrow-left-in-layers-tree",
+          "kind": "shortcut",
+          "feature": "layers-keyboard-navigation",
+          "chord": "ArrowLeft",
+          "context": "layers-tree",
+          "gesture": null,
+          "labelKey": "command.layers.collapseOrParent",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "layers.setRowDetails",
+      "labelKey": "layers.rowDetails",
+      "owner": "src/editor/layers/tree.ts",
+      "introducedBy": "layers-row-columns",
+      "args": {
+        "detail": {
+          "type": "enum",
+          "values": [
+            "tag",
+            "id",
+            "classes",
+            "attributes"
+          ],
+          "optional": false
+        },
+        "shown": {
+          "type": "boolean",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "menu-layers-row-details-tag",
+          "kind": "menu",
+          "feature": "layers-row-columns",
+          "menu": "layers-row-details",
+          "labelKey": "layers.rowDetail.tag",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:layers-row-details",
+            "order": 1
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "detail": "tag"
+          }
+        },
+        {
+          "id": "menu-layers-row-details-id",
+          "kind": "menu",
+          "feature": "layers-row-columns",
+          "menu": "layers-row-details",
+          "labelKey": "layers.rowDetail.id",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:layers-row-details",
+            "order": 2
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "detail": "id"
+          }
+        },
+        {
+          "id": "menu-layers-row-details-classes",
+          "kind": "menu",
+          "feature": "layers-row-columns",
+          "menu": "layers-row-details",
+          "labelKey": "layers.rowDetail.classes",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:layers-row-details",
+            "order": 3
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "detail": "classes"
+          }
+        },
+        {
+          "id": "menu-layers-row-details-attributes",
+          "kind": "menu",
+          "feature": "layers-row-columns",
+          "menu": "layers-row-details",
+          "labelKey": "layers.rowDetail.attributes",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:layers-row-details",
+            "order": 4
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "detail": "attributes"
+          }
+        }
+      ]
+    },
+    {
+      "id": "inspector.toggleSection",
+      "labelKey": "command.inspector.toggleSection",
+      "owner": "src/editor/inspector/sections.ts",
+      "introducedBy": "inspector-panel",
+      "args": {
+        "section": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "inspector-section-header",
+          "kind": "panel-control",
+          "feature": "inspector-panel",
+          "panel": "inspector",
+          "control": "section-header",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.inspector.toggleSection",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "inspector.setMode",
+      "labelKey": "command.inspector.mode",
+      "owner": "src/editor/inspector/sections.ts",
+      "introducedBy": "inspector-advanced-mode",
+      "args": {
+        "mode": {
+          "type": "enum",
+          "values": [
+            "all",
+            "essentials"
+          ],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "inspector-mode-essentials",
+          "kind": "panel-control",
+          "feature": "inspector-advanced-mode",
+          "panel": "inspector",
+          "control": "mode-essentials",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "inspector.mode.essentials",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "mode": "essentials"
+          }
+        },
+        {
+          "id": "inspector-mode-all",
+          "kind": "panel-control",
+          "feature": "inspector-advanced-mode",
+          "panel": "inspector",
+          "control": "mode-all",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "inspector.mode.all",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "mode": "all"
+          }
+        }
+      ]
+    },
+    {
+      "id": "inspector.reveal",
+      "labelKey": "command.editProperty",
+      "owner": "src/editor/inspector/sections.ts",
+      "introducedBy": "inspector-add-property",
+      "args": {
+        "property": {
+          "type": "property",
+          "values": [],
+          "optional": true
+        },
+        "attribute": {
+          "type": "attribute",
+          "values": [],
+          "optional": true
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "inspector-add-property-item",
+          "kind": "panel-control",
+          "feature": "inspector-add-property",
+          "panel": "inspector",
+          "control": "add-property-item",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.editProperty",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "command-bar-edit-property",
+          "kind": "command-bar",
+          "feature": "command-bar-set-property",
+          "entry": "edit-property",
+          "labelKey": "command.editProperty",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "canvas-double-click-form-control",
+          "kind": "canvas-click",
+          "feature": "elements-form-inputs-rules",
+          "target": "form-control",
+          "button": "primary",
+          "count": 2,
+          "modifier": null,
+          "gesture": "canvas-click",
+          "labelKey": "command.editProperty",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {
+            "attribute": "value"
+          }
+        }
+      ]
+    },
+    {
+      "id": "codePanel.copyPane",
+      "labelKey": "codePanel.copyPane",
+      "owner": "src/editor/code-panel/code-panel.ts",
+      "introducedBy": "code-panel-copy-download",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "code-panel-copy",
+          "kind": "panel-control",
+          "feature": "code-panel-copy-download",
+          "panel": "code-panel",
+          "control": "copy",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "codePanel.copyPane",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "codePanel.downloadPane",
+      "labelKey": "codePanel.downloadPane",
+      "owner": "src/editor/code-panel/code-panel.ts",
+      "introducedBy": "code-panel-copy-download",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "code-panel-download",
+          "kind": "panel-control",
+          "feature": "code-panel-copy-download",
+          "panel": "code-panel",
+          "control": "download",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "codePanel.downloadPane",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    }
+  ]
+}

@@ -51,6 +51,6 @@ Not affected.
 
 ## Problems in Pager
 
-1. **The tag switch ignores the nesting rules** (`<main>` ended inside `<header>`). Required: a tag switch that would break the rules is refused with a message naming the rule and the document JSON is unchanged (features.json `nesting-grammar-structure`).
+1. **The tag switch ignores the nesting rules** (`<main>` ended inside `<header>`). Required: a tag switch that would break the rules is refused with a message naming the rule and the document JSON is unchanged (manifest feature `nesting-grammar-structure`).
 2. **The hand offers targets the rules refuse,** reaching them through an automatic wrapper. Required: the hand never offers a target the rules refuse; such slots are skipped by the arrows.
 3. **Each command carries its own copy of the check** (`fitsIn` in `P`, a hand-made loop in unwrap, the drag validator in the hand, nothing in the tag switch), and the messages differ in form (`Refused. … cannot go in …`, `Cannot wrap … cannot sit inside …`, a doubled full stop). Required: wrap, unwrap, promote, tag switch and hand call the same rule function as insert, drag and paste, and word their refusals the same way.

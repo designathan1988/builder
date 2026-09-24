@@ -1,0 +1,235 @@
+{
+  "domain": "events",
+  "commands": [
+    {
+      "id": "interactions.add",
+      "labelKey": "command.interactions.add",
+      "owner": "src/core/events/interactions.ts",
+      "introducedBy": "events-actions",
+      "args": {
+        "trigger": {
+          "type": "enum",
+          "values": [
+            "click",
+            "hover",
+            "scroll-into-view",
+            "page-load",
+            "form-submit"
+          ],
+          "optional": false
+        },
+        "action": {
+          "type": "enum",
+          "values": [
+            "show",
+            "hide",
+            "toggle-class",
+            "play-animation",
+            "scroll-to",
+            "open-link"
+          ],
+          "optional": false
+        },
+        "target": {
+          "type": "node",
+          "values": [],
+          "optional": true
+        },
+        "options": {
+          "type": "json",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "singleSelection",
+        "refusalKey": "status.needsSingleSelection"
+      },
+      "refusals": [
+        "status.interactions.notApplicable",
+        "status.locked.edit"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "inspector-interaction-add",
+          "kind": "panel-control",
+          "feature": "events-actions",
+          "panel": "inspector",
+          "control": "interaction-add",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.interactions.add",
+          "disabledReasonKey": "status.needsSingleSelection",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "interactions.update",
+      "labelKey": "command.interactions.update",
+      "owner": "src/core/events/interactions.ts",
+      "introducedBy": "events-actions",
+      "args": {
+        "interaction": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        },
+        "changes": {
+          "type": "json",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.locked.edit"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "inspector-interaction-trigger",
+          "kind": "panel-control",
+          "feature": "events-actions",
+          "panel": "inspector",
+          "control": "interaction-trigger",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.interactions.update",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-interaction-action",
+          "kind": "panel-control",
+          "feature": "events-actions",
+          "panel": "inspector",
+          "control": "interaction-action",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.interactions.update",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-interaction-options",
+          "kind": "panel-control",
+          "feature": "events-actions",
+          "panel": "inspector",
+          "control": "interaction-options",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.interactions.update",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "canvas-click-pick-target",
+          "kind": "canvas-click",
+          "feature": "events-actions",
+          "target": "pick-target",
+          "button": "primary",
+          "count": 1,
+          "modifier": null,
+          "gesture": "pick-target",
+          "labelKey": "interactions.pickTarget",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        },
+        {
+          "id": "layers-row-pick-target",
+          "kind": "panel-control",
+          "feature": "events-actions",
+          "panel": "layers",
+          "control": "row-pick-target",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "interactions.pickTarget",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "interactions.remove",
+      "labelKey": "command.interactions.remove",
+      "owner": "src/core/events/interactions.ts",
+      "introducedBy": "events-actions",
+      "args": {
+        "interaction": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.locked.edit"
+      ],
+      "confirmation": null,
+      "entryPoints": [
+        {
+          "id": "inspector-interaction-remove",
+          "kind": "panel-control",
+          "feature": "events-actions",
+          "panel": "inspector",
+          "control": "interaction-remove",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.interactions.remove",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": []
+          },
+          "args": {}
+        }
+      ]
+    }
+  ]
+}

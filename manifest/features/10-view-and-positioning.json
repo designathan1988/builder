@@ -1,0 +1,428 @@
+{
+  "group": "view-and-positioning",
+  "titleKey": "featureGroup.viewAndPositioning",
+  "features": [
+    {
+      "id": "zoom-keyboard-buttons",
+      "titleKey": "feature.zoomKeyboardButtons",
+      "commands": [
+        "view.zoomIn",
+        "view.zoomOut",
+        "view.zoomReset",
+        "view.zoomTo",
+        "view.zoomFit"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/zoom-keyboard-buttons.md",
+      "intent": {
+        "title": "Zoom with the keyboard, the status bar buttons and Fit",
+        "steps": [
+          "Press Ctrl+= three times, Ctrl+- once, Ctrl+0.",
+          "Click the zoom-in and zoom-out buttons and the zoom percentage.",
+          "Click Fit."
+        ],
+        "expected": [
+          "Ctrl+= and Ctrl+- change zoom by 10 points, Ctrl+0 sets 100%; the iframe CSS zoom and the percentage in the status bar match.",
+          "Zoom stays between 10% and 800%; the page point at the centre of the canvas stays under the centre.",
+          "Clicking the percentage opens a menu with 25%, 50%, 100%, 200%, 400% and Fit.",
+          "Fit sets the zoom so the whole page width fits in the canvas and keeps it fitted when the canvas size changes; any manual zoom leaves Fit mode until Fit is chosen again.",
+          "The zoom (or Fit mode) is restored after a reload."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "rotation-handle",
+      "titleKey": "feature.rotationHandle",
+      "commands": [
+        "style.setTransform"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/rotation-handle.md",
+      "intent": {
+        "title": "Rotate an element with a handle on the canvas",
+        "steps": [
+          "Select a Container.",
+          "Drag its rotation handle a quarter turn clockwise; repeat with Shift held.",
+          "Type 30 in the inspector's Rotate field.",
+          "Zoom to 200% and rotate again with the handle."
+        ],
+        "expected": [
+          "A rotation handle sits outside the selection outline at a fixed screen distance; over it the cursor shows rotation.",
+          "Dragging rotates around the transform-origin and the angle follows the pointer; Shift snaps to 15° steps; the status bar shows the live angle.",
+          "The handle and the Rotate field run the same command and write the rotate part of the one transform value; a whole drag is one undo step.",
+          "The angle does not depend on the zoom; the outline and handles follow the rotated box."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "zoom-wheel-pan",
+      "titleKey": "feature.zoomWheelPan",
+      "commands": [
+        "view.zoomAt",
+        "view.pan"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/zoom-wheel-pan.md",
+      "intent": {
+        "title": "Ctrl+wheel zoom, wheel scroll and Space-drag pan",
+        "steps": [
+          "Place the pointer over a heading and scroll the wheel with Ctrl held.",
+          "Scroll the wheel without modifiers, then with Shift.",
+          "Hold Space and drag the canvas."
+        ],
+        "expected": [
+          "Ctrl+wheel zooms around the pointer: the heading stays under the pointer.",
+          "Wheel scrolls vertically and Shift+wheel horizontally; the page can be scrolled to see content below the fold.",
+          "Holding Space shows a grab cursor and dragging pans the view without selecting or moving anything; releasing Space returns to selection."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "rulers",
+      "titleKey": "feature.rulers",
+      "commands": [],
+      "dependsOn": [],
+      "spec": "spec/behavior/rulers.md",
+      "intent": {
+        "title": "Rulers along the canvas",
+        "steps": [
+          "Look at the top and left rulers; zoom in and scroll.",
+          "Select an element.",
+          "Move the pointer over the page."
+        ],
+        "expected": [
+          "The rulers fill the 20 px bands reserved along the top and left of the canvas; the canvas viewport and the page position do not move.",
+          "The rulers show page CSS px with 0 at the page top-left; labelled ticks sit on round values (10, 25, 50, 100, 250, 500...) chosen so neighbouring labels are at least 40 screen px apart at any zoom.",
+          "They update with zoom and scroll.",
+          "The selected element's extent is highlighted on both rulers and a marker follows the pointer position."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "guides-manual",
+      "titleKey": "feature.guidesManual",
+      "commands": [
+        "guides.create",
+        "guides.move",
+        "guides.delete",
+        "guides.toggleLock"
+      ],
+      "dependsOn": [
+        "rulers"
+      ],
+      "spec": "spec/behavior/guides-manual.md",
+      "intent": {
+        "title": "Create, move and delete guides from the rulers",
+        "steps": [
+          "Drag from the top ruler down onto the page and release.",
+          "Drag from the left ruler onto the page and release.",
+          "Drag the horizontal guide to a new position.",
+          "Drag the vertical guide back onto its ruler.",
+          "Reload."
+        ],
+        "expected": [
+          "Dragging out of the top ruler creates a horizontal guide and out of the left ruler a vertical guide, each labelled with its position in page px.",
+          "Guides can be moved; dropping a guide on its ruler deletes it.",
+          "Guides are stored per page in the document JSON, restored after reload and never exported; creating, moving and deleting guides are undo steps."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "canvas-outlines-zones",
+      "titleKey": "feature.canvasOutlinesZones",
+      "commands": [
+        "view.toggleOutlines",
+        "view.toggleZones",
+        "workspace.setPanelOpen"
+      ],
+      "dependsOn": [],
+      "spec": null,
+      "intent": {
+        "title": "Show element outlines and drop zones on the canvas",
+        "steps": [
+          "Open Canvas tools and turn on Outlines.",
+          "Turn on Zones.",
+          "Turn both off."
+        ],
+        "expected": [
+          "Outlines draw a dashed box around every element on the canvas.",
+          "Zones show the padding and empty drop areas of containers.",
+          "Neither changes the document JSON or the export; the choices are stored in preferences."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "layout-grid-overlay",
+      "titleKey": "feature.layoutGridOverlay",
+      "commands": [
+        "grid.toggleColumns",
+        "grid.toggleRows",
+        "grid.toggleDots"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/layout-grid-overlay.md",
+      "intent": {
+        "title": "Column grid, row grid and dot grid overlays",
+        "steps": [
+          "Press Ctrl+'.",
+          "Press Ctrl+' again.",
+          "Turn on the row grid and the dot grid from the canvas tools."
+        ],
+        "expected": [
+          "Ctrl+' toggles a 12-column grid overlay (1280 px wide, 24 px gutter, 80 px margin by default) drawn over the page at the right page coordinates.",
+          "The row grid draws horizontal bands and the dot grid draws dots, each at its default spacing.",
+          "Grid settings are stored per page in the document JSON and never exported."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "workspace-settings-dialog",
+      "titleKey": "feature.workspaceSettingsDialog",
+      "commands": [
+        "ui.dismiss",
+        "view.toggleRulers",
+        "grid.toggleColumns",
+        "grid.toggleRows",
+        "grid.toggleDots",
+        "grid.setSettings",
+        "guides.create",
+        "guides.delete",
+        "guides.toggleVisible",
+        "workspace.openDialog"
+      ],
+      "dependsOn": [
+        "guides-manual",
+        "layout-grid-overlay"
+      ],
+      "spec": null,
+      "intent": {
+        "title": "Guides & Grids settings dialog",
+        "steps": [
+          "Open View > Guides & Grids.",
+          "Turn rulers and manual guides off and on.",
+          "Add a vertical guide at 400 by typing it.",
+          "Set the column grid to 6 columns, 960 width, 16 gutter, 40 margin; set row height and row gutter; set the dot spacing.",
+          "Close the dialog with Escape."
+        ],
+        "expected": [
+          "The dialog has Visibility, Manual guides, Column grid, Row grid and Dot grid sections, each with an info tooltip.",
+          "Each change applies to the canvas immediately and is stored (visibility in preferences, grids and guides in the page).",
+          "Escape and the close button close the dialog and return focus to where it was."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "absolute-free-drag",
+      "titleKey": "feature.absoluteFreeDrag",
+      "commands": [
+        "position.move"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/absolute-free-drag.md",
+      "intent": {
+        "title": "Free positioning of absolute children by dragging",
+        "steps": [
+          "Insert a Section with a Heading; set the Heading position to absolute.",
+          "Drag the Heading 60 px right and 40 px down on the canvas."
+        ],
+        "expected": [
+          "Setting absolute on a child of a static parent sets the parent to position relative and keeps the child's visual position (top/left computed from its old place).",
+          "Dragging an absolute child moves it freely; the status bar shows its coordinates relative to the parent; release writes top and left to the document JSON.",
+          "The measured position in the iframe equals the stored top and left."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "absolute-nudge",
+      "titleKey": "feature.absoluteNudge",
+      "commands": [
+        "position.move"
+      ],
+      "dependsOn": [
+        "absolute-free-drag"
+      ],
+      "spec": "spec/behavior/absolute-nudge.md",
+      "intent": {
+        "title": "Nudge positioned elements with the arrow keys",
+        "steps": [
+          "Select an absolutely positioned element on the canvas.",
+          "Press ArrowRight, Shift+ArrowDown, ArrowLeft three times quickly."
+        ],
+        "expected": [
+          "For a selection that is absolutely or fixed positioned, arrows move the element by 1 px and Shift+arrows by 10 px instead of walking the tree; top/left in the document JSON change accordingly.",
+          "The status bar reads 'Moved to x, y' [status.movedTo].",
+          "A quick burst of nudges is one undo step."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "absolute-anchors",
+      "titleKey": "feature.absoluteAnchors",
+      "commands": [
+        "position.setAnchors"
+      ],
+      "dependsOn": [
+        "absolute-free-drag"
+      ],
+      "spec": "spec/behavior/absolute-anchors.md",
+      "intent": {
+        "title": "Anchor positioned elements to edges and centres",
+        "steps": [
+          "Select an absolutely positioned element.",
+          "Press Alt+Shift+ArrowRight, Alt+Shift+ArrowDown.",
+          "Use the anchor control in the inspector to anchor horizontally to the centre.",
+          "Resize the parent."
+        ],
+        "expected": [
+          "Alt+Shift+arrow toggles the anchor on that edge; anchoring both left and right stores left and right (width follows the parent).",
+          "Anchoring the centre stores left:50% with a translate so the element stays centred.",
+          "Toggling an anchor never moves the element visually; after resizing the parent the element keeps its distances to the anchored edges."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "align-distribute",
+      "titleKey": "feature.alignDistribute",
+      "commands": [
+        "position.align",
+        "position.distribute"
+      ],
+      "dependsOn": [
+        "absolute-free-drag"
+      ],
+      "spec": "spec/behavior/align-distribute.md",
+      "intent": {
+        "title": "Align and distribute positioned elements",
+        "steps": [
+          "Place three absolutely positioned boxes in a positioned Container and select them.",
+          "Run Align left, Align centre and Align top; then Distribute horizontally.",
+          "Select one box and run Align centre."
+        ],
+        "expected": [
+          "With several elements selected, align works on the selection's bounds; with one element, on its parent's box.",
+          "Distribute makes the gaps between the elements equal.",
+          "The commands are in the quick panel and the Arrange menu; top and left are written for each element as one undo step, and the measured positions in the iframe match."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "snap-toggle-settings",
+      "titleKey": "feature.snapToggleSettings",
+      "commands": [
+        "snap.setEnabled",
+        "snap.setSettings",
+        "workspace.openDialog"
+      ],
+      "dependsOn": [],
+      "spec": "spec/behavior/snap-toggle-settings.md",
+      "intent": {
+        "title": "Snap on/off and snap settings",
+        "steps": [
+          "Click 'Snap: Off' [topbar.snap.off] in the top bar.",
+          "Open the snap menu and choose Snap settings.",
+          "Untick Grid and Centers, set snap distance 10 and Apply; reopen and Cancel after changes."
+        ],
+        "expected": [
+          "The top bar button toggles between 'Snap: Off' [topbar.snap.off] and 'Snap: On' [topbar.snap.on].",
+          "Snap settings lists Page, Parent, Elements, Guides, Rulers, Grid, Centers and Edges targets and a snap distance in px.",
+          "Apply stores the settings in preferences; Cancel discards changes."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "snap-while-moving",
+      "titleKey": "feature.snapWhileMoving",
+      "commands": [
+        "geometry.resize",
+        "position.move",
+        "guides.create",
+        "snap.setEnabled"
+      ],
+      "dependsOn": [
+        "snap-toggle-settings",
+        "guides-manual",
+        "resize-handles"
+      ],
+      "spec": "spec/behavior/snap-while-moving.md",
+      "intent": {
+        "title": "Snapping while resizing and moving positioned elements",
+        "steps": [
+          "Turn snap on and add a vertical guide at x=400.",
+          "Resize a Container so its right edge passes near the guide.",
+          "Drag an absolutely positioned element so its left edge passes near another element's left edge and near the page centre.",
+          "Repeat holding Ctrl."
+        ],
+        "expected": [
+          "Within the snap distance the edge jumps to the target and a snap line is drawn; the stored value is exactly the target position.",
+          "Only enabled targets snap.",
+          "Holding Ctrl suspends snapping for that gesture, when resizing and when moving; Alt keeps its one resize meaning, resizing from the centre, so each modifier has one meaning per gesture (report PG-14)."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "smart-guides",
+      "titleKey": "feature.smartGuides",
+      "commands": [
+        "position.move",
+        "view.toggleSmartGuides",
+        "view.toggleEqualSpacing"
+      ],
+      "dependsOn": [
+        "snap-while-moving",
+        "workspace-settings-dialog"
+      ],
+      "spec": "spec/behavior/smart-guides.md",
+      "intent": {
+        "title": "Smart alignment and equal spacing guides",
+        "steps": [
+          "Place three absolutely positioned boxes in a positioned container.",
+          "Drag one box so it aligns with the centre of another, then so the gaps between the three become equal.",
+          "In View > Guides & Grids turn Smart guides off and repeat."
+        ],
+        "expected": [
+          "Alignment lines appear when edges or centres align with other elements.",
+          "Equal spacing markers appear when the gaps are equal and the box snaps to the equal-gap position when snap is on, using the snap distance from Snap settings (one setting).",
+          "The Guides & Grids dialog gains a Smart guides toggle under Visibility and an Equal spacing toggle; turning smart guides off removes these hints."
+        ]
+      },
+      "scenarios": []
+    },
+    {
+      "id": "hover-measure",
+      "titleKey": "feature.hoverMeasure",
+      "commands": [],
+      "dependsOn": [],
+      "spec": "spec/behavior/hover-measure.md",
+      "intent": {
+        "title": "Measure sizes and distances on the canvas",
+        "steps": [
+          "Hover an element with nothing selected.",
+          "Select a Container, hold Alt and hover a sibling.",
+          "Hold Alt and hover the selection's parent.",
+          "Zoom to 50% and repeat."
+        ],
+        "expected": [
+          "Hovering shows the element's size (W × H in CSS px) next to its hover outline.",
+          "With a selection, holding Alt over another element draws distance lines between the nearest edges, each labelled in CSS px; over an ancestor it shows the distances from the selection to the ancestor's inner edges.",
+          "The values are CSS px at any zoom and equal the measured geometry in the iframe.",
+          "Measuring never changes the selection or the document JSON."
+        ]
+      },
+      "scenarios": []
+    }
+  ]
+}
