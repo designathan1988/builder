@@ -438,12 +438,12 @@
     {
       "kind": "handler",
       "id": "history.undo",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",
       "id": "history.redo",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",
@@ -1098,7 +1098,7 @@
     {
       "kind": "predicate",
       "id": "always",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "predicate",
@@ -1128,12 +1128,12 @@
     {
       "kind": "predicate",
       "id": "canUndo",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "predicate",
       "id": "canRedo",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "predicate",

@@ -10,7 +10,7 @@ Each module below exists by the end of part 1; until a module lands, its line is
 
 | Concept | Owner | Responsibility | Never |
 |---|---|---|---|
-| Generated types and registries | `tools/gen/types.ts` | Writes `src/generated/` from the manifest and the catalogues: the id unions (CommandId, DoorRef, PropertyId, ElementType, MessageId…), each command's argument types, the value lists the "generated" doors offer. | Hand edits in `src/generated/` (gen:check fails); logic in generated files. |
+| Generated types and registries | `tools/gen/types.ts` | Writes `src/generated/` from the manifest and the catalogues: the id unions (CommandId, DoorId, PropertyId, ElementType, MessageId…), each command's argument types, the value lists the "generated" doors offer. | Hand edits in `src/generated/` (gen:check fails); logic in generated files. |
 | Manifest at runtime | `src/manifest/runtime.ts` | Loads the manifest JSON once, parsed by its schemas, and answers lookups: a command, a door, a region's doors, the menus, the properties, the elements. | Re-listing manifest data in code; writing the manifest. |
 | Command registry and the "not available yet" marker | `src/core/commands/registry.ts` | The contract of the command table: its type `CommandTable` (a key for every CommandId), `registerHandler`, the `NOT_AVAILABLE_YET` marker, `registerPredicate`, the handler's context and outcome. It holds no entries. | Doors, React, entries. |
 | The command table | `src/app/commands.ts` | The one map from every command to its handler or `NOT_AVAILABLE_YET`, and the table of registered predicates; a missing or extra entry is a type error. | Handlers written inline; any other map of commands. |

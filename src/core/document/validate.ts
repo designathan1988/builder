@@ -1,0 +1,153 @@
+// Whole-tree validation: the store runs it on every commit and refuses a state that fails it. It checks a
+// document and its selection against the model (model.ts) and the manifest: element types, tags and content
+// (elements.json), attributes and where they apply, edited properties, breakpoints and states (properties.json).
+// It never repairs or changes anything. The HTML content model (which element may sit in which) is owned by
+// src/core/elements/content-model.ts and arrives with the nesting features.
+import type { ElementsFile, PropertiesFile } from '../../manifest/schema.ts';
+import { DOCUMENT_VERSION, walk, type DocNode, type DocumentJson, type Selection } from './model.ts';
+
+export interface ModelRules {
+  readonly elements: ReadonlyMap<string, { readonly tags: readonly (string | null)[]; readonly content: 'children' | 'text' | 'markup' | 'none' }>;
+  // attribute id → the element types it applies to, or "all"
+  readonly attributes: ReadonlyMap<string, readonly string[] | 'all'>;
+  readonly properties: ReadonlySet<string>;
+  readonly breakpoints: ReadonlySet<string>;
+  readonly states: ReadonlySet<string>;
+  // the element type of every page's root
+  readonly rootType: string;
+}
+
+export function rulesFromManifest(elements: ElementsFile, properties: PropertiesFile): ModelRules {
+  return {
+    elements: new Map(elements.elements.map((e) => [e.id, { tags: [e.tag, ...e.alternativeTags], content: e.content }])),
+    attributes: new Map(elements.attributes.map((a) => [a.id, a.elements])),
+    properties: new Set(properties.properties.map((p) => p.id)),
+    breakpoints: new Set(properties.breakpoints.map((b) => b.id)),
+    states: new Set(properties.states.map((s) => s.id)),
+    rootType: 'page',
+  };
+}
+
+export interface Invalid {
+  // a JSON pointer into the document, or "/selection/<i>"
+  readonly path: string;
+  readonly message: string;
+}
+
+const CLASS_NAME = /^-?[_a-zA-Z][_a-zA-Z0-9-]*$/;
+const PAGE_FILE = /^([a-z0-9][a-z0-9_-]*\/)*[a-z0-9][a-z0-9_-]*\.html$/;
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
+export function validateDocument(doc: DocumentJson, selection: Selection, rules: ModelRules): Invalid[] {
+  const problems: Invalid[] = [];
+  const bad = (path: string, message: string) => problems.push({ path, message });
+  const ids = new Map<string, string>();
+  const claim = (id: unknown, path: string) => {
+    if (typeof id !== 'string' || id === '') return bad(path, 'an id is a non-empty string');
+    const first = ids.get(id);
+    if (first !== undefined) bad(path, `id "${id}" is already used at ${first}`);
+    else ids.set(id, path);
+  };
+
+  if (doc.version !== DOCUMENT_VERSION) bad('/version', `the document version is ${DOCUMENT_VERSION}`);
+  if (!Array.isArray(doc.pages) || doc.pages.length === 0) bad('/pages', 'a project has at least one page');
+  const files = new Set<string>();
+  (doc.pages ?? []).forEach((page, i) => {
+    const at = `/pages/${i}`;
+    claim(page.id, `${at}/id`);
+    if (typeof page.name !== 'string' || page.name.trim() === '') bad(`${at}/name`, 'a page has a name');
+    if (typeof page.file !== 'string' || !PAGE_FILE.test(page.file)) bad(`${at}/file`, `"${String(page.file)}" is not a page file path such as index.html`);
+    else if (files.has(page.file)) bad(`${at}/file`, `two pages are ${page.file}`);
+    else files.add(page.file);
+    if (!isRecord(page.tree)) return bad(`${at}/tree`, 'a page has a tree');
+    if (page.tree.type !== rules.rootType) bad(`${at}/tree/type`, `a page's root is a ${rules.rootType} element`);
+    validateNode(page.tree, `${at}/tree`, rules, claim, bad, true);
+  });
+
+  const nodeIds = new Set<string>();
+  for (const page of doc.pages ?? []) if (isRecord(page.tree)) for (const node of walk(page.tree)) nodeIds.add(node.id);
+  const seen = new Set<string>();
+  selection.forEach((id, i) => {
+    if (!nodeIds.has(id)) bad(`/selection/${i}`, `the selection names "${id}", which is no node of the document`);
+    if (seen.has(id)) bad(`/selection/${i}`, `"${id}" is selected twice`);
+    seen.add(id);
+  });
+  return problems;
+}
+
+function validateNode(
+  node: DocNode,
+  at: string,
+  rules: ModelRules,
+  claim: (id: unknown, path: string) => void,
+  bad: (path: string, message: string) => void,
+  root: boolean,
+): void {
+  claim(node.id, `${at}/id`);
+  const element = rules.elements.get(node.type);
+  if (!element) {
+    bad(`${at}/type`, `"${String(node.type)}" is not an element type of elements.json`);
+    return;
+  }
+  if (!root && node.type === rules.rootType) bad(`${at}/type`, `only a page's root is a ${rules.rootType} element`);
+  if (typeof node.name !== 'string' || node.name.trim() === '') bad(`${at}/name`, 'an element has a name');
+  if (!element.tags.includes(node.tag)) bad(`${at}/tag`, `<${String(node.tag)}> is not a tag of ${node.type} (${element.tags.map(String).join(', ')})`);
+
+  if (!isRecord(node.attributes)) bad(`${at}/attributes`, 'attributes is an object');
+  else {
+    for (const [name, value] of Object.entries(node.attributes)) {
+      const appliesTo = rules.attributes.get(name);
+      if (appliesTo === undefined) bad(`${at}/attributes/${name}`, `"${name}" is not an attribute of elements.json`);
+      else if (appliesTo !== 'all' && !appliesTo.includes(node.type)) bad(`${at}/attributes/${name}`, `${name} does not apply to ${node.type}`);
+      if (!['string', 'number', 'boolean'].includes(typeof value)) bad(`${at}/attributes/${name}`, 'an attribute value is a string, a number or a boolean');
+    }
+  }
+
+  if (!Array.isArray(node.classes)) bad(`${at}/classes`, 'classes is a list');
+  else {
+    const names = new Set<string>();
+    node.classes.forEach((name, i) => {
+      if (typeof name !== 'string' || !CLASS_NAME.test(name)) bad(`${at}/classes/${i}`, `"${String(name)}" is not a class name`);
+      else if (names.has(name)) bad(`${at}/classes/${i}`, `the class ${name} is listed twice`);
+      names.add(name);
+    });
+  }
+
+  if (!isRecord(node.styles)) bad(`${at}/styles`, 'styles is an object');
+  else {
+    for (const [breakpoint, byState] of Object.entries(node.styles)) {
+      if (!rules.breakpoints.has(breakpoint)) bad(`${at}/styles/${breakpoint}`, `"${breakpoint}" is not a breakpoint`);
+      if (!isRecord(byState)) {
+        bad(`${at}/styles/${breakpoint}`, 'a breakpoint holds its states');
+        continue;
+      }
+      for (const [state, declarations] of Object.entries(byState)) {
+        if (!rules.states.has(state)) bad(`${at}/styles/${breakpoint}/${state}`, `"${state}" is not a style state`);
+        if (!isRecord(declarations)) {
+          bad(`${at}/styles/${breakpoint}/${state}`, 'a state holds its declarations');
+          continue;
+        }
+        for (const [property, value] of Object.entries(declarations)) {
+          if (!rules.properties.has(property)) bad(`${at}/styles/${breakpoint}/${state}/${property}`, `"${property}" is not an edited property of properties.json`);
+          if (typeof value !== 'string' || value.trim() === '') bad(`${at}/styles/${breakpoint}/${state}/${property}`, 'a stored value is non-empty CSS text');
+        }
+      }
+    }
+  }
+
+  const holdsText = element.content === 'text' || element.content === 'markup';
+  if (holdsText && typeof node.text !== 'string') bad(`${at}/text`, `a ${node.type} holds its ${element.content}`);
+  if (!holdsText && node.text !== null) bad(`${at}/text`, `a ${node.type} holds no text`);
+  if (!Array.isArray(node.children)) {
+    bad(`${at}/children`, 'children is a list');
+    return;
+  }
+  if (element.content !== 'children' && node.children.length > 0) bad(`${at}/children`, `a ${node.type} holds ${element.content}, not element children`);
+  node.children.forEach((child, i) => {
+    if (!isRecord(child)) bad(`${at}/children/${i}`, 'a child is an element');
+    else validateNode(child as unknown as DocNode, `${at}/children/${i}`, rules, claim, bad, false);
+  });
+}

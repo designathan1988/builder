@@ -23,14 +23,20 @@ for (const file of fs.readdirSync(path.join(REPO_ROOT, GENERATED_DIR))) {
 }
 
 const written = await generate();
+// a file in src/generated/ that the generator does not write is hand-made, even when it is committed
+const handMade = fs
+  .readdirSync(path.join(REPO_ROOT, TYPES_DIR))
+  .map((f) => `${TYPES_DIR}/${f}`)
+  .filter((f) => !written.includes(f));
 const untracked = git('ls-files', '--others', '--exclude-standard', '--', GENERATED_DIR, TOKENS_CSS, TYPES_DIR).trim();
 const diff = git('diff', '--stat', '--', GENERATED_DIR, TOKENS_CSS, TYPES_DIR).trim();
-if (untracked === '' && diff === '') {
+if (untracked === '' && diff === '' && handMade.length === 0) {
   console.log(`gen:check: ${written.join(', ')} are up to date.`);
   process.exit(0);
 }
 for (const line of stale) console.log(`✗ ${line}`);
 if (untracked !== '') console.log(`✗ not added to git:\n${untracked}`);
 if (diff !== '') console.log(`✗ npm run gen changed:\n${diff}`);
+for (const f of handMade) console.log(`✗ ${f} is not written by npm run gen: src/generated/ holds only generated files`);
 console.log('gen:check FAILED: generated files are never edited by hand. Review the regenerated files, then add and commit them.');
 process.exit(1);
