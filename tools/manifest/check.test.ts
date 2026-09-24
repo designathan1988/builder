@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { RULES, checkManifest, generatedOffer, generatedUnits, htmlRefusal, normaliseChord, supportedKeywords, type RuleId } from '../../src/manifest/check.ts';
+import { RULES, architectureOwners, checkManifest, generatedOffer, generatedUnits, htmlRefusal, normaliseChord, supportedKeywords, type RuleId } from '../../src/manifest/check.ts';
 import { createCssMatcher } from '../../src/manifest/css.ts';
 import { generatedCompatSchema, generatedCssSchema, generatedHtmlSchema, propertiesFileSchema } from '../../src/manifest/schema.ts';
 import { loadManifest } from './load.ts';
@@ -110,12 +110,14 @@ describe('manifest:check', () => {
       'label-names-two-properties': rules.get('label-names-two-properties'),
       'inspector-subset-in-all-properties': rules.get('inspector-subset-in-all-properties'),
       'essentials-value-missing-from-all-properties': rules.get('essentials-value-missing-from-all-properties'),
+      'owner-differs-from-architecture': rules.get('owner-differs-from-architecture'),
     }).toEqual({
       'door-unplaced': 'placement',
       'state-door-on-canvas-toolbar': 'state-placement',
       'label-names-two-properties': 'label-term',
       'inspector-subset-in-all-properties': 'all-properties',
       'essentials-value-missing-from-all-properties': 'all-properties',
+      'owner-differs-from-architecture': 'owner',
     });
   });
 
@@ -270,6 +272,21 @@ describe('manifest:check', () => {
     const shared = loaded.input.files['generated/css-compat.json'] as Json;
     expect(compat).not.toBe(shared);
     expect(compat.properties).toBe(shared.properties);
+  });
+
+  it('reads the owner of every command from ARCHITECTURE.md, both ways', () => {
+    const table = ['# A', '', '## Command owners', '', '| Module | Commands | Status |', '|---|---|---|', '| `src/a.ts` | `x.one`, `x.two` | planned |', '', '## Next', '| `src/b.ts` | `y.one` | planned |'].join('\n');
+    expect(architectureOwners(table)).toEqual([{ module: 'src/a.ts', commands: ['x.one', 'x.two'], line: 7 }]);
+    expect(architectureOwners('# A\n')).toBeNull();
+    const missing = mutated((m) => {
+      m.architecture = null;
+    });
+    expect([...missing]).toEqual(['owner']);
+    // a command ARCHITECTURE.md gives to a second module, and a row for a command the manifest does not have
+    const twice = mutated((m) => {
+      m.architecture = `${m.architecture ?? ''}| \`src/core/history/redo.ts\` | \`history.redo\`, \`history.rewind\` | planned |\n`;
+    });
+    expect([...twice]).toEqual(['owner']);
   });
 
   it('never changes the real manifest when planting', () => {

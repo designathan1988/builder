@@ -10,6 +10,7 @@ interface MutableInput {
   glossary: unknown;
   fileExists: ManifestInput['fileExists'];
   registered: ManifestInput['registered'];
+  architecture: string | null;
 }
 
 export interface Plant {
@@ -594,6 +595,14 @@ PLANTS.push(
     },
   },
   {
+    id: 'owner-differs-from-architecture',
+    rule: 'owner',
+    description: 'history.undo is owned by src/core/history/undo.ts in the manifest, but ARCHITECTURE.md names src/core/history/history.ts',
+    apply: (m) => {
+      command(m, 'history.undo').owner = 'src/core/history/undo.ts';
+    },
+  },
+  {
     id: 'label-names-two-properties',
     rule: 'label-term',
     description: 'pt-BR labels gap "Preenchimento", the term of the SVG fill (the mockups used it for padding and fill)',
@@ -611,6 +620,7 @@ export function planted(input: ManifestInput, plant: Plant): ManifestInput {
     glossary: structuredClone(input.glossary),
     fileExists: input.fileExists,
     registered: input.registered,
+    architecture: input.architecture,
   };
   plant.apply(copy);
   return copy;

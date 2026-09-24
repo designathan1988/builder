@@ -88,6 +88,7 @@ export const RULES = [
   'placement',
   'state-placement',
   'label-term',
+  'owner',
 ] as const;
 
 export type RuleId = (typeof RULES)[number];
@@ -111,6 +112,8 @@ export interface ManifestInput {
   fileExists: (repoPath: string) => boolean;
   // ids that code under src/ registers, by kind (registerHandler, registerPredicate, ...)
   registered: Readonly<Record<ReferenceKind, readonly string[]>>;
+  // the text of ARCHITECTURE.md, whose table "Command owners" names the owner module of every command; null when missing
+  architecture: string | null;
 }
 
 export interface ManifestSummary {
@@ -267,15 +270,20 @@ function prefixProblems(files: Readonly<Record<string, unknown>>, skip: (file: s
   return problems;
 }
 
-// A frozen file cannot change, so its parsed form is kept: the generated web data, frozen by the loader, is
-// parsed once however many times the manifest is checked (every planted fixture shares it).
-const parsedFrozen = new WeakMap<object, z.ZodSafeParseResult<unknown>>();
+// A frozen file cannot change, so its parsed form is kept, per schema: the generated web data, frozen by the
+// loader, is parsed once however many times the manifest is checked (every planted fixture shares it).
+const parsedFrozen = new WeakMap<z.ZodType, WeakMap<object, z.ZodSafeParseResult<unknown>>>();
 function parseFile(schema: z.ZodType, json: unknown): z.ZodSafeParseResult<unknown> {
   if (json === null || typeof json !== 'object' || !Object.isFrozen(json)) return schema.safeParse(json);
-  let result = parsedFrozen.get(json);
+  let bySchema = parsedFrozen.get(schema);
+  if (!bySchema) {
+    bySchema = new WeakMap();
+    parsedFrozen.set(schema, bySchema);
+  }
+  let result = bySchema.get(json);
   if (!result) {
     result = schema.safeParse(json);
-    parsedFrozen.set(json, result);
+    bySchema.set(json, result);
   }
   return result;
 }
@@ -351,6 +359,25 @@ export function normaliseChord(chord: string): string | null {
   }
   const ordered = MODIFIER_ORDER.filter((m) => seen.has(m));
   return [...ordered, key].join('+');
+}
+
+// ---------------------------------------------------------------- ARCHITECTURE.md
+
+// The rows of the table under "## Command owners": a module path in backticks, then the command ids it owns in
+// backticks. null when the section is missing.
+export function architectureOwners(text: string): { module: string; commands: string[]; line: number }[] | null {
+  const lines = text.split(/\r?\n/);
+  const start = lines.findIndex((l) => /^##\s+Command owners\s*$/.test(l));
+  if (start < 0) return null;
+  const rows: { module: string; commands: string[]; line: number }[] = [];
+  for (let i = start + 1; i < lines.length && !/^##\s/.test(lines[i] ?? ''); i++) {
+    const cells = (lines[i] ?? '').split('|').map((c) => c.trim());
+    if (cells.length < 4) continue;
+    const module = /^`([^`]+)`$/.exec(cells[1] ?? '')?.[1];
+    if (module === undefined) continue;
+    rows.push({ module, commands: [...(cells[2] ?? '').matchAll(/`([^`]+)`/g)].map((m) => m[1] ?? ''), line: i + 1 });
+  }
+  return rows;
 }
 
 // ---------------------------------------------------------------- HTML content model
@@ -1708,6 +1735,27 @@ export function checkManifest(input: ManifestInput): CheckResult {
           if (typeof text === 'string' && text.trim() !== term) report('label-term', `i18n/${locale}`, key, `${key} labels ${concept.property} "${text}", but the glossary term of "${concept.id}" in ${locale} is "${term}"`);
         }
       }
+    }
+  }
+
+  // ---- owner: the owner of every command is the module ARCHITECTURE.md names for it, and the other way round
+  const ownerRows = input.architecture === null ? null : architectureOwners(input.architecture);
+  if (ownerRows === null) {
+    report('owner', 'ARCHITECTURE.md', '', input.architecture === null ? 'ARCHITECTURE.md is missing: it names the owner module of every command' : 'ARCHITECTURE.md has no table under "## Command owners"');
+  } else {
+    const declared = new Map<string, { module: string; line: number }>();
+    for (const row of ownerRows) {
+      for (const id of row.commands) {
+        const first = declared.get(id);
+        if (first !== undefined) report('owner', 'ARCHITECTURE.md', `line ${row.line}`, `${id} is owned by ${row.module} and, on line ${first.line}, by ${first.module}: one owner per command`);
+        else declared.set(id, { module: row.module, line: row.line });
+        if (!commandById.has(id)) report('owner', 'ARCHITECTURE.md', `line ${row.line}`, `${row.module} owns ${id}, which is not a command of the manifest`);
+      }
+    }
+    for (const c of commands) {
+      const row = declared.get(c.command.id);
+      if (!row) report('owner', c.file, `${c.path}.owner`, `${c.command.id} is owned by ${c.command.owner}, but ARCHITECTURE.md names no owner for it`);
+      else if (row.module !== c.command.owner) report('owner', c.file, `${c.path}.owner`, `${c.command.id} is owned by ${c.command.owner} in the manifest but by ${row.module} in ARCHITECTURE.md (line ${row.line})`);
     }
   }
 

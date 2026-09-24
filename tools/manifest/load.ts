@@ -7,6 +7,7 @@ import type { ManifestInput, Problem, ReferenceKind } from '../../src/manifest/c
 export const REPO_ROOT = fileURLToPath(new URL('../../', import.meta.url));
 export const CATALOGUE_DIR = 'src/i18n/locales';
 export const GLOSSARY_FILE = 'src/i18n/glossary.json';
+export const ARCHITECTURE_FILE = 'ARCHITECTURE.md';
 
 export interface LoadedManifest {
   input: ManifestInput;
@@ -82,8 +83,10 @@ export function loadManifest(root: string = REPO_ROOT): LoadedManifest {
   }
   const glossaryPath = path.join(root, GLOSSARY_FILE);
   const glossary = fs.existsSync(glossaryPath) ? read(glossaryPath, GLOSSARY_FILE) : undefined;
+  const architecturePath = path.join(root, ARCHITECTURE_FILE);
+  const architecture = fs.existsSync(architecturePath) ? fs.readFileSync(architecturePath, 'utf8') : null;
   return {
-    input: { files, catalogues, glossary, fileExists: (repoPath) => fs.existsSync(path.join(root, repoPath)), registered: registeredIds(root) },
+    input: { files, catalogues, glossary, fileExists: (repoPath) => fs.existsSync(path.join(root, repoPath)), registered: registeredIds(root), architecture },
     problems,
   };
 }
