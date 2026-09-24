@@ -27,12 +27,20 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-gesture",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "inspector-display",
           "kind": "inspector-field",
           "feature": "props-display",
           "property": "display",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -42,9 +50,7 @@
             "selection": "all",
             "offers": {
               "property": "display",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "menu"
             },
             "writes": [
               "display"
@@ -56,7 +62,8 @@
           "id": "inspector-flex-direction",
           "kind": "inspector-field",
           "feature": "props-flex-container",
-          "property": "flexDirection",
+          "property": "flex-direction",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -65,13 +72,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "flexDirection",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "flex-direction",
+              "list": "generated"
             },
             "writes": [
-              "flexDirection"
+              "flex-direction"
             ]
           },
           "args": {}
@@ -80,7 +85,8 @@
           "id": "inspector-flex-wrap",
           "kind": "inspector-field",
           "feature": "props-flex-container",
-          "property": "flexWrap",
+          "property": "flex-wrap",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -89,13 +95,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "flexWrap",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "flex-wrap",
+              "list": "generated"
             },
             "writes": [
-              "flexWrap"
+              "flex-wrap"
             ]
           },
           "args": {}
@@ -104,7 +108,8 @@
           "id": "inspector-justify-content",
           "kind": "inspector-field",
           "feature": "props-flex-container",
-          "property": "justifyContent",
+          "property": "justify-content",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -113,13 +118,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "justifyContent",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "justify-content",
+              "list": "generated"
             },
             "writes": [
-              "justifyContent"
+              "justify-content"
             ]
           },
           "args": {}
@@ -128,7 +131,8 @@
           "id": "inspector-align-items",
           "kind": "inspector-field",
           "feature": "props-flex-container",
-          "property": "alignItems",
+          "property": "align-items",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -137,13 +141,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "alignItems",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "align-items",
+              "list": "generated"
             },
             "writes": [
-              "alignItems"
+              "align-items"
             ]
           },
           "args": {}
@@ -152,7 +154,8 @@
           "id": "inspector-align-content",
           "kind": "inspector-field",
           "feature": "props-flex-container",
-          "property": "alignContent",
+          "property": "align-content",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -161,13 +164,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "alignContent",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "align-content",
+              "list": "generated"
             },
             "writes": [
-              "alignContent"
+              "align-content"
             ]
           },
           "args": {}
@@ -176,7 +177,8 @@
           "id": "inspector-gap",
           "kind": "inspector-field",
           "feature": "props-flex-container",
-          "property": "gap",
+          "property": null,
+          "composite": "gap",
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -186,12 +188,11 @@
             "selection": "all",
             "offers": {
               "property": "gap",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "field"
             },
             "writes": [
-              "gap"
+              "row-gap",
+              "column-gap"
             ]
           },
           "args": {}
@@ -200,7 +201,8 @@
           "id": "inspector-row-gap",
           "kind": "inspector-field",
           "feature": "props-flex-container",
-          "property": "rowGap",
+          "property": "row-gap",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -209,13 +211,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "rowGap",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "row-gap",
+              "list": "field"
             },
             "writes": [
-              "rowGap"
+              "row-gap"
             ]
           },
           "args": {}
@@ -224,7 +224,8 @@
           "id": "inspector-column-gap",
           "kind": "inspector-field",
           "feature": "props-flex-container",
-          "property": "columnGap",
+          "property": "column-gap",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -233,13 +234,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "columnGap",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "column-gap",
+              "list": "field"
             },
             "writes": [
-              "columnGap"
+              "column-gap"
             ]
           },
           "args": {}
@@ -248,7 +247,8 @@
           "id": "inspector-grid-template-columns",
           "kind": "inspector-field",
           "feature": "props-grid-container",
-          "property": "gridTemplateColumns",
+          "property": "grid-template-columns",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -257,13 +257,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "gridTemplateColumns",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "grid-template-columns",
+              "list": "generated"
             },
             "writes": [
-              "gridTemplateColumns"
+              "grid-template-columns"
             ]
           },
           "args": {}
@@ -272,7 +270,8 @@
           "id": "inspector-grid-template-rows",
           "kind": "inspector-field",
           "feature": "props-grid-container",
-          "property": "gridTemplateRows",
+          "property": "grid-template-rows",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -281,13 +280,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "gridTemplateRows",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "grid-template-rows",
+              "list": "generated"
             },
             "writes": [
-              "gridTemplateRows"
+              "grid-template-rows"
             ]
           },
           "args": {}
@@ -296,7 +293,8 @@
           "id": "inspector-grid-auto-flow",
           "kind": "inspector-field",
           "feature": "props-grid-container",
-          "property": "gridAutoFlow",
+          "property": "grid-auto-flow",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -305,13 +303,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "gridAutoFlow",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "grid-auto-flow",
+              "list": "menu"
             },
             "writes": [
-              "gridAutoFlow"
+              "grid-auto-flow"
             ]
           },
           "args": {}
@@ -320,7 +316,8 @@
           "id": "inspector-justify-items",
           "kind": "inspector-field",
           "feature": "props-grid-container",
-          "property": "justifyItems",
+          "property": "justify-items",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -329,13 +326,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "justifyItems",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "justify-items",
+              "list": "generated"
             },
             "writes": [
-              "justifyItems"
+              "justify-items"
             ]
           },
           "args": {}
@@ -344,7 +339,8 @@
           "id": "inspector-grid-template-areas",
           "kind": "inspector-field",
           "feature": "props-grid-container",
-          "property": "gridTemplateAreas",
+          "property": "grid-template-areas",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -353,13 +349,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "gridTemplateAreas",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "grid-template-areas",
+              "list": "generated"
             },
             "writes": [
-              "gridTemplateAreas"
+              "grid-template-areas"
             ]
           },
           "args": {}
@@ -368,7 +362,8 @@
           "id": "inspector-flex-grow",
           "kind": "inspector-field",
           "feature": "props-layout-item",
-          "property": "flexGrow",
+          "property": "flex-grow",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -378,7 +373,7 @@
             "selection": "all",
             "offers": null,
             "writes": [
-              "flexGrow"
+              "flex-grow"
             ]
           },
           "args": {}
@@ -387,7 +382,8 @@
           "id": "inspector-flex-shrink",
           "kind": "inspector-field",
           "feature": "props-layout-item",
-          "property": "flexShrink",
+          "property": "flex-shrink",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -397,7 +393,7 @@
             "selection": "all",
             "offers": null,
             "writes": [
-              "flexShrink"
+              "flex-shrink"
             ]
           },
           "args": {}
@@ -406,7 +402,8 @@
           "id": "inspector-flex-basis",
           "kind": "inspector-field",
           "feature": "props-layout-item",
-          "property": "flexBasis",
+          "property": "flex-basis",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -415,13 +412,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "flexBasis",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "flex-basis",
+              "list": "generated"
             },
             "writes": [
-              "flexBasis"
+              "flex-basis"
             ]
           },
           "args": {}
@@ -430,7 +425,8 @@
           "id": "inspector-align-self",
           "kind": "inspector-field",
           "feature": "props-layout-item",
-          "property": "alignSelf",
+          "property": "align-self",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -439,13 +435,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "alignSelf",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "align-self",
+              "list": "generated"
             },
             "writes": [
-              "alignSelf"
+              "align-self"
             ]
           },
           "args": {}
@@ -454,7 +448,8 @@
           "id": "inspector-justify-self",
           "kind": "inspector-field",
           "feature": "props-layout-item",
-          "property": "justifySelf",
+          "property": "justify-self",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -463,13 +458,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "justifySelf",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "justify-self",
+              "list": "generated"
             },
             "writes": [
-              "justifySelf"
+              "justify-self"
             ]
           },
           "args": {}
@@ -479,6 +472,7 @@
           "kind": "inspector-field",
           "feature": "props-layout-item",
           "property": "order",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -497,7 +491,8 @@
           "id": "inspector-grid-column",
           "kind": "inspector-field",
           "feature": "props-layout-item",
-          "property": "gridColumn",
+          "property": null,
+          "composite": "grid-column",
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -507,7 +502,8 @@
             "selection": "all",
             "offers": null,
             "writes": [
-              "gridColumn"
+              "grid-column-start",
+              "grid-column-end"
             ]
           },
           "args": {}
@@ -516,7 +512,8 @@
           "id": "inspector-grid-row",
           "kind": "inspector-field",
           "feature": "props-layout-item",
-          "property": "gridRow",
+          "property": null,
+          "composite": "grid-row",
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -526,7 +523,8 @@
             "selection": "all",
             "offers": null,
             "writes": [
-              "gridRow"
+              "grid-row-start",
+              "grid-row-end"
             ]
           },
           "args": {}
@@ -535,7 +533,8 @@
           "id": "inspector-columns",
           "kind": "inspector-field",
           "feature": "props-more",
-          "property": "columns",
+          "property": null,
+          "composite": "columns",
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -545,12 +544,12 @@
             "selection": "all",
             "offers": {
               "property": "columns",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
-              "columns"
+              "column-width",
+              "column-count",
+              "column-height"
             ]
           },
           "args": {}
@@ -559,7 +558,8 @@
           "id": "inspector-column-span",
           "kind": "inspector-field",
           "feature": "props-more",
-          "property": "columnSpan",
+          "property": "column-span",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -568,13 +568,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "columnSpan",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "column-span",
+              "list": "generated"
             },
             "writes": [
-              "columnSpan"
+              "column-span"
             ]
           },
           "args": {}
@@ -583,7 +581,8 @@
           "id": "inspector-column-fill",
           "kind": "inspector-field",
           "feature": "props-more",
-          "property": "columnFill",
+          "property": "column-fill",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -592,13 +591,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "columnFill",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "column-fill",
+              "list": "generated"
             },
             "writes": [
-              "columnFill"
+              "column-fill"
             ]
           },
           "args": {}
@@ -607,7 +604,8 @@
           "id": "inspector-column-rule-width",
           "kind": "inspector-field",
           "feature": "props-more",
-          "property": "columnRuleWidth",
+          "property": "column-rule-width",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -616,13 +614,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "columnRuleWidth",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "column-rule-width",
+              "list": "generated"
             },
             "writes": [
-              "columnRuleWidth"
+              "column-rule-width"
             ]
           },
           "args": {}
@@ -631,7 +627,8 @@
           "id": "inspector-column-rule-style",
           "kind": "inspector-field",
           "feature": "props-more",
-          "property": "columnRuleStyle",
+          "property": "column-rule-style",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -640,13 +637,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "columnRuleStyle",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "column-rule-style",
+              "list": "generated"
             },
             "writes": [
-              "columnRuleStyle"
+              "column-rule-style"
             ]
           },
           "args": {}
@@ -655,7 +650,8 @@
           "id": "inspector-column-rule-color",
           "kind": "inspector-field",
           "feature": "props-more",
-          "property": "columnRuleColor",
+          "property": "column-rule-color",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -665,7 +661,7 @@
             "selection": "all",
             "offers": null,
             "writes": [
-              "columnRuleColor"
+              "column-rule-color"
             ]
           },
           "args": {}
@@ -674,7 +670,8 @@
           "id": "inspector-break-before",
           "kind": "inspector-field",
           "feature": "props-more",
-          "property": "breakBefore",
+          "property": "break-before",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -683,13 +680,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "breakBefore",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "break-before",
+              "list": "generated"
             },
             "writes": [
-              "breakBefore"
+              "break-before"
             ]
           },
           "args": {}
@@ -698,7 +693,8 @@
           "id": "inspector-break-after",
           "kind": "inspector-field",
           "feature": "props-more",
-          "property": "breakAfter",
+          "property": "break-after",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -707,13 +703,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "breakAfter",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "break-after",
+              "list": "generated"
             },
             "writes": [
-              "breakAfter"
+              "break-after"
             ]
           },
           "args": {}
@@ -722,7 +716,8 @@
           "id": "inspector-break-inside",
           "kind": "inspector-field",
           "feature": "props-more",
-          "property": "breakInside",
+          "property": "break-inside",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -731,13 +726,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "breakInside",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "break-inside",
+              "list": "generated"
             },
             "writes": [
-              "breakInside"
+              "break-inside"
             ]
           },
           "args": {}
@@ -746,7 +739,8 @@
           "id": "inspector-scroll-behavior",
           "kind": "inspector-field",
           "feature": "props-more",
-          "property": "scrollBehavior",
+          "property": "scroll-behavior",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -755,13 +749,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "scrollBehavior",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "scroll-behavior",
+              "list": "generated"
             },
             "writes": [
-              "scrollBehavior"
+              "scroll-behavior"
             ]
           },
           "args": {}
@@ -770,7 +762,8 @@
           "id": "inspector-overscroll-behavior",
           "kind": "inspector-field",
           "feature": "props-more",
-          "property": "overscrollBehavior",
+          "property": null,
+          "composite": "overscroll-behavior",
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -779,13 +772,12 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "overscrollBehavior",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "overscroll-behavior",
+              "list": "generated"
             },
             "writes": [
-              "overscrollBehavior"
+              "overscroll-behavior-x",
+              "overscroll-behavior-y"
             ]
           },
           "args": {}
@@ -794,7 +786,8 @@
           "id": "inspector-scroll-snap-type",
           "kind": "inspector-field",
           "feature": "props-more",
-          "property": "scrollSnapType",
+          "property": "scroll-snap-type",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -803,13 +796,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "scrollSnapType",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "scroll-snap-type",
+              "list": "menu"
             },
             "writes": [
-              "scrollSnapType"
+              "scroll-snap-type"
             ]
           },
           "args": {}
@@ -818,7 +809,8 @@
           "id": "inspector-scroll-snap-align",
           "kind": "inspector-field",
           "feature": "props-more",
-          "property": "scrollSnapAlign",
+          "property": "scroll-snap-align",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -827,13 +819,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "scrollSnapAlign",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "scroll-snap-align",
+              "list": "generated"
             },
             "writes": [
-              "scrollSnapAlign"
+              "scroll-snap-align"
             ]
           },
           "args": {}
@@ -842,7 +832,8 @@
           "id": "inspector-border-collapse",
           "kind": "inspector-field",
           "feature": "props-element-specific",
-          "property": "borderCollapse",
+          "property": "border-collapse",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -851,13 +842,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "borderCollapse",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "border-collapse",
+              "list": "generated"
             },
             "writes": [
-              "borderCollapse"
+              "border-collapse"
             ]
           },
           "args": {}
@@ -866,7 +855,8 @@
           "id": "inspector-border-spacing",
           "kind": "inspector-field",
           "feature": "props-element-specific",
-          "property": "borderSpacing",
+          "property": "border-spacing",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -875,13 +865,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "borderSpacing",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "border-spacing",
+              "list": "generated"
             },
             "writes": [
-              "borderSpacing"
+              "border-spacing"
             ]
           },
           "args": {}
@@ -890,7 +878,8 @@
           "id": "inspector-table-layout",
           "kind": "inspector-field",
           "feature": "props-element-specific",
-          "property": "tableLayout",
+          "property": "table-layout",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -899,13 +888,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "tableLayout",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "table-layout",
+              "list": "generated"
             },
             "writes": [
-              "tableLayout"
+              "table-layout"
             ]
           },
           "args": {}
@@ -914,7 +901,8 @@
           "id": "inspector-caption-side",
           "kind": "inspector-field",
           "feature": "props-element-specific",
-          "property": "captionSide",
+          "property": "caption-side",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -923,13 +911,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "captionSide",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "caption-side",
+              "list": "generated"
             },
             "writes": [
-              "captionSide"
+              "caption-side"
             ]
           },
           "args": {}
@@ -938,7 +924,8 @@
           "id": "inspector-empty-cells",
           "kind": "inspector-field",
           "feature": "props-element-specific",
-          "property": "emptyCells",
+          "property": "empty-cells",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -947,13 +934,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "emptyCells",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "empty-cells",
+              "list": "generated"
             },
             "writes": [
-              "emptyCells"
+              "empty-cells"
             ]
           },
           "args": {}
@@ -963,6 +948,7 @@
           "kind": "inspector-field",
           "feature": "props-more",
           "property": "contain",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -972,9 +958,7 @@
             "selection": "all",
             "offers": {
               "property": "contain",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
               "contain"
@@ -986,7 +970,8 @@
           "id": "inspector-content-visibility",
           "kind": "inspector-field",
           "feature": "props-more",
-          "property": "contentVisibility",
+          "property": "content-visibility",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -995,13 +980,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "contentVisibility",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "content-visibility",
+              "list": "generated"
             },
             "writes": [
-              "contentVisibility"
+              "content-visibility"
             ]
           },
           "args": {}
@@ -1010,7 +993,8 @@
           "id": "inspector-counter-reset",
           "kind": "inspector-field",
           "feature": "props-more",
-          "property": "counterReset",
+          "property": "counter-reset",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1019,13 +1003,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "counterReset",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "counter-reset",
+              "list": "generated"
             },
             "writes": [
-              "counterReset"
+              "counter-reset"
             ]
           },
           "args": {}
@@ -1034,7 +1016,8 @@
           "id": "inspector-counter-increment",
           "kind": "inspector-field",
           "feature": "props-more",
-          "property": "counterIncrement",
+          "property": "counter-increment",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1043,37 +1026,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "counterIncrement",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "counter-increment",
+              "list": "generated"
             },
             "writes": [
-              "counterIncrement"
-            ]
-          },
-          "args": {}
-        },
-        {
-          "id": "inspector-all",
-          "kind": "inspector-field",
-          "feature": "props-more",
-          "property": "all",
-          "attribute": null,
-          "control": "field",
-          "labelKey": "command.setProperty",
-          "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
-          "adapter": {
-            "selection": "all",
-            "offers": {
-              "property": "all",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
-            },
-            "writes": [
-              "all"
+              "counter-increment"
             ]
           },
           "args": {}
@@ -1083,6 +1040,7 @@
           "kind": "inspector-field",
           "feature": "inspector-number-fields",
           "property": "width",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1092,9 +1050,7 @@
             "selection": "all",
             "offers": {
               "property": "width",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
               "width"
@@ -1107,6 +1063,7 @@
           "kind": "inspector-field",
           "feature": "inspector-number-fields",
           "property": "height",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1116,9 +1073,7 @@
             "selection": "all",
             "offers": {
               "property": "height",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
               "height"
@@ -1130,7 +1085,8 @@
           "id": "inspector-min-width",
           "kind": "inspector-field",
           "feature": "props-size-overflow",
-          "property": "minWidth",
+          "property": "min-width",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1139,13 +1095,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "minWidth",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "min-width",
+              "list": "generated"
             },
             "writes": [
-              "minWidth"
+              "min-width"
             ]
           },
           "args": {}
@@ -1154,7 +1108,8 @@
           "id": "inspector-max-width",
           "kind": "inspector-field",
           "feature": "props-size-overflow",
-          "property": "maxWidth",
+          "property": "max-width",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1163,13 +1118,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "maxWidth",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "max-width",
+              "list": "generated"
             },
             "writes": [
-              "maxWidth"
+              "max-width"
             ]
           },
           "args": {}
@@ -1178,7 +1131,8 @@
           "id": "inspector-min-height",
           "kind": "inspector-field",
           "feature": "props-size-overflow",
-          "property": "minHeight",
+          "property": "min-height",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1187,13 +1141,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "minHeight",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "min-height",
+              "list": "generated"
             },
             "writes": [
-              "minHeight"
+              "min-height"
             ]
           },
           "args": {}
@@ -1202,7 +1154,8 @@
           "id": "inspector-max-height",
           "kind": "inspector-field",
           "feature": "props-size-overflow",
-          "property": "maxHeight",
+          "property": "max-height",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1211,13 +1164,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "maxHeight",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "max-height",
+              "list": "generated"
             },
             "writes": [
-              "maxHeight"
+              "max-height"
             ]
           },
           "args": {}
@@ -1226,7 +1177,8 @@
           "id": "inspector-box-sizing",
           "kind": "inspector-field",
           "feature": "props-size-overflow",
-          "property": "boxSizing",
+          "property": "box-sizing",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1235,13 +1187,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "boxSizing",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "box-sizing",
+              "list": "generated"
             },
             "writes": [
-              "boxSizing"
+              "box-sizing"
             ]
           },
           "args": {}
@@ -1250,7 +1200,8 @@
           "id": "inspector-aspect-ratio",
           "kind": "inspector-field",
           "feature": "props-size-overflow",
-          "property": "aspectRatio",
+          "property": "aspect-ratio",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1259,13 +1210,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "aspectRatio",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "aspect-ratio",
+              "list": "generated"
             },
             "writes": [
-              "aspectRatio"
+              "aspect-ratio"
             ]
           },
           "args": {}
@@ -1274,7 +1223,8 @@
           "id": "inspector-overflow",
           "kind": "inspector-field",
           "feature": "props-size-overflow",
-          "property": "overflow",
+          "property": null,
+          "composite": "overflow",
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1284,12 +1234,11 @@
             "selection": "all",
             "offers": {
               "property": "overflow",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
-              "overflow"
+              "overflow-x",
+              "overflow-y"
             ]
           },
           "args": {}
@@ -1298,7 +1247,8 @@
           "id": "inspector-overflow-x",
           "kind": "inspector-field",
           "feature": "props-size-overflow",
-          "property": "overflowX",
+          "property": "overflow-x",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1307,13 +1257,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "overflowX",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "overflow-x",
+              "list": "generated"
             },
             "writes": [
-              "overflowX"
+              "overflow-x"
             ]
           },
           "args": {}
@@ -1322,7 +1270,8 @@
           "id": "inspector-overflow-y",
           "kind": "inspector-field",
           "feature": "props-size-overflow",
-          "property": "overflowY",
+          "property": "overflow-y",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1331,13 +1280,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "overflowY",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "overflow-y",
+              "list": "generated"
             },
             "writes": [
-              "overflowY"
+              "overflow-y"
             ]
           },
           "args": {}
@@ -1347,6 +1294,7 @@
           "kind": "inspector-field",
           "feature": "props-element-specific",
           "property": "resize",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1356,9 +1304,7 @@
             "selection": "all",
             "offers": {
               "property": "resize",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
               "resize"
@@ -1370,7 +1316,8 @@
           "id": "inspector-object-fit",
           "kind": "inspector-field",
           "feature": "props-element-specific",
-          "property": "objectFit",
+          "property": "object-fit",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1379,13 +1326,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "objectFit",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "object-fit",
+              "list": "generated"
             },
             "writes": [
-              "objectFit"
+              "object-fit"
             ]
           },
           "args": {}
@@ -1394,7 +1339,8 @@
           "id": "inspector-object-position",
           "kind": "inspector-field",
           "feature": "props-element-specific",
-          "property": "objectPosition",
+          "property": "object-position",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1403,13 +1349,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "objectPosition",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "object-position",
+              "list": "generated"
             },
             "writes": [
-              "objectPosition"
+              "object-position"
             ]
           },
           "args": {}
@@ -1419,6 +1363,7 @@
           "kind": "inspector-field",
           "feature": "props-position",
           "property": "top",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1428,9 +1373,7 @@
             "selection": "all",
             "offers": {
               "property": "top",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
               "top"
@@ -1443,6 +1386,7 @@
           "kind": "inspector-field",
           "feature": "props-position",
           "property": "right",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1452,9 +1396,7 @@
             "selection": "all",
             "offers": {
               "property": "right",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
               "right"
@@ -1467,6 +1409,7 @@
           "kind": "inspector-field",
           "feature": "props-position",
           "property": "bottom",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1476,9 +1419,7 @@
             "selection": "all",
             "offers": {
               "property": "bottom",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
               "bottom"
@@ -1491,6 +1432,7 @@
           "kind": "inspector-field",
           "feature": "props-position",
           "property": "left",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1500,9 +1442,7 @@
             "selection": "all",
             "offers": {
               "property": "left",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
               "left"
@@ -1514,7 +1454,8 @@
           "id": "inspector-z-index",
           "kind": "inspector-field",
           "feature": "props-position",
-          "property": "zIndex",
+          "property": "z-index",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1523,13 +1464,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "zIndex",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "z-index",
+              "list": "generated"
             },
             "writes": [
-              "zIndex"
+              "z-index"
             ]
           },
           "args": {}
@@ -1539,6 +1478,7 @@
           "kind": "inspector-field",
           "feature": "props-position",
           "property": "float",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1548,9 +1488,7 @@
             "selection": "all",
             "offers": {
               "property": "float",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "menu"
             },
             "writes": [
               "float"
@@ -1563,6 +1501,7 @@
           "kind": "inspector-field",
           "feature": "props-position",
           "property": "clear",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1572,9 +1511,7 @@
             "selection": "all",
             "offers": {
               "property": "clear",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "menu"
             },
             "writes": [
               "clear"
@@ -1586,7 +1523,8 @@
           "id": "inspector-background-color",
           "kind": "inspector-field",
           "feature": "color-picker",
-          "property": "backgroundColor",
+          "property": "background-color",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1596,7 +1534,7 @@
             "selection": "all",
             "offers": null,
             "writes": [
-              "backgroundColor"
+              "background-color"
             ]
           },
           "args": {}
@@ -1605,7 +1543,8 @@
           "id": "inspector-background-size",
           "kind": "inspector-field",
           "feature": "props-background",
-          "property": "backgroundSize",
+          "property": "background-size",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1614,13 +1553,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "backgroundSize",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "background-size",
+              "list": "menu"
             },
             "writes": [
-              "backgroundSize"
+              "background-size"
             ]
           },
           "args": {}
@@ -1629,7 +1566,8 @@
           "id": "inspector-background-position",
           "kind": "inspector-field",
           "feature": "props-background",
-          "property": "backgroundPosition",
+          "property": null,
+          "composite": "background-position",
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1638,13 +1576,12 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "backgroundPosition",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "background-position",
+              "list": "menu"
             },
             "writes": [
-              "backgroundPosition"
+              "background-position-x",
+              "background-position-y"
             ]
           },
           "args": {}
@@ -1653,7 +1590,8 @@
           "id": "inspector-background-repeat",
           "kind": "inspector-field",
           "feature": "props-background",
-          "property": "backgroundRepeat",
+          "property": "background-repeat",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1662,13 +1600,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "backgroundRepeat",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "background-repeat",
+              "list": "generated"
             },
             "writes": [
-              "backgroundRepeat"
+              "background-repeat"
             ]
           },
           "args": {}
@@ -1677,7 +1613,8 @@
           "id": "inspector-background-attachment",
           "kind": "inspector-field",
           "feature": "props-background",
-          "property": "backgroundAttachment",
+          "property": "background-attachment",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1686,13 +1623,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "backgroundAttachment",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "background-attachment",
+              "list": "generated"
             },
             "writes": [
-              "backgroundAttachment"
+              "background-attachment"
             ]
           },
           "args": {}
@@ -1701,7 +1636,8 @@
           "id": "inspector-background-origin",
           "kind": "inspector-field",
           "feature": "props-background",
-          "property": "backgroundOrigin",
+          "property": "background-origin",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1710,13 +1646,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "backgroundOrigin",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "background-origin",
+              "list": "generated"
             },
             "writes": [
-              "backgroundOrigin"
+              "background-origin"
             ]
           },
           "args": {}
@@ -1725,7 +1659,8 @@
           "id": "inspector-background-clip",
           "kind": "inspector-field",
           "feature": "props-background",
-          "property": "backgroundClip",
+          "property": "background-clip",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1734,13 +1669,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "backgroundClip",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "background-clip",
+              "list": "generated"
             },
             "writes": [
-              "backgroundClip"
+              "background-clip"
             ]
           },
           "args": {}
@@ -1749,7 +1682,8 @@
           "id": "inspector-background-blend-mode",
           "kind": "inspector-field",
           "feature": "props-background",
-          "property": "backgroundBlendMode",
+          "property": "background-blend-mode",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1758,13 +1692,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "backgroundBlendMode",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "background-blend-mode",
+              "list": "generated"
             },
             "writes": [
-              "backgroundBlendMode"
+              "background-blend-mode"
             ]
           },
           "args": {}
@@ -1774,6 +1706,7 @@
           "kind": "inspector-field",
           "feature": "elements-svg-shapes",
           "property": "fill",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1783,9 +1716,7 @@
             "selection": "all",
             "offers": {
               "property": "fill",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
               "fill"
@@ -1798,6 +1729,7 @@
           "kind": "inspector-field",
           "feature": "elements-svg-shapes",
           "property": "stroke",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1807,9 +1739,7 @@
             "selection": "all",
             "offers": {
               "property": "stroke",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
               "stroke"
@@ -1821,7 +1751,8 @@
           "id": "inspector-stroke-width",
           "kind": "inspector-field",
           "feature": "elements-svg-shapes",
-          "property": "strokeWidth",
+          "property": "stroke-width",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1830,13 +1761,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "strokeWidth",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "stroke-width",
+              "list": "generated"
             },
             "writes": [
-              "strokeWidth"
+              "stroke-width"
             ]
           },
           "args": {}
@@ -1845,7 +1774,8 @@
           "id": "inspector-outline",
           "kind": "inspector-field",
           "feature": "props-border-outline",
-          "property": "outline",
+          "property": null,
+          "composite": "outline",
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1855,12 +1785,12 @@
             "selection": "all",
             "offers": {
               "property": "outline",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
-              "outline"
+              "outline-width",
+              "outline-style",
+              "outline-color"
             ]
           },
           "args": {}
@@ -1869,7 +1799,8 @@
           "id": "inspector-outline-offset",
           "kind": "inspector-field",
           "feature": "props-border-outline",
-          "property": "outlineOffset",
+          "property": "outline-offset",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1878,13 +1809,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "outlineOffset",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "outline-offset",
+              "list": "generated"
             },
             "writes": [
-              "outlineOffset"
+              "outline-offset"
             ]
           },
           "args": {}
@@ -1894,6 +1823,7 @@
           "kind": "inspector-field",
           "feature": "color-picker",
           "property": "color",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1912,7 +1842,8 @@
           "id": "inspector-font-family",
           "kind": "inspector-field",
           "feature": "props-typography",
-          "property": "fontFamily",
+          "property": "font-family",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1921,13 +1852,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "fontFamily",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "font-family",
+              "list": "stacks"
             },
             "writes": [
-              "fontFamily"
+              "font-family"
             ]
           },
           "args": {}
@@ -1936,7 +1865,8 @@
           "id": "inspector-font-size",
           "kind": "inspector-field",
           "feature": "props-typography",
-          "property": "fontSize",
+          "property": "font-size",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1945,13 +1875,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "fontSize",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "font-size",
+              "list": "generated"
             },
             "writes": [
-              "fontSize"
+              "font-size"
             ]
           },
           "args": {}
@@ -1960,7 +1888,8 @@
           "id": "inspector-font-weight",
           "kind": "inspector-field",
           "feature": "props-typography",
-          "property": "fontWeight",
+          "property": "font-weight",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1969,13 +1898,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "fontWeight",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "font-weight",
+              "list": "menu"
             },
             "writes": [
-              "fontWeight"
+              "font-weight"
             ]
           },
           "args": {}
@@ -1984,7 +1911,8 @@
           "id": "inspector-font-style",
           "kind": "inspector-field",
           "feature": "props-typography",
-          "property": "fontStyle",
+          "property": "font-style",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1993,13 +1921,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "fontStyle",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "font-style",
+              "list": "menu"
             },
             "writes": [
-              "fontStyle"
+              "font-style"
             ]
           },
           "args": {}
@@ -2008,7 +1934,8 @@
           "id": "inspector-line-height",
           "kind": "inspector-field",
           "feature": "props-typography",
-          "property": "lineHeight",
+          "property": "line-height",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2017,13 +1944,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "lineHeight",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "line-height",
+              "list": "generated"
             },
             "writes": [
-              "lineHeight"
+              "line-height"
             ]
           },
           "args": {}
@@ -2032,7 +1957,8 @@
           "id": "inspector-letter-spacing",
           "kind": "inspector-field",
           "feature": "props-typography",
-          "property": "letterSpacing",
+          "property": "letter-spacing",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2041,13 +1967,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "letterSpacing",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "letter-spacing",
+              "list": "generated"
             },
             "writes": [
-              "letterSpacing"
+              "letter-spacing"
             ]
           },
           "args": {}
@@ -2056,7 +1980,8 @@
           "id": "inspector-word-spacing",
           "kind": "inspector-field",
           "feature": "props-typography",
-          "property": "wordSpacing",
+          "property": "word-spacing",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2065,13 +1990,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "wordSpacing",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "word-spacing",
+              "list": "generated"
             },
             "writes": [
-              "wordSpacing"
+              "word-spacing"
             ]
           },
           "args": {}
@@ -2080,7 +2003,8 @@
           "id": "inspector-text-align",
           "kind": "inspector-field",
           "feature": "props-typography",
-          "property": "textAlign",
+          "property": null,
+          "composite": "text-align",
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2089,13 +2013,12 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "textAlign",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "text-align",
+              "list": "generated"
             },
             "writes": [
-              "textAlign"
+              "text-align-all",
+              "text-align-last"
             ]
           },
           "args": {}
@@ -2104,7 +2027,8 @@
           "id": "inspector-text-decoration",
           "kind": "inspector-field",
           "feature": "props-typography",
-          "property": "textDecoration",
+          "property": null,
+          "composite": "text-decoration",
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2113,13 +2037,14 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "textDecoration",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "text-decoration",
+              "list": "menu"
             },
             "writes": [
-              "textDecoration"
+              "text-decoration-line",
+              "text-decoration-thickness",
+              "text-decoration-style",
+              "text-decoration-color"
             ]
           },
           "args": {}
@@ -2128,7 +2053,8 @@
           "id": "inspector-text-transform",
           "kind": "inspector-field",
           "feature": "props-typography",
-          "property": "textTransform",
+          "property": "text-transform",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2137,13 +2063,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "textTransform",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "text-transform",
+              "list": "generated"
             },
             "writes": [
-              "textTransform"
+              "text-transform"
             ]
           },
           "args": {}
@@ -2152,7 +2076,8 @@
           "id": "inspector-text-indent",
           "kind": "inspector-field",
           "feature": "props-typography",
-          "property": "textIndent",
+          "property": "text-indent",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2161,13 +2086,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "textIndent",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "text-indent",
+              "list": "generated"
             },
             "writes": [
-              "textIndent"
+              "text-indent"
             ]
           },
           "args": {}
@@ -2176,7 +2099,8 @@
           "id": "inspector-text-overflow",
           "kind": "inspector-field",
           "feature": "props-typography",
-          "property": "textOverflow",
+          "property": "text-overflow",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2185,13 +2109,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "textOverflow",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "text-overflow",
+              "list": "generated"
             },
             "writes": [
-              "textOverflow"
+              "text-overflow"
             ]
           },
           "args": {}
@@ -2200,7 +2122,8 @@
           "id": "inspector-white-space",
           "kind": "inspector-field",
           "feature": "props-typography",
-          "property": "whiteSpace",
+          "property": null,
+          "composite": "white-space",
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2209,13 +2132,12 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "whiteSpace",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "white-space",
+              "list": "generated"
             },
             "writes": [
-              "whiteSpace"
+              "white-space-collapse",
+              "text-wrap-mode"
             ]
           },
           "args": {}
@@ -2224,7 +2146,8 @@
           "id": "inspector-word-break",
           "kind": "inspector-field",
           "feature": "props-typography",
-          "property": "wordBreak",
+          "property": "word-break",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2233,13 +2156,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "wordBreak",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "word-break",
+              "list": "generated"
             },
             "writes": [
-              "wordBreak"
+              "word-break"
             ]
           },
           "args": {}
@@ -2248,7 +2169,8 @@
           "id": "inspector-vertical-align",
           "kind": "inspector-field",
           "feature": "props-typography",
-          "property": "verticalAlign",
+          "property": null,
+          "composite": "vertical-align",
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2257,13 +2179,13 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "verticalAlign",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "vertical-align",
+              "list": "menu"
             },
             "writes": [
-              "verticalAlign"
+              "alignment-baseline",
+              "baseline-shift",
+              "baseline-source"
             ]
           },
           "args": {}
@@ -2272,7 +2194,8 @@
           "id": "inspector-font-stretch",
           "kind": "inspector-field",
           "feature": "props-typography-advanced",
-          "property": "fontStretch",
+          "property": "font-stretch",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2281,13 +2204,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "fontStretch",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "font-stretch",
+              "list": "generated"
             },
             "writes": [
-              "fontStretch"
+              "font-stretch"
             ]
           },
           "args": {}
@@ -2296,7 +2217,8 @@
           "id": "inspector-font-variant",
           "kind": "inspector-field",
           "feature": "props-typography-advanced",
-          "property": "fontVariant",
+          "property": null,
+          "composite": "font-variant",
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2305,13 +2227,17 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "fontVariant",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "font-variant",
+              "list": "menu"
             },
             "writes": [
-              "fontVariant"
+              "font-variant-ligatures",
+              "font-variant-caps",
+              "font-variant-alternates",
+              "font-variant-numeric",
+              "font-variant-east-asian",
+              "font-variant-position",
+              "font-variant-emoji"
             ]
           },
           "args": {}
@@ -2320,7 +2246,8 @@
           "id": "inspector-font-feature-settings",
           "kind": "inspector-field",
           "feature": "props-typography-advanced",
-          "property": "fontFeatureSettings",
+          "property": "font-feature-settings",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2329,13 +2256,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "fontFeatureSettings",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "font-feature-settings",
+              "list": "generated"
             },
             "writes": [
-              "fontFeatureSettings"
+              "font-feature-settings"
             ]
           },
           "args": {}
@@ -2344,7 +2269,8 @@
           "id": "inspector-overflow-wrap",
           "kind": "inspector-field",
           "feature": "props-typography-advanced",
-          "property": "overflowWrap",
+          "property": "overflow-wrap",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2353,13 +2279,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "overflowWrap",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "overflow-wrap",
+              "list": "generated"
             },
             "writes": [
-              "overflowWrap"
+              "overflow-wrap"
             ]
           },
           "args": {}
@@ -2369,6 +2293,7 @@
           "kind": "inspector-field",
           "feature": "props-typography-advanced",
           "property": "hyphens",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2378,9 +2303,7 @@
             "selection": "all",
             "offers": {
               "property": "hyphens",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
               "hyphens"
@@ -2392,7 +2315,8 @@
           "id": "inspector-webkit-line-clamp",
           "kind": "inspector-field",
           "feature": "props-typography-advanced",
-          "property": "webkitLineClamp",
+          "property": null,
+          "composite": "webkit-line-clamp",
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2401,13 +2325,13 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "webkitLineClamp",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "webkit-line-clamp",
+              "list": "generated"
             },
             "writes": [
-              "webkitLineClamp"
+              "max-lines",
+              "block-ellipsis",
+              "continue"
             ]
           },
           "args": {}
@@ -2417,6 +2341,7 @@
           "kind": "inspector-field",
           "feature": "props-typography-advanced",
           "property": "direction",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2426,9 +2351,7 @@
             "selection": "all",
             "offers": {
               "property": "direction",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
               "direction"
@@ -2440,7 +2363,8 @@
           "id": "inspector-writing-mode",
           "kind": "inspector-field",
           "feature": "props-typography-advanced",
-          "property": "writingMode",
+          "property": "writing-mode",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2449,13 +2373,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "writingMode",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "writing-mode",
+              "list": "generated"
             },
             "writes": [
-              "writingMode"
+              "writing-mode"
             ]
           },
           "args": {}
@@ -2464,7 +2386,8 @@
           "id": "inspector-text-orientation",
           "kind": "inspector-field",
           "feature": "props-typography-advanced",
-          "property": "textOrientation",
+          "property": "text-orientation",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2473,13 +2396,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "textOrientation",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "text-orientation",
+              "list": "generated"
             },
             "writes": [
-              "textOrientation"
+              "text-orientation"
             ]
           },
           "args": {}
@@ -2488,7 +2409,8 @@
           "id": "inspector-list-style-type",
           "kind": "inspector-field",
           "feature": "props-element-specific",
-          "property": "listStyleType",
+          "property": "list-style-type",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2497,13 +2419,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "listStyleType",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "list-style-type",
+              "list": "menu"
             },
             "writes": [
-              "listStyleType"
+              "list-style-type"
             ]
           },
           "args": {}
@@ -2512,7 +2432,8 @@
           "id": "inspector-list-style-position",
           "kind": "inspector-field",
           "feature": "props-element-specific",
-          "property": "listStylePosition",
+          "property": "list-style-position",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2521,13 +2442,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "listStylePosition",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "list-style-position",
+              "list": "generated"
             },
             "writes": [
-              "listStylePosition"
+              "list-style-position"
             ]
           },
           "args": {}
@@ -2536,7 +2455,8 @@
           "id": "inspector-list-style-image",
           "kind": "inspector-field",
           "feature": "props-element-specific",
-          "property": "listStyleImage",
+          "property": "list-style-image",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2545,13 +2465,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "listStyleImage",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "list-style-image",
+              "list": "generated"
             },
             "writes": [
-              "listStyleImage"
+              "list-style-image"
             ]
           },
           "args": {}
@@ -2560,7 +2478,8 @@
           "id": "inspector-accent-color",
           "kind": "inspector-field",
           "feature": "props-element-specific",
-          "property": "accentColor",
+          "property": "accent-color",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2569,13 +2488,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "accentColor",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "accent-color",
+              "list": "generated"
             },
             "writes": [
-              "accentColor"
+              "accent-color"
             ]
           },
           "args": {}
@@ -2584,7 +2501,8 @@
           "id": "inspector-caret-color",
           "kind": "inspector-field",
           "feature": "props-element-specific",
-          "property": "caretColor",
+          "property": "caret-color",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2593,13 +2511,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "caretColor",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "caret-color",
+              "list": "generated"
             },
             "writes": [
-              "caretColor"
+              "caret-color"
             ]
           },
           "args": {}
@@ -2609,6 +2525,7 @@
           "kind": "inspector-field",
           "feature": "props-element-specific",
           "property": "appearance",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2618,9 +2535,7 @@
             "selection": "all",
             "offers": {
               "property": "appearance",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
               "appearance"
@@ -2633,6 +2548,7 @@
           "kind": "inspector-field",
           "feature": "props-effects-basic",
           "property": "opacity",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2652,6 +2568,7 @@
           "kind": "inspector-field",
           "feature": "props-effects-basic",
           "property": "visibility",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2661,9 +2578,7 @@
             "selection": "all",
             "offers": {
               "property": "visibility",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
               "visibility"
@@ -2675,7 +2590,8 @@
           "id": "inspector-mix-blend-mode",
           "kind": "inspector-field",
           "feature": "props-effects-basic",
-          "property": "mixBlendMode",
+          "property": "mix-blend-mode",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2684,13 +2600,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "mixBlendMode",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "mix-blend-mode",
+              "list": "generated"
             },
             "writes": [
-              "mixBlendMode"
+              "mix-blend-mode"
             ]
           },
           "args": {}
@@ -2700,6 +2614,7 @@
           "kind": "inspector-field",
           "feature": "props-effects-basic",
           "property": "isolation",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2709,9 +2624,7 @@
             "selection": "all",
             "offers": {
               "property": "isolation",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
               "isolation"
@@ -2724,6 +2637,7 @@
           "kind": "inspector-field",
           "feature": "props-effects-basic",
           "property": "cursor",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2733,9 +2647,7 @@
             "selection": "all",
             "offers": {
               "property": "cursor",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
               "cursor"
@@ -2747,7 +2659,8 @@
           "id": "inspector-pointer-events",
           "kind": "inspector-field",
           "feature": "props-effects-basic",
-          "property": "pointerEvents",
+          "property": "pointer-events",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2756,13 +2669,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "pointerEvents",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "pointer-events",
+              "list": "generated"
             },
             "writes": [
-              "pointerEvents"
+              "pointer-events"
             ]
           },
           "args": {}
@@ -2771,7 +2682,8 @@
           "id": "inspector-user-select",
           "kind": "inspector-field",
           "feature": "props-effects-basic",
-          "property": "userSelect",
+          "property": "user-select",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2780,13 +2692,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "userSelect",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "user-select",
+              "list": "generated"
             },
             "writes": [
-              "userSelect"
+              "user-select"
             ]
           },
           "args": {}
@@ -2795,7 +2705,8 @@
           "id": "inspector-will-change",
           "kind": "inspector-field",
           "feature": "props-transition",
-          "property": "willChange",
+          "property": "will-change",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2804,13 +2715,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "willChange",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "will-change",
+              "list": "menu"
             },
             "writes": [
-              "willChange"
+              "will-change"
             ]
           },
           "args": {}
@@ -2819,7 +2728,8 @@
           "id": "inspector-backdrop-filter",
           "kind": "inspector-field",
           "feature": "props-filters-clip",
-          "property": "backdropFilter",
+          "property": "backdrop-filter",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2828,13 +2738,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "backdropFilter",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "backdrop-filter",
+              "list": "generated"
             },
             "writes": [
-              "backdropFilter"
+              "backdrop-filter"
             ]
           },
           "args": {}
@@ -2843,7 +2751,8 @@
           "id": "inspector-clip-path",
           "kind": "inspector-field",
           "feature": "props-filters-clip",
-          "property": "clipPath",
+          "property": "clip-path",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2852,13 +2761,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "clipPath",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "clip-path",
+              "list": "generated"
             },
             "writes": [
-              "clipPath"
+              "clip-path"
             ]
           },
           "args": {}
@@ -2867,7 +2774,8 @@
           "id": "inspector-mask-image",
           "kind": "inspector-field",
           "feature": "props-filters-clip",
-          "property": "maskImage",
+          "property": "mask-image",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2876,13 +2784,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "maskImage",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "mask-image",
+              "list": "generated"
             },
             "writes": [
-              "maskImage"
+              "mask-image"
             ]
           },
           "args": {}
@@ -2891,7 +2797,8 @@
           "id": "inspector-transform-origin",
           "kind": "inspector-field",
           "feature": "props-transforms",
-          "property": "transformOrigin",
+          "property": "transform-origin",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2900,13 +2807,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "transformOrigin",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "transform-origin",
+              "list": "menu"
             },
             "writes": [
-              "transformOrigin"
+              "transform-origin"
             ]
           },
           "args": {}
@@ -2916,6 +2821,7 @@
           "kind": "inspector-field",
           "feature": "props-transforms",
           "property": "perspective",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2925,9 +2831,7 @@
             "selection": "all",
             "offers": {
               "property": "perspective",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
               "perspective"
@@ -2939,7 +2843,8 @@
           "id": "inspector-perspective-origin",
           "kind": "inspector-field",
           "feature": "props-transforms",
-          "property": "perspectiveOrigin",
+          "property": "perspective-origin",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2948,13 +2853,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "perspectiveOrigin",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "perspective-origin",
+              "list": "generated"
             },
             "writes": [
-              "perspectiveOrigin"
+              "perspective-origin"
             ]
           },
           "args": {}
@@ -2963,7 +2866,8 @@
           "id": "inspector-transform-style",
           "kind": "inspector-field",
           "feature": "props-transforms",
-          "property": "transformStyle",
+          "property": "transform-style",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2972,13 +2876,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "transformStyle",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "transform-style",
+              "list": "generated"
             },
             "writes": [
-              "transformStyle"
+              "transform-style"
             ]
           },
           "args": {}
@@ -2987,7 +2889,8 @@
           "id": "inspector-backface-visibility",
           "kind": "inspector-field",
           "feature": "props-transforms",
-          "property": "backfaceVisibility",
+          "property": "backface-visibility",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2996,13 +2899,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "backfaceVisibility",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "backface-visibility",
+              "list": "generated"
             },
             "writes": [
-              "backfaceVisibility"
+              "backface-visibility"
             ]
           },
           "args": {}
@@ -3011,7 +2912,8 @@
           "id": "inspector-transform-box",
           "kind": "inspector-field",
           "feature": "props-transforms",
-          "property": "transformBox",
+          "property": "transform-box",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -3020,13 +2922,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "transformBox",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "transform-box",
+              "list": "generated"
             },
             "writes": [
-              "transformBox"
+              "transform-box"
             ]
           },
           "args": {}
@@ -3035,7 +2935,8 @@
           "id": "inspector-transition",
           "kind": "inspector-field",
           "feature": "props-transition",
-          "property": "transition",
+          "property": null,
+          "composite": "transition",
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -3045,12 +2946,14 @@
             "selection": "all",
             "offers": {
               "property": "transition",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
-              "transition"
+              "transition-property",
+              "transition-duration",
+              "transition-timing-function",
+              "transition-delay",
+              "transition-behavior"
             ]
           },
           "args": {}
@@ -3059,7 +2962,8 @@
           "id": "inspector-align-items-stretch-button",
           "kind": "inspector-field",
           "feature": "props-flex-container",
-          "property": "alignItems",
+          "property": "align-items",
+          "composite": null,
           "attribute": null,
           "control": "stretch-button",
           "labelKey": "inspector.flex.stretch",
@@ -3067,25 +2971,22 @@
           "placement": "unplaced",
           "adapter": {
             "selection": "all",
-            "offers": {
-              "property": "alignItems",
-              "keywords": [
-                "stretch"
-              ],
-              "units": "all",
-              "reason": "The Stretch button writes one value; the Align items field offers every keyword."
-            },
+            "offers": null,
             "writes": [
-              "alignItems"
+              "align-items"
             ]
           },
-          "args": {}
+          "args": {
+            "property": "align-items",
+            "value": "stretch"
+          }
         },
         {
           "id": "inspector-justify-content-spread-button",
           "kind": "inspector-field",
           "feature": "props-flex-container",
-          "property": "justifyContent",
+          "property": "justify-content",
+          "composite": null,
           "attribute": null,
           "control": "spread-button",
           "labelKey": "inspector.flex.spread",
@@ -3093,25 +2994,22 @@
           "placement": "unplaced",
           "adapter": {
             "selection": "all",
-            "offers": {
-              "property": "justifyContent",
-              "keywords": [
-                "space-between"
-              ],
-              "units": "all",
-              "reason": "The Spread button writes one value; the Justify content field offers every keyword."
-            },
+            "offers": null,
             "writes": [
-              "justifyContent"
+              "justify-content"
             ]
           },
-          "args": {}
+          "args": {
+            "property": "justify-content",
+            "value": "space-between"
+          }
         },
         {
           "id": "inspector-grid-template-columns-add-track",
           "kind": "inspector-field",
           "feature": "props-grid-container",
-          "property": "gridTemplateColumns",
+          "property": "grid-template-columns",
+          "composite": null,
           "attribute": null,
           "control": "add-track",
           "labelKey": "inspector.grid.addColumn",
@@ -3120,13 +3018,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "gridTemplateColumns",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "grid-template-columns",
+              "list": "generated"
             },
             "writes": [
-              "gridTemplateColumns"
+              "grid-template-columns"
             ]
           },
           "args": {}
@@ -3143,9 +3039,7 @@
             "selection": "all",
             "offers": {
               "property": "width",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
               "width"
@@ -3165,9 +3059,7 @@
             "selection": "all",
             "offers": {
               "property": "height",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
               "height"
@@ -3187,7 +3079,7 @@
             "selection": "all",
             "offers": null,
             "writes": [
-              "backgroundColor",
+              "background-color",
               "fill"
             ]
           },
@@ -3221,13 +3113,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "fontSize",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "font-size",
+              "list": "generated"
             },
             "writes": [
-              "fontSize"
+              "font-size"
             ]
           },
           "args": {}
@@ -3277,7 +3167,8 @@
             "selection": "all",
             "offers": null,
             "writes": [
-              "gap"
+              "row-gap",
+              "column-gap"
             ]
           },
           "args": {}
@@ -3295,7 +3186,7 @@
             "selection": "all",
             "offers": null,
             "writes": [
-              "rowGap"
+              "row-gap"
             ]
           },
           "args": {}
@@ -3313,7 +3204,177 @@
             "selection": "all",
             "offers": null,
             "writes": [
-              "columnGap"
+              "column-gap"
+            ]
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-translate-x",
+          "kind": "inspector-field",
+          "feature": "props-transforms",
+          "property": "translate",
+          "composite": null,
+          "attribute": null,
+          "control": "translate-x",
+          "labelKey": "inspector.transform.moveX",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "all",
+            "offers": {
+              "property": "translate",
+              "list": "generated"
+            },
+            "writes": [
+              "translate"
+            ]
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-translate-y",
+          "kind": "inspector-field",
+          "feature": "props-transforms",
+          "property": "translate",
+          "composite": null,
+          "attribute": null,
+          "control": "translate-y",
+          "labelKey": "inspector.transform.moveY",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "all",
+            "offers": {
+              "property": "translate",
+              "list": "generated"
+            },
+            "writes": [
+              "translate"
+            ]
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-rotate",
+          "kind": "inspector-field",
+          "feature": "props-transforms",
+          "property": "rotate",
+          "composite": null,
+          "attribute": null,
+          "control": "rotate",
+          "labelKey": "inspector.transform.rotate",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "all",
+            "offers": {
+              "property": "rotate",
+              "list": "generated"
+            },
+            "writes": [
+              "rotate"
+            ]
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-scale",
+          "kind": "inspector-field",
+          "feature": "props-transforms",
+          "property": "scale",
+          "composite": null,
+          "attribute": null,
+          "control": "scale",
+          "labelKey": "inspector.transform.scale",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "all",
+            "offers": {
+              "property": "scale",
+              "list": "generated"
+            },
+            "writes": [
+              "scale"
+            ]
+          },
+          "args": {}
+        },
+        {
+          "id": "quick-panel-translate-x",
+          "kind": "quick-panel",
+          "feature": "quick-panel",
+          "control": "translate-x",
+          "labelKey": "inspector.transform.moveX",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "all",
+            "offers": {
+              "property": "translate",
+              "list": "generated"
+            },
+            "writes": [
+              "translate"
+            ]
+          },
+          "args": {}
+        },
+        {
+          "id": "quick-panel-rotate",
+          "kind": "quick-panel",
+          "feature": "quick-panel",
+          "control": "rotate",
+          "labelKey": "inspector.transform.rotate",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "all",
+            "offers": {
+              "property": "rotate",
+              "list": "generated"
+            },
+            "writes": [
+              "rotate"
+            ]
+          },
+          "args": {}
+        },
+        {
+          "id": "quick-panel-scale",
+          "kind": "quick-panel",
+          "feature": "quick-panel",
+          "control": "scale",
+          "labelKey": "inspector.transform.scale",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "unplaced",
+          "adapter": {
+            "selection": "all",
+            "offers": {
+              "property": "scale",
+              "list": "generated"
+            },
+            "writes": [
+              "scale"
+            ]
+          },
+          "args": {}
+        },
+        {
+          "id": "handle-rotate",
+          "kind": "canvas-handle",
+          "feature": "rotation-handle",
+          "handle": "rotate",
+          "gesture": "rotate",
+          "labelKey": "canvas.handle.rotate",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": [
+              "rotate"
             ]
           },
           "args": {}
@@ -3361,12 +3422,20 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-gesture",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "inspector-padding-box-model",
           "kind": "inspector-field",
           "feature": "props-spacing",
-          "property": "padding",
+          "property": null,
+          "composite": "padding",
           "attribute": null,
           "control": "box-model",
           "labelKey": "command.setSpacing",
@@ -3376,12 +3445,13 @@
             "selection": "all",
             "offers": {
               "property": "padding",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
-              "padding"
+              "padding-top",
+              "padding-right",
+              "padding-bottom",
+              "padding-left"
             ]
           },
           "args": {}
@@ -3390,7 +3460,8 @@
           "id": "inspector-padding-top-box-model",
           "kind": "inspector-field",
           "feature": "props-spacing",
-          "property": "paddingTop",
+          "property": "padding-top",
+          "composite": null,
           "attribute": null,
           "control": "box-model",
           "labelKey": "command.setSpacing",
@@ -3399,13 +3470,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "paddingTop",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "padding-top",
+              "list": "generated"
             },
             "writes": [
-              "paddingTop"
+              "padding-top"
             ]
           },
           "args": {}
@@ -3414,7 +3483,8 @@
           "id": "inspector-padding-right-box-model",
           "kind": "inspector-field",
           "feature": "props-spacing",
-          "property": "paddingRight",
+          "property": "padding-right",
+          "composite": null,
           "attribute": null,
           "control": "box-model",
           "labelKey": "command.setSpacing",
@@ -3423,13 +3493,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "paddingRight",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "padding-right",
+              "list": "generated"
             },
             "writes": [
-              "paddingRight"
+              "padding-right"
             ]
           },
           "args": {}
@@ -3438,7 +3506,8 @@
           "id": "inspector-padding-bottom-box-model",
           "kind": "inspector-field",
           "feature": "props-spacing",
-          "property": "paddingBottom",
+          "property": "padding-bottom",
+          "composite": null,
           "attribute": null,
           "control": "box-model",
           "labelKey": "command.setSpacing",
@@ -3447,13 +3516,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "paddingBottom",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "padding-bottom",
+              "list": "generated"
             },
             "writes": [
-              "paddingBottom"
+              "padding-bottom"
             ]
           },
           "args": {}
@@ -3462,7 +3529,8 @@
           "id": "inspector-padding-left-box-model",
           "kind": "inspector-field",
           "feature": "props-spacing",
-          "property": "paddingLeft",
+          "property": "padding-left",
+          "composite": null,
           "attribute": null,
           "control": "box-model",
           "labelKey": "command.setSpacing",
@@ -3471,13 +3539,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "paddingLeft",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "padding-left",
+              "list": "generated"
             },
             "writes": [
-              "paddingLeft"
+              "padding-left"
             ]
           },
           "args": {}
@@ -3486,7 +3552,8 @@
           "id": "inspector-margin-box-model",
           "kind": "inspector-field",
           "feature": "props-spacing",
-          "property": "margin",
+          "property": null,
+          "composite": "margin",
           "attribute": null,
           "control": "box-model",
           "labelKey": "command.setSpacing",
@@ -3496,12 +3563,13 @@
             "selection": "all",
             "offers": {
               "property": "margin",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
-              "margin"
+              "margin-top",
+              "margin-right",
+              "margin-bottom",
+              "margin-left"
             ]
           },
           "args": {}
@@ -3510,7 +3578,8 @@
           "id": "inspector-margin-top-box-model",
           "kind": "inspector-field",
           "feature": "props-spacing",
-          "property": "marginTop",
+          "property": "margin-top",
+          "composite": null,
           "attribute": null,
           "control": "box-model",
           "labelKey": "command.setSpacing",
@@ -3519,13 +3588,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "marginTop",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "margin-top",
+              "list": "generated"
             },
             "writes": [
-              "marginTop"
+              "margin-top"
             ]
           },
           "args": {}
@@ -3534,7 +3601,8 @@
           "id": "inspector-margin-right-box-model",
           "kind": "inspector-field",
           "feature": "props-spacing",
-          "property": "marginRight",
+          "property": "margin-right",
+          "composite": null,
           "attribute": null,
           "control": "box-model",
           "labelKey": "command.setSpacing",
@@ -3543,13 +3611,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "marginRight",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "margin-right",
+              "list": "generated"
             },
             "writes": [
-              "marginRight"
+              "margin-right"
             ]
           },
           "args": {}
@@ -3558,7 +3624,8 @@
           "id": "inspector-margin-bottom-box-model",
           "kind": "inspector-field",
           "feature": "props-spacing",
-          "property": "marginBottom",
+          "property": "margin-bottom",
+          "composite": null,
           "attribute": null,
           "control": "box-model",
           "labelKey": "command.setSpacing",
@@ -3567,13 +3634,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "marginBottom",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "margin-bottom",
+              "list": "generated"
             },
             "writes": [
-              "marginBottom"
+              "margin-bottom"
             ]
           },
           "args": {}
@@ -3582,7 +3647,8 @@
           "id": "inspector-margin-left-box-model",
           "kind": "inspector-field",
           "feature": "props-spacing",
-          "property": "marginLeft",
+          "property": "margin-left",
+          "composite": null,
           "attribute": null,
           "control": "box-model",
           "labelKey": "command.setSpacing",
@@ -3591,13 +3657,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "marginLeft",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "margin-left",
+              "list": "generated"
             },
             "writes": [
-              "marginLeft"
+              "margin-left"
             ]
           },
           "args": {}
@@ -3630,7 +3694,7 @@
             "selection": "all",
             "offers": null,
             "writes": [
-              "paddingTop"
+              "padding-top"
             ]
           },
           "args": {}
@@ -3648,7 +3712,7 @@
             "selection": "all",
             "offers": null,
             "writes": [
-              "marginTop"
+              "margin-top"
             ]
           },
           "args": {}
@@ -3666,7 +3730,7 @@
             "selection": "all",
             "offers": null,
             "writes": [
-              "paddingRight"
+              "padding-right"
             ]
           },
           "args": {}
@@ -3684,7 +3748,7 @@
             "selection": "all",
             "offers": null,
             "writes": [
-              "marginRight"
+              "margin-right"
             ]
           },
           "args": {}
@@ -3702,7 +3766,7 @@
             "selection": "all",
             "offers": null,
             "writes": [
-              "paddingBottom"
+              "padding-bottom"
             ]
           },
           "args": {}
@@ -3720,7 +3784,7 @@
             "selection": "all",
             "offers": null,
             "writes": [
-              "marginBottom"
+              "margin-bottom"
             ]
           },
           "args": {}
@@ -3738,7 +3802,7 @@
             "selection": "all",
             "offers": null,
             "writes": [
-              "paddingLeft"
+              "padding-left"
             ]
           },
           "args": {}
@@ -3756,7 +3820,7 @@
             "selection": "all",
             "offers": null,
             "writes": [
-              "marginLeft"
+              "margin-left"
             ]
           },
           "args": {}
@@ -3784,6 +3848,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "inspector-spacing-link",
@@ -3847,12 +3914,20 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-gesture",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "inspector-border-border-editor",
           "kind": "inspector-field",
           "feature": "props-border-outline",
-          "property": "border",
+          "property": null,
+          "composite": "border",
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
@@ -3862,12 +3937,21 @@
             "selection": "all",
             "offers": {
               "property": "border",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
-              "border"
+              "border-top-width",
+              "border-right-width",
+              "border-bottom-width",
+              "border-left-width",
+              "border-top-style",
+              "border-right-style",
+              "border-bottom-style",
+              "border-left-style",
+              "border-top-color",
+              "border-right-color",
+              "border-bottom-color",
+              "border-left-color"
             ]
           },
           "args": {}
@@ -3876,7 +3960,8 @@
           "id": "inspector-border-width-border-editor",
           "kind": "inspector-field",
           "feature": "props-border-outline",
-          "property": "borderWidth",
+          "property": null,
+          "composite": "border-width",
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
@@ -3885,13 +3970,14 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "borderWidth",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "border-width",
+              "list": "generated"
             },
             "writes": [
-              "borderWidth"
+              "border-top-width",
+              "border-right-width",
+              "border-bottom-width",
+              "border-left-width"
             ]
           },
           "args": {}
@@ -3900,7 +3986,8 @@
           "id": "inspector-border-style-border-editor",
           "kind": "inspector-field",
           "feature": "props-border-outline",
-          "property": "borderStyle",
+          "property": null,
+          "composite": "border-style",
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
@@ -3909,13 +3996,14 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "borderStyle",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "border-style",
+              "list": "generated"
             },
             "writes": [
-              "borderStyle"
+              "border-top-style",
+              "border-right-style",
+              "border-bottom-style",
+              "border-left-style"
             ]
           },
           "args": {}
@@ -3924,7 +4012,8 @@
           "id": "inspector-border-color-border-editor",
           "kind": "inspector-field",
           "feature": "props-border-outline",
-          "property": "borderColor",
+          "property": null,
+          "composite": "border-color",
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
@@ -3934,7 +4023,10 @@
             "selection": "all",
             "offers": null,
             "writes": [
-              "borderColor"
+              "border-top-color",
+              "border-right-color",
+              "border-bottom-color",
+              "border-left-color"
             ]
           },
           "args": {}
@@ -3943,7 +4035,8 @@
           "id": "inspector-border-top-border-editor",
           "kind": "inspector-field",
           "feature": "props-border-outline",
-          "property": "borderTop",
+          "property": null,
+          "composite": "border-top",
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
@@ -3952,13 +4045,13 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "borderTop",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "border-top",
+              "list": "generated"
             },
             "writes": [
-              "borderTop"
+              "border-top-width",
+              "border-top-style",
+              "border-top-color"
             ]
           },
           "args": {}
@@ -3967,7 +4060,8 @@
           "id": "inspector-border-top-width-border-editor",
           "kind": "inspector-field",
           "feature": "props-border-outline",
-          "property": "borderTopWidth",
+          "property": "border-top-width",
+          "composite": null,
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
@@ -3976,13 +4070,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "borderTopWidth",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "border-top-width",
+              "list": "generated"
             },
             "writes": [
-              "borderTopWidth"
+              "border-top-width"
             ]
           },
           "args": {}
@@ -3991,7 +4083,8 @@
           "id": "inspector-border-right-border-editor",
           "kind": "inspector-field",
           "feature": "props-border-outline",
-          "property": "borderRight",
+          "property": null,
+          "composite": "border-right",
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
@@ -4000,13 +4093,13 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "borderRight",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "border-right",
+              "list": "generated"
             },
             "writes": [
-              "borderRight"
+              "border-right-width",
+              "border-right-style",
+              "border-right-color"
             ]
           },
           "args": {}
@@ -4015,7 +4108,8 @@
           "id": "inspector-border-right-width-border-editor",
           "kind": "inspector-field",
           "feature": "props-border-outline",
-          "property": "borderRightWidth",
+          "property": "border-right-width",
+          "composite": null,
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
@@ -4024,13 +4118,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "borderRightWidth",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "border-right-width",
+              "list": "generated"
             },
             "writes": [
-              "borderRightWidth"
+              "border-right-width"
             ]
           },
           "args": {}
@@ -4039,7 +4131,8 @@
           "id": "inspector-border-bottom-border-editor",
           "kind": "inspector-field",
           "feature": "props-border-outline",
-          "property": "borderBottom",
+          "property": null,
+          "composite": "border-bottom",
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
@@ -4048,13 +4141,13 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "borderBottom",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "border-bottom",
+              "list": "generated"
             },
             "writes": [
-              "borderBottom"
+              "border-bottom-width",
+              "border-bottom-style",
+              "border-bottom-color"
             ]
           },
           "args": {}
@@ -4063,7 +4156,8 @@
           "id": "inspector-border-bottom-width-border-editor",
           "kind": "inspector-field",
           "feature": "props-border-outline",
-          "property": "borderBottomWidth",
+          "property": "border-bottom-width",
+          "composite": null,
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
@@ -4072,13 +4166,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "borderBottomWidth",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "border-bottom-width",
+              "list": "generated"
             },
             "writes": [
-              "borderBottomWidth"
+              "border-bottom-width"
             ]
           },
           "args": {}
@@ -4087,7 +4179,8 @@
           "id": "inspector-border-left-border-editor",
           "kind": "inspector-field",
           "feature": "props-border-outline",
-          "property": "borderLeft",
+          "property": null,
+          "composite": "border-left",
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
@@ -4096,13 +4189,13 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "borderLeft",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "border-left",
+              "list": "generated"
             },
             "writes": [
-              "borderLeft"
+              "border-left-width",
+              "border-left-style",
+              "border-left-color"
             ]
           },
           "args": {}
@@ -4111,7 +4204,8 @@
           "id": "inspector-border-left-width-border-editor",
           "kind": "inspector-field",
           "feature": "props-border-outline",
-          "property": "borderLeftWidth",
+          "property": "border-left-width",
+          "composite": null,
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
@@ -4120,13 +4214,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "borderLeftWidth",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "border-left-width",
+              "list": "generated"
             },
             "writes": [
-              "borderLeftWidth"
+              "border-left-width"
             ]
           },
           "args": {}
@@ -4142,13 +4234,22 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "borderStyle",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "border-style",
+              "list": "generated"
             },
             "writes": [
-              "border"
+              "border-top-width",
+              "border-right-width",
+              "border-bottom-width",
+              "border-left-width",
+              "border-top-style",
+              "border-right-style",
+              "border-bottom-style",
+              "border-left-style",
+              "border-top-color",
+              "border-right-color",
+              "border-bottom-color",
+              "border-left-color"
             ]
           },
           "args": {}
@@ -4181,7 +4282,7 @@
             "selection": "all",
             "offers": null,
             "writes": [
-              "borderTopWidth"
+              "border-top-width"
             ]
           },
           "args": {}
@@ -4199,7 +4300,7 @@
             "selection": "all",
             "offers": null,
             "writes": [
-              "borderRightWidth"
+              "border-right-width"
             ]
           },
           "args": {}
@@ -4217,7 +4318,7 @@
             "selection": "all",
             "offers": null,
             "writes": [
-              "borderBottomWidth"
+              "border-bottom-width"
             ]
           },
           "args": {}
@@ -4235,7 +4336,7 @@
             "selection": "all",
             "offers": null,
             "writes": [
-              "borderLeftWidth"
+              "border-left-width"
             ]
           },
           "args": {}
@@ -4274,12 +4375,20 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-gesture",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "inspector-border-radius-radius-editor",
           "kind": "inspector-field",
           "feature": "props-border-outline",
-          "property": "borderRadius",
+          "property": null,
+          "composite": "border-radius",
           "attribute": null,
           "control": "radius-editor",
           "labelKey": "command.setRadius",
@@ -4288,13 +4397,14 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "borderRadius",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "border-radius",
+              "list": "generated"
             },
             "writes": [
-              "borderRadius"
+              "border-top-left-radius",
+              "border-top-right-radius",
+              "border-bottom-right-radius",
+              "border-bottom-left-radius"
             ]
           },
           "args": {}
@@ -4303,7 +4413,8 @@
           "id": "inspector-border-top-left-radius-radius-editor",
           "kind": "inspector-field",
           "feature": "props-border-outline",
-          "property": "borderTopLeftRadius",
+          "property": "border-top-left-radius",
+          "composite": null,
           "attribute": null,
           "control": "radius-editor",
           "labelKey": "command.setRadius",
@@ -4312,13 +4423,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "borderTopLeftRadius",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "border-top-left-radius",
+              "list": "generated"
             },
             "writes": [
-              "borderTopLeftRadius"
+              "border-top-left-radius"
             ]
           },
           "args": {}
@@ -4327,7 +4436,8 @@
           "id": "inspector-border-top-right-radius-radius-editor",
           "kind": "inspector-field",
           "feature": "props-border-outline",
-          "property": "borderTopRightRadius",
+          "property": "border-top-right-radius",
+          "composite": null,
           "attribute": null,
           "control": "radius-editor",
           "labelKey": "command.setRadius",
@@ -4336,13 +4446,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "borderTopRightRadius",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "border-top-right-radius",
+              "list": "generated"
             },
             "writes": [
-              "borderTopRightRadius"
+              "border-top-right-radius"
             ]
           },
           "args": {}
@@ -4351,7 +4459,8 @@
           "id": "inspector-border-bottom-right-radius-radius-editor",
           "kind": "inspector-field",
           "feature": "props-border-outline",
-          "property": "borderBottomRightRadius",
+          "property": "border-bottom-right-radius",
+          "composite": null,
           "attribute": null,
           "control": "radius-editor",
           "labelKey": "command.setRadius",
@@ -4360,13 +4469,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "borderBottomRightRadius",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "border-bottom-right-radius",
+              "list": "generated"
             },
             "writes": [
-              "borderBottomRightRadius"
+              "border-bottom-right-radius"
             ]
           },
           "args": {}
@@ -4375,7 +4482,8 @@
           "id": "inspector-border-bottom-left-radius-radius-editor",
           "kind": "inspector-field",
           "feature": "props-border-outline",
-          "property": "borderBottomLeftRadius",
+          "property": "border-bottom-left-radius",
+          "composite": null,
           "attribute": null,
           "control": "radius-editor",
           "labelKey": "command.setRadius",
@@ -4384,13 +4492,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "borderBottomLeftRadius",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "border-bottom-left-radius",
+              "list": "generated"
             },
             "writes": [
-              "borderBottomLeftRadius"
+              "border-bottom-left-radius"
             ]
           },
           "args": {}
@@ -4423,7 +4529,10 @@
             "selection": "all",
             "offers": null,
             "writes": [
-              "borderRadius"
+              "border-top-left-radius",
+              "border-top-right-radius",
+              "border-bottom-right-radius",
+              "border-bottom-left-radius"
             ]
           },
           "args": {}
@@ -4452,12 +4561,20 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-gesture",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "inspector-background-image",
           "kind": "inspector-field",
           "feature": "props-background",
-          "property": "backgroundImage",
+          "property": "background-image",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setBackgroundImage",
@@ -4466,13 +4583,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "backgroundImage",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "background-image",
+              "list": "generated"
             },
             "writes": [
-              "backgroundImage"
+              "background-image"
             ]
           },
           "args": {}
@@ -4481,7 +4596,8 @@
           "id": "inspector-background-image-gradient-add",
           "kind": "inspector-field",
           "feature": "gradient-editor",
-          "property": "backgroundImage",
+          "property": null,
+          "composite": "background",
           "attribute": null,
           "control": "gradient-add",
           "labelKey": "inspector.gradient.add",
@@ -4490,13 +4606,18 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "backgroundImage",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "background-image",
+              "list": "generated"
             },
             "writes": [
-              "backgroundImage"
+              "background-image",
+              "background-position-x",
+              "background-position-y",
+              "background-size",
+              "background-repeat",
+              "background-attachment",
+              "background-origin",
+              "background-clip"
             ]
           },
           "args": {}
@@ -4505,7 +4626,8 @@
           "id": "inspector-background-image-gradient-type",
           "kind": "inspector-field",
           "feature": "gradient-editor",
-          "property": "backgroundImage",
+          "property": "background-image",
+          "composite": null,
           "attribute": null,
           "control": "gradient-type",
           "labelKey": "inspector.gradient.type",
@@ -4514,13 +4636,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "backgroundImage",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "background-image",
+              "list": "generated"
             },
             "writes": [
-              "backgroundImage"
+              "background-image"
             ]
           },
           "args": {}
@@ -4529,7 +4649,8 @@
           "id": "inspector-background-image-gradient-bar",
           "kind": "inspector-field",
           "feature": "gradient-editor",
-          "property": "backgroundImage",
+          "property": "background-image",
+          "composite": null,
           "attribute": null,
           "control": "gradient-bar",
           "labelKey": "inspector.gradient.addStopHere",
@@ -4538,13 +4659,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "backgroundImage",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "background-image",
+              "list": "generated"
             },
             "writes": [
-              "backgroundImage"
+              "background-image"
             ]
           },
           "args": {}
@@ -4553,7 +4672,8 @@
           "id": "inspector-background-image-gradient-stop-colour",
           "kind": "inspector-field",
           "feature": "gradient-editor",
-          "property": "backgroundImage",
+          "property": "background-image",
+          "composite": null,
           "attribute": null,
           "control": "gradient-stop-colour",
           "labelKey": "inspector.gradient.stopColour",
@@ -4562,13 +4682,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "backgroundImage",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "background-image",
+              "list": "generated"
             },
             "writes": [
-              "backgroundImage"
+              "background-image"
             ]
           },
           "args": {}
@@ -4577,7 +4695,8 @@
           "id": "inspector-background-image-gradient-stop-position",
           "kind": "inspector-field",
           "feature": "gradient-editor",
-          "property": "backgroundImage",
+          "property": "background-image",
+          "composite": null,
           "attribute": null,
           "control": "gradient-stop-position",
           "labelKey": "inspector.gradient.stopPosition",
@@ -4586,13 +4705,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "backgroundImage",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "background-image",
+              "list": "generated"
             },
             "writes": [
-              "backgroundImage"
+              "background-image"
             ]
           },
           "args": {}
@@ -4601,7 +4718,8 @@
           "id": "inspector-background-image-gradient-angle",
           "kind": "inspector-field",
           "feature": "gradient-editor",
-          "property": "backgroundImage",
+          "property": "background-image",
+          "composite": null,
           "attribute": null,
           "control": "gradient-angle",
           "labelKey": "inspector.gradient.angle",
@@ -4610,13 +4728,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "backgroundImage",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "background-image",
+              "list": "generated"
             },
             "writes": [
-              "backgroundImage"
+              "background-image"
             ]
           },
           "args": {}
@@ -4625,7 +4741,8 @@
           "id": "inspector-background-image-gradient-reverse",
           "kind": "inspector-field",
           "feature": "gradient-editor",
-          "property": "backgroundImage",
+          "property": "background-image",
+          "composite": null,
           "attribute": null,
           "control": "gradient-reverse",
           "labelKey": "inspector.gradient.reverse",
@@ -4634,13 +4751,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "backgroundImage",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "background-image",
+              "list": "generated"
             },
             "writes": [
-              "backgroundImage"
+              "background-image"
             ]
           },
           "args": {}
@@ -4649,7 +4764,8 @@
           "id": "inspector-background-image-gradient-distribute",
           "kind": "inspector-field",
           "feature": "gradient-editor",
-          "property": "backgroundImage",
+          "property": "background-image",
+          "composite": null,
           "attribute": null,
           "control": "gradient-distribute",
           "labelKey": "inspector.gradient.distribute",
@@ -4658,13 +4774,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "backgroundImage",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "background-image",
+              "list": "generated"
             },
             "writes": [
-              "backgroundImage"
+              "background-image"
             ]
           },
           "args": {}
@@ -4673,7 +4787,8 @@
           "id": "inspector-background-image-gradient-add-stop",
           "kind": "inspector-field",
           "feature": "gradient-editor",
-          "property": "backgroundImage",
+          "property": "background-image",
+          "composite": null,
           "attribute": null,
           "control": "gradient-add-stop",
           "labelKey": "inspector.gradient.addStop",
@@ -4682,13 +4797,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "backgroundImage",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "background-image",
+              "list": "generated"
             },
             "writes": [
-              "backgroundImage"
+              "background-image"
             ]
           },
           "args": {}
@@ -4697,7 +4810,8 @@
           "id": "inspector-background-image-gradient-remove-stop",
           "kind": "inspector-field",
           "feature": "gradient-editor",
-          "property": "backgroundImage",
+          "property": "background-image",
+          "composite": null,
           "attribute": null,
           "control": "gradient-remove-stop",
           "labelKey": "inspector.gradient.removeStop",
@@ -4706,13 +4820,11 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "backgroundImage",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "background-image",
+              "list": "generated"
             },
             "writes": [
-              "backgroundImage"
+              "background-image"
             ]
           },
           "args": {}
@@ -4721,7 +4833,8 @@
           "id": "inspector-background-image-gradient-reset",
           "kind": "inspector-field",
           "feature": "gradient-editor",
-          "property": "backgroundImage",
+          "property": null,
+          "composite": "background",
           "attribute": null,
           "control": "gradient-reset",
           "labelKey": "inspector.gradient.remove",
@@ -4730,13 +4843,18 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "backgroundImage",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "background-image",
+              "list": "generated"
             },
             "writes": [
-              "backgroundImage"
+              "background-image",
+              "background-position-x",
+              "background-position-y",
+              "background-size",
+              "background-repeat",
+              "background-attachment",
+              "background-origin",
+              "background-clip"
             ]
           },
           "args": {}
@@ -4755,7 +4873,7 @@
             "selection": "all",
             "offers": null,
             "writes": [
-              "backgroundImage"
+              "background-image"
             ]
           },
           "args": {}
@@ -4840,7 +4958,7 @@
             "selection": "all",
             "offers": null,
             "writes": [
-              "backgroundImage"
+              "background-image"
             ]
           },
           "args": {}
@@ -4871,8 +4989,8 @@
         "property": {
           "type": "enum",
           "values": [
-            "boxShadow",
-            "textShadow"
+            "box-shadow",
+            "text-shadow"
           ],
           "optional": false
         },
@@ -4891,12 +5009,20 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-gesture",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "inspector-box-shadow-shadow-add",
           "kind": "inspector-field",
           "feature": "shadow-editor",
-          "property": "boxShadow",
+          "property": null,
+          "composite": "box-shadow",
           "attribute": null,
           "control": "shadow-add",
           "labelKey": "inspector.shadow.add",
@@ -4905,24 +5031,27 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "boxShadow",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "box-shadow",
+              "list": "generated"
             },
             "writes": [
-              "boxShadow"
+              "box-shadow-color",
+              "box-shadow-offset",
+              "box-shadow-blur",
+              "box-shadow-spread",
+              "box-shadow-position"
             ]
           },
           "args": {
-            "property": "boxShadow"
+            "property": "box-shadow"
           }
         },
         {
           "id": "inspector-box-shadow-shadow-x",
           "kind": "inspector-field",
           "feature": "shadow-editor",
-          "property": "boxShadow",
+          "property": null,
+          "composite": "box-shadow",
           "attribute": null,
           "control": "shadow-x",
           "labelKey": "inspector.shadow.x",
@@ -4931,24 +5060,27 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "boxShadow",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "box-shadow",
+              "list": "generated"
             },
             "writes": [
-              "boxShadow"
+              "box-shadow-color",
+              "box-shadow-offset",
+              "box-shadow-blur",
+              "box-shadow-spread",
+              "box-shadow-position"
             ]
           },
           "args": {
-            "property": "boxShadow"
+            "property": "box-shadow"
           }
         },
         {
           "id": "inspector-box-shadow-shadow-y",
           "kind": "inspector-field",
           "feature": "shadow-editor",
-          "property": "boxShadow",
+          "property": null,
+          "composite": "box-shadow",
           "attribute": null,
           "control": "shadow-y",
           "labelKey": "inspector.shadow.y",
@@ -4957,24 +5089,27 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "boxShadow",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "box-shadow",
+              "list": "generated"
             },
             "writes": [
-              "boxShadow"
+              "box-shadow-color",
+              "box-shadow-offset",
+              "box-shadow-blur",
+              "box-shadow-spread",
+              "box-shadow-position"
             ]
           },
           "args": {
-            "property": "boxShadow"
+            "property": "box-shadow"
           }
         },
         {
           "id": "inspector-box-shadow-shadow-blur",
           "kind": "inspector-field",
           "feature": "shadow-editor",
-          "property": "boxShadow",
+          "property": null,
+          "composite": "box-shadow",
           "attribute": null,
           "control": "shadow-blur",
           "labelKey": "inspector.shadow.blur",
@@ -4983,24 +5118,27 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "boxShadow",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "box-shadow",
+              "list": "generated"
             },
             "writes": [
-              "boxShadow"
+              "box-shadow-color",
+              "box-shadow-offset",
+              "box-shadow-blur",
+              "box-shadow-spread",
+              "box-shadow-position"
             ]
           },
           "args": {
-            "property": "boxShadow"
+            "property": "box-shadow"
           }
         },
         {
           "id": "inspector-box-shadow-shadow-spread",
           "kind": "inspector-field",
           "feature": "shadow-editor",
-          "property": "boxShadow",
+          "property": null,
+          "composite": "box-shadow",
           "attribute": null,
           "control": "shadow-spread",
           "labelKey": "inspector.shadow.spread",
@@ -5009,24 +5147,27 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "boxShadow",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "box-shadow",
+              "list": "generated"
             },
             "writes": [
-              "boxShadow"
+              "box-shadow-color",
+              "box-shadow-offset",
+              "box-shadow-blur",
+              "box-shadow-spread",
+              "box-shadow-position"
             ]
           },
           "args": {
-            "property": "boxShadow"
+            "property": "box-shadow"
           }
         },
         {
           "id": "inspector-box-shadow-shadow-inset",
           "kind": "inspector-field",
           "feature": "shadow-editor",
-          "property": "boxShadow",
+          "property": null,
+          "composite": "box-shadow",
           "attribute": null,
           "control": "shadow-inset",
           "labelKey": "inspector.shadow.inset",
@@ -5035,24 +5176,27 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "boxShadow",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "box-shadow",
+              "list": "generated"
             },
             "writes": [
-              "boxShadow"
+              "box-shadow-color",
+              "box-shadow-offset",
+              "box-shadow-blur",
+              "box-shadow-spread",
+              "box-shadow-position"
             ]
           },
           "args": {
-            "property": "boxShadow"
+            "property": "box-shadow"
           }
         },
         {
           "id": "inspector-box-shadow-shadow-colour",
           "kind": "inspector-field",
           "feature": "shadow-editor",
-          "property": "boxShadow",
+          "property": null,
+          "composite": "box-shadow",
           "attribute": null,
           "control": "shadow-colour",
           "labelKey": "inspector.shadow.colour",
@@ -5061,24 +5205,27 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "boxShadow",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "box-shadow",
+              "list": "generated"
             },
             "writes": [
-              "boxShadow"
+              "box-shadow-color",
+              "box-shadow-offset",
+              "box-shadow-blur",
+              "box-shadow-spread",
+              "box-shadow-position"
             ]
           },
           "args": {
-            "property": "boxShadow"
+            "property": "box-shadow"
           }
         },
         {
           "id": "inspector-box-shadow-shadow-visibility",
           "kind": "inspector-field",
           "feature": "shadow-editor",
-          "property": "boxShadow",
+          "property": null,
+          "composite": "box-shadow",
           "attribute": null,
           "control": "shadow-visibility",
           "labelKey": "inspector.shadow.visibility",
@@ -5087,24 +5234,27 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "boxShadow",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "box-shadow",
+              "list": "generated"
             },
             "writes": [
-              "boxShadow"
+              "box-shadow-color",
+              "box-shadow-offset",
+              "box-shadow-blur",
+              "box-shadow-spread",
+              "box-shadow-position"
             ]
           },
           "args": {
-            "property": "boxShadow"
+            "property": "box-shadow"
           }
         },
         {
           "id": "inspector-box-shadow-shadow-remove",
           "kind": "inspector-field",
           "feature": "shadow-editor",
-          "property": "boxShadow",
+          "property": null,
+          "composite": "box-shadow",
           "attribute": null,
           "control": "shadow-remove",
           "labelKey": "inspector.shadow.remove",
@@ -5113,24 +5263,27 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "boxShadow",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "box-shadow",
+              "list": "generated"
             },
             "writes": [
-              "boxShadow"
+              "box-shadow-color",
+              "box-shadow-offset",
+              "box-shadow-blur",
+              "box-shadow-spread",
+              "box-shadow-position"
             ]
           },
           "args": {
-            "property": "boxShadow"
+            "property": "box-shadow"
           }
         },
         {
           "id": "inspector-box-shadow-shadow-reset",
           "kind": "inspector-field",
           "feature": "shadow-editor",
-          "property": "boxShadow",
+          "property": null,
+          "composite": "box-shadow",
           "attribute": null,
           "control": "shadow-reset",
           "labelKey": "inspector.shadow.reset",
@@ -5139,24 +5292,27 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "boxShadow",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "box-shadow",
+              "list": "generated"
             },
             "writes": [
-              "boxShadow"
+              "box-shadow-color",
+              "box-shadow-offset",
+              "box-shadow-blur",
+              "box-shadow-spread",
+              "box-shadow-position"
             ]
           },
           "args": {
-            "property": "boxShadow"
+            "property": "box-shadow"
           }
         },
         {
           "id": "inspector-text-shadow-shadow-add",
           "kind": "inspector-field",
           "feature": "shadow-editor",
-          "property": "textShadow",
+          "property": "text-shadow",
+          "composite": null,
           "attribute": null,
           "control": "shadow-add",
           "labelKey": "inspector.shadow.add",
@@ -5165,24 +5321,23 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "textShadow",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "text-shadow",
+              "list": "generated"
             },
             "writes": [
-              "textShadow"
+              "text-shadow"
             ]
           },
           "args": {
-            "property": "textShadow"
+            "property": "text-shadow"
           }
         },
         {
           "id": "inspector-text-shadow-shadow-x",
           "kind": "inspector-field",
           "feature": "shadow-editor",
-          "property": "textShadow",
+          "property": "text-shadow",
+          "composite": null,
           "attribute": null,
           "control": "shadow-x",
           "labelKey": "inspector.shadow.x",
@@ -5191,24 +5346,23 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "textShadow",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "text-shadow",
+              "list": "generated"
             },
             "writes": [
-              "textShadow"
+              "text-shadow"
             ]
           },
           "args": {
-            "property": "textShadow"
+            "property": "text-shadow"
           }
         },
         {
           "id": "inspector-text-shadow-shadow-y",
           "kind": "inspector-field",
           "feature": "shadow-editor",
-          "property": "textShadow",
+          "property": "text-shadow",
+          "composite": null,
           "attribute": null,
           "control": "shadow-y",
           "labelKey": "inspector.shadow.y",
@@ -5217,24 +5371,23 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "textShadow",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "text-shadow",
+              "list": "generated"
             },
             "writes": [
-              "textShadow"
+              "text-shadow"
             ]
           },
           "args": {
-            "property": "textShadow"
+            "property": "text-shadow"
           }
         },
         {
           "id": "inspector-text-shadow-shadow-blur",
           "kind": "inspector-field",
           "feature": "shadow-editor",
-          "property": "textShadow",
+          "property": "text-shadow",
+          "composite": null,
           "attribute": null,
           "control": "shadow-blur",
           "labelKey": "inspector.shadow.blur",
@@ -5243,24 +5396,23 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "textShadow",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "text-shadow",
+              "list": "generated"
             },
             "writes": [
-              "textShadow"
+              "text-shadow"
             ]
           },
           "args": {
-            "property": "textShadow"
+            "property": "text-shadow"
           }
         },
         {
           "id": "inspector-text-shadow-shadow-colour",
           "kind": "inspector-field",
           "feature": "shadow-editor",
-          "property": "textShadow",
+          "property": "text-shadow",
+          "composite": null,
           "attribute": null,
           "control": "shadow-colour",
           "labelKey": "inspector.shadow.colour",
@@ -5269,24 +5421,23 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "textShadow",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "text-shadow",
+              "list": "generated"
             },
             "writes": [
-              "textShadow"
+              "text-shadow"
             ]
           },
           "args": {
-            "property": "textShadow"
+            "property": "text-shadow"
           }
         },
         {
           "id": "inspector-text-shadow-shadow-visibility",
           "kind": "inspector-field",
           "feature": "shadow-editor",
-          "property": "textShadow",
+          "property": "text-shadow",
+          "composite": null,
           "attribute": null,
           "control": "shadow-visibility",
           "labelKey": "inspector.shadow.visibility",
@@ -5295,24 +5446,23 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "textShadow",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "text-shadow",
+              "list": "generated"
             },
             "writes": [
-              "textShadow"
+              "text-shadow"
             ]
           },
           "args": {
-            "property": "textShadow"
+            "property": "text-shadow"
           }
         },
         {
           "id": "inspector-text-shadow-shadow-remove",
           "kind": "inspector-field",
           "feature": "shadow-editor",
-          "property": "textShadow",
+          "property": "text-shadow",
+          "composite": null,
           "attribute": null,
           "control": "shadow-remove",
           "labelKey": "inspector.shadow.remove",
@@ -5321,24 +5471,23 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "textShadow",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "text-shadow",
+              "list": "generated"
             },
             "writes": [
-              "textShadow"
+              "text-shadow"
             ]
           },
           "args": {
-            "property": "textShadow"
+            "property": "text-shadow"
           }
         },
         {
           "id": "inspector-text-shadow-shadow-reset",
           "kind": "inspector-field",
           "feature": "shadow-editor",
-          "property": "textShadow",
+          "property": "text-shadow",
+          "composite": null,
           "attribute": null,
           "control": "shadow-reset",
           "labelKey": "inspector.shadow.reset",
@@ -5347,17 +5496,15 @@
           "adapter": {
             "selection": "all",
             "offers": {
-              "property": "textShadow",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "property": "text-shadow",
+              "list": "generated"
             },
             "writes": [
-              "textShadow"
+              "text-shadow"
             ]
           },
           "args": {
-            "property": "textShadow"
+            "property": "text-shadow"
           }
         },
         {
@@ -5374,11 +5521,15 @@
             "selection": "all",
             "offers": null,
             "writes": [
-              "boxShadow"
+              "box-shadow-color",
+              "box-shadow-offset",
+              "box-shadow-blur",
+              "box-shadow-spread",
+              "box-shadow-position"
             ]
           },
           "args": {
-            "property": "boxShadow"
+            "property": "box-shadow"
           }
         },
         {
@@ -5395,11 +5546,11 @@
             "selection": "all",
             "offers": null,
             "writes": [
-              "textShadow"
+              "text-shadow"
             ]
           },
           "args": {
-            "property": "textShadow"
+            "property": "text-shadow"
           }
         },
         {
@@ -5498,8 +5649,12 @@
             "selection": "all",
             "offers": null,
             "writes": [
-              "boxShadow",
-              "textShadow"
+              "box-shadow-color",
+              "box-shadow-offset",
+              "box-shadow-blur",
+              "box-shadow-spread",
+              "box-shadow-position",
+              "text-shadow"
             ]
           },
           "args": {}
@@ -5517,8 +5672,12 @@
             "selection": "all",
             "offers": null,
             "writes": [
-              "boxShadow",
-              "textShadow"
+              "box-shadow-color",
+              "box-shadow-offset",
+              "box-shadow-blur",
+              "box-shadow-spread",
+              "box-shadow-position",
+              "text-shadow"
             ]
           },
           "args": {}
@@ -5546,12 +5705,20 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "inspector-filter-filter-blur",
           "kind": "inspector-field",
           "feature": "props-filters-clip",
           "property": "filter",
+          "composite": null,
           "attribute": null,
           "control": "filter-blur",
           "labelKey": "inspector.filters.blur",
@@ -5561,9 +5728,7 @@
             "selection": "all",
             "offers": {
               "property": "filter",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
               "filter"
@@ -5576,6 +5741,7 @@
           "kind": "inspector-field",
           "feature": "props-filters-clip",
           "property": "filter",
+          "composite": null,
           "attribute": null,
           "control": "filter-brightness",
           "labelKey": "inspector.filters.brightness",
@@ -5585,9 +5751,7 @@
             "selection": "all",
             "offers": {
               "property": "filter",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
               "filter"
@@ -5600,6 +5764,7 @@
           "kind": "inspector-field",
           "feature": "props-filters-clip",
           "property": "filter",
+          "composite": null,
           "attribute": null,
           "control": "filter-contrast",
           "labelKey": "inspector.filters.contrast",
@@ -5609,9 +5774,7 @@
             "selection": "all",
             "offers": {
               "property": "filter",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
               "filter"
@@ -5624,6 +5787,7 @@
           "kind": "inspector-field",
           "feature": "props-filters-clip",
           "property": "filter",
+          "composite": null,
           "attribute": null,
           "control": "filter-saturate",
           "labelKey": "inspector.filters.saturate",
@@ -5633,9 +5797,7 @@
             "selection": "all",
             "offers": {
               "property": "filter",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
               "filter"
@@ -5648,6 +5810,7 @@
           "kind": "inspector-field",
           "feature": "props-filters-clip",
           "property": "filter",
+          "composite": null,
           "attribute": null,
           "control": "filter-hue-rotate",
           "labelKey": "inspector.filters.hueRotate",
@@ -5657,9 +5820,7 @@
             "selection": "all",
             "offers": {
               "property": "filter",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
               "filter"
@@ -5672,6 +5833,7 @@
           "kind": "inspector-field",
           "feature": "props-filters-clip",
           "property": "filter",
+          "composite": null,
           "attribute": null,
           "control": "filter-grayscale",
           "labelKey": "inspector.filters.grayscale",
@@ -5681,9 +5843,7 @@
             "selection": "all",
             "offers": {
               "property": "filter",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
               "filter"
@@ -5696,6 +5856,7 @@
           "kind": "inspector-field",
           "feature": "props-filters-clip",
           "property": "filter",
+          "composite": null,
           "attribute": null,
           "control": "filter-invert",
           "labelKey": "inspector.filters.invert",
@@ -5705,9 +5866,7 @@
             "selection": "all",
             "offers": {
               "property": "filter",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
               "filter"
@@ -5720,6 +5879,7 @@
           "kind": "inspector-field",
           "feature": "props-filters-clip",
           "property": "filter",
+          "composite": null,
           "attribute": null,
           "control": "filter-sepia",
           "labelKey": "inspector.filters.sepia",
@@ -5729,9 +5889,7 @@
             "selection": "all",
             "offers": {
               "property": "filter",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
               "filter"
@@ -5744,6 +5902,7 @@
           "kind": "inspector-field",
           "feature": "props-filters-clip",
           "property": "filter",
+          "composite": null,
           "attribute": null,
           "control": "filter-remove",
           "labelKey": "inspector.filters.remove",
@@ -5753,9 +5912,7 @@
             "selection": "all",
             "offers": {
               "property": "filter",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
               "filter"
@@ -5818,108 +5975,20 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
-        {
-          "id": "inspector-transform-transform-move-x",
-          "kind": "inspector-field",
-          "feature": "props-transforms",
-          "property": "transform",
-          "attribute": null,
-          "control": "transform-move-x",
-          "labelKey": "inspector.transform.moveX",
-          "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
-          "adapter": {
-            "selection": "all",
-            "offers": {
-              "property": "transform",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
-            },
-            "writes": [
-              "transform"
-            ]
-          },
-          "args": {}
-        },
-        {
-          "id": "inspector-transform-transform-move-y",
-          "kind": "inspector-field",
-          "feature": "props-transforms",
-          "property": "transform",
-          "attribute": null,
-          "control": "transform-move-y",
-          "labelKey": "inspector.transform.moveY",
-          "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
-          "adapter": {
-            "selection": "all",
-            "offers": {
-              "property": "transform",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
-            },
-            "writes": [
-              "transform"
-            ]
-          },
-          "args": {}
-        },
-        {
-          "id": "inspector-transform-transform-rotate",
-          "kind": "inspector-field",
-          "feature": "props-transforms",
-          "property": "transform",
-          "attribute": null,
-          "control": "transform-rotate",
-          "labelKey": "inspector.transform.rotate",
-          "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
-          "adapter": {
-            "selection": "all",
-            "offers": {
-              "property": "transform",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
-            },
-            "writes": [
-              "transform"
-            ]
-          },
-          "args": {}
-        },
-        {
-          "id": "inspector-transform-transform-scale",
-          "kind": "inspector-field",
-          "feature": "props-transforms",
-          "property": "transform",
-          "attribute": null,
-          "control": "transform-scale",
-          "labelKey": "inspector.transform.scale",
-          "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
-          "adapter": {
-            "selection": "all",
-            "offers": {
-              "property": "transform",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
-            },
-            "writes": [
-              "transform"
-            ]
-          },
-          "args": {}
-        },
         {
           "id": "inspector-transform-transform-skew-x",
           "kind": "inspector-field",
           "feature": "props-transforms",
           "property": "transform",
+          "composite": null,
           "attribute": null,
           "control": "transform-skew-x",
           "labelKey": "inspector.transform.skewX",
@@ -5929,9 +5998,7 @@
             "selection": "all",
             "offers": {
               "property": "transform",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
               "transform"
@@ -5944,6 +6011,7 @@
           "kind": "inspector-field",
           "feature": "props-transforms",
           "property": "transform",
+          "composite": null,
           "attribute": null,
           "control": "transform-skew-y",
           "labelKey": "inspector.transform.skewY",
@@ -5953,61 +6021,8 @@
             "selection": "all",
             "offers": {
               "property": "transform",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
-            "writes": [
-              "transform"
-            ]
-          },
-          "args": {}
-        },
-        {
-          "id": "quick-panel-transform-move-x",
-          "kind": "quick-panel",
-          "feature": "quick-panel",
-          "control": "transform-move-x",
-          "labelKey": "inspector.transform.moveX",
-          "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
-          "adapter": {
-            "selection": "all",
-            "offers": null,
-            "writes": [
-              "transform"
-            ]
-          },
-          "args": {}
-        },
-        {
-          "id": "quick-panel-transform-rotate",
-          "kind": "quick-panel",
-          "feature": "quick-panel",
-          "control": "transform-rotate",
-          "labelKey": "inspector.transform.rotate",
-          "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
-          "adapter": {
-            "selection": "all",
-            "offers": null,
-            "writes": [
-              "transform"
-            ]
-          },
-          "args": {}
-        },
-        {
-          "id": "quick-panel-transform-scale",
-          "kind": "quick-panel",
-          "feature": "quick-panel",
-          "control": "transform-scale",
-          "labelKey": "inspector.transform.scale",
-          "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
-          "adapter": {
-            "selection": "all",
-            "offers": null,
             "writes": [
               "transform"
             ]
@@ -6026,24 +6041,6 @@
             "selection": "all",
             "offers": null,
             "writes": []
-          },
-          "args": {}
-        },
-        {
-          "id": "handle-rotate",
-          "kind": "canvas-handle",
-          "feature": "rotation-handle",
-          "handle": "rotate",
-          "gesture": "rotate",
-          "labelKey": "canvas.handle.rotate",
-          "disabledReasonKey": "common.notAvailableYet",
-          "placement": "none",
-          "adapter": {
-            "selection": "all",
-            "offers": null,
-            "writes": [
-              "transform"
-            ]
           },
           "args": {}
         }
@@ -6082,6 +6079,13 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "inspector-alignment-matrix",
@@ -6098,8 +6102,8 @@
             "selection": "all",
             "offers": null,
             "writes": [
-              "justifyContent",
-              "alignItems"
+              "justify-content",
+              "align-items"
             ]
           },
           "args": {}
@@ -6127,6 +6131,13 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "inspector-custom-declarations",
@@ -6169,6 +6180,13 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "code-panel-css-apply",
@@ -6210,6 +6228,13 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "inspector-property-reset",
@@ -6245,6 +6270,13 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "menu-element-actions",
@@ -6310,6 +6342,13 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "key-arrow-up-in-number-field",
@@ -6447,6 +6486,13 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-gesture",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "panel-drag-field-label-horizontal",
@@ -6487,6 +6533,13 @@
         "status.value.unitNotConverted"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "inspector-unit-menu",

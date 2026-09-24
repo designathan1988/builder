@@ -41,6 +41,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "menu-view-elements",
@@ -398,6 +401,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "key-ctrl-b-in-global",
@@ -448,6 +454,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "key-ctrl-alt-b-in-global",
@@ -498,6 +507,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "key-ctrl-backslash-in-global",
@@ -548,6 +560,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "menu-view",
@@ -581,6 +596,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "menu-view",
@@ -641,6 +659,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "toolbar-workbench-strip-toggle",
@@ -701,6 +722,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "tab-strip-tab",
@@ -745,6 +769,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "panel-drag-splitter-workspace",
@@ -868,6 +895,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "panel-drag-panel-header-canvas",
@@ -996,6 +1026,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "panel-drag-quick-panel-grip-canvas",
@@ -1037,6 +1070,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "menu-language-pt-br",
@@ -1102,6 +1138,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "menu-theme-light",
@@ -1177,6 +1216,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "key-ctrl-k-in-global",
@@ -1233,6 +1275,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "elements-group-header",
@@ -1277,6 +1322,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "elements-density-list",
@@ -1387,6 +1435,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "layers-caret",
@@ -1441,6 +1492,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "toolbar-layers-header-collapse-all",
@@ -1471,6 +1525,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "toolbar-layers-header-expand-all",
@@ -1501,6 +1558,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "key-arrow-right-in-layers-tree",
@@ -1533,6 +1593,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "key-arrow-left-in-layers-tree",
@@ -1581,6 +1644,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "menu-layers-row-details-tag",
@@ -1682,6 +1748,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "inspector-section-header",
@@ -1724,6 +1793,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "inspector-mode-essentials",
@@ -1790,6 +1862,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "inspector-add-property-item",
@@ -1859,6 +1934,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "code-panel-copy",
@@ -1892,6 +1970,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "code-panel-download",

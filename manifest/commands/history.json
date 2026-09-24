@@ -13,6 +13,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "key-ctrl-z-in-global",
@@ -111,6 +114,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "key-ctrl-shift-z-in-global",

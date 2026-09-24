@@ -21,6 +21,13 @@
         "status.animation.nameTaken"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "timeline-new-animation",
@@ -67,6 +74,13 @@
         "status.animation.nameTaken"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "timeline-animation-name-field",
@@ -106,6 +120,13 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "timeline-animation-delete",
@@ -150,6 +171,13 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "timeline-add-keyframe",
@@ -194,6 +222,13 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-gesture",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "panel-drag-keyframe-track",
@@ -237,6 +272,13 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "timeline-keyframe-easing",
@@ -276,6 +318,13 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "timeline-keyframe-delete",
@@ -352,6 +401,13 @@
         "status.animation.invalidSetting"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "timeline-setting-duration",
@@ -513,6 +569,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "panel-drag-playhead-ruler",
@@ -563,6 +622,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "timeline-play",
@@ -596,6 +658,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "timeline-pause",
@@ -629,6 +694,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "timeline-stop",
@@ -662,6 +730,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "timeline-loop",

@@ -16,6 +16,9 @@
         "status.locked.editText"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "canvas-double-click-text-element",
@@ -96,6 +99,13 @@
         "status.link.unsafe"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "key-enter-in-text-editing",
@@ -138,6 +148,7 @@
           "kind": "inspector-field",
           "feature": "inspector-panel",
           "property": null,
+          "composite": null,
           "attribute": "text",
           "control": "field",
           "labelKey": "command.setText",
@@ -164,6 +175,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "key-escape-in-text-editing",
@@ -196,6 +210,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "key-shift-enter-in-text-editing",
@@ -228,6 +245,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "key-ctrl-b-in-text-editing",
@@ -260,6 +280,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "key-ctrl-i-in-text-editing",
@@ -294,6 +317,9 @@
         "status.link.unsafe"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "key-ctrl-k-in-text-editing",
@@ -328,6 +354,9 @@
         "status.clipboard.denied"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "key-ctrl-v-in-text-editing",
@@ -360,6 +389,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "key-ctrl-a-in-text-editing",

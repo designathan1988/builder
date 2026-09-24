@@ -15,6 +15,9 @@
         "status.zoom.limit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "key-ctrl-equals-in-global",
@@ -96,6 +99,9 @@
         "status.zoom.limit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "key-ctrl-minus-in-global",
@@ -158,6 +164,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "key-ctrl-0-in-global",
@@ -211,6 +220,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "menu-zoom-25",
@@ -326,6 +338,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "toolbar-status-bar-fit",
@@ -402,6 +417,9 @@
         "status.zoom.limit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "canvas-wheel-ctrl",
@@ -444,6 +462,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "canvas-wheel",
@@ -531,6 +552,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "toolbar-top-bar-desktop",
@@ -688,6 +712,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "menu-style-state-base",
@@ -843,6 +870,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "key-ctrl-p-in-global",
@@ -922,6 +952,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "key-escape-in-preview",
@@ -986,6 +1019,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "canvas-tools-outlines",
@@ -1019,6 +1055,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "canvas-tools-zones",
@@ -1052,6 +1091,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "guides-grids-rulers",
@@ -1085,6 +1127,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "guides-grids-smart-guides",
@@ -1118,6 +1163,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "guides-grids-equal-spacing",
@@ -1151,6 +1199,13 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "key-ctrl-quote-in-global",
@@ -1219,6 +1274,13 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "canvas-tools-row-grid",
@@ -1270,6 +1332,13 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "canvas-tools-dot-grid",
@@ -1338,6 +1407,13 @@
         "status.grid.invalid"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "guides-grids-columns-settings",
@@ -1427,6 +1503,13 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-gesture",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "canvas-drag-top-ruler-page",
@@ -1507,6 +1590,13 @@
         "status.guides.locked"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-gesture",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "canvas-drag-guide-page",
@@ -1613,6 +1703,13 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-gesture",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "canvas-drag-guide-own-ruler",
@@ -1703,6 +1800,13 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "key-l-in-guide",
@@ -1735,6 +1839,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "guides-grids-manual-guides",
@@ -1778,6 +1885,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "toolbar-top-bar-snap",
@@ -1863,6 +1973,9 @@
         "status.snap.distanceRange"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "snap-settings-apply",
@@ -1905,6 +2018,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "menu-view-guides-grids",

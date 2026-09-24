@@ -17,6 +17,9 @@
         "confirmKey": "dialog.newBlankPage.confirm",
         "cancelKey": "dialog.cancel"
       },
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "menu-file",
@@ -71,6 +74,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "recovery-dialog-restore",
@@ -104,6 +110,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "tab-guard-take-over",
@@ -137,6 +146,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "menu-file",
@@ -192,6 +204,9 @@
         "confirmKey": "dialog.replace",
         "cancelKey": "dialog.cancel"
       },
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "menu-file",
@@ -245,6 +260,9 @@
         "messageKey": "dialog.openFolder.message",
         "confirmKey": "dialog.replace",
         "cancelKey": "dialog.cancel"
+      },
+      "history": {
+        "undoable": false
       },
       "entryPoints": [
         {
@@ -300,6 +318,13 @@
         "confirmKey": "dialog.replace",
         "cancelKey": "dialog.cancel"
       },
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "menu-file",
@@ -348,6 +373,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "menu-file",

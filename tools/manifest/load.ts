@@ -2,7 +2,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import type { ManifestInput, Problem } from '../../src/manifest/check.ts';
+import type { ManifestInput, Problem, ReferenceKind } from '../../src/manifest/check.ts';
 
 export const REPO_ROOT = fileURLToPath(new URL('../../', import.meta.url));
 export const CATALOGUE_DIR = 'src/i18n/locales';
@@ -20,6 +20,31 @@ function jsonFiles(dir: string): string[] {
     if (entry.isDirectory()) return jsonFiles(full);
     return entry.name.endsWith('.json') ? [full] : [];
   });
+}
+
+// Code registers what the manifest names by id with registerHandler('<id>', ...),
+// registerPredicate, registerAction or registerCodec. The ids found under src/ are "registered".
+const REGISTER = /\bregister(Handler|Predicate|Action|Codec)\(\s*['"]([^'"]+)['"]/g;
+
+function sourceFiles(dir: string): string[] {
+  if (!fs.existsSync(dir)) return [];
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) return sourceFiles(full);
+    return /\.tsx?$/.test(entry.name) && !/\.test\.tsx?$/.test(entry.name) ? [full] : [];
+  });
+}
+
+export function registeredIds(root: string = REPO_ROOT): Record<ReferenceKind, string[]> {
+  const out: Record<ReferenceKind, string[]> = { handler: [], predicate: [], action: [], codec: [] };
+  for (const file of sourceFiles(path.join(root, 'src'))) {
+    for (const match of fs.readFileSync(file, 'utf8').matchAll(REGISTER)) {
+      const kind = (match[1] ?? '').toLowerCase() as ReferenceKind;
+      const id = match[2] ?? '';
+      if (!out[kind].includes(id)) out[kind].push(id);
+    }
+  }
+  return out;
 }
 
 export function loadManifest(root: string = REPO_ROOT): LoadedManifest {
@@ -45,7 +70,7 @@ export function loadManifest(root: string = REPO_ROOT): LoadedManifest {
     if (json !== undefined) catalogues[path.basename(full, '.json')] = json;
   }
   return {
-    input: { files, catalogues, fileExists: (repoPath) => fs.existsSync(path.join(root, repoPath)) },
+    input: { files, catalogues, fileExists: (repoPath) => fs.existsSync(path.join(root, repoPath)), registered: registeredIds(root) },
     problems,
   };
 }

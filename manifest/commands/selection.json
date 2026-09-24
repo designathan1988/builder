@@ -19,6 +19,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "canvas-click-element-or-page",
@@ -142,6 +145,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "key-escape-in-canvas",
@@ -232,6 +238,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "canvas-click-element-shift",
@@ -290,6 +299,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "canvas-click-element-ctrl",
@@ -344,6 +356,9 @@
         "status.walk.noNext"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "key-arrow-right-in-canvas",
@@ -378,6 +393,9 @@
         "status.walk.noPrevious"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "key-arrow-left-in-canvas",
@@ -412,6 +430,9 @@
         "status.walk.atRoot"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "key-arrow-up-in-canvas",
@@ -446,6 +467,9 @@
         "status.walk.noChildren"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "key-arrow-down-in-canvas",
@@ -478,6 +502,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "key-ctrl-a-in-canvas",
@@ -558,6 +585,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "canvas-drag-empty-area-page-or-container",
@@ -596,6 +626,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "canvas-right-click-element-or-page",

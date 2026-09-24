@@ -78,7 +78,7 @@
           "Set display to each of block, inline, inline-block, flex, inline-flex, grid, inline-grid, contents and none."
         ],
         "expected": [
-          "The Display control offers every keyword the property catalogue has for display, and nothing else (a unit test checks that the control options equal the catalogue keyword list).",
+          "The Display control offers exactly the list its door names in the manifest (the declared display subset, drawn from the generated keyword list) and nothing else (a unit test checks that the control options equal that list); a typed value is accepted only when it matches the official display syntax.",
           "Each choice writes the value into the document JSON and the element's computed display matches."
         ]
       },
@@ -178,7 +178,7 @@
         ],
         "expected": [
           "The box model diagram shows margin, padding and the element size; each side is editable in place.",
-          "Linked sides change together and write the margin shorthand; unlinked sides write per-side values.",
+          "Linked sides change together: one command writes the four longhands (margin-top, margin-right, margin-bottom, margin-left) as one undo step; unlinked sides write their own longhand.",
           "Negative margins are accepted; negative padding is rejected with a message.",
           "Computed margin and padding in the iframe match the document JSON."
         ]
@@ -331,7 +331,7 @@
         "expected": [
           "The font menu lists system and web-safe font stacks; weight offers 100-900 with names.",
           "Every value is written to the document JSON and the computed style of the paragraph in the iframe matches.",
-          "Each keyword control offers every keyword the property catalogue defines for it.",
+          "Each keyword control offers the list its door names: the generated keywords of the property, or a subset the manifest declares with its reason.",
           "Each value is written by one command per property, and every other control for the same property must use that command."
         ]
       },
@@ -430,8 +430,8 @@
           "Set outline and outline-offset."
         ],
         "expected": [
-          "The border style control offers every catalogue keyword (none, solid, dashed, dotted, double, groove, ridge, inset, outset, hidden).",
-          "All-sides edits write the shorthand; single-edge edits write that side only; the computed borders in the iframe match.",
+          "The border style control offers every keyword of the generated border-style list (none, hidden, dotted, dashed, solid, double, groove, ridge, inset, outset).",
+          "All-sides edits write the width, style and colour longhands of every side in one command and one undo step; single-edge edits write the longhands of that side only; the computed borders in the iframe match.",
           "Per-corner radius values are written and the computed border radii match.",
           "Outline and outline-offset are written and computed as set.",
           "Each value is written by one command per property, and every other control for the same property must use that command."
@@ -482,7 +482,7 @@
         ],
         "expected": [
           "Each shadow layer has X, Y, blur, spread, colour and inset controls; dragging the light pad sets X and Y.",
-          "The box-shadow list is written to the document JSON in layer order; hidden layers are left out of the CSS.",
+          "The shadow layers are written to the document JSON in layer order as the box-shadow longhands (colour, offset, blur, spread, position), all of them by one command per change, and rendered as the box-shadow shorthand; hidden layers are left out of the CSS.",
           "The computed box-shadow and text-shadow in the iframe match."
         ]
       },
@@ -530,9 +530,9 @@
           "Set transform-origin, perspective, perspective-origin, transform-style, backface-visibility and transform-box."
         ],
         "expected": [
-          "The transform fields compose one transform value written to the document JSON; the computed transform matrix in the iframe matches it.",
+          "Move X/Y write translate, Rotate writes rotate and Scale writes scale, each its own property in the document JSON; Skew X/Y compose the transform value, which holds only the functions translate, rotate and scale do not cover; the computed translate, rotate, scale and transform in the iframe match.",
           "The other transform properties are written and computed as set.",
-          "Move X/Y, Rotate, Scale and Skew are written by one transform command that composes the transform value, and every other control of the transform (on the canvas or elsewhere) must use that command."
+          "Every control of translate, rotate or scale (the inspector, the quick panel, the rotation handle) writes that one property through the same command and door data; no control parses or rebuilds a transform list to change a move, a rotation or a scale."
         ]
       },
       "scenarios": []
@@ -571,7 +571,7 @@
         "steps": [
           "Select a Container.",
           "Set contain, content-visibility, columns, column-span, column-fill, column-rule width/style/colour, break-before, break-after, break-inside.",
-          "Set scroll-behavior, overscroll-behavior, scroll-snap-type, scroll-snap-align, counter-reset, counter-increment and all."
+          "Set scroll-behavior, overscroll-behavior, scroll-snap-type, scroll-snap-align, counter-reset and counter-increment."
         ],
         "expected": [
           "Every property listed is present in the inspector with the control type the catalogue declares (keyword menu, length or text).",
@@ -735,7 +735,6 @@
         "style.setBorder",
         "style.setBackgroundImage",
         "style.setFilter",
-        "style.setTransform",
         "element.setTag",
         "quickPanel.setOffset"
       ],
@@ -756,7 +755,7 @@
         ],
         "expected": [
           "The quick panel shows the tag menu, a drag handle, a More actions button, W and H, Fill, Text colour and font Size for text elements, Border, Opacity, Effects, Transform and the 'Edit on canvas' [quickPanel.editOnCanvas] mode menu; controls and modes whose feature is not built yet are disabled and labelled 'not available yet' [common.notAvailableYet] — which features are built is read from one feature registry, and the test checks the UI against that registry instead of a fixed list, so it stays valid as later entries are built.",
-          "Every quick panel control runs the same command as the matching inspector field and writes the same document JSON, and both stay in sync; Fill opens the same fill editor as the inspector (solid colour or gradient), and Transform writes the same transform value as the inspector's transform fields.",
+          "Every quick panel control runs the same command as the matching inspector field and writes the same document JSON, and both stay in sync; Fill opens the same fill editor as the inspector (solid colour or gradient), and the Move X, Rotate and Scale controls of Transform write translate, rotate and scale like the inspector fields.",
           "More actions opens the element's context menu at the button: the same menu as a right-click on the element.",
           "A dragged quick panel keeps its offset for that element.",
           "The quick panel is always placed inside the canvas viewport; with no room above the element it goes below it."

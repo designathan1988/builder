@@ -29,12 +29,20 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "inspector-tag",
           "kind": "inspector-field",
           "feature": "semantic-tag-switch",
           "property": null,
+          "composite": null,
           "attribute": "tag",
           "control": "field",
           "labelKey": "command.setTag",
@@ -91,12 +99,20 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "inspector-title",
           "kind": "inspector-field",
           "feature": "props-attributes",
           "property": null,
+          "composite": null,
           "attribute": "title",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -114,6 +130,7 @@
           "kind": "inspector-field",
           "feature": "elements-media-images",
           "property": null,
+          "composite": null,
           "attribute": "src",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -131,6 +148,7 @@
           "kind": "inspector-field",
           "feature": "elements-media-images",
           "property": null,
+          "composite": null,
           "attribute": "alt",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -148,6 +166,7 @@
           "kind": "inspector-field",
           "feature": "elements-media-images",
           "property": null,
+          "composite": null,
           "attribute": "srcset",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -165,6 +184,7 @@
           "kind": "inspector-field",
           "feature": "elements-media-images",
           "property": null,
+          "composite": null,
           "attribute": "media",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -182,6 +202,7 @@
           "kind": "inspector-field",
           "feature": "elements-form-inputs",
           "property": null,
+          "composite": null,
           "attribute": "placeholder",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -199,6 +220,7 @@
           "kind": "inspector-field",
           "feature": "elements-form-inputs",
           "property": null,
+          "composite": null,
           "attribute": "value",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -216,6 +238,7 @@
           "kind": "inspector-field",
           "feature": "elements-form-inputs",
           "property": null,
+          "composite": null,
           "attribute": "name",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -233,6 +256,7 @@
           "kind": "inspector-field",
           "feature": "elements-form-inputs",
           "property": null,
+          "composite": null,
           "attribute": "required",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -250,6 +274,7 @@
           "kind": "inspector-field",
           "feature": "elements-form-inputs",
           "property": null,
+          "composite": null,
           "attribute": "pattern",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -267,6 +292,7 @@
           "kind": "inspector-field",
           "feature": "elements-form-inputs",
           "property": null,
+          "composite": null,
           "attribute": "min",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -284,6 +310,7 @@
           "kind": "inspector-field",
           "feature": "elements-form-inputs",
           "property": null,
+          "composite": null,
           "attribute": "max",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -301,6 +328,7 @@
           "kind": "inspector-field",
           "feature": "elements-form-inputs",
           "property": null,
+          "composite": null,
           "attribute": "step",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -318,6 +346,7 @@
           "kind": "inspector-field",
           "feature": "elements-form-inputs",
           "property": null,
+          "composite": null,
           "attribute": "autocomplete",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -335,6 +364,7 @@
           "kind": "inspector-field",
           "feature": "elements-form-inputs",
           "property": null,
+          "composite": null,
           "attribute": "disabled",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -352,6 +382,7 @@
           "kind": "inspector-field",
           "feature": "elements-form-inputs",
           "property": null,
+          "composite": null,
           "attribute": "readonly",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -369,6 +400,7 @@
           "kind": "inspector-field",
           "feature": "elements-form-inputs",
           "property": null,
+          "composite": null,
           "attribute": "checked",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -386,6 +418,7 @@
           "kind": "inspector-field",
           "feature": "elements-form-structure",
           "property": null,
+          "composite": null,
           "attribute": "action",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -403,6 +436,7 @@
           "kind": "inspector-field",
           "feature": "elements-form-structure",
           "property": null,
+          "composite": null,
           "attribute": "method",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -420,6 +454,7 @@
           "kind": "inspector-field",
           "feature": "elements-form-structure",
           "property": null,
+          "composite": null,
           "attribute": "buttonType",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -437,6 +472,7 @@
           "kind": "inspector-field",
           "feature": "elements-form-controls",
           "property": null,
+          "composite": null,
           "attribute": "rows",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -454,6 +490,7 @@
           "kind": "inspector-field",
           "feature": "elements-form-controls",
           "property": null,
+          "composite": null,
           "attribute": "groupLabel",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -471,6 +508,7 @@
           "kind": "inspector-field",
           "feature": "elements-form-controls",
           "property": null,
+          "composite": null,
           "attribute": "selected",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -488,6 +526,7 @@
           "kind": "inspector-field",
           "feature": "elements-media-embeds",
           "property": null,
+          "composite": null,
           "attribute": "poster",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -505,6 +544,7 @@
           "kind": "inspector-field",
           "feature": "elements-media-embeds",
           "property": null,
+          "composite": null,
           "attribute": "controls",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -522,6 +562,7 @@
           "kind": "inspector-field",
           "feature": "elements-media-embeds",
           "property": null,
+          "composite": null,
           "attribute": "autoplay",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -539,6 +580,7 @@
           "kind": "inspector-field",
           "feature": "elements-media-embeds",
           "property": null,
+          "composite": null,
           "attribute": "loop",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -556,6 +598,7 @@
           "kind": "inspector-field",
           "feature": "elements-media-embeds",
           "property": null,
+          "composite": null,
           "attribute": "muted",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -573,6 +616,7 @@
           "kind": "inspector-field",
           "feature": "elements-media-embeds",
           "property": null,
+          "composite": null,
           "attribute": "trackKind",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -590,6 +634,7 @@
           "kind": "inspector-field",
           "feature": "elements-media-embeds",
           "property": null,
+          "composite": null,
           "attribute": "canvasWidth",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -607,6 +652,7 @@
           "kind": "inspector-field",
           "feature": "elements-media-embeds",
           "property": null,
+          "composite": null,
           "attribute": "canvasHeight",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -624,6 +670,7 @@
           "kind": "inspector-field",
           "feature": "elements-interactive",
           "property": null,
+          "composite": null,
           "attribute": "open",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -680,12 +727,20 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "inspector-id",
           "kind": "inspector-field",
           "feature": "props-attributes",
           "property": null,
+          "composite": null,
           "attribute": "id",
           "control": "field",
           "labelKey": "command.setId",
@@ -721,12 +776,20 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "inspector-classes",
           "kind": "inspector-field",
           "feature": "props-attributes",
           "property": null,
+          "composite": null,
           "attribute": "classes",
           "control": "field",
           "labelKey": "command.setClasses",
@@ -777,12 +840,20 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "inspector-href",
           "kind": "inspector-field",
           "feature": "elements-structure",
           "property": null,
+          "composite": null,
           "attribute": "href",
           "control": "field",
           "labelKey": "command.setLink",
@@ -800,6 +871,7 @@
           "kind": "inspector-field",
           "feature": "elements-text",
           "property": null,
+          "composite": null,
           "attribute": "newTab",
           "control": "field",
           "labelKey": "inspector.link.openInNewTab",
@@ -939,12 +1011,20 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "inspector-input-type",
           "kind": "inspector-field",
           "feature": "elements-form-inputs-rules",
           "property": null,
+          "composite": null,
           "attribute": "inputType",
           "control": "field",
           "labelKey": "command.setInputType",
@@ -979,12 +1059,20 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "inspector-label-for",
           "kind": "inspector-field",
           "feature": "elements-form-inputs-rules",
           "property": null,
+          "composite": null,
           "attribute": "labelFor",
           "control": "field",
           "labelKey": "command.setLabelTarget",
@@ -1026,6 +1114,13 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "inspector-custom-attribute-add",
@@ -1085,6 +1180,13 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "inspector-custom-attribute-remove",
@@ -1127,12 +1229,20 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "inspector-svg-markup",
           "kind": "inspector-field",
           "feature": "elements-svg-shapes",
           "property": null,
+          "composite": null,
           "attribute": "svgMarkup",
           "control": "field",
           "labelKey": "command.setSvgMarkup",
@@ -1167,12 +1277,20 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "inspector-embed-markup",
           "kind": "inspector-field",
           "feature": "embed-html",
           "property": null,
+          "composite": null,
           "attribute": "embedMarkup",
           "control": "field",
           "labelKey": "command.setEmbedMarkup",
@@ -1215,6 +1333,13 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "code-panel-html-apply",
@@ -1260,6 +1385,13 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "inspector-table-caption-toggle",
@@ -1358,6 +1490,13 @@
         "status.locked.insert"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "inspector-options-editor-add-option",
@@ -1546,6 +1685,13 @@
         "status.locked.move"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "inspector-part-move-up",
@@ -1609,6 +1755,13 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "inspector-part-remove",
@@ -1644,6 +1797,13 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "context-menu",
@@ -1693,6 +1853,13 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "context-menu",
@@ -1743,6 +1910,13 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "context-menu",
@@ -1792,6 +1966,13 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "context-menu",
@@ -1842,6 +2023,13 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "context-menu",

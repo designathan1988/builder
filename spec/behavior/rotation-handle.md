@@ -39,5 +39,5 @@ None in Pager.
 1. **No rotation on the canvas.** Required (manifest feature `rotation-handle`):
    - A rotation handle sits outside the selection outline at a fixed screen distance; over it the cursor shows rotation.
    - Dragging it rotates the element around its transform-origin and the angle follows the pointer; Shift snaps to 15° steps; the status bar shows the live angle.
-   - The handle and the inspector's Rotate field run the same command and write the rotate part of the one transform value; a whole drag is one undo step.
+   - The handle and the inspector's Rotate field run the same command and write the `rotate` property, never the `transform` list (manifest property layer: translate, rotate and scale are their own properties); a whole drag is one undo step.
    - The angle does not depend on the zoom; the outline and handles follow the rotated box.

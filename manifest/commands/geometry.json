@@ -27,12 +27,20 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "inspector-position",
           "kind": "inspector-field",
           "feature": "props-position",
           "property": "position",
+          "composite": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setPosition",
@@ -42,9 +50,7 @@
             "selection": "all",
             "offers": {
               "property": "position",
-              "keywords": "all",
-              "units": "all",
-              "reason": null
+              "list": "generated"
             },
             "writes": [
               "position"
@@ -104,6 +110,13 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-gesture",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "handle-resize-n",
@@ -280,6 +293,16 @@
         "status.locked.move"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": {
+          "same": "target-and-property",
+          "within": "history.nudgeBurstWindow"
+        },
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-gesture",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "canvas-drag-positioned-element-containing-block",
@@ -416,6 +439,13 @@
         "status.locked.edit"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-gesture",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "key-alt-shift-arrow-left-in-canvas-positioned",
@@ -430,7 +460,11 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [
+              "left",
+              "right",
+              "width"
+            ]
           },
           "args": {
             "edge": "left",
@@ -450,7 +484,11 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [
+              "left",
+              "right",
+              "width"
+            ]
           },
           "args": {
             "edge": "right",
@@ -470,7 +508,11 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [
+              "top",
+              "bottom",
+              "height"
+            ]
           },
           "args": {
             "edge": "top",
@@ -490,7 +532,11 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [
+              "top",
+              "bottom",
+              "height"
+            ]
           },
           "args": {
             "edge": "bottom",
@@ -509,7 +555,11 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [
+              "left",
+              "right",
+              "width"
+            ]
           },
           "args": {
             "edge": "left",
@@ -528,7 +578,11 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [
+              "left",
+              "right",
+              "width"
+            ]
           },
           "args": {
             "edge": "right",
@@ -547,7 +601,11 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [
+              "top",
+              "bottom",
+              "height"
+            ]
           },
           "args": {
             "edge": "top",
@@ -566,7 +624,11 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [
+              "top",
+              "bottom",
+              "height"
+            ]
           },
           "args": {
             "edge": "bottom",
@@ -588,11 +650,16 @@
             "selection": "single",
             "offers": null,
             "writes": [
-              "left",
-              "right",
               "top",
+              "right",
               "bottom",
-              "translate"
+              "left",
+              "margin-top",
+              "margin-right",
+              "margin-bottom",
+              "margin-left",
+              "width",
+              "height"
             ]
           },
           "args": {}
@@ -626,6 +693,13 @@
         "status.locked.move"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "quick-panel-align-left",
@@ -977,6 +1051,13 @@
         "status.locked.move"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "quick-panel-distribute-horizontal",
@@ -1109,6 +1190,13 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "key-arrow-right-in-canvas-handle",
@@ -1220,6 +1308,9 @@
         "status.shadow.none"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "quick-panel-edit-on-canvas",

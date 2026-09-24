@@ -31,6 +31,8 @@ interface Amendment {
 // The three points the last review left open: no older saved format exists; one meaning per modifier
 // while resizing (Alt from the centre, Ctrl suspends snapping); an opened folder's stylesheets are parsed
 // into the document and the original .css files stay as ordinary, unlinked files.
+// The property model (longhands, composites, generated value lists, translate/rotate/scale) rewrote
+// the intent lines that still described shorthand writes and one composed transform value.
 export const AMENDMENTS: Amendment[] = [
   {
     feature: 'autosave-restore',
@@ -70,6 +72,118 @@ export const AMENDMENTS: Amendment[] = [
     from: 'HTML pages go through the HTML importer with their linked CSS resolved from the folder; each becomes a page named after its file, at its path (about/index.html is the page index in the folder about), and the root index.html is the home page (a folder without one gets an empty home page index.html, listed in the report); CSS, JS, images and fonts are kept as files.',
     to: "HTML pages go through the HTML importer: the stylesheets they link are resolved from the folder and parsed into the document's styles, because the document JSON is the source of truth; each page becomes a page named after its file, at its path (about/index.html is the page index in the folder about), and the root index.html is the home page (a folder without one gets an empty home page index.html, listed in the report); the original .css files stay in the tree as ordinary files that no page links any more, and the import report says so; JS, images and fonts are kept as files.",
     why: 'linked stylesheets are parsed into the document; the .css files stay as unlinked files',
+  },
+  {
+    feature: 'props-display',
+    field: 'expected',
+    op: 'replace',
+    from: 'The Display control offers every keyword the property catalogue has for display, and nothing else (a unit test checks that the control options equal the catalogue keyword list).',
+    to: 'The Display control offers exactly the list its door names in the manifest (the declared display subset, drawn from the generated keyword list) and nothing else (a unit test checks that the control options equal that list); a typed value is accepted only when it matches the official display syntax.',
+    why: 'property model: a door offers the generated list of its property or a declared subset',
+  },
+  {
+    feature: 'props-spacing',
+    field: 'expected',
+    op: 'replace',
+    from: 'Linked sides change together and write the margin shorthand; unlinked sides write per-side values.',
+    to: 'Linked sides change together: one command writes the four longhands (margin-top, margin-right, margin-bottom, margin-left) as one undo step; unlinked sides write their own longhand.',
+    why: 'property model: the document stores only longhands and a composite writes all of them in one command',
+  },
+  {
+    feature: 'props-typography',
+    field: 'expected',
+    op: 'replace',
+    from: 'Each keyword control offers every keyword the property catalogue defines for it.',
+    to: 'Each keyword control offers the list its door names: the generated keywords of the property, or a subset the manifest declares with its reason.',
+    why: 'property model: a door offers the generated list of its property or a declared subset',
+  },
+  {
+    feature: 'props-border-outline',
+    field: 'expected',
+    op: 'replace',
+    from: 'The border style control offers every catalogue keyword (none, solid, dashed, dotted, double, groove, ridge, inset, outset, hidden).',
+    to: 'The border style control offers every keyword of the generated border-style list (none, hidden, dotted, dashed, solid, double, groove, ridge, inset, outset).',
+    why: 'property model: a door offers the generated list of its property or a declared subset',
+  },
+  {
+    feature: 'props-border-outline',
+    field: 'expected',
+    op: 'replace',
+    from: 'All-sides edits write the shorthand; single-edge edits write that side only; the computed borders in the iframe match.',
+    to: 'All-sides edits write the width, style and colour longhands of every side in one command and one undo step; single-edge edits write the longhands of that side only; the computed borders in the iframe match.',
+    why: 'property model: the document stores only longhands and a composite writes all of them in one command',
+  },
+  {
+    feature: 'shadow-editor',
+    field: 'expected',
+    op: 'replace',
+    from: 'The box-shadow list is written to the document JSON in layer order; hidden layers are left out of the CSS.',
+    to: 'The shadow layers are written to the document JSON in layer order as the box-shadow longhands (colour, offset, blur, spread, position), all of them by one command per change, and rendered as the box-shadow shorthand; hidden layers are left out of the CSS.',
+    why: 'property model: the document stores only longhands and a composite writes all of them in one command',
+  },
+  {
+    feature: 'props-transforms',
+    field: 'expected',
+    op: 'replace',
+    from: 'The transform fields compose one transform value written to the document JSON; the computed transform matrix in the iframe matches it.',
+    to: 'Move X/Y write translate, Rotate writes rotate and Scale writes scale, each its own property in the document JSON; Skew X/Y compose the transform value, which holds only the functions translate, rotate and scale do not cover; the computed translate, rotate, scale and transform in the iframe match.',
+    why: 'property model: translate, rotate and scale are their own properties; transform keeps skew',
+  },
+  {
+    feature: 'props-transforms',
+    field: 'expected',
+    op: 'replace',
+    from: 'Move X/Y, Rotate, Scale and Skew are written by one transform command that composes the transform value, and every other control of the transform (on the canvas or elsewhere) must use that command.',
+    to: 'Every control of translate, rotate or scale (the inspector, the quick panel, the rotation handle) writes that one property through the same command and door data; no control parses or rebuilds a transform list to change a move, a rotation or a scale.',
+    why: 'property model: translate, rotate and scale are their own properties; transform keeps skew',
+  },
+  {
+    feature: 'props-more',
+    field: 'steps',
+    op: 'replace',
+    from: 'Set scroll-behavior, overscroll-behavior, scroll-snap-type, scroll-snap-align, counter-reset, counter-increment and all.',
+    to: 'Set scroll-behavior, overscroll-behavior, scroll-snap-type, scroll-snap-align, counter-reset and counter-increment.',
+    why: 'property model: all is the shorthand of every property, which the longhand-only document cannot store, so it is not edited',
+  },
+  {
+    feature: 'quick-panel',
+    field: 'expected',
+    op: 'replace',
+    from: "Every quick panel control runs the same command as the matching inspector field and writes the same document JSON, and both stay in sync; Fill opens the same fill editor as the inspector (solid colour or gradient), and Transform writes the same transform value as the inspector's transform fields.",
+    to: 'Every quick panel control runs the same command as the matching inspector field and writes the same document JSON, and both stay in sync; Fill opens the same fill editor as the inspector (solid colour or gradient), and the Move X, Rotate and Scale controls of Transform write translate, rotate and scale like the inspector fields.',
+    why: 'property model: translate, rotate and scale are their own properties; transform keeps skew',
+  },
+  {
+    feature: 'radius-border-gap-handles',
+    field: 'expected',
+    op: 'replace',
+    from: 'Radius mode shows a corner handle labelled with the current radius and writes border-radius.',
+    to: 'Radius mode shows a corner handle labelled with the current radius and writes the four corner radius longhands in one command.',
+    why: 'property model: the document stores only longhands and a composite writes all of them in one command',
+  },
+  {
+    feature: 'radius-border-gap-handles',
+    field: 'expected',
+    op: 'replace',
+    from: 'Gap modes show bands between children and write gap, row-gap or column-gap; the measured distance between children in the iframe matches.',
+    to: 'Gap modes show bands between children: Gap writes row-gap and column-gap together in one command, Row gap and Column gap write their own longhand; the measured distance between children in the iframe matches.',
+    why: 'property model: the document stores only longhands and a composite writes all of them in one command',
+  },
+  {
+    feature: 'rotation-handle',
+    field: 'expected',
+    op: 'replace',
+    from: 'The handle and the Rotate field run the same command and write the rotate part of the one transform value; a whole drag is one undo step.',
+    to: 'The handle and the Rotate field run the same command and write the rotate property, never the transform list; a whole drag is one undo step.',
+    why: 'property model: translate, rotate and scale are their own properties; transform keeps skew',
+  },
+  {
+    feature: 'absolute-anchors',
+    field: 'expected',
+    op: 'replace',
+    from: 'Anchoring the centre stores left:50% with a translate so the element stays centred.',
+    to: 'Anchoring the centre stores left and right 0 with auto side margins and a fit-content width (top, bottom, auto margins and a fit-content height for the vertical centre), so the element stays centred without translate, which belongs to Move X/Y.',
+    why: 'property model: translate belongs to Move X/Y, so centring uses auto margins (measured centred in Chrome 153)',
   },
 ];
 

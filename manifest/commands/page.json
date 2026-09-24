@@ -13,6 +13,9 @@
       },
       "refusals": [],
       "confirmation": null,
+      "history": {
+        "undoable": false
+      },
       "entryPoints": [
         {
           "id": "toolbar-top-bar-page",
@@ -89,12 +92,20 @@
         "status.url.unsafe"
       ],
       "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
+      },
       "entryPoints": [
         {
           "id": "inspector-page-title",
           "kind": "inspector-field",
           "feature": "page-properties",
           "property": null,
+          "composite": null,
           "attribute": "pageTitle",
           "control": "field",
           "labelKey": "command.setPageSetting",
@@ -112,6 +123,7 @@
           "kind": "inspector-field",
           "feature": "page-properties",
           "property": null,
+          "composite": null,
           "attribute": "pageLanguage",
           "control": "field",
           "labelKey": "command.setPageSetting",
@@ -129,6 +141,7 @@
           "kind": "inspector-field",
           "feature": "page-properties",
           "property": null,
+          "composite": null,
           "attribute": "pageDirection",
           "control": "field",
           "labelKey": "command.setPageSetting",
@@ -146,6 +159,7 @@
           "kind": "inspector-field",
           "feature": "page-seo-meta",
           "property": null,
+          "composite": null,
           "attribute": "pageDescription",
           "control": "field",
           "labelKey": "command.setPageSetting",
@@ -163,6 +177,7 @@
           "kind": "inspector-field",
           "feature": "page-seo-meta",
           "property": null,
+          "composite": null,
           "attribute": "pageCanonical",
           "control": "field",
           "labelKey": "command.setPageSetting",
@@ -180,6 +195,7 @@
           "kind": "inspector-field",
           "feature": "page-seo-meta",
           "property": null,
+          "composite": null,
           "attribute": "pageOgTitle",
           "control": "field",
           "labelKey": "command.setPageSetting",
@@ -197,6 +213,7 @@
           "kind": "inspector-field",
           "feature": "page-seo-meta",
           "property": null,
+          "composite": null,
           "attribute": "pageOgImage",
           "control": "field",
           "labelKey": "command.setPageSetting",
@@ -214,6 +231,7 @@
           "kind": "inspector-field",
           "feature": "page-seo-meta",
           "property": null,
+          "composite": null,
           "attribute": "pageFavicon",
           "control": "field",
           "labelKey": "command.setPageSetting",
@@ -231,6 +249,7 @@
           "kind": "inspector-field",
           "feature": "code-panel-edit-js",
           "property": null,
+          "composite": null,
           "attribute": "pageScripts",
           "control": "field",
           "labelKey": "command.setPageSetting",

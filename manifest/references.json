@@ -1,0 +1,1639 @@
+{
+  "references": [
+    {
+      "kind": "handler",
+      "id": "animation.create",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "animation.rename",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "animation.delete",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "animation.addKeyframe",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "animation.moveKeyframe",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "animation.setKeyframeEasing",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "animation.deleteKeyframe",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "animation.setSettings",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "timeline.setPlayhead",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "timeline.play",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "timeline.pause",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "timeline.stop",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "timeline.toggleLoop",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "clipboard.copy",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "clipboard.paste",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "clipboard.cut",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "clipboard.copyStyle",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "clipboard.pasteStyle",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "colors.saveSwatch",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "colors.removeSwatch",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "tokens.create",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "tokens.update",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "tokens.rename",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "tokens.delete",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "classes.create",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "classes.apply",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "classes.detach",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "inspector.setStyleTarget",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "components.create",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "components.insertInstance",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "components.detach",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "element.setTag",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "element.setAttribute",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "element.setId",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "element.setClasses",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "element.setLink",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "element.setInputType",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "element.setLabelTarget",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "element.setCustomAttribute",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "element.removeCustomAttribute",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "element.setSvgMarkup",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "element.setEmbedMarkup",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "element.applyHtml",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "parts.toggle",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "parts.add",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "parts.move",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "parts.remove",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "table.addColumnAfter",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "table.addColumnEnd",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "table.removeColumn",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "table.addRowAfter",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "table.removeRow",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "interactions.add",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "interactions.update",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "interactions.remove",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "pages.add",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "pages.rename",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "pages.duplicate",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "pages.delete",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "pages.switch",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "files.createFolder",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "files.createFile",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "files.rename",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "files.move",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "files.delete",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "files.open",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "files.upload",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "files.saveContent",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "assets.insertImageFile",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "focus.next",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "focus.previous",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "focus.first",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "focus.last",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "focus.activate",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "focus.nextRegion",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "focus.previousRegion",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "focus.canvas",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "ui.dismiss",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "position.setMode",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "geometry.resize",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "position.move",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "position.setAnchors",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "position.align",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "position.distribute",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "handle.step",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "canvas.setEditMode",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "history.undo",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "history.redo",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "layers.startRename",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "element.rename",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "element.toggleLock",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "element.toggleHidden",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "element.setLayerColor",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "page.openProperties",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "page.setSetting",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "project.newBlankPage",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "project.restoreVersion",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "project.takeOverEditing",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "project.save",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "project.open",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "project.openFolder",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "project.importHtml",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "project.export",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "selection.select",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "selection.clear",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "selection.add",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "selection.toggle",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "selection.walkNextSibling",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "selection.walkPreviousSibling",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "selection.walkParent",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "selection.walkFirstChild",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "selection.selectAllInContainer",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "selection.marquee",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "contextMenu.open",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "element.insert",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "element.moveTo",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "drag.levelUp",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "drag.levelDown",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "drag.cancel",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "element.moveUp",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "element.moveDown",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "element.wrapRow",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "element.wrapColumn",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "element.nestIntoPrevious",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "element.promote",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "element.duplicate",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "element.delete",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "element.unwrap",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "element.createNaturalChild",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "hand.take",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "hand.aimNext",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "hand.aimPrevious",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "hand.climb",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "hand.descend",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "hand.drop",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "style.set",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "style.setSpacing",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "inspector.toggleSpacingLink",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "style.setBorder",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "style.setRadius",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "style.setBackgroundImage",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "style.setShadows",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "style.setFilter",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "style.setTransform",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "style.setAlignment",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "style.setCustomDeclarations",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "style.applyCssRule",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "style.reset",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "style.resetAll",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "field.step",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "field.scrub",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "field.setUnit",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "text.startEdit",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "text.set",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "text.cancelEdit",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "text.insertLineBreak",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "text.toggleBold",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "text.toggleItalic",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "text.editLink",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "text.paste",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "text.selectAll",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "view.zoomIn",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "view.zoomOut",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "view.zoomReset",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "view.zoomTo",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "view.zoomFit",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "view.zoomAt",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "view.pan",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "view.setBreakpoint",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "view.setStyleState",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "view.enterPreview",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "view.exitPreview",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "view.toggleOutlines",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "view.toggleZones",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "view.toggleRulers",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "view.toggleSmartGuides",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "view.toggleEqualSpacing",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "grid.toggleColumns",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "grid.toggleRows",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "grid.toggleDots",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "grid.setSettings",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "guides.create",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "guides.move",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "guides.delete",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "guides.toggleLock",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "guides.toggleVisible",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "snap.setEnabled",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "snap.setSettings",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "workspace.openDialog",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "workspace.setPanelOpen",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "workspace.toggleLeftDock",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "workspace.toggleInspector",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "workspace.collapseDocks",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "workspace.toggleDeveloperTools",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "workspace.reset",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "workspace.setWorkbenchState",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "workspace.setActiveTab",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "workspace.resizeSplitter",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "workspace.movePanel",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "quickPanel.setOffset",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "preferences.setLanguage",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "preferences.setTheme",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "commandBar.open",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "palette.toggleGroup",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "palette.setDensity",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "layers.setExpanded",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "layers.collapseAll",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "layers.expandAll",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "layers.expandOrFocusChild",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "layers.collapseOrFocusParent",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "layers.setRowDetails",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "inspector.toggleSection",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "inspector.setMode",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "inspector.reveal",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "codePanel.copyPane",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "codePanel.downloadPane",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "singleSelection",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "always",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "hasSelection",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "instanceSelected",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "cellSelected",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "inTable",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "positionedSelection",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "canUndo",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "canRedo",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "canNestIntoPrevious",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "canUnwrap",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "hasNaturalChild",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "flexOrGridContainer",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "singleTextSelection",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "flexContainer",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "gridContainer",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "flexItem",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "flexOrGridItem",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "gridItem",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "container",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "fragmented",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "multicol",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "scrollContainer",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "snapChild",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "table",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "tableOrCaption",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "hasBox",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "textarea",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "media",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "positioned",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "staticBox",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "imagePainting",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "svgShape",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "text",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "clippingBox",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "inlineOrCell",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "list",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "formControl",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "textInput",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "perspectiveContext",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "transformed",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "valueIn",
+      "status": "planned"
+    },
+    {
+      "kind": "predicate",
+      "id": "parentValueIn",
+      "status": "planned"
+    },
+    {
+      "kind": "action",
+      "id": "setValue",
+      "status": "planned"
+    },
+    {
+      "kind": "action",
+      "id": "swapWith",
+      "status": "planned"
+    },
+    {
+      "kind": "action",
+      "id": "setParentValue",
+      "status": "planned"
+    },
+    {
+      "kind": "action",
+      "id": "keepVisualPlace",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "keyword",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "length-percentage",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "track-list",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "keyword-set",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "grid-areas",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "number",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "integer",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "grid-line",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "length",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "line-width",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "color",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "length-pair",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "counter-list",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "ratio",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "position",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "translate",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "rotate",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "scale",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "image-layers",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "background-size",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "position-axis",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "paint",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "radius",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "font-family-list",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "font-weight",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "font-style",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "line-height",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "text-indent",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "baseline-shift",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "font-stretch",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "feature-tag-list",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "block-ellipsis",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "counter-style",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "image",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "alpha",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "cursor",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "animateable-feature-list",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "color-list",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "shadow-offset-list",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "length-list",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "keyword-list",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "shadow-list",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "filter-list",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "clip-path",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "transform-list",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "property-list",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "time-list",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "easing-list",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "axis-pair",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "columns",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "grid-line-pair",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "box-sides",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "border",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "border-side",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "box-corners",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "text-align",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "text-decoration",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "white-space",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "vertical-align",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "font-variant",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "line-clamp",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "background-layers",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "transition-list",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "alignment-matrix",
+      "status": "planned"
+    }
+  ]
+}

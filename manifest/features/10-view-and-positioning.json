@@ -35,7 +35,7 @@
       "id": "rotation-handle",
       "titleKey": "feature.rotationHandle",
       "commands": [
-        "style.setTransform"
+        "style.set"
       ],
       "dependsOn": [],
       "spec": "spec/behavior/rotation-handle.md",
@@ -50,7 +50,7 @@
         "expected": [
           "A rotation handle sits outside the selection outline at a fixed screen distance; over it the cursor shows rotation.",
           "Dragging rotates around the transform-origin and the angle follows the pointer; Shift snaps to 15° steps; the status bar shows the live angle.",
-          "The handle and the Rotate field run the same command and write the rotate part of the one transform value; a whole drag is one undo step.",
+          "The handle and the Rotate field run the same command and write the rotate property, never the transform list; a whole drag is one undo step.",
           "The angle does not depend on the zoom; the outline and handles follow the rotated box."
         ]
       },
@@ -285,7 +285,7 @@
         ],
         "expected": [
           "Alt+Shift+arrow toggles the anchor on that edge; anchoring both left and right stores left and right (width follows the parent).",
-          "Anchoring the centre stores left:50% with a translate so the element stays centred.",
+          "Anchoring the centre stores left and right 0 with auto side margins and a fit-content width (top, bottom, auto margins and a fit-content height for the vertical centre), so the element stays centred without translate, which belongs to Move X/Y.",
           "Toggling an anchor never moves the element visually; after resizing the parent the element keeps its distances to the anchored edges."
         ]
       },

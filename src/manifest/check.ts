@@ -1,27 +1,46 @@
-// Validates the manifest: first every file against its schema, then the rules
-// that tie the files together. Pure: the caller supplies the parsed files, the
-// i18n catalogues and a way to ask whether a repository path exists.
+// Validates the manifest: first that no hand-written field holds logic, then every file against its
+// schema, then the rules that tie the files together and to the generated web data. Pure: the
+// caller supplies the parsed files, the i18n catalogues, a way to ask whether a repository path
+// exists and the ids code has registered.
 import type { z } from 'zod';
+import { createCssMatcher, type CssMatcher } from './css.ts';
+import { schemaFields } from './fields.ts';
 import {
+  COUPLING_ACTIONS,
+  COUPLING_PREDICATES,
+  GESTURE_DOOR_KINDS,
+  REFERENCE_KINDS,
   commandsFileSchema,
+  consumersFileSchema,
   elementsFileSchema,
   environmentSchema,
   featuresFileSchema,
+  generatedCssSchema,
+  generatedHtmlSchema,
   interactionsFileSchema,
   propertiesFileSchema,
+  referencesFileSchema,
   type Command,
   type CommandsFile,
+  type Composite,
+  type ConsumersFile,
   type Door,
   type DoorKind,
+  type ElementType,
   type ElementsFile,
   type Environment,
   type Feature,
   type FeaturesFile,
+  type GeneratedCss,
+  type GeneratedHtml,
   type InteractionsFile,
   type PropertiesFile,
+  type ReferencesFile,
+  type Subset,
 } from './schema.ts';
 
 export const RULES = [
+  'no-logic',
   'schema',
   'duplicate-id',
   'unknown-reference',
@@ -30,6 +49,16 @@ export const RULES = [
   'feature-command-link',
   'i18n-missing',
   'value-set',
+  'css-syntax',
+  'shorthand-write',
+  'composite',
+  'door-writes',
+  'individual-transform',
+  'coupling',
+  'history',
+  'reference',
+  'consumer',
+  'html-model',
   'chord-conflict',
   'modifier-conflict',
   'order',
@@ -38,6 +67,7 @@ export const RULES = [
 ] as const;
 
 export type RuleId = (typeof RULES)[number];
+export type ReferenceKind = (typeof REFERENCE_KINDS)[number];
 
 export interface Problem {
   rule: RuleId;
@@ -53,18 +83,32 @@ export interface ManifestInput {
   catalogues: Readonly<Record<string, unknown>>;
   // whether a path relative to the repository root exists
   fileExists: (repoPath: string) => boolean;
+  // ids that code under src/ registers, by kind (registerHandler, registerPredicate, ...)
+  registered: Readonly<Record<ReferenceKind, readonly string[]>>;
 }
 
 export interface ManifestSummary {
   features: number;
   featureGroups: number;
   commands: number;
+  undoableCommands: number;
   doors: number;
   doorsByKind: Record<string, number>;
   elements: number;
   paletteEntries: number;
   attributes: number;
+  generatedProperties: number;
+  generatedShorthands: number;
+  generatedElements: number;
   properties: number;
+  composites: number;
+  couplings: number;
+  plannedReferences: number;
+  registeredReferences: number;
+  referencesByKind: Record<string, number>;
+  consumers: number;
+  // values the official syntax rejects and the browser syntax (CSSTree's MDN data) accepts
+  implementedOnly: string[];
   constants: number;
   gestures: number;
   keyContexts: number;
@@ -82,11 +126,24 @@ interface Parsed {
   elements: ElementsFile;
   properties: PropertiesFile;
   interactions: InteractionsFile;
+  references: ReferencesFile;
+  consumers: ConsumersFile;
+  css: GeneratedCss;
+  html: GeneratedHtml;
   commandFiles: { file: string; data: CommandsFile }[];
   featureFiles: { file: string; data: FeaturesFile }[];
 }
 
-const SINGLE_FILES = ['environment.json', 'elements.json', 'properties.json', 'interactions.json'];
+const SINGLE_FILES: Record<string, { key: keyof Parsed; schema: z.ZodType }> = {
+  'environment.json': { key: 'environment', schema: environmentSchema },
+  'elements.json': { key: 'elements', schema: elementsFileSchema },
+  'properties.json': { key: 'properties', schema: propertiesFileSchema },
+  'interactions.json': { key: 'interactions', schema: interactionsFileSchema },
+  'references.json': { key: 'references', schema: referencesFileSchema },
+  'consumers.json': { key: 'consumers', schema: consumersFileSchema },
+  'generated/css-properties.json': { key: 'css', schema: generatedCssSchema },
+  'generated/html-elements.json': { key: 'html', schema: generatedHtmlSchema },
+};
 
 function issuePath(path: readonly PropertyKey[]): string {
   return path.map((part) => (typeof part === 'number' ? `[${part}]` : `.${String(part)}`)).join('').replace(/^\./, '');
@@ -101,6 +158,31 @@ function schemaProblems(file: string, error: z.ZodError): Problem[] {
   });
 }
 
+// ---------------------------------------------------------------- no logic in data
+
+// Operators and code that never belong in a data value. CSS values and prose pass.
+const EXPRESSION = /(===|!==|==|!=|&&|\|\||=>|<=|>=|\$\{|\bfunction\s*\(|\breturn\s+\S.*;)/;
+
+function logicProblems(files: Readonly<Record<string, unknown>>): Problem[] {
+  const problems: Problem[] = [];
+  for (const [file, json] of Object.entries(files)) {
+    if (file.startsWith('generated/')) continue;
+    const visit = (value: unknown, path: string): void => {
+      if (typeof value === 'string') {
+        if (EXPRESSION.test(value)) {
+          problems.push({ rule: 'no-logic', file, path, message: `holds an expression (${JSON.stringify(value)}): data names predicates, actions and codecs by id and never holds code or conditions as text` });
+        }
+      } else if (Array.isArray(value)) {
+        value.forEach((item, i) => visit(item, `${path}[${i}]`));
+      } else if (value !== null && typeof value === 'object') {
+        for (const [key, item] of Object.entries(value)) visit(item, path === '' ? key : `${path}.${key}`);
+      }
+    };
+    visit(json, '');
+  }
+  return problems;
+}
+
 function parseFiles(input: ManifestInput): { parsed: Parsed | null; problems: Problem[] } {
   const problems: Problem[] = [];
   const out: Partial<Parsed> & { commandFiles: Parsed['commandFiles']; featureFiles: Parsed['featureFiles'] } = {
@@ -108,21 +190,10 @@ function parseFiles(input: ManifestInput): { parsed: Parsed | null; problems: Pr
     featureFiles: [],
   };
   for (const [file, json] of Object.entries(input.files)) {
-    if (file === 'environment.json') {
-      const result = environmentSchema.safeParse(json);
-      if (result.success) out.environment = result.data;
-      else problems.push(...schemaProblems(file, result.error));
-    } else if (file === 'elements.json') {
-      const result = elementsFileSchema.safeParse(json);
-      if (result.success) out.elements = result.data;
-      else problems.push(...schemaProblems(file, result.error));
-    } else if (file === 'properties.json') {
-      const result = propertiesFileSchema.safeParse(json);
-      if (result.success) out.properties = result.data;
-      else problems.push(...schemaProblems(file, result.error));
-    } else if (file === 'interactions.json') {
-      const result = interactionsFileSchema.safeParse(json);
-      if (result.success) out.interactions = result.data;
+    const single = SINGLE_FILES[file];
+    if (single) {
+      const result = single.schema.safeParse(json);
+      if (result.success) (out as Record<string, unknown>)[single.key] = result.data;
       else problems.push(...schemaProblems(file, result.error));
     } else if (/^commands\/[a-z0-9-]+\.json$/.test(file)) {
       const result = commandsFileSchema.safeParse(json);
@@ -133,11 +204,11 @@ function parseFiles(input: ManifestInput): { parsed: Parsed | null; problems: Pr
       if (result.success) out.featureFiles.push({ file, data: result.data });
       else problems.push(...schemaProblems(file, result.error));
     } else {
-      problems.push({ rule: 'schema', file, path: '', message: 'not a manifest file: expected one of environment.json, elements.json, properties.json, interactions.json, commands/<domain>.json, features/<NN>-<group>.json' });
+      problems.push({ rule: 'schema', file, path: '', message: `not a manifest file: expected one of ${Object.keys(SINGLE_FILES).join(', ')}, commands/<domain>.json, features/<NN>-<group>.json` });
     }
   }
-  for (const file of SINGLE_FILES) {
-    if (!(file in input.files)) problems.push({ rule: 'schema', file, path: '', message: 'missing manifest file' });
+  for (const file of Object.keys(SINGLE_FILES)) {
+    if (!(file in input.files)) problems.push({ rule: 'schema', file, path: '', message: file.startsWith('generated/') ? 'missing generated file: run npm run gen' : 'missing manifest file' });
   }
   if (out.commandFiles.length === 0 && !Object.keys(input.files).some((f) => f.startsWith('commands/'))) {
     problems.push({ rule: 'schema', file: 'commands/', path: '', message: 'missing: no command file' });
@@ -185,6 +256,53 @@ export function normaliseChord(chord: string): string | null {
   return [...ordered, key].join('+');
 }
 
+// ---------------------------------------------------------------- HTML content model
+
+type HtmlMeta = GeneratedHtml['elements'][string];
+const CATEGORY_OF: Record<string, keyof HtmlMeta['categories']> = {
+  '@metadata': 'metadata',
+  '@flow': 'flow',
+  '@sectioning': 'sectioning',
+  '@heading': 'heading',
+  '@phrasing': 'phrasing',
+  '@embedded': 'embedded',
+  '@interactive': 'interactive',
+  '@labelable': 'labelable',
+  '@form': 'form',
+  '@script': 'scriptSupporting',
+};
+
+function matchesContent(tag: string, meta: HtmlMeta | undefined, pattern: string): boolean {
+  const p = pattern.replace(/[?*]$/, '');
+  const category = CATEGORY_OF[p];
+  if (category !== undefined) return meta !== undefined && meta.categories[category] !== false;
+  return p === tag;
+}
+
+// null when HTML permits <child> directly inside <parent>, the reason otherwise
+export function htmlRefusal(html: GeneratedHtml, parentTag: string, childTag: string): string | null {
+  const parent = html.elements[parentTag];
+  const child = html.elements[childTag];
+  if (!parent) return `<${parentTag}> is not an HTML element of the generated data`;
+  if (parent.void) return `<${parentTag}> is a void element`;
+  if (parent.textOnly) return `<${parentTag}> holds text only`;
+  if (parent.permittedContent !== null && !parent.permittedContent.some((p) => matchesContent(childTag, child, p))) {
+    return `<${parentTag}> permits ${parent.permittedContent.join(', ')}, not <${childTag}>`;
+  }
+  for (const rule of parent.permittedDescendants ?? []) {
+    if (rule.exclude.some((p) => matchesContent(childTag, child, p))) return `<${parentTag}> excludes <${childTag}> from its descendants`;
+  }
+  if (child?.permittedParent && !child.permittedParent.includes(parentTag)) return `<${childTag}> is permitted only in ${child.permittedParent.join(', ')}`;
+  if (child?.requiredAncestors) {
+    const ok = child.requiredAncestors.some((selector) => {
+      const parts = selector.split('>').map((s) => s.trim());
+      return parts[parts.length - 2] === parentTag;
+    });
+    if (!ok) return `<${childTag}> requires ${child.requiredAncestors.join(' or ')}`;
+  }
+  return null;
+}
+
 // ---------------------------------------------------------------- the rules
 
 interface DoorEntry {
@@ -192,17 +310,34 @@ interface DoorEntry {
   path: string;
   command: Command;
   door: Door;
+  ref: string;
 }
 
 function placeholders(text: string): string[] {
   return [...text.matchAll(/\{(\w+)\}/g)].map((m) => m[1] ?? '').sort();
 }
 
+// Controls that present a list of values: their doors must say which list they offer.
+const LIST_CONTROLS = new Set(['keyword-menu', 'keyword-buttons', 'length-field', 'font-menu']);
+
+const matcherCache = new WeakMap<object, CssMatcher>();
+function cssMatcher(css: GeneratedCss): CssMatcher {
+  let matcher = matcherCache.get(css);
+  if (!matcher) {
+    matcher = createCssMatcher({ properties: Object.fromEntries(Object.entries(css.properties).map(([name, p]) => [name, p.syntax])), types: css.types });
+    matcherCache.set(css, matcher);
+  }
+  return matcher;
+}
+
 export function checkManifest(input: ManifestInput): CheckResult {
+  const logic = logicProblems(input.files);
+  if (logic.length > 0) return { problems: logic, summary: null };
   const { parsed, problems } = parseFiles(input);
   if (!parsed) return { problems, summary: null };
   const p = parsed;
   const report = (rule: RuleId, file: string, path: string, message: string) => problems.push({ rule, file, path, message });
+  const css = cssMatcher(p.css);
 
   // Every id is unique within its kind.
   const unique = (kind: string, file: string, entries: { id: string; path: string }[]) => {
@@ -231,18 +366,23 @@ export function checkManifest(input: ManifestInput): CheckResult {
 
   const doors: DoorEntry[] = [];
   for (const c of commands) {
-    c.command.entryPoints.forEach((door, i) => doors.push({ file: c.file, path: `${c.path}.entryPoints[${i}]`, command: c.command, door }));
+    c.command.entryPoints.forEach((door, i) => doors.push({ file: c.file, path: `${c.path}.entryPoints[${i}]`, command: c.command, door, ref: `${c.command.id}#${door.id}` }));
   }
+  const doorByRef = new Map(doors.map((d) => [d.ref, d]));
 
-  const elementIds = new Set(p.elements.elements.map((e) => e.id));
+  const elementById = new Map(p.elements.elements.map((e) => [e.id, e]));
   const attributeById = new Map(p.elements.attributes.map((a) => [a.id, a]));
   const paletteEntryIds = new Set(p.elements.palette.flatMap((g) => g.entries.map((e) => e.id)));
   const propertyById = new Map(p.properties.properties.map((prop) => [prop.id, prop]));
+  const compositeById = new Map(p.properties.composites.map((c) => [c.id, c]));
   const breakpointIds = new Set(p.properties.breakpoints.map((b) => b.id));
   const stateIds = new Set(p.properties.states.map((s) => s.id));
   const contextIds = new Set(p.interactions.keyContexts.map((k) => k.id));
   const gestureById = new Map(p.interactions.gestures.map((g) => [g.id, g]));
+  const constantById = new Map(p.interactions.constants.map((c) => [c.id, c]));
   const viewportIds = new Set(p.environment.viewports.map((v) => v.id));
+  const generated = p.css.properties;
+  const isShorthand = (name: string) => (generated[name]?.longhands.length ?? 0) > 0;
 
   // ---- duplicate-id
   unique('feature', 'features/', features.map((f) => ({ id: f.feature.id, path: `${f.file} ${f.path}` })));
@@ -257,7 +397,15 @@ export function checkManifest(input: ManifestInput): CheckResult {
   unique('palette group', 'elements.json', p.elements.palette.map((g, i) => ({ id: g.id, path: `palette[${i}]` })));
   unique('palette entry', 'elements.json', p.elements.palette.flatMap((g, gi) => g.entries.map((e, i) => ({ id: e.id, path: `palette[${gi}].entries[${i}]` }))));
   unique('property', 'properties.json', p.properties.properties.map((prop, i) => ({ id: prop.id, path: `properties[${i}]` })));
-  unique('CSS property name', 'properties.json', p.properties.properties.map((prop, i) => ({ id: prop.css, path: `properties[${i}]` })));
+  unique('composite', 'properties.json', p.properties.composites.map((c, i) => ({ id: c.id, path: `composites[${i}]` })));
+  unique('coupling', 'properties.json', p.properties.couplings.map((c, i) => ({ id: c.id, path: `couplings[${i}]` })));
+  for (const [i, prop] of p.properties.properties.entries()) unique(`subset of ${prop.id}`, 'properties.json', prop.subsets.map((s, si) => ({ id: s.id, path: `properties[${i}].subsets[${si}]` })));
+  for (const [i, c] of p.properties.composites.entries()) unique(`subset of ${c.id}`, 'properties.json', c.subsets.map((s, si) => ({ id: s.id, path: `composites[${i}].subsets[${si}]` })));
+  // a legacy alias and the property it names are one property
+  for (const [i, prop] of p.properties.properties.entries()) {
+    const alias = generated[prop.id]?.legacyAliasOf;
+    if (alias && propertyById.has(alias)) report('duplicate-id', 'properties.json', `properties[${i}].id`, `${prop.id} is a legacy alias of ${alias}, which is also edited`);
+  }
   unique('section', 'properties.json', p.properties.sections.map((s, i) => ({ id: s.id, path: `sections[${i}]` })));
   for (const [si, s] of p.properties.sections.entries()) {
     unique(`group of section ${s.id}`, 'properties.json', s.groups.map((g, i) => ({ id: g.id, path: `sections[${si}].groups[${i}]` })));
@@ -268,6 +416,8 @@ export function checkManifest(input: ManifestInput): CheckResult {
   unique('constant', 'interactions.json', p.interactions.constants.map((c, i) => ({ id: c.id, path: `constants[${i}]` })));
   unique('gesture', 'interactions.json', p.interactions.gestures.map((g, i) => ({ id: g.id, path: `gestures[${i}]` })));
   unique('viewport', 'environment.json', p.environment.viewports.map((v, i) => ({ id: v.id, path: `viewports[${i}]` })));
+  unique('reference', 'references.json', p.references.references.map((r, i) => ({ id: `${r.kind}:${r.id}`, path: `references[${i}]` })));
+  unique('consumer field', 'consumers.json', p.consumers.consumers.map((c, i) => ({ id: c.field, path: `consumers[${i}]` })));
 
   // ---- unknown-reference
   const ref = (ok: boolean, file: string, path: string, message: string) => {
@@ -277,34 +427,35 @@ export function checkManifest(input: ManifestInput): CheckResult {
     report('unknown-reference', 'environment.json', 'locales.default', `default locale "${p.environment.locales.default}" is not an available locale`);
   }
   for (const [i, e] of p.elements.elements.entries()) {
-    const path = `elements[${i}]`;
-    const refs = [
-      ...(Array.isArray(e.allowedChildren) ? e.allowedChildren.map((id) => ['allowedChildren', id] as const) : []),
-      ...e.requiredParent.map((id) => ['requiredParent', id] as const),
-      ...e.uniqueChildren.map((id) => ['uniqueChildren', id] as const),
-      ...e.requiredChildren.map((id) => ['requiredChildren', id] as const),
-      ...e.forbiddenAncestors.map((id) => ['forbiddenAncestors', id] as const),
-      ...(e.firstChild ? [['firstChild', e.firstChild] as const] : []),
-      ...(e.naturalChild ? [['naturalChild', e.naturalChild] as const] : []),
-    ];
-    for (const [field, id] of refs) ref(elementIds.has(id), 'elements.json', `${path}.${field}`, `unknown element type "${id}"`);
-    if (e.tag === null && e.content !== 'markup') report('schema', 'elements.json', `${path}.tag`, 'only an element whose content is "markup" may have no tag');
+    if (e.naturalChild !== null) ref(elementById.has(e.naturalChild), 'elements.json', `elements[${i}].naturalChild`, `unknown element type "${e.naturalChild}"`);
+    if (e.tag === null && e.content !== 'markup') report('schema', 'elements.json', `elements[${i}].tag`, 'only an element whose content is "markup" may have no tag');
+    for (const name of Object.keys(e.defaultStyles)) {
+      if (!isShorthand(name)) ref(propertyById.has(name), 'elements.json', `elements[${i}].defaultStyles.${name}`, `"${name}" is not an edited property of properties.json`);
+    }
   }
   for (const [i, a] of p.elements.attributes.entries()) {
-    if (a.elements !== 'all') for (const id of a.elements) ref(elementIds.has(id), 'elements.json', `attributes[${i}].elements`, `unknown element type "${id}"`);
+    if (a.elements !== 'all') for (const id of a.elements) ref(elementById.has(id), 'elements.json', `attributes[${i}].elements`, `unknown element type "${id}"`);
     ref(commandById.has(a.command), 'elements.json', `attributes[${i}].command`, `unknown command "${a.command}"`);
   }
   for (const [gi, g] of p.elements.palette.entries()) {
     for (const [i, e] of g.entries.entries()) {
-      ref(elementIds.has(e.element), 'elements.json', `palette[${gi}].entries[${i}].element`, `unknown element type "${e.element}"`);
+      ref(elementById.has(e.element), 'elements.json', `palette[${gi}].entries[${i}].element`, `unknown element type "${e.element}"`);
       ref(featureIndex.has(e.feature), 'elements.json', `palette[${gi}].entries[${i}].feature`, `unknown feature "${e.feature}"`);
     }
   }
+  const checkPlace = (file: string, path: string, item: { section: string; group: string }) => {
+    const section = p.properties.sections.find((s) => s.id === item.section);
+    ref(section !== undefined, file, `${path}.section`, `unknown section "${item.section}"`);
+    if (section) ref(section.groups.some((g) => g.id === item.group), file, `${path}.group`, `section "${item.section}" has no group "${item.group}"`);
+  };
   for (const [i, prop] of p.properties.properties.entries()) {
-    const section = p.properties.sections.find((s) => s.id === prop.section);
-    ref(section !== undefined, 'properties.json', `properties[${i}].section`, `unknown section "${prop.section}"`);
-    if (section) ref(section.groups.some((g) => g.id === prop.group), 'properties.json', `properties[${i}].group`, `section "${prop.section}" has no group "${prop.group}"`);
-    ref(commandById.has(prop.command), 'properties.json', `properties[${i}].command`, `unknown command "${prop.command}"`);
+    checkPlace('properties.json', `properties[${i}]`, prop);
+    ref(generated[prop.id] !== undefined, 'properties.json', `properties[${i}].id`, `"${prop.id}" is not a CSS property of the generated web data`);
+    for (const [di, d] of prop.doors.entries()) ref(doorByRef.has(d), 'properties.json', `properties[${i}].doors[${di}]`, `unknown door "${d}"`);
+  }
+  for (const [i, c] of p.properties.composites.entries()) {
+    checkPlace('properties.json', `composites[${i}]`, c);
+    for (const [di, d] of c.doors.entries()) ref(doorByRef.has(d), 'properties.json', `composites[${i}].doors[${di}]`, `unknown door "${d}"`);
   }
   for (const [i, k] of p.interactions.keyContexts.entries()) {
     if (k.inherits !== null) ref(contextIds.has(k.inherits), 'interactions.json', `keyContexts[${i}].inherits`, `unknown key context "${k.inherits}"`);
@@ -323,7 +474,7 @@ export function checkManifest(input: ManifestInput): CheckResult {
       const text = typeof value === 'string' ? value : null;
       if (arg.type === 'enum') ref(text !== null && arg.values.includes(text), file, `${path}.args.${name}`, `"${String(value)}" is not one of ${arg.values.join(', ')}`);
       if (arg.type === 'palette-entry') ref(text !== null && paletteEntryIds.has(text), file, `${path}.args.${name}`, `unknown palette entry "${String(value)}"`);
-      if (arg.type === 'property') ref(text !== null && propertyById.has(text), file, `${path}.args.${name}`, `unknown property "${String(value)}"`);
+      if (arg.type === 'property') ref(text !== null && (propertyById.has(text) || compositeById.has(text)), file, `${path}.args.${name}`, `unknown property or composite "${String(value)}"`);
       if (arg.type === 'attribute') ref(text !== null && attributeById.has(text), file, `${path}.args.${name}`, `unknown attribute "${String(value)}"`);
       if (arg.type === 'breakpoint') ref(text !== null && breakpointIds.has(text), file, `${path}.args.${name}`, `unknown breakpoint "${String(value)}"`);
       if (arg.type === 'state') ref(text !== null && stateIds.has(text), file, `${path}.args.${name}`, `unknown state "${String(value)}"`);
@@ -337,28 +488,21 @@ export function checkManifest(input: ManifestInput): CheckResult {
     }
     if (door.kind === 'shortcut') ref(contextIds.has(door.context), file, `${path}.context`, `unknown key context "${door.context}"`);
     if (door.kind === 'inspector-field') {
-      if ((door.property === null) === (door.attribute === null)) {
-        report('schema', file, path, 'an inspector field names exactly one property or one attribute');
-      }
-      if (door.property !== null) {
-        const prop = propertyById.get(door.property);
-        ref(prop !== undefined, file, `${path}.property`, `unknown property "${door.property}"`);
-        if (prop) ref(prop.command === command.id, file, `${path}.property`, `property "${prop.id}" is written by ${prop.command}, not by ${command.id}`);
-      }
+      const named = [door.property, door.composite, door.attribute].filter((x) => x !== null).length;
+      if (named !== 1) report('schema', file, path, 'an inspector field names exactly one property, one composite or one attribute');
+      if (door.property !== null) ref(propertyById.has(door.property), file, `${path}.property`, `unknown property "${door.property}"`);
+      if (door.composite !== null) ref(compositeById.has(door.composite), file, `${path}.composite`, `unknown composite "${door.composite}"`);
       if (door.attribute !== null) {
         const attr = attributeById.get(door.attribute);
         ref(attr !== undefined, file, `${path}.attribute`, `unknown attribute "${door.attribute}"`);
         if (attr) ref(attr.command === command.id, file, `${path}.attribute`, `attribute "${attr.id}" is written by ${attr.command}, not by ${command.id}`);
       }
     }
-    for (const id of door.adapter.writes) {
-      const prop = propertyById.get(id);
-      ref(prop !== undefined, file, `${path}.adapter.writes`, `unknown property "${id}"`);
-      if (prop && (door.kind === 'inspector-field' || door.kind === 'quick-panel')) {
-        ref(prop.command === command.id, file, `${path}.adapter.writes`, `property "${id}" is written by ${prop.command}, not by ${command.id}`);
-      }
+    for (const name of door.adapter.writes) {
+      if (!isShorthand(name)) ref(propertyById.has(name), file, `${path}.adapter.writes`, `"${name}" is not an edited property of properties.json`);
     }
-    if (door.adapter.offers) ref(propertyById.has(door.adapter.offers.property), file, `${path}.adapter.offers.property`, `unknown property "${door.adapter.offers.property}"`);
+    const offers = door.adapter.offers;
+    if (offers) ref(propertyById.has(offers.property) || compositeById.has(offers.property), file, `${path}.adapter.offers.property`, `unknown property or composite "${offers.property}"`);
   }
   for (const f of features) {
     for (const [i, id] of f.feature.commands.entries()) ref(commandById.has(id), f.file, `${f.path}.commands[${i}]`, `unknown command "${id}"`);
@@ -487,6 +631,7 @@ export function checkManifest(input: ManifestInput): CheckResult {
   p.properties.breakpoints.forEach((b, i) => noteKey(b.labelKey, `properties.json breakpoints[${i}].labelKey`));
   p.properties.states.forEach((s, i) => noteKey(s.labelKey, `properties.json states[${i}].labelKey`));
   p.properties.properties.forEach((prop, i) => noteKey(prop.labelKey, `properties.json properties[${i}].labelKey`));
+  p.properties.composites.forEach((c, i) => noteKey(c.labelKey, `properties.json composites[${i}].labelKey`));
   p.interactions.keyContexts.forEach((k, i) => noteKey(k.labelKey, `interactions.json keyContexts[${i}].labelKey`));
 
   const catalogues = new Map<string, Record<string, unknown>>();
@@ -521,29 +666,310 @@ export function checkManifest(input: ManifestInput): CheckResult {
     }
   }
 
-  // ---- value-set: what a door offers is the property's catalogue list, or a declared subset with its reason
-  for (const { file, path, command, door } of doors) {
+  // ---- value-set: a door offers the generated list of its property or composite, or a declared subset of it
+  const cssNameOf = (target: string): string | null => {
+    if (propertyById.has(target)) return target;
+    return compositeById.get(target)?.shorthand ?? null;
+  };
+  const subsetsOf = (target: string): Subset[] => propertyById.get(target)?.subsets ?? compositeById.get(target)?.subsets ?? [];
+  const controlOf = (target: string): string | undefined => propertyById.get(target)?.control ?? compositeById.get(target)?.control;
+  const offeredGenerated = new Map<string, string>(); // css name → first door that offers its generated list
+  for (const { file, path, command, door, ref: doorRef } of doors) {
     const offers = door.adapter.offers;
-    if (door.kind === 'inspector-field' && door.property !== null) {
-      const prop = propertyById.get(door.property);
-      if (prop && (prop.keywords.length > 0 || prop.units.length > 0) && (offers === null || offers.property !== prop.id)) {
-        report('value-set', file, `${path}.adapter.offers`, `${command.id}#${door.id} edits ${prop.id} but declares no value set for it`);
+    // a button that writes one fixed value (args.value) offers no list
+    if (door.kind === 'inspector-field' && (door.property !== null || door.composite !== null) && typeof door.args.value !== 'string') {
+      const target = door.property ?? door.composite ?? '';
+      const control = controlOf(target);
+      if (control !== undefined && LIST_CONTROLS.has(control) && (offers === null || offers.property !== target)) {
+        report('value-set', file, `${path}.adapter.offers`, `${doorRef} edits ${target}, a ${control}, but declares no list of values for it`);
       }
     }
     if (!offers) continue;
-    const prop = propertyById.get(offers.property);
-    if (!prop) continue;
-    let smaller = false;
-    if (offers.keywords !== 'all') {
-      for (const k of offers.keywords) if (!prop.keywords.includes(k)) report('value-set', file, `${path}.adapter.offers.keywords`, `${command.id}#${door.id} offers "${k}", which is not in the catalogue keywords of ${prop.id}`);
-      if (new Set(offers.keywords).size < prop.keywords.length) smaller = true;
+    if (!propertyById.has(offers.property) && !compositeById.has(offers.property)) continue;
+    if (offers.list === 'generated') {
+      const name = cssNameOf(offers.property);
+      if (name === null) {
+        report('value-set', file, `${path}.adapter.offers.list`, `${command.id}#${door.id} offers the generated list of ${offers.property}, which stands for no CSS property`);
+        continue;
+      }
+      const g = generated[name];
+      const control = controlOf(offers.property);
+      if (g && g.keywords.length === 0 && (control === 'keyword-menu' || control === 'font-menu')) {
+        report('value-set', file, `${path}.adapter.offers.list`, `${doorRef} is a menu but the generated list of ${name} has no keyword: declare a subset`);
+      }
+      if (!offeredGenerated.has(name)) offeredGenerated.set(name, `${file} ${path}`);
+    } else if (!subsetsOf(offers.property).some((s) => s.id === offers.list)) {
+      report('value-set', file, `${path}.adapter.offers.list`, `${doorRef} offers "${offers.list}", which is neither "generated" nor a subset declared on ${offers.property}`);
     }
-    if (offers.units !== 'all') {
-      for (const u of offers.units) if (!(prop.units as string[]).includes(u)) report('value-set', file, `${path}.adapter.offers.units`, `${command.id}#${door.id} offers unit "${u}", which is not in the catalogue units of ${prop.id}`);
-      if (new Set(offers.units).size < prop.units.length) smaller = true;
+  }
+
+  // ---- css-syntax: every value a door offers or writes matches the official syntax (CSSTree's lexer)
+  const implementedOnly = new Set<string>();
+  const syntax = (file: string, path: string, property: string, value: string) => {
+    const result = css.matchEither(property, value);
+    if (!result.ok) report('css-syntax', file, path, `"${value}" is not a valid value of ${property}: ${result.reason}`);
+    else if (result.by === 'implemented') implementedOnly.add(`${property}: ${value}`);
+  };
+  for (const [name, where] of offeredGenerated) {
+    const g = generated[name];
+    if (!g) continue;
+    const [file = '', ...rest] = where.split(' ');
+    for (const keyword of g.keywords) syntax(file, `${rest.join(' ')} (generated keywords of ${name})`, name, keyword);
+    for (const unit of g.units) syntax(file, `${rest.join(' ')} (generated units of ${name})`, name, `1${unit}`);
+  }
+  const checkSubsets = (file: string, path: string, name: string | null, subsets: Subset[]) => {
+    for (const [si, s] of subsets.entries()) {
+      if (name === null) {
+        report('value-set', file, `${path}.subsets[${si}]`, 'a composite that stands for no CSS property cannot declare a subset of its values');
+        continue;
+      }
+      (s.values ?? []).forEach((value, vi) => syntax(file, `${path}.subsets[${si}].values[${vi}]`, name, value));
+      (s.units ?? []).forEach((unit, ui) => syntax(file, `${path}.subsets[${si}].units[${ui}]`, name, `1${unit}`));
     }
-    if (smaller && offers.reason === null) {
-      report('value-set', file, `${path}.adapter.offers.reason`, `${command.id}#${door.id} offers less than the catalogue list of ${prop.id} and gives no reason`);
+  };
+  p.properties.properties.forEach((prop, i) => checkSubsets('properties.json', `properties[${i}]`, prop.id, prop.subsets));
+  p.properties.composites.forEach((c, i) => checkSubsets('properties.json', `composites[${i}]`, c.shorthand, c.subsets));
+  for (const { file, path, door } of doors) {
+    const property = door.args.property;
+    const value = door.args.value;
+    if (typeof property === 'string' && typeof value === 'string') {
+      const name = cssNameOf(property);
+      if (name !== null) syntax(file, `${path}.args.value`, name, value);
+    }
+  }
+  for (const [i, e] of p.elements.elements.entries()) {
+    for (const [name, value] of Object.entries(e.defaultStyles)) if (generated[name]) syntax('elements.json', `elements[${i}].defaultStyles.${name}`, name, value);
+  }
+  for (const [i, c] of p.properties.couplings.entries()) {
+    const path = `couplings[${i}]`;
+    if (generated[c.trigger.property]) (c.trigger.values ?? []).forEach((v, vi) => syntax('properties.json', `${path}.trigger.values[${vi}]`, c.trigger.property, v));
+    if (c.condition.property !== null && generated[c.condition.property]) c.condition.values.forEach((v, vi) => syntax('properties.json', `${path}.condition.values[${vi}]`, c.condition.property ?? '', v));
+    if (c.effect.value !== null && generated[c.effect.property]) syntax('properties.json', `${path}.effect.value`, c.effect.property, c.effect.value);
+  }
+
+  // ---- shorthand-write: the document stores only longhands
+  for (const [i, prop] of p.properties.properties.entries()) {
+    if (isShorthand(prop.id)) report('shorthand-write', 'properties.json', `properties[${i}].id`, `${prop.id} is a shorthand of ${generated[prop.id]?.longhands.join(', ')}: edit it as a composite`);
+  }
+  for (const { file, path, door, ref: doorRef } of doors) {
+    for (const name of door.adapter.writes) if (isShorthand(name)) report('shorthand-write', file, `${path}.adapter.writes`, `${doorRef} writes the shorthand ${name}; a door writes its longhands (${generated[name]?.longhands.join(', ')})`);
+  }
+  for (const [i, e] of p.elements.elements.entries()) {
+    for (const name of Object.keys(e.defaultStyles)) if (isShorthand(name)) report('shorthand-write', 'elements.json', `elements[${i}].defaultStyles.${name}`, `default style ${name} is a shorthand; store its longhands`);
+  }
+
+  // ---- composite: a shorthand is edited as a composite whose door writes every longhand in one undoable command
+  const compositesOf = new Map<string, Composite[]>();
+  for (const [i, c] of p.properties.composites.entries()) {
+    const path = `composites[${i}]`;
+    for (const name of c.longhands) {
+      if (!compositesOf.has(name)) compositesOf.set(name, []);
+      compositesOf.get(name)?.push(c);
+      if (!propertyById.has(name)) report('composite', 'properties.json', `${path}.longhands`, `${c.id} writes ${name}, which is not an edited property`);
+    }
+    if (c.shorthand === null) {
+      if (c.omits !== null) report('composite', 'properties.json', `${path}.omits`, `${c.id} stands for no shorthand, so it omits nothing`);
+    } else {
+      const expected = generated[c.shorthand]?.longhands ?? [];
+      if (expected.length === 0) {
+        report('composite', 'properties.json', `${path}.shorthand`, `${c.shorthand} is not a shorthand in the generated web data`);
+      } else {
+        const omitted = c.omits?.longhands ?? [];
+        const missing = expected.filter((l) => !c.longhands.includes(l) && !omitted.includes(l));
+        const extra = [...c.longhands, ...omitted].filter((l) => !expected.includes(l));
+        const both = c.longhands.filter((l) => omitted.includes(l));
+        if (missing.length > 0) report('composite', 'properties.json', `${path}.longhands`, `${c.id} leaves out ${missing.join(', ')}, which the ${c.shorthand} shorthand sets; write them or declare them in omits with the reason`);
+        if (extra.length > 0) report('composite', 'properties.json', `${path}.longhands`, `${extra.join(', ')} are not longhands of ${c.shorthand}`);
+        if (both.length > 0) report('composite', 'properties.json', `${path}.omits`, `${both.join(', ')} are both written and omitted`);
+      }
+    }
+    for (const [di, d] of c.doors.entries()) {
+      const entry = doorByRef.get(d);
+      if (!entry) continue;
+      const missing = c.longhands.filter((l) => !entry.door.adapter.writes.includes(l));
+      if (missing.length > 0) report('composite', 'properties.json', `${path}.doors[${di}]`, `${d} is a door of ${c.id} but does not write ${missing.join(', ')}: a composite door writes every longhand in one command`);
+      if (!entry.command.history.undoable) report('composite', 'properties.json', `${path}.doors[${di}]`, `${d} writes ${c.id} through ${entry.command.id}, which is not undoable: a composite write is one undo step`);
+      if (entry.door.kind === 'inspector-field' && entry.door.composite !== c.id) report('composite', entry.file, `${entry.path}.composite`, `${d} is listed as a door of ${c.id} but edits ${entry.door.composite ?? entry.door.property ?? 'nothing'}`);
+    }
+  }
+  for (const { file, path, door, ref: doorRef } of doors) {
+    if (door.kind === 'inspector-field' && door.composite !== null) {
+      const c = compositeById.get(door.composite);
+      if (c && !c.doors.includes(doorRef)) report('composite', file, `${path}.composite`, `${doorRef} edits ${c.id} but ${c.id} does not list it among its doors`);
+    }
+    // a longhand that has no control of its own is written only with the rest of its composite
+    for (const name of door.adapter.writes) {
+      if (propertyById.get(name)?.control !== 'part-of-composite') continue;
+      const whole = (compositesOf.get(name) ?? []).some((c) => c.longhands.every((l) => door.adapter.writes.includes(l)));
+      if (!whole) report('composite', file, `${path}.adapter.writes`, `${doorRef} writes ${name} without the rest of its composite`);
+    }
+  }
+  for (const [i, prop] of p.properties.properties.entries()) {
+    if (prop.control === 'part-of-composite' && !compositesOf.has(prop.id)) report('composite', 'properties.json', `properties[${i}].control`, `${prop.id} is part of no composite`);
+  }
+
+  // ---- door-writes: a property lists exactly the doors that write it, and a field writes what it edits
+  const writers = new Map<string, string[]>();
+  for (const { ref: doorRef, door } of doors) {
+    for (const name of door.adapter.writes) {
+      if (!writers.has(name)) writers.set(name, []);
+      writers.get(name)?.push(doorRef);
+    }
+  }
+  for (const [i, prop] of p.properties.properties.entries()) {
+    const actual = writers.get(prop.id) ?? [];
+    for (const d of actual) if (!prop.doors.includes(d)) report('door-writes', 'properties.json', `properties[${i}].doors`, `${d} writes ${prop.id} but is not listed among its doors`);
+    for (const d of prop.doors) if (doorByRef.has(d) && !actual.includes(d)) report('door-writes', 'properties.json', `properties[${i}].doors`, `${d} is listed among the doors of ${prop.id} but does not write it`);
+  }
+  for (const { file, path, door, ref: doorRef } of doors) {
+    if (door.kind === 'inspector-field' && door.property !== null && propertyById.has(door.property) && !door.adapter.writes.includes(door.property)) {
+      report('door-writes', file, `${path}.adapter.writes`, `${doorRef} edits ${door.property} but does not write it`);
+    }
+  }
+
+  // ---- individual-transform: movement, rotation and scaling use translate, rotate and scale
+  for (const { file, path, door, ref: doorRef } of doors) {
+    if (!door.adapter.writes.includes('transform')) continue;
+    if (door.kind === 'canvas-handle' || door.kind === 'canvas-drag') {
+      report('individual-transform', file, `${path}.adapter.writes`, `${doorRef} is a canvas handle and writes transform: handles write translate, rotate or scale`);
+    }
+    const others = door.adapter.writes.filter((w) => w !== 'transform');
+    if (others.length > 0) report('individual-transform', file, `${path}.adapter.writes`, `${doorRef} writes transform together with ${others.join(', ')}: transform only holds the functions translate, rotate and scale do not cover`);
+  }
+
+  // ---- coupling: rules are data made of a closed list of predicates and actions
+  for (const [i, c] of p.properties.couplings.entries()) {
+    const path = `couplings[${i}]`;
+    const bad = (at: string, message: string) => report('coupling', 'properties.json', `${path}.${at}`, message);
+    if (!(COUPLING_PREDICATES as readonly string[]).includes(c.condition.predicate)) bad('condition.predicate', `unknown predicate "${c.condition.predicate}": use one of ${COUPLING_PREDICATES.join(', ')}`);
+    if (!(COUPLING_ACTIONS as readonly string[]).includes(c.effect.action)) bad('effect.action', `unknown action "${c.effect.action}": use one of ${COUPLING_ACTIONS.join(', ')}`);
+    if (!propertyById.has(c.trigger.property)) bad('trigger.property', `"${c.trigger.property}" is not an edited property`);
+    if (c.trigger.via !== null) {
+      const via = compositeById.get(c.trigger.via);
+      if (!via) bad('trigger.via', `unknown composite "${c.trigger.via}"`);
+      else if (!via.longhands.includes(c.trigger.property)) bad('trigger.via', `${via.id} does not write ${c.trigger.property}`);
+    }
+    if (c.condition.predicate === 'always') {
+      if (c.condition.property !== null || c.condition.values.length > 0) bad('condition', '"always" takes no property and no values');
+    } else if (c.condition.property === null || !propertyById.has(c.condition.property) || c.condition.values.length === 0) {
+      bad('condition', `"${c.condition.predicate}" needs an edited property and at least one value`);
+    }
+    if (!propertyById.has(c.effect.property)) bad('effect.property', `"${c.effect.property}" is not an edited property`);
+    const takesValue = c.effect.action === 'setValue' || c.effect.action === 'setParentValue';
+    if (takesValue !== (c.effect.value !== null)) bad('effect.value', takesValue ? `"${c.effect.action}" needs a value` : `"${c.effect.action}" takes no value`);
+    if (!featureIndex.has(c.feature)) bad('feature', `unknown feature "${c.feature}"`);
+  }
+
+  // ---- history: every command declares how it meets the history
+  const writesProperties = new Set(doors.filter((d) => d.door.adapter.writes.length > 0).map((d) => d.command.id));
+  for (const c of commands) {
+    const h = c.command.history;
+    const path = `${c.path}.history`;
+    if (!h.undoable) {
+      if (writesProperties.has(c.command.id)) report('history', c.file, path, `${c.command.id} writes properties, so it changes the document and must be undoable`);
+      continue;
+    }
+    const gesture = c.command.entryPoints.some((d) => (GESTURE_DOOR_KINDS as readonly DoorKind[]).includes(d.kind));
+    if (gesture && h.transaction !== 'per-gesture') report('history', c.file, `${path}.transaction`, `${c.command.id} has pointer-gesture doors: one transaction per gesture`);
+    if (!gesture && h.transaction !== 'per-dispatch') report('history', c.file, `${path}.transaction`, `${c.command.id} has no pointer-gesture door: one transaction per dispatch`);
+    if (h.coalesce !== 'none') {
+      const constant = constantById.get(h.coalesce.within);
+      if (!constant) report('history', c.file, `${path}.coalesce.within`, `unknown constant "${h.coalesce.within}"`);
+      else if (constant.unit !== 'ms') report('history', c.file, `${path}.coalesce.within`, `constant ${constant.id} is in ${constant.unit}, not ms`);
+    }
+  }
+
+  // ---- reference: every id the data names for code is planned or registered
+  const referenced = new Map<string, string>(); // "kind:id" → first place
+  const need = (kind: ReferenceKind, id: string, where: string) => {
+    const key = `${kind}:${id}`;
+    if (!referenced.has(key)) referenced.set(key, where);
+  };
+  for (const c of commands) {
+    need('handler', c.command.id, `${c.file} ${c.path}.id`);
+    need('predicate', c.command.availability.predicate, `${c.file} ${c.path}.availability.predicate`);
+  }
+  p.properties.properties.forEach((prop, i) => {
+    need('codec', prop.codec, `properties.json properties[${i}].codec`);
+    need('predicate', prop.appliesTo, `properties.json properties[${i}].appliesTo`);
+  });
+  p.properties.composites.forEach((c, i) => {
+    need('codec', c.codec, `properties.json composites[${i}].codec`);
+    need('predicate', c.appliesTo, `properties.json composites[${i}].appliesTo`);
+  });
+  p.properties.couplings.forEach((c, i) => {
+    // an id outside the closed lists is reported by the coupling rule
+    if ((COUPLING_PREDICATES as readonly string[]).includes(c.condition.predicate)) need('predicate', c.condition.predicate, `properties.json couplings[${i}].condition.predicate`);
+    if ((COUPLING_ACTIONS as readonly string[]).includes(c.effect.action)) need('action', c.effect.action, `properties.json couplings[${i}].effect.action`);
+  });
+  const listed = new Map(p.references.references.map((r, i) => [`${r.kind}:${r.id}`, { entry: r, index: i }]));
+  const registeredIn = (kind: ReferenceKind, id: string) => (input.registered[kind] ?? []).includes(id);
+  for (const [key, where] of referenced) {
+    const [kind = '', ...rest] = key.split(':');
+    const id = rest.join(':');
+    const entry = listed.get(key);
+    const inCode = registeredIn(kind as ReferenceKind, id);
+    if (!entry && !inCode) {
+      const [file = '', ...path] = where.split(' ');
+      report('reference', file, path.join(' '), `${kind} "${id}" is neither planned in references.json nor registered in code`);
+    }
+  }
+  for (const [key, { entry, index }] of listed) {
+    const path = `references[${index}]`;
+    if (!referenced.has(key)) report('reference', 'references.json', path, `${entry.kind} "${entry.id}" is listed but nothing in the manifest references it`);
+    const inCode = registeredIn(entry.kind, entry.id);
+    if (entry.status === 'registered' && !inCode) report('reference', 'references.json', `${path}.status`, `${entry.kind} "${entry.id}" says registered but no code registers it`);
+    if (entry.status === 'planned' && inCode) report('reference', 'references.json', `${path}.status`, `${entry.kind} "${entry.id}" is registered in code: mark it registered`);
+  }
+
+  // ---- consumer: every field of every schema has a module that reads it
+  const fields = schemaFields();
+  const readers = new Map(p.consumers.consumers.map((c, i) => [c.field, i]));
+  for (const field of fields) if (!readers.has(field)) report('consumer', 'consumers.json', 'consumers', `field ${field} has no reader: name the module that reads it, or remove the field`);
+  const fieldSet = new Set(fields);
+  for (const [field, i] of readers) if (!fieldSet.has(field)) report('consumer', 'consumers.json', `consumers[${i}].field`, `${field} is not a field of any schema`);
+
+  // ---- html-model: element types follow the generated HTML content model
+  const html = p.html.elements;
+  const refusal = (parent: ElementType, child: ElementType): string | null => {
+    if (parent.content !== 'children') return `${parent.id} holds ${parent.content}, not element children`;
+    if (child.namespace === 'svg') return parent.tag !== null && html[parent.tag]?.foreign === true ? null : `${child.id} is an SVG element and goes only inside a foreign (svg) element`;
+    if (parent.tag !== null && html[parent.tag]?.foreign === true) return `${parent.id} is foreign content and holds only SVG elements`;
+    if (parent.tag === null || child.tag === null) return 'an element without a tag has no content model';
+    return htmlRefusal(p.html, parent.tag, child.tag);
+  };
+  for (const [i, e] of p.elements.elements.entries()) {
+    const path = `elements[${i}]`;
+    const meta = e.tag !== null ? html[e.tag] : undefined;
+    if (e.namespace === 'html' && e.tag !== null) {
+      if (!meta) report('html-model', 'elements.json', `${path}.tag`, `<${e.tag}> is not an element of the generated HTML data`);
+      else if (meta.deprecated) report('html-model', 'elements.json', `${path}.tag`, `<${e.tag}> is deprecated in the generated HTML data`);
+      for (const tag of e.alternativeTags) if (!html[tag] || html[tag]?.deprecated) report('html-model', 'elements.json', `${path}.alternativeTags`, `<${tag}> is not a current HTML element`);
+    }
+    if (e.namespace === 'svg' && e.tag !== null && html[e.tag]) report('html-model', 'elements.json', `${path}.namespace`, `<${e.tag}> is an HTML element, not an SVG one`);
+    if (meta?.void && e.content !== 'none') report('html-model', 'elements.json', `${path}.content`, `<${e.tag}> is void, so its content is "none"`);
+    if (meta?.textOnly && e.content === 'children') report('html-model', 'elements.json', `${path}.content`, `<${e.tag}> holds text only`);
+    if (e.naturalChild !== null) {
+      const child = elementById.get(e.naturalChild);
+      const reason = child ? refusal(e, child) : null;
+      if (reason !== null) report('html-model', 'elements.json', `${path}.naturalChild`, `${e.naturalChild} cannot be a child of ${e.id}: ${reason}`);
+    }
+  }
+  const enumOf = (tag: string | null, attribute: string) => (tag !== null ? html[tag]?.attributes[attribute]?.enum ?? null : null);
+  for (const [i, a] of p.elements.attributes.entries()) {
+    if (a.html === null || a.keywords.length === 0) continue;
+    const targets = a.elements === 'all' ? [] : a.elements;
+    for (const id of targets) {
+      const values = enumOf(elementById.get(id)?.tag ?? null, a.html);
+      if (values === null) continue;
+      for (const k of a.keywords) if (!values.includes(k)) report('html-model', 'elements.json', `attributes[${i}].keywords`, `"${k}" is not a value of ${a.html} on <${elementById.get(id)?.tag ?? id}> (${values.join(', ')})`);
+    }
+  }
+  for (const [gi, g] of p.elements.palette.entries()) {
+    for (const [ei, entry] of g.entries.entries()) {
+      if (entry.inputType === null) continue;
+      const values = enumOf(elementById.get(entry.element)?.tag ?? null, 'type');
+      if (values !== null && !values.includes(entry.inputType)) report('html-model', 'elements.json', `palette[${gi}].entries[${ei}].inputType`, `"${entry.inputType}" is not an input type (${values.join(', ')})`);
     }
   }
 
@@ -586,16 +1012,29 @@ export function checkManifest(input: ManifestInput): CheckResult {
 
   const doorsByKind: Record<string, number> = {};
   for (const { door } of doors) doorsByKind[door.kind] = (doorsByKind[door.kind] ?? 0) + 1;
+  const referencesByKind: Record<string, number> = {};
+  for (const r of p.references.references) referencesByKind[r.kind] = (referencesByKind[r.kind] ?? 0) + 1;
   const summary: ManifestSummary = {
     features: features.length,
     featureGroups: p.featureFiles.length,
     commands: commands.length,
+    undoableCommands: commands.filter((c) => c.command.history.undoable).length,
     doors: doors.length,
-    doorsByKind: Object.fromEntries(Object.entries(doorsByKind).sort(([a], [b]) => a.localeCompare(b))) as Record<DoorKind, number>,
+    doorsByKind: Object.fromEntries(Object.entries(doorsByKind).sort(([a], [b]) => a.localeCompare(b))),
     elements: p.elements.elements.length,
     paletteEntries: paletteEntryIds.size,
     attributes: p.elements.attributes.length,
+    generatedProperties: Object.keys(generated).length,
+    generatedShorthands: Object.values(generated).filter((g) => g.longhands.length > 0).length,
+    generatedElements: Object.keys(html).length,
     properties: p.properties.properties.length,
+    composites: p.properties.composites.length,
+    couplings: p.properties.couplings.length,
+    plannedReferences: p.references.references.filter((r) => r.status === 'planned').length,
+    registeredReferences: p.references.references.filter((r) => r.status === 'registered').length,
+    referencesByKind: Object.fromEntries(Object.entries(referencesByKind).sort(([a], [b]) => a.localeCompare(b))),
+    consumers: p.consumers.consumers.length,
+    implementedOnly: [...implementedOnly].sort(),
     constants: p.interactions.constants.length,
     gestures: p.interactions.gestures.length,
     keyContexts: p.interactions.keyContexts.length,
@@ -604,3 +1043,4 @@ export function checkManifest(input: ManifestInput): CheckResult {
   };
   return { problems, summary };
 }
+

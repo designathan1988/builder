@@ -2,6 +2,40 @@
 
 Handoff notes between sessions. Newest entry first.
 
+## 2026-09-24 — Property model: generated web data, longhands, composites, couplings, history
+
+Why: hand-copied CSS/HTML tables are how Pager ended up with two unit lists for gap; editors break on shorthand versus longhand and on values re-parsed as strings; undo bugs come from interactions that forget to mark a history step. This session changed data and the validator only; there is still no app code.
+
+Done:
+- `npm run gen` (`tools/gen/generate.ts`) writes `manifest/generated/css-properties.json` (821 properties, 169 of them shorthands with their expanded longhands, 578 type and function syntaxes; per property the keywords and units CSSTree's lexer accepts alone) from @webref/css 8.7.5 and css-tree 3.2.1, and `manifest/generated/html-elements.json` (145 elements: void, text-only, categories, permitted content/descendants/order/parent, required ancestors/content, attribute enums) from html-validate 11.16.0. Each has a `$generated` header naming its sources. Never edit them. `npm run gen:check` regenerates and fails when git sees a change or an untracked generated file; it is the first step of `verify:fast`.
+- `src/manifest/css.ts` builds the lexer (CSSTree forked with the webref syntaxes); generator and checker use the same construction.
+- `properties.json` is the editor layer: 189 edited longhands (id = CSS longhand name, label, section/group, control type, value type from the closed list, codec id, `appliesTo` predicate id, doors, declared subsets with reasons), 30 composites (shorthand, longhands, `omits` with reason, codec, doors) and 9 coupling rules (trigger, condition predicate, effect action, feature; closed lists in `schema.ts`). No keyword or unit list is written by hand; a door's `offers.list` is `generated` or a subset id.
+- Every command has `history`: undoable or not (110 of 216 are), coalescing (`none`, or same target and property within an interactions constant: only `position.move`, `history.nudgeBurstWindow`), undo restores the selection from before the command, one transaction per gesture for commands with pointer-gesture doors, no entry when nothing changes.
+- `references.json`: 327 planned ids (216 handlers = command ids, 43 predicates, 64 codecs, 4 actions). Code will register them with `registerHandler|Predicate|Action|Codec('<id>', …)`; `tools/manifest/load.ts` scans `src/` for those calls. `consumers.json`: every one of the 295 schema fields (enumerated from the zod schemas by `src/manifest/fields.ts`) with its planned reader module (intent and spec: `CLAUDE.md`, read by scenario authors).
+- `elements.json` keeps editor data only (tag, namespace, alternative tags, label, icon, palette, how the content is edited, natural child, longhand default styles, default text). The content model comes from the generated HTML data.
+- `manifest:check` rules added: `no-logic` (runs first, before the schema), `css-syntax`, `shorthand-write`, `composite`, `door-writes`, `individual-transform`, `coupling`, `history`, `reference`, `consumer`, `html-model`. Each has a planted fixture that fails on that rule alone (`npm run manifest:check -- --list-plants`, `-- --plant <id>`), locked by `tools/manifest/check.test.ts`.
+- Intents and specs that still described shorthand writes, one composed transform value or translate-centred anchors were amended (14 intent lines, declared in `tools/manifest/map-features.ts`; `npm run manifest:map` passes; specs rotation-handle, radius-border-gap-handles, spacing-handles).
+
+Decisions taken here (change them in the manifest if the user disagrees):
+- Measured in the installed Chrome 153: it implements none of `text-align-all`, `max-lines`, `block-ellipsis`, `continue`, `font-width` and the five `box-shadow-*` longhands. The document still stores the official longhands; rendering and export write a composite as its shorthand whenever all its longhands are set (CSSOM serialisation). `font-stretch` stays the edited name (webref: legacy alias of `font-width`, and the `font` shorthand's longhand).
+- The official grammar is incomplete: the Fill and Stroke 3 draft's `<paint>` has no `<color>`. The checker accepts a value the official syntax rejects when CSSTree's bundled MDN (browser) syntax accepts it, and lists every such value in its summary (today 2: the SVG shape defaults `fill: #dbe7ff`, `stroke: #2b5fe3`).
+- translate, rotate and scale are edited as their own properties by `style.set` (inspector Move X/Y, Rotate, Scale; quick panel; rotation handle). `style.setTransform` keeps skew only. Anchoring to the centre no longer writes translate: it writes left/right 0, auto side margins and a fit-content size (measured centred in Chrome 153).
+- `all` is no longer edited (it is the shorthand of every property). Summary and Legend have no natural child: HTML permits only phrasing and headings there, not a Paragraph.
+- Composites are written by the command their fields already used (`style.set` accepts a composite id as its `property`; `style.setSpacing`, `setBorder`, `setRadius`, `setShadows`, `setBackgroundImage`, `setAlignment`). The `background` composite omits `background-color` (Pager's gradient erased it). `inset` has no door yet (command bar and CSS import).
+- Declared subsets (menus smaller than the official list, each with its reason): display, gap, grid-auto-flow, scroll-snap-type, float, clear, background-size, background-position, font-family stacks, font-weight, font-style, text-decoration, vertical-align, font-variant, list-style-type, will-change, transform-origin.
+
+Open questions for the user:
+- Line clamp: Chrome clamps only with `display: -webkit-box`, `-webkit-box-orient: vertical` and overflow hidden (measured), and the official display syntax rejects `-webkit-box`. No coupling rule sets them yet, so `props-typography-advanced` ("Line clamp 2 limits the measured paragraph height to two lines") cannot pass as the data stands.
+- html-validate marks `td`/`th` as flow content, so the generated content model alone allows a cell outside a row, and a label's one-control limit is an html-validate rule (`multiple-labeled-controls`), not element metadata. The placement predicate must cover both.
+
+Fragile / worth knowing:
+- The generated files must be added to git before `verify:fast` passes. A version bump of @webref/css, css-tree or html-validate regenerates them; review the diff, since keyword lists and syntaxes change with the specs.
+- Planted fixtures clone the manifest including the generated files; the checker caches one lexer per generated object.
+
+Next:
+1. `DESIGN.md` (places every door) and `ARCHITECTURE.md` (confirms every command owner and the reader modules named in `consumers.json`).
+2. The scenario runner, then the scenario session for `01-foundation`.
+
 ## 2026-09-24 — features.json converted into the manifest
 
 Why: `.cache/investigation-report.md` (sections 6 and 7) found that every divergence of the previous attempts sat in a concept reached through hand-registered doors, and that hand-written status and prose outcomes were satisfied literally. The work is now driven by data.

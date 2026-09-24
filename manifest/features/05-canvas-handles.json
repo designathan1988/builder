@@ -77,9 +77,9 @@
           "Select a flex Container with children; choose Gap, Row gap and Column gap and drag the gap bands."
         ],
         "expected": [
-          "Radius mode shows a corner handle labelled with the current radius and writes border-radius.",
+          "Radius mode shows a corner handle labelled with the current radius and writes the four corner radius longhands in one command.",
           "Border mode writes border width of the dragged side.",
-          "Gap modes show bands between children and write gap, row-gap or column-gap; the measured distance between children in the iframe matches."
+          "Gap modes show bands between children: Gap writes row-gap and column-gap together in one command, Row gap and Column gap write their own longhand; the measured distance between children in the iframe matches."
         ]
       },
       "scenarios": []

@@ -8,6 +8,7 @@ interface MutableInput {
   files: Record<string, unknown>;
   catalogues: Record<string, unknown>;
   fileExists: ManifestInput['fileExists'];
+  registered: ManifestInput['registered'];
 }
 
 export interface Plant {
@@ -42,6 +43,28 @@ function feature(input: MutableInput, id: string): Json {
 function door(input: MutableInput, commandId: string, doorId: string): Json {
   const found = list(command(input, commandId).entryPoints).find((d) => d.id === doorId);
   if (!found) throw new Error(`plant: no door ${commandId}#${doorId}`);
+  return found;
+}
+
+function properties(input: MutableInput): Json {
+  return obj(input.files['properties.json']);
+}
+
+function property(input: MutableInput, id: string): Json {
+  const found = list(properties(input).properties).find((p) => p.id === id);
+  if (!found) throw new Error(`plant: no property ${id}`);
+  return found;
+}
+
+function composite(input: MutableInput, id: string): Json {
+  const found = list(properties(input).composites).find((c) => c.id === id);
+  if (!found) throw new Error(`plant: no composite ${id}`);
+  return found;
+}
+
+function element(input: MutableInput, id: string): Json {
+  const found = list(obj(input.files['elements.json']).elements).find((e) => e.id === id);
+  if (!found) throw new Error(`plant: no element ${id}`);
   return found;
 }
 
@@ -134,22 +157,123 @@ export const PLANTS: Plant[] = [
     },
   },
   {
-    id: 'value-set-not-subset',
+    id: 'value-set-unknown-subset',
     rule: 'value-set',
-    description: 'the Display field offers "flow", which is not a display keyword of the catalogue',
+    description: 'the Display field offers the list "palette", which display does not declare',
     apply: (m) => {
-      const offers = obj(obj(door(m, 'style.set', 'inspector-display').adapter).offers);
-      offers.keywords = ['block', 'inline', 'inline-block', 'flex', 'inline-flex', 'grid', 'inline-grid', 'contents', 'none', 'flow'];
+      obj(obj(door(m, 'style.set', 'inspector-display').adapter).offers).list = 'palette';
     },
   },
   {
-    id: 'value-set-smaller-without-reason',
+    id: 'value-set-menu-without-list',
     rule: 'value-set',
-    description: 'the quick panel W field offers only px and % and gives no reason',
+    description: 'the Display menu declares no list of values',
     apply: (m) => {
-      const offers = obj(obj(door(m, 'style.set', 'quick-panel-width').adapter).offers);
-      offers.units = ['px', '%'];
-      offers.reason = null;
+      obj(door(m, 'style.set', 'inspector-display').adapter).offers = null;
+    },
+  },
+  {
+    id: 'keyword-rejected-by-syntax',
+    rule: 'css-syntax',
+    description: 'the Display menu subset offers "flexbox", which the official display syntax rejects',
+    apply: (m) => {
+      strings(list(property(m, 'display').subsets)[0]?.values).push('flexbox');
+    },
+  },
+  {
+    id: 'door-writes-shorthand',
+    rule: 'shorthand-write',
+    description: 'a quick panel control writes the gap shorthand instead of row-gap and column-gap',
+    apply: (m) => {
+      list(command(m, 'style.set').entryPoints).push({
+        id: 'quick-panel-gap',
+        kind: 'quick-panel',
+        feature: 'quick-panel',
+        control: 'gap',
+        labelKey: 'quickPanel.width',
+        disabledReasonKey: 'common.notAvailableYet',
+        placement: 'unplaced',
+        adapter: { selection: 'all', offers: null, writes: ['gap'] },
+        args: {},
+      });
+    },
+  },
+  {
+    id: 'handle-writes-transform',
+    rule: 'individual-transform',
+    description: 'the rotation handle writes transform instead of rotate',
+    apply: (m) => {
+      obj(door(m, 'style.set', 'handle-rotate').adapter).writes = ['transform'];
+      const rotate = property(m, 'rotate');
+      rotate.doors = strings(rotate.doors).filter((d) => d !== 'style.set#handle-rotate');
+      strings(property(m, 'transform').doors).push('style.set#handle-rotate');
+    },
+  },
+  {
+    id: 'coupling-unknown-predicate',
+    rule: 'coupling',
+    description: 'the border width coupling asks the predicate "styleIsNone", which is not in the closed list',
+    apply: (m) => {
+      obj(list(properties(m).couplings)[0]?.condition).predicate = 'styleIsNone';
+    },
+  },
+  {
+    id: 'field-without-consumer',
+    rule: 'consumer',
+    description: 'no module reads the coalescing rule of a command',
+    apply: (m) => {
+      const file = obj(m.files['consumers.json']);
+      file.consumers = list(file.consumers).filter((c) => c.field !== 'commands:commands[].history.coalesce');
+    },
+  },
+  {
+    id: 'field-holds-expression',
+    rule: 'no-logic',
+    description: 'the availability of Undo is written as the expression "canUndo && !editingText"',
+    apply: (m) => {
+      obj(command(m, 'history.undo').availability).predicate = 'canUndo && !editingText';
+    },
+  },
+  {
+    id: 'reference-not-planned',
+    rule: 'reference',
+    description: 'row-gap names the codec "length-percentage-v2", which is neither planned nor registered',
+    apply: (m) => {
+      property(m, 'row-gap').codec = 'length-percentage-v2';
+    },
+  },
+  {
+    id: 'composite-leaves-out-longhand',
+    rule: 'composite',
+    description: 'the padding composite leaves out padding-left, which the padding shorthand sets',
+    apply: (m) => {
+      const padding = composite(m, 'padding');
+      padding.longhands = strings(padding.longhands).filter((l) => l !== 'padding-left');
+    },
+  },
+  {
+    id: 'property-misses-a-door',
+    rule: 'door-writes',
+    description: 'width does not list the quick panel W field, which writes it',
+    apply: (m) => {
+      const width = property(m, 'width');
+      width.doors = strings(width.doors).filter((d) => d !== 'style.set#quick-panel-width');
+    },
+  },
+  {
+    id: 'gesture-without-transaction',
+    rule: 'history',
+    description: 'resizing records one transaction per pointer event instead of one per gesture',
+    apply: (m) => {
+      obj(command(m, 'geometry.resize').history).transaction = 'per-dispatch';
+    },
+  },
+  {
+    id: 'natural-child-refused-by-html',
+    rule: 'html-model',
+    description: 'a Summary creates a Paragraph as its natural child; HTML permits only phrasing and headings in <summary>',
+    apply: (m) => {
+      element(m, 'summary').naturalChild = 'paragraph';
     },
   },
   {
@@ -208,9 +332,9 @@ export const PLANTS: Plant[] = [
   {
     id: 'unknown-reference',
     rule: 'unknown-reference',
-    description: 'an inspector field edits the unknown property displayMode',
+    description: 'an inspector field edits the unknown property display-mode',
     apply: (m) => {
-      door(m, 'style.set', 'inspector-display').property = 'displayMode';
+      door(m, 'style.set', 'inspector-display').property = 'display-mode';
     },
   },
   {
@@ -229,6 +353,7 @@ export function planted(input: ManifestInput, plant: Plant): ManifestInput {
     files: structuredClone(input.files) as Record<string, unknown>,
     catalogues: structuredClone(input.catalogues) as Record<string, unknown>,
     fileExists: input.fileExists,
+    registered: input.registered,
   };
   plant.apply(copy);
   return copy;

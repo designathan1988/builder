@@ -56,7 +56,7 @@ Focus the handle and use the arrows; the Inspector's Border section is the full 
 
 ## Problems in Pager
 
-1. **Radius is changed by sideways movement of a handle placed near a corner,** not by dragging a corner handle inward. Required: Radius mode shows a corner handle labelled with the current radius; dragging it toward the element's centre increases `border-radius`, dragging it back decreases it (manifest feature `radius-border-gap-handles`).
+1. **Radius is changed by sideways movement of a handle placed near a corner,** not by dragging a corner handle inward. Required: Radius mode shows a corner handle labelled with the current radius; dragging it toward the element's centre increases the four corner radii (the `border-radius` composite writes its four longhands in one command), dragging it back decreases them (manifest feature `radius-border-gap-handles`).
 2. **Border mode writes all four sides from one handle.** Required: Border mode shows a handle per side; dragging a side writes that side's border width only.
 3. **Direct handles write nothing to the status bar.** Required: the live value during the drag and `<Property> set to <value>` at the end, like the spacing bands.
-4. **Gap mode writes `row-gap` in a column flex and a direct handle offers `column-gap` there too,** where it has no visible effect. Required: Gap writes `gap`; Row gap and Column gap write their own property (manifest intent: "write gap, row-gap or column-gap"); options that cannot change the layout (column-gap in a single-column flex) are disabled with the reason.
+4. **Gap mode writes `row-gap` in a column flex and a direct handle offers `column-gap` there too,** where it has no visible effect. Required: Gap writes `row-gap` and `column-gap` together (the `gap` composite, one command); Row gap and Column gap write their own longhand; options that cannot change the layout (column-gap in a single-column flex) are disabled with the reason.
