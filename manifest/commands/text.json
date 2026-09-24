@@ -30,6 +30,7 @@
           "modifier": null,
           "gesture": "canvas-click",
           "labelKey": "command.editText",
+          "icon": null,
           "disabledReasonKey": "status.textEdit.notText",
           "placement": "none",
           "adapter": {
@@ -48,6 +49,7 @@
           "context": "canvas",
           "gesture": null,
           "labelKey": "command.editText",
+          "icon": null,
           "disabledReasonKey": "status.textEdit.notText",
           "placement": "none",
           "adapter": {
@@ -64,6 +66,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.editText",
+          "icon": null,
           "disabledReasonKey": "status.textEdit.notText",
           "placement": {
             "region": "command-palette",
@@ -121,6 +124,7 @@
           "context": "text-editing",
           "gesture": null,
           "labelKey": "command.textEdit.commit",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -141,6 +145,7 @@
           "modifier": null,
           "gesture": "canvas-click",
           "labelKey": "command.textEdit.commit",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -161,6 +166,7 @@
           "attribute": "text",
           "control": "field",
           "labelKey": "command.setText",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -200,6 +206,7 @@
           "context": "text-editing",
           "gesture": null,
           "labelKey": "command.textEdit.cancel",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -236,6 +243,7 @@
           "context": "text-editing",
           "gesture": null,
           "labelKey": "command.textEdit.lineBreak",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -272,6 +280,7 @@
           "context": "text-editing",
           "gesture": null,
           "labelKey": "command.textEdit.bold",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -285,9 +294,11 @@
         {
           "id": "toolbar-text-toolbar-bold",
           "kind": "toolbar",
+          "drawnAs": "icon-button",
           "feature": "text-inline-formatting",
           "toolbar": "text-toolbar",
           "labelKey": "command.textEdit.bold",
+          "icon": "bold",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "text-toolbar",
@@ -327,6 +338,7 @@
           "context": "text-editing",
           "gesture": null,
           "labelKey": "command.textEdit.italic",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -340,9 +352,11 @@
         {
           "id": "toolbar-text-toolbar-italic",
           "kind": "toolbar",
+          "drawnAs": "icon-button",
           "feature": "text-inline-formatting",
           "toolbar": "text-toolbar",
           "labelKey": "command.textEdit.italic",
+          "icon": "italic",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "text-toolbar",
@@ -384,6 +398,7 @@
           "context": "text-editing",
           "gesture": null,
           "labelKey": "command.textEdit.link",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -397,9 +412,11 @@
         {
           "id": "toolbar-text-toolbar-link",
           "kind": "toolbar",
+          "drawnAs": "icon-button",
           "feature": "text-inline-formatting",
           "toolbar": "text-toolbar",
           "labelKey": "command.textEdit.link",
+          "icon": "link",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "text-toolbar",
@@ -441,6 +458,7 @@
           "context": "text-editing",
           "gesture": null,
           "labelKey": "command.textEdit.paste",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -477,6 +495,7 @@
           "context": "text-editing",
           "gesture": null,
           "labelKey": "command.textEdit.selectAll",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {

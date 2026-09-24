@@ -33,6 +33,7 @@
           "modifier": null,
           "gesture": "canvas-click",
           "labelKey": "command.select",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -46,12 +47,14 @@
         {
           "id": "layers-row",
           "kind": "panel-control",
+          "drawnAs": "item",
           "feature": "layers-tree",
           "panel": "layers",
           "control": "row",
           "modifier": null,
           "gesture": "layers-row-click",
           "labelKey": "command.select",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "layers-row",
@@ -73,6 +76,7 @@
           "context": "layers-tree",
           "gesture": null,
           "labelKey": "command.select",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -86,12 +90,14 @@
         {
           "id": "status-bar-breadcrumb-item",
           "kind": "panel-control",
+          "drawnAs": "item",
           "feature": "status-bar",
           "panel": "status-bar",
           "control": "breadcrumb-item",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.select",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "status-bar",
@@ -108,12 +114,14 @@
         {
           "id": "checks-issue",
           "kind": "panel-control",
+          "drawnAs": "item",
           "feature": "accessibility-checks",
           "panel": "checks",
           "control": "issue",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.select",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "dock-checks",
@@ -130,12 +138,14 @@
         {
           "id": "code-panel-html-line",
           "kind": "panel-control",
+          "drawnAs": "item",
           "feature": "code-panel-selection-sync",
           "panel": "code-panel",
           "control": "html-line",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.select",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "code-view",
@@ -175,6 +185,7 @@
           "context": "canvas",
           "gesture": null,
           "labelKey": "command.clearSelection",
+          "icon": null,
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": "none",
           "adapter": {
@@ -195,6 +206,7 @@
           "modifier": null,
           "gesture": "canvas-click",
           "labelKey": "command.clearSelection",
+          "icon": null,
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": "none",
           "adapter": {
@@ -211,6 +223,7 @@
           "feature": "app-menu",
           "menu": "edit",
           "labelKey": "command.clearSelection",
+          "icon": null,
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "menu:edit",
@@ -230,6 +243,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.clearSelection",
+          "icon": null,
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "command-palette",
@@ -277,6 +291,7 @@
           "modifier": "Shift",
           "gesture": "canvas-click",
           "labelKey": "command.selectionAdd",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -290,12 +305,14 @@
         {
           "id": "layers-row-shift",
           "kind": "panel-control",
+          "drawnAs": "item",
           "feature": "multi-select-click",
           "panel": "layers",
           "control": "row",
           "modifier": "Shift",
           "gesture": "layers-row-click",
           "labelKey": "command.selectionAdd",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "layers-row",
@@ -343,6 +360,7 @@
           "modifier": "Ctrl",
           "gesture": "canvas-click",
           "labelKey": "command.selectionToggle",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -356,12 +374,14 @@
         {
           "id": "layers-row-ctrl",
           "kind": "panel-control",
+          "drawnAs": "item",
           "feature": "multi-select-click",
           "panel": "layers",
           "control": "row",
           "modifier": "Ctrl",
           "gesture": "layers-row-click",
           "labelKey": "command.selectionToggle",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "layers-row",
@@ -403,6 +423,7 @@
           "context": "canvas",
           "gesture": null,
           "labelKey": "command.walkNextSibling",
+          "icon": null,
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": "none",
           "adapter": {
@@ -441,6 +462,7 @@
           "context": "canvas",
           "gesture": null,
           "labelKey": "command.walkPreviousSibling",
+          "icon": null,
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": "none",
           "adapter": {
@@ -479,6 +501,7 @@
           "context": "canvas",
           "gesture": null,
           "labelKey": "command.walkParent",
+          "icon": null,
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": "none",
           "adapter": {
@@ -517,6 +540,7 @@
           "context": "canvas",
           "gesture": null,
           "labelKey": "command.walkFirstChild",
+          "icon": null,
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": "none",
           "adapter": {
@@ -553,6 +577,7 @@
           "context": "canvas",
           "gesture": null,
           "labelKey": "command.selectAllInContainer",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -569,6 +594,7 @@
           "feature": "app-menu",
           "menu": "edit",
           "labelKey": "command.selectAllInContainer",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "menu:edit",
@@ -588,6 +614,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.selectAllInContainer",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "command-palette",
@@ -642,6 +669,7 @@
           "zone": "page-or-container",
           "gesture": "marquee",
           "labelKey": "command.marqueeSelect",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -686,6 +714,7 @@
           "modifier": null,
           "gesture": "canvas-click",
           "labelKey": "command.openContextMenu",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -699,12 +728,14 @@
         {
           "id": "layers-row-secondary-click",
           "kind": "panel-control",
+          "drawnAs": "item",
           "feature": "context-menu",
           "panel": "layers",
           "control": "row-secondary-click",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.openContextMenu",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "layers-row",
@@ -724,6 +755,7 @@
           "feature": "quick-panel",
           "control": "more-actions",
           "labelKey": "quickPanel.moreActions",
+          "icon": "ellipsis",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "quick-panel",

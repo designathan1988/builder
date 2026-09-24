@@ -79,7 +79,7 @@ function plantedLabel(m: MutableInput, key: string, text: string): string {
 // an edited property with no door, for plants that only need the property itself
 function editedProperty(m: MutableInput, id: string, fields: Json): Json {
   const labelKey = plantedLabel(m, `plant.${id.replace(/^-/, '').replace(/-([a-z])/g, (_x, c: string) => c.toUpperCase())}`, `Planted ${id}`);
-  return { id, labelKey, section: 'size', group: 'size', control: 'length-field', valueType: 'length', codec: 'length', appliesTo: 'hasBox', essential: false, doors: [], subsets: [], ...fields };
+  return { id, labelKey, section: 'size', group: 'size', control: 'length-field', icons: {}, valueType: 'length', codec: 'length', appliesTo: 'hasBox', essential: false, doors: [], subsets: [], ...fields };
 }
 
 // The generated files are shared by every fixture, read once and frozen (load.ts). A plant that changes one
@@ -225,6 +225,7 @@ export const PLANTS: Plant[] = [
         feature: 'quick-panel',
         control: 'gap',
         labelKey: 'property.gap',
+        icon: null,
         disabledReasonKey: 'common.notAvailableYet',
         placement: { region: 'quick-panel', order: 99 },
         adapter: { selection: 'all', offers: null, writes: ['gap'], fields: [] },
@@ -569,7 +570,9 @@ PLANTS.push(
         kind: 'toolbar',
         feature: 'state-styles',
         toolbar: 'canvas-toolbar',
+        drawnAs: 'button',
         labelKey: 'styleState.hover',
+        icon: 'mouse-pointer-2',
         disabledReasonKey: 'common.notAvailableYet',
         placement: { region: 'canvas-toolbar', order: 13 },
         adapter: { selection: 'none', offers: null, writes: [], fields: [] },
@@ -600,6 +603,30 @@ PLANTS.push(
     description: 'history.undo is owned by src/core/history/undo.ts in the manifest, but ARCHITECTURE.md names src/core/history/history.ts',
     apply: (m) => {
       command(m, 'history.undo').owner = 'src/core/history/undo.ts';
+    },
+  },
+  {
+    id: 'icon-not-in-library',
+    rule: 'icon-name',
+    description: 'the top bar Undo button names the icon "undo-3", which Lucide does not have',
+    apply: (m) => {
+      door(m, 'history.undo', 'toolbar-top-bar').icon = 'undo-3';
+    },
+  },
+  {
+    id: 'toolbar-door-without-icon',
+    rule: 'icon-required',
+    description: 'the top bar Undo button names no icon, so the shell would have to pick one',
+    apply: (m) => {
+      door(m, 'history.undo', 'toolbar-top-bar').icon = null;
+    },
+  },
+  {
+    id: 'panel-button-without-icon',
+    rule: 'icon-required',
+    description: 'the Add a page icon button of the Explorer names no icon',
+    apply: (m) => {
+      door(m, 'pages.add', 'explorer-add-page').icon = null;
     },
   },
   {

@@ -25,6 +25,7 @@
           "context": "menu",
           "gesture": null,
           "labelKey": "command.focusNext",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -43,6 +44,7 @@
           "context": "command-bar",
           "gesture": null,
           "labelKey": "command.focusNext",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -61,6 +63,7 @@
           "context": "layers-tree",
           "gesture": null,
           "labelKey": "layers.key.nextRow",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -79,6 +82,7 @@
           "context": "tab-strip",
           "gesture": null,
           "labelKey": "command.focusNext",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -97,6 +101,7 @@
           "context": "tab-strip",
           "gesture": null,
           "labelKey": "command.focusNext",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -115,6 +120,7 @@
           "context": "toolbar",
           "gesture": null,
           "labelKey": "command.focusNext",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -133,6 +139,7 @@
           "context": "toolbar",
           "gesture": null,
           "labelKey": "command.focusNext",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -151,6 +158,7 @@
           "context": "palette",
           "gesture": null,
           "labelKey": "command.focusNext",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -169,6 +177,7 @@
           "context": "palette",
           "gesture": null,
           "labelKey": "command.focusNext",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -205,6 +214,7 @@
           "context": "menu",
           "gesture": null,
           "labelKey": "command.focusPrevious",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -223,6 +233,7 @@
           "context": "command-bar",
           "gesture": null,
           "labelKey": "command.focusPrevious",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -241,6 +252,7 @@
           "context": "layers-tree",
           "gesture": null,
           "labelKey": "layers.key.previousRow",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -259,6 +271,7 @@
           "context": "tab-strip",
           "gesture": null,
           "labelKey": "command.focusPrevious",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -277,6 +290,7 @@
           "context": "tab-strip",
           "gesture": null,
           "labelKey": "command.focusPrevious",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -295,6 +309,7 @@
           "context": "toolbar",
           "gesture": null,
           "labelKey": "command.focusPrevious",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -313,6 +328,7 @@
           "context": "toolbar",
           "gesture": null,
           "labelKey": "command.focusPrevious",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -331,6 +347,7 @@
           "context": "palette",
           "gesture": null,
           "labelKey": "command.focusPrevious",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -349,6 +366,7 @@
           "context": "palette",
           "gesture": null,
           "labelKey": "command.focusPrevious",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -385,6 +403,7 @@
           "context": "menu",
           "gesture": null,
           "labelKey": "command.focusFirst",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -403,6 +422,7 @@
           "context": "layers-tree",
           "gesture": null,
           "labelKey": "command.focusFirst",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -421,6 +441,7 @@
           "context": "tab-strip",
           "gesture": null,
           "labelKey": "command.focusFirst",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -439,6 +460,7 @@
           "context": "toolbar",
           "gesture": null,
           "labelKey": "command.focusFirst",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -457,6 +479,7 @@
           "context": "palette",
           "gesture": null,
           "labelKey": "command.focusFirst",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -493,6 +516,7 @@
           "context": "menu",
           "gesture": null,
           "labelKey": "command.focusLast",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -511,6 +535,7 @@
           "context": "layers-tree",
           "gesture": null,
           "labelKey": "command.focusLast",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -529,6 +554,7 @@
           "context": "tab-strip",
           "gesture": null,
           "labelKey": "command.focusLast",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -547,6 +573,7 @@
           "context": "toolbar",
           "gesture": null,
           "labelKey": "command.focusLast",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -565,6 +592,7 @@
           "context": "palette",
           "gesture": null,
           "labelKey": "command.focusLast",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -601,6 +629,7 @@
           "context": "menu",
           "gesture": null,
           "labelKey": "command.focusActivate",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -619,6 +648,7 @@
           "context": "command-bar",
           "gesture": null,
           "labelKey": "command.focusActivate",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -637,6 +667,7 @@
           "context": "tab-strip",
           "gesture": null,
           "labelKey": "command.focusActivate",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -655,6 +686,7 @@
           "context": "tab-strip",
           "gesture": null,
           "labelKey": "command.focusActivate",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -673,6 +705,7 @@
           "context": "toolbar",
           "gesture": null,
           "labelKey": "command.focusActivate",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -691,6 +724,7 @@
           "context": "toolbar",
           "gesture": null,
           "labelKey": "command.focusActivate",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -727,6 +761,7 @@
           "context": "global",
           "gesture": null,
           "labelKey": "command.focusNextRegion",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -745,6 +780,7 @@
           "context": "field",
           "gesture": null,
           "labelKey": "command.focusNextRegion",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -781,6 +817,7 @@
           "context": "global",
           "gesture": null,
           "labelKey": "command.focusPreviousRegion",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -799,6 +836,7 @@
           "context": "field",
           "gesture": null,
           "labelKey": "command.focusPreviousRegion",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -835,6 +873,7 @@
           "context": "layers-tree",
           "gesture": null,
           "labelKey": "command.focusCanvas",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -853,6 +892,7 @@
           "context": "palette",
           "gesture": null,
           "labelKey": "command.focusCanvas",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -871,6 +911,7 @@
           "context": "tab-strip",
           "gesture": null,
           "labelKey": "command.focusCanvas",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -889,6 +930,7 @@
           "context": "toolbar",
           "gesture": null,
           "labelKey": "command.focusCanvas",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -907,6 +949,7 @@
           "context": "splitter",
           "gesture": null,
           "labelKey": "command.focusCanvas",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -943,6 +986,7 @@
           "context": "menu",
           "gesture": null,
           "labelKey": "command.dismiss",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -956,12 +1000,14 @@
         {
           "id": "overlay-backdrop",
           "kind": "panel-control",
+          "drawnAs": "area",
           "feature": "context-menu",
           "panel": "overlay",
           "control": "backdrop",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.dismiss",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "overlay",
@@ -983,6 +1029,7 @@
           "context": "command-bar",
           "gesture": null,
           "labelKey": "command.dismiss",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -1001,6 +1048,7 @@
           "context": "dialog",
           "gesture": null,
           "labelKey": "command.dismiss",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -1014,12 +1062,14 @@
         {
           "id": "dialog-close",
           "kind": "panel-control",
+          "drawnAs": "icon-button",
           "feature": "workspace-settings-dialog",
           "panel": "dialog",
           "control": "close",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.dismiss",
+          "icon": "x",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "dialog",

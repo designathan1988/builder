@@ -30,12 +30,14 @@
         {
           "id": "color-picker-save-current",
           "kind": "panel-control",
+          "drawnAs": "icon-button",
           "feature": "color-swatches-eyedropper",
           "panel": "color-picker",
           "control": "save-current",
           "modifier": null,
           "gesture": null,
           "labelKey": "colorPicker.saveCurrent",
+          "icon": "plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "color-picker",
@@ -80,12 +82,14 @@
         {
           "id": "color-picker-swatch-remove",
           "kind": "panel-control",
+          "drawnAs": "icon-button",
           "feature": "color-swatches-eyedropper",
           "panel": "color-picker",
           "control": "swatch-remove",
           "modifier": null,
           "gesture": null,
           "labelKey": "colorPicker.removeSwatch",
+          "icon": "x",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "color-picker",
@@ -146,12 +150,14 @@
         {
           "id": "variables-add",
           "kind": "panel-control",
+          "drawnAs": "icon-button",
           "feature": "css-variables-tokens",
           "panel": "variables",
           "control": "add",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.tokens.create",
+          "icon": "plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "styles",
@@ -203,12 +209,14 @@
         {
           "id": "variables-value-field",
           "kind": "panel-control",
+          "drawnAs": "field",
           "feature": "css-variables-tokens",
           "panel": "variables",
           "control": "value-field",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.tokens.update",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "styles",
@@ -260,12 +268,14 @@
         {
           "id": "variables-name-field",
           "kind": "panel-control",
+          "drawnAs": "field",
           "feature": "css-variables-tokens",
           "panel": "variables",
           "control": "name-field",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.tokens.rename",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "styles",
@@ -312,12 +322,14 @@
         {
           "id": "variables-delete",
           "kind": "panel-control",
+          "drawnAs": "icon-button",
           "feature": "css-variables-tokens",
           "panel": "variables",
           "control": "delete",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.tokens.delete",
+          "icon": "trash",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "styles",
@@ -364,12 +376,14 @@
         {
           "id": "inspector-class-save-as",
           "kind": "panel-control",
+          "drawnAs": "icon-button",
           "feature": "shared-style-classes",
           "panel": "inspector",
           "control": "class-save-as",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.classes.create",
+          "icon": "component",
           "disabledReasonKey": "status.needsSingleSelection",
           "placement": {
             "region": "inspector-selector-bar",
@@ -416,12 +430,14 @@
         {
           "id": "inspector-class-add",
           "kind": "panel-control",
+          "drawnAs": "button",
           "feature": "shared-style-classes",
           "panel": "inspector",
           "control": "class-add",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.classes.apply",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-selector-bar",
@@ -468,12 +484,14 @@
         {
           "id": "inspector-class-remove",
           "kind": "panel-control",
+          "drawnAs": "icon-button",
           "feature": "shared-style-classes",
           "panel": "inspector",
           "control": "class-remove",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.classes.detach",
+          "icon": "x",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-selector-bar",
@@ -522,12 +540,14 @@
         {
           "id": "inspector-class-bar-target",
           "kind": "panel-control",
+          "drawnAs": "item",
           "feature": "shared-style-classes",
           "panel": "inspector",
           "control": "class-bar-target",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.inspector.styleTarget",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-selector-bar",
@@ -570,6 +590,7 @@
           "kind": "context-menu",
           "feature": "reusable-components",
           "labelKey": "command.components.create",
+          "icon": "component",
           "disabledReasonKey": "status.needsSingleSelection",
           "placement": {
             "region": "context-menu",
@@ -589,6 +610,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.components.create",
+          "icon": "component",
           "disabledReasonKey": "status.needsSingleSelection",
           "placement": {
             "region": "command-palette",
@@ -652,12 +674,14 @@
         {
           "id": "elements-component-tile",
           "kind": "panel-control",
+          "drawnAs": "item",
           "feature": "reusable-components",
           "panel": "elements",
           "control": "component-tile",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.components.insertInstance",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "insert",
@@ -679,6 +703,7 @@
           "zone": "drop-proposal",
           "gesture": "palette-drag",
           "labelKey": "command.components.insertInstance",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -716,6 +741,7 @@
           "kind": "context-menu",
           "feature": "reusable-components",
           "labelKey": "command.components.detach",
+          "icon": null,
           "disabledReasonKey": "status.components.notInstance",
           "placement": {
             "region": "context-menu",
@@ -735,6 +761,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.components.detach",
+          "icon": null,
           "disabledReasonKey": "status.components.notInstance",
           "placement": {
             "region": "command-palette",

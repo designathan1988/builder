@@ -9,6 +9,7 @@ import { REPO_ROOT } from '../manifest/load.ts';
 import { GENERATED_DIR, generate } from './generate.ts';
 import { TOKENS_CSS } from './tokens.ts';
 import { TYPES_DIR } from './types.ts';
+import { ICON_SPRITE } from './icons.ts';
 import { packageVersion } from './versions.ts';
 const git = (...args: string[]) => execFileSync('git', args, { cwd: REPO_ROOT, encoding: 'utf8' });
 
@@ -28,8 +29,8 @@ const handMade = fs
   .readdirSync(path.join(REPO_ROOT, TYPES_DIR))
   .map((f) => `${TYPES_DIR}/${f}`)
   .filter((f) => !written.includes(f));
-const untracked = git('ls-files', '--others', '--exclude-standard', '--', GENERATED_DIR, TOKENS_CSS, TYPES_DIR).trim();
-const diff = git('diff', '--stat', '--', GENERATED_DIR, TOKENS_CSS, TYPES_DIR).trim();
+const untracked = git('ls-files', '--others', '--exclude-standard', '--', GENERATED_DIR, TOKENS_CSS, TYPES_DIR, ICON_SPRITE).trim();
+const diff = git('diff', '--stat', '--', GENERATED_DIR, TOKENS_CSS, TYPES_DIR, ICON_SPRITE).trim();
 if (untracked === '' && diff === '' && handMade.length === 0) {
   console.log(`gen:check: ${written.join(', ')} are up to date.`);
   process.exit(0);

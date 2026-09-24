@@ -32,12 +32,14 @@
         {
           "id": "explorer-add-page",
           "kind": "panel-control",
+          "drawnAs": "icon-button",
           "feature": "explorer-pages",
           "panel": "explorer",
           "control": "add-page",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.pages.add",
+          "icon": "plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "explorer-pages",
@@ -89,12 +91,14 @@
         {
           "id": "explorer-page-name-field",
           "kind": "panel-control",
+          "drawnAs": "field",
           "feature": "explorer-pages",
           "panel": "explorer",
           "control": "page-name-field",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.pages.rename",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "explorer-pages",
@@ -139,12 +143,14 @@
         {
           "id": "explorer-page-duplicate",
           "kind": "panel-control",
+          "drawnAs": "icon-button",
           "feature": "explorer-pages",
           "panel": "explorer",
           "control": "page-duplicate",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.pages.duplicate",
+          "icon": "copy",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "explorer-pages",
@@ -195,12 +201,14 @@
         {
           "id": "explorer-page-delete",
           "kind": "panel-control",
+          "drawnAs": "icon-button",
           "feature": "explorer-pages",
           "panel": "explorer",
           "control": "page-delete",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.pages.delete",
+          "icon": "trash",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "explorer-pages",
@@ -241,12 +249,14 @@
         {
           "id": "explorer-page-row",
           "kind": "panel-control",
+          "drawnAs": "item",
           "feature": "explorer-pages",
           "panel": "explorer",
           "control": "page-row",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.pages.switch",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "explorer-pages",
@@ -263,12 +273,14 @@
         {
           "id": "file-tab",
           "kind": "panel-control",
+          "drawnAs": "item",
           "feature": "explorer-pages",
           "panel": "file-tabs",
           "control": "page-tab",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.pages.switch",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "file-tabs",
@@ -285,9 +297,11 @@
         {
           "id": "toolbar-top-bar-page-switcher",
           "kind": "toolbar",
+          "drawnAs": "button",
           "feature": "explorer-pages",
           "toolbar": "top-bar",
           "labelKey": "topbar.pageSwitcher",
+          "icon": "file",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "top-bar",
@@ -335,12 +349,14 @@
         {
           "id": "explorer-new-folder",
           "kind": "panel-control",
+          "drawnAs": "icon-button",
           "feature": "explorer-file-system",
           "panel": "explorer",
           "control": "new-folder",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.files.newFolder",
+          "icon": "folder-plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "explorer-files",
@@ -388,12 +404,14 @@
         {
           "id": "explorer-new-file",
           "kind": "panel-control",
+          "drawnAs": "icon-button",
           "feature": "explorer-file-system",
           "panel": "explorer",
           "control": "new-file",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.files.newFile",
+          "icon": "file-plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "explorer-files",
@@ -446,12 +464,14 @@
         {
           "id": "explorer-file-name-field",
           "kind": "panel-control",
+          "drawnAs": "field",
           "feature": "explorer-file-system",
           "panel": "explorer",
           "control": "file-name-field",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.files.rename",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "explorer-files",
@@ -509,6 +529,7 @@
           "zone": "folder",
           "gesture": "explorer-drag",
           "labelKey": "command.files.moveTo",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -522,12 +543,14 @@
         {
           "id": "explorer-move-to",
           "kind": "panel-control",
+          "drawnAs": "icon-button",
           "feature": "explorer-file-system",
           "panel": "explorer",
           "control": "move-to",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.files.moveTo",
+          "icon": "folder-input",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "explorer-files",
@@ -579,12 +602,14 @@
         {
           "id": "explorer-delete",
           "kind": "panel-control",
+          "drawnAs": "icon-button",
           "feature": "explorer-file-system",
           "panel": "explorer",
           "control": "delete",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.files.delete",
+          "icon": "trash",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "explorer-files",
@@ -625,12 +650,14 @@
         {
           "id": "explorer-file-row",
           "kind": "panel-control",
+          "drawnAs": "item",
           "feature": "explorer-file-system",
           "panel": "explorer",
           "control": "file-row",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.files.open",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "explorer-files",
@@ -647,12 +674,14 @@
         {
           "id": "file-tab",
           "kind": "panel-control",
+          "drawnAs": "item",
           "feature": "explorer-file-system",
           "panel": "file-tabs",
           "control": "file-tab",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.files.open",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "file-tabs",
@@ -693,12 +722,14 @@
         {
           "id": "file-tab-close",
           "kind": "panel-control",
+          "drawnAs": "icon-button",
           "feature": "explorer-file-system",
           "panel": "file-tabs",
           "control": "close",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.files.closeTab",
+          "icon": "x",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "file-tabs",
@@ -751,12 +782,14 @@
         {
           "id": "explorer-upload",
           "kind": "panel-control",
+          "drawnAs": "icon-button",
           "feature": "explorer-assets",
           "panel": "explorer",
           "control": "upload",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.files.upload",
+          "icon": "arrow-up-to-line",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "explorer-files",
@@ -778,6 +811,7 @@
           "zone": "explorer-folder",
           "gesture": "file-drag",
           "labelKey": "command.files.upload",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -827,12 +861,14 @@
         {
           "id": "code-panel-save",
           "kind": "panel-control",
+          "drawnAs": "button",
           "feature": "code-panel-edit-js",
           "panel": "code-panel",
           "control": "save",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.files.save",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "code-view",
@@ -854,6 +890,7 @@
           "context": "code-editor",
           "gesture": null,
           "labelKey": "command.files.save",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -919,6 +956,7 @@
           "zone": "drop-proposal",
           "gesture": "file-drag",
           "labelKey": "command.assets.insertImage",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {

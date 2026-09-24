@@ -27,6 +27,7 @@
           "feature": "new-blank-page",
           "menu": "file",
           "labelKey": "command.newBlankPage",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "menu:file",
@@ -46,6 +47,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.newBlankPage",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "command-palette",
@@ -86,12 +88,14 @@
         {
           "id": "recovery-dialog-restore",
           "kind": "panel-control",
+          "drawnAs": "button",
           "feature": "autosave-corruption-recovery",
           "panel": "recovery-dialog",
           "control": "restore",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.restoreVersion",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "recovery-dialog",
@@ -126,12 +130,14 @@
         {
           "id": "tab-guard-take-over",
           "kind": "panel-control",
+          "drawnAs": "button",
           "feature": "multi-tab-guard",
           "panel": "tab-guard",
           "control": "take-over",
           "modifier": null,
           "gesture": null,
           "labelKey": "tabGuard.takeOver",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "tab-guard",
@@ -169,6 +175,7 @@
           "feature": "project-save-json",
           "menu": "file",
           "labelKey": "command.saveProject",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "menu:file",
@@ -188,6 +195,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.saveProject",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "command-palette",
@@ -232,6 +240,7 @@
           "feature": "project-open-json",
           "menu": "file",
           "labelKey": "command.openProject",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "menu:file",
@@ -251,6 +260,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.openProject",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "command-palette",
@@ -294,6 +304,7 @@
           "feature": "explorer-open-folder",
           "menu": "file",
           "labelKey": "command.openFolder",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "menu:file",
@@ -313,6 +324,7 @@
           "feature": "explorer-open-folder",
           "entry": "command",
           "labelKey": "command.openFolder",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "command-palette",
@@ -360,6 +372,7 @@
           "feature": "html-import-structure",
           "menu": "file",
           "labelKey": "command.importHtml",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "menu:file",
@@ -379,6 +392,7 @@
           "feature": "html-import-structure",
           "entry": "command",
           "labelKey": "command.importHtml",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "command-palette",
@@ -416,6 +430,7 @@
           "feature": "export-zip",
           "menu": "file",
           "labelKey": "command.exportPage",
+          "icon": "share",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "menu:file",
@@ -432,9 +447,11 @@
         {
           "id": "toolbar-top-bar-export",
           "kind": "toolbar",
+          "drawnAs": "button",
           "feature": "export-zip",
           "toolbar": "top-bar",
           "labelKey": "command.exportPage",
+          "icon": "share",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "top-bar",
@@ -451,9 +468,11 @@
         {
           "id": "toolbar-preview-bar-export",
           "kind": "toolbar",
+          "drawnAs": "button",
           "feature": "preview-mode",
           "toolbar": "preview-bar",
           "labelKey": "command.exportPage",
+          "icon": "share",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "preview-bar",
@@ -473,6 +492,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.exportPage",
+          "icon": "share",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "command-palette",

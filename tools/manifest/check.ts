@@ -33,6 +33,7 @@ function printSummary(s: ManifestSummary): void {
   console.log(`  recipes      ${s.recipeSources.join('; ')}; ${s.recipeBrowserSyntax.length} recipe values accepted by the browser syntax only${s.recipeBrowserSyntax.length > 0 ? `: ${s.recipeBrowserSyntax.join('; ')}` : ''}`);
   console.log(`  stored whole ${s.storedWhole.length} shorthands:`);
   for (const entry of s.storedWhole) console.log(`    - ${entry}`);
+  console.log(`  icons        ${s.iconsNamed} icons named from ${s.iconLibrary}, the editor's one icon library; ${s.doorsWithIcon} doors show an icon, every toolbar door and icon button among them`);
   console.log(`  interactions ${s.keyContexts} key contexts, ${s.constants} constants, ${s.gestures} gestures`);
   console.log(`  scenarios    ${s.scenarios}`);
   console.log(`  i18n         ${s.i18nKeys} referenced keys, each present in every locale; ${s.glossaryConcepts} glossary concepts, each the label of its property in every locale, and no label names two CSS properties`);

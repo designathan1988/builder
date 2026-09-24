@@ -20,12 +20,14 @@
         {
           "id": "inspector-page-properties-button",
           "kind": "panel-control",
+          "drawnAs": "icon-button",
           "feature": "page-properties",
           "panel": "inspector",
           "control": "page-properties-button",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.pageProperties",
+          "icon": "sliders-horizontal",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-header",
@@ -45,6 +47,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.pageProperties",
+          "icon": "sliders-horizontal",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "command-palette",
@@ -103,6 +106,7 @@
           "attribute": "pageTitle",
           "control": "field",
           "labelKey": "command.setPageSetting",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -126,6 +130,7 @@
           "attribute": "pageLanguage",
           "control": "field",
           "labelKey": "command.setPageSetting",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -149,6 +154,7 @@
           "attribute": "pageDirection",
           "control": "field",
           "labelKey": "command.setPageSetting",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -172,6 +178,7 @@
           "attribute": "pageDescription",
           "control": "field",
           "labelKey": "command.setPageSetting",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -195,6 +202,7 @@
           "attribute": "pageCanonical",
           "control": "field",
           "labelKey": "command.setPageSetting",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -218,6 +226,7 @@
           "attribute": "pageOgTitle",
           "control": "field",
           "labelKey": "command.setPageSetting",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -241,6 +250,7 @@
           "attribute": "pageOgImage",
           "control": "field",
           "labelKey": "command.setPageSetting",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -264,6 +274,7 @@
           "attribute": "pageFavicon",
           "control": "field",
           "labelKey": "command.setPageSetting",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -287,6 +298,7 @@
           "attribute": "pageScripts",
           "control": "field",
           "labelKey": "command.setPageSetting",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",

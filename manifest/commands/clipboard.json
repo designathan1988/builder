@@ -27,6 +27,7 @@
           "context": "global",
           "gesture": null,
           "labelKey": "command.copy",
+          "icon": null,
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": "none",
           "adapter": {
@@ -42,6 +43,7 @@
           "kind": "context-menu",
           "feature": "clipboard-copy-paste",
           "labelKey": "command.copy",
+          "icon": "copy",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "context-menu",
@@ -61,6 +63,7 @@
           "feature": "app-menu",
           "menu": "edit",
           "labelKey": "command.copy",
+          "icon": "copy",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "menu:edit",
@@ -80,6 +83,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.copy",
+          "icon": "copy",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "command-palette",
@@ -134,6 +138,7 @@
           "context": "global",
           "gesture": null,
           "labelKey": "command.paste",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -149,6 +154,7 @@
           "kind": "context-menu",
           "feature": "clipboard-copy-paste",
           "labelKey": "command.paste",
+          "icon": "clipboard",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "context-menu",
@@ -168,6 +174,7 @@
           "feature": "app-menu",
           "menu": "edit",
           "labelKey": "command.paste",
+          "icon": "clipboard",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "menu:edit",
@@ -187,6 +194,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.paste",
+          "icon": "clipboard",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "command-palette",
@@ -233,6 +241,7 @@
           "context": "global",
           "gesture": null,
           "labelKey": "command.cut",
+          "icon": null,
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": "none",
           "adapter": {
@@ -248,6 +257,7 @@
           "kind": "context-menu",
           "feature": "clipboard-cut-system",
           "labelKey": "command.cut",
+          "icon": "scissors",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "context-menu",
@@ -267,6 +277,7 @@
           "feature": "clipboard-cut-system",
           "menu": "edit",
           "labelKey": "command.cut",
+          "icon": "scissors",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "menu:edit",
@@ -286,6 +297,7 @@
           "feature": "clipboard-cut-system",
           "entry": "command",
           "labelKey": "command.cut",
+          "icon": "scissors",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "command-palette",
@@ -327,6 +339,7 @@
           "context": "global",
           "gesture": null,
           "labelKey": "command.copyStyle",
+          "icon": null,
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": "none",
           "adapter": {
@@ -342,6 +355,7 @@
           "kind": "context-menu",
           "feature": "copy-paste-styles",
           "labelKey": "command.copyStyle",
+          "icon": "palette",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "context-menu",
@@ -361,6 +375,7 @@
           "feature": "copy-paste-styles",
           "menu": "edit",
           "labelKey": "command.copyStyle",
+          "icon": "palette",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "menu:edit",
@@ -380,6 +395,7 @@
           "feature": "copy-paste-styles",
           "entry": "command",
           "labelKey": "command.copyStyle",
+          "icon": "palette",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "command-palette",
@@ -427,6 +443,7 @@
           "context": "global",
           "gesture": null,
           "labelKey": "command.pasteStyle",
+          "icon": null,
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": "none",
           "adapter": {
@@ -442,6 +459,7 @@
           "kind": "context-menu",
           "feature": "copy-paste-styles",
           "labelKey": "command.pasteStyle",
+          "icon": null,
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "context-menu",
@@ -461,6 +479,7 @@
           "feature": "copy-paste-styles",
           "menu": "edit",
           "labelKey": "command.pasteStyle",
+          "icon": null,
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "menu:edit",
@@ -480,6 +499,7 @@
           "feature": "copy-paste-styles",
           "entry": "command",
           "labelKey": "command.pasteStyle",
+          "icon": null,
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "command-palette",

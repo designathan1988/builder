@@ -51,12 +51,14 @@
         {
           "id": "elements-tile",
           "kind": "panel-control",
+          "drawnAs": "item",
           "feature": "palette-click-insert",
           "panel": "elements",
           "control": "tile",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.insertElement",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "insert",
@@ -78,6 +80,7 @@
           "context": "palette",
           "gesture": null,
           "labelKey": "command.insertElement",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -96,6 +99,7 @@
           "context": "palette",
           "gesture": null,
           "labelKey": "command.insertElement",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -114,6 +118,7 @@
           "zone": "drop-proposal",
           "gesture": "palette-drag",
           "labelKey": "command.insertElement",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -130,6 +135,7 @@
           "feature": "command-bar",
           "entry": "insert",
           "labelKey": "command.insertElement",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "command-palette",
@@ -195,6 +201,7 @@
           "zone": "before-after",
           "gesture": "element-drag",
           "labelKey": "command.moveTo",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -213,6 +220,7 @@
           "zone": "inside",
           "gesture": "element-drag",
           "labelKey": "command.moveTo",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -231,6 +239,7 @@
           "zone": "row-zones",
           "gesture": "layers-drag",
           "labelKey": "command.moveTo",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -249,6 +258,7 @@
           "context": "hand",
           "gesture": null,
           "labelKey": "command.hand.place",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -287,6 +297,7 @@
           "context": "drag",
           "gesture": null,
           "labelKey": "command.drag.levelUp",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -323,6 +334,7 @@
           "context": "drag",
           "gesture": null,
           "labelKey": "command.drag.levelDown",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -359,6 +371,7 @@
           "context": "drag",
           "gesture": null,
           "labelKey": "command.drag.cancel",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -403,6 +416,7 @@
           "context": "canvas",
           "gesture": null,
           "labelKey": "command.moveUp",
+          "icon": null,
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": "none",
           "adapter": {
@@ -421,6 +435,7 @@
           "context": "layers-tree",
           "gesture": null,
           "labelKey": "command.moveUp",
+          "icon": null,
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": "none",
           "adapter": {
@@ -436,6 +451,7 @@
           "kind": "context-menu",
           "feature": "context-menu",
           "labelKey": "command.moveUp",
+          "icon": "arrow-up",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "context-menu",
@@ -455,6 +471,7 @@
           "feature": "app-menu",
           "menu": "arrange",
           "labelKey": "command.moveUp",
+          "icon": "arrow-up",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "menu:arrange",
@@ -474,6 +491,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.moveUp",
+          "icon": "arrow-up",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "command-palette",
@@ -521,6 +539,7 @@
           "context": "canvas",
           "gesture": null,
           "labelKey": "command.moveDown",
+          "icon": null,
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": "none",
           "adapter": {
@@ -539,6 +558,7 @@
           "context": "layers-tree",
           "gesture": null,
           "labelKey": "command.moveDown",
+          "icon": null,
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": "none",
           "adapter": {
@@ -554,6 +574,7 @@
           "kind": "context-menu",
           "feature": "context-menu",
           "labelKey": "command.moveDown",
+          "icon": "arrow-down",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "context-menu",
@@ -573,6 +594,7 @@
           "feature": "app-menu",
           "menu": "arrange",
           "labelKey": "command.moveDown",
+          "icon": "arrow-down",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "menu:arrange",
@@ -592,6 +614,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.moveDown",
+          "icon": "arrow-down",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "command-palette",
@@ -646,6 +669,7 @@
           "context": "canvas",
           "gesture": null,
           "labelKey": "command.wrapRow",
+          "icon": null,
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": "none",
           "adapter": {
@@ -661,6 +685,7 @@
           "kind": "context-menu",
           "feature": "context-menu",
           "labelKey": "command.wrapRow",
+          "icon": "columns-3",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "context-menu",
@@ -680,6 +705,7 @@
           "feature": "app-menu",
           "menu": "arrange",
           "labelKey": "command.wrapRow",
+          "icon": "columns-3",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "menu:arrange",
@@ -699,6 +725,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.wrapRow",
+          "icon": "columns-3",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "command-palette",
@@ -753,6 +780,7 @@
           "context": "canvas",
           "gesture": null,
           "labelKey": "command.wrapColumn",
+          "icon": null,
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": "none",
           "adapter": {
@@ -768,6 +796,7 @@
           "kind": "context-menu",
           "feature": "context-menu",
           "labelKey": "command.wrapColumn",
+          "icon": "rows-3",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "context-menu",
@@ -787,6 +816,7 @@
           "feature": "app-menu",
           "menu": "arrange",
           "labelKey": "command.wrapColumn",
+          "icon": "rows-3",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "menu:arrange",
@@ -806,6 +836,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.wrapColumn",
+          "icon": "rows-3",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "command-palette",
@@ -855,6 +886,7 @@
           "kind": "context-menu",
           "feature": "nest-into-previous",
           "labelKey": "command.nestIntoPrevious",
+          "icon": "corner-down-right",
           "disabledReasonKey": "status.nest.noPrevious",
           "placement": {
             "region": "context-menu",
@@ -876,6 +908,7 @@
           "context": "canvas",
           "gesture": null,
           "labelKey": "command.nestIntoPrevious",
+          "icon": null,
           "disabledReasonKey": "status.nest.noPrevious",
           "placement": "none",
           "adapter": {
@@ -892,6 +925,7 @@
           "feature": "app-menu",
           "menu": "arrange",
           "labelKey": "command.nestIntoPrevious",
+          "icon": "corner-down-right",
           "disabledReasonKey": "status.nest.noPrevious",
           "placement": {
             "region": "menu:arrange",
@@ -911,6 +945,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.nestIntoPrevious",
+          "icon": "corner-down-right",
           "disabledReasonKey": "status.nest.noPrevious",
           "placement": {
             "region": "command-palette",
@@ -964,6 +999,7 @@
           "context": "canvas",
           "gesture": null,
           "labelKey": "command.promote",
+          "icon": null,
           "disabledReasonKey": "status.needsSingleSelection",
           "placement": "none",
           "adapter": {
@@ -979,6 +1015,7 @@
           "kind": "context-menu",
           "feature": "promote-out",
           "labelKey": "command.promote",
+          "icon": "share",
           "disabledReasonKey": "status.needsSingleSelection",
           "placement": {
             "region": "context-menu",
@@ -998,6 +1035,7 @@
           "feature": "app-menu",
           "menu": "arrange",
           "labelKey": "command.promote",
+          "icon": "share",
           "disabledReasonKey": "status.needsSingleSelection",
           "placement": {
             "region": "menu:arrange",
@@ -1017,6 +1055,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.promote",
+          "icon": "share",
           "disabledReasonKey": "status.needsSingleSelection",
           "placement": {
             "region": "command-palette",
@@ -1064,6 +1103,7 @@
           "context": "global",
           "gesture": null,
           "labelKey": "command.duplicate",
+          "icon": null,
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": "none",
           "adapter": {
@@ -1079,6 +1119,7 @@
           "kind": "context-menu",
           "feature": "duplicate",
           "labelKey": "command.duplicate",
+          "icon": "copy",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "context-menu",
@@ -1098,6 +1139,7 @@
           "feature": "app-menu",
           "menu": "edit",
           "labelKey": "command.duplicate",
+          "icon": "copy",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "menu:edit",
@@ -1117,6 +1159,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.duplicate",
+          "icon": "copy",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "command-palette",
@@ -1163,6 +1206,7 @@
           "context": "canvas",
           "gesture": null,
           "labelKey": "command.delete",
+          "icon": null,
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": "none",
           "adapter": {
@@ -1181,6 +1225,7 @@
           "context": "canvas",
           "gesture": null,
           "labelKey": "command.delete",
+          "icon": null,
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": "none",
           "adapter": {
@@ -1199,6 +1244,7 @@
           "context": "layers-tree",
           "gesture": null,
           "labelKey": "command.delete",
+          "icon": null,
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": "none",
           "adapter": {
@@ -1217,6 +1263,7 @@
           "context": "layers-tree",
           "gesture": null,
           "labelKey": "command.delete",
+          "icon": null,
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": "none",
           "adapter": {
@@ -1232,6 +1279,7 @@
           "kind": "context-menu",
           "feature": "context-menu",
           "labelKey": "command.delete",
+          "icon": "trash",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "context-menu",
@@ -1251,6 +1299,7 @@
           "feature": "app-menu",
           "menu": "edit",
           "labelKey": "command.delete",
+          "icon": "trash",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "menu:edit",
@@ -1270,6 +1319,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.delete",
+          "icon": "trash",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "command-palette",
@@ -1320,6 +1370,7 @@
           "kind": "context-menu",
           "feature": "unwrap",
           "labelKey": "command.unwrap",
+          "icon": "square",
           "disabledReasonKey": "status.unwrap.unavailable",
           "placement": {
             "region": "context-menu",
@@ -1339,6 +1390,7 @@
           "feature": "app-menu",
           "menu": "arrange",
           "labelKey": "command.unwrap",
+          "icon": "square",
           "disabledReasonKey": "status.unwrap.unavailable",
           "placement": {
             "region": "menu:arrange",
@@ -1358,6 +1410,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.unwrap",
+          "icon": "square",
           "disabledReasonKey": "status.unwrap.unavailable",
           "placement": {
             "region": "command-palette",
@@ -1401,6 +1454,7 @@
           "kind": "context-menu",
           "feature": "natural-child-command",
           "labelKey": "command.createNaturalChild",
+          "icon": null,
           "disabledReasonKey": "status.naturalChild.none",
           "placement": {
             "region": "context-menu",
@@ -1420,6 +1474,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.createNaturalChild",
+          "icon": null,
           "disabledReasonKey": "status.naturalChild.none",
           "placement": {
             "region": "command-palette",
@@ -1463,6 +1518,7 @@
           "context": "canvas",
           "gesture": null,
           "labelKey": "command.takeIntoHand",
+          "icon": null,
           "disabledReasonKey": "status.needsSingleSelection",
           "placement": "none",
           "adapter": {
@@ -1478,6 +1534,7 @@
           "kind": "context-menu",
           "feature": "hand-keyboard-move",
           "labelKey": "command.takeIntoHand",
+          "icon": "move",
           "disabledReasonKey": "status.needsSingleSelection",
           "placement": {
             "region": "context-menu",
@@ -1497,6 +1554,7 @@
           "feature": "app-menu",
           "menu": "arrange",
           "labelKey": "command.takeIntoHand",
+          "icon": "move",
           "disabledReasonKey": "status.needsSingleSelection",
           "placement": {
             "region": "menu:arrange",
@@ -1516,6 +1574,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.takeIntoHand",
+          "icon": "move",
           "disabledReasonKey": "status.needsSingleSelection",
           "placement": {
             "region": "command-palette",
@@ -1555,6 +1614,7 @@
           "context": "hand",
           "gesture": null,
           "labelKey": "command.hand.aimNext",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -1573,6 +1633,7 @@
           "context": "hand",
           "gesture": null,
           "labelKey": "command.hand.aimNext",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -1609,6 +1670,7 @@
           "context": "hand",
           "gesture": null,
           "labelKey": "command.hand.aimPrevious",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -1627,6 +1689,7 @@
           "context": "hand",
           "gesture": null,
           "labelKey": "command.hand.aimPrevious",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -1663,6 +1726,7 @@
           "context": "hand",
           "gesture": null,
           "labelKey": "command.hand.climb",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -1699,6 +1763,7 @@
           "context": "hand",
           "gesture": null,
           "labelKey": "command.hand.descend",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -1739,6 +1804,7 @@
           "context": "hand",
           "gesture": null,
           "labelKey": "command.hand.drop",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {

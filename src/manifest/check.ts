@@ -22,6 +22,7 @@ import {
   generatedCompatSchema,
   generatedCssSchema,
   generatedHtmlSchema,
+  generatedIconsSchema,
   glossarySchema,
   interactionsFileSchema,
   layoutFileSchema,
@@ -46,6 +47,7 @@ import {
   type Glossary,
   type LayoutFile,
   type GeneratedHtml,
+  type GeneratedIcons,
   type InteractionsFile,
   type PropertiesFile,
   type Recipe,
@@ -89,6 +91,8 @@ export const RULES = [
   'state-placement',
   'label-term',
   'owner',
+  'icon-name',
+  'icon-required',
 ] as const;
 
 export type RuleId = (typeof RULES)[number];
@@ -152,6 +156,10 @@ export interface ManifestSummary {
   recipeSources: string[];
   // each shorthand stored whole, with its reason
   storedWhole: string[];
+  // the icon library (name and version, number of icons) and the icons the manifest names
+  iconLibrary: string;
+  iconsNamed: number;
+  doorsWithIcon: number;
   plannedReferences: number;
   registeredReferences: number;
   referencesByKind: Record<string, number>;
@@ -184,6 +192,7 @@ interface Parsed {
   css: GeneratedCss;
   compat: GeneratedCompat;
   html: GeneratedHtml;
+  icons: GeneratedIcons;
   commandFiles: { file: string; data: CommandsFile }[];
   featureFiles: { file: string; data: FeaturesFile }[];
 }
@@ -200,6 +209,7 @@ const SINGLE_FILES: Record<string, { key: keyof Parsed; schema: z.ZodType }> = {
   'generated/css-properties.json': { key: 'css', schema: generatedCssSchema },
   'generated/css-compat.json': { key: 'compat', schema: generatedCompatSchema },
   'generated/html-elements.json': { key: 'html', schema: generatedHtmlSchema },
+  'generated/icons.json': { key: 'icons', schema: generatedIconsSchema },
 };
 
 function issuePath(path: readonly PropertyKey[]): string {
@@ -1759,6 +1769,58 @@ export function checkManifest(input: ManifestInput): CheckResult {
     }
   }
 
+  // ---- icon-name: every icon the manifest names is an icon of the editor's one library (Lucide,
+  // manifest/generated/icons.json): door icons, menu buttons, the layout's glyphs, element icons, keyword icons
+  const library = new Set(p.icons.icons);
+  const iconName = (icon: string | null, file: string, path: string, what: string) => {
+    if (icon !== null && !library.has(icon)) report('icon-name', file, path, `${what} names the icon "${icon}", which the icon library (Lucide ${p.icons.$generated.from['lucide-static'] ?? ''}) does not have`);
+  };
+  for (const { file, path, door, ref: doorRef } of doors) iconName(door.icon, file, `${path}.icon`, doorRef);
+  p.layout.menus.forEach((m, mi) => m.anchors.forEach((a, ai) => iconName(a.icon, 'layout.json', `menus[${mi}].anchors[${ai}].icon`, `the button of menu "${m.id}" in ${a.region}`)));
+  for (const [glyph, icon] of Object.entries(p.layout.glyphs)) iconName(icon, 'layout.json', `glyphs.${glyph}`, `the ${glyph} glyph`);
+  for (const [panel, icon] of Object.entries(p.layout.panels)) iconName(icon, 'layout.json', `panels.${panel}`, `the ${panel} panel`);
+  p.elements.elements.forEach((e, i) => iconName(e.icon, 'elements.json', `elements[${i}].icon`, `element ${e.id}`));
+  p.properties.properties.forEach((prop, i) => {
+    for (const [keyword, icon] of Object.entries(prop.icons)) iconName(icon, 'properties.json', `properties[${i}].icons.${keyword}`, `${prop.id}: ${keyword}`);
+  });
+
+  // ---- icon-required: a toolbar door, an icon button and a menu button drawn as an icon button name their icon,
+  // so the shell never picks one; a disclosure's icon is the layout's glyph and a key or a pointer gesture has no
+  // control, so neither names one; every panel has its icon; a keyword-buttons control drawn with icons has one for
+  // every keyword its doors offer
+  for (const { file, path, door, ref: doorRef } of doors) {
+    const drawnAs = door.kind === 'toolbar' || door.kind === 'panel-control' ? door.drawnAs : null;
+    if (CONTROLLESS.includes(door.kind) || drawnAs === 'disclosure') {
+      if (door.icon !== null) report('icon-required', file, `${path}.icon`, drawnAs === 'disclosure' ? `${doorRef} is a disclosure: its icon is the layout's expanded or collapsed glyph, so it names none` : `${doorRef} is a ${door.kind} door: it has no control, so no icon`);
+      continue;
+    }
+    if (door.icon !== null) continue;
+    if (door.kind === 'toolbar') report('icon-required', file, `${path}.icon`, `${doorRef} is a toolbar door without an icon: every toolbar door names its icon`);
+    else if (drawnAs === 'icon-button') report('icon-required', file, `${path}.icon`, `${doorRef} is drawn as an icon button but names no icon`);
+  }
+  const panelArg = commandById.get('workspace.setPanelOpen')?.args.panel?.values ?? [];
+  for (const panel of panelArg) if (!(panel in p.layout.panels)) report('icon-required', 'layout.json', 'panels', `the ${panel} panel has no icon`);
+  for (const panel of Object.keys(p.layout.panels)) if (!panelArg.includes(panel)) report('icon-required', 'layout.json', `panels.${panel}`, `"${panel}" is not a panel of workspace.setPanelOpen`);
+  p.layout.menus.forEach((m, mi) =>
+    m.anchors.forEach((a, ai) => {
+      if (a.drawnAs === 'icon-button' && a.icon === null) report('icon-required', 'layout.json', `menus[${mi}].anchors[${ai}].icon`, `the button of menu "${m.id}" in ${a.region} is drawn as an icon button but names no icon`);
+    }),
+  );
+  p.properties.properties.forEach((prop, i) => {
+    const icons = Object.keys(prop.icons);
+    if (icons.length === 0) return;
+    if (prop.control !== 'keyword-buttons') report('icon-required', 'properties.json', `properties[${i}].icons`, `${prop.id} is a ${prop.control}: only keyword buttons show an icon for each keyword`);
+    const offered = new Set<string>();
+    for (const d of prop.doors) {
+      const offers = doorByRef.get(d)?.door.adapter.offers;
+      if (!offers || offers.property !== prop.id) continue;
+      (offers.list === 'generated' ? (generatedOffer(offerData, prop.id) ?? []) : (subsetsOf(prop.id).find((s) => s.id === offers.list)?.values ?? [])).forEach((v) => offered.add(v));
+      for (const id of [offers.presets, offers.essentials]) if (id !== null) (subsetsOf(prop.id).find((s) => s.id === id)?.values ?? []).forEach((v) => offered.add(v));
+    }
+    const missing = [...offered].filter((v) => !icons.includes(v));
+    if (missing.length > 0) report('icon-required', 'properties.json', `properties[${i}].icons`, `${prop.id} shows its keywords as icons but has none for ${missing.join(', ')}`);
+  });
+
   const doorsByKind: Record<string, number> = {};
   for (const { door } of doors) doorsByKind[door.kind] = (doorsByKind[door.kind] ?? 0) + 1;
   const referencesByKind: Record<string, number> = {};
@@ -1792,6 +1854,9 @@ export function checkManifest(input: ManifestInput): CheckResult {
     recipeBrowserSyntax: [...recipeBrowserSyntax].sort(),
     recipeSources: p.properties.recipes.map((r) => `${r.id} (${r.source.spec}; BCD ${r.source.bcd})`),
     storedWhole: p.properties.storedWhole.map((w) => `${w.property}: ${w.reason}`),
+    iconLibrary: `Lucide ${p.icons.$generated.from['lucide-static'] ?? ''} (${p.icons.icons.length} icons)`,
+    iconsNamed: new Set([...doors.map((d) => d.door.icon), ...p.elements.elements.map((e) => e.icon), ...p.layout.menus.flatMap((m) => m.anchors.map((a) => a.icon)), ...Object.values(p.layout.glyphs), ...Object.values(p.layout.panels), ...p.properties.properties.flatMap((prop) => Object.values(prop.icons))].filter((i) => i !== null)).size,
+    doorsWithIcon: doors.filter((d) => d.door.icon !== null).length,
     plannedReferences: p.references.references.filter((r) => r.status === 'planned').length,
     registeredReferences: p.references.references.filter((r) => r.status === 'registered').length,
     referencesByKind: Object.fromEntries(Object.entries(referencesByKind).sort(([a], [b]) => a.localeCompare(b))),

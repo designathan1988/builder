@@ -25,6 +25,7 @@
           "context": "global",
           "gesture": null,
           "labelKey": "command.undo",
+          "icon": null,
           "disabledReasonKey": "status.undo.nothing",
           "placement": "none",
           "adapter": {
@@ -38,9 +39,11 @@
         {
           "id": "toolbar-top-bar",
           "kind": "toolbar",
+          "drawnAs": "icon-button",
           "feature": "undo-redo",
           "toolbar": "top-bar",
           "labelKey": "command.undo",
+          "icon": "undo-2",
           "disabledReasonKey": "status.undo.nothing",
           "placement": {
             "region": "top-bar",
@@ -57,12 +60,14 @@
         {
           "id": "toast-undo",
           "kind": "panel-control",
+          "drawnAs": "button",
           "feature": "delete-element",
           "panel": "toast",
           "control": "undo",
           "modifier": null,
           "gesture": null,
           "labelKey": "toast.undo",
+          "icon": null,
           "disabledReasonKey": "status.undo.nothing",
           "placement": {
             "region": "toast",
@@ -82,6 +87,7 @@
           "feature": "app-menu",
           "menu": "edit",
           "labelKey": "command.undo",
+          "icon": "undo-2",
           "disabledReasonKey": "status.undo.nothing",
           "placement": {
             "region": "menu:edit",
@@ -101,6 +107,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.undo",
+          "icon": "undo-2",
           "disabledReasonKey": "status.undo.nothing",
           "placement": {
             "region": "command-palette",
@@ -140,6 +147,7 @@
           "context": "global",
           "gesture": null,
           "labelKey": "command.redo",
+          "icon": null,
           "disabledReasonKey": "status.redo.nothing",
           "placement": "none",
           "adapter": {
@@ -158,6 +166,7 @@
           "context": "global",
           "gesture": null,
           "labelKey": "command.redo",
+          "icon": null,
           "disabledReasonKey": "status.redo.nothing",
           "placement": "none",
           "adapter": {
@@ -171,9 +180,11 @@
         {
           "id": "toolbar-top-bar",
           "kind": "toolbar",
+          "drawnAs": "icon-button",
           "feature": "undo-redo",
           "toolbar": "top-bar",
           "labelKey": "command.redo",
+          "icon": "redo-2",
           "disabledReasonKey": "status.redo.nothing",
           "placement": {
             "region": "top-bar",
@@ -193,6 +204,7 @@
           "feature": "app-menu",
           "menu": "edit",
           "labelKey": "command.redo",
+          "icon": "redo-2",
           "disabledReasonKey": "status.redo.nothing",
           "placement": {
             "region": "menu:edit",
@@ -212,6 +224,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.redo",
+          "icon": "redo-2",
           "disabledReasonKey": "status.redo.nothing",
           "placement": {
             "region": "command-palette",

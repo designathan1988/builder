@@ -212,7 +212,9 @@
       "anchors": [
         {
           "region": "top-bar",
-          "order": 1
+          "order": 1,
+          "drawnAs": "button",
+          "icon": null
         }
       ]
     },
@@ -222,7 +224,9 @@
       "anchors": [
         {
           "region": "top-bar",
-          "order": 2
+          "order": 2,
+          "drawnAs": "button",
+          "icon": null
         }
       ]
     },
@@ -232,7 +236,9 @@
       "anchors": [
         {
           "region": "top-bar",
-          "order": 3
+          "order": 3,
+          "drawnAs": "button",
+          "icon": null
         }
       ]
     },
@@ -242,7 +248,9 @@
       "anchors": [
         {
           "region": "top-bar",
-          "order": 4
+          "order": 4,
+          "drawnAs": "button",
+          "icon": null
         }
       ]
     },
@@ -252,7 +260,9 @@
       "anchors": [
         {
           "region": "top-bar",
-          "order": 5
+          "order": 5,
+          "drawnAs": "button",
+          "icon": null
         }
       ]
     },
@@ -262,7 +272,9 @@
       "anchors": [
         {
           "region": "menu:view",
-          "order": 17
+          "order": 17,
+          "drawnAs": "item",
+          "icon": null
         }
       ]
     },
@@ -272,11 +284,15 @@
       "anchors": [
         {
           "region": "menu:view",
-          "order": 18
+          "order": 18,
+          "drawnAs": "item",
+          "icon": null
         },
         {
           "region": "status-bar",
-          "order": 6
+          "order": 6,
+          "drawnAs": "button",
+          "icon": "globe"
         }
       ]
     },
@@ -286,7 +302,9 @@
       "anchors": [
         {
           "region": "inspector-header",
-          "order": 5
+          "order": 5,
+          "drawnAs": "icon-button",
+          "icon": "ellipsis"
         }
       ]
     },
@@ -296,11 +314,15 @@
       "anchors": [
         {
           "region": "canvas-toolbar",
-          "order": 12
+          "order": 12,
+          "drawnAs": "button",
+          "icon": null
         },
         {
           "region": "status-bar",
-          "order": 3
+          "order": 3,
+          "drawnAs": "button",
+          "icon": null
         }
       ]
     },
@@ -310,7 +332,9 @@
       "anchors": [
         {
           "region": "canvas-toolbar",
-          "order": 11
+          "order": 11,
+          "drawnAs": "icon-button",
+          "icon": "chevron-down"
         }
       ]
     },
@@ -320,7 +344,9 @@
       "anchors": [
         {
           "region": "inspector-selector-bar",
-          "order": 5
+          "order": 5,
+          "drawnAs": "button",
+          "icon": null
         }
       ]
     },
@@ -330,9 +356,33 @@
       "anchors": [
         {
           "region": "explorer-layers",
-          "order": 4
+          "order": 4,
+          "drawnAs": "icon-button",
+          "icon": "sliders-horizontal"
         }
       ]
     }
-  ]
+  ],
+  "glyphs": {
+    "dropdown": "chevron-down",
+    "submenu": "chevron-right",
+    "expanded": "chevron-down",
+    "collapsed": "chevron-right",
+    "checked": "check",
+    "folder": "folder",
+    "sizeVariable": "square-round-corner"
+  },
+  "panels": {
+    "elements": "square-plus",
+    "layers": "layers",
+    "inspector": "panel-right",
+    "explorer": "files",
+    "timeline": "diamond",
+    "variables": "palette",
+    "checks": "check",
+    "workbench": "panel-bottom",
+    "shortcuts": "keyboard",
+    "document": "braces",
+    "canvas-tools": "ruler-dimension-line"
+  }
 }

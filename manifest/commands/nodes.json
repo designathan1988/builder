@@ -27,6 +27,7 @@
           "context": "canvas",
           "gesture": null,
           "labelKey": "command.rename",
+          "icon": null,
           "disabledReasonKey": "status.needsSingleSelection",
           "placement": "none",
           "adapter": {
@@ -40,12 +41,14 @@
         {
           "id": "layers-row-name",
           "kind": "panel-control",
+          "drawnAs": "area",
           "feature": "rename-element",
           "panel": "layers",
           "control": "row-name",
           "modifier": null,
           "gesture": null,
           "labelKey": "layers.renameByDoubleClick",
+          "icon": null,
           "disabledReasonKey": "status.needsSingleSelection",
           "placement": {
             "region": "layers-row",
@@ -64,6 +67,7 @@
           "kind": "context-menu",
           "feature": "rename-element",
           "labelKey": "command.rename",
+          "icon": "type",
           "disabledReasonKey": "status.needsSingleSelection",
           "placement": {
             "region": "context-menu",
@@ -83,6 +87,7 @@
           "feature": "app-menu",
           "menu": "arrange",
           "labelKey": "command.rename",
+          "icon": "type",
           "disabledReasonKey": "status.needsSingleSelection",
           "placement": {
             "region": "menu:arrange",
@@ -104,6 +109,7 @@
           "context": "layers-tree",
           "gesture": null,
           "labelKey": "command.rename",
+          "icon": null,
           "disabledReasonKey": "status.needsSingleSelection",
           "placement": "none",
           "adapter": {
@@ -120,6 +126,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.rename",
+          "icon": "type",
           "disabledReasonKey": "status.needsSingleSelection",
           "placement": {
             "region": "command-palette",
@@ -171,12 +178,14 @@
         {
           "id": "layers-row-name-field",
           "kind": "panel-control",
+          "drawnAs": "field",
           "feature": "rename-element",
           "panel": "layers",
           "control": "row-name-field",
           "modifier": null,
           "gesture": null,
           "labelKey": "layers.renameField",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "layers-row",
@@ -223,12 +232,14 @@
         {
           "id": "layers-row-lock",
           "kind": "panel-control",
+          "drawnAs": "icon-button",
           "feature": "lock-element",
           "panel": "layers",
           "control": "row-lock",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.lock",
+          "icon": "lock-open",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "layers-row",
@@ -247,6 +258,7 @@
           "kind": "context-menu",
           "feature": "lock-element",
           "labelKey": "command.lock",
+          "icon": "lock",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "context-menu",
@@ -266,6 +278,7 @@
           "feature": "inspector-panel",
           "menu": "element-actions",
           "labelKey": "command.lock",
+          "icon": "lock",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "menu:element-actions",
@@ -285,6 +298,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.lock",
+          "icon": "lock",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "command-palette",
@@ -331,12 +345,14 @@
         {
           "id": "layers-row-eye",
           "kind": "panel-control",
+          "drawnAs": "icon-button",
           "feature": "hide-element",
           "panel": "layers",
           "control": "row-eye",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.hide",
+          "icon": "eye",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "layers-row",
@@ -355,6 +371,7 @@
           "kind": "context-menu",
           "feature": "hide-element",
           "labelKey": "command.hide",
+          "icon": "eye-off",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "context-menu",
@@ -374,6 +391,7 @@
           "feature": "inspector-panel",
           "menu": "element-actions",
           "labelKey": "command.hide",
+          "icon": "eye-off",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "menu:element-actions",
@@ -393,6 +411,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.hide",
+          "icon": "eye-off",
           "disabledReasonKey": "refusal.nothingSelected",
           "placement": {
             "region": "command-palette",
@@ -442,12 +461,14 @@
         {
           "id": "layers-row-colour-dot",
           "kind": "panel-control",
+          "drawnAs": "area",
           "feature": "layers-row-colours",
           "panel": "layers",
           "control": "row-colour-dot",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.setLayerColor",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "layers-row",

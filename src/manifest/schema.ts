@@ -19,6 +19,8 @@ const constantId = z.string().regex(/^[a-z][a-zA-Z0-9]*(\.[a-zA-Z0-9]+)+$/, 'a d
 const cssName = z.string().regex(/^-?[a-z]+(-[a-z0-9]+)*$/, 'a CSS property name');
 const htmlTag = z.string().regex(/^[a-z][a-z0-9]*$/, 'an HTML tag name');
 const ownerPath = z.string().regex(/^src\/[a-z0-9/-]+\.ts$/, 'a planned module path under src/');
+// an icon of the editor's one icon library, Lucide (DESIGN.md "Icons"): manifest:check rule icon-name proves it exists
+const iconName = z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, 'a Lucide icon name');
 // a predicate, codec or action id: code registers it under this id (references.json)
 const predicateId = camelId;
 const codecId = kebabId;
@@ -56,7 +58,8 @@ export const elementSchema = z.strictObject({
   namespace: z.enum(['html', 'svg']),
   alternativeTags: z.array(htmlTag),
   labelKey: i18nKey,
-  icon: kebabId,
+  // the element's icon in Layers, the Insert grid and the breadcrumb: an icon of the library (rule icon-name)
+  icon: iconName,
   palette: z.boolean(),
   // how the editor edits what is inside: element children, rich text, verbatim markup, or nothing
   content: z.enum(['children', 'text', 'markup', 'none']),
@@ -176,6 +179,9 @@ export const propertySchema = z.strictObject({
   section: kebabId,
   group: kebabId,
   control: z.enum(CONTROL_TYPES),
+  // keyword → the icon its button shows, for a keyword-buttons control drawn as icon buttons (one icon for every
+  // value its doors offer); empty when the buttons show the keywords as text
+  icons: z.record(z.string(), iconName),
   valueType: z.enum(VALUE_TYPES),
   // parses and serialises the value; the document stores the canonical CSS text, or the typed
   // fields of a structured value type, which only the codec turns into CSS
@@ -414,10 +420,20 @@ const placementSchema = z.union([
   z.strictObject({ region: regionId, order: z.number().int().positive() }),
 ]);
 
+// How a toolbar or panel control is drawn (DESIGN.md "Icons"): an icon button (the icon alone, the label as its
+// tooltip), a button (its label, after its icon when it has one), one of a segmented group, a tab, an item of a list
+// (a row, a tile, a file tab, a chip: its icon and text come from the item), a field, a toggle, an area of a
+// larger control (a ruler, a matrix, a backdrop), or a disclosure (a caret or a section header, whose icon is the
+// layout's expanded or collapsed glyph, by its state, and never its own).
+export const DRAWN_AS = ['icon-button', 'button', 'segment', 'tab', 'item', 'field', 'toggle', 'area', 'disclosure'] as const;
+
 const doorCommon = {
   id: doorId,
   feature: featureId,
   labelKey: i18nKey,
+  // the icon its control shows; null for a key or a pointer gesture, a text-only control, or an item whose icon
+  // comes from the item (an element's icon, a file's type). A toolbar door and an icon button always have one.
+  icon: iconName.nullable(),
   disabledReasonKey: i18nKey,
   placement: placementSchema,
   adapter: adapterSchema,
@@ -443,7 +459,7 @@ export const doorSchema = z.discriminatedUnion('kind', [
   z.strictObject({ ...doorCommon, kind: z.literal('shortcut'), chord: z.string().min(1), context: kebabId, gesture: kebabId.nullable() }),
   z.strictObject({ ...doorCommon, kind: z.literal('menu'), menu: menuIdSchema }),
   z.strictObject({ ...doorCommon, kind: z.literal('context-menu') }),
-  z.strictObject({ ...doorCommon, kind: z.literal('toolbar'), toolbar: kebabId }),
+  z.strictObject({ ...doorCommon, kind: z.literal('toolbar'), drawnAs: z.enum(DRAWN_AS), toolbar: kebabId }),
   z.strictObject({ ...doorCommon, kind: z.literal('quick-panel'), control: kebabId }),
   z.strictObject({
     ...doorCommon,
@@ -476,6 +492,7 @@ export const doorSchema = z.discriminatedUnion('kind', [
   z.strictObject({
     ...doorCommon,
     kind: z.literal('panel-control'),
+    drawnAs: z.enum(DRAWN_AS),
     panel: kebabId,
     control: kebabId,
     modifier: modifierKeySchema.nullable(),
@@ -581,9 +598,19 @@ export const layoutFileSchema = z.strictObject({
     z.strictObject({
       id: menuIdSchema,
       labelKey: i18nKey,
-      anchors: z.array(z.strictObject({ region: regionId, order: z.number().int().positive() })).min(1),
+      // each button that opens the menu: an icon button, a button, or an item of another menu (a submenu)
+      anchors: z
+        .array(z.strictObject({ region: regionId, order: z.number().int().positive(), drawnAs: z.enum(['icon-button', 'button', 'item']), icon: iconName.nullable() }))
+        .min(1),
     }),
   ),
+  // The icons every control or item of a kind draws besides a door's own: the arrow of a button or field that opens a
+  // list, the arrow of an item that opens a submenu, the disclosure of an expanded and of a collapsed section or tree
+  // row, the mark of a checked item, a folder of the Explorer, a size variable of the Styles view. The shell draws no
+  // other icon than these, the panels', the elements', the keywords' and the ones the doors name.
+  glyphs: z.strictObject({ dropdown: iconName, submenu: iconName, expanded: iconName, collapsed: iconName, checked: iconName, folder: iconName, sizeVariable: iconName }),
+  // each panel (the panel values of workspace.setPanelOpen) → its icon, on its dock tab and its palette entry
+  panels: z.record(kebabId, iconName),
 });
 
 // ---------------------------------------------------------------- checks (the Checks tab of the dock)
@@ -831,6 +858,12 @@ export const generatedHtmlSchema = z.strictObject({
   ),
 });
 
+// The icons of the editor's one icon library (Lucide), by name.
+export const generatedIconsSchema = z.strictObject({
+  $generated: generatedHeader,
+  icons: z.array(iconName),
+});
+
 // Each manifest file and its schema, keyed as consumers.json names them.
 export const FILE_SCHEMAS = {
   environment: environmentSchema,
@@ -846,6 +879,7 @@ export const FILE_SCHEMAS = {
   'generated/css-properties': generatedCssSchema,
   'generated/css-compat': generatedCompatSchema,
   'generated/html-elements': generatedHtmlSchema,
+  'generated/icons': generatedIconsSchema,
 } as const;
 
 export type Environment = z.infer<typeof environmentSchema>;
@@ -878,4 +912,5 @@ export type ConsumersFile = z.infer<typeof consumersFileSchema>;
 export type GeneratedCss = z.infer<typeof generatedCssSchema>;
 export type GeneratedCompat = z.infer<typeof generatedCompatSchema>;
 export type GeneratedHtml = z.infer<typeof generatedHtmlSchema>;
+export type GeneratedIcons = z.infer<typeof generatedIconsSchema>;
 export type Locale = z.infer<typeof localeSchema>;

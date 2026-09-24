@@ -32,12 +32,14 @@
         {
           "id": "timeline-new-animation",
           "kind": "panel-control",
+          "drawnAs": "icon-button",
           "feature": "timeline-animations",
           "panel": "timeline",
           "control": "new-animation",
           "modifier": null,
           "gesture": null,
           "labelKey": "timeline.newAnimation",
+          "icon": "plus",
           "disabledReasonKey": "status.needsSingleSelection",
           "placement": {
             "region": "dock-timeline",
@@ -89,12 +91,14 @@
         {
           "id": "timeline-animation-name-field",
           "kind": "panel-control",
+          "drawnAs": "field",
           "feature": "timeline-animations",
           "panel": "timeline",
           "control": "animation-name-field",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.animation.rename",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "dock-timeline",
@@ -139,12 +143,14 @@
         {
           "id": "timeline-animation-delete",
           "kind": "panel-control",
+          "drawnAs": "icon-button",
           "feature": "timeline-animations",
           "panel": "timeline",
           "control": "animation-delete",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.animation.delete",
+          "icon": "trash",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "dock-timeline",
@@ -194,12 +200,14 @@
         {
           "id": "timeline-add-keyframe",
           "kind": "panel-control",
+          "drawnAs": "button",
           "feature": "timeline-keyframes",
           "panel": "timeline",
           "control": "add-keyframe",
           "modifier": null,
           "gesture": null,
           "labelKey": "timeline.addKeyframe",
+          "icon": "diamond",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "dock-timeline",
@@ -254,6 +262,7 @@
           "zone": "track",
           "gesture": "keyframe-drag",
           "labelKey": "command.animation.moveKeyframe",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -300,12 +309,14 @@
         {
           "id": "timeline-keyframe-easing",
           "kind": "panel-control",
+          "drawnAs": "field",
           "feature": "timeline-keyframes",
           "panel": "timeline",
           "control": "keyframe-easing",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.animation.easing",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "dock-timeline",
@@ -350,12 +361,14 @@
         {
           "id": "timeline-keyframe-delete",
           "kind": "panel-control",
+          "drawnAs": "icon-button",
           "feature": "timeline-keyframes",
           "panel": "timeline",
           "control": "keyframe-delete",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.animation.deleteKeyframe",
+          "icon": "trash",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "dock-timeline",
@@ -377,6 +390,7 @@
           "context": "timeline",
           "gesture": null,
           "labelKey": "command.animation.deleteKeyframe",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -438,12 +452,14 @@
         {
           "id": "timeline-setting-duration",
           "kind": "panel-control",
+          "drawnAs": "field",
           "feature": "timeline-animation-settings",
           "panel": "timeline",
           "control": "setting-duration",
           "modifier": null,
           "gesture": null,
           "labelKey": "timeline.setting.duration",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "dock-timeline",
@@ -462,12 +478,14 @@
         {
           "id": "timeline-setting-delay",
           "kind": "panel-control",
+          "drawnAs": "field",
           "feature": "timeline-animation-settings",
           "panel": "timeline",
           "control": "setting-delay",
           "modifier": null,
           "gesture": null,
           "labelKey": "timeline.setting.delay",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "dock-timeline",
@@ -486,12 +504,14 @@
         {
           "id": "timeline-setting-iterations",
           "kind": "panel-control",
+          "drawnAs": "field",
           "feature": "timeline-animation-settings",
           "panel": "timeline",
           "control": "setting-iterations",
           "modifier": null,
           "gesture": null,
           "labelKey": "timeline.setting.iterations",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "dock-timeline",
@@ -510,12 +530,14 @@
         {
           "id": "timeline-setting-direction",
           "kind": "panel-control",
+          "drawnAs": "field",
           "feature": "timeline-animation-settings",
           "panel": "timeline",
           "control": "setting-direction",
           "modifier": null,
           "gesture": null,
           "labelKey": "timeline.setting.direction",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "dock-timeline",
@@ -534,12 +556,14 @@
         {
           "id": "timeline-setting-fill",
           "kind": "panel-control",
+          "drawnAs": "field",
           "feature": "timeline-animation-settings",
           "panel": "timeline",
           "control": "setting-fill",
           "modifier": null,
           "gesture": null,
           "labelKey": "timeline.setting.fill",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "dock-timeline",
@@ -558,12 +582,14 @@
         {
           "id": "timeline-setting-timing",
           "kind": "panel-control",
+          "drawnAs": "field",
           "feature": "timeline-animation-settings",
           "panel": "timeline",
           "control": "setting-timing",
           "modifier": null,
           "gesture": null,
           "labelKey": "timeline.setting.timing",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "dock-timeline",
@@ -582,12 +608,14 @@
         {
           "id": "timeline-setting-play-state",
           "kind": "panel-control",
+          "drawnAs": "field",
           "feature": "timeline-animation-settings",
           "panel": "timeline",
           "control": "setting-play-state",
           "modifier": null,
           "gesture": null,
           "labelKey": "timeline.setting.playState",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "dock-timeline",
@@ -635,6 +663,7 @@
           "zone": "ruler",
           "gesture": "playhead-drag",
           "labelKey": "command.timeline.playhead",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -648,12 +677,14 @@
         {
           "id": "timeline-ruler-click",
           "kind": "panel-control",
+          "drawnAs": "area",
           "feature": "timeline-keyframes",
           "panel": "timeline",
           "control": "ruler-click",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.timeline.playhead",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "dock-timeline",
@@ -688,12 +719,14 @@
         {
           "id": "timeline-play",
           "kind": "panel-control",
+          "drawnAs": "icon-button",
           "feature": "timeline-preview",
           "panel": "timeline",
           "control": "play",
           "modifier": null,
           "gesture": null,
           "labelKey": "timeline.play",
+          "icon": "play",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "dock-timeline",
@@ -728,12 +761,14 @@
         {
           "id": "timeline-pause",
           "kind": "panel-control",
+          "drawnAs": "icon-button",
           "feature": "timeline-preview",
           "panel": "timeline",
           "control": "pause",
           "modifier": null,
           "gesture": null,
           "labelKey": "timeline.pause",
+          "icon": "pause",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "dock-timeline",
@@ -768,12 +803,14 @@
         {
           "id": "timeline-stop",
           "kind": "panel-control",
+          "drawnAs": "icon-button",
           "feature": "timeline-preview",
           "panel": "timeline",
           "control": "stop",
           "modifier": null,
           "gesture": null,
           "labelKey": "timeline.stop",
+          "icon": "square",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "dock-timeline",
@@ -808,12 +845,14 @@
         {
           "id": "timeline-loop",
           "kind": "panel-control",
+          "drawnAs": "icon-button",
           "feature": "timeline-preview",
           "panel": "timeline",
           "control": "loop",
           "modifier": null,
           "gesture": null,
           "labelKey": "timeline.toggleLoop",
+          "icon": "repeat",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "dock-timeline",

@@ -45,6 +45,7 @@
           "attribute": null,
           "control": "field",
           "labelKey": "command.setPosition",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-style",
@@ -71,6 +72,7 @@
           "feature": "command-bar-set-property",
           "entry": "set-property",
           "labelKey": "command.setProperty",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "command-palette",
@@ -136,6 +138,7 @@
           "handle": "resize-n",
           "gesture": "resize",
           "labelKey": "command.resize",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -155,6 +158,7 @@
           "handle": "resize-ne",
           "gesture": "resize",
           "labelKey": "command.resize",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -175,6 +179,7 @@
           "handle": "resize-e",
           "gesture": "resize",
           "labelKey": "command.resize",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -194,6 +199,7 @@
           "handle": "resize-se",
           "gesture": "resize",
           "labelKey": "command.resize",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -214,6 +220,7 @@
           "handle": "resize-s",
           "gesture": "resize",
           "labelKey": "command.resize",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -233,6 +240,7 @@
           "handle": "resize-sw",
           "gesture": "resize",
           "labelKey": "command.resize",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -253,6 +261,7 @@
           "handle": "resize-w",
           "gesture": "resize",
           "labelKey": "command.resize",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -272,6 +281,7 @@
           "handle": "resize-nw",
           "gesture": "resize",
           "labelKey": "command.resize",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -331,6 +341,7 @@
           "zone": "containing-block",
           "gesture": "free-drag",
           "labelKey": "command.movePositioned",
+          "icon": null,
           "disabledReasonKey": "status.position.notPositioned",
           "placement": "none",
           "adapter": {
@@ -349,6 +360,7 @@
           "context": "canvas-positioned",
           "gesture": "nudge-keys",
           "labelKey": "command.nudgeLeft",
+          "icon": null,
           "disabledReasonKey": "status.position.notPositioned",
           "placement": "none",
           "adapter": {
@@ -370,6 +382,7 @@
           "context": "canvas-positioned",
           "gesture": "nudge-keys",
           "labelKey": "command.nudgeRight",
+          "icon": null,
           "disabledReasonKey": "status.position.notPositioned",
           "placement": "none",
           "adapter": {
@@ -391,6 +404,7 @@
           "context": "canvas-positioned",
           "gesture": "nudge-keys",
           "labelKey": "command.nudgeUp",
+          "icon": null,
           "disabledReasonKey": "status.position.notPositioned",
           "placement": "none",
           "adapter": {
@@ -412,6 +426,7 @@
           "context": "canvas-positioned",
           "gesture": "nudge-keys",
           "labelKey": "command.nudgeDown",
+          "icon": null,
           "disabledReasonKey": "status.position.notPositioned",
           "placement": "none",
           "adapter": {
@@ -479,6 +494,7 @@
           "context": "canvas-positioned",
           "gesture": null,
           "labelKey": "command.anchor.left",
+          "icon": null,
           "disabledReasonKey": "status.position.notPositioned",
           "placement": "none",
           "adapter": {
@@ -504,6 +520,7 @@
           "context": "canvas-positioned",
           "gesture": null,
           "labelKey": "command.anchor.right",
+          "icon": null,
           "disabledReasonKey": "status.position.notPositioned",
           "placement": "none",
           "adapter": {
@@ -529,6 +546,7 @@
           "context": "canvas-positioned",
           "gesture": null,
           "labelKey": "command.anchor.top",
+          "icon": null,
           "disabledReasonKey": "status.position.notPositioned",
           "placement": "none",
           "adapter": {
@@ -554,6 +572,7 @@
           "context": "canvas-positioned",
           "gesture": null,
           "labelKey": "command.anchor.bottom",
+          "icon": null,
           "disabledReasonKey": "status.position.notPositioned",
           "placement": "none",
           "adapter": {
@@ -578,6 +597,7 @@
           "handle": "anchor-left",
           "gesture": "anchor-tab",
           "labelKey": "command.anchor.left",
+          "icon": null,
           "disabledReasonKey": "status.position.notPositioned",
           "placement": "none",
           "adapter": {
@@ -602,6 +622,7 @@
           "handle": "anchor-right",
           "gesture": "anchor-tab",
           "labelKey": "command.anchor.right",
+          "icon": null,
           "disabledReasonKey": "status.position.notPositioned",
           "placement": "none",
           "adapter": {
@@ -626,6 +647,7 @@
           "handle": "anchor-top",
           "gesture": "anchor-tab",
           "labelKey": "command.anchor.top",
+          "icon": null,
           "disabledReasonKey": "status.position.notPositioned",
           "placement": "none",
           "adapter": {
@@ -650,6 +672,7 @@
           "handle": "anchor-bottom",
           "gesture": "anchor-tab",
           "labelKey": "command.anchor.bottom",
+          "icon": null,
           "disabledReasonKey": "status.position.notPositioned",
           "placement": "none",
           "adapter": {
@@ -670,12 +693,14 @@
         {
           "id": "inspector-anchor-control",
           "kind": "panel-control",
+          "drawnAs": "area",
           "feature": "absolute-anchors",
           "panel": "inspector",
           "control": "anchor-control",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.setAnchors",
+          "icon": null,
           "disabledReasonKey": "status.position.notPositioned",
           "placement": {
             "region": "inspector-style",
@@ -743,6 +768,7 @@
           "feature": "align-distribute",
           "control": "align-left",
           "labelKey": "command.align.left",
+          "icon": "align-start-vertical",
           "disabledReasonKey": "status.align.needsPositioned",
           "placement": {
             "region": "quick-panel",
@@ -764,6 +790,7 @@
           "feature": "align-distribute",
           "menu": "arrange",
           "labelKey": "command.align.left",
+          "icon": "align-start-vertical",
           "disabledReasonKey": "status.align.needsPositioned",
           "placement": {
             "region": "menu:arrange",
@@ -785,6 +812,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.align.left",
+          "icon": "align-start-vertical",
           "disabledReasonKey": "status.align.needsPositioned",
           "placement": {
             "region": "command-palette",
@@ -806,6 +834,7 @@
           "feature": "align-distribute",
           "control": "align-horizontal-center",
           "labelKey": "command.align.horizontalCenter",
+          "icon": "align-center-vertical",
           "disabledReasonKey": "status.align.needsPositioned",
           "placement": {
             "region": "quick-panel",
@@ -827,6 +856,7 @@
           "feature": "align-distribute",
           "menu": "arrange",
           "labelKey": "command.align.horizontalCenter",
+          "icon": "align-center-vertical",
           "disabledReasonKey": "status.align.needsPositioned",
           "placement": {
             "region": "menu:arrange",
@@ -848,6 +878,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.align.horizontalCenter",
+          "icon": "align-center-vertical",
           "disabledReasonKey": "status.align.needsPositioned",
           "placement": {
             "region": "command-palette",
@@ -869,6 +900,7 @@
           "feature": "align-distribute",
           "control": "align-right",
           "labelKey": "command.align.right",
+          "icon": "align-end-vertical",
           "disabledReasonKey": "status.align.needsPositioned",
           "placement": {
             "region": "quick-panel",
@@ -890,6 +922,7 @@
           "feature": "align-distribute",
           "menu": "arrange",
           "labelKey": "command.align.right",
+          "icon": "align-end-vertical",
           "disabledReasonKey": "status.align.needsPositioned",
           "placement": {
             "region": "menu:arrange",
@@ -911,6 +944,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.align.right",
+          "icon": "align-end-vertical",
           "disabledReasonKey": "status.align.needsPositioned",
           "placement": {
             "region": "command-palette",
@@ -932,6 +966,7 @@
           "feature": "align-distribute",
           "control": "align-top",
           "labelKey": "command.align.top",
+          "icon": "align-start-horizontal",
           "disabledReasonKey": "status.align.needsPositioned",
           "placement": {
             "region": "quick-panel",
@@ -953,6 +988,7 @@
           "feature": "align-distribute",
           "menu": "arrange",
           "labelKey": "command.align.top",
+          "icon": "align-start-horizontal",
           "disabledReasonKey": "status.align.needsPositioned",
           "placement": {
             "region": "menu:arrange",
@@ -974,6 +1010,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.align.top",
+          "icon": "align-start-horizontal",
           "disabledReasonKey": "status.align.needsPositioned",
           "placement": {
             "region": "command-palette",
@@ -995,6 +1032,7 @@
           "feature": "align-distribute",
           "control": "align-vertical-center",
           "labelKey": "command.align.verticalCenter",
+          "icon": "align-center-horizontal",
           "disabledReasonKey": "status.align.needsPositioned",
           "placement": {
             "region": "quick-panel",
@@ -1016,6 +1054,7 @@
           "feature": "align-distribute",
           "menu": "arrange",
           "labelKey": "command.align.verticalCenter",
+          "icon": "align-center-horizontal",
           "disabledReasonKey": "status.align.needsPositioned",
           "placement": {
             "region": "menu:arrange",
@@ -1037,6 +1076,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.align.verticalCenter",
+          "icon": "align-center-horizontal",
           "disabledReasonKey": "status.align.needsPositioned",
           "placement": {
             "region": "command-palette",
@@ -1058,6 +1098,7 @@
           "feature": "align-distribute",
           "control": "align-bottom",
           "labelKey": "command.align.bottom",
+          "icon": "align-end-horizontal",
           "disabledReasonKey": "status.align.needsPositioned",
           "placement": {
             "region": "quick-panel",
@@ -1079,6 +1120,7 @@
           "feature": "align-distribute",
           "menu": "arrange",
           "labelKey": "command.align.bottom",
+          "icon": "align-end-horizontal",
           "disabledReasonKey": "status.align.needsPositioned",
           "placement": {
             "region": "menu:arrange",
@@ -1100,6 +1142,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.align.bottom",
+          "icon": "align-end-horizontal",
           "disabledReasonKey": "status.align.needsPositioned",
           "placement": {
             "region": "command-palette",
@@ -1155,6 +1198,7 @@
           "feature": "align-distribute",
           "control": "distribute-horizontal",
           "labelKey": "command.distribute.horizontal",
+          "icon": "align-horizontal-space-around",
           "disabledReasonKey": "status.align.needsPositioned",
           "placement": {
             "region": "quick-panel",
@@ -1176,6 +1220,7 @@
           "feature": "align-distribute",
           "menu": "arrange",
           "labelKey": "command.distribute.horizontal",
+          "icon": "align-horizontal-space-around",
           "disabledReasonKey": "status.align.needsPositioned",
           "placement": {
             "region": "menu:arrange",
@@ -1197,6 +1242,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.distribute.horizontal",
+          "icon": "align-horizontal-space-around",
           "disabledReasonKey": "status.align.needsPositioned",
           "placement": {
             "region": "command-palette",
@@ -1218,6 +1264,7 @@
           "feature": "align-distribute",
           "control": "distribute-vertical",
           "labelKey": "command.distribute.vertical",
+          "icon": "align-vertical-space-around",
           "disabledReasonKey": "status.align.needsPositioned",
           "placement": {
             "region": "quick-panel",
@@ -1239,6 +1286,7 @@
           "feature": "align-distribute",
           "menu": "arrange",
           "labelKey": "command.distribute.vertical",
+          "icon": "align-vertical-space-around",
           "disabledReasonKey": "status.align.needsPositioned",
           "placement": {
             "region": "menu:arrange",
@@ -1260,6 +1308,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.distribute.vertical",
+          "icon": "align-vertical-space-around",
           "disabledReasonKey": "status.align.needsPositioned",
           "placement": {
             "region": "command-palette",
@@ -1314,6 +1363,7 @@
           "context": "canvas-handle",
           "gesture": "handle-keys",
           "labelKey": "canvas.handle.increase",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -1334,6 +1384,7 @@
           "context": "canvas-handle",
           "gesture": "handle-keys",
           "labelKey": "canvas.handle.increase",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -1354,6 +1405,7 @@
           "context": "canvas-handle",
           "gesture": "handle-keys",
           "labelKey": "canvas.handle.decrease",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -1374,6 +1426,7 @@
           "context": "canvas-handle",
           "gesture": "handle-keys",
           "labelKey": "canvas.handle.decrease",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -1430,6 +1483,7 @@
           "feature": "spacing-handles",
           "control": "edit-on-canvas",
           "labelKey": "quickPanel.editOnCanvas",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "quick-panel",
@@ -1451,6 +1505,7 @@
           "context": "canvas-edit-mode",
           "gesture": null,
           "labelKey": "canvas.editMode.leave",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {

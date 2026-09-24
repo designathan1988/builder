@@ -111,6 +111,9 @@ describe('manifest:check', () => {
       'inspector-subset-in-all-properties': rules.get('inspector-subset-in-all-properties'),
       'essentials-value-missing-from-all-properties': rules.get('essentials-value-missing-from-all-properties'),
       'owner-differs-from-architecture': rules.get('owner-differs-from-architecture'),
+      'icon-not-in-library': rules.get('icon-not-in-library'),
+      'toolbar-door-without-icon': rules.get('toolbar-door-without-icon'),
+      'panel-button-without-icon': rules.get('panel-button-without-icon'),
     }).toEqual({
       'door-unplaced': 'placement',
       'state-door-on-canvas-toolbar': 'state-placement',
@@ -118,6 +121,9 @@ describe('manifest:check', () => {
       'inspector-subset-in-all-properties': 'all-properties',
       'essentials-value-missing-from-all-properties': 'all-properties',
       'owner-differs-from-architecture': 'owner',
+      'icon-not-in-library': 'icon-name',
+      'toolbar-door-without-icon': 'icon-required',
+      'panel-button-without-icon': 'icon-required',
     });
   });
 
@@ -149,7 +155,7 @@ describe('manifest:check', () => {
     expect([...twoDoors]).toEqual(['placement']);
     const doorAndMenu = mutated((m) => {
       const menus = (m.files['layout.json'] as Json).menus as Json[];
-      (menus.find((x) => x.id === 'element-actions') as Json).anchors = [{ region: 'inspector-header', order: 2 }];
+      (menus.find((x) => x.id === 'element-actions') as Json).anchors = [{ region: 'inspector-header', order: 2, drawnAs: 'icon-button', icon: 'ellipsis' }];
     });
     expect([...doorAndMenu]).toEqual(['placement']);
   });
@@ -166,7 +172,7 @@ describe('manifest:check', () => {
   it('refuses a state menu that opens from the canvas frame', () => {
     const rules = mutated((m) => {
       const menus = (m.files['layout.json'] as Json).menus as Json[];
-      (menus.find((x) => x.id === 'style-state') as Json).anchors = [{ region: 'canvas-frame', order: 5 }];
+      (menus.find((x) => x.id === 'style-state') as Json).anchors = [{ region: 'canvas-frame', order: 5, drawnAs: 'button', icon: null }];
     });
     expect([...rules]).toEqual(['state-placement']);
   });
@@ -260,7 +266,7 @@ describe('manifest:check', () => {
 
   it('reads the generated files once: every fixture shares them, frozen, and a plant copies only what it changes', () => {
     const generated = Object.keys(loaded.input.files).filter((file) => file.startsWith('generated/'));
-    expect(generated).toEqual(['generated/css-compat.json', 'generated/css-properties.json', 'generated/html-elements.json']);
+    expect(generated).toEqual(['generated/css-compat.json', 'generated/css-properties.json', 'generated/html-elements.json', 'generated/icons.json']);
     for (const file of generated) expect(Object.isFrozen(loaded.input.files[file])).toBe(true);
     const plant = PLANTS.find((p) => p.id === 'door-unplaced');
     if (!plant) throw new Error('no plant door-unplaced');

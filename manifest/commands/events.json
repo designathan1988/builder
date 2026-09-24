@@ -61,12 +61,14 @@
         {
           "id": "inspector-interaction-add",
           "kind": "panel-control",
+          "drawnAs": "button",
           "feature": "events-actions",
           "panel": "inspector",
           "control": "interaction-add",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.interactions.add",
+          "icon": "plus",
           "disabledReasonKey": "status.needsSingleSelection",
           "placement": {
             "region": "inspector-interactions",
@@ -118,12 +120,14 @@
         {
           "id": "inspector-interaction-trigger",
           "kind": "panel-control",
+          "drawnAs": "field",
           "feature": "events-actions",
           "panel": "inspector",
           "control": "interaction-trigger",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.interactions.update",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-interactions",
@@ -140,12 +144,14 @@
         {
           "id": "inspector-interaction-action",
           "kind": "panel-control",
+          "drawnAs": "field",
           "feature": "events-actions",
           "panel": "inspector",
           "control": "interaction-action",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.interactions.update",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-interactions",
@@ -162,12 +168,14 @@
         {
           "id": "inspector-interaction-options",
           "kind": "panel-control",
+          "drawnAs": "field",
           "feature": "events-actions",
           "panel": "inspector",
           "control": "interaction-options",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.interactions.update",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-interactions",
@@ -184,12 +192,14 @@
         {
           "id": "inspector-interaction-scope",
           "kind": "panel-control",
+          "drawnAs": "field",
           "feature": "events-actions",
           "panel": "inspector",
           "control": "interaction-scope",
           "modifier": null,
           "gesture": null,
           "labelKey": "inspector.interactionScope",
+          "icon": "locate-fixed",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-interactions",
@@ -213,6 +223,7 @@
           "modifier": null,
           "gesture": "pick-target",
           "labelKey": "interactions.pickTarget",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
@@ -226,12 +237,14 @@
         {
           "id": "layers-row-pick-target",
           "kind": "panel-control",
+          "drawnAs": "item",
           "feature": "events-actions",
           "panel": "layers",
           "control": "row-pick-target",
           "modifier": null,
           "gesture": null,
           "labelKey": "interactions.pickTarget",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "layers-row",
@@ -278,12 +291,14 @@
         {
           "id": "inspector-interaction-remove",
           "kind": "panel-control",
+          "drawnAs": "icon-button",
           "feature": "events-actions",
           "panel": "inspector",
           "control": "interaction-remove",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.interactions.remove",
+          "icon": "trash",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-interactions",

@@ -1615,6 +1615,82 @@
     {
       "field": "generated/html-elements:elements{}.attributes{}.enum",
       "reader": "src/editor/inspector/attributes.ts"
+    },
+    {
+      "field": "properties:properties[].icons",
+      "reader": "src/editor/inspector/fields.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].icon",
+      "reader": "src/editor/doors/door.tsx"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].drawnAs",
+      "reader": "src/editor/doors/door.tsx"
+    },
+    {
+      "field": "layout:menus[].anchors[].drawnAs",
+      "reader": "src/editor/doors/menu.tsx"
+    },
+    {
+      "field": "layout:menus[].anchors[].icon",
+      "reader": "src/editor/doors/menu.tsx"
+    },
+    {
+      "field": "layout:glyphs",
+      "reader": "src/editor/doors/door.tsx"
+    },
+    {
+      "field": "layout:glyphs.dropdown",
+      "reader": "src/editor/doors/door.tsx"
+    },
+    {
+      "field": "layout:glyphs.submenu",
+      "reader": "src/editor/doors/menu.tsx"
+    },
+    {
+      "field": "layout:glyphs.expanded",
+      "reader": "src/editor/doors/door.tsx"
+    },
+    {
+      "field": "layout:glyphs.collapsed",
+      "reader": "src/editor/doors/door.tsx"
+    },
+    {
+      "field": "layout:glyphs.checked",
+      "reader": "src/editor/doors/menu.tsx"
+    },
+    {
+      "field": "generated/icons:$generated",
+      "reader": "tools/gen/check.ts"
+    },
+    {
+      "field": "generated/icons:$generated.notice",
+      "reader": "tools/gen/check.ts"
+    },
+    {
+      "field": "generated/icons:$generated.by",
+      "reader": "tools/gen/check.ts"
+    },
+    {
+      "field": "generated/icons:$generated.from",
+      "reader": "tools/gen/check.ts"
+    },
+    {
+      "field": "generated/icons:icons",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "layout:glyphs.folder",
+      "reader": "src/editor/doors/door.tsx"
+    },
+    {
+      "field": "layout:glyphs.sizeVariable",
+      "reader": "src/editor/doors/door.tsx"
+    },
+    {
+      "field": "layout:panels",
+      "reader": "src/editor/doors/door.tsx"
     }
   ]
 }

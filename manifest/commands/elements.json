@@ -47,6 +47,7 @@
           "attribute": "tag",
           "control": "field",
           "labelKey": "command.setTag",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -66,6 +67,7 @@
           "feature": "quick-panel",
           "control": "tag",
           "labelKey": "quickPanel.tag",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "quick-panel",
@@ -126,6 +128,7 @@
           "attribute": "title",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -149,6 +152,7 @@
           "attribute": "src",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -172,6 +176,7 @@
           "attribute": "alt",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -195,6 +200,7 @@
           "attribute": "srcset",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -218,6 +224,7 @@
           "attribute": "media",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -241,6 +248,7 @@
           "attribute": "placeholder",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -264,6 +272,7 @@
           "attribute": "value",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -287,6 +296,7 @@
           "attribute": "name",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -310,6 +320,7 @@
           "attribute": "required",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -333,6 +344,7 @@
           "attribute": "pattern",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -356,6 +368,7 @@
           "attribute": "min",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -379,6 +392,7 @@
           "attribute": "max",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -402,6 +416,7 @@
           "attribute": "step",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -425,6 +440,7 @@
           "attribute": "autocomplete",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -448,6 +464,7 @@
           "attribute": "disabled",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -471,6 +488,7 @@
           "attribute": "readonly",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -494,6 +512,7 @@
           "attribute": "checked",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -517,6 +536,7 @@
           "attribute": "action",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -540,6 +560,7 @@
           "attribute": "method",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -563,6 +584,7 @@
           "attribute": "buttonType",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -586,6 +608,7 @@
           "attribute": "rows",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -609,6 +632,7 @@
           "attribute": "groupLabel",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -632,6 +656,7 @@
           "attribute": "selected",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -655,6 +680,7 @@
           "attribute": "poster",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -678,6 +704,7 @@
           "attribute": "controls",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -701,6 +728,7 @@
           "attribute": "autoplay",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -724,6 +752,7 @@
           "attribute": "loop",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -747,6 +776,7 @@
           "attribute": "muted",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -770,6 +800,7 @@
           "attribute": "trackKind",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -793,6 +824,7 @@
           "attribute": "canvasWidth",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -816,6 +848,7 @@
           "attribute": "canvasHeight",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -839,6 +872,7 @@
           "attribute": "open",
           "control": "field",
           "labelKey": "command.setAttribute",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -855,12 +889,14 @@
         {
           "id": "asset-picker-choose",
           "kind": "panel-control",
+          "drawnAs": "item",
           "feature": "explorer-assets-use",
           "panel": "asset-picker",
           "control": "choose",
           "modifier": null,
           "gesture": null,
           "labelKey": "assets.picker.choose",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "asset-picker",
@@ -918,6 +954,7 @@
           "attribute": "id",
           "control": "field",
           "labelKey": "command.setId",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -972,6 +1009,7 @@
           "attribute": "classes",
           "control": "field",
           "labelKey": "command.setClasses",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -1041,6 +1079,7 @@
           "attribute": "href",
           "control": "field",
           "labelKey": "command.setLink",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -1064,6 +1103,7 @@
           "attribute": "newTab",
           "control": "field",
           "labelKey": "inspector.link.openInNewTab",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -1080,12 +1120,14 @@
         {
           "id": "link-picker-page",
           "kind": "panel-control",
+          "drawnAs": "segment",
           "feature": "link-picker",
           "panel": "link-picker",
           "control": "page",
           "modifier": null,
           "gesture": null,
           "labelKey": "linkPicker.page",
+          "icon": "file",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "link-picker",
@@ -1102,12 +1144,14 @@
         {
           "id": "link-picker-anchor",
           "kind": "panel-control",
+          "drawnAs": "segment",
           "feature": "link-picker",
           "panel": "link-picker",
           "control": "anchor",
           "modifier": null,
           "gesture": null,
           "labelKey": "linkPicker.anchor",
+          "icon": "hash",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "link-picker",
@@ -1124,12 +1168,14 @@
         {
           "id": "link-picker-url",
           "kind": "panel-control",
+          "drawnAs": "segment",
           "feature": "link-picker",
           "panel": "link-picker",
           "control": "url",
           "modifier": null,
           "gesture": null,
           "labelKey": "linkPicker.url",
+          "icon": "globe",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "link-picker",
@@ -1146,12 +1192,14 @@
         {
           "id": "link-picker-email",
           "kind": "panel-control",
+          "drawnAs": "segment",
           "feature": "link-picker",
           "panel": "link-picker",
           "control": "email",
           "modifier": null,
           "gesture": null,
           "labelKey": "linkPicker.email",
+          "icon": "mail",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "link-picker",
@@ -1168,12 +1216,14 @@
         {
           "id": "link-picker-phone",
           "kind": "panel-control",
+          "drawnAs": "segment",
           "feature": "link-picker",
           "panel": "link-picker",
           "control": "phone",
           "modifier": null,
           "gesture": null,
           "labelKey": "linkPicker.phone",
+          "icon": "phone",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "link-picker",
@@ -1242,6 +1292,7 @@
           "attribute": "inputType",
           "control": "field",
           "labelKey": "command.setInputType",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -1295,6 +1346,7 @@
           "attribute": "labelFor",
           "control": "field",
           "labelKey": "command.setLabelTarget",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -1348,12 +1400,14 @@
         {
           "id": "inspector-custom-attribute-add",
           "kind": "panel-control",
+          "drawnAs": "icon-button",
           "feature": "element-attributes-aria",
           "panel": "inspector",
           "control": "custom-attribute-add",
           "modifier": null,
           "gesture": null,
           "labelKey": "inspector.customAttribute.add",
+          "icon": "plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -1370,12 +1424,14 @@
         {
           "id": "inspector-custom-attribute-value",
           "kind": "panel-control",
+          "drawnAs": "field",
           "feature": "element-attributes-aria",
           "panel": "inspector",
           "control": "custom-attribute-value",
           "modifier": null,
           "gesture": null,
           "labelKey": "inspector.customAttribute.value",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -1422,12 +1478,14 @@
         {
           "id": "inspector-custom-attribute-remove",
           "kind": "panel-control",
+          "drawnAs": "icon-button",
           "feature": "element-attributes-aria",
           "panel": "inspector",
           "control": "custom-attribute-remove",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.removeCustomAttribute",
+          "icon": "x",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -1482,6 +1540,7 @@
           "attribute": "svgMarkup",
           "control": "field",
           "labelKey": "command.setSvgMarkup",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -1535,6 +1594,7 @@
           "attribute": "embedMarkup",
           "control": "field",
           "labelKey": "command.setEmbedMarkup",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -1589,12 +1649,14 @@
         {
           "id": "code-panel-html-apply",
           "kind": "panel-control",
+          "drawnAs": "button",
           "feature": "code-panel-edit-html",
           "panel": "code-panel",
           "control": "html-apply",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.applyHtml",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "code-view",
@@ -1645,12 +1707,14 @@
         {
           "id": "inspector-table-caption-toggle",
           "kind": "panel-control",
+          "drawnAs": "toggle",
           "feature": "elements-tables",
           "panel": "inspector",
           "control": "table-caption-toggle",
           "modifier": null,
           "gesture": null,
           "labelKey": "inspector.table.caption",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -1669,12 +1733,14 @@
         {
           "id": "inspector-table-head-toggle",
           "kind": "panel-control",
+          "drawnAs": "toggle",
           "feature": "elements-tables",
           "panel": "inspector",
           "control": "table-head-toggle",
           "modifier": null,
           "gesture": null,
           "labelKey": "inspector.table.tableHead",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -1693,12 +1759,14 @@
         {
           "id": "inspector-table-foot-toggle",
           "kind": "panel-control",
+          "drawnAs": "toggle",
           "feature": "elements-tables",
           "panel": "inspector",
           "control": "table-foot-toggle",
           "modifier": null,
           "gesture": null,
           "labelKey": "inspector.table.tableFoot",
+          "icon": null,
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -1762,12 +1830,14 @@
         {
           "id": "inspector-options-editor-add-option",
           "kind": "panel-control",
+          "drawnAs": "button",
           "feature": "elements-form-controls",
           "panel": "inspector",
           "control": "options-editor-add-option",
           "modifier": null,
           "gesture": null,
           "labelKey": "inspector.parts.add.option",
+          "icon": "plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -1786,12 +1856,14 @@
         {
           "id": "inspector-options-editor-add-option-group",
           "kind": "panel-control",
+          "drawnAs": "button",
           "feature": "elements-form-controls",
           "panel": "inspector",
           "control": "options-editor-add-option-group",
           "modifier": null,
           "gesture": null,
           "labelKey": "inspector.parts.add.optionGroup",
+          "icon": "plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -1810,12 +1882,14 @@
         {
           "id": "inspector-picture-sources-add-source",
           "kind": "panel-control",
+          "drawnAs": "button",
           "feature": "elements-media-images",
           "panel": "inspector",
           "control": "picture-sources-add-source",
           "modifier": null,
           "gesture": null,
           "labelKey": "inspector.parts.add.source",
+          "icon": "plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -1834,12 +1908,14 @@
         {
           "id": "inspector-media-sources-add-track",
           "kind": "panel-control",
+          "drawnAs": "button",
           "feature": "elements-media-embeds",
           "panel": "inspector",
           "control": "media-sources-add-track",
           "modifier": null,
           "gesture": null,
           "labelKey": "inspector.parts.add.track",
+          "icon": "plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -1858,12 +1934,14 @@
         {
           "id": "inspector-svg-shapes-add-rectangle",
           "kind": "panel-control",
+          "drawnAs": "button",
           "feature": "elements-svg-shapes",
           "panel": "inspector",
           "control": "svg-shapes-add-rectangle",
           "modifier": null,
           "gesture": null,
           "labelKey": "inspector.parts.add.rectangle",
+          "icon": "plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -1882,12 +1960,14 @@
         {
           "id": "inspector-svg-shapes-add-ellipse",
           "kind": "panel-control",
+          "drawnAs": "button",
           "feature": "elements-svg-shapes",
           "panel": "inspector",
           "control": "svg-shapes-add-ellipse",
           "modifier": null,
           "gesture": null,
           "labelKey": "inspector.parts.add.ellipse",
+          "icon": "plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -1906,12 +1986,14 @@
         {
           "id": "inspector-svg-shapes-add-line",
           "kind": "panel-control",
+          "drawnAs": "button",
           "feature": "elements-svg-shapes",
           "panel": "inspector",
           "control": "svg-shapes-add-line",
           "modifier": null,
           "gesture": null,
           "labelKey": "inspector.parts.add.line",
+          "icon": "plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -1930,12 +2012,14 @@
         {
           "id": "inspector-media-sources-add-source",
           "kind": "panel-control",
+          "drawnAs": "button",
           "feature": "elements-media-embeds",
           "panel": "inspector",
           "control": "media-sources-add-source",
           "modifier": null,
           "gesture": null,
           "labelKey": "inspector.parts.add.source",
+          "icon": "plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -1989,12 +2073,14 @@
         {
           "id": "inspector-part-move-up",
           "kind": "panel-control",
+          "drawnAs": "icon-button",
           "feature": "elements-form-controls",
           "panel": "inspector",
           "control": "part-move-up",
           "modifier": null,
           "gesture": null,
           "labelKey": "inspector.parts.moveUp",
+          "icon": "arrow-up",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -2013,12 +2099,14 @@
         {
           "id": "inspector-part-move-down",
           "kind": "panel-control",
+          "drawnAs": "icon-button",
           "feature": "elements-form-controls",
           "panel": "inspector",
           "control": "part-move-down",
           "modifier": null,
           "gesture": null,
           "labelKey": "inspector.parts.moveDown",
+          "icon": "arrow-down",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -2067,12 +2155,14 @@
         {
           "id": "inspector-part-remove",
           "kind": "panel-control",
+          "drawnAs": "icon-button",
           "feature": "elements-form-controls",
           "panel": "inspector",
           "control": "part-remove",
           "modifier": null,
           "gesture": null,
           "labelKey": "command.parts.remove",
+          "icon": "x",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
@@ -2115,6 +2205,7 @@
           "kind": "context-menu",
           "feature": "table-commands",
           "labelKey": "command.table.addColumnAfter",
+          "icon": null,
           "disabledReasonKey": "status.table.selectCell",
           "placement": {
             "region": "context-menu",
@@ -2134,6 +2225,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.table.addColumnAfter",
+          "icon": null,
           "disabledReasonKey": "status.table.selectCell",
           "placement": {
             "region": "command-palette",
@@ -2176,6 +2268,7 @@
           "kind": "context-menu",
           "feature": "table-commands",
           "labelKey": "command.table.addColumnEnd",
+          "icon": null,
           "disabledReasonKey": "status.table.selectPart",
           "placement": {
             "region": "context-menu",
@@ -2195,6 +2288,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.table.addColumnEnd",
+          "icon": null,
           "disabledReasonKey": "status.table.selectPart",
           "placement": {
             "region": "command-palette",
@@ -2238,6 +2332,7 @@
           "kind": "context-menu",
           "feature": "table-commands",
           "labelKey": "command.table.removeColumn",
+          "icon": null,
           "disabledReasonKey": "status.table.selectCell",
           "placement": {
             "region": "context-menu",
@@ -2257,6 +2352,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.table.removeColumn",
+          "icon": null,
           "disabledReasonKey": "status.table.selectCell",
           "placement": {
             "region": "command-palette",
@@ -2299,6 +2395,7 @@
           "kind": "context-menu",
           "feature": "table-commands",
           "labelKey": "command.table.addRowAfter",
+          "icon": null,
           "disabledReasonKey": "status.table.selectCell",
           "placement": {
             "region": "context-menu",
@@ -2318,6 +2415,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.table.addRowAfter",
+          "icon": null,
           "disabledReasonKey": "status.table.selectCell",
           "placement": {
             "region": "command-palette",
@@ -2361,6 +2459,7 @@
           "kind": "context-menu",
           "feature": "table-commands",
           "labelKey": "command.table.removeRow",
+          "icon": null,
           "disabledReasonKey": "status.table.selectCell",
           "placement": {
             "region": "context-menu",
@@ -2380,6 +2479,7 @@
           "feature": "command-bar",
           "entry": "command",
           "labelKey": "command.table.removeRow",
+          "icon": null,
           "disabledReasonKey": "status.table.selectCell",
           "placement": {
             "region": "command-palette",

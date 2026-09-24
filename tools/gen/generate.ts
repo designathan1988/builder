@@ -16,6 +16,7 @@ import { REPO_ROOT } from '../manifest/load.ts';
 import { bcdVersion, generateCompatProperties, generateUnits, generateValueFunctions } from './compat.ts';
 import { TOKENS_CSS, generateTokens } from './tokens.ts';
 import { writeTypes } from './types.ts';
+import { ICONS_FILE, ICON_SPRITE, generateIconNames, generateSprite } from './icons.ts';
 import { packageVersion } from './versions.ts';
 
 const require = createRequire(import.meta.url);
@@ -321,9 +322,10 @@ export function generateHtml(): unknown {
 
 // ---------------------------------------------------------------- output
 
-// One entry per line under "properties", "types" and "elements", so a regenerated file diffs by entry.
+// One entry per line under "properties", "types", "elements" and "icons", so a regenerated file diffs by entry.
 function format(data: Record<string, unknown>): string {
   const lines = Object.entries(data).map(([key, value]) => {
+    if (Array.isArray(value) && key === 'icons') return `  ${JSON.stringify(key)}: [\n${value.map((v) => `    ${JSON.stringify(v)}`).join(',\n')}\n  ]`;
     if (value !== null && typeof value === 'object' && !Array.isArray(value) && ['properties', 'types', 'elements'].includes(key)) {
       const inner = Object.entries(value as Record<string, unknown>).map(([k, v]) => `    ${JSON.stringify(k)}: ${JSON.stringify(v)}`);
       return `  ${JSON.stringify(key)}: {\n${inner.join(',\n')}\n  }`;
@@ -338,7 +340,7 @@ export async function generate(root: string = REPO_ROOT): Promise<string[]> {
   fs.mkdirSync(dir, { recursive: true });
   const written: string[] = [];
   const css = generateCss();
-  for (const [file, data] of [[CSS_FILE, css], [COMPAT_FILE, generateCompat(css)], [HTML_FILE, generateHtml()]] as const) {
+  for (const [file, data] of [[CSS_FILE, css], [COMPAT_FILE, generateCompat(css)], [HTML_FILE, generateHtml()], [ICONS_FILE, generateIconNames()]] as const) {
     fs.writeFileSync(path.join(dir, file), format(data as Record<string, unknown>));
     written.push(`${GENERATED_DIR}/${file}`);
   }
@@ -347,6 +349,8 @@ export async function generate(root: string = REPO_ROOT): Promise<string[]> {
   fs.writeFileSync(tokens, await generateTokens(root));
   written.push(TOKENS_CSS);
   written.push(...writeTypes(root));
+  fs.writeFileSync(path.join(root, ICON_SPRITE), generateSprite(root));
+  written.push(ICON_SPRITE);
   return written;
 }
 
