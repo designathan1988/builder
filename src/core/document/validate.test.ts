@@ -7,7 +7,7 @@ import { rulesFromManifest, validateDocument } from './validate.ts';
 const rules = rulesFromManifest(manifest.elements, manifest.properties);
 
 function project(children: DocNode[] = []): DocumentJson {
-  const doc = createEmptyDocument(sequentialIds('p'), { page: 'Home', root: 'Page' });
+  const doc = createEmptyDocument(sequentialIds('p'), { page: 'Home', root: 'Page' }, rules.root);
   const page = doc.pages[0];
   if (!page) throw new Error('no page');
   return { ...doc, pages: [{ ...page, tree: { ...page.tree, children } }] };
@@ -17,6 +17,12 @@ const div = (id: string, fields: Partial<DocNode> = {}): DocNode => ({ id, type:
 const paths = (doc: DocumentJson, selection: string[] = []) => validateDocument(doc, selection, rules).map((p) => p.path);
 
 describe('validateDocument', () => {
+  it('takes the page root from the manifest: the element whose tag is body', () => {
+    const body = manifest.elements.elements.find((e) => e.tag === 'body');
+    expect(rules.root).toEqual({ type: body?.id, tag: 'body' });
+    expect(project().pages[0]?.tree).toMatchObject({ type: body?.id, tag: 'body' });
+  });
+
   it('accepts the empty project and a valid tree', () => {
     expect(validateDocument(project(), [], rules)).toEqual([]);
     const tree = [div('a', { tag: 'section', classes: ['card', 'card--x'], attributes: { id: 'hero', title: 'Hi' }, styles: { desktop: { base: { width: '10px' } }, phone: { hover: { color: 'red' } } } })];

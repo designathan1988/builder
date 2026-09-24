@@ -722,7 +722,7 @@
     },
     {
       "field": "commands:commands[].history.coalesce",
-      "reader": "src/core/history/history.ts"
+      "reader": "src/core/store/store.ts"
     },
     {
       "field": "commands:commands[].history.coalesce.same",
@@ -738,7 +738,7 @@
     },
     {
       "field": "commands:commands[].history.transaction",
-      "reader": "src/core/history/history.ts"
+      "reader": "src/core/store/store.ts"
     },
     {
       "field": "commands:commands[].history.noChange",

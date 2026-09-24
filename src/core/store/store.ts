@@ -107,6 +107,9 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
     'the initial state',
   );
   let open: OpenGesture | null = null;
+  // the coalescing key of the last dispatch when it recorded an entry that may merge; any other dispatch clears it,
+  // so a burst merges only when no other command came in between (spec absolute-nudge)
+  let lastMergeable: string | null = null;
 
   const publish = (next: StoreState<Ui>) => {
     state = next;
@@ -128,6 +131,10 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
     const entry = table[id];
     const command = commands.get(id);
     if (!command) throw new Error(`unknown command ${id}`);
+    const previousMergeable = lastMergeable;
+    lastMergeable = null;
+    // the manifest's history.transaction: a command recorded once per dispatch never joins a gesture's transaction
+    if (gesture && command.history.undoable && command.history.transaction === 'per-dispatch') throw new Error(`${id} records one transaction per dispatch: it cannot run inside a gesture`);
     if (!isBuilt(entry)) return { status: 'not-available-yet' };
     const predicate = predicates[command.availability.predicate as keyof PredicateTable<Ui>];
     if (predicate && !predicate.test(state)) {
@@ -163,7 +170,8 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
     } else if (documentChanged) {
       const { key, within } = coalescing(command, args, before.selection);
       const tx: Transaction = { command: id, patches: applied.applied, inverses: applied.inverses, selectionBefore: before.selection, selectionAfter: selection, at: clock.now(), coalesceKey: key };
-      history = record(before.history, tx, within);
+      history = record(before.history, tx, key !== null && key === previousMergeable ? within : null);
+      lastMergeable = key;
     }
     const next: StoreState<Ui> = {
       document: documentChanged ? applied.document : before.document,

@@ -88,7 +88,7 @@ interface TestStore {
 }
 
 function emptyDocument(ids: IdGenerator): DocumentJson {
-  return createEmptyDocument(ids, { page: 'Home', root: 'Page' });
+  return createEmptyDocument(ids, { page: 'Home', root: 'Page' }, RULES.root);
 }
 
 function testStore(table: CommandTable<never> = TEST_COMMANDS, predicates: PredicateTable<never> = TEST_PREDICATES): TestStore {
@@ -253,6 +253,29 @@ describe('the store', () => {
     expect(locate(s.store.getState().document, id)?.node.styles.desktop?.base?.left).toBe('3px');
     s.store.dispatch('history.undo', {});
     expect(locate(s.store.getState().document, id)?.node.styles.desktop?.base).toBeUndefined();
+  });
+
+  it('never merges moves when another command came in between, even one that records nothing (spec absolute-nudge)', () => {
+    const s = testStore();
+    insertInto(s);
+    const id = s.store.getState().selection[0] ?? '';
+    s.store.dispatch('position.move', { dx: 1, dy: 0 });
+    // selecting the node that is already selected changes nothing and records nothing
+    s.store.dispatch('selection.select', { target: id });
+    s.store.dispatch('position.move', { dx: 1, dy: 0 });
+    // a command that is not available yet is a command in between as well
+    s.store.dispatch('element.duplicate', {});
+    s.store.dispatch('position.move', { dx: 1, dy: 0 });
+    expect(s.store.getState().history.past.map((t) => t.command)).toEqual(['element.insert', 'position.move', 'position.move', 'position.move']);
+  });
+
+  it('refuses a command the manifest records per dispatch inside a gesture (history.transaction)', () => {
+    const s = testStore();
+    insertInto(s);
+    const id = s.store.getState().selection[0] ?? '';
+    const gesture = s.store.gesture();
+    expect(() => gesture.dispatch('element.rename', { target: id, name: 'Inside' })).toThrow(/one transaction per dispatch/);
+    gesture.cancel();
   });
 
   it('never merges moves of different selections', () => {

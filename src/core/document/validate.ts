@@ -3,6 +3,7 @@
 // (elements.json), attributes and where they apply, edited properties, breakpoints and states (properties.json).
 // It never repairs or changes anything. The HTML content model (which element may sit in which) is owned by
 // src/core/elements/content-model.ts and arrives with the nesting features.
+import type { ElementType } from '../../generated/ids.ts';
 import type { ElementsFile, PropertiesFile } from '../../manifest/schema.ts';
 import { DOCUMENT_VERSION, walk, type DocNode, type DocumentJson, type Selection } from './model.ts';
 
@@ -13,18 +14,20 @@ export interface ModelRules {
   readonly properties: ReadonlySet<string>;
   readonly breakpoints: ReadonlySet<string>;
   readonly states: ReadonlySet<string>;
-  // the element type of every page's root
-  readonly rootType: string;
+  // the element every page's root is: the element type whose tag is <body> in elements.json
+  readonly root: { readonly type: ElementType; readonly tag: string };
 }
 
 export function rulesFromManifest(elements: ElementsFile, properties: PropertiesFile): ModelRules {
+  const body = elements.elements.find((e) => e.tag === 'body');
+  if (!body) throw new Error('elements.json has no element whose tag is body: a page has no root element');
   return {
     elements: new Map(elements.elements.map((e) => [e.id, { tags: [e.tag, ...e.alternativeTags], content: e.content }])),
     attributes: new Map(elements.attributes.map((a) => [a.id, a.elements])),
     properties: new Set(properties.properties.map((p) => p.id)),
     breakpoints: new Set(properties.breakpoints.map((b) => b.id)),
     states: new Set(properties.states.map((s) => s.id)),
-    rootType: 'page',
+    root: { type: body.id as ElementType, tag: 'body' },
   };
 }
 
@@ -63,7 +66,7 @@ export function validateDocument(doc: DocumentJson, selection: Selection, rules:
     else if (files.has(page.file)) bad(`${at}/file`, `two pages are ${page.file}`);
     else files.add(page.file);
     if (!isRecord(page.tree)) return bad(`${at}/tree`, 'a page has a tree');
-    if (page.tree.type !== rules.rootType) bad(`${at}/tree/type`, `a page's root is a ${rules.rootType} element`);
+    if (page.tree.type !== rules.root.type) bad(`${at}/tree/type`, `a page's root is a ${rules.root.type} element`);
     validateNode(page.tree, `${at}/tree`, rules, claim, bad, true);
   });
 
@@ -92,7 +95,7 @@ function validateNode(
     bad(`${at}/type`, `"${String(node.type)}" is not an element type of elements.json`);
     return;
   }
-  if (!root && node.type === rules.rootType) bad(`${at}/type`, `only a page's root is a ${rules.rootType} element`);
+  if (!root && node.type === rules.root.type) bad(`${at}/type`, `only a page's root is a ${rules.root.type} element`);
   if (typeof node.name !== 'string' || node.name.trim() === '') bad(`${at}/name`, 'an element has a name');
   if (!element.tags.includes(node.tag)) bad(`${at}/tag`, `<${String(node.tag)}> is not a tag of ${node.type} (${element.tags.map(String).join(', ')})`);
 

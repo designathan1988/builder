@@ -53,8 +53,9 @@ export interface EmptyProjectNames {
   readonly root: string;
 }
 
-// A project with one empty home page, index.html, whose root is the page element (<body>).
-export function createEmptyDocument(ids: IdGenerator, names: EmptyProjectNames): DocumentJson {
+// A project with one empty home page, index.html, whose root is the root element the manifest gives (validate.ts
+// ModelRules.root: the element whose tag is <body>).
+export function createEmptyDocument(ids: IdGenerator, names: EmptyProjectNames, root: { readonly type: ElementType; readonly tag: string }): DocumentJson {
   return {
     version: DOCUMENT_VERSION,
     pages: [
@@ -62,7 +63,7 @@ export function createEmptyDocument(ids: IdGenerator, names: EmptyProjectNames):
         id: ids.next(),
         name: names.page,
         file: 'index.html',
-        tree: { id: ids.next(), type: 'page', name: names.root, tag: 'body', attributes: {}, classes: [], styles: {}, text: null, children: [] },
+        tree: { id: ids.next(), type: root.type, name: names.root, tag: root.tag, attributes: {}, classes: [], styles: {}, text: null, children: [] },
       },
     ],
   };
