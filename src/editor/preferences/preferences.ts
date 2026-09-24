@@ -3,11 +3,14 @@
 import { DEFAULT_LOCALE, LOCALES, type Locale } from '../../generated/ids.ts';
 import type { CommandArgs } from '../../generated/commands.ts';
 import { registerHandler } from '../../core/commands/registry.ts';
+import { commandOf } from '../../manifest/runtime.ts';
 import type { Store } from '../../core/store/store.ts';
 import type { EditorUi } from '../state.ts';
 
 export type Theme = CommandArgs['preferences.setTheme']['theme'];
-const THEMES: readonly Theme[] = ['light', 'dark', 'system'];
+// the themes preferences.setTheme offers, read from the manifest
+const THEMES: readonly string[] = commandOf('preferences.setTheme').args.theme?.values ?? [];
+const isTheme = (value: unknown): value is Theme => typeof value === 'string' && THEMES.includes(value);
 
 export interface Preferences {
   readonly locale: Locale;
@@ -49,7 +52,7 @@ export function loadPreferences(storage: PreferenceStorage): Preferences {
   try {
     const stored = JSON.parse(text) as Record<string, unknown>;
     const locale = (LOCALES as readonly unknown[]).includes(stored.locale) ? (stored.locale as Locale) : INITIAL_PREFERENCES.locale;
-    const theme = (THEMES as readonly unknown[]).includes(stored.theme) ? (stored.theme as Theme) : INITIAL_PREFERENCES.theme;
+    const theme = isTheme(stored.theme) ? stored.theme : INITIAL_PREFERENCES.theme;
     return { locale, theme };
   } catch {
     return INITIAL_PREFERENCES;

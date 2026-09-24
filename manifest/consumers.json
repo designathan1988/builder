@@ -1690,7 +1690,27 @@
     },
     {
       "field": "layout:panels",
-      "reader": "src/editor/doors/door.tsx"
+      "reader": "src/editor/workspace/panels.ts"
+    },
+    {
+      "field": "layout:panels{}.icon",
+      "reader": "src/editor/shell/dock.tsx"
+    },
+    {
+      "field": "layout:panels{}.labelKey",
+      "reader": "src/editor/workspace/panels.ts"
+    },
+    {
+      "field": "layout:panels{}.place",
+      "reader": "src/editor/workspace/panels.ts"
+    },
+    {
+      "field": "layout:panels{}.in",
+      "reader": "src/editor/workspace/panels.ts"
+    },
+    {
+      "field": "layout:panels{}.open",
+      "reader": "src/editor/workspace/panels.ts"
     }
   ]
 }

@@ -12,6 +12,7 @@ import { DoorControl, Icon, useDoor } from '../doors/door.tsx';
 import { MenuButton } from '../doors/menu.tsx';
 import { GLYPHS, doorSlots, slotsIn } from '../doors/placement.ts';
 import { useEditorState } from '../store.ts';
+import { isPanelOpen, panelName } from '../workspace/panels.ts';
 import { useT } from '../text.ts';
 import { Slots } from './slots.tsx';
 
@@ -61,12 +62,15 @@ function offered(entry: DoorEntry, target: Target): readonly string[] {
 // an editor's action (add, remove, reset, reverse, distribute) is a button, not a value
 const ACTION = /(^|-)(add|remove|reset|reverse|distribute)(-|$)/;
 
-function FieldInput({ entry, target, label }: { readonly entry: DoorEntry; readonly target: Target; readonly label: string }) {
+// A field's controls, disabled while its door is (not available yet, or its predicate does not hold).
+function FieldInput({ entry, target, label, available }: { readonly entry: DoorEntry; readonly target: Target; readonly label: string; readonly available: boolean }) {
   const d = entry.door;
+  const off = available ? '' : ' is-unavailable';
+  const ariaDisabled = available ? undefined : true;
   // a button that writes one fixed value (Spread writes space-between), or an editor's action
   if (typeof d.args.value === 'string' || (d.kind === 'inspector-field' && ACTION.test(d.control))) {
     return (
-      <button type="button" className="door door--button is-unavailable" aria-disabled aria-label={label}>
+      <button type="button" className={`door door--button${off}`} aria-disabled={ariaDisabled} aria-label={label}>
         <span className="door__label">{typeof d.args.value === 'string' ? d.args.value : label}</span>
       </button>
     );
@@ -77,7 +81,7 @@ function FieldInput({ entry, target, label }: { readonly entry: DoorEntry; reado
         {offered(entry, target).map((value) => {
           const icon = target.icons[value];
           return (
-            <button key={value} type="button" className="door door--segment is-unavailable" aria-disabled title={value} aria-label={value}>
+            <button key={value} type="button" className={`door door--segment${off}`} aria-disabled={ariaDisabled} title={value} aria-label={value}>
               {icon !== undefined ? <Icon name={icon} size="sm" /> : <span className="door__label">{value}</span>}
             </button>
           );
@@ -87,7 +91,7 @@ function FieldInput({ entry, target, label }: { readonly entry: DoorEntry; reado
   }
   if (target.control === 'keyword-menu' || target.control === 'font-menu') {
     return (
-      <button type="button" className="select is-unavailable" aria-disabled aria-label={label} aria-haspopup="listbox">
+      <button type="button" className={`select${off}`} aria-disabled={ariaDisabled} aria-label={label} aria-haspopup="listbox">
         <span className="select__value" />
         <Icon name={GLYPHS.dropdown} size="xs" />
       </button>
@@ -96,7 +100,7 @@ function FieldInput({ entry, target, label }: { readonly entry: DoorEntry; reado
   return (
     <span className="input-wrap">
       {target.control === 'color-field' ? <span className="swatch" /> : null}
-      <input className="input" disabled aria-label={label} />
+      <input className="input" disabled={!available} aria-label={label} />
     </span>
   );
 }
@@ -111,11 +115,11 @@ function Field({ entry }: { readonly entry: DoorEntry }) {
   if (!target) return null;
   const cssName = entry.door.kind === 'inspector-field' ? (entry.door.property ?? target.id) : target.id;
   return (
-    <div className="field-row is-unavailable" data-door={entry.ref} title={door.title}>
+    <div className={`field-row${door.available ? '' : ' is-unavailable'}`} data-door={entry.ref} title={door.title}>
       <span className="field-row__label" title={cssName}>
         {door.label}
       </span>
-      <FieldInput entry={entry} target={target} label={door.label} />
+      <FieldInput entry={entry} target={target} label={door.label} available={door.available} />
     </div>
   );
 }
@@ -126,7 +130,7 @@ function BoxSide({ entry, where }: { readonly entry: DoorEntry; readonly where: 
   const property = entry.door.kind === 'inspector-field' ? entry.door.property : null;
   const labelKey = property !== null ? TARGETS.get(property)?.labelKey : undefined;
   const door = useDoor(entry, {}, labelKey !== undefined ? t(labelKey as MessageId) : undefined);
-  return <input className={`box__side box__side--${where}`} disabled aria-label={door.label} title={door.title} data-door={entry.ref} />;
+  return <input className={`box__side box__side--${where}`} disabled={!door.available} aria-label={door.label} title={door.title} data-door={entry.ref} />;
 }
 
 // the label of the margin or the padding box: the door that sets all four sides at once
@@ -214,7 +218,7 @@ function StyleSections() {
 function PanelField({ entry }: { readonly entry: DoorEntry }) {
   const door = useDoor(entry);
   return (
-    <div className="field-row is-unavailable" data-door={entry.ref} title={door.title}>
+    <div className={`field-row${door.available ? '' : ' is-unavailable'}`} data-door={entry.ref} title={door.title}>
       <span className="field-row__label">{door.label}</span>
       {entry.door.kind === 'panel-control' && entry.door.control === 'alignment-matrix' ? (
         <span className="matrix" aria-label={door.label} role="grid">
@@ -223,7 +227,7 @@ function PanelField({ entry }: { readonly entry: DoorEntry }) {
           ))}
         </span>
       ) : (
-        <input className="input" disabled aria-label={door.label} />
+        <input className="input" disabled={!door.available} aria-label={door.label} />
       )}
     </div>
   );
@@ -231,10 +235,10 @@ function PanelField({ entry }: { readonly entry: DoorEntry }) {
 
 export function Inspector() {
   const t = useT();
-  const open = useEditorState((s) => s.ui.panels.inspector);
+  const open = useEditorState((s) => isPanelOpen(s.ui, 'inspector'));
   if (!open) return null;
   return (
-    <aside className="inspector" aria-label={t('panel.inspector')}>
+    <aside className="inspector" aria-label={t(panelName('inspector'))}>
       <div className="inspector-header" data-region="inspector-header">
         <div className="inspector-header__tabs" role="tablist">
           <Slots region="inspector-header" render={(slot) => (slot.kind === 'door' && slot.entry.door.kind === 'panel-control' && slot.entry.door.drawnAs === 'tab' ? undefined : null)} />

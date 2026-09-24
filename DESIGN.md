@@ -240,7 +240,7 @@ Everything on disk (code, file names, commits, this document) is in English. The
 |---|---|
 | A door's control: every toolbar button (top bar, activity bar, canvas toolbar, frame tabs, text toolbar, preview bar, dock strip, status bar), every panel control drawn as an icon button, menu, context-menu and palette items that show one, quick panel buttons | `icon` of the door in `manifest/commands/*.json` |
 | A button that opens a menu | `icon` of its anchor in `manifest/layout.json` |
-| A panel: its dock tab (Timeline, Checks, Keyboard shortcuts, Document) and its palette entry ("Open …") | `panels` of `manifest/layout.json`, one per panel of `workspace.setPanelOpen` |
+| A panel: its dock tab (Timeline, Checks, Keyboard shortcuts, Document) and its palette entry ("Open …") | `panels` of `manifest/layout.json`, one per panel of `workspace.setPanelOpen`, which also holds the panel's name, its place (a sidebar view, a section of one, the inspector, the canvas tools, the workbench or a dock tab) and whether it is open at the first start |
 | An element (Layers rows, the Insert grid, the breadcrumb, the selector bar) and a page (its root element, `page`) | `icon` of the element type in `manifest/elements.json` |
 | A keyword of a keyword-buttons field drawn as icon buttons (Direction, Text align) | `icons` of the property in `manifest/properties.json`, one for every keyword its doors offer |
 | The marks every control or item of a kind draws: a dropdown's arrow, a submenu's arrow, the expanded and the collapsed disclosure, a checked item, a folder of the Explorer, a size variable of the Styles view | `glyphs` of `manifest/layout.json` |

@@ -630,6 +630,22 @@ PLANTS.push(
     },
   },
   {
+    id: 'panel-missing-from-layout',
+    rule: 'panel',
+    description: 'layout.json leaves out the Document panel, so the shell would have to name and place it in code',
+    apply: (m) => {
+      delete obj(obj(m.files['layout.json']).panels).document;
+    },
+  },
+  {
+    id: 'two-sidebar-views-open',
+    rule: 'panel',
+    description: 'both the Explorer and Insert are open at the first start, and the sidebar shows one view',
+    apply: (m) => {
+      obj(obj(obj(m.files['layout.json']).panels).elements).open = true;
+    },
+  },
+  {
     id: 'label-names-two-properties',
     rule: 'label-term',
     description: 'pt-BR labels gap "Preenchimento", the term of the SVG fill (the mockups used it for padding and fill)',

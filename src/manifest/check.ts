@@ -94,6 +94,7 @@ export const RULES = [
   'owner',
   'icon-name',
   'icon-required',
+  'panel',
 ] as const;
 
 export type RuleId = (typeof RULES)[number];
@@ -856,6 +857,7 @@ export function checkManifest(input: ManifestInput): CheckResult {
   p.properties.recipes.forEach((r, i) => noteKey(r.labelKey, `properties.json recipes[${i}].labelKey`));
   p.interactions.keyContexts.forEach((k, i) => noteKey(k.labelKey, `interactions.json keyContexts[${i}].labelKey`));
   p.layout.menus.forEach((m, i) => noteKey(m.labelKey, `layout.json menus[${i}].labelKey`));
+  for (const [panel, data] of Object.entries(p.layout.panels)) noteKey(data.labelKey, `layout.json panels.${panel}.labelKey`);
   p.checks.categories.forEach((k, i) => noteKey(k.labelKey, `checks.json categories[${i}].labelKey`));
 
   const catalogues = new Map<string, Record<string, unknown>>();
@@ -1745,7 +1747,7 @@ export function checkManifest(input: ManifestInput): CheckResult {
   for (const { file, path, door, ref: doorRef } of doors) iconName(door.icon, file, `${path}.icon`, doorRef);
   p.layout.menus.forEach((m, mi) => m.anchors.forEach((a, ai) => iconName(a.icon, 'layout.json', `menus[${mi}].anchors[${ai}].icon`, `the button of menu "${m.id}" in ${a.region}`)));
   for (const [glyph, icon] of Object.entries(p.layout.glyphs)) iconName(icon, 'layout.json', `glyphs.${glyph}`, `the ${glyph} glyph`);
-  for (const [panel, icon] of Object.entries(p.layout.panels)) iconName(icon, 'layout.json', `panels.${panel}`, `the ${panel} panel`);
+  for (const [panel, data] of Object.entries(p.layout.panels)) iconName(data.icon, 'layout.json', `panels.${panel}.icon`, `the ${panel} panel`);
   p.elements.elements.forEach((e, i) => iconName(e.icon, 'elements.json', `elements[${i}].icon`, `element ${e.id}`));
   p.properties.properties.forEach((prop, i) => {
     for (const [keyword, icon] of Object.entries(prop.icons)) iconName(icon, 'properties.json', `properties[${i}].icons.${keyword}`, `${prop.id}: ${keyword}`);
@@ -1765,9 +1767,21 @@ export function checkManifest(input: ManifestInput): CheckResult {
     if (door.kind === 'toolbar') report('icon-required', file, `${path}.icon`, `${doorRef} is a toolbar door without an icon: every toolbar door names its icon`);
     else if (drawnAs === 'icon-button') report('icon-required', file, `${path}.icon`, `${doorRef} is drawn as an icon button but names no icon`);
   }
+
+  // ---- panel: layout.json declares every panel of workspace.setPanelOpen and nothing else, with its place; the
+  // sidebar shows exactly one view at the first start; a section names the sidebar view it belongs to, and only a
+  // section does
   const panelArg = commandById.get('workspace.setPanelOpen')?.args.panel?.values ?? [];
-  for (const panel of panelArg) if (!(panel in p.layout.panels)) report('icon-required', 'layout.json', 'panels', `the ${panel} panel has no icon`);
-  for (const panel of Object.keys(p.layout.panels)) if (!panelArg.includes(panel)) report('icon-required', 'layout.json', `panels.${panel}`, `"${panel}" is not a panel of workspace.setPanelOpen`);
+  const panels = p.layout.panels;
+  for (const panel of panelArg) if (!(panel in panels)) report('panel', 'layout.json', 'panels', `the ${panel} panel of workspace.setPanelOpen is not declared: give it its icon, name, place and first state`);
+  for (const [panel, data] of Object.entries(panels)) {
+    if (!panelArg.includes(panel)) report('panel', 'layout.json', `panels.${panel}`, `"${panel}" is not a panel of workspace.setPanelOpen`);
+    if (data.place === 'section') {
+      if (data.in === null || panels[data.in]?.place !== 'sidebar') report('panel', 'layout.json', `panels.${panel}.in`, `${panel} is a section: "in" names the sidebar view it belongs to`);
+    } else if (data.in !== null) report('panel', 'layout.json', `panels.${panel}.in`, `${panel} is not a section, so it belongs to no sidebar view ("in" is null)`);
+  }
+  const firstViews = Object.entries(panels).filter(([, data]) => data.place === 'sidebar' && data.open).map(([panel]) => panel);
+  if (firstViews.length !== 1) report('panel', 'layout.json', 'panels', `the sidebar shows one view at the first start, but ${firstViews.length === 0 ? 'no sidebar panel is' : `${firstViews.join(', ')} are`} open`);
   p.layout.menus.forEach((m, mi) =>
     m.anchors.forEach((a, ai) => {
       if (a.drawnAs === 'icon-button' && a.icon === null) report('icon-required', 'layout.json', `menus[${mi}].anchors[${ai}].icon`, `the button of menu "${m.id}" in ${a.region} is drawn as an icon button but names no icon`);
@@ -1822,7 +1836,7 @@ export function checkManifest(input: ManifestInput): CheckResult {
     recipeSources: p.properties.recipes.map((r) => `${r.id} (${r.source.spec}; BCD ${r.source.bcd})`),
     storedWhole: p.properties.storedWhole.map((w) => `${w.property}: ${w.reason}`),
     iconLibrary: `Lucide ${p.icons.$generated.from['lucide-static'] ?? ''} (${p.icons.icons.length} icons)`,
-    iconsNamed: new Set([...doors.map((d) => d.door.icon), ...p.elements.elements.map((e) => e.icon), ...p.layout.menus.flatMap((m) => m.anchors.map((a) => a.icon)), ...Object.values(p.layout.glyphs), ...Object.values(p.layout.panels), ...p.properties.properties.flatMap((prop) => Object.values(prop.icons))].filter((i) => i !== null)).size,
+    iconsNamed: new Set([...doors.map((d) => d.door.icon), ...p.elements.elements.map((e) => e.icon), ...p.layout.menus.flatMap((m) => m.anchors.map((a) => a.icon)), ...Object.values(p.layout.glyphs), ...Object.values(p.layout.panels).map((panel) => panel.icon), ...p.properties.properties.flatMap((prop) => Object.values(prop.icons))].filter((i) => i !== null)).size,
     doorsWithIcon: doors.filter((d) => d.door.icon !== null).length,
     plannedReferences: p.references.references.filter((r) => r.status === 'planned').length,
     registeredReferences: p.references.references.filter((r) => r.status === 'registered').length,

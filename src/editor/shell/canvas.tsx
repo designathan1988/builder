@@ -8,6 +8,7 @@ import { DoorControl, Icon } from '../doors/door.tsx';
 import { MenuButton } from '../doors/menu.tsx';
 import { doorSlots, slotsIn } from '../doors/placement.ts';
 import { useEditorState } from '../store.ts';
+import { isPanelOpen } from '../workspace/panels.ts';
 import { useT } from '../text.ts';
 import { ReportFitZoom, Slots, useFitZoom } from './slots.tsx';
 
@@ -47,7 +48,7 @@ function ZoomValue() {
 }
 
 function CanvasToolbar() {
-  const toolsOpen = useEditorState((s) => s.ui.panels.canvasTools);
+  const toolsOpen = useEditorState((s) => isPanelOpen(s.ui, 'canvas-tools'));
   const toggleOrder = slotsIn('canvas-toolbar').find((s) => s.kind === 'door' && s.entry.command.id === 'workspace.setPanelOpen')?.order ?? 0;
   const tools = slotsIn('canvas-toolbar').filter((s) => s.kind === 'door' && s.entry.door.kind === 'panel-control' && s.entry.door.panel === 'canvas-tools').map((s) => s.order);
   return (

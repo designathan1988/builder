@@ -440,6 +440,10 @@ const doorCommon = {
   args: z.record(camelId, jsonValue),
 };
 
+// Where a panel lives: a view of the sidebar (the activity bar switches them), a section of a sidebar view, the
+// inspector column, the tools of the canvas toolbar, the workbench (the dock itself) or a tab of the dock.
+export const PANEL_PLACES = ['sidebar', 'section', 'inspector', 'canvas-toolbar', 'workbench', 'dock'] as const;
+
 export const menuIdSchema = z.enum([
   'file',
   'edit',
@@ -609,8 +613,11 @@ export const layoutFileSchema = z.strictObject({
   // row, the mark of a checked item, a folder of the Explorer, a size variable of the Styles view. The shell draws no
   // other icon than these, the panels', the elements', the keywords' and the ones the doors name.
   glyphs: z.strictObject({ dropdown: iconName, submenu: iconName, expanded: iconName, collapsed: iconName, checked: iconName, folder: iconName, sizeVariable: iconName }),
-  // each panel (the panel values of workspace.setPanelOpen) → its icon, on its dock tab and its palette entry
-  panels: z.record(kebabId, iconName),
+  // Each panel (the panel values of workspace.setPanelOpen): its icon (on its dock tab and its palette entry), its
+  // name, where it lives, the sidebar view a section belongs to ("in", a section only), and whether it is open at the
+  // first start (a dock panel: a tab of the dock; the workbench: the dock expanded). The dock's panels are its tabs
+  // in this order.
+  panels: z.record(kebabId, z.strictObject({ icon: iconName, labelKey: i18nKey, place: z.enum(PANEL_PLACES), in: kebabId.nullable(), open: z.boolean() })),
 });
 
 // ---------------------------------------------------------------- checks (the Checks tab of the dock)

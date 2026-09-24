@@ -8,6 +8,7 @@ import { manifest, type DoorEntry } from '../../manifest/runtime.ts';
 import { DoorControl, Icon, useDoor } from '../doors/door.tsx';
 import { GLYPHS, doorSlots } from '../doors/placement.ts';
 import { useEditorState } from '../store.ts';
+import { isPanelOpen, panelName } from '../workspace/panels.ts';
 import { useT } from '../text.ts';
 import { Slots } from './slots.tsx';
 
@@ -111,11 +112,11 @@ function LayersRow({ node, depth }: { readonly node: DocNode; readonly depth: nu
 function Explorer() {
   const t = useT();
   const pages = useEditorState((s) => s.document.pages);
-  const layersOpen = useEditorState((s) => s.ui.panels.layers);
+  const layersOpen = useEditorState((s) => isPanelOpen(s.ui, 'layers'));
   const tree = pages[0]?.tree;
   return (
-    <section className="view" aria-label={t('panel.explorer')}>
-      <div className="view__title">{t('panel.explorer')}</div>
+    <section className="view" aria-label={t(panelName('explorer'))}>
+      <div className="view__title">{t(panelName('explorer'))}</div>
       <div data-region="explorer-pages">
         <SectionTitle title={t('explorer.pages')} region="explorer-pages" />
         {pages.map((p) => (
@@ -133,7 +134,7 @@ function Explorer() {
           </span>
         </div>
         {layersOpen && tree ? (
-          <div role="tree" aria-label={t('panel.layers')} data-region="layers-row" data-key-context="layers-tree">
+          <div role="tree" aria-label={t(panelName('layers'))} data-region="layers-row" data-key-context="layers-tree">
             <LayersRow node={tree} depth={0} />
           </div>
         ) : null}
@@ -181,7 +182,7 @@ function Styles() {
       <div className="section-title">
         <span className="section-title__text">{t('styles.classes')}</span>
       </div>
-      <SectionTitle title={t('panel.variables')} region="styles" />
+      <SectionTitle title={t(panelName('variables'))} region="styles" />
     </section>
   );
 }

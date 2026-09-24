@@ -1,93 +1,99 @@
-// Panel visibility (ARCHITECTURE.md): which sidebar view is shown, and whether the sidebar, the Layers section, the
-// inspector, the canvas tools and each dock tab are open. The commands workspace.setPanelOpen, toggleLeftDock,
+// Panel visibility (ARCHITECTURE.md): which sidebar view is shown, and whether the sidebar, each section of a view,
+// the inspector, the canvas tools and each dock tab are open. The commands workspace.setPanelOpen, toggleLeftDock,
 // toggleInspector and collapseDocks change it; the status bar reports each change (spec dock-toggles, Problems 1).
+// What a panel is (its name, its place, whether it is open at the first start) is data: `panels` of layout.json.
 import type { CommandArgs } from '../../generated/commands.ts';
 import type { MessageId } from '../../generated/ids.ts';
 import { message, registerHandler, type Message } from '../../core/commands/registry.ts';
+import { manifest } from '../../manifest/runtime.ts';
 import type { EditorUi } from '../state.ts';
-import { withDock, type DockState } from './layout.ts';
+import { withActiveDockTab, withDock, type DockState } from './layout.ts';
 
 export type Panel = CommandArgs['workspace.setPanelOpen']['panel'];
+export type PanelData = (typeof manifest.layout.panels)[string];
+export type PanelPlace = PanelData['place'];
 
-// the sidebar's views (the activity bar) and the dock's tabs, as panels of workspace.setPanelOpen
-export const SIDEBAR_VIEWS = ['explorer', 'elements', 'variables'] as const satisfies readonly Panel[];
-export type SidebarView = (typeof SIDEBAR_VIEWS)[number];
-export const DOCK_TABS = ['timeline', 'checks', 'shortcuts', 'document'] as const satisfies readonly Panel[];
-export type DockTab = (typeof DOCK_TABS)[number];
+// manifest:check rule panel proves layout.json declares every panel of workspace.setPanelOpen, and only those
+export const PANELS = manifest.layout.panels as Readonly<Record<Panel, PanelData>>;
+
+// a panel's name in the catalogue
+export const panelName = (panel: Panel): MessageId => PANELS[panel].labelKey as MessageId;
+
+// the panels that live in a place, in the order of layout.json
+export function panelsAt(place: PanelPlace): readonly Panel[] {
+  return (Object.keys(PANELS) as Panel[]).filter((panel) => PANELS[panel].place === place);
+}
 
 export interface PanelsState {
-  readonly sidebarView: SidebarView;
+  // the sidebar column (Ctrl+B) and the view it shows
   readonly sidebar: boolean;
-  readonly inspector: boolean;
-  // the Layers section of the Explorer
-  readonly layers: boolean;
-  // canvas toolbar items 5–9 (outlines, zones, grids)
-  readonly canvasTools: boolean;
-  readonly dockTabs: readonly DockTab[];
-  readonly activeDockTab: DockTab | null;
+  readonly sidebarView: Panel;
+  // whether each section, the inspector and the canvas tools are open
+  readonly open: Readonly<Record<Panel, boolean>>;
+  // the dock's tabs, in the order they were opened
+  readonly dockTabs: readonly Panel[];
   // what the first Ctrl+\ collapsed, put back by the second
   readonly collapsed: { readonly sidebar: boolean; readonly inspector: boolean; readonly dock: DockState } | null;
 }
 
-// DESIGN.md: the Explorer is the default sidebar view; Timeline and Checks are the dock's tabs.
+const sidebarViews = panelsAt('sidebar');
+const firstView = sidebarViews.find((panel) => PANELS[panel].open) ?? sidebarViews[0];
+if (firstView === undefined) throw new Error('layout.json declares no sidebar view');
+
 export const INITIAL_PANELS: PanelsState = {
-  sidebarView: 'explorer',
-  sidebar: true,
-  inspector: true,
-  layers: true,
-  canvasTools: true,
-  dockTabs: ['timeline', 'checks'],
-  activeDockTab: 'timeline',
+  sidebar: sidebarViews.some((panel) => PANELS[panel].open),
+  sidebarView: firstView,
+  open: Object.fromEntries((Object.keys(PANELS) as Panel[]).map((panel) => [panel, PANELS[panel].open])) as Record<Panel, boolean>,
+  dockTabs: panelsAt('dock').filter((panel) => PANELS[panel].open),
   collapsed: null,
 };
 
-// each panel's name in the catalogue
-export const PANEL_LABELS: Readonly<Record<Panel, MessageId>> = {
-  elements: 'panel.elements',
-  layers: 'panel.layers',
-  inspector: 'panel.inspector',
-  explorer: 'panel.explorer',
-  timeline: 'panel.timeline',
-  variables: 'panel.variables',
-  checks: 'panel.checks',
-  workbench: 'panel.workbench',
-  shortcuts: 'panel.shortcuts',
-  document: 'panel.document',
-  'canvas-tools': 'panel.canvasTools',
-};
-
-const isSidebarView = (panel: Panel): panel is SidebarView => (SIDEBAR_VIEWS as readonly Panel[]).includes(panel);
-const isDockTab = (panel: Panel): panel is DockTab => (DOCK_TABS as readonly Panel[]).includes(panel);
-
 export function isPanelOpen(ui: EditorUi, panel: Panel): boolean {
   const p = ui.panels;
-  if (isSidebarView(panel)) return p.sidebar && p.sidebarView === panel;
-  if (isDockTab(panel)) return p.dockTabs.includes(panel);
-  if (panel === 'layers') return p.sidebar && p.sidebarView === 'explorer' && p.layers;
-  if (panel === 'inspector') return p.inspector;
-  if (panel === 'workbench') return ui.layout.dock !== 'collapsed';
-  return p.canvasTools;
+  const data = PANELS[panel];
+  switch (data.place) {
+    case 'sidebar':
+      return p.sidebar && p.sidebarView === panel;
+    case 'section':
+      return p.sidebar && p.sidebarView === data.in && p.open[panel];
+    case 'dock':
+      return p.dockTabs.includes(panel);
+    case 'workbench':
+      return ui.layout.dock !== 'collapsed';
+    default:
+      return p.open[panel];
+  }
 }
 
 function withPanel(ui: EditorUi, panel: Panel, open: boolean): EditorUi {
   const p = ui.panels;
-  if (isSidebarView(panel)) return { ...ui, panels: open ? { ...p, sidebar: true, sidebarView: panel } : { ...p, sidebar: p.sidebarView === panel ? false : p.sidebar } };
-  if (panel === 'layers') return { ...ui, panels: open ? { ...p, sidebar: true, sidebarView: 'explorer', layers: true } : { ...p, layers: false } };
-  if (panel === 'inspector') return { ...ui, panels: { ...p, inspector: open } };
-  if (panel === 'canvas-tools') return { ...ui, panels: { ...p, canvasTools: open } };
-  if (panel === 'workbench') return withDock(ui, open ? 'open' : 'collapsed');
-  if (open) {
-    const dockTabs = p.dockTabs.includes(panel) ? p.dockTabs : [...p.dockTabs, panel];
-    return withDock({ ...ui, panels: { ...p, dockTabs, activeDockTab: panel } }, ui.layout.dock === 'collapsed' ? 'open' : ui.layout.dock);
+  const data = PANELS[panel];
+  switch (data.place) {
+    case 'sidebar':
+      return { ...ui, panels: open ? { ...p, sidebar: true, sidebarView: panel } : { ...p, sidebar: p.sidebarView === panel ? false : p.sidebar } };
+    case 'section': {
+      const view = open && data.in !== null ? { sidebar: true, sidebarView: data.in as Panel } : {};
+      return { ...ui, panels: { ...p, ...view, open: { ...p.open, [panel]: open } } };
+    }
+    case 'workbench':
+      return withDock(ui, open ? 'open' : 'collapsed');
+    case 'dock': {
+      if (open) {
+        const dockTabs = p.dockTabs.includes(panel) ? p.dockTabs : [...p.dockTabs, panel];
+        return withDock(withActiveDockTab({ ...ui, panels: { ...p, dockTabs } }, panel), ui.layout.dock === 'collapsed' ? 'open' : ui.layout.dock);
+      }
+      // closing the last tab collapses the workbench (spec workbench-panel, Problems 1)
+      const dockTabs = p.dockTabs.filter((t) => t !== panel);
+      const active = ui.layout.activeDockTab === panel ? (dockTabs[dockTabs.length - 1] ?? null) : ui.layout.activeDockTab;
+      const next = withActiveDockTab({ ...ui, panels: { ...p, dockTabs } }, active);
+      return dockTabs.length === 0 ? withDock(next, 'collapsed') : next;
+    }
+    default:
+      return { ...ui, panels: { ...p, open: { ...p.open, [panel]: open } } };
   }
-  // closing the last tab collapses the workbench (spec workbench-panel, Problems 1)
-  const dockTabs = p.dockTabs.filter((t) => t !== panel);
-  const activeDockTab = p.activeDockTab === panel ? (dockTabs[dockTabs.length - 1] ?? null) : p.activeDockTab;
-  const next: EditorUi = { ...ui, panels: { ...p, dockTabs, activeDockTab } };
-  return dockTabs.length === 0 ? withDock(next, 'collapsed') : next;
 }
 
-const panelMessage = (panel: Panel, open: boolean): Message => message(open ? 'status.panel.opened' : 'status.panel.closed', { panel: { key: PANEL_LABELS[panel] } });
+const panelMessage = (panel: Panel, open: boolean): Message => message(open ? 'status.panel.opened' : 'status.panel.closed', { panel: { key: panelName(panel) } });
 
 export const setPanelOpen = registerHandler<'workspace.setPanelOpen', EditorUi>('workspace.setPanelOpen', ({ state }, args) => {
   const open = args.open === 'toggle' ? !isPanelOpen(state.ui, args.panel) : args.open === 'open';
@@ -100,20 +106,27 @@ export const toggleLeftDock = registerHandler<'workspace.toggleLeftDock', Editor
   return { kind: 'change', ui: { ...state.ui, panels: { ...state.ui.panels, sidebar } }, message: message(sidebar ? 'status.sidebar.shown' : 'status.sidebar.hidden') };
 });
 
+// the inspector column: the panels placed there (layout.json names one, the inspector)
+const withInspector = (ui: EditorUi, open: boolean): EditorUi => panelsAt('inspector').reduce((next, panel) => withPanel(next, panel, open), ui);
+const inspectorOpen = (ui: EditorUi): boolean => panelsAt('inspector').some((panel) => isPanelOpen(ui, panel));
+
 export const toggleInspector = registerHandler<'workspace.toggleInspector', EditorUi>('workspace.toggleInspector', ({ state }) => {
-  const inspector = !state.ui.panels.inspector;
-  return { kind: 'change', ui: { ...state.ui, panels: { ...state.ui.panels, inspector } }, message: message(inspector ? 'status.inspector.shown' : 'status.inspector.hidden') };
+  const open = !inspectorOpen(state.ui);
+  return { kind: 'change', ui: withInspector(state.ui, open), message: message(open ? 'status.inspector.shown' : 'status.inspector.hidden') };
 });
 
 // Ctrl+\: collapses every dock; the second press puts back exactly what was open (spec dock-toggles).
 export const collapseDocks = registerHandler<'workspace.collapseDocks', EditorUi>('workspace.collapseDocks', ({ state }) => {
   const { ui } = state;
   const p = ui.panels;
-  const anyOpen = p.sidebar || p.inspector || ui.layout.dock !== 'collapsed';
+  const inspector = inspectorOpen(ui);
+  const anyOpen = p.sidebar || inspector || ui.layout.dock !== 'collapsed';
   if (!anyOpen && p.collapsed !== null) {
     const back = p.collapsed;
-    return { kind: 'change', ui: withDock({ ...ui, panels: { ...p, sidebar: back.sidebar, inspector: back.inspector, collapsed: null } }, back.dock), message: message('status.docks.restored') };
+    const restored = withInspector({ ...ui, panels: { ...p, sidebar: back.sidebar, collapsed: null } }, back.inspector);
+    return { kind: 'change', ui: withDock(restored, back.dock), message: message('status.docks.restored') };
   }
-  const collapsed = { sidebar: p.sidebar, inspector: p.inspector, dock: ui.layout.dock };
-  return { kind: 'change', ui: withDock({ ...ui, panels: { ...p, sidebar: false, inspector: false, collapsed } }, 'collapsed'), message: message('status.docks.collapsed') };
+  const collapsed = { sidebar: p.sidebar, inspector, dock: ui.layout.dock };
+  const hidden = withInspector({ ...ui, panels: { ...p, sidebar: false, collapsed } }, false);
+  return { kind: 'change', ui: withDock(hidden, 'collapsed'), message: message('status.docks.collapsed') };
 });

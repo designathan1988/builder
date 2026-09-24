@@ -44,10 +44,10 @@ export function namedIcons(root: string): string[] {
     if (!file.startsWith('commands/')) continue;
     for (const command of (json as { commands: { entryPoints: { icon?: unknown }[] }[] }).commands) for (const door of command.entryPoints) add(door.icon);
   }
-  const layout = files['layout.json'] as { menus: { anchors: { icon?: unknown }[] }[]; glyphs?: Record<string, unknown>; panels?: Record<string, unknown> };
+  const layout = files['layout.json'] as { menus: { anchors: { icon?: unknown }[] }[]; glyphs?: Record<string, unknown>; panels?: Record<string, { icon?: unknown }> };
   for (const menu of layout.menus) for (const anchor of menu.anchors) add(anchor.icon);
   for (const glyph of Object.values(layout.glyphs ?? {})) add(glyph);
-  for (const icon of Object.values(layout.panels ?? {})) add(icon);
+  for (const panel of Object.values(layout.panels ?? {})) add(panel.icon);
   for (const element of (files['elements.json'] as { elements: { icon: unknown }[] }).elements) add(element.icon);
   for (const property of (files['properties.json'] as { properties: { icons?: Record<string, unknown> }[] }).properties) for (const icon of Object.values(property.icons ?? {})) add(icon);
   return [...names].sort();

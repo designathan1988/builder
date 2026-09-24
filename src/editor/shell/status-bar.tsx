@@ -7,6 +7,7 @@ import { allNodes } from '../../core/document/model.ts';
 import { pluralForm } from '../../i18n/index.ts';
 import { MenuButton } from '../doors/menu.tsx';
 import { useEditorState } from '../store.ts';
+import { panelName } from '../workspace/panels.ts';
 import { messageText, useLocale, useT } from '../text.ts';
 import { ZoomValue } from './canvas.tsx';
 import { Slots } from './slots.tsx';
@@ -30,7 +31,7 @@ export function StatusBar() {
           if (slot.kind === 'door' && slot.entry.command.id === 'selection.select') {
             // the breadcrumb of the selection: empty without one, then the breakpoint and the element count
             return [
-              <nav key="breadcrumb" className="status-bar__breadcrumb" aria-label={t('panel.layers')} />,
+              <nav key="breadcrumb" className="status-bar__breadcrumb" aria-label={t(panelName('layers'))} />,
               <span key="breakpoint" className="status-bar__item">
                 {BASE_BREAKPOINT ? t(BASE_BREAKPOINT.labelKey as MessageId) : null}
               </span>,

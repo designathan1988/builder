@@ -49,7 +49,7 @@ export function useDoor(entry: DoorEntry, args: Readonly<Record<string, unknown>
   const t = useT();
   const store = useStore();
   const built = isDoorBuilt(entry);
-  const current = useEditorState((s) => isCurrent(entry, s, args));
+  const current = useEditorState((s) => built && isCurrent(entry, s, args));
   const available = useEditorState((s) => built && ((PREDICATES as PredicateTable<EditorUi>)[entry.command.availability.predicate as PredicateId]?.test(s) ?? true));
   const label = labelled ?? t(entry.door.labelKey as MessageId);
   const chord = chordHint(entry.command.id);

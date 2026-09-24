@@ -373,16 +373,82 @@
     "sizeVariable": "square-round-corner"
   },
   "panels": {
-    "elements": "square-plus",
-    "layers": "layers",
-    "inspector": "panel-right",
-    "explorer": "files",
-    "timeline": "diamond",
-    "variables": "palette",
-    "checks": "check",
-    "workbench": "panel-bottom",
-    "shortcuts": "keyboard",
-    "document": "braces",
-    "canvas-tools": "ruler-dimension-line"
+    "explorer": {
+      "icon": "files",
+      "labelKey": "panel.explorer",
+      "place": "sidebar",
+      "in": null,
+      "open": true
+    },
+    "elements": {
+      "icon": "square-plus",
+      "labelKey": "panel.elements",
+      "place": "sidebar",
+      "in": null,
+      "open": false
+    },
+    "variables": {
+      "icon": "palette",
+      "labelKey": "panel.variables",
+      "place": "sidebar",
+      "in": null,
+      "open": false
+    },
+    "layers": {
+      "icon": "layers",
+      "labelKey": "panel.layers",
+      "place": "section",
+      "in": "explorer",
+      "open": true
+    },
+    "inspector": {
+      "icon": "panel-right",
+      "labelKey": "panel.inspector",
+      "place": "inspector",
+      "in": null,
+      "open": true
+    },
+    "canvas-tools": {
+      "icon": "ruler-dimension-line",
+      "labelKey": "panel.canvasTools",
+      "place": "canvas-toolbar",
+      "in": null,
+      "open": true
+    },
+    "workbench": {
+      "icon": "panel-bottom",
+      "labelKey": "panel.workbench",
+      "place": "workbench",
+      "in": null,
+      "open": false
+    },
+    "timeline": {
+      "icon": "diamond",
+      "labelKey": "panel.timeline",
+      "place": "dock",
+      "in": null,
+      "open": true
+    },
+    "checks": {
+      "icon": "check",
+      "labelKey": "panel.checks",
+      "place": "dock",
+      "in": null,
+      "open": true
+    },
+    "shortcuts": {
+      "icon": "keyboard",
+      "labelKey": "panel.shortcuts",
+      "place": "dock",
+      "in": null,
+      "open": false
+    },
+    "document": {
+      "icon": "braces",
+      "labelKey": "panel.document",
+      "place": "dock",
+      "in": null,
+      "open": false
+    }
   }
 }

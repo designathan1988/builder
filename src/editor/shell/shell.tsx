@@ -4,6 +4,7 @@
 import { useEffect, useState } from 'react';
 import { installKeymap } from '../input/keymap.ts';
 import { useEditorState, useStore } from '../store.ts';
+import { isPanelOpen } from '../workspace/panels.ts';
 import { useT } from '../text.ts';
 import { CanvasColumn } from './canvas.tsx';
 import { Dock } from './dock.tsx';
@@ -30,7 +31,7 @@ export function Shell() {
   const store = useStore();
   const t = useT();
   const sidebar = useEditorState((s) => s.ui.panels.sidebar);
-  const inspector = useEditorState((s) => s.ui.panels.inspector);
+  const inspector = useEditorState((s) => isPanelOpen(s.ui, 'inspector'));
   const dock = useEditorState((s) => s.ui.layout.dock);
   // a measure of the layout (the zoom that fits the frame), not editor state: the camera arrives with the canvas
   const [zoom, setZoom] = useState(1);

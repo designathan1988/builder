@@ -6,14 +6,13 @@ import { DoorControl, Icon } from '../doors/door.tsx';
 import { doorSlots } from '../doors/placement.ts';
 import { useEditorState } from '../store.ts';
 import { useT } from '../text.ts';
-import { PANEL_LABELS, type DockTab } from '../workspace/panels.ts';
+import { PANELS, panelName, type Panel } from '../workspace/panels.ts';
 import { Slots } from './slots.tsx';
 
 const TAB = doorSlots('tab-strip')[0];
 const CLOSE = doorSlots('dock-strip').find((d) => d.command.id === 'workspace.setPanelOpen');
-const PANEL_ICONS = manifest.layout.panels;
 
-function DockBody({ tab }: { readonly tab: DockTab }) {
+function DockBody({ tab }: { readonly tab: Panel }) {
   const t = useT();
   if (tab === 'timeline') {
     return (
@@ -41,17 +40,17 @@ function DockBody({ tab }: { readonly tab: DockTab }) {
 export function Dock() {
   const t = useT();
   const tabs = useEditorState((s) => s.ui.panels.dockTabs);
-  const active = useEditorState((s) => s.ui.panels.activeDockTab);
+  const active = useEditorState((s) => s.ui.layout.activeDockTab);
   const state = useEditorState((s) => s.ui.layout.dock);
   return (
-    <section className={`dock dock--${state}`} aria-label={t('panel.workbench')}>
+    <section className={`dock dock--${state}`} aria-label={t(panelName('workbench'))}>
       <div className="dock-strip" data-region="dock-strip">
         <div className="dock-strip__tabs" role="tablist" data-region="tab-strip" data-key-context="tab-strip">
           {TAB
             ? tabs.map((tab) => (
                 <DoorControl key={tab} entry={TAB} args={{ group: 'workbench', panel: tab }} className={tab === active ? 'is-active' : ''}>
-                  <Icon name={PANEL_ICONS[tab] ?? PANEL_ICONS.workbench ?? ''} size="sm" />
-                  <span className="door__label">{t(PANEL_LABELS[tab])}</span>
+                  <Icon name={PANELS[tab].icon} size="sm" />
+                  <span className="door__label">{t(panelName(tab))}</span>
                 </DoorControl>
               ))
             : null}

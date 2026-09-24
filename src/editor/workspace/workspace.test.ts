@@ -3,7 +3,7 @@ import { sequentialIds } from '../../core/ports/ids.ts';
 import { manualClock } from '../../core/ports/clock.ts';
 import type { PreferenceStorage } from '../preferences/preferences.ts';
 import { createEditorStore } from '../store.ts';
-import { isPanelOpen } from './panels.ts';
+import { PANELS, isPanelOpen, type Panel } from './panels.ts';
 
 function memory(text: string | null = null): PreferenceStorage & { text: string | null } {
   const box = {
@@ -17,22 +17,30 @@ function memory(text: string | null = null): PreferenceStorage & { text: string 
 }
 
 const store = () => createEditorStore({ storage: memory(), ids: sequentialIds('n'), clock: manualClock() });
+const openPanels = (s: ReturnType<typeof store>): Panel[] => (Object.keys(PANELS) as Panel[]).filter((panel) => isPanelOpen(s.getState().ui, panel));
 
 describe('panel visibility (workspace/panels.ts)', () => {
+  it('starts with every panel as layout.json says: open at the first start or not', () => {
+    const s = store();
+    for (const panel of Object.keys(PANELS) as Panel[]) expect([panel, isPanelOpen(s.getState().ui, panel)]).toEqual([panel, PANELS[panel].open]);
+  });
+
   it('starts with the Explorer, Layers and the inspector open and the dock collapsed with Timeline and Checks', () => {
-    const { ui } = store().getState();
-    expect(ui.panels).toMatchObject({ sidebarView: 'explorer', sidebar: true, inspector: true, layers: true, dockTabs: ['timeline', 'checks'] });
-    expect(ui.layout.dock).toBe('collapsed');
+    const s = store();
+    expect(openPanels(s)).toEqual(['explorer', 'layers', 'inspector', 'canvas-tools', 'timeline', 'checks']);
+    expect(s.getState().ui.panels.dockTabs).toEqual(['timeline', 'checks']);
+    expect(s.getState().ui.layout).toEqual({ dock: 'collapsed', activeDockTab: 'timeline' });
   });
 
   it('switches the sidebar view, and closes the sidebar when the shown view is toggled again', () => {
     const s = store();
     s.dispatch('workspace.setPanelOpen', { panel: 'elements', open: 'toggle' });
-    expect(s.getState().ui.panels).toMatchObject({ sidebarView: 'elements', sidebar: true });
+    expect(openPanels(s).filter((p) => PANELS[p].place === 'sidebar')).toEqual(['elements']);
     s.dispatch('workspace.setPanelOpen', { panel: 'elements', open: 'toggle' });
     expect(s.getState().ui.panels.sidebar).toBe(false);
+    expect(openPanels(s).filter((p) => PANELS[p].place === 'sidebar' || PANELS[p].place === 'section')).toEqual([]);
     s.dispatch('workspace.setPanelOpen', { panel: 'explorer', open: 'open' });
-    expect(s.getState().ui.panels).toMatchObject({ sidebarView: 'explorer', sidebar: true });
+    expect(openPanels(s).filter((p) => PANELS[p].place === 'sidebar' || PANELS[p].place === 'section')).toEqual(['explorer', 'layers']);
   });
 
   it('reports each change in the status bar (spec dock-toggles, Problems 1)', () => {
@@ -47,11 +55,10 @@ describe('panel visibility (workspace/panels.ts)', () => {
     const s = store();
     s.dispatch('workspace.setPanelOpen', { panel: 'shortcuts', open: 'open' });
     expect(s.getState().ui.panels.dockTabs).toEqual(['timeline', 'checks', 'shortcuts']);
-    expect(s.getState().ui.panels.activeDockTab).toBe('shortcuts');
-    expect(s.getState().ui.layout.dock).toBe('open');
+    expect(s.getState().ui.layout).toEqual({ dock: 'open', activeDockTab: 'shortcuts' });
     for (const panel of ['shortcuts', 'timeline', 'checks'] as const) s.dispatch('workspace.setPanelOpen', { panel, open: 'close' });
     expect(s.getState().ui.panels.dockTabs).toEqual([]);
-    expect(s.getState().ui.layout.dock).toBe('collapsed');
+    expect(s.getState().ui.layout).toEqual({ dock: 'collapsed', activeDockTab: null });
   });
 
   it('hides and shows the sidebar and the inspector (Ctrl+B, Ctrl+Alt+B)', () => {
@@ -60,10 +67,12 @@ describe('panel visibility (workspace/panels.ts)', () => {
     expect(s.getState().ui.panels.sidebar).toBe(false);
     expect(s.getState().message?.key).toBe('status.sidebar.hidden');
     s.dispatch('workspace.toggleInspector', {});
-    expect(s.getState().ui.panels.inspector).toBe(false);
+    expect(isPanelOpen(s.getState().ui, 'inspector')).toBe(false);
+    expect(s.getState().message?.key).toBe('status.inspector.hidden');
     s.dispatch('workspace.toggleLeftDock', {});
     s.dispatch('workspace.toggleInspector', {});
-    expect(s.getState().ui.panels).toMatchObject({ sidebar: true, inspector: true });
+    expect(s.getState().ui.panels.sidebar).toBe(true);
+    expect(isPanelOpen(s.getState().ui, 'inspector')).toBe(true);
   });
 
   it('collapses every dock and puts back exactly what was open on the second Ctrl+\\ (spec dock-toggles)', () => {
@@ -71,11 +80,13 @@ describe('panel visibility (workspace/panels.ts)', () => {
     s.dispatch('workspace.toggleInspector', {});
     s.dispatch('workspace.setWorkbenchState', { state: 'max' });
     s.dispatch('workspace.collapseDocks', {});
-    expect(s.getState().ui.panels).toMatchObject({ sidebar: false, inspector: false });
+    expect(s.getState().ui.panels.sidebar).toBe(false);
+    expect(isPanelOpen(s.getState().ui, 'inspector')).toBe(false);
     expect(s.getState().ui.layout.dock).toBe('collapsed');
     expect(s.getState().message?.key).toBe('status.docks.collapsed');
     s.dispatch('workspace.collapseDocks', {});
-    expect(s.getState().ui.panels).toMatchObject({ sidebar: true, inspector: false, collapsed: null });
+    expect(s.getState().ui.panels).toMatchObject({ sidebar: true, collapsed: null });
+    expect(isPanelOpen(s.getState().ui, 'inspector')).toBe(false);
     expect(s.getState().ui.layout.dock).toBe('max');
     expect(s.getState().message?.key).toBe('status.docks.restored');
   });
