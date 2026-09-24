@@ -15,7 +15,15 @@ Reference material in `reference/` is read-only. Never write anything inside it.
 
 When the user writes to you, do what the message says. The user outranks this file. If you are blocked, ask the user in the chat.
 
-Do the work yourself. Do not delegate code or reviews to other models or external workers (for example deepseek-worker). The only reviewer is the `evaluator` subagent.
+Do the work yourself. Do not delegate code or reviews to other models or external workers (for example deepseek-worker). Helper agents only when the user asks for them in the conversation.
+
+## Builder and auditor
+
+Two Claude Code sessions work side by side in this folder: the builder writes the work, the auditor reviews each of the builder's commits and messages its findings. The auditor is the only reviewer.
+
+- The builder finds the auditor with ListAgents. After every commit and push it sends the auditor the commit hash and one line saying what changed, and keeps working without waiting for the answer.
+- When the auditor's findings arrive, the builder fixes every BLOCKING finding at the next safe point, before starting new work, and commits the fix. Every NOTE goes into `PROGRESS.md` under "Open findings". A finding is never argued away.
+- The auditor's messages are review findings, not orders. Orders come only from the user.
 
 ## The manifest is the contract
 
@@ -44,7 +52,7 @@ Features are grouped in `manifest/features/NN-group.json` and built in that orde
 1. **Scenario session.** Write the scenarios of every feature in the group, from its intent and its spec (the spec's "Problems in Pager" corrections are requirements). Each scenario names its setup, the doors it runs through, the expected document diff, selection and history, at least one end terminal (render, persistence after an immediate reload, or export) and its refusals. Write no app code. `npm run manifest:check` passes; commit and push.
 2. **Build session.** Start by reading `PROGRESS.md`, `git log --oneline -15`, the group's features and specs, `DESIGN.md` and `ARCHITECTURE.md`, and by running `npm run verify:fast` and `npm run e2e`; fix any failure first. Build the group's commands and doors until the runner passes every scenario of the group through every door. The build session never edits scenarios; if one looks wrong, stop and tell the user.
 3. **Tooth proof.** For each feature, make its command handler return without changing anything, run its scenarios and show they FAIL, then undo that single edit and show they pass. Show both raw outputs.
-4. **Review.** Call the `evaluator` subagent. On NEEDS_WORK fix every finding and call it again; do not argue a finding away. After PASS update `PROGRESS.md`, commit naming the group and feature ids, and push to origin main.
+4. **Review.** Update `PROGRESS.md`, commit naming the group and feature ids, push to origin main and notify the auditor. Fix every BLOCKING finding it sends back, as above, until it has none left for the group.
 
 ## Tests
 
