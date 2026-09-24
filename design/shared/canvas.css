@@ -1,0 +1,239 @@
+/*
+  Canvas overlays shared by the three mockups (selection, handles, spacing bands, measurement,
+  drop indicator, ghost, text caret, interaction target).
+  They sit inside the zoomed page. Pieces that must keep a constant screen size counter the zoom
+  with `zoom: var(--iz)`; lengths inside them are then screen pixels. Bands stay in page pixels.
+  Colours come from each direction's tokens (--cv-*).
+*/
+.ov { position: absolute; inset: 0; pointer-events: none; z-index: 40; }
+.ov * { box-sizing: border-box; }
+.ov-z { zoom: var(--iz); }
+/* overlays never inherit the page's typography */
+.ov, .ov-tag, .ov-size, .ov-chip, .ov-tip, .ov-num, .qp { letter-spacing: normal; text-transform: none; font-style: normal; text-align: left; }
+
+/* outlines */
+.ov-sel { position: absolute; inset: 0; outline: calc(1.5px * var(--iz)) solid var(--cv-sel); border-radius: inherit; }
+.ov-hov { position: absolute; inset: 0; outline: calc(1px * var(--iz)) solid var(--cv-hov); }
+.ov-dash { position: absolute; inset: 0; outline: calc(1.5px * var(--iz)) dashed var(--cv-sel); }
+.ov-text { position: absolute; inset: calc(-4px * var(--iz)); outline: calc(1.5px * var(--iz)) solid var(--cv-text); border-radius: calc(3px * var(--iz)); }
+
+/* chips: name tag above, size below */
+.ov-tag, .ov-size, .ov-chip {
+  position: absolute;
+  zoom: var(--iz);
+  font: 600 11px/18px var(--font-ui);
+  padding: 0 6px;
+  white-space: nowrap;
+  color: var(--cv-on);
+  background: var(--cv-sel);
+  border-radius: 4px;
+}
+.ov-tag { bottom: 100%; left: -1px; translate: 0 -4px; }
+.ov-tag small { font-weight: 400; opacity: 0.85; margin-left: 4px; font-size: 11px; }
+.ov-size { top: 100%; left: 50%; translate: -50% 6px; }
+.ov-size.is-hov { background: var(--cv-hov); color: var(--cv-on-hov, var(--cv-on)); }
+.is-text.ov-chip { background: var(--cv-text); color: var(--cv-on-text); }
+.is-bp.ov-chip, .is-bp.ov-tag, .is-bp.ov-size { background: var(--cv-bp); color: var(--cv-on-bp); }
+.is-state.ov-chip, .is-state.ov-tag, .is-state.ov-size { background: var(--cv-state); color: var(--cv-on-state); }
+.is-target.ov-chip { background: var(--cv-target); color: var(--cv-on-state); }
+.is-drop.ov-chip { background: var(--cv-drop); }
+.ov-chip { z-index: 60; }
+
+/* states drawn on the page itself */
+[data-state="drag"] #card3 { opacity: 0.28; }
+
+/* resize handles */
+.ov-h {
+  position: absolute;
+  zoom: var(--iz);
+  width: 8px;
+  height: 8px;
+  translate: -50% -50%;
+  background: #fff;
+  border: 1.5px solid var(--cv-sel);
+  border-radius: 1px;
+}
+.ov-h.nw { left: 0; top: 0; } .ov-h.n { left: 50%; top: 0; } .ov-h.ne { left: 100%; top: 0; }
+.ov-h.e { left: 100%; top: 50%; } .ov-h.se { left: 100%; top: 100%; } .ov-h.s { left: 50%; top: 100%; }
+.ov-h.sw { left: 0; top: 100%; } .ov-h.w { left: 0; top: 50%; }
+
+/* radius handles, 14 screen px inside each corner */
+.ov-rad {
+  position: absolute;
+  zoom: var(--iz);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1.5px solid var(--cv-sel);
+}
+.ov-rad.nw { left: 10px; top: 10px; } .ov-rad.ne { right: 10px; top: 10px; }
+.ov-rad.se { right: 10px; bottom: 10px; } .ov-rad.sw { left: 10px; bottom: 10px; }
+
+/* rotation zone just outside the top-right corner */
+.ov-rot { position: absolute; zoom: var(--iz); left: 100%; top: 0; translate: 6px -22px; width: 16px; height: 16px; color: var(--cv-sel); }
+
+/* spacing bands (page pixels) */
+.ov-band {
+  position: absolute;
+  --c: var(--cv-pad);
+  background:
+    repeating-linear-gradient(-45deg, color-mix(in srgb, var(--c) 55%, transparent) 0 calc(1px * var(--iz)), transparent 0 calc(6px * var(--iz))),
+    color-mix(in srgb, var(--c) 12%, transparent);
+}
+.ov-band.is-margin { --c: var(--cv-mar); }
+.ov-band.is-gap { --c: var(--cv-gap); }
+.ov-band.is-hot { background: color-mix(in srgb, var(--c) 34%, transparent); outline: calc(1px * var(--iz)) solid var(--c); }
+.ov-band.pt { left: 0; right: 0; top: 0; height: var(--pt); }
+.ov-band.pb { left: 0; right: 0; bottom: 0; height: var(--pb); }
+.ov-band.pl { left: 0; top: var(--pt); bottom: var(--pb); width: var(--pl); }
+.ov-band.pr { right: 0; top: var(--pt); bottom: var(--pb); width: var(--pr); }
+.ov-band.gap { left: 0; right: 0; top: 100%; height: var(--gap); }
+.ov-band.mt { left: 0; right: 0; bottom: 100%; height: calc(6px * var(--iz)); }
+.ov-band.mb { left: 0; right: 0; top: 100%; height: calc(6px * var(--iz)); }
+.ov-bandval {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  zoom: var(--iz);
+  font: 600 11px/16px var(--font-ui);
+  padding: 0 5px;
+  border-radius: 3px;
+  color: #fff;
+  background: color-mix(in srgb, var(--c) 78%, #000);
+  white-space: nowrap;
+}
+
+/* hint beside a hovered handle */
+.ov-tip {
+  position: absolute;
+  zoom: var(--iz);
+  z-index: 3;
+  width: max-content;
+  max-width: 280px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font: 400 12px/17px var(--font-ui);
+  color: var(--cv-tip-text);
+  background: var(--cv-tip-bg);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+.ov-tip b { font-weight: 600; }
+.ov-tip kbd, .ov-kbd {
+  font: 600 11px/16px var(--font-ui);
+  padding: 0 4px;
+  border-radius: 3px;
+  border: 1px solid color-mix(in srgb, currentColor 35%, transparent);
+}
+
+/* number field opened by a click on a handle */
+.ov-num {
+  position: absolute;
+  zoom: var(--iz);
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 28px;
+  padding: 0 4px 0 8px;
+  border-radius: 6px;
+  background: var(--cv-tip-bg);
+  color: var(--cv-tip-text);
+  font: 400 12px/28px var(--font-ui);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  white-space: nowrap;
+}
+.ov-num input {
+  width: 44px;
+  height: 22px;
+  border: 1.5px solid var(--cv-sel);
+  border-radius: 4px;
+  font: 600 12px var(--font-ui);
+  padding: 0 4px;
+  background: #fff;
+  color: #111;
+}
+
+/* measurement */
+.ov-mx, .ov-my { position: absolute; --m: var(--cv-measure); }
+.ov-mx { height: 0; border-top: calc(1px * var(--iz)) solid var(--m); }
+.ov-my { width: 0; border-left: calc(1px * var(--iz)) solid var(--m); }
+.ov-mx::before, .ov-mx::after { content: ""; position: absolute; top: calc(-5px * var(--iz)); height: calc(9px * var(--iz)); border-left: calc(1px * var(--iz)) solid var(--m); }
+.ov-mx::before { left: 0; } .ov-mx::after { right: 0; }
+.ov-my::before, .ov-my::after { content: ""; position: absolute; left: calc(-5px * var(--iz)); width: calc(9px * var(--iz)); border-top: calc(1px * var(--iz)) solid var(--m); }
+.ov-my::before { top: 0; } .ov-my::after { bottom: 0; }
+.ov-mval {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  zoom: var(--iz);
+  font: 600 11px/16px var(--font-ui);
+  padding: 0 5px;
+  border-radius: 3px;
+  color: #fff;
+  background: color-mix(in srgb, var(--cv-measure) 85%, #000);
+  white-space: nowrap;
+}
+.ov-mguide { position: absolute; border-left: calc(1px * var(--iz)) dashed var(--cv-measure); opacity: 0.7; }
+
+/* drag: insertion line, ghost, drop container */
+.ov-drop-v {
+  position: absolute;
+  top: -6px;
+  bottom: -6px;
+  width: calc(3px * var(--iz));
+  translate: -50% 0;
+  border-radius: 2px;
+  background: var(--cv-drop);
+  box-shadow: 0 0 0 calc(2px * var(--iz)) color-mix(in srgb, var(--cv-drop) 25%, transparent);
+}
+.ov-drop-v::before, .ov-drop-v::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  width: calc(9px * var(--iz));
+  height: calc(9px * var(--iz));
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: #fff;
+  border: calc(2px * var(--iz)) solid var(--cv-drop);
+}
+.ov-drop-v::before { top: 0; } .ov-drop-v::after { top: 100%; }
+.ov-drop-h {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: calc(3px * var(--iz));
+  translate: 0 -50%;
+  border-radius: 2px;
+  background: var(--cv-drop);
+}
+.ov-droparea { position: absolute; inset: -8px; outline: calc(1.5px * var(--iz)) dashed var(--cv-drop); background: color-mix(in srgb, var(--cv-drop) 6%, transparent); border-radius: 24px; }
+.ov-ghost {
+  position: absolute;
+  z-index: 45;
+  pointer-events: none;
+  opacity: 0.6;
+  rotate: -2deg;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* cursors */
+.ov-cursor { position: absolute; zoom: var(--iz); width: 22px; height: 22px; z-index: 60; filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.35)); }
+
+/* text editing */
+.tsel { background: color-mix(in srgb, var(--cv-text) 30%, transparent); color: inherit; border-radius: 2px; }
+.caret { display: inline-block; width: 0; height: 1.05em; vertical-align: -0.12em; margin-left: 1px; border-left: calc(2px * var(--iz)) solid var(--cv-text); }
+
+/* interaction target picking */
+.ov-pick { position: absolute; inset: -6px; outline: calc(2px * var(--iz)) dashed var(--cv-target); background: color-mix(in srgb, var(--cv-target) 7%, transparent); border-radius: 22px; }
+.ov-link {
+  position: absolute;
+  border-left: calc(2px * var(--iz)) dashed var(--cv-target);
+}
+
+/* layout grid overlay (columns) */
+.ov-cols { position: absolute; inset: 0 96px; display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; z-index: 5; }
+.ov-cols i { background: color-mix(in srgb, var(--cv-measure) 7%, transparent); }

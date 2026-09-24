@@ -1,0 +1,135 @@
+/*
+  The sample page edited in every mockup ("Aurora Café").
+  It is drawn at real CSS pixels (desktop 1440 px wide) and the frame scales it with CSS zoom,
+  the same way the editor will scale its iframe. Canvas overlays live in canvas.css.
+*/
+.site {
+  --s-bg: #fbf6ee;
+  --s-ink: #2b1d14;
+  --s-ink-2: #6b5646;
+  --s-accent: #b9512a;
+  --s-accent-hover: #8f3a1b;
+  --s-card: #ffffff;
+  --s-line: #eadfce;
+  --s-cream: #f5ecdf;
+  --s-serif: Georgia, "Times New Roman", serif;
+  --s-sans: "Segoe UI", system-ui, sans-serif;
+  position: relative;
+  width: 1440px;
+  zoom: var(--z);
+  background: var(--s-bg);
+  color: var(--s-ink);
+  font: 400 16px/24px var(--s-sans);
+  margin-top: var(--scroll, 0px);
+}
+.site * { box-sizing: border-box; }
+.site h1, .site h2, .site h3, .site p { margin: 0; }
+.site a { color: inherit; text-decoration: none; }
+
+.s-header {
+  position: relative;
+  height: 80px;
+  padding: 0 96px;
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  border-bottom: 1px solid var(--s-line);
+}
+.s-logo { font: 700 28px/32px var(--s-serif); letter-spacing: -0.5px; }
+.s-logo span { color: var(--s-accent); }
+.s-nav { display: flex; gap: 32px; margin-left: auto; font-size: 16px; color: var(--s-ink-2); }
+
+.s-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 52px;
+  padding: 0 28px;
+  border-radius: 999px;
+  font: 600 17px/24px var(--s-sans);
+  border: 1.5px solid var(--s-ink);
+}
+.s-btn--sm { height: 40px; padding: 0 20px; font-size: 15px; }
+.s-btn--primary { background: var(--s-accent); border-color: var(--s-accent); color: #fff; }
+.s-btn--primary.is-hover { background: var(--s-accent-hover); border-color: var(--s-accent-hover); box-shadow: 0 10px 24px rgba(143, 58, 27, 0.35); top: -2px; }
+
+.s-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 520px;
+  gap: 64px;
+  align-items: center;
+  padding: 64px 96px;
+}
+.s-eyebrow { font: 600 14px/20px var(--s-sans); letter-spacing: 1.4px; text-transform: uppercase; color: var(--s-accent); margin-bottom: 16px; }
+.s-h1 { position: relative; font: 400 60px/64px var(--s-serif); letter-spacing: -1.2px; margin-bottom: 20px; }
+.s-lead { font-size: 19px; line-height: 30px; color: var(--s-ink-2); margin-bottom: 32px; max-width: 600px; }
+.s-actions { position: relative; display: flex; gap: 16px; }
+.s-hero-img {
+  position: relative;
+  height: 400px;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 50% 58%, #f5ecdf 0 70px, #d9c2a5 71px 96px, transparent 97px),
+    radial-gradient(circle at 50% 58%, rgba(43, 29, 20, 0.25) 0 120px, transparent 121px),
+    radial-gradient(circle at 20% 20%, #e7a567 0 60px, transparent 61px),
+    radial-gradient(circle at 85% 80%, #6d3b20 0 90px, transparent 91px),
+    linear-gradient(135deg, #c8743f, #7a3e1d);
+}
+
+.s-plans { position: relative; padding: 72px 96px 96px; }
+.s-h2 { position: relative; font: 400 44px/52px var(--s-serif); letter-spacing: -0.6px; }
+.s-sub { margin-top: 8px; font-size: 18px; line-height: 28px; color: var(--s-ink-2); }
+.s-cards {
+  position: relative;
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.s-card {
+  --pt: 32px; --pr: 32px; --pb: 32px; --pl: 32px; --gap: 12px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 32px;
+  border-radius: 20px;
+  background: var(--s-card);
+  border: 1px solid var(--s-line);
+  box-shadow: 0 8px 24px rgba(43, 29, 20, 0.08);
+}
+.s-card > * { position: relative; }
+.s-card-img { height: 170px; border-radius: 12px; background: linear-gradient(135deg, #e3a36b, #a8552b); }
+.s-card h3 { font: 600 26px/32px var(--s-serif); }
+.s-card p { height: 48px; color: var(--s-ink-2); }
+.s-price { height: 40px; display: flex; align-items: baseline; gap: 4px; padding-top: 8px; border-top: 1px solid var(--s-line); }
+.s-price b { font: 700 24px/32px var(--s-sans); }
+.s-price span { color: var(--s-ink-2); }
+.s-card--featured { background: var(--s-ink); color: var(--s-cream); border-color: var(--s-ink); }
+.s-card--featured p, .s-card--featured .s-price span { color: #d9c7b3; }
+.s-card--featured .s-price { border-top-color: #4a372a; }
+.s-card--featured .s-card-img { background: linear-gradient(135deg, #5a3622, #1d120c); }
+.s-card--leaf .s-card-img { background: linear-gradient(135deg, #9dbb8a, #3f6b4f); }
+
+.s-footer {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 48px;
+  padding: 48px 96px;
+  background: var(--s-ink);
+  color: var(--s-cream);
+  font-size: 15px;
+}
+.s-footer b { display: block; font: 700 22px/28px var(--s-serif); margin-bottom: 8px; }
+.s-footer span { display: block; color: #cdb9a3; }
+
+/* Tablet (834 px): only what the mockups need to show the breakpoint reflow. */
+.site.is-tablet { width: 834px; }
+.site.is-tablet .s-header { padding: 0 40px; gap: 24px; }
+.site.is-tablet .s-nav { gap: 20px; font-size: 15px; }
+.site.is-tablet .s-hero { grid-template-columns: 1fr; gap: 32px; padding: 48px 40px; }
+.site.is-tablet .s-h1 { font-size: 44px; line-height: 50px; }
+.site.is-tablet .s-hero-img { height: 260px; }
+.site.is-tablet .s-plans { padding: 56px 40px 72px; }
+.site.is-tablet .s-cards { grid-template-columns: repeat(2, 1fr); }

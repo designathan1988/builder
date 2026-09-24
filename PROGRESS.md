@@ -2,6 +2,42 @@
 
 Handoff notes between sessions. Newest entry first.
 
+## 2026-09-24 — Interface mockups: three directions to choose from
+
+Why: every earlier attempt left the interface for last and ended generic and cluttered. The user picks a direction before anything is built. This session wrote static HTML and CSS only: no app code, no manifest change.
+
+Done:
+- `design/a-classic-refined`, `design/b-pen`, `design/c-studio`, each with:
+  - `index.html`: the full editor with every command group placed. 12 drawn states, switched by a small inline script (`#state=<id>&theme=light|dark`): the brief's 10, plus `menu` (an app menu open) and `context` (the context menu) so those command groups are visible.
+  - `tokens.json` (DTCG 2025.10): type scale, spacing, sizes, radii, elevation, colours for light and dark.
+  - `tokens.css`: the same values as custom properties, read by the page.
+  - `shots/`: `1440-NN-<state>.png` for the 12 states, plus `1920-01-default.png`.
+- `design/shared/site.css` is the sample page (Aurora Café), drawn at real pixels and scaled with CSS `zoom`, as the editor's iframe will be. `design/shared/canvas.css` holds the canvas overlays: selection, handles, spacing bands, measurement, drop line, ghost, caret and interaction target.
+- `design/OPTIONS.md`: the comparison table against requirements 1–13, who each direction suits and its main risk.
+- Every screenshot was checked with Playwright on the installed Chrome for text overflowing its box, targets under 24 px not spaced per WCAG 2.5.8, and console errors: 0 findings in 39 screenshots. `npm run verify:fast` still passes.
+
+Fragile / worth knowing:
+- `tokens.css` and each page's inline CSS were written from the values in `tokens.json`. Editing `tokens.json` alone does not change a mockup.
+- Canvas overlays live inside the zoomed page and cancel the zoom with `zoom: var(--iz)` (1 / page zoom). Lengths inside them are screen pixels; spacing bands stay in page pixels. The same approach may serve the real canvas overlay.
+
+Open findings (recorded, not acted on):
+1. Requirement 10 names Ctrl+Shift+K as the palette fallback. `commandBar.open` has only `Ctrl+K` and `menu:file`. Inside text editing, Ctrl+K is `text.editLink`, so the fallback is the only palette shortcut there.
+2. The mockups place controls that have no door yet:
+   - breakpoint and state pickers in the inspector selector bar (all three);
+   - breakpoint tabs on the frame (B) and the breakpoint ruler (C). `view.setBreakpoint` has only `toolbar:top-bar` and `toolbar:preview-bar`; `view.setStyleState` has only `menu:style-state`;
+   - B's quick-insert row (`element.insert` has only `panel-control:elements/tile`);
+   - C's Canvas / Split / Code switch (the manifest's code panel is a toggled panel, not a split view).
+   The chosen direction's doors must be added to the manifest with DESIGN.md.
+3. Requirement 7 asks for a canvas door for every visual property. The manifest's canvas doors cover resize, spacing, gap, border width, radius, shadow, rotation, anchors and move. The quick panel adds size, fill, gradient, text colour, font size, opacity, border, effects, move, rotate and scale. Line height, letter spacing, font family and weight, filters, skew, grid tracks and the rest have no canvas door.
+4. Requirement 9 names four dock tools (timeline, code, accessibility, problems). The manifest has the panels `timeline`, `code`, `checks` (Verificações) and `workbench`, and no problems panel. The mockups draw Acessibilidade and Problemas as two tabs.
+5. Text formatting (bold, italic, link) has only shortcut doors. The mockups show them as key hints in the text-editing mode chip.
+6. `view.enterPreview` (Ctrl+P) and `element.duplicate` (Ctrl+D) override Chrome's Print and Bookmark. Chrome does not reserve them (a page can prevent the default), so requirement 11 holds; flagged in case they should be avoided too.
+
+Next:
+1. The user picks a direction, or a mix, from `design/OPTIONS.md`.
+2. `DESIGN.md` from the chosen mockup: every door placed, and the missing doors from the open findings added to the manifest.
+3. `ARCHITECTURE.md`, then the scenario runner and the scenario session for `01-foundation`.
+
 ## 2026-09-24 — Property model fix: browser support from BCD, implemented properties, recipes, fallback allowlist
 
 Why: a67fcde stored longhands no browser implements (box-shadow-*, text-align-all, max-lines, block-ellipsis, continue), which forced render and export to rebuild the shorthand: a second writer of the same property. The rule now is to store the finest-grained property browsers implement, and which ones they implement is generated from MDN's browser-compat-data (BCD), not measured or remembered. This session changed data, the generator and the validator only; there is still no app code.
