@@ -43,7 +43,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -96,7 +97,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -142,7 +144,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -193,7 +196,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -243,7 +247,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -294,7 +299,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -340,7 +346,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -357,7 +364,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -423,7 +431,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {
             "setting": "duration"
@@ -443,7 +452,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {
             "setting": "delay"
@@ -463,7 +473,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {
             "setting": "iterations"
@@ -483,7 +494,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {
             "setting": "direction"
@@ -503,7 +515,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {
             "setting": "fill"
@@ -523,7 +536,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {
             "setting": "timing"
@@ -543,7 +557,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {
             "setting": "play-state"
@@ -586,7 +601,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -604,7 +620,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -640,7 +657,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -676,7 +694,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -712,7 +731,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -748,7 +768,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }

@@ -41,6 +41,7 @@
           "feature": "props-display",
           "property": "display",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -54,7 +55,8 @@
             },
             "writes": [
               "display"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -64,6 +66,7 @@
           "feature": "props-flex-container",
           "property": "flex-direction",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -77,7 +80,8 @@
             },
             "writes": [
               "flex-direction"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -87,6 +91,7 @@
           "feature": "props-flex-container",
           "property": "flex-wrap",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -100,7 +105,8 @@
             },
             "writes": [
               "flex-wrap"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -110,6 +116,7 @@
           "feature": "props-flex-container",
           "property": "justify-content",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -123,7 +130,8 @@
             },
             "writes": [
               "justify-content"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -133,6 +141,7 @@
           "feature": "props-flex-container",
           "property": "align-items",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -146,7 +155,8 @@
             },
             "writes": [
               "align-items"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -156,6 +166,7 @@
           "feature": "props-flex-container",
           "property": "align-content",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -169,7 +180,8 @@
             },
             "writes": [
               "align-content"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -179,6 +191,7 @@
           "feature": "props-flex-container",
           "property": null,
           "composite": "gap",
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -193,7 +206,8 @@
             "writes": [
               "row-gap",
               "column-gap"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -203,6 +217,7 @@
           "feature": "props-flex-container",
           "property": "row-gap",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -216,7 +231,8 @@
             },
             "writes": [
               "row-gap"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -226,6 +242,7 @@
           "feature": "props-flex-container",
           "property": "column-gap",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -239,7 +256,8 @@
             },
             "writes": [
               "column-gap"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -249,6 +267,7 @@
           "feature": "props-grid-container",
           "property": "grid-template-columns",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -262,7 +281,8 @@
             },
             "writes": [
               "grid-template-columns"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -272,6 +292,7 @@
           "feature": "props-grid-container",
           "property": "grid-template-rows",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -285,7 +306,8 @@
             },
             "writes": [
               "grid-template-rows"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -295,6 +317,7 @@
           "feature": "props-grid-container",
           "property": "grid-auto-flow",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -308,7 +331,8 @@
             },
             "writes": [
               "grid-auto-flow"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -318,6 +342,7 @@
           "feature": "props-grid-container",
           "property": "justify-items",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -331,7 +356,8 @@
             },
             "writes": [
               "justify-items"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -341,6 +367,7 @@
           "feature": "props-grid-container",
           "property": "grid-template-areas",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -354,7 +381,8 @@
             },
             "writes": [
               "grid-template-areas"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -364,6 +392,7 @@
           "feature": "props-layout-item",
           "property": "flex-grow",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -374,7 +403,8 @@
             "offers": null,
             "writes": [
               "flex-grow"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -384,6 +414,7 @@
           "feature": "props-layout-item",
           "property": "flex-shrink",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -394,7 +425,8 @@
             "offers": null,
             "writes": [
               "flex-shrink"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -404,6 +436,7 @@
           "feature": "props-layout-item",
           "property": "flex-basis",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -417,7 +450,8 @@
             },
             "writes": [
               "flex-basis"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -427,6 +461,7 @@
           "feature": "props-layout-item",
           "property": "align-self",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -440,7 +475,8 @@
             },
             "writes": [
               "align-self"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -450,6 +486,7 @@
           "feature": "props-layout-item",
           "property": "justify-self",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -463,7 +500,8 @@
             },
             "writes": [
               "justify-self"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -473,6 +511,7 @@
           "feature": "props-layout-item",
           "property": "order",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -483,7 +522,8 @@
             "offers": null,
             "writes": [
               "order"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -493,6 +533,7 @@
           "feature": "props-layout-item",
           "property": null,
           "composite": "grid-column",
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -504,7 +545,8 @@
             "writes": [
               "grid-column-start",
               "grid-column-end"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -514,6 +556,7 @@
           "feature": "props-layout-item",
           "property": null,
           "composite": "grid-row",
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -525,7 +568,8 @@
             "writes": [
               "grid-row-start",
               "grid-row-end"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -535,6 +579,7 @@
           "feature": "props-more",
           "property": null,
           "composite": "columns",
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -548,9 +593,9 @@
             },
             "writes": [
               "column-width",
-              "column-count",
-              "column-height"
-            ]
+              "column-count"
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -560,6 +605,7 @@
           "feature": "props-more",
           "property": "column-span",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -573,7 +619,8 @@
             },
             "writes": [
               "column-span"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -583,6 +630,7 @@
           "feature": "props-more",
           "property": "column-fill",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -596,7 +644,8 @@
             },
             "writes": [
               "column-fill"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -606,6 +655,7 @@
           "feature": "props-more",
           "property": "column-rule-width",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -619,7 +669,8 @@
             },
             "writes": [
               "column-rule-width"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -629,6 +680,7 @@
           "feature": "props-more",
           "property": "column-rule-style",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -642,7 +694,8 @@
             },
             "writes": [
               "column-rule-style"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -652,6 +705,7 @@
           "feature": "props-more",
           "property": "column-rule-color",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -662,7 +716,8 @@
             "offers": null,
             "writes": [
               "column-rule-color"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -672,6 +727,7 @@
           "feature": "props-more",
           "property": "break-before",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -681,11 +737,12 @@
             "selection": "all",
             "offers": {
               "property": "break-before",
-              "list": "generated"
+              "list": "menu"
             },
             "writes": [
               "break-before"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -695,6 +752,7 @@
           "feature": "props-more",
           "property": "break-after",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -704,11 +762,12 @@
             "selection": "all",
             "offers": {
               "property": "break-after",
-              "list": "generated"
+              "list": "menu"
             },
             "writes": [
               "break-after"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -718,6 +777,7 @@
           "feature": "props-more",
           "property": "break-inside",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -727,11 +787,12 @@
             "selection": "all",
             "offers": {
               "property": "break-inside",
-              "list": "generated"
+              "list": "menu"
             },
             "writes": [
               "break-inside"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -741,6 +802,7 @@
           "feature": "props-more",
           "property": "scroll-behavior",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -754,31 +816,8 @@
             },
             "writes": [
               "scroll-behavior"
-            ]
-          },
-          "args": {}
-        },
-        {
-          "id": "inspector-overscroll-behavior",
-          "kind": "inspector-field",
-          "feature": "props-more",
-          "property": null,
-          "composite": "overscroll-behavior",
-          "attribute": null,
-          "control": "field",
-          "labelKey": "command.setProperty",
-          "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
-          "adapter": {
-            "selection": "all",
-            "offers": {
-              "property": "overscroll-behavior",
-              "list": "generated"
-            },
-            "writes": [
-              "overscroll-behavior-x",
-              "overscroll-behavior-y"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -788,6 +827,7 @@
           "feature": "props-more",
           "property": "scroll-snap-type",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -801,7 +841,8 @@
             },
             "writes": [
               "scroll-snap-type"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -811,6 +852,7 @@
           "feature": "props-more",
           "property": "scroll-snap-align",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -824,7 +866,8 @@
             },
             "writes": [
               "scroll-snap-align"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -834,6 +877,7 @@
           "feature": "props-element-specific",
           "property": "border-collapse",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -847,7 +891,8 @@
             },
             "writes": [
               "border-collapse"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -857,6 +902,7 @@
           "feature": "props-element-specific",
           "property": "border-spacing",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -870,7 +916,8 @@
             },
             "writes": [
               "border-spacing"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -880,6 +927,7 @@
           "feature": "props-element-specific",
           "property": "table-layout",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -893,7 +941,8 @@
             },
             "writes": [
               "table-layout"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -903,6 +952,7 @@
           "feature": "props-element-specific",
           "property": "caption-side",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -916,7 +966,8 @@
             },
             "writes": [
               "caption-side"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -926,6 +977,7 @@
           "feature": "props-element-specific",
           "property": "empty-cells",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -939,7 +991,8 @@
             },
             "writes": [
               "empty-cells"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -949,6 +1002,7 @@
           "feature": "props-more",
           "property": "contain",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -962,7 +1016,8 @@
             },
             "writes": [
               "contain"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -972,6 +1027,7 @@
           "feature": "props-more",
           "property": "content-visibility",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -985,7 +1041,8 @@
             },
             "writes": [
               "content-visibility"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -995,6 +1052,7 @@
           "feature": "props-more",
           "property": "counter-reset",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1008,7 +1066,8 @@
             },
             "writes": [
               "counter-reset"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1018,6 +1077,7 @@
           "feature": "props-more",
           "property": "counter-increment",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1031,7 +1091,8 @@
             },
             "writes": [
               "counter-increment"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1041,6 +1102,7 @@
           "feature": "inspector-number-fields",
           "property": "width",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1054,7 +1116,8 @@
             },
             "writes": [
               "width"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1064,6 +1127,7 @@
           "feature": "inspector-number-fields",
           "property": "height",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1077,7 +1141,8 @@
             },
             "writes": [
               "height"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1087,6 +1152,7 @@
           "feature": "props-size-overflow",
           "property": "min-width",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1100,7 +1166,8 @@
             },
             "writes": [
               "min-width"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1110,6 +1177,7 @@
           "feature": "props-size-overflow",
           "property": "max-width",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1123,7 +1191,8 @@
             },
             "writes": [
               "max-width"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1133,6 +1202,7 @@
           "feature": "props-size-overflow",
           "property": "min-height",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1146,7 +1216,8 @@
             },
             "writes": [
               "min-height"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1156,6 +1227,7 @@
           "feature": "props-size-overflow",
           "property": "max-height",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1169,7 +1241,8 @@
             },
             "writes": [
               "max-height"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1179,6 +1252,7 @@
           "feature": "props-size-overflow",
           "property": "box-sizing",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1192,7 +1266,8 @@
             },
             "writes": [
               "box-sizing"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1202,6 +1277,7 @@
           "feature": "props-size-overflow",
           "property": "aspect-ratio",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1215,7 +1291,8 @@
             },
             "writes": [
               "aspect-ratio"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1225,6 +1302,7 @@
           "feature": "props-size-overflow",
           "property": null,
           "composite": "overflow",
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1239,7 +1317,8 @@
             "writes": [
               "overflow-x",
               "overflow-y"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1249,6 +1328,7 @@
           "feature": "props-size-overflow",
           "property": "overflow-x",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1262,7 +1342,8 @@
             },
             "writes": [
               "overflow-x"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1272,6 +1353,7 @@
           "feature": "props-size-overflow",
           "property": "overflow-y",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1285,7 +1367,8 @@
             },
             "writes": [
               "overflow-y"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1295,6 +1378,7 @@
           "feature": "props-element-specific",
           "property": "resize",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1308,7 +1392,8 @@
             },
             "writes": [
               "resize"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1318,6 +1403,7 @@
           "feature": "props-element-specific",
           "property": "object-fit",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1331,7 +1417,8 @@
             },
             "writes": [
               "object-fit"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1341,6 +1428,7 @@
           "feature": "props-element-specific",
           "property": "object-position",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1354,7 +1442,8 @@
             },
             "writes": [
               "object-position"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1364,6 +1453,7 @@
           "feature": "props-position",
           "property": "top",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1377,7 +1467,8 @@
             },
             "writes": [
               "top"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1387,6 +1478,7 @@
           "feature": "props-position",
           "property": "right",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1400,7 +1492,8 @@
             },
             "writes": [
               "right"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1410,6 +1503,7 @@
           "feature": "props-position",
           "property": "bottom",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1423,7 +1517,8 @@
             },
             "writes": [
               "bottom"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1433,6 +1528,7 @@
           "feature": "props-position",
           "property": "left",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1446,7 +1542,8 @@
             },
             "writes": [
               "left"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1456,6 +1553,7 @@
           "feature": "props-position",
           "property": "z-index",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1469,7 +1567,8 @@
             },
             "writes": [
               "z-index"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1479,6 +1578,7 @@
           "feature": "props-position",
           "property": "float",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1492,7 +1592,8 @@
             },
             "writes": [
               "float"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1502,6 +1603,7 @@
           "feature": "props-position",
           "property": "clear",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1515,7 +1617,8 @@
             },
             "writes": [
               "clear"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1525,6 +1628,7 @@
           "feature": "color-picker",
           "property": "background-color",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1535,7 +1639,8 @@
             "offers": null,
             "writes": [
               "background-color"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1545,6 +1650,7 @@
           "feature": "props-background",
           "property": "background-size",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1558,7 +1664,8 @@
             },
             "writes": [
               "background-size"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1568,6 +1675,7 @@
           "feature": "props-background",
           "property": null,
           "composite": "background-position",
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1582,7 +1690,8 @@
             "writes": [
               "background-position-x",
               "background-position-y"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1592,6 +1701,7 @@
           "feature": "props-background",
           "property": "background-repeat",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1605,7 +1715,8 @@
             },
             "writes": [
               "background-repeat"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1615,6 +1726,7 @@
           "feature": "props-background",
           "property": "background-attachment",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1628,7 +1740,8 @@
             },
             "writes": [
               "background-attachment"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1638,6 +1751,7 @@
           "feature": "props-background",
           "property": "background-origin",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1651,7 +1765,8 @@
             },
             "writes": [
               "background-origin"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1661,6 +1776,7 @@
           "feature": "props-background",
           "property": "background-clip",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1674,7 +1790,8 @@
             },
             "writes": [
               "background-clip"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1684,6 +1801,7 @@
           "feature": "props-background",
           "property": "background-blend-mode",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1697,7 +1815,8 @@
             },
             "writes": [
               "background-blend-mode"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1707,6 +1826,7 @@
           "feature": "elements-svg-shapes",
           "property": "fill",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1720,7 +1840,8 @@
             },
             "writes": [
               "fill"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1730,6 +1851,7 @@
           "feature": "elements-svg-shapes",
           "property": "stroke",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1743,7 +1865,8 @@
             },
             "writes": [
               "stroke"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1753,6 +1876,7 @@
           "feature": "elements-svg-shapes",
           "property": "stroke-width",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1766,7 +1890,8 @@
             },
             "writes": [
               "stroke-width"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1776,6 +1901,7 @@
           "feature": "props-border-outline",
           "property": null,
           "composite": "outline",
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1791,7 +1917,8 @@
               "outline-width",
               "outline-style",
               "outline-color"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1801,6 +1928,7 @@
           "feature": "props-border-outline",
           "property": "outline-offset",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1814,7 +1942,8 @@
             },
             "writes": [
               "outline-offset"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1824,6 +1953,7 @@
           "feature": "color-picker",
           "property": "color",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1834,7 +1964,8 @@
             "offers": null,
             "writes": [
               "color"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1844,6 +1975,7 @@
           "feature": "props-typography",
           "property": "font-family",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1857,7 +1989,8 @@
             },
             "writes": [
               "font-family"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1867,6 +2000,7 @@
           "feature": "props-typography",
           "property": "font-size",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1880,7 +2014,8 @@
             },
             "writes": [
               "font-size"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1890,6 +2025,7 @@
           "feature": "props-typography",
           "property": "font-weight",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1903,7 +2039,8 @@
             },
             "writes": [
               "font-weight"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1913,6 +2050,7 @@
           "feature": "props-typography",
           "property": "font-style",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1926,7 +2064,8 @@
             },
             "writes": [
               "font-style"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1936,6 +2075,7 @@
           "feature": "props-typography",
           "property": "line-height",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1949,7 +2089,8 @@
             },
             "writes": [
               "line-height"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1959,6 +2100,7 @@
           "feature": "props-typography",
           "property": "letter-spacing",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1972,7 +2114,8 @@
             },
             "writes": [
               "letter-spacing"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -1982,6 +2125,7 @@
           "feature": "props-typography",
           "property": "word-spacing",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -1995,7 +2139,8 @@
             },
             "writes": [
               "word-spacing"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2003,8 +2148,9 @@
           "id": "inspector-text-align",
           "kind": "inspector-field",
           "feature": "props-typography",
-          "property": null,
-          "composite": "text-align",
+          "property": "text-align",
+          "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2017,9 +2163,9 @@
               "list": "generated"
             },
             "writes": [
-              "text-align-all",
-              "text-align-last"
-            ]
+              "text-align"
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2029,6 +2175,7 @@
           "feature": "props-typography",
           "property": null,
           "composite": "text-decoration",
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2045,7 +2192,8 @@
               "text-decoration-thickness",
               "text-decoration-style",
               "text-decoration-color"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2055,6 +2203,7 @@
           "feature": "props-typography",
           "property": "text-transform",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2068,7 +2217,8 @@
             },
             "writes": [
               "text-transform"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2078,6 +2228,7 @@
           "feature": "props-typography",
           "property": "text-indent",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2091,7 +2242,8 @@
             },
             "writes": [
               "text-indent"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2101,6 +2253,7 @@
           "feature": "props-typography",
           "property": "text-overflow",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2114,7 +2267,8 @@
             },
             "writes": [
               "text-overflow"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2124,6 +2278,7 @@
           "feature": "props-typography",
           "property": null,
           "composite": "white-space",
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2138,7 +2293,8 @@
             "writes": [
               "white-space-collapse",
               "text-wrap-mode"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2148,6 +2304,7 @@
           "feature": "props-typography",
           "property": "word-break",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2161,7 +2318,8 @@
             },
             "writes": [
               "word-break"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2169,8 +2327,9 @@
           "id": "inspector-vertical-align",
           "kind": "inspector-field",
           "feature": "props-typography",
-          "property": null,
-          "composite": "vertical-align",
+          "property": "vertical-align",
+          "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2183,10 +2342,9 @@
               "list": "menu"
             },
             "writes": [
-              "alignment-baseline",
-              "baseline-shift",
-              "baseline-source"
-            ]
+              "vertical-align"
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2196,6 +2354,7 @@
           "feature": "props-typography-advanced",
           "property": "font-stretch",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2209,7 +2368,8 @@
             },
             "writes": [
               "font-stretch"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2219,6 +2379,7 @@
           "feature": "props-typography-advanced",
           "property": null,
           "composite": "font-variant",
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2236,9 +2397,9 @@
               "font-variant-alternates",
               "font-variant-numeric",
               "font-variant-east-asian",
-              "font-variant-position",
-              "font-variant-emoji"
-            ]
+              "font-variant-position"
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2248,6 +2409,7 @@
           "feature": "props-typography-advanced",
           "property": "font-feature-settings",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2261,7 +2423,8 @@
             },
             "writes": [
               "font-feature-settings"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2271,6 +2434,7 @@
           "feature": "props-typography-advanced",
           "property": "overflow-wrap",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2284,7 +2448,8 @@
             },
             "writes": [
               "overflow-wrap"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2294,6 +2459,7 @@
           "feature": "props-typography-advanced",
           "property": "hyphens",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2307,16 +2473,18 @@
             },
             "writes": [
               "hyphens"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
         {
-          "id": "inspector-webkit-line-clamp",
+          "id": "inspector-line-clamp",
           "kind": "inspector-field",
           "feature": "props-typography-advanced",
           "property": null,
-          "composite": "webkit-line-clamp",
+          "composite": null,
+          "recipe": "line-clamp",
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2324,15 +2492,15 @@
           "placement": "unplaced",
           "adapter": {
             "selection": "all",
-            "offers": {
-              "property": "webkit-line-clamp",
-              "list": "generated"
-            },
+            "offers": null,
             "writes": [
-              "max-lines",
-              "block-ellipsis",
-              "continue"
-            ]
+              "display",
+              "-webkit-box-orient",
+              "-webkit-line-clamp",
+              "overflow-x",
+              "overflow-y"
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2342,6 +2510,7 @@
           "feature": "props-typography-advanced",
           "property": "direction",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2355,7 +2524,8 @@
             },
             "writes": [
               "direction"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2365,6 +2535,7 @@
           "feature": "props-typography-advanced",
           "property": "writing-mode",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2378,7 +2549,8 @@
             },
             "writes": [
               "writing-mode"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2388,6 +2560,7 @@
           "feature": "props-typography-advanced",
           "property": "text-orientation",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2401,7 +2574,8 @@
             },
             "writes": [
               "text-orientation"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2411,6 +2585,7 @@
           "feature": "props-element-specific",
           "property": "list-style-type",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2424,7 +2599,8 @@
             },
             "writes": [
               "list-style-type"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2434,6 +2610,7 @@
           "feature": "props-element-specific",
           "property": "list-style-position",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2447,7 +2624,8 @@
             },
             "writes": [
               "list-style-position"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2457,6 +2635,7 @@
           "feature": "props-element-specific",
           "property": "list-style-image",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2470,7 +2649,8 @@
             },
             "writes": [
               "list-style-image"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2480,6 +2660,7 @@
           "feature": "props-element-specific",
           "property": "accent-color",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2493,7 +2674,8 @@
             },
             "writes": [
               "accent-color"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2503,6 +2685,7 @@
           "feature": "props-element-specific",
           "property": "caret-color",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2516,7 +2699,8 @@
             },
             "writes": [
               "caret-color"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2526,6 +2710,7 @@
           "feature": "props-element-specific",
           "property": "appearance",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2539,7 +2724,8 @@
             },
             "writes": [
               "appearance"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2549,6 +2735,7 @@
           "feature": "props-effects-basic",
           "property": "opacity",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2559,7 +2746,8 @@
             "offers": null,
             "writes": [
               "opacity"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2569,6 +2757,7 @@
           "feature": "props-effects-basic",
           "property": "visibility",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2582,7 +2771,8 @@
             },
             "writes": [
               "visibility"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2592,6 +2782,7 @@
           "feature": "props-effects-basic",
           "property": "mix-blend-mode",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2605,7 +2796,8 @@
             },
             "writes": [
               "mix-blend-mode"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2615,6 +2807,7 @@
           "feature": "props-effects-basic",
           "property": "isolation",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2628,7 +2821,8 @@
             },
             "writes": [
               "isolation"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2638,6 +2832,7 @@
           "feature": "props-effects-basic",
           "property": "cursor",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2651,7 +2846,8 @@
             },
             "writes": [
               "cursor"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2661,6 +2857,7 @@
           "feature": "props-effects-basic",
           "property": "pointer-events",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2674,7 +2871,8 @@
             },
             "writes": [
               "pointer-events"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2682,8 +2880,9 @@
           "id": "inspector-user-select",
           "kind": "inspector-field",
           "feature": "props-effects-basic",
-          "property": "user-select",
+          "property": null,
           "composite": null,
+          "recipe": "user-select",
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2696,8 +2895,10 @@
               "list": "generated"
             },
             "writes": [
+              "-webkit-user-select",
               "user-select"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2707,6 +2908,7 @@
           "feature": "props-transition",
           "property": "will-change",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2720,7 +2922,8 @@
             },
             "writes": [
               "will-change"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2730,6 +2933,7 @@
           "feature": "props-filters-clip",
           "property": "backdrop-filter",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2743,7 +2947,8 @@
             },
             "writes": [
               "backdrop-filter"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2753,6 +2958,7 @@
           "feature": "props-filters-clip",
           "property": "clip-path",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2766,7 +2972,8 @@
             },
             "writes": [
               "clip-path"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2776,6 +2983,7 @@
           "feature": "props-filters-clip",
           "property": "mask-image",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2789,7 +2997,8 @@
             },
             "writes": [
               "mask-image"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2799,6 +3008,7 @@
           "feature": "props-transforms",
           "property": "transform-origin",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2812,7 +3022,8 @@
             },
             "writes": [
               "transform-origin"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2822,6 +3033,7 @@
           "feature": "props-transforms",
           "property": "perspective",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2835,7 +3047,8 @@
             },
             "writes": [
               "perspective"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2845,6 +3058,7 @@
           "feature": "props-transforms",
           "property": "perspective-origin",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2858,7 +3072,8 @@
             },
             "writes": [
               "perspective-origin"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2868,6 +3083,7 @@
           "feature": "props-transforms",
           "property": "transform-style",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2881,7 +3097,8 @@
             },
             "writes": [
               "transform-style"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2891,6 +3108,7 @@
           "feature": "props-transforms",
           "property": "backface-visibility",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2904,7 +3122,8 @@
             },
             "writes": [
               "backface-visibility"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2914,6 +3133,7 @@
           "feature": "props-transforms",
           "property": "transform-box",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2927,7 +3147,8 @@
             },
             "writes": [
               "transform-box"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2937,6 +3158,7 @@
           "feature": "props-transition",
           "property": null,
           "composite": "transition",
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setProperty",
@@ -2954,7 +3176,8 @@
               "transition-timing-function",
               "transition-delay",
               "transition-behavior"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -2964,6 +3187,7 @@
           "feature": "props-flex-container",
           "property": "align-items",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "stretch-button",
           "labelKey": "inspector.flex.stretch",
@@ -2974,7 +3198,8 @@
             "offers": null,
             "writes": [
               "align-items"
-            ]
+            ],
+            "fields": []
           },
           "args": {
             "property": "align-items",
@@ -2987,6 +3212,7 @@
           "feature": "props-flex-container",
           "property": "justify-content",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "spread-button",
           "labelKey": "inspector.flex.spread",
@@ -2997,7 +3223,8 @@
             "offers": null,
             "writes": [
               "justify-content"
-            ]
+            ],
+            "fields": []
           },
           "args": {
             "property": "justify-content",
@@ -3010,6 +3237,7 @@
           "feature": "props-grid-container",
           "property": "grid-template-columns",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "add-track",
           "labelKey": "inspector.grid.addColumn",
@@ -3023,7 +3251,8 @@
             },
             "writes": [
               "grid-template-columns"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3043,7 +3272,8 @@
             },
             "writes": [
               "width"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3063,7 +3293,8 @@
             },
             "writes": [
               "height"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3081,7 +3312,8 @@
             "writes": [
               "background-color",
               "fill"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3098,7 +3330,8 @@
             "offers": null,
             "writes": [
               "color"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3118,7 +3351,8 @@
             },
             "writes": [
               "font-size"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3135,7 +3369,8 @@
             "offers": null,
             "writes": [
               "opacity"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3150,7 +3385,8 @@
           "adapter": {
             "selection": "all",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -3169,7 +3405,8 @@
             "writes": [
               "row-gap",
               "column-gap"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3187,7 +3424,8 @@
             "offers": null,
             "writes": [
               "row-gap"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3205,7 +3443,8 @@
             "offers": null,
             "writes": [
               "column-gap"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3215,6 +3454,7 @@
           "feature": "props-transforms",
           "property": "translate",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "translate-x",
           "labelKey": "inspector.transform.moveX",
@@ -3228,7 +3468,8 @@
             },
             "writes": [
               "translate"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3238,6 +3479,7 @@
           "feature": "props-transforms",
           "property": "translate",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "translate-y",
           "labelKey": "inspector.transform.moveY",
@@ -3251,7 +3493,8 @@
             },
             "writes": [
               "translate"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3261,6 +3504,7 @@
           "feature": "props-transforms",
           "property": "rotate",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "rotate",
           "labelKey": "inspector.transform.rotate",
@@ -3274,7 +3518,8 @@
             },
             "writes": [
               "rotate"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3284,6 +3529,7 @@
           "feature": "props-transforms",
           "property": "scale",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "scale",
           "labelKey": "inspector.transform.scale",
@@ -3297,7 +3543,8 @@
             },
             "writes": [
               "scale"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3317,7 +3564,8 @@
             },
             "writes": [
               "translate"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3337,7 +3585,8 @@
             },
             "writes": [
               "rotate"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3357,7 +3606,8 @@
             },
             "writes": [
               "scale"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3375,7 +3625,8 @@
             "offers": null,
             "writes": [
               "rotate"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         }
@@ -3436,6 +3687,7 @@
           "feature": "props-spacing",
           "property": null,
           "composite": "padding",
+          "recipe": null,
           "attribute": null,
           "control": "box-model",
           "labelKey": "command.setSpacing",
@@ -3452,7 +3704,8 @@
               "padding-right",
               "padding-bottom",
               "padding-left"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3462,6 +3715,7 @@
           "feature": "props-spacing",
           "property": "padding-top",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "box-model",
           "labelKey": "command.setSpacing",
@@ -3475,7 +3729,8 @@
             },
             "writes": [
               "padding-top"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3485,6 +3740,7 @@
           "feature": "props-spacing",
           "property": "padding-right",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "box-model",
           "labelKey": "command.setSpacing",
@@ -3498,7 +3754,8 @@
             },
             "writes": [
               "padding-right"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3508,6 +3765,7 @@
           "feature": "props-spacing",
           "property": "padding-bottom",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "box-model",
           "labelKey": "command.setSpacing",
@@ -3521,7 +3779,8 @@
             },
             "writes": [
               "padding-bottom"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3531,6 +3790,7 @@
           "feature": "props-spacing",
           "property": "padding-left",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "box-model",
           "labelKey": "command.setSpacing",
@@ -3544,7 +3804,8 @@
             },
             "writes": [
               "padding-left"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3554,6 +3815,7 @@
           "feature": "props-spacing",
           "property": null,
           "composite": "margin",
+          "recipe": null,
           "attribute": null,
           "control": "box-model",
           "labelKey": "command.setSpacing",
@@ -3570,7 +3832,8 @@
               "margin-right",
               "margin-bottom",
               "margin-left"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3580,6 +3843,7 @@
           "feature": "props-spacing",
           "property": "margin-top",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "box-model",
           "labelKey": "command.setSpacing",
@@ -3593,7 +3857,8 @@
             },
             "writes": [
               "margin-top"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3603,6 +3868,7 @@
           "feature": "props-spacing",
           "property": "margin-right",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "box-model",
           "labelKey": "command.setSpacing",
@@ -3616,7 +3882,8 @@
             },
             "writes": [
               "margin-right"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3626,6 +3893,7 @@
           "feature": "props-spacing",
           "property": "margin-bottom",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "box-model",
           "labelKey": "command.setSpacing",
@@ -3639,7 +3907,8 @@
             },
             "writes": [
               "margin-bottom"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3649,6 +3918,7 @@
           "feature": "props-spacing",
           "property": "margin-left",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "box-model",
           "labelKey": "command.setSpacing",
@@ -3662,7 +3932,8 @@
             },
             "writes": [
               "margin-left"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3677,7 +3948,8 @@
           "adapter": {
             "selection": "all",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -3695,7 +3967,8 @@
             "offers": null,
             "writes": [
               "padding-top"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3713,7 +3986,8 @@
             "offers": null,
             "writes": [
               "margin-top"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3731,7 +4005,8 @@
             "offers": null,
             "writes": [
               "padding-right"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3749,7 +4024,8 @@
             "offers": null,
             "writes": [
               "margin-right"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3767,7 +4043,8 @@
             "offers": null,
             "writes": [
               "padding-bottom"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3785,7 +4062,8 @@
             "offers": null,
             "writes": [
               "margin-bottom"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3803,7 +4081,8 @@
             "offers": null,
             "writes": [
               "padding-left"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3821,7 +4100,8 @@
             "offers": null,
             "writes": [
               "margin-left"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         }
@@ -3866,7 +4146,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -3928,6 +4209,7 @@
           "feature": "props-border-outline",
           "property": null,
           "composite": "border",
+          "recipe": null,
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
@@ -3952,7 +4234,8 @@
               "border-right-color",
               "border-bottom-color",
               "border-left-color"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3962,6 +4245,7 @@
           "feature": "props-border-outline",
           "property": null,
           "composite": "border-width",
+          "recipe": null,
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
@@ -3978,7 +4262,8 @@
               "border-right-width",
               "border-bottom-width",
               "border-left-width"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -3988,6 +4273,7 @@
           "feature": "props-border-outline",
           "property": null,
           "composite": "border-style",
+          "recipe": null,
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
@@ -4004,7 +4290,8 @@
               "border-right-style",
               "border-bottom-style",
               "border-left-style"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -4014,6 +4301,7 @@
           "feature": "props-border-outline",
           "property": null,
           "composite": "border-color",
+          "recipe": null,
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
@@ -4027,7 +4315,8 @@
               "border-right-color",
               "border-bottom-color",
               "border-left-color"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -4037,6 +4326,7 @@
           "feature": "props-border-outline",
           "property": null,
           "composite": "border-top",
+          "recipe": null,
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
@@ -4052,7 +4342,8 @@
               "border-top-width",
               "border-top-style",
               "border-top-color"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -4062,6 +4353,7 @@
           "feature": "props-border-outline",
           "property": "border-top-width",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
@@ -4075,7 +4367,8 @@
             },
             "writes": [
               "border-top-width"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -4085,6 +4378,7 @@
           "feature": "props-border-outline",
           "property": null,
           "composite": "border-right",
+          "recipe": null,
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
@@ -4100,7 +4394,8 @@
               "border-right-width",
               "border-right-style",
               "border-right-color"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -4110,6 +4405,7 @@
           "feature": "props-border-outline",
           "property": "border-right-width",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
@@ -4123,7 +4419,8 @@
             },
             "writes": [
               "border-right-width"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -4133,6 +4430,7 @@
           "feature": "props-border-outline",
           "property": null,
           "composite": "border-bottom",
+          "recipe": null,
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
@@ -4148,7 +4446,8 @@
               "border-bottom-width",
               "border-bottom-style",
               "border-bottom-color"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -4158,6 +4457,7 @@
           "feature": "props-border-outline",
           "property": "border-bottom-width",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
@@ -4171,7 +4471,8 @@
             },
             "writes": [
               "border-bottom-width"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -4181,6 +4482,7 @@
           "feature": "props-border-outline",
           "property": null,
           "composite": "border-left",
+          "recipe": null,
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
@@ -4196,7 +4498,8 @@
               "border-left-width",
               "border-left-style",
               "border-left-color"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -4206,6 +4509,7 @@
           "feature": "props-border-outline",
           "property": "border-left-width",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "border-editor",
           "labelKey": "command.setBorder",
@@ -4219,7 +4523,8 @@
             },
             "writes": [
               "border-left-width"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -4250,7 +4555,8 @@
               "border-right-color",
               "border-bottom-color",
               "border-left-color"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -4265,7 +4571,8 @@
           "adapter": {
             "selection": "all",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -4283,7 +4590,8 @@
             "offers": null,
             "writes": [
               "border-top-width"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -4301,7 +4609,8 @@
             "offers": null,
             "writes": [
               "border-right-width"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -4319,7 +4628,8 @@
             "offers": null,
             "writes": [
               "border-bottom-width"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -4337,7 +4647,8 @@
             "offers": null,
             "writes": [
               "border-left-width"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         }
@@ -4389,6 +4700,7 @@
           "feature": "props-border-outline",
           "property": null,
           "composite": "border-radius",
+          "recipe": null,
           "attribute": null,
           "control": "radius-editor",
           "labelKey": "command.setRadius",
@@ -4405,7 +4717,8 @@
               "border-top-right-radius",
               "border-bottom-right-radius",
               "border-bottom-left-radius"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -4415,6 +4728,7 @@
           "feature": "props-border-outline",
           "property": "border-top-left-radius",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "radius-editor",
           "labelKey": "command.setRadius",
@@ -4428,7 +4742,8 @@
             },
             "writes": [
               "border-top-left-radius"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -4438,6 +4753,7 @@
           "feature": "props-border-outline",
           "property": "border-top-right-radius",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "radius-editor",
           "labelKey": "command.setRadius",
@@ -4451,7 +4767,8 @@
             },
             "writes": [
               "border-top-right-radius"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -4461,6 +4778,7 @@
           "feature": "props-border-outline",
           "property": "border-bottom-right-radius",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "radius-editor",
           "labelKey": "command.setRadius",
@@ -4474,7 +4792,8 @@
             },
             "writes": [
               "border-bottom-right-radius"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -4484,6 +4803,7 @@
           "feature": "props-border-outline",
           "property": "border-bottom-left-radius",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "radius-editor",
           "labelKey": "command.setRadius",
@@ -4497,7 +4817,8 @@
             },
             "writes": [
               "border-bottom-left-radius"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -4512,7 +4833,8 @@
           "adapter": {
             "selection": "all",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -4533,7 +4855,8 @@
               "border-top-right-radius",
               "border-bottom-right-radius",
               "border-bottom-left-radius"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         }
@@ -4575,6 +4898,7 @@
           "feature": "props-background",
           "property": "background-image",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "field",
           "labelKey": "command.setBackgroundImage",
@@ -4588,7 +4912,8 @@
             },
             "writes": [
               "background-image"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -4598,6 +4923,7 @@
           "feature": "gradient-editor",
           "property": null,
           "composite": "background",
+          "recipe": null,
           "attribute": null,
           "control": "gradient-add",
           "labelKey": "inspector.gradient.add",
@@ -4618,7 +4944,8 @@
               "background-attachment",
               "background-origin",
               "background-clip"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -4628,6 +4955,7 @@
           "feature": "gradient-editor",
           "property": "background-image",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "gradient-type",
           "labelKey": "inspector.gradient.type",
@@ -4641,7 +4969,8 @@
             },
             "writes": [
               "background-image"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -4651,6 +4980,7 @@
           "feature": "gradient-editor",
           "property": "background-image",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "gradient-bar",
           "labelKey": "inspector.gradient.addStopHere",
@@ -4664,7 +4994,8 @@
             },
             "writes": [
               "background-image"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -4674,6 +5005,7 @@
           "feature": "gradient-editor",
           "property": "background-image",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "gradient-stop-colour",
           "labelKey": "inspector.gradient.stopColour",
@@ -4687,7 +5019,8 @@
             },
             "writes": [
               "background-image"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -4697,6 +5030,7 @@
           "feature": "gradient-editor",
           "property": "background-image",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "gradient-stop-position",
           "labelKey": "inspector.gradient.stopPosition",
@@ -4710,7 +5044,8 @@
             },
             "writes": [
               "background-image"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -4720,6 +5055,7 @@
           "feature": "gradient-editor",
           "property": "background-image",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "gradient-angle",
           "labelKey": "inspector.gradient.angle",
@@ -4733,7 +5069,8 @@
             },
             "writes": [
               "background-image"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -4743,6 +5080,7 @@
           "feature": "gradient-editor",
           "property": "background-image",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "gradient-reverse",
           "labelKey": "inspector.gradient.reverse",
@@ -4756,7 +5094,8 @@
             },
             "writes": [
               "background-image"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -4766,6 +5105,7 @@
           "feature": "gradient-editor",
           "property": "background-image",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "gradient-distribute",
           "labelKey": "inspector.gradient.distribute",
@@ -4779,7 +5119,8 @@
             },
             "writes": [
               "background-image"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -4789,6 +5130,7 @@
           "feature": "gradient-editor",
           "property": "background-image",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "gradient-add-stop",
           "labelKey": "inspector.gradient.addStop",
@@ -4802,7 +5144,8 @@
             },
             "writes": [
               "background-image"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -4812,6 +5155,7 @@
           "feature": "gradient-editor",
           "property": "background-image",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "gradient-remove-stop",
           "labelKey": "inspector.gradient.removeStop",
@@ -4825,7 +5169,8 @@
             },
             "writes": [
               "background-image"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -4835,6 +5180,7 @@
           "feature": "gradient-editor",
           "property": null,
           "composite": "background",
+          "recipe": null,
           "attribute": null,
           "control": "gradient-reset",
           "labelKey": "inspector.gradient.remove",
@@ -4855,7 +5201,8 @@
               "background-attachment",
               "background-origin",
               "background-clip"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -4874,7 +5221,8 @@
             "offers": null,
             "writes": [
               "background-image"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -4891,7 +5239,8 @@
           "adapter": {
             "selection": "all",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -4908,7 +5257,8 @@
           "adapter": {
             "selection": "all",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -4925,7 +5275,8 @@
           "adapter": {
             "selection": "all",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -4942,7 +5293,8 @@
           "adapter": {
             "selection": "all",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -4959,7 +5311,8 @@
             "offers": null,
             "writes": [
               "background-image"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -4974,7 +5327,8 @@
           "adapter": {
             "selection": "all",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -5021,8 +5375,9 @@
           "id": "inspector-box-shadow-shadow-add",
           "kind": "inspector-field",
           "feature": "shadow-editor",
-          "property": null,
-          "composite": "box-shadow",
+          "property": "box-shadow",
+          "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "shadow-add",
           "labelKey": "inspector.shadow.add",
@@ -5030,17 +5385,11 @@
           "placement": "unplaced",
           "adapter": {
             "selection": "all",
-            "offers": {
-              "property": "box-shadow",
-              "list": "generated"
-            },
+            "offers": null,
             "writes": [
-              "box-shadow-color",
-              "box-shadow-offset",
-              "box-shadow-blur",
-              "box-shadow-spread",
-              "box-shadow-position"
-            ]
+              "box-shadow"
+            ],
+            "fields": []
           },
           "args": {
             "property": "box-shadow"
@@ -5050,8 +5399,9 @@
           "id": "inspector-box-shadow-shadow-x",
           "kind": "inspector-field",
           "feature": "shadow-editor",
-          "property": null,
-          "composite": "box-shadow",
+          "property": "box-shadow",
+          "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "shadow-x",
           "labelKey": "inspector.shadow.x",
@@ -5059,16 +5409,12 @@
           "placement": "unplaced",
           "adapter": {
             "selection": "all",
-            "offers": {
-              "property": "box-shadow",
-              "list": "generated"
-            },
+            "offers": null,
             "writes": [
-              "box-shadow-color",
-              "box-shadow-offset",
-              "box-shadow-blur",
-              "box-shadow-spread",
-              "box-shadow-position"
+              "box-shadow"
+            ],
+            "fields": [
+              "offsetX"
             ]
           },
           "args": {
@@ -5079,8 +5425,9 @@
           "id": "inspector-box-shadow-shadow-y",
           "kind": "inspector-field",
           "feature": "shadow-editor",
-          "property": null,
-          "composite": "box-shadow",
+          "property": "box-shadow",
+          "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "shadow-y",
           "labelKey": "inspector.shadow.y",
@@ -5088,16 +5435,12 @@
           "placement": "unplaced",
           "adapter": {
             "selection": "all",
-            "offers": {
-              "property": "box-shadow",
-              "list": "generated"
-            },
+            "offers": null,
             "writes": [
-              "box-shadow-color",
-              "box-shadow-offset",
-              "box-shadow-blur",
-              "box-shadow-spread",
-              "box-shadow-position"
+              "box-shadow"
+            ],
+            "fields": [
+              "offsetY"
             ]
           },
           "args": {
@@ -5108,8 +5451,9 @@
           "id": "inspector-box-shadow-shadow-blur",
           "kind": "inspector-field",
           "feature": "shadow-editor",
-          "property": null,
-          "composite": "box-shadow",
+          "property": "box-shadow",
+          "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "shadow-blur",
           "labelKey": "inspector.shadow.blur",
@@ -5117,16 +5461,12 @@
           "placement": "unplaced",
           "adapter": {
             "selection": "all",
-            "offers": {
-              "property": "box-shadow",
-              "list": "generated"
-            },
+            "offers": null,
             "writes": [
-              "box-shadow-color",
-              "box-shadow-offset",
-              "box-shadow-blur",
-              "box-shadow-spread",
-              "box-shadow-position"
+              "box-shadow"
+            ],
+            "fields": [
+              "blur"
             ]
           },
           "args": {
@@ -5137,8 +5477,9 @@
           "id": "inspector-box-shadow-shadow-spread",
           "kind": "inspector-field",
           "feature": "shadow-editor",
-          "property": null,
-          "composite": "box-shadow",
+          "property": "box-shadow",
+          "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "shadow-spread",
           "labelKey": "inspector.shadow.spread",
@@ -5146,16 +5487,12 @@
           "placement": "unplaced",
           "adapter": {
             "selection": "all",
-            "offers": {
-              "property": "box-shadow",
-              "list": "generated"
-            },
+            "offers": null,
             "writes": [
-              "box-shadow-color",
-              "box-shadow-offset",
-              "box-shadow-blur",
-              "box-shadow-spread",
-              "box-shadow-position"
+              "box-shadow"
+            ],
+            "fields": [
+              "spread"
             ]
           },
           "args": {
@@ -5166,8 +5503,9 @@
           "id": "inspector-box-shadow-shadow-inset",
           "kind": "inspector-field",
           "feature": "shadow-editor",
-          "property": null,
-          "composite": "box-shadow",
+          "property": "box-shadow",
+          "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "shadow-inset",
           "labelKey": "inspector.shadow.inset",
@@ -5175,16 +5513,12 @@
           "placement": "unplaced",
           "adapter": {
             "selection": "all",
-            "offers": {
-              "property": "box-shadow",
-              "list": "generated"
-            },
+            "offers": null,
             "writes": [
-              "box-shadow-color",
-              "box-shadow-offset",
-              "box-shadow-blur",
-              "box-shadow-spread",
-              "box-shadow-position"
+              "box-shadow"
+            ],
+            "fields": [
+              "inset"
             ]
           },
           "args": {
@@ -5195,8 +5529,9 @@
           "id": "inspector-box-shadow-shadow-colour",
           "kind": "inspector-field",
           "feature": "shadow-editor",
-          "property": null,
-          "composite": "box-shadow",
+          "property": "box-shadow",
+          "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "shadow-colour",
           "labelKey": "inspector.shadow.colour",
@@ -5204,16 +5539,12 @@
           "placement": "unplaced",
           "adapter": {
             "selection": "all",
-            "offers": {
-              "property": "box-shadow",
-              "list": "generated"
-            },
+            "offers": null,
             "writes": [
-              "box-shadow-color",
-              "box-shadow-offset",
-              "box-shadow-blur",
-              "box-shadow-spread",
-              "box-shadow-position"
+              "box-shadow"
+            ],
+            "fields": [
+              "color"
             ]
           },
           "args": {
@@ -5224,8 +5555,9 @@
           "id": "inspector-box-shadow-shadow-visibility",
           "kind": "inspector-field",
           "feature": "shadow-editor",
-          "property": null,
-          "composite": "box-shadow",
+          "property": "box-shadow",
+          "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "shadow-visibility",
           "labelKey": "inspector.shadow.visibility",
@@ -5233,16 +5565,12 @@
           "placement": "unplaced",
           "adapter": {
             "selection": "all",
-            "offers": {
-              "property": "box-shadow",
-              "list": "generated"
-            },
+            "offers": null,
             "writes": [
-              "box-shadow-color",
-              "box-shadow-offset",
-              "box-shadow-blur",
-              "box-shadow-spread",
-              "box-shadow-position"
+              "box-shadow"
+            ],
+            "fields": [
+              "hidden"
             ]
           },
           "args": {
@@ -5253,8 +5581,9 @@
           "id": "inspector-box-shadow-shadow-remove",
           "kind": "inspector-field",
           "feature": "shadow-editor",
-          "property": null,
-          "composite": "box-shadow",
+          "property": "box-shadow",
+          "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "shadow-remove",
           "labelKey": "inspector.shadow.remove",
@@ -5262,17 +5591,11 @@
           "placement": "unplaced",
           "adapter": {
             "selection": "all",
-            "offers": {
-              "property": "box-shadow",
-              "list": "generated"
-            },
+            "offers": null,
             "writes": [
-              "box-shadow-color",
-              "box-shadow-offset",
-              "box-shadow-blur",
-              "box-shadow-spread",
-              "box-shadow-position"
-            ]
+              "box-shadow"
+            ],
+            "fields": []
           },
           "args": {
             "property": "box-shadow"
@@ -5282,8 +5605,9 @@
           "id": "inspector-box-shadow-shadow-reset",
           "kind": "inspector-field",
           "feature": "shadow-editor",
-          "property": null,
-          "composite": "box-shadow",
+          "property": "box-shadow",
+          "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "shadow-reset",
           "labelKey": "inspector.shadow.reset",
@@ -5291,17 +5615,11 @@
           "placement": "unplaced",
           "adapter": {
             "selection": "all",
-            "offers": {
-              "property": "box-shadow",
-              "list": "generated"
-            },
+            "offers": null,
             "writes": [
-              "box-shadow-color",
-              "box-shadow-offset",
-              "box-shadow-blur",
-              "box-shadow-spread",
-              "box-shadow-position"
-            ]
+              "box-shadow"
+            ],
+            "fields": []
           },
           "args": {
             "property": "box-shadow"
@@ -5313,6 +5631,7 @@
           "feature": "shadow-editor",
           "property": "text-shadow",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "shadow-add",
           "labelKey": "inspector.shadow.add",
@@ -5320,13 +5639,11 @@
           "placement": "unplaced",
           "adapter": {
             "selection": "all",
-            "offers": {
-              "property": "text-shadow",
-              "list": "generated"
-            },
+            "offers": null,
             "writes": [
               "text-shadow"
-            ]
+            ],
+            "fields": []
           },
           "args": {
             "property": "text-shadow"
@@ -5338,6 +5655,7 @@
           "feature": "shadow-editor",
           "property": "text-shadow",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "shadow-x",
           "labelKey": "inspector.shadow.x",
@@ -5345,12 +5663,12 @@
           "placement": "unplaced",
           "adapter": {
             "selection": "all",
-            "offers": {
-              "property": "text-shadow",
-              "list": "generated"
-            },
+            "offers": null,
             "writes": [
               "text-shadow"
+            ],
+            "fields": [
+              "offsetX"
             ]
           },
           "args": {
@@ -5363,6 +5681,7 @@
           "feature": "shadow-editor",
           "property": "text-shadow",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "shadow-y",
           "labelKey": "inspector.shadow.y",
@@ -5370,12 +5689,12 @@
           "placement": "unplaced",
           "adapter": {
             "selection": "all",
-            "offers": {
-              "property": "text-shadow",
-              "list": "generated"
-            },
+            "offers": null,
             "writes": [
               "text-shadow"
+            ],
+            "fields": [
+              "offsetY"
             ]
           },
           "args": {
@@ -5388,6 +5707,7 @@
           "feature": "shadow-editor",
           "property": "text-shadow",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "shadow-blur",
           "labelKey": "inspector.shadow.blur",
@@ -5395,12 +5715,12 @@
           "placement": "unplaced",
           "adapter": {
             "selection": "all",
-            "offers": {
-              "property": "text-shadow",
-              "list": "generated"
-            },
+            "offers": null,
             "writes": [
               "text-shadow"
+            ],
+            "fields": [
+              "blur"
             ]
           },
           "args": {
@@ -5413,6 +5733,7 @@
           "feature": "shadow-editor",
           "property": "text-shadow",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "shadow-colour",
           "labelKey": "inspector.shadow.colour",
@@ -5420,12 +5741,12 @@
           "placement": "unplaced",
           "adapter": {
             "selection": "all",
-            "offers": {
-              "property": "text-shadow",
-              "list": "generated"
-            },
+            "offers": null,
             "writes": [
               "text-shadow"
+            ],
+            "fields": [
+              "color"
             ]
           },
           "args": {
@@ -5438,6 +5759,7 @@
           "feature": "shadow-editor",
           "property": "text-shadow",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "shadow-visibility",
           "labelKey": "inspector.shadow.visibility",
@@ -5445,12 +5767,12 @@
           "placement": "unplaced",
           "adapter": {
             "selection": "all",
-            "offers": {
-              "property": "text-shadow",
-              "list": "generated"
-            },
+            "offers": null,
             "writes": [
               "text-shadow"
+            ],
+            "fields": [
+              "hidden"
             ]
           },
           "args": {
@@ -5463,6 +5785,7 @@
           "feature": "shadow-editor",
           "property": "text-shadow",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "shadow-remove",
           "labelKey": "inspector.shadow.remove",
@@ -5470,13 +5793,11 @@
           "placement": "unplaced",
           "adapter": {
             "selection": "all",
-            "offers": {
-              "property": "text-shadow",
-              "list": "generated"
-            },
+            "offers": null,
             "writes": [
               "text-shadow"
-            ]
+            ],
+            "fields": []
           },
           "args": {
             "property": "text-shadow"
@@ -5488,6 +5809,7 @@
           "feature": "shadow-editor",
           "property": "text-shadow",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "shadow-reset",
           "labelKey": "inspector.shadow.reset",
@@ -5495,13 +5817,11 @@
           "placement": "unplaced",
           "adapter": {
             "selection": "all",
-            "offers": {
-              "property": "text-shadow",
-              "list": "generated"
-            },
+            "offers": null,
             "writes": [
               "text-shadow"
-            ]
+            ],
+            "fields": []
           },
           "args": {
             "property": "text-shadow"
@@ -5521,11 +5841,11 @@
             "selection": "all",
             "offers": null,
             "writes": [
-              "box-shadow-color",
-              "box-shadow-offset",
-              "box-shadow-blur",
-              "box-shadow-spread",
-              "box-shadow-position"
+              "box-shadow"
+            ],
+            "fields": [
+              "offsetX",
+              "offsetY"
             ]
           },
           "args": {
@@ -5547,6 +5867,10 @@
             "offers": null,
             "writes": [
               "text-shadow"
+            ],
+            "fields": [
+              "offsetX",
+              "offsetY"
             ]
           },
           "args": {
@@ -5566,7 +5890,13 @@
           "adapter": {
             "selection": "all",
             "offers": null,
-            "writes": []
+            "writes": [
+              "box-shadow",
+              "text-shadow"
+            ],
+            "fields": [
+              "offsetX"
+            ]
           },
           "args": {}
         },
@@ -5583,7 +5913,13 @@
           "adapter": {
             "selection": "all",
             "offers": null,
-            "writes": []
+            "writes": [
+              "box-shadow",
+              "text-shadow"
+            ],
+            "fields": [
+              "offsetX"
+            ]
           },
           "args": {}
         },
@@ -5600,7 +5936,13 @@
           "adapter": {
             "selection": "all",
             "offers": null,
-            "writes": []
+            "writes": [
+              "box-shadow",
+              "text-shadow"
+            ],
+            "fields": [
+              "offsetY"
+            ]
           },
           "args": {}
         },
@@ -5617,7 +5959,13 @@
           "adapter": {
             "selection": "all",
             "offers": null,
-            "writes": []
+            "writes": [
+              "box-shadow",
+              "text-shadow"
+            ],
+            "fields": [
+              "offsetY"
+            ]
           },
           "args": {}
         },
@@ -5632,7 +5980,8 @@
           "adapter": {
             "selection": "all",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -5649,12 +5998,12 @@
             "selection": "all",
             "offers": null,
             "writes": [
-              "box-shadow-color",
-              "box-shadow-offset",
-              "box-shadow-blur",
-              "box-shadow-spread",
-              "box-shadow-position",
+              "box-shadow",
               "text-shadow"
+            ],
+            "fields": [
+              "offsetX",
+              "offsetY"
             ]
           },
           "args": {}
@@ -5672,12 +6021,11 @@
             "selection": "all",
             "offers": null,
             "writes": [
-              "box-shadow-color",
-              "box-shadow-offset",
-              "box-shadow-blur",
-              "box-shadow-spread",
-              "box-shadow-position",
+              "box-shadow",
               "text-shadow"
+            ],
+            "fields": [
+              "blur"
             ]
           },
           "args": {}
@@ -5719,6 +6067,7 @@
           "feature": "props-filters-clip",
           "property": "filter",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "filter-blur",
           "labelKey": "inspector.filters.blur",
@@ -5732,7 +6081,8 @@
             },
             "writes": [
               "filter"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -5742,6 +6092,7 @@
           "feature": "props-filters-clip",
           "property": "filter",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "filter-brightness",
           "labelKey": "inspector.filters.brightness",
@@ -5755,7 +6106,8 @@
             },
             "writes": [
               "filter"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -5765,6 +6117,7 @@
           "feature": "props-filters-clip",
           "property": "filter",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "filter-contrast",
           "labelKey": "inspector.filters.contrast",
@@ -5778,7 +6131,8 @@
             },
             "writes": [
               "filter"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -5788,6 +6142,7 @@
           "feature": "props-filters-clip",
           "property": "filter",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "filter-saturate",
           "labelKey": "inspector.filters.saturate",
@@ -5801,7 +6156,8 @@
             },
             "writes": [
               "filter"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -5811,6 +6167,7 @@
           "feature": "props-filters-clip",
           "property": "filter",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "filter-hue-rotate",
           "labelKey": "inspector.filters.hueRotate",
@@ -5824,7 +6181,8 @@
             },
             "writes": [
               "filter"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -5834,6 +6192,7 @@
           "feature": "props-filters-clip",
           "property": "filter",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "filter-grayscale",
           "labelKey": "inspector.filters.grayscale",
@@ -5847,7 +6206,8 @@
             },
             "writes": [
               "filter"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -5857,6 +6217,7 @@
           "feature": "props-filters-clip",
           "property": "filter",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "filter-invert",
           "labelKey": "inspector.filters.invert",
@@ -5870,7 +6231,8 @@
             },
             "writes": [
               "filter"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -5880,6 +6242,7 @@
           "feature": "props-filters-clip",
           "property": "filter",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "filter-sepia",
           "labelKey": "inspector.filters.sepia",
@@ -5893,7 +6256,8 @@
             },
             "writes": [
               "filter"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -5903,6 +6267,7 @@
           "feature": "props-filters-clip",
           "property": "filter",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "filter-remove",
           "labelKey": "inspector.filters.remove",
@@ -5916,7 +6281,8 @@
             },
             "writes": [
               "filter"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -5933,7 +6299,8 @@
             "offers": null,
             "writes": [
               "filter"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -5948,7 +6315,8 @@
           "adapter": {
             "selection": "all",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -5989,6 +6357,7 @@
           "feature": "props-transforms",
           "property": "transform",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "transform-skew-x",
           "labelKey": "inspector.transform.skewX",
@@ -6002,7 +6371,8 @@
             },
             "writes": [
               "transform"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -6012,6 +6382,7 @@
           "feature": "props-transforms",
           "property": "transform",
           "composite": null,
+          "recipe": null,
           "attribute": null,
           "control": "transform-skew-y",
           "labelKey": "inspector.transform.skewY",
@@ -6025,7 +6396,8 @@
             },
             "writes": [
               "transform"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         },
@@ -6040,7 +6412,8 @@
           "adapter": {
             "selection": "all",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -6104,7 +6477,8 @@
             "writes": [
               "justify-content",
               "align-items"
-            ]
+            ],
+            "fields": []
           },
           "args": {}
         }
@@ -6153,7 +6527,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -6202,7 +6577,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -6250,7 +6626,8 @@
           "adapter": {
             "selection": "all",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -6292,7 +6669,8 @@
           "adapter": {
             "selection": "all",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -6307,7 +6685,8 @@
           "adapter": {
             "selection": "all",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -6363,7 +6742,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {
             "direction": "up",
@@ -6383,7 +6763,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {
             "direction": "down",
@@ -6403,7 +6784,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {
             "direction": "up",
@@ -6423,7 +6805,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {
             "direction": "down",
@@ -6444,7 +6827,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {
             "direction": "up",
@@ -6465,7 +6849,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {
             "direction": "down",
@@ -6507,7 +6892,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -6555,7 +6941,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }

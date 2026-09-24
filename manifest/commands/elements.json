@@ -43,6 +43,7 @@
           "feature": "semantic-tag-switch",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "tag",
           "control": "field",
           "labelKey": "command.setTag",
@@ -51,7 +52,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -66,7 +68,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -113,6 +116,7 @@
           "feature": "props-attributes",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "title",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -121,7 +125,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -131,6 +136,7 @@
           "feature": "elements-media-images",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "src",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -139,7 +145,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -149,6 +156,7 @@
           "feature": "elements-media-images",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "alt",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -157,7 +165,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -167,6 +176,7 @@
           "feature": "elements-media-images",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "srcset",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -175,7 +185,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -185,6 +196,7 @@
           "feature": "elements-media-images",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "media",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -193,7 +205,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -203,6 +216,7 @@
           "feature": "elements-form-inputs",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "placeholder",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -211,7 +225,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -221,6 +236,7 @@
           "feature": "elements-form-inputs",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "value",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -229,7 +245,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -239,6 +256,7 @@
           "feature": "elements-form-inputs",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "name",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -247,7 +265,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -257,6 +276,7 @@
           "feature": "elements-form-inputs",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "required",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -265,7 +285,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -275,6 +296,7 @@
           "feature": "elements-form-inputs",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "pattern",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -283,7 +305,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -293,6 +316,7 @@
           "feature": "elements-form-inputs",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "min",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -301,7 +325,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -311,6 +336,7 @@
           "feature": "elements-form-inputs",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "max",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -319,7 +345,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -329,6 +356,7 @@
           "feature": "elements-form-inputs",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "step",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -337,7 +365,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -347,6 +376,7 @@
           "feature": "elements-form-inputs",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "autocomplete",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -355,7 +385,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -365,6 +396,7 @@
           "feature": "elements-form-inputs",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "disabled",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -373,7 +405,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -383,6 +416,7 @@
           "feature": "elements-form-inputs",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "readonly",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -391,7 +425,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -401,6 +436,7 @@
           "feature": "elements-form-inputs",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "checked",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -409,7 +445,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -419,6 +456,7 @@
           "feature": "elements-form-structure",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "action",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -427,7 +465,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -437,6 +476,7 @@
           "feature": "elements-form-structure",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "method",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -445,7 +485,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -455,6 +496,7 @@
           "feature": "elements-form-structure",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "buttonType",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -463,7 +505,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -473,6 +516,7 @@
           "feature": "elements-form-controls",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "rows",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -481,7 +525,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -491,6 +536,7 @@
           "feature": "elements-form-controls",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "groupLabel",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -499,7 +545,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -509,6 +556,7 @@
           "feature": "elements-form-controls",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "selected",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -517,7 +565,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -527,6 +576,7 @@
           "feature": "elements-media-embeds",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "poster",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -535,7 +585,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -545,6 +596,7 @@
           "feature": "elements-media-embeds",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "controls",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -553,7 +605,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -563,6 +616,7 @@
           "feature": "elements-media-embeds",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "autoplay",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -571,7 +625,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -581,6 +636,7 @@
           "feature": "elements-media-embeds",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "loop",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -589,7 +645,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -599,6 +656,7 @@
           "feature": "elements-media-embeds",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "muted",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -607,7 +665,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -617,6 +676,7 @@
           "feature": "elements-media-embeds",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "trackKind",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -625,7 +685,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -635,6 +696,7 @@
           "feature": "elements-media-embeds",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "canvasWidth",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -643,7 +705,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -653,6 +716,7 @@
           "feature": "elements-media-embeds",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "canvasHeight",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -661,7 +725,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -671,6 +736,7 @@
           "feature": "elements-interactive",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "open",
           "control": "field",
           "labelKey": "command.setAttribute",
@@ -679,7 +745,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -697,7 +764,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {
             "attribute": "src"
@@ -741,6 +809,7 @@
           "feature": "props-attributes",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "id",
           "control": "field",
           "labelKey": "command.setId",
@@ -749,7 +818,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -790,6 +860,7 @@
           "feature": "props-attributes",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "classes",
           "control": "field",
           "labelKey": "command.setClasses",
@@ -798,7 +869,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -854,6 +926,7 @@
           "feature": "elements-structure",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "href",
           "control": "field",
           "labelKey": "command.setLink",
@@ -862,7 +935,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -872,6 +946,7 @@
           "feature": "elements-text",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "newTab",
           "control": "field",
           "labelKey": "inspector.link.openInNewTab",
@@ -880,7 +955,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -898,7 +974,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -916,7 +993,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -934,7 +1012,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -952,7 +1031,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -970,7 +1050,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -1025,6 +1106,7 @@
           "feature": "elements-form-inputs-rules",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "inputType",
           "control": "field",
           "labelKey": "command.setInputType",
@@ -1033,7 +1115,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -1073,6 +1156,7 @@
           "feature": "elements-form-inputs-rules",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "labelFor",
           "control": "field",
           "labelKey": "command.setLabelTarget",
@@ -1081,7 +1165,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -1136,7 +1221,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -1154,7 +1240,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -1202,7 +1289,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -1243,6 +1331,7 @@
           "feature": "elements-svg-shapes",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "svgMarkup",
           "control": "field",
           "labelKey": "command.setSvgMarkup",
@@ -1251,7 +1340,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -1291,6 +1381,7 @@
           "feature": "embed-html",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "embedMarkup",
           "control": "field",
           "labelKey": "command.setEmbedMarkup",
@@ -1299,7 +1390,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -1355,7 +1447,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -1407,7 +1500,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {
             "type": "caption"
@@ -1427,7 +1521,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {
             "type": "tableHead"
@@ -1447,7 +1542,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {
             "type": "tableFoot"
@@ -1512,7 +1608,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {
             "type": "option"
@@ -1532,7 +1629,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {
             "type": "optionGroup"
@@ -1552,7 +1650,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {
             "type": "source"
@@ -1572,7 +1671,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {
             "type": "track"
@@ -1592,7 +1692,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {
             "type": "rectangle"
@@ -1612,7 +1713,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {
             "type": "ellipse"
@@ -1632,7 +1734,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {
             "type": "line"
@@ -1652,7 +1755,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {
             "type": "source"
@@ -1707,7 +1811,8 @@
           "adapter": {
             "selection": "target",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {
             "delta": -1
@@ -1727,7 +1832,8 @@
           "adapter": {
             "selection": "target",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {
             "delta": 1
@@ -1777,7 +1883,8 @@
           "adapter": {
             "selection": "target",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -1818,7 +1925,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -1833,7 +1941,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -1874,7 +1983,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -1889,7 +1999,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -1931,7 +2042,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -1946,7 +2058,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -1987,7 +2100,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -2002,7 +2116,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -2044,7 +2159,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -2059,7 +2175,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }

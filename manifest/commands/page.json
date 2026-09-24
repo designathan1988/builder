@@ -28,7 +28,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -46,7 +47,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -61,7 +63,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -106,6 +109,7 @@
           "feature": "page-properties",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "pageTitle",
           "control": "field",
           "labelKey": "command.setPageSetting",
@@ -114,7 +118,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -124,6 +129,7 @@
           "feature": "page-properties",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "pageLanguage",
           "control": "field",
           "labelKey": "command.setPageSetting",
@@ -132,7 +138,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -142,6 +149,7 @@
           "feature": "page-properties",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "pageDirection",
           "control": "field",
           "labelKey": "command.setPageSetting",
@@ -150,7 +158,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -160,6 +169,7 @@
           "feature": "page-seo-meta",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "pageDescription",
           "control": "field",
           "labelKey": "command.setPageSetting",
@@ -168,7 +178,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -178,6 +189,7 @@
           "feature": "page-seo-meta",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "pageCanonical",
           "control": "field",
           "labelKey": "command.setPageSetting",
@@ -186,7 +198,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -196,6 +209,7 @@
           "feature": "page-seo-meta",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "pageOgTitle",
           "control": "field",
           "labelKey": "command.setPageSetting",
@@ -204,7 +218,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -214,6 +229,7 @@
           "feature": "page-seo-meta",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "pageOgImage",
           "control": "field",
           "labelKey": "command.setPageSetting",
@@ -222,7 +238,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -232,6 +249,7 @@
           "feature": "page-seo-meta",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "pageFavicon",
           "control": "field",
           "labelKey": "command.setPageSetting",
@@ -240,7 +258,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -250,6 +269,7 @@
           "feature": "code-panel-edit-js",
           "property": null,
           "composite": null,
+          "recipe": null,
           "attribute": "pageScripts",
           "control": "field",
           "labelKey": "command.setPageSetting",
@@ -258,7 +278,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }

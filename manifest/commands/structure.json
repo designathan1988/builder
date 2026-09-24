@@ -62,7 +62,8 @@
           "adapter": {
             "selection": "primary",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -79,7 +80,8 @@
           "adapter": {
             "selection": "primary",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -96,7 +98,8 @@
           "adapter": {
             "selection": "primary",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -113,7 +116,8 @@
           "adapter": {
             "selection": "primary",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -128,7 +132,8 @@
           "adapter": {
             "selection": "primary",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -189,7 +194,8 @@
           "adapter": {
             "selection": "roots",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -206,7 +212,8 @@
           "adapter": {
             "selection": "roots",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -223,7 +230,8 @@
           "adapter": {
             "selection": "roots",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -240,7 +248,8 @@
           "adapter": {
             "selection": "roots",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -277,7 +286,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -312,7 +322,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -347,7 +358,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -390,7 +402,8 @@
           "adapter": {
             "selection": "roots-same-parent",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -407,7 +420,8 @@
           "adapter": {
             "selection": "focused-row",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -424,7 +438,8 @@
           "adapter": {
             "selection": "roots-same-parent",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -442,7 +457,8 @@
           "adapter": {
             "selection": "roots-same-parent",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -457,7 +473,8 @@
           "adapter": {
             "selection": "roots-same-parent",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -500,7 +517,8 @@
           "adapter": {
             "selection": "roots-same-parent",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -517,7 +535,8 @@
           "adapter": {
             "selection": "focused-row",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -534,7 +553,8 @@
           "adapter": {
             "selection": "roots-same-parent",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -552,7 +572,8 @@
           "adapter": {
             "selection": "roots-same-parent",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -567,7 +588,8 @@
           "adapter": {
             "selection": "roots-same-parent",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -617,7 +639,8 @@
           "adapter": {
             "selection": "roots-same-parent",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -634,7 +657,8 @@
           "adapter": {
             "selection": "roots-same-parent",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -652,7 +676,8 @@
           "adapter": {
             "selection": "roots-same-parent",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -667,7 +692,8 @@
           "adapter": {
             "selection": "roots-same-parent",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -717,7 +743,8 @@
           "adapter": {
             "selection": "roots-same-parent",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -734,7 +761,8 @@
           "adapter": {
             "selection": "roots-same-parent",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -752,7 +780,8 @@
           "adapter": {
             "selection": "roots-same-parent",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -767,7 +796,8 @@
           "adapter": {
             "selection": "roots-same-parent",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -815,7 +845,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -832,7 +863,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -850,7 +882,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -865,7 +898,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -914,7 +948,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -931,7 +966,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -949,7 +985,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -964,7 +1001,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -1007,7 +1045,8 @@
           "adapter": {
             "selection": "roots",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -1024,7 +1063,8 @@
           "adapter": {
             "selection": "roots",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -1042,7 +1082,8 @@
           "adapter": {
             "selection": "roots",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -1057,7 +1098,8 @@
           "adapter": {
             "selection": "roots",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -1099,7 +1141,8 @@
           "adapter": {
             "selection": "roots",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -1116,7 +1159,8 @@
           "adapter": {
             "selection": "roots",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -1133,7 +1177,8 @@
           "adapter": {
             "selection": "focused-row",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -1150,7 +1195,8 @@
           "adapter": {
             "selection": "focused-row",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -1167,7 +1213,8 @@
           "adapter": {
             "selection": "roots",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -1185,7 +1232,8 @@
           "adapter": {
             "selection": "roots",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -1200,7 +1248,8 @@
           "adapter": {
             "selection": "roots",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -1249,7 +1298,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -1267,7 +1317,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -1282,7 +1333,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -1324,7 +1376,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -1339,7 +1392,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -1378,7 +1432,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -1395,7 +1450,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -1413,7 +1469,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -1428,7 +1485,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -1463,7 +1521,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -1480,7 +1539,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -1515,7 +1575,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -1532,7 +1593,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -1567,7 +1629,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -1602,7 +1665,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -1641,7 +1705,8 @@
           "adapter": {
             "selection": "none",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }

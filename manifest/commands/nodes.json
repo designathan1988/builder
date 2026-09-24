@@ -32,7 +32,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -50,7 +51,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -67,7 +69,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -85,7 +88,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -102,7 +106,8 @@
           "adapter": {
             "selection": "focused-row",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -117,7 +122,8 @@
           "adapter": {
             "selection": "single",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -170,7 +176,8 @@
           "adapter": {
             "selection": "target",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -218,7 +225,8 @@
           "adapter": {
             "selection": "target",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -235,7 +243,8 @@
           "adapter": {
             "selection": "primary",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -253,7 +262,8 @@
           "adapter": {
             "selection": "primary",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -268,7 +278,8 @@
           "adapter": {
             "selection": "primary",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -316,7 +327,8 @@
           "adapter": {
             "selection": "target",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -333,7 +345,8 @@
           "adapter": {
             "selection": "primary",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -351,7 +364,8 @@
           "adapter": {
             "selection": "primary",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         },
@@ -366,7 +380,8 @@
           "adapter": {
             "selection": "primary",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }
@@ -417,7 +432,8 @@
           "adapter": {
             "selection": "target",
             "offers": null,
-            "writes": []
+            "writes": [],
+            "fields": []
           },
           "args": {}
         }

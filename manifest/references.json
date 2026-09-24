@@ -1457,22 +1457,12 @@
     },
     {
       "kind": "codec",
-      "id": "baseline-shift",
-      "status": "planned"
-    },
-    {
-      "kind": "codec",
       "id": "font-stretch",
       "status": "planned"
     },
     {
       "kind": "codec",
       "id": "feature-tag-list",
-      "status": "planned"
-    },
-    {
-      "kind": "codec",
-      "id": "block-ellipsis",
       "status": "planned"
     },
     {
@@ -1502,27 +1492,17 @@
     },
     {
       "kind": "codec",
-      "id": "color-list",
-      "status": "planned"
-    },
-    {
-      "kind": "codec",
-      "id": "shadow-offset-list",
-      "status": "planned"
-    },
-    {
-      "kind": "codec",
-      "id": "length-list",
-      "status": "planned"
-    },
-    {
-      "kind": "codec",
       "id": "keyword-list",
       "status": "planned"
     },
     {
       "kind": "codec",
       "id": "shadow-list",
+      "status": "planned"
+    },
+    {
+      "kind": "codec",
+      "id": "text-shadow-list",
       "status": "planned"
     },
     {
@@ -1588,11 +1568,6 @@
     {
       "kind": "codec",
       "id": "box-corners",
-      "status": "planned"
-    },
-    {
-      "kind": "codec",
-      "id": "text-align",
       "status": "planned"
     },
     {

@@ -361,6 +361,126 @@
       "reader": "src/editor/inspector/value-lists.ts"
     },
     {
+      "field": "properties:structures",
+      "reader": "src/core/style/structures.ts"
+    },
+    {
+      "field": "properties:structures[].id",
+      "reader": "src/core/style/structures.ts"
+    },
+    {
+      "field": "properties:structures[].codec",
+      "reader": "src/core/style/codecs.ts"
+    },
+    {
+      "field": "properties:structures[].list",
+      "reader": "src/core/style/structures.ts"
+    },
+    {
+      "field": "properties:structures[].fields",
+      "reader": "src/core/style/structures.ts"
+    },
+    {
+      "field": "properties:structures[].fields[].id",
+      "reader": "src/core/style/structures.ts"
+    },
+    {
+      "field": "properties:structures[].fields[].type",
+      "reader": "src/core/style/structures.ts"
+    },
+    {
+      "field": "properties:structures[].fields[].css",
+      "reader": "src/core/style/structures.ts"
+    },
+    {
+      "field": "properties:structures[].fields[].keyword",
+      "reader": "src/core/style/structures.ts"
+    },
+    {
+      "field": "properties:structures[].fields[].units",
+      "reader": "src/editor/inspector/value-lists.ts"
+    },
+    {
+      "field": "properties:structures[].fields[].sample",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "properties:recipes",
+      "reader": "src/core/style/recipes.ts"
+    },
+    {
+      "field": "properties:recipes[].id",
+      "reader": "src/core/style/recipes.ts"
+    },
+    {
+      "field": "properties:recipes[].labelKey",
+      "reader": "src/editor/inspector/fields.ts"
+    },
+    {
+      "field": "properties:recipes[].section",
+      "reader": "src/editor/inspector/fields.ts"
+    },
+    {
+      "field": "properties:recipes[].group",
+      "reader": "src/editor/inspector/fields.ts"
+    },
+    {
+      "field": "properties:recipes[].control",
+      "reader": "src/editor/inspector/fields.ts"
+    },
+    {
+      "field": "properties:recipes[].codec",
+      "reader": "src/core/style/codecs.ts"
+    },
+    {
+      "field": "properties:recipes[].appliesTo",
+      "reader": "src/core/style/applies-to.ts"
+    },
+    {
+      "field": "properties:recipes[].declarations",
+      "reader": "src/core/style/recipes.ts"
+    },
+    {
+      "field": "properties:recipes[].declarations[].property",
+      "reader": "src/core/style/recipes.ts"
+    },
+    {
+      "field": "properties:recipes[].declarations[].value",
+      "reader": "src/core/style/recipes.ts"
+    },
+    {
+      "field": "properties:recipes[].shared",
+      "reader": "src/core/style/recipes.ts"
+    },
+    {
+      "field": "properties:recipes[].shared.clear",
+      "reader": "src/core/style/recipes.ts"
+    },
+    {
+      "field": "properties:recipes[].shared.otherWrite",
+      "reader": "src/core/style/recipes.ts"
+    },
+    {
+      "field": "properties:recipes[].shared.fields",
+      "reader": "src/editor/inspector/fields.ts"
+    },
+    {
+      "field": "properties:recipes[].doors",
+      "reader": "src/editor/doors/registry.ts"
+    },
+    {
+      "field": "properties:recipes[].source",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "properties:recipes[].source.spec",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "properties:recipes[].source.bcd",
+      "reader": "src/manifest/check.ts"
+    },
+    {
       "field": "properties:couplings",
       "reader": "src/core/style/couplings.ts"
     },
@@ -419,6 +539,38 @@
     {
       "field": "properties:couplings[].feature",
       "reader": "src/core/style/couplings.ts"
+    },
+    {
+      "field": "properties:storedWhole",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "properties:storedWhole[].property",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "properties:storedWhole[].reason",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "properties:syntaxFallbacks",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "properties:syntaxFallbacks[].property",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "properties:syntaxFallbacks[].values",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "properties:syntaxFallbacks[].recipe",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "properties:syntaxFallbacks[].reason",
+      "reader": "src/manifest/check.ts"
     },
     {
       "field": "interactions:keyContexts",
@@ -645,6 +797,10 @@
       "reader": "src/editor/doors/adapter.ts"
     },
     {
+      "field": "commands:commands[].entryPoints[].adapter.fields",
+      "reader": "src/editor/doors/adapter.ts"
+    },
+    {
       "field": "commands:commands[].entryPoints[].args",
       "reader": "src/editor/doors/registry.ts"
     },
@@ -687,6 +843,10 @@
     {
       "field": "commands:commands[].entryPoints[].composite",
       "reader": "src/editor/doors/registry.ts"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].recipe",
+      "reader": "src/editor/doors/adapter.ts"
     },
     {
       "field": "commands:commands[].entryPoints[].attribute",
@@ -1051,6 +1211,218 @@
     {
       "field": "generated/css-properties:types",
       "reader": "src/manifest/css.ts"
+    },
+    {
+      "field": "generated/css-properties:scopedFunctions",
+      "reader": "tools/gen/compat.ts"
+    },
+    {
+      "field": "generated/css-compat:$generated",
+      "reader": "tools/gen/check.ts"
+    },
+    {
+      "field": "generated/css-compat:$generated.notice",
+      "reader": "tools/gen/check.ts"
+    },
+    {
+      "field": "generated/css-compat:$generated.by",
+      "reader": "tools/gen/check.ts"
+    },
+    {
+      "field": "generated/css-compat:$generated.from",
+      "reader": "tools/gen/check.ts"
+    },
+    {
+      "field": "generated/css-compat:browsers",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:browsers.chrome",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:browsers.firefox",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:browsers.safari",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:valueFunctions",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:valueFunctions{}.bcd",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:valueFunctions{}.chrome",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:valueFunctions{}.firefox",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:valueFunctions{}.safari",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:valueFunctions{}.why",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:units",
+      "reader": "src/editor/inspector/value-lists.ts"
+    },
+    {
+      "field": "generated/css-compat:units{}.bcd",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:units{}.chrome",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:units{}.firefox",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:units{}.safari",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:units{}.why",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.bcd",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.via",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.chrome",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.firefox",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.safari",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.why",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.keywords",
+      "reader": "src/editor/inspector/value-lists.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.keywords{}.bcd",
+      "reader": "src/editor/inspector/value-lists.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.keywords{}.chrome",
+      "reader": "src/editor/inspector/value-lists.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.keywords{}.firefox",
+      "reader": "src/editor/inspector/value-lists.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.keywords{}.safari",
+      "reader": "src/editor/inspector/value-lists.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.keywords{}.why",
+      "reader": "src/editor/inspector/value-lists.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.keywords{}.inFunctions",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.keywords{}.inFunctions{}.bcd",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.keywords{}.inFunctions{}.chrome",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.keywords{}.inFunctions{}.firefox",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.keywords{}.inFunctions{}.safari",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.keywords{}.inFunctions{}.why",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.functions",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.functions{}.bcd",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.functions{}.chrome",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.functions{}.firefox",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.functions{}.safari",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.functions{}.why",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.forms",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.forms{}.shape",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.forms{}.bcd",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.forms{}.chrome",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.forms{}.firefox",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.forms{}.safari",
+      "reader": "src/manifest/check.ts"
+    },
+    {
+      "field": "generated/css-compat:properties{}.forms{}.why",
+      "reader": "src/manifest/check.ts"
     },
     {
       "field": "generated/html-elements:$generated",

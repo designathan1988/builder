@@ -3,12 +3,10 @@
 // edited by hand, or is stale because a source package changed, or was never added to git.
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
-import { createRequire } from 'node:module';
 import path from 'node:path';
 import { REPO_ROOT } from '../manifest/load.ts';
 import { GENERATED_DIR, generate } from './generate.ts';
-
-const require = createRequire(import.meta.url);
+import { packageVersion } from './versions.ts';
 const git = (...args: string[]) => execFileSync('git', args, { cwd: REPO_ROOT, encoding: 'utf8' });
 
 // the header names the package versions it was generated from; say which one moved
@@ -16,7 +14,7 @@ const stale: string[] = [];
 for (const file of fs.readdirSync(path.join(REPO_ROOT, GENERATED_DIR))) {
   const header = (JSON.parse(fs.readFileSync(path.join(REPO_ROOT, GENERATED_DIR, file), 'utf8')) as { $generated?: { from?: Record<string, string> } }).$generated;
   for (const [pkg, version] of Object.entries(header?.from ?? {})) {
-    const installed = (require(`${pkg}/package.json`) as { version: string }).version;
+    const installed = packageVersion(pkg);
     if (installed !== version) stale.push(`${file} was generated from ${pkg} ${version}; ${installed} is installed`);
   }
 }

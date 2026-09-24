@@ -62,6 +62,17 @@ function composite(input: MutableInput, id: string): Json {
   return found;
 }
 
+function recipe(input: MutableInput, id: string): Json {
+  const found = list(properties(input).recipes).find((r) => r.id === id);
+  if (!found) throw new Error(`plant: no recipe ${id}`);
+  return found;
+}
+
+// an edited property with no door, for plants that only need the property itself
+function editedProperty(id: string, fields: Json): Json {
+  return { id, labelKey: 'property.width', section: 'size', group: 'size', control: 'length-field', valueType: 'length', codec: 'length', appliesTo: 'hasBox', essential: false, doors: [], subsets: [], ...fields };
+}
+
 function element(input: MutableInput, id: string): Json {
   const found = list(obj(input.files['elements.json']).elements).find((e) => e.id === id);
   if (!found) throw new Error(`plant: no element ${id}`);
@@ -193,9 +204,176 @@ export const PLANTS: Plant[] = [
         labelKey: 'quickPanel.width',
         disabledReasonKey: 'common.notAvailableYet',
         placement: 'unplaced',
-        adapter: { selection: 'all', offers: null, writes: ['gap'] },
+        adapter: { selection: 'all', offers: null, writes: ['gap'], fields: [] },
         args: {},
       });
+    },
+  },
+  {
+    id: 'edited-property-unsupported',
+    rule: 'browser-support',
+    description: 'column-height is edited as a property; only Chrome implements it (Firefox and Safari lack it in css-compat.json)',
+    apply: (m) => {
+      list(properties(m).properties).push(editedProperty('column-height', { section: 'layout', group: 'columns', appliesTo: 'container', labelKey: 'property.columns' }));
+    },
+  },
+  {
+    id: 'offered-keyword-unsupported',
+    rule: 'browser-support',
+    description: 'the flex-wrap menu offers a subset with balance, which only Chrome supports',
+    apply: (m) => {
+      property(m, 'flex-wrap').subsets = [{ id: 'menu', values: ['nowrap', 'wrap', 'wrap-reverse', 'balance'], units: null, reason: 'planted' }];
+      obj(obj(door(m, 'style.set', 'inspector-flex-wrap').adapter).offers).list = 'menu';
+    },
+  },
+  {
+    id: 'prefix-outside-recipe',
+    rule: 'vendor-prefix',
+    description: '-webkit-text-stroke-width, which all three browsers support, is edited as a plain property instead of inside a recipe',
+    apply: (m) => {
+      list(properties(m).properties).push(editedProperty('-webkit-text-stroke-width', { section: 'text', group: 'typography', appliesTo: 'text' }));
+    },
+  },
+  {
+    id: 'fallback-outside-allowlist',
+    rule: 'syntax-fallback',
+    description: 'stroke leaves the fallback allowlist, so its default #2b5fe3 (valid only by the browser syntax) is a fallback outside the list',
+    apply: (m) => {
+      const file = properties(m);
+      file.syntaxFallbacks = list(file.syntaxFallbacks).filter((f) => f.property !== 'stroke');
+    },
+  },
+  {
+    id: 'recipe-misses-browsers',
+    rule: 'recipe',
+    description: 'the line clamp recipe writes the unprefixed line-clamp, which no browser ships, instead of -webkit-line-clamp',
+    apply: (m) => {
+      const unprefix = (name: unknown) => (name === '-webkit-line-clamp' ? 'line-clamp' : name);
+      for (const d of list(recipe(m, 'line-clamp').declarations)) d.property = unprefix(d.property);
+      const adapter = obj(door(m, 'style.set', 'inspector-line-clamp').adapter);
+      adapter.writes = strings(adapter.writes).map((w) => unprefix(w) as string);
+    },
+  },
+  {
+    id: 'handle-edits-unknown-field',
+    rule: 'structured-value',
+    description: 'the shadow blur handle edits the field spread, which a text shadow layer does not have',
+    apply: (m) => {
+      obj(door(m, 'style.setShadows', 'handle-shadow-blur').adapter).fields = ['spread'];
+    },
+  },
+  {
+    id: 'offered-type-keyword-unsupported',
+    rule: 'browser-support',
+    description: 'the accent-color field offers a subset with Mark, a system colour Safari lacks (BCD css.types.color.system-color.mark)',
+    apply: (m) => {
+      property(m, 'accent-color').subsets = [{ id: 'swatches', values: ['canvastext', 'mark'], units: null, reason: 'planted' }];
+      obj(door(m, 'style.set', 'inspector-accent-color').adapter).offers = { property: 'accent-color', list: 'swatches' };
+    },
+  },
+  {
+    id: 'recipe-source-not-its-value',
+    rule: 'recipe',
+    description: 'the line clamp recipe cites css.properties.display, the BCD entry of a fixed declaration, instead of the one carrying the clamp',
+    apply: (m) => {
+      obj(recipe(m, 'line-clamp').source).bcd = 'css.properties.display';
+    },
+  },
+  {
+    id: 'structured-default-as-css-text',
+    rule: 'structured-value',
+    description: 'the div gets box-shadow "0 1px 2px red" as a CSS-text default, although box-shadow stores typed layers',
+    apply: (m) => {
+      obj(element(m, 'div').defaultStyles)['box-shadow'] = '0 1px 2px red';
+    },
+  },
+  {
+    id: 'composite-subset-sets-omitted-longhand',
+    rule: 'composite',
+    description: 'a columns subset offers "2 auto / 10em", which sets column-height, a longhand the composite omits',
+    apply: (m) => {
+      composite(m, 'columns').subsets = [{ id: 'presets', values: ['2 auto', '2 auto / 10em'], units: null, reason: 'planted' }];
+    },
+  },
+  {
+    id: 'buttons-with-no-supported-keyword',
+    rule: 'value-set',
+    description: 'Safari loses every text-align keyword in css-compat.json, so the Text align buttons would be empty',
+    apply: (m) => {
+      const textAlign = obj(obj(obj(m.files['generated/css-compat.json']).properties)['text-align']);
+      for (const k of Object.values(obj(textAlign.keywords))) {
+        obj(k).safari = false;
+        obj(obj(k).why).safari = 'planted';
+      }
+    },
+  },
+  {
+    id: 'global-allowlist-cannot-vouch',
+    rule: 'browser-support',
+    description: 'an allowlist entry for overflow-x: overlay outside any recipe lets the syntax through, but cannot make a value no browser supports acceptable',
+    apply: (m) => {
+      list(properties(m).syntaxFallbacks).push({ property: 'overflow-x', values: ['overlay'], recipe: null, reason: 'planted' });
+      obj(element(m, 'div').defaultStyles)['overflow-x'] = 'overlay';
+    },
+  },
+  {
+    id: 'written-function-unsupported',
+    rule: 'browser-support',
+    description: 'a width subset offers fit-content(10px); BCD css.properties.width.fit-content_function has no browser',
+    apply: (m) => {
+      property(m, 'width').subsets = [{ id: 'presets', values: ['auto', 'fit-content(10px)'], units: null, reason: 'planted' }];
+    },
+  },
+  {
+    id: 'written-untracked-function',
+    rule: 'browser-support',
+    description: 'a color subset offers device-cmyk(0 0 0 1); BCD tracks no device-cmyk() and no browser implements it',
+    apply: (m) => {
+      property(m, 'color').subsets = [{ id: 'swatches', values: ['red', 'device-cmyk(0 0 0 1)'], units: null, reason: 'planted' }];
+    },
+  },
+  {
+    id: 'offered-unit-unsupported',
+    rule: 'browser-support',
+    description: 'Safari loses the rcap unit in css-compat.json, and a width subset offers it',
+    apply: (m) => {
+      const rcap = obj(obj(obj(m.files['generated/css-compat.json']).units).rcap);
+      rcap.safari = false;
+      obj(rcap.why).safari = 'planted';
+      property(m, 'width').subsets = [{ id: 'units', values: null, units: ['px', 'rcap'], reason: 'planted' }];
+    },
+  },
+  {
+    id: 'written-form-unsupported',
+    rule: 'browser-support',
+    description: 'a text-overflow subset offers "clip ellipsis"; the two-value syntax (BCD two_value_syntax) is Firefox only',
+    apply: (m) => {
+      property(m, 'text-overflow').subsets = [{ id: 'presets', values: ['ellipsis', 'clip ellipsis'], units: null, reason: 'planted' }];
+    },
+  },
+  {
+    id: 'recipe-writes-shorthand-of-edited-longhands',
+    rule: 'recipe',
+    description: 'the line clamp recipe also declares overflow: hidden, a second writer of its own overflow-x and overflow-y',
+    apply: (m) => {
+      list(recipe(m, 'line-clamp').declarations).push({ property: 'overflow', value: 'hidden' });
+      strings(obj(door(m, 'style.set', 'inspector-line-clamp').adapter).writes).push('overflow');
+    },
+  },
+  {
+    id: 'shorthand-whose-longhands-browsers-implement',
+    rule: 'shorthand-write',
+    description: 'inset-block is edited whole although Chrome, Firefox and Safari implement both its longhands',
+    apply: (m) => {
+      list(properties(m).properties).push(editedProperty('inset-block', { section: 'position', group: 'position', appliesTo: 'positioned' }));
+    },
+  },
+  {
+    id: 'stored-shorthand-and-its-longhand',
+    rule: 'shorthand-write',
+    description: 'text-align is stored whole, and its longhand text-align-last is edited as well',
+    apply: (m) => {
+      list(properties(m).properties).push(editedProperty('text-align-last', { section: 'text', group: 'typography', appliesTo: 'text', control: 'keyword-menu', valueType: 'keyword', codec: 'keyword' }));
     },
   },
   {

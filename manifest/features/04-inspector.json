@@ -331,7 +331,7 @@
         "expected": [
           "The font menu lists system and web-safe font stacks; weight offers 100-900 with names.",
           "Every value is written to the document JSON and the computed style of the paragraph in the iframe matches.",
-          "Each keyword control offers the list its door names: the generated keywords of the property, or a subset the manifest declares with its reason.",
+          "Each keyword control offers the list its door names: the generated keywords of the property that Chrome, Firefox and Safari all support according to css-compat.json, or a subset the manifest declares with its reason.",
           "Each value is written by one command per property, and every other control for the same property must use that command."
         ]
       },
@@ -353,7 +353,8 @@
         ],
         "expected": [
           "Each value is written to the document JSON and the computed style matches.",
-          "Line clamp 2 limits the measured paragraph height to two lines of text."
+          "Line clamp 2 limits the measured paragraph height to two lines of text.",
+          "Line clamp is a compatibility recipe: one command and one undo step write every declaration browsers need to clamp (the legacy box display, its vertical orientation, the legacy line clamp and hidden overflow). While it is set, the Display and Overflow fields show the clamp; choosing a display or an overflow there clears the clamp in the same command; clearing the clamp removes its declarations and restores the display and overflow values it replaced."
         ]
       },
       "scenarios": []
@@ -457,7 +458,8 @@
         "expected": [
           "Opacity 50% is written as 0.5 and the computed opacity matches.",
           "Each other value is written to the document JSON and the computed style matches.",
-          "Each value is written by one command per property, and every other control for the same property must use that command."
+          "Each value is written by one command per property, and every other control for the same property must use that command.",
+          "Text selection (user-select) is a compatibility recipe: one command and one undo step write the standard property and the prefixed form Safari needs."
         ]
       },
       "scenarios": []
@@ -482,7 +484,7 @@
         ],
         "expected": [
           "Each shadow layer has X, Y, blur, spread, colour and inset controls; dragging the light pad sets X and Y.",
-          "The shadow layers are written to the document JSON in layer order as the box-shadow longhands (colour, offset, blur, spread, position), all of them by one command per change, and rendered as the box-shadow shorthand; hidden layers are left out of the CSS.",
+          "The shadow layers are written to the document JSON as one box-shadow value made of typed layers (X, Y, blur, spread, colour, inset, hidden), in layer order, by one command per change; the codec writes the visible layers as the box-shadow list, and hidden layers stay in the document but are left out of the CSS.",
           "The computed box-shadow and text-shadow in the iframe match."
         ]
       },
@@ -571,7 +573,7 @@
         "steps": [
           "Select a Container.",
           "Set contain, content-visibility, columns, column-span, column-fill, column-rule width/style/colour, break-before, break-after, break-inside.",
-          "Set scroll-behavior, overscroll-behavior, scroll-snap-type, scroll-snap-align, counter-reset and counter-increment."
+          "Set scroll-behavior, scroll-snap-type, scroll-snap-align, counter-reset and counter-increment."
         ],
         "expected": [
           "Every property listed is present in the inspector with the control type the catalogue declares (keyword menu, length or text).",

@@ -2,6 +2,149 @@
 
 Handoff notes between sessions. Newest entry first.
 
+## 2026-09-24 — Property model fix: browser support from BCD, implemented properties, recipes, fallback allowlist
+
+Why: a67fcde stored longhands no browser implements (box-shadow-*, text-align-all, max-lines, block-ellipsis, continue), which forced render and export to rebuild the shorthand: a second writer of the same property. The rule now is to store the finest-grained property browsers implement, and which ones they implement is generated from MDN's browser-compat-data (BCD), not measured or remembered. This session changed data, the generator and the validator only; there is still no app code.
+
+Done:
+- `@mdn/browser-compat-data` 8.1.2 (dev dependency). `npm run gen` also writes `manifest/generated/css-compat.json` (`tools/gen/compat.ts`, 6.7 MB, one line per property). It records the version of the current stable Chrome (153), Firefox (156) and Safari (27) that added each item, or false with the reason. It covers:
+  - the 821 generated CSS properties;
+  - their 26 790 keywords, each with its support inside every function it appears in (`inFunctions`);
+  - their 2 667 functions;
+  - the syntax forms BCD tracks (`forms`);
+  - the 41 general-purpose functions CSS Values defines (`valueFunctions`: calc(), min(), max(), clamp(), round()…), which CSSTree matches wherever their result type fits, so no property's syntax names them;
+  - the 65 units of the generated unit lists (`units`).
+  The method is the comment at the top of `tools/gen/compat.ts`. In short:
+  - Supported means an unprefixed statement for the current release, with no flag, not preview, not removed and not a partial implementation.
+  - `-webkit-x` is looked up as the prefixed form of BCD `x`, and its keywords follow the prefixed property. BCD's value entries under `x` describe the standard property.
+  - Own entries:
+    - A keyword's: its key; a description that is nothing but its name in `<code>` ("AccentColor and AccentColorText"; `oblique-angle` is not `oblique`'s); or "`jump-` keywords".
+    - A function's: `name_function`, or a description starting with `<code>name()</code>`. So `css.types.image`, the `<image>` type, is not `image()`.
+  - A function is looked up in each context it is met in: under the scope that reaches a scoped function; else under a type on its path (never under its own entry); else under the property, its longhands (grid's `minmax()` is under grid-template-columns) and css.types (`linear()` is `linear-function`).
+    - A function BCD tracks nowhere is a legacy alias when its official grammar is another function's once renamed (`rgba()` of `rgb()`).
+    - Otherwise it has no support (`image()`, `device-cmyk()`).
+  - A keyword is looked up under the property and its longhands. Otherwise it is decided in each context the syntax has it in. Every path that reaches it is recorded (`syntaxMentions` works out each type once and composes it into every path):
+    - under the css.types entry of a type on the way (`color: mark` → `css.types.color.system-color.mark`, Safari false);
+    - inside a function but through a type BCD tracks (`red` in `linear-gradient()`, through `<color>`): decided by that type, as outside functions. The function is checked as a function;
+    - in a function's own grammar: the function's subfeature that names it (`display-p3-linear` → Chrome 144 / Firefox 146 / Safari 26.2), or the one BCD's convention ties to it (`relative_syntax` is `from`: in `rgb()` Chrome 122 / Firefox 128 / Safari 18). Else the function's support when MDN's syntax names the keyword inside that function. Else no support;
+    - outside functions: a type that lists none of its values stands for them when MDN names the keyword.
+  - A keyword outside functions that no context decides inherits its property's support only when both syntaxes name it. It gets no support when it is prefixed, when only MDN names it (`fill: context-fill`), when MDN lists it as non-standard (`overflow-x: overlay`), or when MDN does not name it.
+  - `units` come from the css.types entry of their list. The type's own entry stands for the units BCD does not list separately (px, cm, s, ms, %). hz, khz, db and st have no support.
+  - `forms` records the syntax forms BCD tracks as subfeatures, with the value shape each stands for: two- or three-value syntax, multiple keywords, several layers, negative values.
+- Webref defines some functions only in scoped versions (`for`): `rect()` of `<basic-shape>` and of `clip`; `type()` of `image-set()`, `attr()` and `@function`. CSSTree has no scopes and matches a `<name()>` reference only by the function's own name. So the generator writes each scoped version inline into the syntaxes its scope reaches (`inlineScopedFunctions` in `tools/gen/generate.ts`; css-properties.json records them in `scopedFunctions`):
+  - `clip-path: rect(0 10px 10px 0)` is official syntax;
+  - its BCD entry is `css.types.basic-shape.rect`;
+  - `type()` inside `image-set()` takes `image-set()`'s entry, since BCD lists nothing for it there.
+- CSSTree's parser turns `url(…)` into a url token that only CSSTree's own `<url>` definition matches. So the official lexer keeps that definition, plus webref's `<src()>`, and `url("a.png")` is matched by the official syntax.
+- `CSSTree` builds the official lexer as a fork of its MDN data. `src/manifest/css.ts` now counts a match as a browser-syntax match when it goes through a property or type webref does not define (`-webkit-box-orient`, `rect()`). It also reports what the value is made of: the keywords, the custom identifiers, and the longhands it sets.
+- Rule `browser-support`:
+  - Every edited property must be supported by all three browsers.
+  - So must every keyword, function and unit of every value the manifest offers or writes, and every syntax form such a value takes. Each must also be one css-compat.json lists. A keyword inside a function is checked with its support in that function (`src/manifest/css.ts` reads the function from CSSTree's match tree). That covers subsets, fixed door values, element defaults, coupling effects, recipe values and structure keywords such as `inset`. So `width: fit-content(10px)` and `text-overflow: clip ellipsis` fail.
+  - A custom identifier is checked when BCD tracks it.
+  - A legacy alias whose standard name every browser supports is refused.
+- `generated` as a door's list means the generated keywords and units all three support. `generatedOffer()` and `generatedUnits()` in `src/manifest/check.ts` are the one definition for properties, composites and recipes, for the UI to reuse. Today no offered unit is left out. It leaves out 288 generated keywords, such as `block-start` for object-position, `hairline`, `stretch`, `balance`, `match-parent`, `preserve-spaces`, `chain` and the system colours Mark, MarkText and ButtonBorder.
+- Rule `shorthand-write`:
+  - A shorthand is edited through its longhands (a composite) when all three browsers implement every one of them.
+  - When a browser lacks one, the manifest declares the choice: a composite that `omits` it with the reason (`columns`, `font-variant`), or the shorthand stored whole in `storedWhole` with the reason (`box-shadow`, `text-align`, `vertical-align`).
+  - A shorthand stored whole has none of its longhands edited as well.
+  - A composite's offered or written values may not set a longhand it omits. The check looks for a referenced `<'column-height'>` or a keyword only the omitted longhand has.
+- Replaced (what was edited → what is edited now):
+  - `box-shadow-color`, `box-shadow-offset`, `box-shadow-blur`, `box-shadow-spread`, `box-shadow-position` (no BCD entry, no browser) → `box-shadow`, stored whole. Its value type is `shadow-list`: typed layers with color, offsetX, offsetY, blur, spread, inset and hidden.
+  - `text-shadow` → value type `text-shadow-list` (color, offsetX, offsetY, blur, hidden).
+  - `text-align-all` (no BCD entry) + `text-align-last` → `text-align`, stored whole. `text-align-last` is not edited, so text-align keeps one writer.
+  - `alignment-baseline`, `baseline-shift`, `baseline-source` → `vertical-align`, stored whole, with the CSS 2 menu. Safari lacks baseline-source, and BCD shows the CSS Inline 3 vertical-align values only in Firefox.
+  - `max-lines`, `block-ellipsis`, `continue` (Chrome and Firefox: none; Safari: preview) → the `line-clamp` recipe.
+  - `user-select` (Safari: only prefixed) → the `user-select` recipe: `-webkit-user-select` and `user-select`.
+  - `column-height` (Chrome only) → omitted by the `columns` composite.
+  - `font-variant-emoji` (Safari preview) → omitted by the `font-variant` composite.
+  - `overscroll-behavior-x`, `overscroll-behavior-y` and their composite (Safari: partial implementation) → not edited.
+  - `font-stretch` was already the edited name (`font-width` lacks Chrome).
+- Structured value types (`properties.json` `structures`, rule `structured-value`):
+  - The document stores typed fields, and the codec is the only writer of the CSS.
+  - The checker serialises a sample layer (and a two-layer list) from the fields and matches it against the property's official syntax.
+  - A length field names the unit list it offers (`units: length`).
+  - A door names the typed fields it edits in `adapter.fields`: the X field `offsetX`, the light pad and the offset handle `offsetX, offsetY`, the blur handle `blur`. The shadow doors offer no list.
+  - A structured value is written only by a command with a json argument. It is never written as CSS text: not as a subset, an element default, a coupling effect or a fixed door value.
+  - The four shadow-pad arrow keys used to declare no writes; they now write box-shadow or text-shadow (`offsetX` or `offsetY`).
+- Compatibility recipes (`properties.json` `recipes`, rule `recipe`):
+  - One door writes every declaration in one command and one undo step.
+  - `source` names the spec section, and the BCD entry of the declaration that carries the door's value.
+  - For each browser, every group (a property and its prefixed forms) needs a declaration that browser supports. Its value's keywords must be supported too, or vouched for by the allowlist.
+  - Line clamp writes `display: -webkit-box`, `-webkit-box-orient: vertical`, `-webkit-line-clamp: N`, `overflow-x: hidden` and `overflow-y: hidden`. Its sources are CSS Overflow 4 §5.1.1 Legacy compatibility (`#webkit-line-clamp`) and BCD `css.properties.line-clamp` (the `-webkit-` prefix since Chrome 6, Firefox 68 and Safari 5).
+  - The overflow is written as its two longhands. Every browser implements them and both are edited properties, so storing the `overflow` shorthand would be a second writer.
+  - A recipe that also writes edited properties declares how it shares them (`shared`):
+    - its fields show the recipe while it is set, so the Display menu never has to show `-webkit-box`;
+    - a door that writes one of them clears the recipe in the same command and undo step;
+    - clearing the recipe restores the values it replaced.
+  - The props-typography-advanced intent says so.
+  - A recipe never declares the shorthand of edited longhands (`overflow`, `padding`), nor a longhand of a shorthand stored whole.
+  - Rule `vendor-prefix` (case-insensitive) rejects a prefix in any other string or key of the hand-written manifest. The only exceptions are the recipes, their doors' `writes` and their allowlist entries.
+- Lexer fallback allowlist (`properties.json` `syntaxFallbacks`, rule `syntax-fallback`):
+  - Entries: `fill` and `stroke` (every value), and, for the line-clamp recipe only, `display: -webkit-box` and `-webkit-box-orient: vertical`. Each has its reason.
+  - Only a recipe-scoped entry vouches for its value where BCD does not track it, and only inside that recipe. A global entry lets the syntax through, never a value no browser supports.
+  - Any other browser-syntax-only value fails, recipe values included. So does an entry that nothing needs.
+- Planted fixtures, each failing on its own rule and locked by `tools/manifest/check.test.ts` (47 in all):
+  - `edited-property-unsupported` → browser-support
+  - `offered-keyword-unsupported` → browser-support
+  - `offered-type-keyword-unsupported` → browser-support
+  - `global-allowlist-cannot-vouch` → browser-support
+  - `written-function-unsupported` → browser-support
+  - `written-untracked-function` → browser-support
+  - `offered-unit-unsupported` → browser-support
+  - `written-form-unsupported` → browser-support
+  - `recipe-writes-shorthand-of-edited-longhands` → recipe
+  - `prefix-outside-recipe` → vendor-prefix
+  - `fallback-outside-allowlist` → syntax-fallback
+  - `recipe-misses-browsers` → recipe
+  - `recipe-source-not-its-value` → recipe
+  - `handle-edits-unknown-field` → structured-value
+  - `structured-default-as-css-text` → structured-value
+  - `composite-subset-sets-omitted-longhand` → composite
+  - `buttons-with-no-supported-keyword` → value-set
+  - `shorthand-whose-longhands-browsers-implement` → shorthand-write
+  - `stored-shorthand-and-its-longhand` → shorthand-write
+  - Unit tests also pin the compat facts, the filtered lists, and the review's mutations that break several rules:
+    - `overflow-x: overlay` or `display: -moz-box` in a recipe;
+    - `-WEBKIT-box`;
+    - a recipe that writes `padding`;
+    - a coupling that writes box-shadow text;
+    - `calc()`, `max()`, `clamp()`, `color-mix()`, `rgb(from red 255 0 0)`, colours inside gradients and `url("a.png")` accepted;
+    - `image()`, `contrast-color(red tbd-fg)`, `color(rec2100-pq …)`, `fill: context-fill`, `shape(from 0 0, …)` and a unit a browser lacks refused.
+- Doors, consumers, i18n and intents followed:
+  - `inspector-webkit-line-clamp` is now `inspector-line-clamp`, and `inspector-overscroll-behavior` is deleted.
+  - Every adapter has `fields`, and every inspector field has `recipe`.
+  - The 18 unused `property.*` keys are removed, and `property.webkitLineClamp` is now `property.lineClamp`.
+  - Five intent lines are amended and declared in `tools/manifest/map-features.ts`: shadow-editor, props-more, props-typography, props-typography-advanced and props-effects-basic.
+  - The behaviour specs needed no change: they describe Pager, and none names a removed property.
+  - The summary of `manifest:check` prints the allowlist, the recipes' sources and the shorthands stored whole, with their reasons.
+
+What webref (@webref/css 8.7.5) says about line clamp:
+- It defines `-webkit-line-clamp`: CSS Overflow 4, `#propdef--webkit-line-clamp`, syntax `none | <integer [1,∞]>`, a shorthand of max-lines, block-ellipsis and continue. It also defines `line-clamp`.
+- It lists `-webkit-box-orient` from the Compatibility Standard, with no syntax.
+- It does not define the display value `-webkit-box`, anywhere. Neither the display syntax nor `<display-legacy>` (inline-block | inline-table | inline-flex | inline-grid) has it, and BCD has no entry for it either.
+- The spec text (§5.1.1) says the legacy clamp "only takes effect if the specified value of the display property is -webkit-box or -webkit-inline-box and the value of the -webkit-box-orient property is vertical".
+- So the recipe's `display: -webkit-box` and `-webkit-box-orient: vertical` are browser-syntax values that the allowlist names for this recipe only, with the spec section as their evidence.
+
+Decisions taken here (change them in the manifest if the user disagrees):
+- **Partial implementations count as unsupported.** BCD says a partial implementation "deviates from the specification in a way that may cause compatibility problems". For that reason overscroll-behavior is not edited (the props-more intent no longer lists it), and `background-clip: text` is not offered.
+- **user-select became a recipe instead of being dropped**, so "user-select none" in props-effects-basic keeps working in Safari.
+- **vertical-align is stored whole** (the reason is in `storedWhole`). The alternative was a composite of alignment-baseline and baseline-shift that omits baseline-source.
+- **shape() values are refused for lack of data.** BCD records `shape()` in all three browsers but none of its keywords (from, line, to, close…), and MDN's syntax does not know `shape()`. The only other evidence is webref's draft grammar, and that same grammar gives `contrast-color()` the placeholders `tbd-fg`/`tbd-bg`, which no browser ships. No data tells the two apart, so keywords inside a function need BCD or MDN to name them there. The editor offers no `shape()`.
+- **Keyword support needs a rule where BCD is silent.** A keyword BCD does not track inherits its property's support only when MDN's browser syntax names it. That catches draft-only keywords such as `hairline`, `stretch` and `justify-all`. But BCD and MDN still both let `all`, `region` and `avoid-region` through for the break-* properties, so those menus declare subsets with the reason.
+- The font menu drops the ui-serif, ui-sans-serif and ui-monospace stacks, which only Safari supports.
+
+Open questions for the user: none from this session.
+
+Fragile / worth knowing:
+- A BCD version bump changes css-compat.json, including which release counts as "current". `gen:check` names the package that moved; review the diff, since edited properties can become valid or invalid.
+- `gen:check` compares against the git index, so a new generated file must be staged (`git add manifest/generated/`) before `verify:fast` passes.
+- css-compat.json is 6.7 MB (one line per property, keywords with their contexts inline); the unit tests clone it for every plant, so `npm run unit` takes about 15 s.
+- BCD subfeatures that are neither a value, a function nor one of the six form shapes are not checked. Examples: `side-relative_values`, `shorthand_values`, `url_positioning_syntax`, `writing-mode_relative_values`. `FORM_SHAPES` in `tools/gen/compat.ts` is the place to add one.
+
+Next:
+1. `DESIGN.md` (places every door) and `ARCHITECTURE.md` (confirms every command owner and the reader modules named in `consumers.json`, including `src/core/style/structures.ts` and `recipes.ts`).
+2. The scenario runner, then the scenario session for `01-foundation`.
+
 ## 2026-09-24 — Property model: generated web data, longhands, composites, couplings, history
 
 Why: hand-copied CSS/HTML tables are how Pager ended up with two unit lists for gap; editors break on shorthand versus longhand and on values re-parsed as strings; undo bugs come from interactions that forget to mark a history step. This session changed data and the validator only; there is still no app code.

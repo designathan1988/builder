@@ -248,6 +248,118 @@
       "pseudo": ":placeholder-shown"
     }
   ],
+  "structures": [
+    {
+      "id": "shadow-list",
+      "codec": "shadow-list",
+      "list": true,
+      "fields": [
+        {
+          "id": "color",
+          "type": "color",
+          "css": "value",
+          "keyword": null,
+          "units": null,
+          "sample": "rgb(15 23 42 / 0.24)"
+        },
+        {
+          "id": "offsetX",
+          "type": "length",
+          "css": "value",
+          "keyword": null,
+          "units": "length",
+          "sample": "4px"
+        },
+        {
+          "id": "offsetY",
+          "type": "length",
+          "css": "value",
+          "keyword": null,
+          "units": "length",
+          "sample": "6px"
+        },
+        {
+          "id": "blur",
+          "type": "length",
+          "css": "value",
+          "keyword": null,
+          "units": "length",
+          "sample": "12px"
+        },
+        {
+          "id": "spread",
+          "type": "length",
+          "css": "value",
+          "keyword": null,
+          "units": "length",
+          "sample": "0px"
+        },
+        {
+          "id": "inset",
+          "type": "boolean",
+          "css": "keyword",
+          "keyword": "inset",
+          "units": null,
+          "sample": true
+        },
+        {
+          "id": "hidden",
+          "type": "boolean",
+          "css": "hides-layer",
+          "keyword": null,
+          "units": null,
+          "sample": false
+        }
+      ]
+    },
+    {
+      "id": "text-shadow-list",
+      "codec": "text-shadow-list",
+      "list": true,
+      "fields": [
+        {
+          "id": "color",
+          "type": "color",
+          "css": "value",
+          "keyword": null,
+          "units": null,
+          "sample": "rgb(15 23 42 / 0.24)"
+        },
+        {
+          "id": "offsetX",
+          "type": "length",
+          "css": "value",
+          "keyword": null,
+          "units": "length",
+          "sample": "4px"
+        },
+        {
+          "id": "offsetY",
+          "type": "length",
+          "css": "value",
+          "keyword": null,
+          "units": "length",
+          "sample": "6px"
+        },
+        {
+          "id": "blur",
+          "type": "length",
+          "css": "value",
+          "keyword": null,
+          "units": "length",
+          "sample": "12px"
+        },
+        {
+          "id": "hidden",
+          "type": "boolean",
+          "css": "hides-layer",
+          "keyword": null,
+          "units": null,
+          "sample": false
+        }
+      ]
+    }
+  ],
   "properties": [
     {
       "id": "display",
@@ -260,7 +372,8 @@
       "appliesTo": "always",
       "essential": true,
       "doors": [
-        "style.set#inspector-display"
+        "style.set#inspector-display",
+        "style.set#inspector-line-clamp"
       ],
       "subsets": [
         {
@@ -683,21 +796,6 @@
       "subsets": []
     },
     {
-      "id": "column-height",
-      "labelKey": "property.columnHeight",
-      "section": "layout",
-      "group": "columns",
-      "control": "part-of-composite",
-      "valueType": "length",
-      "codec": "length",
-      "appliesTo": "container",
-      "essential": false,
-      "doors": [
-        "style.set#inspector-columns"
-      ],
-      "subsets": []
-    },
-    {
       "id": "column-span",
       "labelKey": "property.columnSpan",
       "section": "layout",
@@ -785,7 +883,19 @@
       "doors": [
         "style.set#inspector-break-before"
       ],
-      "subsets": []
+      "subsets": [
+        {
+          "id": "menu",
+          "values": [
+            "auto",
+            "page",
+            "left",
+            "right"
+          ],
+          "units": null,
+          "reason": "The menu leaves out all, region and avoid-region: css-compat.json keeps them only because BCD does not track them and the browser syntax lists them, but they break through nested fragmentation contexts and CSS Regions, which no browser implements and the editor never creates."
+        }
+      ]
     },
     {
       "id": "break-after",
@@ -800,7 +910,19 @@
       "doors": [
         "style.set#inspector-break-after"
       ],
-      "subsets": []
+      "subsets": [
+        {
+          "id": "menu",
+          "values": [
+            "auto",
+            "page",
+            "left",
+            "right"
+          ],
+          "units": null,
+          "reason": "The menu leaves out all, region and avoid-region: css-compat.json keeps them only because BCD does not track them and the browser syntax lists them, but they break through nested fragmentation contexts and CSS Regions, which no browser implements and the editor never creates."
+        }
+      ]
     },
     {
       "id": "break-inside",
@@ -815,7 +937,19 @@
       "doors": [
         "style.set#inspector-break-inside"
       ],
-      "subsets": []
+      "subsets": [
+        {
+          "id": "menu",
+          "values": [
+            "auto",
+            "avoid",
+            "avoid-page",
+            "avoid-column"
+          ],
+          "units": null,
+          "reason": "The menu leaves out avoid-region: css-compat.json keeps it only because BCD does not track it and the browser syntax lists it, but it acts on CSS Regions, which no browser implements."
+        }
+      ]
     },
     {
       "id": "scroll-behavior",
@@ -829,36 +963,6 @@
       "essential": false,
       "doors": [
         "style.set#inspector-scroll-behavior"
-      ],
-      "subsets": []
-    },
-    {
-      "id": "overscroll-behavior-x",
-      "labelKey": "property.overscrollBehaviorX",
-      "section": "layout",
-      "group": "scroll",
-      "control": "part-of-composite",
-      "valueType": "keyword",
-      "codec": "keyword",
-      "appliesTo": "scrollContainer",
-      "essential": false,
-      "doors": [
-        "style.set#inspector-overscroll-behavior"
-      ],
-      "subsets": []
-    },
-    {
-      "id": "overscroll-behavior-y",
-      "labelKey": "property.overscrollBehaviorY",
-      "section": "layout",
-      "group": "scroll",
-      "control": "part-of-composite",
-      "valueType": "keyword",
-      "codec": "keyword",
-      "appliesTo": "scrollContainer",
-      "essential": false,
-      "doors": [
-        "style.set#inspector-overscroll-behavior"
       ],
       "subsets": []
     },
@@ -1337,7 +1441,8 @@
       "essential": false,
       "doors": [
         "style.set#inspector-overflow",
-        "style.set#inspector-overflow-x"
+        "style.set#inspector-overflow-x",
+        "style.set#inspector-line-clamp"
       ],
       "subsets": []
     },
@@ -1353,7 +1458,8 @@
       "essential": false,
       "doors": [
         "style.set#inspector-overflow",
-        "style.set#inspector-overflow-y"
+        "style.set#inspector-overflow-y",
+        "style.set#inspector-line-clamp"
       ],
       "subsets": []
     },
@@ -2241,9 +2347,6 @@
           "id": "stacks",
           "values": [
             "system-ui, sans-serif",
-            "ui-sans-serif, system-ui, sans-serif",
-            "ui-serif, Georgia, serif",
-            "ui-monospace, monospace",
             "Arial, Helvetica, sans-serif",
             "Verdana, Geneva, sans-serif",
             "Tahoma, sans-serif",
@@ -2256,7 +2359,7 @@
             "monospace"
           ],
           "units": null,
-          "reason": "The font menu offers system and web-safe font stacks; the generic families of the official list are the last entry of each stack, and any other family is typed."
+          "reason": "The font menu offers system and web-safe font stacks; the generic families of the official list are the last entry of each stack, and any other family is typed. The ui-serif, ui-sans-serif and ui-monospace families are left out: only Safari supports them (css-compat.json)."
         }
       ]
     },
@@ -2384,26 +2487,11 @@
       "subsets": []
     },
     {
-      "id": "text-align-all",
-      "labelKey": "property.textAlignAll",
+      "id": "text-align",
+      "labelKey": "property.textAlign",
       "section": "text",
       "group": "typography",
-      "control": "part-of-composite",
-      "valueType": "keyword",
-      "codec": "keyword",
-      "appliesTo": "text",
-      "essential": false,
-      "doors": [
-        "style.set#inspector-text-align"
-      ],
-      "subsets": []
-    },
-    {
-      "id": "text-align-last",
-      "labelKey": "property.textAlignLast",
-      "section": "text",
-      "group": "typography",
-      "control": "part-of-composite",
+      "control": "keyword-buttons",
       "valueType": "keyword",
       "codec": "keyword",
       "appliesTo": "text",
@@ -2564,49 +2652,35 @@
       "subsets": []
     },
     {
-      "id": "alignment-baseline",
-      "labelKey": "property.alignmentBaseline",
+      "id": "vertical-align",
+      "labelKey": "property.verticalAlign",
       "section": "text",
       "group": "typography",
-      "control": "part-of-composite",
-      "valueType": "keyword",
-      "codec": "keyword",
-      "appliesTo": "inlineOrCell",
-      "essential": false,
-      "doors": [
-        "style.set#inspector-vertical-align"
-      ],
-      "subsets": []
-    },
-    {
-      "id": "baseline-shift",
-      "labelKey": "property.baselineShift",
-      "section": "text",
-      "group": "typography",
-      "control": "part-of-composite",
+      "control": "keyword-menu",
       "valueType": "length-percentage",
-      "codec": "baseline-shift",
+      "codec": "vertical-align",
       "appliesTo": "inlineOrCell",
       "essential": false,
       "doors": [
         "style.set#inspector-vertical-align"
       ],
-      "subsets": []
-    },
-    {
-      "id": "baseline-source",
-      "labelKey": "property.baselineSource",
-      "section": "text",
-      "group": "typography",
-      "control": "part-of-composite",
-      "valueType": "keyword",
-      "codec": "keyword",
-      "appliesTo": "inlineOrCell",
-      "essential": false,
-      "doors": [
-        "style.set#inspector-vertical-align"
-      ],
-      "subsets": []
+      "subsets": [
+        {
+          "id": "menu",
+          "values": [
+            "baseline",
+            "top",
+            "middle",
+            "bottom",
+            "sub",
+            "super",
+            "text-top",
+            "text-bottom"
+          ],
+          "units": null,
+          "reason": "The menu offers the keywords Chrome, Firefox and Safari all implement; lengths and percentages are typed. The CSS Inline 3 keywords (first, last, center, alphabetic and the other baselines) are Firefox only (css-compat.json)."
+        }
+      ]
     },
     {
       "id": "font-stretch",
@@ -2714,21 +2788,6 @@
       "subsets": []
     },
     {
-      "id": "font-variant-emoji",
-      "labelKey": "property.fontVariantEmoji",
-      "section": "text",
-      "group": "advanced",
-      "control": "part-of-composite",
-      "valueType": "keyword",
-      "codec": "keyword-set",
-      "appliesTo": "text",
-      "essential": false,
-      "doors": [
-        "style.set#inspector-font-variant"
-      ],
-      "subsets": []
-    },
-    {
       "id": "font-feature-settings",
       "labelKey": "property.fontFeatureSettings",
       "section": "text",
@@ -2770,51 +2829,6 @@
       "essential": false,
       "doors": [
         "style.set#inspector-hyphens"
-      ],
-      "subsets": []
-    },
-    {
-      "id": "max-lines",
-      "labelKey": "property.maxLines",
-      "section": "text",
-      "group": "advanced",
-      "control": "part-of-composite",
-      "valueType": "integer",
-      "codec": "integer",
-      "appliesTo": "text",
-      "essential": false,
-      "doors": [
-        "style.set#inspector-webkit-line-clamp"
-      ],
-      "subsets": []
-    },
-    {
-      "id": "block-ellipsis",
-      "labelKey": "property.blockEllipsis",
-      "section": "text",
-      "group": "advanced",
-      "control": "part-of-composite",
-      "valueType": "string",
-      "codec": "block-ellipsis",
-      "appliesTo": "text",
-      "essential": false,
-      "doors": [
-        "style.set#inspector-webkit-line-clamp"
-      ],
-      "subsets": []
-    },
-    {
-      "id": "continue",
-      "labelKey": "property.continue",
-      "section": "text",
-      "group": "advanced",
-      "control": "part-of-composite",
-      "valueType": "keyword",
-      "codec": "keyword",
-      "appliesTo": "text",
-      "essential": false,
-      "doors": [
-        "style.set#inspector-webkit-line-clamp"
       ],
       "subsets": []
     },
@@ -3062,21 +3076,6 @@
       "subsets": []
     },
     {
-      "id": "user-select",
-      "labelKey": "property.userSelect",
-      "section": "effects",
-      "group": "pointer",
-      "control": "keyword-menu",
-      "valueType": "keyword",
-      "codec": "keyword",
-      "appliesTo": "always",
-      "essential": false,
-      "doors": [
-        "style.set#inspector-user-select"
-      ],
-      "subsets": []
-    },
-    {
       "id": "will-change",
       "labelKey": "property.willChange",
       "section": "effects",
@@ -3105,13 +3104,13 @@
       ]
     },
     {
-      "id": "box-shadow-color",
-      "labelKey": "property.boxShadowColor",
+      "id": "box-shadow",
+      "labelKey": "property.boxShadow",
       "section": "effects",
       "group": "shadow",
-      "control": "part-of-composite",
-      "valueType": "color",
-      "codec": "color-list",
+      "control": "shadow-editor",
+      "valueType": "shadow-list",
+      "codec": "shadow-list",
       "appliesTo": "always",
       "essential": false,
       "doors": [
@@ -3127,115 +3126,11 @@
         "style.setShadows#inspector-box-shadow-shadow-reset",
         "style.setShadows#panel-drag-box-shadow-pad-pad",
         "style.setShadows#handle-shadow-offset",
-        "style.setShadows#handle-shadow-blur"
-      ],
-      "subsets": []
-    },
-    {
-      "id": "box-shadow-offset",
-      "labelKey": "property.boxShadowOffset",
-      "section": "effects",
-      "group": "shadow",
-      "control": "part-of-composite",
-      "valueType": "length",
-      "codec": "shadow-offset-list",
-      "appliesTo": "always",
-      "essential": false,
-      "doors": [
-        "style.setShadows#inspector-box-shadow-shadow-add",
-        "style.setShadows#inspector-box-shadow-shadow-x",
-        "style.setShadows#inspector-box-shadow-shadow-y",
-        "style.setShadows#inspector-box-shadow-shadow-blur",
-        "style.setShadows#inspector-box-shadow-shadow-spread",
-        "style.setShadows#inspector-box-shadow-shadow-inset",
-        "style.setShadows#inspector-box-shadow-shadow-colour",
-        "style.setShadows#inspector-box-shadow-shadow-visibility",
-        "style.setShadows#inspector-box-shadow-shadow-remove",
-        "style.setShadows#inspector-box-shadow-shadow-reset",
-        "style.setShadows#panel-drag-box-shadow-pad-pad",
-        "style.setShadows#handle-shadow-offset",
-        "style.setShadows#handle-shadow-blur"
-      ],
-      "subsets": []
-    },
-    {
-      "id": "box-shadow-blur",
-      "labelKey": "property.boxShadowBlur",
-      "section": "effects",
-      "group": "shadow",
-      "control": "part-of-composite",
-      "valueType": "length",
-      "codec": "length-list",
-      "appliesTo": "always",
-      "essential": false,
-      "doors": [
-        "style.setShadows#inspector-box-shadow-shadow-add",
-        "style.setShadows#inspector-box-shadow-shadow-x",
-        "style.setShadows#inspector-box-shadow-shadow-y",
-        "style.setShadows#inspector-box-shadow-shadow-blur",
-        "style.setShadows#inspector-box-shadow-shadow-spread",
-        "style.setShadows#inspector-box-shadow-shadow-inset",
-        "style.setShadows#inspector-box-shadow-shadow-colour",
-        "style.setShadows#inspector-box-shadow-shadow-visibility",
-        "style.setShadows#inspector-box-shadow-shadow-remove",
-        "style.setShadows#inspector-box-shadow-shadow-reset",
-        "style.setShadows#panel-drag-box-shadow-pad-pad",
-        "style.setShadows#handle-shadow-offset",
-        "style.setShadows#handle-shadow-blur"
-      ],
-      "subsets": []
-    },
-    {
-      "id": "box-shadow-spread",
-      "labelKey": "property.boxShadowSpread",
-      "section": "effects",
-      "group": "shadow",
-      "control": "part-of-composite",
-      "valueType": "length",
-      "codec": "length-list",
-      "appliesTo": "always",
-      "essential": false,
-      "doors": [
-        "style.setShadows#inspector-box-shadow-shadow-add",
-        "style.setShadows#inspector-box-shadow-shadow-x",
-        "style.setShadows#inspector-box-shadow-shadow-y",
-        "style.setShadows#inspector-box-shadow-shadow-blur",
-        "style.setShadows#inspector-box-shadow-shadow-spread",
-        "style.setShadows#inspector-box-shadow-shadow-inset",
-        "style.setShadows#inspector-box-shadow-shadow-colour",
-        "style.setShadows#inspector-box-shadow-shadow-visibility",
-        "style.setShadows#inspector-box-shadow-shadow-remove",
-        "style.setShadows#inspector-box-shadow-shadow-reset",
-        "style.setShadows#panel-drag-box-shadow-pad-pad",
-        "style.setShadows#handle-shadow-offset",
-        "style.setShadows#handle-shadow-blur"
-      ],
-      "subsets": []
-    },
-    {
-      "id": "box-shadow-position",
-      "labelKey": "property.boxShadowPosition",
-      "section": "effects",
-      "group": "shadow",
-      "control": "part-of-composite",
-      "valueType": "keyword",
-      "codec": "keyword-list",
-      "appliesTo": "always",
-      "essential": false,
-      "doors": [
-        "style.setShadows#inspector-box-shadow-shadow-add",
-        "style.setShadows#inspector-box-shadow-shadow-x",
-        "style.setShadows#inspector-box-shadow-shadow-y",
-        "style.setShadows#inspector-box-shadow-shadow-blur",
-        "style.setShadows#inspector-box-shadow-shadow-spread",
-        "style.setShadows#inspector-box-shadow-shadow-inset",
-        "style.setShadows#inspector-box-shadow-shadow-colour",
-        "style.setShadows#inspector-box-shadow-shadow-visibility",
-        "style.setShadows#inspector-box-shadow-shadow-remove",
-        "style.setShadows#inspector-box-shadow-shadow-reset",
-        "style.setShadows#panel-drag-box-shadow-pad-pad",
-        "style.setShadows#handle-shadow-offset",
-        "style.setShadows#handle-shadow-blur"
+        "style.setShadows#handle-shadow-blur",
+        "style.setShadows#key-arrow-left-in-shadow-pad",
+        "style.setShadows#key-arrow-right-in-shadow-pad",
+        "style.setShadows#key-arrow-up-in-shadow-pad",
+        "style.setShadows#key-arrow-down-in-shadow-pad"
       ],
       "subsets": []
     },
@@ -3245,8 +3140,8 @@
       "section": "effects",
       "group": "shadow",
       "control": "shadow-editor",
-      "valueType": "shadow-list",
-      "codec": "shadow-list",
+      "valueType": "text-shadow-list",
+      "codec": "text-shadow-list",
       "appliesTo": "text",
       "essential": false,
       "doors": [
@@ -3260,7 +3155,11 @@
         "style.setShadows#inspector-text-shadow-shadow-reset",
         "style.setShadows#panel-drag-text-shadow-pad-pad",
         "style.setShadows#handle-shadow-offset",
-        "style.setShadows#handle-shadow-blur"
+        "style.setShadows#handle-shadow-blur",
+        "style.setShadows#key-arrow-left-in-shadow-pad",
+        "style.setShadows#key-arrow-right-in-shadow-pad",
+        "style.setShadows#key-arrow-up-in-shadow-pad",
+        "style.setShadows#key-arrow-down-in-shadow-pad"
       ],
       "subsets": []
     },
@@ -3582,25 +3481,6 @@
       "subsets": []
     },
     {
-      "id": "overscroll-behavior",
-      "shorthand": "overscroll-behavior",
-      "labelKey": "property.overscrollBehavior",
-      "section": "layout",
-      "group": "scroll",
-      "control": "keyword-menu",
-      "codec": "axis-pair",
-      "appliesTo": "scrollContainer",
-      "longhands": [
-        "overscroll-behavior-x",
-        "overscroll-behavior-y"
-      ],
-      "omits": null,
-      "doors": [
-        "style.set#inspector-overscroll-behavior"
-      ],
-      "subsets": []
-    },
-    {
       "id": "columns",
       "shorthand": "columns",
       "labelKey": "property.columns",
@@ -3611,10 +3491,14 @@
       "appliesTo": "container",
       "longhands": [
         "column-width",
-        "column-count",
-        "column-height"
+        "column-count"
       ],
-      "omits": null,
+      "omits": {
+        "longhands": [
+          "column-height"
+        ],
+        "reason": "Only Chrome implements column-height, in the columns shorthand or alone; Firefox and Safari do not (css-compat.json)."
+      },
       "doors": [
         "style.set#inspector-columns"
       ],
@@ -3935,25 +3819,6 @@
       "subsets": []
     },
     {
-      "id": "text-align",
-      "shorthand": "text-align",
-      "labelKey": "property.textAlign",
-      "section": "text",
-      "group": "typography",
-      "control": "keyword-buttons",
-      "codec": "text-align",
-      "appliesTo": "text",
-      "longhands": [
-        "text-align-all",
-        "text-align-last"
-      ],
-      "omits": null,
-      "doors": [
-        "style.set#inspector-text-align"
-      ],
-      "subsets": []
-    },
-    {
       "id": "text-decoration",
       "shorthand": "text-decoration",
       "labelKey": "property.textDecoration",
@@ -4007,42 +3872,6 @@
       "subsets": []
     },
     {
-      "id": "vertical-align",
-      "shorthand": "vertical-align",
-      "labelKey": "property.verticalAlign",
-      "section": "text",
-      "group": "typography",
-      "control": "keyword-menu",
-      "codec": "vertical-align",
-      "appliesTo": "inlineOrCell",
-      "longhands": [
-        "alignment-baseline",
-        "baseline-shift",
-        "baseline-source"
-      ],
-      "omits": null,
-      "doors": [
-        "style.set#inspector-vertical-align"
-      ],
-      "subsets": [
-        {
-          "id": "menu",
-          "values": [
-            "baseline",
-            "top",
-            "middle",
-            "bottom",
-            "sub",
-            "super",
-            "text-top",
-            "text-bottom"
-          ],
-          "units": null,
-          "reason": "The menu offers the CSS 2 values every browser implements; the CSS Inline 3 baseline keywords and lengths are typed."
-        }
-      ]
-    },
-    {
       "id": "font-variant",
       "shorthand": "font-variant",
       "labelKey": "property.fontVariant",
@@ -4057,10 +3886,14 @@
         "font-variant-alternates",
         "font-variant-numeric",
         "font-variant-east-asian",
-        "font-variant-position",
-        "font-variant-emoji"
+        "font-variant-position"
       ],
-      "omits": null,
+      "omits": {
+        "longhands": [
+          "font-variant-emoji"
+        ],
+        "reason": "Safari supports font-variant-emoji only in a preview release (css-compat.json); the composite writes the variants every browser implements."
+      },
       "doors": [
         "style.set#inspector-font-variant"
       ],
@@ -4078,26 +3911,6 @@
           "reason": "The menu offers the caps and numeric variants a page uses most; other variants are typed."
         }
       ]
-    },
-    {
-      "id": "webkit-line-clamp",
-      "shorthand": "-webkit-line-clamp",
-      "labelKey": "property.webkitLineClamp",
-      "section": "text",
-      "group": "advanced",
-      "control": "number-field",
-      "codec": "line-clamp",
-      "appliesTo": "text",
-      "longhands": [
-        "max-lines",
-        "block-ellipsis",
-        "continue"
-      ],
-      "omits": null,
-      "doors": [
-        "style.set#inspector-webkit-line-clamp"
-      ],
-      "subsets": []
     },
     {
       "id": "background-position",
@@ -4167,40 +3980,6 @@
       "subsets": []
     },
     {
-      "id": "box-shadow",
-      "shorthand": "box-shadow",
-      "labelKey": "property.boxShadow",
-      "section": "effects",
-      "group": "shadow",
-      "control": "shadow-editor",
-      "codec": "shadow-list",
-      "appliesTo": "always",
-      "longhands": [
-        "box-shadow-color",
-        "box-shadow-offset",
-        "box-shadow-blur",
-        "box-shadow-spread",
-        "box-shadow-position"
-      ],
-      "omits": null,
-      "doors": [
-        "style.setShadows#inspector-box-shadow-shadow-add",
-        "style.setShadows#inspector-box-shadow-shadow-x",
-        "style.setShadows#inspector-box-shadow-shadow-y",
-        "style.setShadows#inspector-box-shadow-shadow-blur",
-        "style.setShadows#inspector-box-shadow-shadow-spread",
-        "style.setShadows#inspector-box-shadow-shadow-inset",
-        "style.setShadows#inspector-box-shadow-shadow-colour",
-        "style.setShadows#inspector-box-shadow-shadow-visibility",
-        "style.setShadows#inspector-box-shadow-shadow-remove",
-        "style.setShadows#inspector-box-shadow-shadow-reset",
-        "style.setShadows#panel-drag-box-shadow-pad-pad",
-        "style.setShadows#handle-shadow-offset",
-        "style.setShadows#handle-shadow-blur"
-      ],
-      "subsets": []
-    },
-    {
       "id": "transition",
       "shorthand": "transition",
       "labelKey": "property.transition",
@@ -4240,6 +4019,78 @@
         "style.setAlignment#inspector-alignment-matrix"
       ],
       "subsets": []
+    }
+  ],
+  "recipes": [
+    {
+      "id": "line-clamp",
+      "labelKey": "property.lineClamp",
+      "section": "text",
+      "group": "advanced",
+      "control": "number-field",
+      "codec": "line-clamp",
+      "appliesTo": "text",
+      "declarations": [
+        {
+          "property": "display",
+          "value": "-webkit-box"
+        },
+        {
+          "property": "-webkit-box-orient",
+          "value": "vertical"
+        },
+        {
+          "property": "-webkit-line-clamp",
+          "value": null
+        },
+        {
+          "property": "overflow-x",
+          "value": "hidden"
+        },
+        {
+          "property": "overflow-y",
+          "value": "hidden"
+        }
+      ],
+      "shared": {
+        "clear": "restores-previous",
+        "otherWrite": "clears-recipe",
+        "fields": "show-recipe"
+      },
+      "source": {
+        "spec": "https://drafts.csswg.org/css-overflow-4/#webkit-line-clamp",
+        "bcd": "css.properties.line-clamp"
+      },
+      "doors": [
+        "style.set#inspector-line-clamp"
+      ]
+    },
+    {
+      "id": "user-select",
+      "labelKey": "property.userSelect",
+      "section": "effects",
+      "group": "pointer",
+      "control": "keyword-menu",
+      "codec": "keyword",
+      "appliesTo": "always",
+      "declarations": [
+        {
+          "property": "-webkit-user-select",
+          "value": null
+        },
+        {
+          "property": "user-select",
+          "value": null
+        }
+      ],
+      "shared": null,
+      "source": {
+        "spec": "https://drafts.csswg.org/css-ui-4/#propdef--webkit-user-select",
+        "bcd": "css.properties.user-select"
+      },
+      "doors": [
+        "style.set#inspector-user-select"
+      ]
     }
   ],
   "couplings": [
@@ -4436,6 +4287,50 @@
         "value": null
       },
       "feature": "absolute-free-drag"
+    }
+  ],
+  "storedWhole": [
+    {
+      "property": "box-shadow",
+      "reason": "BCD has no entry for box-shadow-color, box-shadow-offset, box-shadow-blur, box-shadow-spread or box-shadow-position: no browser implements the longhands, every browser implements box-shadow."
+    },
+    {
+      "property": "text-align",
+      "reason": "BCD has no entry for text-align-all: browsers implement text-align itself. text-align-last, which every browser implements, is not edited, so text-align keeps one writer."
+    },
+    {
+      "property": "vertical-align",
+      "reason": "Safari lacks baseline-source, and BCD records the CSS Inline 3 values of vertical-align (first, last, center, alphabetic, central...) only in Firefox: Chrome and Safari implement vertical-align as the CSS 2 property, not as the shorthand of alignment-baseline, baseline-shift and baseline-source, so a composite of those longhands would not do what vertical-align does there."
+    }
+  ],
+  "syntaxFallbacks": [
+    {
+      "property": "fill",
+      "values": null,
+      "recipe": null,
+      "reason": "The Fill and Stroke 3 draft's <paint> no longer lists <color>, although every browser accepts a colour (the SVG shape default fill: #dbe7ff); the browser syntax still has it."
+    },
+    {
+      "property": "stroke",
+      "values": null,
+      "recipe": null,
+      "reason": "The Fill and Stroke 3 draft's <paint> no longer lists <color>, although every browser accepts a colour (the SVG shape default stroke: #2b5fe3); the browser syntax still has it."
+    },
+    {
+      "property": "display",
+      "values": [
+        "-webkit-box"
+      ],
+      "recipe": "line-clamp",
+      "reason": "CSS Overflow 4, 5.1.1 Legacy compatibility: the legacy line clamp only takes effect when display is -webkit-box or -webkit-inline-box. webref defines no such display value and BCD does not track it; the browser syntax (MDN) has it, and the spec section is the evidence for the recipe."
+    },
+    {
+      "property": "-webkit-box-orient",
+      "values": [
+        "vertical"
+      ],
+      "recipe": "line-clamp",
+      "reason": "CSS Overflow 4, 5.1.1 Legacy compatibility: the legacy line clamp needs -webkit-box-orient: vertical. webref lists -webkit-box-orient (Compatibility Standard) without a syntax, so only the browser syntax (MDN) defines its values."
     }
   ]
 }

@@ -102,6 +102,16 @@ export const elementsFileSchema = z.strictObject({
 // Keywords, units and longhand lists are never written here: they come from
 // manifest/generated/css-properties.json, and manifest:check validates every value a door offers
 // or writes against the property's official syntax with CSSTree's lexer.
+// What browsers implement comes from manifest/generated/css-compat.json (MDN's browser-compat-data):
+// a property or keyword is edited only when Chrome, Firefox and Safari all support it. The document
+// stores the finest-grained property browsers implement: the longhands when every engine implements
+// all of them (a composite writes them). When an engine lacks a longhand, the manifest declares the
+// choice: a composite that omits the missing longhands (omits, with the reason), or the shorthand
+// stored whole (storedWhole, with the reason: box-shadow, text-align, vertical-align).
+
+// The browsers an exported site must work in.
+export const BROWSERS = ['chrome', 'firefox', 'safari'] as const;
+export type Browser = (typeof BROWSERS)[number];
 
 export const VALUE_TYPES = [
   'length',
@@ -116,6 +126,7 @@ export const VALUE_TYPES = [
   'image',
   'gradient',
   'shadow-list',
+  'text-shadow-list',
   'transform-list',
   'font-family-list',
   'url',
@@ -158,14 +169,16 @@ const subsetSchema = z.strictObject({
 });
 
 export const propertySchema = z.strictObject({
-  // the CSS longhand name; the document stores only longhands
+  // the CSS property name: a longhand, or the coarser property browsers implement when an engine
+  // lacks one of its longhands (css-compat.json)
   id: cssName,
   labelKey: i18nKey,
   section: kebabId,
   group: kebabId,
   control: z.enum(CONTROL_TYPES),
   valueType: z.enum(VALUE_TYPES),
-  // parses and serialises the value; the document stores the canonical CSS text
+  // parses and serialises the value; the document stores the canonical CSS text, or the typed
+  // fields of a structured value type, which only the codec turns into CSS
   codec: codecId,
   // the element predicate that decides where the property applies
   appliesTo: predicateId,
@@ -175,9 +188,9 @@ export const propertySchema = z.strictObject({
   subsets: z.array(subsetSchema),
 });
 
-// A shorthand exists only as a composite control: its door writes every longhand in one command
-// and one undo step. Rendering and export write the shorthand when every longhand is set (CSSOM
-// serialisation), so longhands a browser does not implement on their own still render.
+// A shorthand whose longhands every browser implements exists only as a composite control: its door
+// writes every longhand in one command and one undo step, and rendering and export write the stored
+// longhands as they are. A longhand an engine lacks is left out (omits, with the reason).
 export const compositeSchema = z.strictObject({
   id: kebabId,
   // the CSS shorthand this composite stands for; null for an editor composite (the alignment matrix)
@@ -193,6 +206,67 @@ export const compositeSchema = z.strictObject({
   omits: z.strictObject({ longhands: z.array(cssName).min(1), reason: z.string().min(1) }).nullable(),
   doors: z.array(doorRef),
   subsets: z.array(subsetSchema),
+});
+
+// A structured value type: the document stores typed fields, never CSS text, and the codec is the only
+// code that turns them into CSS. Handles and fields edit one typed field (a door's adapter.fields).
+// These value types of VALUE_TYPES are structured; each needs its structure declared in properties.json.
+export const STRUCTURED_VALUE_TYPES: readonly (typeof VALUE_TYPES)[number][] = ['shadow-list', 'text-shadow-list'];
+export const STRUCTURE_FIELD_TYPES = ['length', 'color', 'boolean'] as const;
+export const structureSchema = z.strictObject({
+  // a structured value type of VALUE_TYPES
+  id: z.enum(VALUE_TYPES),
+  codec: codecId,
+  // true: the value is a list of layers (first painted on top), written comma-separated; none is the empty list
+  list: z.boolean(),
+  fields: z
+    .array(
+      z.strictObject({
+        id: camelId,
+        type: z.enum(STRUCTURE_FIELD_TYPES),
+        // how the field reaches CSS: "value" writes it, "keyword" writes `keyword` when true, and
+        // "hides-layer" keeps the layer in the document JSON but out of the CSS when true
+        css: z.enum(['value', 'keyword', 'hides-layer']),
+        keyword: z.string().min(1).nullable(),
+        // for a length field, the unit list of manifest/generated/css-properties.json (units) it offers; null otherwise
+        units: z.string().min(1).nullable(),
+        // the field's value in the sample layer manifest:check serialises and matches against the syntax
+        sample: z.union([z.string().min(1), z.boolean()]),
+      }),
+    )
+    .min(1),
+});
+
+// A compatibility recipe: the declarations browsers need for one effect that no standard property
+// provides in every engine (legacy line clamp; user-select, which Safari supports only prefixed).
+// One door writes all of them in one command and one undo step, and clearing it removes all of them.
+// Recipes are the only place where vendor-prefixed properties or values appear; their fixed values
+// are matched against the syntax browsers implement (CSSTree's MDN data), because they exist for
+// legacy values the official grammar does not define.
+export const recipeSchema = z.strictObject({
+  id: kebabId,
+  labelKey: i18nKey,
+  section: kebabId,
+  group: kebabId,
+  control: z.enum(CONTROL_TYPES),
+  codec: codecId,
+  appliesTo: predicateId,
+  // value null: the value the door edits
+  declarations: z.array(z.strictObject({ property: cssName, value: z.string().min(1).nullable() })).min(2),
+  // How the recipe shares the edited properties it also writes (the line clamp writes display, overflow-x
+  // and overflow-y); null when it writes none. Applying the recipe keeps their previous values with it and
+  // clearing it restores them; a door that writes one of them while the recipe is set clears the recipe
+  // in the same command and undo step; their fields show the recipe while it is set.
+  shared: z
+    .strictObject({ clear: z.literal('restores-previous'), otherWrite: z.literal('clears-recipe'), fields: z.literal('show-recipe') })
+    .nullable(),
+  // the spec section that defines the legacy behaviour, and the BCD entry that records the browsers' support
+  // of the declaration that carries the door's value
+  source: z.strictObject({
+    spec: z.string().regex(/^https:\/\/\S+#\S+$/, 'a spec URL with its section anchor'),
+    bcd: z.string().regex(/^css\.properties\.[a-z-]+$/, 'a BCD entry such as css.properties.line-clamp'),
+  }),
+  doors: z.array(doorRef),
 });
 
 // Closed lists: a coupling rule names one predicate and one action, never an expression.
@@ -233,10 +307,27 @@ export const propertiesFileSchema = z.strictObject({
     .array(z.strictObject({ id: kebabId, labelKey: i18nKey, width: z.number().int().positive() }))
     .min(1),
   states: z.array(z.strictObject({ id: kebabId, labelKey: i18nKey, pseudo: z.string().nullable() })).min(1),
+  structures: z.array(structureSchema),
   properties: z.array(propertySchema).min(1),
   composites: z.array(compositeSchema),
+  recipes: z.array(recipeSchema),
   // a coupling's effect runs inside the triggering command: same transaction, same undo step
   couplings: z.array(couplingSchema),
+  // Shorthands stored whole: an engine lacks one of their longhands, and the reason says why the
+  // manifest stores the shorthand instead of a composite that omits the missing longhands.
+  storedWhole: z.array(z.strictObject({ property: cssName, reason: z.string().min(1) })),
+  // The lexer fallback allowlist: the only values accepted by the syntax browsers implement (CSSTree's
+  // MDN data) where the official syntax rejects them or lacks a definition, each with its reason.
+  // values null: every value of the property. recipe: the entry holds only for that recipe's
+  // declarations, and it also vouches for its values where BCD does not track them.
+  syntaxFallbacks: z.array(
+    z.strictObject({
+      property: cssName,
+      values: z.array(z.string().min(1)).min(1).nullable(),
+      recipe: kebabId.nullable(),
+      reason: z.string().min(1),
+    }),
+  ),
 });
 
 // ---------------------------------------------------------------- interactions
@@ -283,18 +374,23 @@ export const selectionNormalisationSchema = z.enum([
 ]);
 
 const offersSchema = z.strictObject({
-  // the property or composite whose values the door offers
+  // the property, composite or recipe whose values the door offers
   property: z.union([cssName, kebabId]),
-  // "generated": the keyword and unit lists of manifest/generated; otherwise the id of a subset
-  // declared on that property or composite
+  // "generated": the keywords of manifest/generated/css-properties.json that css-compat.json says
+  // Chrome, Firefox and Safari all support, and the units; otherwise the id of a subset declared on
+  // that property or composite
   list: kebabId,
 });
 
 const adapterSchema = z.strictObject({
   selection: selectionNormalisationSchema,
   offers: offersSchema.nullable(),
-  // the longhands this door's hit area or control writes (never a shorthand)
+  // the properties this door's hit area or control writes (never a shorthand whose longhands every
+  // browser implements); a recipe door writes the recipe's declarations
   writes: z.array(cssName),
+  // the typed fields of a structured value this door edits (a shadow layer's offsetX, blur...);
+  // empty for a door that edits a plain value or adds, removes or resets whole layers
+  fields: z.array(camelId),
 });
 
 const placementSchema = z.union([
@@ -342,9 +438,10 @@ export const doorSchema = z.discriminatedUnion('kind', [
   z.strictObject({
     ...doorCommon,
     kind: z.literal('inspector-field'),
-    // exactly one of property (a longhand), composite and attribute
+    // exactly one of property, composite, recipe and attribute
     property: cssName.nullable(),
     composite: kebabId.nullable(),
+    recipe: kebabId.nullable(),
     attribute: camelId.nullable(),
     control: kebabId,
   }),
@@ -388,7 +485,7 @@ const argSchema = z.strictObject({
     'color',
     'path',
     'palette-entry',
-    // a longhand of properties.json, or a composite id
+    // a property of properties.json, a composite id or a recipe id
     'property',
     'attribute',
     'breakpoint',
@@ -587,6 +684,52 @@ export const generatedCssSchema = z.strictObject({
     }),
   ),
   types: z.record(z.string(), z.string()),
+  // functions webref defines only in scoped versions (rect() of <basic-shape> and of clip) → the scope
+  // roots; each version is written inline into the syntaxes its scope reaches
+  scopedFunctions: z.record(z.string(), z.array(z.string())),
+});
+
+// A browser's support: the version that added it, or false (why says what is missing).
+const supportVersion = z.union([z.string().regex(/^≤?\d+(\.\d+)*$/, 'a release number'), z.literal(false)]);
+const supportFields = {
+  chrome: supportVersion,
+  firefox: supportVersion,
+  safari: supportVersion,
+  why: z.partialRecord(z.enum(BROWSERS), z.string().min(1)),
+};
+
+// The value shape a syntax form BCD tracks stands for: at least N space-separated components in a layer,
+// at least two keywords, at least two comma-separated layers, or a negative number.
+export const FORM_SHAPES_LIST = ['components-2', 'components-3', 'components-4', 'keywords-2', 'layers-2', 'negative'] as const;
+export type FormShape = (typeof FORM_SHAPES_LIST)[number];
+
+const entrySupport = z.strictObject({ bcd: z.string().nullable(), ...supportFields });
+
+export const generatedCompatSchema = z.strictObject({
+  $generated: generatedHeader,
+  // the current stable release of each browser according to BCD
+  browsers: z.strictObject({ chrome: z.string().min(1), firefox: z.string().min(1), safari: z.string().min(1) }),
+  // the general-purpose functions CSS Values defines (calc(), min(), clamp()...), usable wherever their
+  // result type is accepted, so no property's syntax names them: lower-case name, without "()" → support
+  valueFunctions: z.record(z.string(), entrySupport),
+  // every unit of css-properties.json's unit lists, lower-case ("%" for percentages) → its support
+  units: z.record(z.string(), entrySupport),
+  properties: z.record(
+    cssName,
+    z.strictObject({
+      // the BCD entry that decided, null when BCD has none
+      bcd: z.string().nullable(),
+      // how the name maps to that entry when it is not the entry's own name (a prefix, an alternative name)
+      via: z.string().nullable(),
+      ...supportFields,
+      // lower-case keyword → its support outside functions, and inside each function it appears in
+      keywords: z.record(z.string(), z.strictObject({ bcd: z.string().nullable(), ...supportFields, inFunctions: z.record(z.string(), entrySupport) })),
+      // lower-case function name, without "()" → its support
+      functions: z.record(z.string(), entrySupport),
+      // BCD subfeature key of a syntax form (two_value_syntax, multiple_shadows) → the value shape and its support
+      forms: z.record(z.string(), z.strictObject({ shape: z.enum(FORM_SHAPES_LIST), bcd: z.string().nullable(), ...supportFields })),
+    }),
+  ),
 });
 
 const htmlFlag = z.union([z.boolean(), z.literal('conditional')]);
@@ -638,6 +781,7 @@ export const FILE_SCHEMAS = {
   references: referencesFileSchema,
   consumers: consumersFileSchema,
   'generated/css-properties': generatedCssSchema,
+  'generated/css-compat': generatedCompatSchema,
   'generated/html-elements': generatedHtmlSchema,
 } as const;
 
@@ -648,6 +792,9 @@ export type PaletteGroup = z.infer<typeof paletteGroupSchema>;
 export type ElementsFile = z.infer<typeof elementsFileSchema>;
 export type Property = z.infer<typeof propertySchema>;
 export type Composite = z.infer<typeof compositeSchema>;
+export type Structure = z.infer<typeof structureSchema>;
+export type Recipe = z.infer<typeof recipeSchema>;
+export type SyntaxFallback = PropertiesFile['syntaxFallbacks'][number];
 export type Coupling = z.infer<typeof couplingSchema>;
 export type Subset = z.infer<typeof subsetSchema>;
 export type PropertiesFile = z.infer<typeof propertiesFileSchema>;
@@ -663,5 +810,6 @@ export type FeaturesFile = z.infer<typeof featuresFileSchema>;
 export type ReferencesFile = z.infer<typeof referencesFileSchema>;
 export type ConsumersFile = z.infer<typeof consumersFileSchema>;
 export type GeneratedCss = z.infer<typeof generatedCssSchema>;
+export type GeneratedCompat = z.infer<typeof generatedCompatSchema>;
 export type GeneratedHtml = z.infer<typeof generatedHtmlSchema>;
 export type Locale = z.infer<typeof localeSchema>;

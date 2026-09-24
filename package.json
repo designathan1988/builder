@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@mdn/browser-compat-data": "^8.1.2",
     "@playwright/test": "^1.63.0",
     "@types/css-tree": "^3.2.0",
     "@types/node": "^26.6.2",
