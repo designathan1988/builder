@@ -5,6 +5,9 @@
 import type { z } from 'zod';
 import { createCssMatcher, valueShape, type CssAnalysis, type CssMatcher } from './css.ts';
 import { normaliseChord } from './chord.ts';
+import { rulesFromManifest, validateDocument } from '../core/document/validate.ts';
+import type { DocumentJson } from '../core/document/model.ts';
+import { EMPTY_FIXTURE, FIXTURE_FILE, applyDiff, emptyProject, parsePath, resolveNode, withStandInIds } from './scenario.ts';
 import { schemaFields } from './fields.ts';
 import {
   BROWSERS,
@@ -53,6 +56,7 @@ import {
   type PropertiesFile,
   type Recipe,
   type ReferencesFile,
+  type Scenario,
   type Structure,
   type Subset,
 } from './schema.ts';
@@ -95,6 +99,11 @@ export const RULES = [
   'icon-name',
   'icon-required',
   'panel',
+  'fixture',
+  'document-path',
+  'step',
+  'door-coverage',
+  'tooth-proof',
 ] as const;
 
 export type RuleId = (typeof RULES)[number];
@@ -174,6 +183,7 @@ export interface ManifestSummary {
   gestures: number;
   keyContexts: number;
   scenarios: number;
+  fixtures: number;
   i18nKeys: number;
 }
 
@@ -197,6 +207,8 @@ interface Parsed {
   icons: GeneratedIcons;
   commandFiles: { file: string; data: CommandsFile }[];
   featureFiles: { file: string; data: FeaturesFile }[];
+  // fixture id → the project document of manifest/features/fixtures/<id>.json, validated by rule fixture
+  fixtures: Map<string, unknown>;
 }
 
 const SINGLE_FILES: Record<string, { key: keyof Parsed; schema: z.ZodType }> = {
@@ -302,9 +314,10 @@ function parseFile(schema: z.ZodType, json: unknown): z.ZodSafeParseResult<unkno
 
 function parseFiles(input: ManifestInput): { parsed: Parsed | null; problems: Problem[] } {
   const problems: Problem[] = [];
-  const out: Partial<Parsed> & { commandFiles: Parsed['commandFiles']; featureFiles: Parsed['featureFiles'] } = {
+  const out: Partial<Parsed> & { commandFiles: Parsed['commandFiles']; featureFiles: Parsed['featureFiles']; fixtures: Parsed['fixtures'] } = {
     commandFiles: [],
     featureFiles: [],
+    fixtures: new Map(),
   };
   for (const [file, json] of Object.entries(input.files)) {
     const single = SINGLE_FILES[file];
@@ -320,8 +333,11 @@ function parseFiles(input: ManifestInput): { parsed: Parsed | null; problems: Pr
       const result = featuresFileSchema.safeParse(json);
       if (result.success) out.featureFiles.push({ file, data: result.data });
       else problems.push(...schemaProblems(file, result.error));
+    } else if (FIXTURE_FILE.test(file)) {
+      // a project document: the model (validateDocument) is its schema, checked by rule fixture
+      out.fixtures.set(FIXTURE_FILE.exec(file)?.[1] ?? '', json);
     } else {
-      problems.push({ rule: 'schema', file, path: '', message: `not a manifest file: expected one of ${Object.keys(SINGLE_FILES).join(', ')}, commands/<domain>.json, features/<NN>-<group>.json` });
+      problems.push({ rule: 'schema', file, path: '', message: `not a manifest file: expected one of ${Object.keys(SINGLE_FILES).join(', ')}, commands/<domain>.json, features/<NN>-<group>.json, features/fixtures/<id>.json` });
     }
   }
   for (const file of Object.keys(SINGLE_FILES)) {
@@ -505,6 +521,13 @@ function cssMatcher(css: GeneratedCss): CssMatcher {
   return matcher;
 }
 
+// a { key: number } object with exactly these keys
+function isNumbers(value: unknown, keys: readonly string[]): boolean {
+  if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+  const record = value as Record<string, unknown>;
+  return Object.keys(record).length === keys.length && keys.every((k) => typeof record[k] === 'number');
+}
+
 export function checkManifest(input: ManifestInput): CheckResult {
   const logic = logicProblems(input.files);
   if (logic.length > 0) return { problems: logic, summary: null };
@@ -560,6 +583,7 @@ export function checkManifest(input: ManifestInput): CheckResult {
   const gestureById = new Map(p.interactions.gestures.map((g) => [g.id, g]));
   const constantById = new Map(p.interactions.constants.map((c) => [c.id, c]));
   const viewportIds = new Set(p.environment.viewports.map((v) => v.id));
+  const regionIds = new Set(p.layout.regions.map((r) => r.id));
   const generated = p.css.properties;
   const isShorthand = (name: string) => (generated[name]?.longhands.length ?? 0) > 0;
 
@@ -737,19 +761,27 @@ export function checkManifest(input: ManifestInput): CheckResult {
       ref(viewportIds.has(s.setup.viewport), f.file, `${path}.viewport`, `unknown viewport "${s.setup.viewport}"`);
       ref(p.environment.zoomLevels.includes(s.setup.zoom), f.file, `${path}.zoom`, `zoom ${s.setup.zoom} is not one of the environment's zoom levels`);
       ref(p.environment.locales.available.includes(s.setup.locale), f.file, `${path}.locale`, `locale "${s.setup.locale}" is not available`);
+      const editor = s.expect.editor;
+      const at = `${f.path}.scenarios[${si}].expect.editor`;
+      editor?.regions.forEach((g, gi) => {
+        ref(regionIds.has(g.region), f.file, `${at}.regions[${gi}].region`, `unknown region "${g.region}" of layout.json`);
+        if (g.reference !== null) ref(regionIds.has(g.reference), f.file, `${at}.regions[${gi}].reference`, `unknown region "${g.reference}" of layout.json`);
+      });
+      editor?.computed.forEach((c, ci) => ref(regionIds.has(c.region), f.file, `${at}.computed[${ci}].region`, `unknown region "${c.region}" of layout.json`));
     }
   }
 
-  // ---- door-unknown-command: a door reference names a command, then one of its doors
+  // ---- door-unknown-command: a door reference, in a scenario's doors or its steps, names a command, then one of its doors
+  const checkDoorRef = (doorRef: string, file: string, path: string) => {
+    const [commandPart = '', doorPart = ''] = doorRef.split('#');
+    const command = commandById.get(commandPart);
+    if (!command) report('door-unknown-command', file, path, `door "${doorRef}" points to unknown command "${commandPart}"`);
+    else if (!command.entryPoints.some((d) => d.id === doorPart)) report('door-unknown-command', file, path, `command ${commandPart} has no door "${doorPart}"`);
+  };
   for (const f of features) {
     for (const [si, s] of f.feature.scenarios.entries()) {
-      for (const [di, doorRef] of s.doors.entries()) {
-        const [commandPart = '', doorPart = ''] = doorRef.split('#');
-        const command = commandById.get(commandPart);
-        const path = `${f.path}.scenarios[${si}].doors[${di}]`;
-        if (!command) report('door-unknown-command', f.file, path, `door "${doorRef}" points to unknown command "${commandPart}"`);
-        else if (!command.entryPoints.some((d) => d.id === doorPart)) report('door-unknown-command', f.file, path, `command ${commandPart} has no door "${doorPart}"`);
-      }
+      s.doors.forEach((doorRef, di) => checkDoorRef(doorRef, f.file, `${f.path}.scenarios[${si}].doors[${di}]`));
+      s.steps.forEach((step, ti) => checkDoorRef(step.door, f.file, `${f.path}.scenarios[${si}].steps[${ti}].door`));
     }
   }
 
@@ -1573,11 +1605,17 @@ export function checkManifest(input: ManifestInput): CheckResult {
     for (const [si, s] of f.feature.scenarios.entries()) {
       const render = s.expect.render;
       const renders = render !== null && render.computed.length + render.geometry.length + render.feedback.length > 0;
-      if (!renders && s.expect.persistence === null && s.expect.export === null) {
-        report('scenario-terminal', f.file, `${f.path}.scenarios[${si}].expect`, `scenario ${s.id} has no end terminal: expect render, persistence or export`);
+      const editor = s.expect.editor;
+      const measuresEditor = editor !== null && editor.regions.length + editor.computed.length > 0;
+      const persistence = s.expect.persistence;
+      const persists = persistence !== null && (persistence.document !== null || persistence.preferences !== null);
+      if (!renders && !measuresEditor && !persists && s.expect.export === null) {
+        report('scenario-terminal', f.file, `${f.path}.scenarios[${si}].expect`, `scenario ${s.id} has no end terminal: expect render, the editor, persistence (of the document or the preferences) or export`);
       }
     }
   }
+
+  checkScenarioData();
 
   // ---- placement: every door with a control of its own is drawn in a region of DESIGN.md (layout.json)
   const regionById = new Map(p.layout.regions.map((r) => [r.id, r]));
@@ -1806,6 +1844,171 @@ export function checkManifest(input: ManifestInput): CheckResult {
   for (const { door } of doors) doorsByKind[door.kind] = (doorsByKind[door.kind] ?? 0) + 1;
   const referencesByKind: Record<string, number> = {};
   for (const r of p.references.references) referencesByKind[r.kind] = (referencesByKind[r.kind] ?? 0) + 1;
+  // ---- fixture, document-path, step, door-coverage, tooth-proof: every scenario can be run as written
+  function checkScenarioData(): void {
+    const modelRules = rulesFromManifest(p.elements, p.properties);
+    const rootLabel = p.elements.elements.find((e) => e.id === modelRules.root.type)?.labelKey ?? '';
+    // fixture: every fixture file is a project document the model accepts
+    const fixtureDocs = new Map<string, unknown>();
+    for (const [id, json] of p.fixtures) {
+      const file = `features/fixtures/${id}.json`;
+      if (json === null || typeof json !== 'object' || Array.isArray(json) || !Array.isArray((json as { pages?: unknown }).pages)) {
+        report('fixture', file, '', 'a fixture is a project document: { "version", "pages" } in the model of src/core/document/model.ts');
+        continue;
+      }
+      const invalid = validateDocument(json as DocumentJson, [], modelRules);
+      for (const problem of invalid) report('fixture', file, problem.path, problem.message);
+      if (invalid.length === 0) fixtureDocs.set(id, json);
+    }
+    const textOf = (locale: string, key: string): string => {
+      const catalogue = input.catalogues[locale];
+      const text = catalogue !== null && typeof catalogue === 'object' ? (catalogue as Record<string, unknown>)[key] : undefined;
+      return typeof text === 'string' ? text : key;
+    };
+    // the fixture a scenario starts from: a file, or the empty project a fresh profile gets in its locale
+    const fixtureOf = (f: (typeof features)[number], si: number, s: Scenario): unknown => {
+      const id = s.setup.fixture;
+      if (id === EMPTY_FIXTURE) return emptyProject({ page: textOf(s.setup.locale, 'pages.defaultHome'), root: textOf(s.setup.locale, rootLabel) }, modelRules.root);
+      if (!p.fixtures.has(id)) {
+        report('fixture', f.file, `${f.path}.scenarios[${si}].setup.fixture`, `no fixture file manifest/features/fixtures/${id}.json (only "${EMPTY_FIXTURE}" needs none)`);
+        return null;
+      }
+      return fixtureDocs.get(id) ?? null;
+    };
+    const unresolved = (doc: unknown, nodePath: string): string | null => {
+      const found = resolveNode(doc, parsePath(nodePath).nodes);
+      return typeof found === 'string' ? found : null;
+    };
+    const armCheck = (doc: unknown, file: string, path: string, nodePath: string, when: string) => {
+      const why = unresolved(doc, nodePath);
+      if (why !== null) report('document-path', file, path, `${nodePath} does not resolve ${when}: ${why}`);
+    };
+    // a step acts on the fixture or on the result of the diff, so its node paths resolve in one of them
+    const eitherCheck = (before: unknown, after: unknown, file: string, path: string, nodePath: string) => {
+      const why = unresolved(before, nodePath);
+      if (why !== null && unresolved(after, nodePath) !== null) report('document-path', file, path, `${nodePath} resolves neither in the fixture nor after the diff: ${why}`);
+    };
+    const nodeValue = (value: unknown): value is string => typeof value === 'string' && /^(\/[^/@][^/]*)+$/.test(value);
+    const argProblem = (arg: Command['args'][string], value: unknown): string | null => {
+      const text = typeof value === 'string' ? value : null;
+      const num = typeof value === 'number' ? value : null;
+      switch (arg.type) {
+        case 'node':
+          return nodeValue(value) ? null : 'is a node path';
+        case 'nodes':
+          return Array.isArray(value) && value.every(nodeValue) ? null : 'is a list of node paths';
+        case 'string':
+        case 'color':
+        case 'path':
+        case 'file':
+          return text !== null ? null : 'is a string';
+        case 'number':
+          return num !== null ? null : 'is a number';
+        case 'integer':
+          return num !== null && Number.isInteger(num) ? null : 'is an integer';
+        case 'boolean':
+          return typeof value === 'boolean' ? null : 'is true or false';
+        case 'enum':
+          return text !== null && arg.values.includes(text) ? null : `is one of ${arg.values.join(', ')}`;
+        case 'palette-entry':
+          return text !== null && paletteEntryIds.has(text) ? null : 'is a palette entry of elements.json';
+        case 'property':
+          return text !== null && (propertyById.has(text) || compositeById.has(text) || recipeById.has(text)) ? null : 'is a property, composite or recipe of properties.json';
+        case 'attribute':
+          return text !== null && attributeById.has(text) ? null : 'is an attribute of elements.json';
+        case 'breakpoint':
+          return text !== null && breakpointIds.has(text) ? null : 'is a breakpoint of properties.json';
+        case 'state':
+          return text !== null && stateIds.has(text) ? null : 'is a state of properties.json';
+        case 'point':
+          return isNumbers(value, ['x', 'y']) ? null : 'is { "x", "y" }';
+        case 'rect':
+          return isNumbers(value, ['x', 'y', 'width', 'height']) ? null : 'is { "x", "y", "width", "height" }';
+        default:
+          return null;
+      }
+    };
+    const architectureModules = new Set([...(input.architecture ?? '').matchAll(/`((?:src|tools)\/[^`\s]+\.tsx?)`/g)].map((m) => m[1] ?? ''));
+
+    for (const f of features) {
+      const scenarios = f.feature.scenarios;
+      scenarios.forEach((s, si) => {
+        const at = `${f.path}.scenarios[${si}]`;
+        const before = fixtureOf(f, si, s);
+        // step: exactly one action step, whose door is one of `doors`, and every door of `doors` is a door of its command
+        const actions = s.steps.filter((step) => step.action);
+        if (actions.length !== 1) report('step', f.file, `${at}.steps`, `scenario ${s.id} has ${actions.length} action steps: exactly one step is the action step`);
+        const action = actions[0];
+        if (action !== undefined) {
+          const actionCommand = action.door.split('#')[0] ?? '';
+          if (!s.doors.includes(action.door)) report('step', f.file, `${at}.steps`, `the action step's door ${action.door} is not one of the scenario's doors`);
+          s.doors.forEach((doorRef, di) => {
+            const command = doorRef.split('#')[0] ?? '';
+            if (commandById.has(command) && command !== actionCommand) report('step', f.file, `${at}.doors[${di}]`, `${doorRef} is not a door of ${actionCommand}, the action step's command: the doors of a scenario are alternatives for its action step`);
+          });
+        }
+        s.steps.forEach((step, ti) => {
+          const command = commandById.get(step.door.split('#')[0] ?? '');
+          if (!command) return;
+          for (const [name, value] of Object.entries(step.args)) {
+            const arg = command.args[name];
+            if (!arg) {
+              report('step', f.file, `${at}.steps[${ti}].args.${name}`, `${command.id} has no argument "${name}"`);
+              continue;
+            }
+            const problem = argProblem(arg, value);
+            if (problem !== null) report('step', f.file, `${at}.steps[${ti}].args.${name}`, `${JSON.stringify(value)}: the argument "${name}" of ${command.id} ${problem}`);
+          }
+        });
+        if (before === null) return;
+        // document-path: setup in the fixture; the diff applies; expectations after the diff; steps in either
+        s.setup.selection.forEach((nodePath, i) => armCheck(before, f.file, `${at}.setup.selection[${i}]`, nodePath, 'in the fixture'));
+        const diff = applyDiff(before, s.expect.document);
+        if (diff.error !== null) {
+          report('document-path', f.file, `${at}.expect.document[${diff.error.index}]`, diff.error.message);
+          return;
+        }
+        const after = diff.document;
+        for (const problem of validateDocument(withStandInIds(after) as DocumentJson, [], modelRules)) {
+          report('document-path', f.file, `${at}.expect.document`, `after the diff the document breaks the model at ${problem.path}: ${problem.message}`);
+        }
+        s.expect.selection.forEach((nodePath, i) => armCheck(after, f.file, `${at}.expect.selection[${i}]`, nodePath, 'after the diff'));
+        s.expect.render?.computed.forEach((c, i) => armCheck(after, f.file, `${at}.expect.render.computed[${i}].node`, c.node, 'after the diff'));
+        s.expect.render?.geometry.forEach((g, i) => {
+          armCheck(after, f.file, `${at}.expect.render.geometry[${i}].node`, g.node, 'after the diff');
+          if (g.reference !== null) armCheck(after, f.file, `${at}.expect.render.geometry[${i}].reference`, g.reference, 'after the diff');
+        });
+        s.steps.forEach((step, ti) => {
+          if (step.target !== null) eitherCheck(before, after, f.file, `${at}.steps[${ti}].target`, step.target);
+          if (step.drop !== null) eitherCheck(before, after, f.file, `${at}.steps[${ti}].drop.reference`, step.drop.reference);
+          const command = commandById.get(step.door.split('#')[0] ?? '');
+          for (const [name, value] of Object.entries(step.args)) {
+            const type = command?.args[name]?.type;
+            if (type === 'node' && nodeValue(value)) eitherCheck(before, after, f.file, `${at}.steps[${ti}].args.${name}`, value);
+            if (type === 'nodes' && Array.isArray(value)) value.filter(nodeValue).forEach((v) => eitherCheck(before, after, f.file, `${at}.steps[${ti}].args.${name}`, v));
+          }
+        });
+      });
+
+      // door-coverage: once a feature has scenarios, every door of its own runs in one of them
+      if (scenarios.length > 0) {
+        const used = new Set(scenarios.flatMap((s) => [...s.doors, ...s.steps.map((step) => step.door)]));
+        for (const d of doors) {
+          if (d.door.feature === f.feature.id && !used.has(d.ref)) report('door-coverage', f.file, `${f.path}.scenarios`, `the door ${d.ref} of ${f.feature.id} runs in none of its scenarios`);
+        }
+      }
+
+      // tooth-proof: a feature with scenarios and no commands names the module its tooth proof disables
+      const tooth = f.feature.toothProof;
+      if (tooth !== undefined) {
+        if (f.feature.commands.length > 0) report('tooth-proof', f.file, `${f.path}.toothProof`, `${f.feature.id} has commands: its tooth proof disables their handlers, so it names no module`);
+        else if (!architectureModules.has(tooth)) report('tooth-proof', f.file, `${f.path}.toothProof`, `${tooth} is not a module of ARCHITECTURE.md`);
+      } else if (scenarios.length > 0 && f.feature.commands.length === 0) {
+        report('tooth-proof', f.file, `${f.path}`, `${f.feature.id} has scenarios and no commands: name the module its tooth proof replaces with a no-op (toothProof)`);
+      }
+    }
+  }
+
   const summary: ManifestSummary = {
     features: features.length,
     featureGroups: p.featureFiles.length,
@@ -1848,6 +2051,7 @@ export function checkManifest(input: ManifestInput): CheckResult {
     gestures: p.interactions.gestures.length,
     keyContexts: p.interactions.keyContexts.length,
     scenarios: features.reduce((n, f) => n + f.feature.scenarios.length, 0),
+    fixtures: p.fixtures.size,
     i18nKeys: keyUses.size,
   };
   return { problems, summary };

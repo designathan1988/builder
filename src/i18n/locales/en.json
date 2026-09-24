@@ -1205,6 +1205,7 @@
   "status.panel.opened": "{panel} panel opened.",
   "status.paste.empty": "The clipboard holds nothing that can be pasted.",
   "status.pickTarget": "Pick the target of the interaction.",
+  "status.placed": "Placed {element} in {parent}, position {position} of {count}.",
   "status.position.notPositioned": "Set the position to absolute or fixed first.",
   "status.promote.topLevel": "A direct child of the page has nothing to be promoted to.",
   "status.readOnlyTab": "This tab is read-only: another tab is editing the project.",

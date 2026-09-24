@@ -35,7 +35,7 @@ function command(input: MutableInput, id: string): Json {
 
 function feature(input: MutableInput, id: string): Json {
   for (const [file, data] of Object.entries(input.files)) {
-    if (!file.startsWith('features/')) continue;
+    if (!/^features\/\d{2}-/.test(file)) continue;
     const found = list(obj(data).features).find((f) => f.id === id);
     if (found) return found;
   }
@@ -102,11 +102,25 @@ function element(input: MutableInput, id: string): Json {
   return found;
 }
 
-function scenario(doors: string[], expect: Json): Json {
+// The planted fixture: a page whose section holds a heading and a paragraph.
+const PLANTED_FIXTURE = 'planted-section';
+const fixtureFile = `features/fixtures/${PLANTED_FIXTURE}.json`;
+const leaf = (id: string, type: string, name: string, tag: string, text: string | null, children: Json[] = []): Json => ({ id, type, name, tag, attributes: {}, classes: [], styles: {}, text, children });
+
+function plantFixture(m: MutableInput): Json {
+  const tree = leaf('n1', 'page', 'Page', 'body', null, [leaf('n2', 'section', 'Section', 'section', null, [leaf('n3', 'heading', 'Heading', 'h2', 'Title'), leaf('n4', 'paragraph', 'Paragraph', 'p', 'Body')])]);
+  const fixture = { version: 1, pages: [{ id: 'p1', name: 'Home', file: 'index.html', tree }] };
+  m.files[fixtureFile] = fixture;
+  return fixture;
+}
+
+const step = (door: string, action: boolean, fields: Json = {}): Json => ({ door, args: {}, target: null, drop: null, action, ...fields });
+
+function scenario(id: string, steps: Json[], doors: string[], expect: Json): Json {
   return {
-    id: 'planted-scenario',
+    id,
     setup: {
-      fixture: 'section-with-paragraphs',
+      fixture: PLANTED_FIXTURE,
       selection: ['/Page/Section/Paragraph'],
       context: 'canvas',
       breakpoint: 'desktop',
@@ -115,12 +129,14 @@ function scenario(doors: string[], expect: Json): Json {
       viewport: 'desktop-1440',
       zoom: 100,
     },
+    steps,
     doors,
     expect: {
-      document: [{ op: 'remove', path: '/pages/0/tree/children/0/children/0' }],
-      selection: ['/Page/Section'],
+      document: [],
+      selection: ['/Page/Section/Paragraph'],
       history: { undoSteps: 1, undoRestores: true, redoRestores: true },
       render: null,
+      editor: null,
       persistence: null,
       export: null,
       ...expect,
@@ -130,6 +146,30 @@ function scenario(doors: string[], expect: Json): Json {
 }
 
 const RENDERED = { render: { computed: [{ node: '/Page/Section', property: 'display', value: 'block' }], geometry: [], feedback: [] } };
+
+// Two scenarios of delete-element that together run all three of its doors: Delete (or Backspace) removes the
+// paragraph; the toast's Undo brings it back. Each plant breaks one thing in them. Returns [delete, undo].
+export function plantDeleteScenarios(m: MutableInput): [Json, Json] {
+  plantFixture(m);
+  const remove = scenario(
+    'planted-delete',
+    [step('element.delete#key-delete-in-canvas', true)],
+    ['element.delete#key-delete-in-canvas', 'element.delete#key-backspace-in-canvas'],
+    { document: [{ op: 'remove', path: '/Page/Section/Paragraph' }], selection: ['/Page/Section'], ...RENDERED },
+  );
+  const undo = scenario('planted-toast-undo', [step('element.delete#key-delete-in-canvas', false), step('history.undo#toast-undo', true)], ['history.undo#toast-undo'], RENDERED);
+  feature(m, 'delete-element').scenarios = [remove, undo];
+  return [remove, undo];
+}
+
+// A scenario of canvas-page-iframe, a feature without commands: the page renders the fixture.
+export function plantRenderScenario(m: MutableInput): Json {
+  plantFixture(m);
+  const render = scenario('planted-render', [step('workspace.toggleLeftDock#key-ctrl-b-in-global', true)], ['workspace.toggleLeftDock#key-ctrl-b-in-global'], RENDERED);
+  const f = feature(m, 'canvas-page-iframe');
+  f.scenarios = [render];
+  return f;
+}
 
 export const PLANTS: Plant[] = [
   {
@@ -163,7 +203,12 @@ export const PLANTS: Plant[] = [
     rule: 'door-unknown-command',
     description: 'a scenario of delete-element runs through a door of the unknown command element.remove',
     apply: (m) => {
-      feature(m, 'delete-element').scenarios = [scenario(['element.remove#key-delete-in-canvas'], RENDERED)];
+      const [remove, undo] = plantDeleteScenarios(m);
+      const unknown = structuredClone(remove);
+      unknown.id = 'planted-unknown-door';
+      unknown.doors = ['element.remove#key-delete-in-canvas'];
+      list(unknown.steps)[0] = step('element.remove#key-delete-in-canvas', true);
+      feature(m, 'delete-element').scenarios = [remove, undo, unknown];
     },
   },
   {
@@ -525,9 +570,144 @@ export const PLANTS: Plant[] = [
   {
     id: 'scenario-without-terminal',
     rule: 'scenario-terminal',
-    description: 'a scenario of delete-element expects no render, no persistence and no export',
+    description: 'a scenario of delete-element expects no render, no editor measure, no persistence and no export',
     apply: (m) => {
-      feature(m, 'delete-element').scenarios = [scenario(['element.delete#key-delete-in-canvas'], {})];
+      const [remove] = plantDeleteScenarios(m);
+      obj(remove.expect).render = null;
+    },
+  },
+  {
+    id: 'editor-terminal-without-measure',
+    rule: 'scenario-terminal',
+    description: 'a scenario of delete-element ends only on an editor terminal that measures nothing',
+    apply: (m) => {
+      const [remove] = plantDeleteScenarios(m);
+      Object.assign(obj(remove.expect), { render: null, editor: { regions: [], computed: [] } });
+    },
+  },
+  {
+    id: 'persistence-of-nothing',
+    rule: 'scenario-terminal',
+    description: 'a scenario of delete-element ends only on a reload that keeps neither the document nor the preferences',
+    apply: (m) => {
+      const [remove] = plantDeleteScenarios(m);
+      Object.assign(obj(remove.expect), { render: null, persistence: { reload: 'immediate', document: null, preferences: null } });
+    },
+  },
+  {
+    id: 'editor-region-unknown',
+    rule: 'unknown-reference',
+    description: 'a scenario measures the width of "side-bar", which is no region of layout.json',
+    apply: (m) => {
+      const [remove] = plantDeleteScenarios(m);
+      obj(remove.expect).editor = { regions: [{ region: 'side-bar', measure: 'width', relation: 'equals', value: 224, reference: null }], computed: [] };
+    },
+  },
+  {
+    id: 'fixture-file-missing',
+    rule: 'fixture',
+    description: 'a scenario of delete-element starts from the fixture "no-such-fixture", which has no file',
+    apply: (m) => {
+      const [remove] = plantDeleteScenarios(m);
+      obj(remove.setup).fixture = 'no-such-fixture';
+    },
+  },
+  {
+    id: 'fixture-breaks-model',
+    rule: 'fixture',
+    description: 'the planted fixture holds a node of the element type "banner", which elements.json does not have',
+    apply: (m) => {
+      plantDeleteScenarios(m);
+      const tree = obj(list(obj(m.files[fixtureFile]).pages)[0]).tree;
+      obj(list(obj(list(obj(tree).children)[0]).children)[0]).type = 'banner';
+    },
+  },
+  {
+    id: 'setup-path-not-in-fixture',
+    rule: 'document-path',
+    description: 'a scenario selects /Page/Section/Caption, which the fixture does not have',
+    apply: (m) => {
+      const [remove] = plantDeleteScenarios(m);
+      obj(remove.setup).selection = ['/Page/Section/Caption'];
+    },
+  },
+  {
+    id: 'expect-path-removed-by-diff',
+    rule: 'document-path',
+    description: 'a scenario expects /Page/Section/Paragraph selected after its own diff removed it',
+    apply: (m) => {
+      const [remove] = plantDeleteScenarios(m);
+      obj(remove.expect).selection = ['/Page/Section/Paragraph'];
+    },
+  },
+  {
+    id: 'diff-path-unresolved',
+    rule: 'document-path',
+    description: 'a scenario removes /Page/Aside, which the fixture does not have',
+    apply: (m) => {
+      const [remove] = plantDeleteScenarios(m);
+      obj(remove.expect).document = [{ op: 'remove', path: '/Page/Aside' }];
+    },
+  },
+  {
+    id: 'diff-node-value-with-id',
+    rule: 'document-path',
+    description: 'a scenario sets /Page/Section/Heading to a node value that names its id, although ids are generated',
+    apply: (m) => {
+      const [, undo] = plantDeleteScenarios(m);
+      obj(undo.expect).document = [{ op: 'set', path: '/Page/Section/Heading', value: leaf('n3', 'heading', 'Heading', 'h2', 'New title') }];
+    },
+  },
+  {
+    id: 'step-target-unresolved',
+    rule: 'document-path',
+    description: 'a step of a scenario acts on /Page/Footer, which neither the fixture nor the result has',
+    apply: (m) => {
+      const [remove] = plantDeleteScenarios(m);
+      obj(list(remove.steps)[0]).target = '/Page/Footer';
+    },
+  },
+  {
+    id: 'step-argument-unknown',
+    rule: 'step',
+    description: 'the action step of a scenario gives element.delete the argument "force", which the command does not have',
+    apply: (m) => {
+      const [remove] = plantDeleteScenarios(m);
+      obj(list(remove.steps)[0]).args = { force: true };
+    },
+  },
+  {
+    id: 'two-action-steps',
+    rule: 'step',
+    description: 'a scenario marks both of its steps as the action step',
+    apply: (m) => {
+      const [, undo] = plantDeleteScenarios(m);
+      obj(list(undo.steps)[0]).action = true;
+    },
+  },
+  {
+    id: 'door-in-no-scenario',
+    rule: 'door-coverage',
+    description: 'the scenarios of delete-element leave out its Backspace door',
+    apply: (m) => {
+      const [remove] = plantDeleteScenarios(m);
+      remove.doors = ['element.delete#key-delete-in-canvas'];
+    },
+  },
+  {
+    id: 'tooth-proof-without-module',
+    rule: 'tooth-proof',
+    description: 'canvas-page-iframe has a scenario and no commands, and names no module for its tooth proof',
+    apply: (m) => {
+      delete plantRenderScenario(m).toothProof;
+    },
+  },
+  {
+    id: 'tooth-proof-module-unknown',
+    rule: 'tooth-proof',
+    description: 'canvas-page-iframe names src/core/render/renderer.ts for its tooth proof, which ARCHITECTURE.md does not name',
+    apply: (m) => {
+      plantRenderScenario(m).toothProof = 'src/core/render/renderer.ts';
     },
   },
   {

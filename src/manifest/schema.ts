@@ -645,11 +645,38 @@ export const glossarySchema = z.strictObject({
 
 // ---------------------------------------------------------------- scenarios and features
 
-const nodeRef = z.string().regex(/^\/.*/, 'a node path from the fixture root, such as "/Page/Section/Heading"');
+// A node path: the node names from the fixture's root, such as "/Page/Section/Heading" (src/manifest/scenario.ts
+// resolves it; manifest:check proves every one names exactly one node). A document path may go on into a field of
+// that node after "/@": "/Page/Section/@styles/desktop/base/padding-top".
+const nodeRef = z.string().regex(/^(\/[^/@][^/]*)+$/, 'a node path from the fixture root, such as "/Page/Section/Heading"');
+const documentPath = z.string().regex(/^(\/[^/@][^/]*)+(\/@[a-z]+(\/[^/]+)*)?$/, 'a node path, optionally followed by /@<field>, such as "/Page/Section/@styles/desktop/base/padding-top"');
+
+// One step of a scenario: a door run with the command's arguments as data (for element.insert, `entry` is the
+// palette entry whose tile the runner uses), on the node the gesture acts on, dropped before, after or inside a node
+// for a drag. The action step is the one the scenario is about: the runner runs the scenario once per door of
+// `doors`, putting that door in the action step.
+const stepSchema = z.strictObject({
+  door: doorRef,
+  args: z.record(camelId, jsonValue),
+  target: nodeRef.nullable(),
+  drop: z.strictObject({ placement: z.enum(['before', 'after', 'inside']), reference: nodeRef }).nullable(),
+  action: z.boolean(),
+});
+
+// A measure of a region of the editor (layout.json), alone or against another region.
+const editorGeometry = z.strictObject({
+  region: regionId,
+  measure: z.enum(['x', 'y', 'width', 'height']),
+  relation: z.enum(['equals', 'less-than', 'greater-than']),
+  value: z.number(),
+  reference: regionId.nullable(),
+});
 
 export const scenarioSchema = z.strictObject({
   id: kebabId,
   setup: z.strictObject({
+    // a fixture of manifest/features/fixtures/<id>.json, loaded through File › Open; "empty" is a fresh profile's
+    // empty project and has no file
     fixture: kebabId,
     selection: z.array(nodeRef),
     context: kebabId,
@@ -659,12 +686,18 @@ export const scenarioSchema = z.strictObject({
     viewport: kebabId,
     zoom: z.number().int().positive(),
   }),
+  // run in order after the fixture is loaded; exactly one is the action step
+  steps: z.array(stepSchema).min(1),
+  // the doors of the action step, each of the action step's command: one run per door
   doors: z.array(doorRef).min(1),
   expect: z.strictObject({
+    // The document diff, applied to the fixture in order. A node value omits id (ids are generated) and its
+    // children array gives their order; a new node appears through the value of its parent or of the parent's
+    // @children.
     document: z.array(
       z.discriminatedUnion('op', [
-        z.strictObject({ op: z.literal('set'), path: z.string().regex(/^\//), value: jsonValue }),
-        z.strictObject({ op: z.literal('remove'), path: z.string().regex(/^\//) }),
+        z.strictObject({ op: z.literal('set'), path: documentPath, value: jsonValue }),
+        z.strictObject({ op: z.literal('remove'), path: documentPath }),
       ]),
     ),
     selection: z.array(nodeRef),
@@ -689,7 +722,17 @@ export const scenarioSchema = z.strictObject({
         feedback: z.array(z.strictObject({ key: i18nKey, params: z.record(z.string(), z.union([z.string(), z.number()])) })),
       })
       .nullable(),
-    persistence: z.strictObject({ reload: z.literal('immediate'), document: z.literal('same') }).nullable(),
+    // The editor itself: the geometry and the computed style of its regions (layout.json).
+    editor: z
+      .strictObject({
+        regions: z.array(editorGeometry),
+        computed: z.array(z.strictObject({ region: regionId, property: cssName, value: z.string().min(1) })),
+      })
+      .nullable(),
+    // what must survive an immediate reload: the document, the stored preferences, or both
+    persistence: z
+      .strictObject({ reload: z.literal('immediate'), document: z.literal('same').nullable(), preferences: z.literal('same').nullable() })
+      .nullable(),
     export: z
       .strictObject({
         files: z
@@ -707,6 +750,10 @@ export const featureSchema = z.strictObject({
   commands: z.array(commandId),
   dependsOn: z.array(featureId),
   spec: specPath.nullable(),
+  // The module the tooth proof replaces with a no-op, for a feature without commands of its own (the renderer for
+  // canvas-page-iframe); a feature with commands disables their handlers instead. Optional, so no feature has to
+  // name it; manifest:check requires it of a feature with scenarios and no commands.
+  toothProof: ownerPath.optional(),
   // Guidance for scenario authors only. No test reads it.
   intent: z.strictObject({
     title: z.string().min(1),

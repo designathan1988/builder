@@ -3356,6 +3356,7 @@ export const MESSAGE_IDS = [
   "status.panel.opened",
   "status.paste.empty",
   "status.pickTarget",
+  "status.placed",
   "status.position.notPositioned",
   "status.promote.topLevel",
   "status.readOnlyTab",

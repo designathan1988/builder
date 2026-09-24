@@ -4,7 +4,7 @@ import { normaliseChord } from '../../src/manifest/chord.ts';
 import { createCssMatcher } from '../../src/manifest/css.ts';
 import { generatedCompatSchema, generatedCssSchema, generatedHtmlSchema, propertiesFileSchema } from '../../src/manifest/schema.ts';
 import { loadManifest, registrationsIn } from './load.ts';
-import { PLANTS, ownGenerated, planted, type Plant } from './plants.ts';
+import { PLANTS, ownGenerated, plantDeleteScenarios, plantRenderScenario, planted, type Plant } from './plants.ts';
 
 const loaded = loadManifest();
 
@@ -309,6 +309,55 @@ describe('manifest:check', () => {
       { kind: 'handler', id: 'workspace.setPanelOpen' },
       { kind: 'predicate', id: 'canUndo' },
     ]);
+  });
+
+  // A plant that must leave the manifest valid: the scenario contract accepts what it describes.
+  const valid = (apply: Plant['apply']) => checkManifest(planted(loaded.input, { id: 'valid', rule: 'fixture', description: '', apply })).problems;
+
+  it('counts a measure of the editor and a kept preference as end terminals', () => {
+    expect(
+      valid((m) => {
+        const [remove] = plantDeleteScenarios(m);
+        Object.assign(remove.expect as object, { render: null, editor: { regions: [{ region: 'top-bar', measure: 'height', relation: 'equals', value: 40, reference: null }], computed: [{ region: 'status-bar', property: 'background-color', value: 'rgb(0, 0, 0)' }] } });
+      }),
+    ).toEqual([]);
+    expect(
+      valid((m) => {
+        const [remove] = plantDeleteScenarios(m);
+        Object.assign(remove.expect as object, { render: null, persistence: { reload: 'immediate', document: null, preferences: 'same' } });
+      }),
+    ).toEqual([]);
+  });
+
+  it('resolves a scenario of the empty project with the names of its locale', () => {
+    const empty = (locale: string, root: string) =>
+      valid((m) => {
+        const f = plantRenderScenario(m);
+        f.toothProof = 'src/core/render/render.ts';
+        const s = (f.scenarios as Record<string, Record<string, unknown>>[])[0] as Record<string, Record<string, unknown>>;
+        Object.assign(s.setup as object, { fixture: 'empty', locale, selection: [root] });
+        Object.assign(s.expect as object, { selection: [root], render: { computed: [{ node: root, property: 'display', value: 'block' }], geometry: [], feedback: [] } });
+      });
+    expect(empty('pt-BR', '/Página')).toEqual([]);
+    expect(empty('en', '/Page')).toEqual([]);
+    expect(empty('en', '/Página').map((p) => p.rule)).toEqual(['document-path', 'document-path', 'document-path']);
+  });
+
+  it('checks the arguments of a step against its command: a palette entry, a node path', () => {
+    const insert = (entry: string) =>
+      checkManifest(
+        planted(loaded.input, {
+          id: 'insert',
+          rule: 'step',
+          description: '',
+          apply: (m) => {
+            const [remove] = plantDeleteScenarios(m);
+            (remove.steps as unknown[]).unshift({ door: 'element.insert#elements-tile', args: { entry, parent: '/Page/Section' }, target: null, drop: null, action: false });
+          },
+        }),
+      ).problems.map((p) => `${p.rule}: ${p.message}`);
+    expect(insert('heading')).toEqual([]);
+    expect(insert('banner')).toEqual(['step: "banner": the argument "entry" of element.insert is a palette entry of elements.json']);
   });
 
   it('never changes the real manifest when planting', () => {

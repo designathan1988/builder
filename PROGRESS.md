@@ -2,6 +2,23 @@
 
 Handoff notes between sessions. Newest entry first.
 
+## 2026-09-24 — Run: scenario contract, visual pass, foundation part 2, group 02
+
+Why: part 1 is verified by the auditor at 380745b. This run goes by checkpoints in one session: each step committed, pushed and reviewed as it lands. The auditor writes the scenarios and fixtures of groups 01 and 02 under `manifest/features/` in the same folder and branch; the builder never edits them and commits only its own files with `git commit --only`.
+
+Done:
+0. The scenario contract (schema, manifest:check, loader, tests and plants; the auditor writes the data):
+   - Fixtures are data: `manifest/features/fixtures/<id>.json`, each a project document of `src/core/document/model.ts`. The loader reads them with the manifest; rule `fixture` validates each with `validateDocument` and fails on a `setup.fixture` without a file. `empty` is a fresh profile's empty project, built with the names of the scenario's locale (Home/Page, Início/Página), and has no file. A fixture reaches the app only through File › Open (`project.open`, built in part 2 as runner infrastructure).
+   - Steps: a scenario has `steps` (door, args, target, drop, action), run in order after the fixture loads; exactly one is the action step, and `doors` lists the alternative doors for it, each a door of the action step's command (rule `step`, which also checks every argument against the command's declared arguments: palette entries, enum values, node paths, properties…). Door references in steps are checked like the scenario's doors (rule `door-unknown-command`). Rule `door-coverage`: once a feature has scenarios, every door whose feature it is runs in one of them.
+   - Paths: `src/manifest/scenario.ts` owns the grammar. A node path is the node names from the fixture's root (`/Page/Section`), each naming exactly one node; a field follows `/@` (`/Page/Section/@styles/desktop/base/padding-top`). A node value in `expect.document` omits id and its children array gives their order; a new node appears through its parent's value or `@children`. Rule `document-path` resolves setup paths in the fixture, applies the diff (refusing a node value with an id, an unknown field, a removed root, a key that is not there), validates the result against the model, resolves every expectation after the diff and every step path in the fixture or the result.
+   - Editor terminals: `expect.editor` (regions of layout.json measured alone or against another region, and computed styles of regions) and `expect.persistence.preferences` beside `document`; rule `scenario-terminal` counts both; unknown regions fail `unknown-reference`.
+   - Tooth proof without commands: optional `toothProof` on a feature names the module the tooth proof replaces with a no-op; rule `tooth-proof` requires it of a feature with scenarios and no commands, refuses it on a feature with commands, and requires the module to be one ARCHITECTURE.md names.
+   - `status.placed` ("Placed {element} in {parent}, position {position} of {count}." / "{element} colocado em {parent}, posição {position} de {count}.") is in both catalogues.
+   - Plants (each fails on its own rule only): `fixture-file-missing`, `fixture-breaks-model`, `setup-path-not-in-fixture`, `expect-path-removed-by-diff`, `diff-path-unresolved`, `diff-node-value-with-id`, `step-target-unresolved`, `step-argument-unknown`, `two-action-steps`, `door-in-no-scenario`, `editor-terminal-without-measure`, `persistence-of-nothing`, `editor-region-unknown`, `tooth-proof-without-module`, `tooth-proof-module-unknown`; the older scenario plants now build on two planted delete-element scenarios that together run all three of its doors. Positive tests: an editor-only and a preferences-only terminal pass; the empty project resolves `/Página` in pt-BR and `/Page` in English; a step inserting the palette entry `heading` into `/Page/Section` passes and one naming `banner` fails.
+
+Open findings (recorded, not acted on):
+1. (builder, item 0) A node path cannot name a page itself (its name or file) nor tell apart two siblings with the same name: `document-path` reports an ambiguous name. Fixtures name siblings apart; pages get paths when a group needs them.
+
 ## 2026-09-24 — Foundation, part 1: editor shell and document core
 
 Why: the contract is done (manifest, DESIGN.md, `design/final/`); this is the first session that writes app code. Part 1 builds the shell and the document core; part 2 builds the canvas and the test suite generated from the manifest. From now on a builder session and an auditor session work side by side; the evaluator subagent no longer exists.

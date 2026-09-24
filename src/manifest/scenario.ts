@@ -1,0 +1,198 @@
+// The scenario data (ARCHITECTURE.md): how a scenario names the nodes and fields of a document, and how its
+// document diff applies. manifest:check proves every path of every scenario resolves; the runner
+// (tools/runner/scenarios.ts) resolves the same paths in the document the test port reads and compares the result
+// with matchDocument. Plain TypeScript, no DOM.
+//
+// Grammar. A node path is the node names from the fixture's root: "/Page/Section/Heading" names the child
+// "Heading" of the child "Section" of the page root "Page"; each name names exactly one node. A document path may
+// go on into a field of that node after "/@": "/Page/Section/@styles/desktop/base/padding-top". A node value (the
+// value of a node path, of @children, or a child inside them) omits id, because ids are generated; its children
+// array gives their order. A new node appears through the value of its parent or of its parent's @children.
+import { createEmptyDocument, type DocumentJson } from '../core/document/model.ts';
+import { sequentialIds } from '../core/ports/ids.ts';
+import type { ElementType } from '../generated/ids.ts';
+
+export interface DocumentPath {
+  readonly nodes: readonly string[];
+  // the field of the node and the keys inside it, or null for the node itself
+  readonly field: readonly string[] | null;
+}
+
+// the fields of a node a path may name; id is generated, so never named
+export const NODE_FIELDS = ['type', 'name', 'tag', 'attributes', 'classes', 'styles', 'text', 'children'] as const;
+
+// The id a fixture file names: manifest/features/fixtures/<id>.json. "empty" has no file.
+export const EMPTY_FIXTURE = 'empty';
+export const FIXTURE_FILE = /^features\/fixtures\/([a-z0-9]+(?:-[a-z0-9]+)*)\.json$/;
+
+export function parsePath(path: string): DocumentPath {
+  const parts = path.replace(/^\//, '').split('/');
+  const at = parts.findIndex((part) => part.startsWith('@'));
+  if (at < 0) return { nodes: parts, field: null };
+  return { nodes: parts.slice(0, at), field: [(parts[at] ?? '').slice(1), ...parts.slice(at + 1)] };
+}
+
+type Json = null | boolean | number | string | Json[] | { [key: string]: Json };
+type JsonObject = { [key: string]: Json };
+// a node as a scenario sees it: an expected node may lack its id
+export type LooseNode = JsonObject & { name?: Json; children?: Json };
+
+const isObject = (value: unknown): value is JsonObject => value !== null && typeof value === 'object' && !Array.isArray(value);
+const childrenOf = (node: JsonObject): JsonObject[] => (Array.isArray(node.children) ? node.children.filter(isObject) : []);
+
+export interface Resolved {
+  readonly node: JsonObject;
+  // null for a page's root
+  readonly parent: JsonObject | null;
+  readonly index: number;
+  readonly page: number;
+}
+
+// The node a node path names, or why it names none or several.
+export function resolveNode(document: unknown, nodes: readonly string[]): Resolved | string {
+  const pages = isObject(document) && Array.isArray(document.pages) ? document.pages.filter(isObject) : [];
+  const [rootName, ...rest] = nodes;
+  const roots = pages.map((page, i) => ({ tree: page.tree, i })).filter((p): p is { tree: JsonObject; i: number } => isObject(p.tree) && p.tree.name === rootName);
+  if (roots.length === 0) return `no page's root is named "${rootName ?? ''}"`;
+  if (roots.length > 1) return `${roots.length} pages have a root named "${rootName ?? ''}": a node path names one node`;
+  const root = roots[0] as { tree: JsonObject; i: number };
+  let at: Resolved = { node: root.tree, parent: null, index: 0, page: root.i };
+  let named = `/${rootName ?? ''}`;
+  for (const name of rest) {
+    const children = childrenOf(at.node);
+    const matches = children.map((child, index) => ({ child, index })).filter((c) => c.child.name === name);
+    if (matches.length === 0) return `${named} has no child named "${name}"`;
+    if (matches.length > 1) return `${named} has ${matches.length} children named "${name}": a node path names one node`;
+    const match = matches[0] as { child: JsonObject; index: number };
+    at = { node: match.child, parent: at.node, index: match.index, page: at.page };
+    named = `${named}/${name}`;
+  }
+  return at;
+}
+
+// A node value has no id, and neither has any node inside it.
+function idInNodeValue(value: Json): string | null {
+  if (!isObject(value)) return 'a node value is an object';
+  if ('id' in value) return 'a node value omits id: ids are generated';
+  if (value.children !== undefined) {
+    if (!Array.isArray(value.children)) return 'children is a list of node values';
+    for (const child of value.children) {
+      const problem = idInNodeValue(child);
+      if (problem !== null) return problem;
+    }
+  }
+  return null;
+}
+
+export type DiffOp = { readonly op: 'set'; readonly path: string; readonly value: unknown } | { readonly op: 'remove'; readonly path: string };
+
+export interface DiffResult {
+  readonly document: unknown;
+  // the first operation that does not apply, with why
+  readonly error: { readonly index: number; readonly message: string } | null;
+}
+
+// Applies a scenario's document diff to a document, in order, without changing the input.
+export function applyDiff(document: unknown, ops: readonly DiffOp[]): DiffResult {
+  const doc = structuredClone(document) as JsonObject;
+  for (const [index, op] of ops.entries()) {
+    const message = applyOne(doc, op);
+    if (message !== null) return { document: doc, error: { index, message } };
+  }
+  return { document: doc, error: null };
+}
+
+function applyOne(doc: JsonObject, op: DiffOp): string | null {
+  const path = parsePath(op.path);
+  const found = resolveNode(doc, path.nodes);
+  if (typeof found === 'string') return `${op.path}: ${found}`;
+  const { node, parent, index, page } = found;
+  const value = op.op === 'set' ? (structuredClone(op.value) as Json) : null;
+  if (path.field === null) {
+    if (op.op === 'remove') {
+      if (parent === null) return `${op.path}: a page's root is never removed`;
+      (parent.children as Json[]).splice(index, 1);
+      return null;
+    }
+    const problem = idInNodeValue(value);
+    if (problem !== null) return `${op.path}: ${problem}`;
+    if (parent === null) ((doc.pages as JsonObject[])[page] as JsonObject).tree = value;
+    else (parent.children as Json[])[index] = value;
+    return null;
+  }
+  const [field, ...keys] = path.field;
+  if (!(NODE_FIELDS as readonly string[]).includes(field ?? '')) return `${op.path}: "@${field ?? ''}" is not a field of a node (${NODE_FIELDS.join(', ')})`;
+  if (field === 'children' && keys.length === 0 && op.op === 'set') {
+    if (!Array.isArray(value)) return `${op.path}: @children is a list of node values`;
+    for (const child of value) {
+      const problem = idInNodeValue(child);
+      if (problem !== null) return `${op.path}: ${problem}`;
+    }
+  }
+  if (field === 'children' && keys.length > 0) return `${op.path}: a child is named by its node path, not by an index into @children`;
+  if (op.op === 'remove') {
+    if (keys.length === 0) return `${op.path}: a field of a node is set, never removed; remove a key inside it`;
+    let container: Json | undefined = node[field as string];
+    for (const key of keys.slice(0, -1)) container = isObject(container) ? container[key] : undefined;
+    const last = keys[keys.length - 1] as string;
+    if (!isObject(container) || !(last in container)) return `${op.path}: there is nothing at this path to remove`;
+    Reflect.deleteProperty(container, last);
+    return null;
+  }
+  if (keys.length === 0) {
+    node[field as string] = value;
+    return null;
+  }
+  let container = node[field as string];
+  if (container === undefined || container === null) container = node[field as string] = {};
+  if (!isObject(container)) return `${op.path}: @${field ?? ''} holds no keys`;
+  for (const key of keys.slice(0, -1)) {
+    const next: Json | undefined = container[key];
+    if (next === undefined || next === null) container = container[key] = {};
+    else if (isObject(next)) container = next;
+    else return `${op.path}: "${key}" holds no keys`;
+  }
+  container[keys[keys.length - 1] as string] = value;
+  return null;
+}
+
+// Gives every node without an id a stand-in, so an expected document can be validated as a document.
+export function withStandInIds(document: unknown): unknown {
+  const doc = structuredClone(document) as JsonObject;
+  let next = 0;
+  const visit = (node: Json): void => {
+    if (!isObject(node)) return;
+    if (!('id' in node)) node.id = `~new-${String(++next)}`;
+    for (const child of childrenOf(node)) visit(child);
+  };
+  for (const page of Array.isArray(doc.pages) ? doc.pages : []) if (isObject(page)) visit(page.tree ?? null);
+  return doc;
+}
+
+// The empty project of a fresh profile, as the editor creates it for a locale (names from the catalogue).
+export function emptyProject(names: { readonly page: string; readonly root: string }, root: { readonly type: ElementType; readonly tag: string }): DocumentJson {
+  return createEmptyDocument(sequentialIds('empty'), names, root);
+}
+
+// Where an actual document differs from an expected one. A node the expectation writes without an id matches any
+// id; everything else must be equal.
+export function matchDocument(actual: unknown, expected: unknown, at = ''): string[] {
+  if (isObject(expected)) {
+    if (!isObject(actual)) return [`${at || '/'}: expected an object, found ${JSON.stringify(actual)}`];
+    const keys = new Set([...Object.keys(expected), ...Object.keys(actual)]);
+    const out: string[] = [];
+    for (const key of keys) {
+      if (key === 'id' && !('id' in expected)) continue;
+      if (!(key in expected)) out.push(`${at}/${key}: not expected, found ${JSON.stringify(actual[key])}`);
+      else if (!(key in actual)) out.push(`${at}/${key}: expected ${JSON.stringify(expected[key])}, missing`);
+      else out.push(...matchDocument(actual[key], expected[key], `${at}/${key}`));
+    }
+    return out;
+  }
+  if (Array.isArray(expected)) {
+    if (!Array.isArray(actual)) return [`${at || '/'}: expected a list, found ${JSON.stringify(actual)}`];
+    if (actual.length !== expected.length) return [`${at}: expected ${expected.length} items, found ${actual.length}`];
+    return expected.flatMap((item, i) => matchDocument(actual[i], item, `${at}/${i}`));
+  }
+  return Object.is(actual, expected) ? [] : [`${at || '/'}: expected ${JSON.stringify(expected)}, found ${JSON.stringify(actual)}`];
+}

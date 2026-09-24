@@ -1205,6 +1205,7 @@
   "status.panel.opened": "Painel {panel} aberto.",
   "status.paste.empty": "A área de transferência não tem nada que possa ser colado.",
   "status.pickTarget": "Escolha o alvo da interação.",
+  "status.placed": "{element} colocado em {parent}, posição {position} de {count}.",
   "status.position.notPositioned": "Defina a posição como absoluta ou fixa primeiro.",
   "status.promote.topLevel": "Um filho direto da página não tem para onde subir.",
   "status.readOnlyTab": "Esta aba está somente leitura: outra aba está editando o projeto.",

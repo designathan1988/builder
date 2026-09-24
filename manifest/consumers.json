@@ -981,6 +981,10 @@
       "reader": "CLAUDE.md"
     },
     {
+      "field": "features:features[].toothProof",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
       "field": "features:features[].intent",
       "reader": "CLAUDE.md"
     },
@@ -1038,6 +1042,38 @@
     },
     {
       "field": "features:features[].scenarios[].setup.zoom",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].steps",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].steps[].door",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].steps[].args",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].steps[].target",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].steps[].drop",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].steps[].drop.placement",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].steps[].drop.reference",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].steps[].action",
       "reader": "tools/runner/scenarios.ts"
     },
     {
@@ -1141,6 +1177,50 @@
       "reader": "tools/runner/scenarios.ts"
     },
     {
+      "field": "features:features[].scenarios[].expect.editor",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.editor.regions",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.editor.regions[].region",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.editor.regions[].measure",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.editor.regions[].relation",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.editor.regions[].value",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.editor.regions[].reference",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.editor.computed",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.editor.computed[].region",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.editor.computed[].property",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.editor.computed[].value",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
       "field": "features:features[].scenarios[].expect.persistence",
       "reader": "tools/runner/scenarios.ts"
     },
@@ -1150,6 +1230,10 @@
     },
     {
       "field": "features:features[].scenarios[].expect.persistence.document",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].expect.persistence.preferences",
       "reader": "tools/runner/scenarios.ts"
     },
     {
