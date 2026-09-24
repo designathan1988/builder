@@ -18,8 +18,9 @@ export interface DocumentPath {
   readonly field: readonly string[] | null;
 }
 
-// the fields of a node a path may name; id is generated, so never named
-export const NODE_FIELDS = ['type', 'name', 'tag', 'attributes', 'classes', 'styles', 'text', 'children'] as const;
+// the fields of a node a path may name; id is generated, so never named. locked, hidden (true, absent when off) and
+// inline (the runs of inline marks) arrive with the lock, hide and inline formatting features of group 02.
+export const NODE_FIELDS = ['type', 'name', 'tag', 'attributes', 'classes', 'styles', 'text', 'children', 'locked', 'hidden', 'inline'] as const;
 
 // The id a fixture file names: manifest/features/fixtures/<id>.json. "empty" has no file.
 export const EMPTY_FIXTURE = 'empty';

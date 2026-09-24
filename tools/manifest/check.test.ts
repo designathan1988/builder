@@ -360,6 +360,23 @@ describe('manifest:check', () => {
     expect(insert('banner')).toEqual(['step: "banner": the argument "entry" of element.insert is a palette entry of elements.json']);
   });
 
+  it('accepts a held drag that a later step releases on its door or drag.cancel ends, and typed characters', () => {
+    const drag = 'element.moveTo#canvas-drag-canvas-element-before-after';
+    const held = { door: drag, args: { parent: '/Page/Section', index: 1 }, target: '/Page/Section/Heading', drop: { placement: 'after', reference: '/Page/Section/Paragraph' }, action: false, hold: true, type: null };
+    for (const end of [
+      { door: drag, args: {}, target: null, drop: null, action: false, hold: false },
+      { door: 'drag.cancel#key-escape-in-drag', args: {}, target: null, drop: null, action: false },
+    ]) {
+      expect(
+        valid((m) => {
+          const [remove] = plantDeleteScenarios(m);
+          (remove.steps as unknown[]).unshift(held, end);
+          ((remove.steps as Record<string, unknown>[]).at(-1) as Record<string, unknown>).type = 'x\n';
+        }),
+      ).toEqual([]);
+    }
+  });
+
   it('never changes the real manifest when planting', () => {
     for (const plant of PLANTS) planted(loaded.input, plant);
     expect(checkManifest(loaded.input).problems).toEqual([]);

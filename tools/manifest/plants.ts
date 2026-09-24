@@ -677,6 +677,60 @@ export const PLANTS: Plant[] = [
     },
   },
   {
+    id: 'hold-never-released',
+    rule: 'step',
+    description: 'a scenario holds a canvas drag of the heading and never releases or cancels it',
+    apply: (m) => {
+      const [remove] = plantDeleteScenarios(m);
+      (remove.steps as Json[]).unshift(step('element.moveTo#canvas-drag-canvas-element-before-after', false, { args: { parent: '/Page/Section', index: 1 }, target: '/Page/Section/Heading', drop: { placement: 'after', reference: '/Page/Section/Paragraph' }, hold: true }));
+    },
+  },
+  {
+    id: 'release-without-hold',
+    rule: 'step',
+    description: 'a scenario releases a canvas drag that no earlier step holds',
+    apply: (m) => {
+      const [remove] = plantDeleteScenarios(m);
+      (remove.steps as Json[]).unshift(step('element.moveTo#canvas-drag-canvas-element-before-after', false));
+    },
+  },
+  {
+    id: 'hold-on-a-key',
+    rule: 'step',
+    description: 'a scenario holds the Delete key as if it were a drag',
+    apply: (m) => {
+      const [remove] = plantDeleteScenarios(m);
+      obj(list(remove.steps)[0]).hold = true;
+    },
+  },
+  {
+    id: 'typed-text-not-text',
+    rule: 'schema',
+    description: 'a step types the number 42 instead of characters',
+    apply: (m) => {
+      const [remove] = plantDeleteScenarios(m);
+      obj(list(remove.steps)[0]).type = 42;
+    },
+  },
+  {
+    id: 'required-argument-missing',
+    rule: 'step',
+    description: 'a step clicks the heading on the canvas without the target node selection.select needs',
+    apply: (m) => {
+      const [remove] = plantDeleteScenarios(m);
+      (remove.steps as Json[]).unshift(step('selection.select#canvas-click-element-or-page', false, { target: '/Page/Section/Heading' }));
+    },
+  },
+  {
+    id: 'gesture-argument-given',
+    rule: 'step',
+    description: 'a marquee step writes the band rectangle, which the gesture produces',
+    apply: (m) => {
+      const [remove] = plantDeleteScenarios(m);
+      (remove.steps as Json[]).unshift(step('selection.marquee#canvas-drag-empty-area-page-or-container', false, { args: { mode: 'replace', rect: { x: 0, y: 0, width: 10, height: 10 } }, target: '/Page/Section' }));
+    },
+  },
+  {
     id: 'two-action-steps',
     rule: 'step',
     description: 'a scenario marks both of its steps as the action step',

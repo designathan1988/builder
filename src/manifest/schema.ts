@@ -655,15 +655,27 @@ const documentPath = z.string().regex(/^(\/[^/@][^/]*)+(\/@[a-z]+(\/[^/]+)*)?$/,
 // palette entry whose tile the runner uses), on the node the gesture acts on, dropped before, after or inside a node
 // for a drag. The action step is the one the scenario is about: the runner runs the scenario once per door of
 // `doors`, putting that door in the action step.
+// Arguments: a node argument is a node path; for a drag, the arguments are the parent and index its drop produces;
+// a rect or point argument is produced by the gesture (the marquee band, a pointer position), so a step leaves it
+// out; every other required argument the door does not fix is present (manifest:check rule step).
 const stepSchema = z.strictObject({
   door: doorRef,
   args: z.record(camelId, jsonValue),
   target: nodeRef.nullable(),
   drop: z.strictObject({ placement: z.enum(['before', 'after', 'inside']), reference: nodeRef }).nullable(),
   action: z.boolean(),
+  // A drag step with hold: true presses on its target (for a palette drag, on the tile of args.entry), moves to its
+  // drop and keeps the button down; the steps after it run during the drag. The drag ends at a later step on the same
+  // drag door with target null, drop null and hold false (a release where the pointer is), or at drag.cancel.
+  // Optional: absent is false.
+  hold: z.boolean().optional(),
+  // The characters the runner types with the real keyboard after the step's door has run; "\n" presses Enter (the
+  // edited text, the link prompt, the rename field). Optional: absent is null.
+  type: z.string().nullable().optional(),
 });
 
-// A measure of a region of the editor (layout.json), alone or against another region.
+// A measure of a region of the editor (layout.json): measure(region) compared, by relation, with
+// measure(reference) + value, or with value alone when reference is null.
 const editorGeometry = z.strictObject({
   region: regionId,
   measure: z.enum(['x', 'y', 'width', 'height']),
@@ -710,6 +722,7 @@ export const scenarioSchema = z.strictObject({
     render: z
       .strictObject({
         computed: z.array(z.strictObject({ node: nodeRef, property: cssName, value: z.string().min(1) })),
+        // measure(node) compared, by relation, with measure(reference) + value, or with value alone when reference is null
         geometry: z.array(
           z.strictObject({
             node: nodeRef,

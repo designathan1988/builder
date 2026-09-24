@@ -1947,7 +1947,20 @@ export function checkManifest(input: ManifestInput): CheckResult {
             if (commandById.has(command) && command !== actionCommand) report('step', f.file, `${at}.doors[${di}]`, `${doorRef} is not a door of ${actionCommand}, the action step's command: the doors of a scenario are alternatives for its action step`);
           });
         }
+        // held drags: a hold ends at a release on its door or at drag.cancel; a release ends a hold
+        const held = new Map<string, number>();
         s.steps.forEach((step, ti) => {
+          const entry = doorByRef.get(step.door);
+          const drag = entry !== undefined && (GESTURE_DOOR_KINDS as readonly string[]).includes(entry.door.kind);
+          const hold = step.hold === true;
+          const release = drag && !hold && step.target === null && step.drop === null;
+          if (hold && !drag) report('step', f.file, `${at}.steps[${ti}].hold`, `${step.door} is not a drag: only a drag is held`);
+          if (hold && drag) held.set(step.door, ti);
+          if (release) {
+            if (held.has(step.door)) held.delete(step.door);
+            else report('step', f.file, `${at}.steps[${ti}]`, `${step.door} releases a drag that no earlier step holds`);
+          }
+          if (entry?.command.id === 'drag.cancel') held.clear();
           const command = commandById.get(step.door.split('#')[0] ?? '');
           if (!command) return;
           for (const [name, value] of Object.entries(step.args)) {
@@ -1956,10 +1969,22 @@ export function checkManifest(input: ManifestInput): CheckResult {
               report('step', f.file, `${at}.steps[${ti}].args.${name}`, `${command.id} has no argument "${name}"`);
               continue;
             }
+            if (arg.type === 'rect' || arg.type === 'point') {
+              report('step', f.file, `${at}.steps[${ti}].args.${name}`, `the ${arg.type} "${name}" of ${command.id} is produced by the gesture: a step leaves it out`);
+              continue;
+            }
             const problem = argProblem(arg, value);
             if (problem !== null) report('step', f.file, `${at}.steps[${ti}].args.${name}`, `${JSON.stringify(value)}: the argument "${name}" of ${command.id} ${problem}`);
           }
+          // a release completes the held drag, whose step gave the arguments
+          if (release) return;
+          const fixed = entry?.door.args ?? {};
+          for (const [name, arg] of Object.entries(command.args)) {
+            if (arg.optional || arg.type === 'rect' || arg.type === 'point' || name in fixed || name in step.args) continue;
+            report('step', f.file, `${at}.steps[${ti}].args`, `${step.door} needs the argument "${name}" (${arg.type}) of ${command.id}: the door does not fix it`);
+          }
         });
+        for (const [doorRef, ti] of held) report('step', f.file, `${at}.steps[${ti}].hold`, `${doorRef} is held and never released or cancelled (drag.cancel)`);
         if (before === null) return;
         // document-path: setup in the fixture; the diff applies; expectations after the diff; steps in either
         s.setup.selection.forEach((nodePath, i) => armCheck(before, f.file, `${at}.setup.selection[${i}]`, nodePath, 'in the fixture'));

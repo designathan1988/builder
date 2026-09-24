@@ -1077,6 +1077,14 @@
       "reader": "tools/runner/scenarios.ts"
     },
     {
+      "field": "features:features[].scenarios[].steps[].hold",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].steps[].type",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
       "field": "features:features[].scenarios[].doors",
       "reader": "tools/runner/scenarios.ts"
     },
