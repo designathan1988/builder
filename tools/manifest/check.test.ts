@@ -108,10 +108,12 @@ describe('manifest:check', () => {
       'door-unplaced': rules.get('door-unplaced'),
       'state-door-on-canvas-toolbar': rules.get('state-door-on-canvas-toolbar'),
       'label-names-two-properties': rules.get('label-names-two-properties'),
+      'inspector-subset-in-all-properties': rules.get('inspector-subset-in-all-properties'),
     }).toEqual({
       'door-unplaced': 'placement',
       'state-door-on-canvas-toolbar': 'state-placement',
       'label-names-two-properties': 'label-term',
+      'inspector-subset-in-all-properties': 'all-properties',
     });
   });
 

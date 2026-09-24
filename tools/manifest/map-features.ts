@@ -78,8 +78,8 @@ export const AMENDMENTS: Amendment[] = [
     field: 'expected',
     op: 'replace',
     from: 'The Display control offers every keyword the property catalogue has for display, and nothing else (a unit test checks that the control options equal the catalogue keyword list).',
-    to: 'The Display control offers exactly the list its door names in the manifest (the declared display subset, drawn from the generated keyword list) and nothing else (a unit test checks that the control options equal that list); a typed value is accepted only when it matches the official display syntax.',
-    why: 'property model: a door offers the generated list of its property or a declared subset',
+    to: 'In All properties the Display control offers every keyword of the catalogue (the generated display keywords Chrome, Firefox and Safari all support) and nothing else; in Essentials only it offers the declared display subset its door names (a unit test checks that the control options equal each list); a typed value is accepted only when it matches the official display syntax.',
+    why: 'All properties offers every value of the catalogue; a declared subset only in Essentials only and the quick panel (foundation contract fix)',
   },
   {
     feature: 'props-spacing',
@@ -94,8 +94,8 @@ export const AMENDMENTS: Amendment[] = [
     field: 'expected',
     op: 'replace',
     from: 'Each keyword control offers every keyword the property catalogue defines for it.',
-    to: 'Each keyword control offers the list its door names: the generated keywords of the property that Chrome, Firefox and Safari all support according to css-compat.json, or a subset the manifest declares with its reason.',
-    why: 'property model: a door offers the generated keywords all three browsers support, or a declared subset',
+    to: 'In All properties each keyword control offers every value of the catalogue: the generated keywords of the property that Chrome, Firefox and Safari all support according to css-compat.json. A subset the manifest declares with its reason is offered only in Essentials only and in the quick panel.',
+    why: 'All properties offers every value of the catalogue; a declared subset only in Essentials only and the quick panel (foundation contract fix)',
   },
   {
     feature: 'props-typography-advanced',
@@ -222,6 +222,13 @@ export const AMENDMENTS: Amendment[] = [
     from: 'A fresh profile shows every UI text in pt-BR: menus, panels, tooltips, status bar messages and accessible names.',
     to: 'A fresh profile shows every UI text in English: menus, panels, tooltips, status bar messages and accessible names; after switching to Português (Brasil) every one of them is in pt-BR.',
     why: 'the design decision brief: everything on disk is in English and the UI language is switchable, so English is the source and default UI language and pt-BR is a translation',
+  },
+  {
+    feature: 'export-bem-css',
+    field: 'expected',
+    op: 'append',
+    to: "Styles set with the Element chip are written as a readable BEM class derived from the element's name, on that element only: an element of class .card named 'Plano assinatura' gets .card--plano-assinatura; a numeric suffix is added only on a collision (.card--plano-assinatura-2); the class is never a hash, never an #id selector and never a style attribute.",
+    why: 'the Element style class is readable BEM from the element name, never a hash (foundation contract fix)',
   },
 ];
 

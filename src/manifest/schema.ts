@@ -380,8 +380,13 @@ const offersSchema = z.strictObject({
   property: z.union([cssName, kebabId]),
   // "generated": the keywords of manifest/generated/css-properties.json that css-compat.json says
   // Chrome, Firefox and Safari all support, and the units; otherwise the id of a subset declared on
-  // that property or composite
+  // that property or composite. An inspector field's list is what it offers in All properties, where
+  // every control offers the whole catalogue: always "generated" (manifest:check rule all-properties).
+  // Only a quick panel field names a subset here.
   list: kebabId,
+  // the declared subset an inspector field offers in Essentials only; null for every other door, and for
+  // a field that offers the whole catalogue in both modes
+  essentials: kebabId.nullable(),
 });
 
 const adapterSchema = z.strictObject({

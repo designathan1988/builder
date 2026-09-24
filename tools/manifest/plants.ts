@@ -178,9 +178,9 @@ export const PLANTS: Plant[] = [
   {
     id: 'value-set-unknown-subset',
     rule: 'value-set',
-    description: 'the Display field offers the list "palette", which display does not declare',
+    description: 'the quick panel Weight field offers the list "palette", which font-weight does not declare',
     apply: (m) => {
-      obj(obj(door(m, 'style.set', 'inspector-display').adapter).offers).list = 'palette';
+      obj(obj(door(m, 'style.set', 'quick-panel-font-weight').adapter).offers).list = 'palette';
     },
   },
   {
@@ -228,10 +228,10 @@ export const PLANTS: Plant[] = [
   {
     id: 'offered-keyword-unsupported',
     rule: 'browser-support',
-    description: 'the flex-wrap menu offers a subset with balance, which only Chrome supports',
+    description: 'the flex-wrap menu offers, in Essentials only, a subset with balance, which only Chrome supports',
     apply: (m) => {
       property(m, 'flex-wrap').subsets = [{ id: 'menu', values: ['nowrap', 'wrap', 'wrap-reverse', 'balance'], units: null, reason: 'planted' }];
-      obj(obj(door(m, 'style.set', 'inspector-flex-wrap').adapter).offers).list = 'menu';
+      obj(obj(door(m, 'style.set', 'inspector-flex-wrap').adapter).offers).essentials = 'menu';
     },
   },
   {
@@ -273,10 +273,10 @@ export const PLANTS: Plant[] = [
   {
     id: 'offered-type-keyword-unsupported',
     rule: 'browser-support',
-    description: 'the accent-color field offers a subset with Mark, a system colour Safari lacks (BCD css.types.color.system-color.mark)',
+    description: 'the accent-color field offers, in Essentials only, a subset with Mark, a system colour Safari lacks (BCD css.types.color.system-color.mark)',
     apply: (m) => {
       property(m, 'accent-color').subsets = [{ id: 'swatches', values: ['canvastext', 'mark'], units: null, reason: 'planted' }];
-      obj(door(m, 'style.set', 'inspector-accent-color').adapter).offers = { property: 'accent-color', list: 'swatches' };
+      obj(door(m, 'style.set', 'inspector-accent-color').adapter).offers = { property: 'accent-color', list: 'generated', essentials: 'swatches' };
     },
   },
   {
@@ -561,6 +561,15 @@ PLANTS.push(
         adapter: { selection: 'none', offers: null, writes: [], fields: [] },
         args: { state: 'hover' },
       });
+    },
+  },
+  {
+    id: 'inspector-subset-in-all-properties',
+    rule: 'all-properties',
+    description: 'the inspector Direction field offers only row and column in All properties (All properties offers every value of the catalogue)',
+    apply: (m) => {
+      property(m, 'flex-direction').subsets = [{ id: 'row-column', values: ['row', 'column'], units: null, reason: 'planted' }];
+      obj(door(m, 'style.set', 'inspector-flex-direction').adapter).offers = { property: 'flex-direction', list: 'row-column', essentials: null };
     },
   },
   {

@@ -54,7 +54,8 @@
             "selection": "all",
             "offers": {
               "property": "position",
-              "list": "generated"
+              "list": "generated",
+              "essentials": null
             },
             "writes": [
               "position"

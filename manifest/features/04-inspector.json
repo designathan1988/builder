@@ -79,7 +79,7 @@
           "Set display to each of block, inline, inline-block, flex, inline-flex, grid, inline-grid, contents and none."
         ],
         "expected": [
-          "The Display control offers exactly the list its door names in the manifest (the declared display subset, drawn from the generated keyword list) and nothing else (a unit test checks that the control options equal that list); a typed value is accepted only when it matches the official display syntax.",
+          "In All properties the Display control offers every keyword of the catalogue (the generated display keywords Chrome, Firefox and Safari all support) and nothing else; in Essentials only it offers the declared display subset its door names (a unit test checks that the control options equal each list); a typed value is accepted only when it matches the official display syntax.",
           "Each choice writes the value into the document JSON and the element's computed display matches."
         ]
       },
@@ -332,7 +332,7 @@
         "expected": [
           "The font menu lists system and web-safe font stacks; weight offers 100-900 with names.",
           "Every value is written to the document JSON and the computed style of the paragraph in the iframe matches.",
-          "Each keyword control offers the list its door names: the generated keywords of the property that Chrome, Firefox and Safari all support according to css-compat.json, or a subset the manifest declares with its reason.",
+          "In All properties each keyword control offers every value of the catalogue: the generated keywords of the property that Chrome, Firefox and Safari all support according to css-compat.json. A subset the manifest declares with its reason is offered only in Essentials only and in the quick panel.",
           "Each value is written by one command per property, and every other control for the same property must use that command."
         ]
       },

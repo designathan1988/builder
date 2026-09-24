@@ -64,6 +64,7 @@ export const RULES = [
   'feature-command-link',
   'i18n-missing',
   'value-set',
+  'all-properties',
   'css-syntax',
   'syntax-fallback',
   'browser-support',
@@ -919,6 +920,22 @@ export function checkManifest(input: ManifestInput): CheckResult {
     } else if (!subsetsOf(offers.property).some((s) => s.id === offers.list)) {
       report('value-set', file, `${path}.adapter.offers.list`, `${doorRef} offers "${offers.list}", which is neither "generated" nor a subset declared on ${offers.property}`);
     }
+  }
+
+  // ---- all-properties: in All properties every inspector field offers the whole catalogue (the generated
+  // list: all four flex directions, every text-align value, space-between, space-around and space-evenly).
+  // A declared subset is offered only in Essentials only (offers.essentials) and in the quick panel.
+  for (const { file, path, door, ref: doorRef } of doors) {
+    const offers = door.adapter.offers;
+    if (!offers) continue;
+    if (offers.list !== 'generated' && door.kind !== 'quick-panel') {
+      report('all-properties', file, `${path}.adapter.offers.list`, door.kind === 'inspector-field'
+        ? `${doorRef} offers the subset "${offers.list}" in All properties, which offers every value of the catalogue: offer "generated" and name the subset in offers.essentials`
+        : `${doorRef} is a ${door.kind} door and offers the subset "${offers.list}": a declared subset is offered only in Essentials only and in the quick panel`);
+    }
+    if (offers.essentials === null) continue;
+    if (door.kind !== 'inspector-field') report('all-properties', file, `${path}.adapter.offers.essentials`, `${doorRef} is a ${door.kind} door: only an inspector field has an Essentials only list`);
+    else if (!subsetsOf(offers.property).some((s) => s.id === offers.essentials)) report('all-properties', file, `${path}.adapter.offers.essentials`, `${doorRef} offers "${offers.essentials}" in Essentials only, which is not a subset declared on ${offers.property}`);
   }
 
   // ---- css-syntax: every value a door offers or writes matches the official syntax (CSSTree's lexer)

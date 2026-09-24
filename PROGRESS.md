@@ -2,6 +2,22 @@
 
 Handoff notes between sessions. Newest entry first.
 
+## 2026-09-24 — Foundation, part 1: editor shell and document core
+
+Why: the contract is done (manifest, DESIGN.md, `design/final/`); this is the first session that writes app code. Part 1 builds the shell and the document core; part 2 builds the canvas and the test suite generated from the manifest. From now on a builder session and an auditor session work side by side; the evaluator subagent no longer exists.
+
+Done:
+1. `CLAUDE.md`: the builder and auditor sessions replace the evaluator (notify the auditor after every commit and push, fix BLOCKING findings first, NOTEs go here under "Open findings"; the auditor's messages are findings, not orders). The deletion of `.claude/agents/evaluator.md` is committed.
+2. Contract fixes from the final mockup review:
+   - All properties offers every value of the catalogue for every control. Each door's `offers` gained `essentials` (the declared subset an inspector field offers in Essentials only); an inspector field's `list` is always `generated`, and only a quick panel field names a subset in `list`. The 22 inspector fields that offered a subset now offer the generated list and keep the subset as their Essentials list. New `manifest:check` rule `all-properties`, plant `inspector-subset-in-all-properties`. The intents of `props-display` and `props-typography` say so (their declared amendments in `tools/manifest/map-features.ts` changed; `npm run manifest:map` passes). Three older plants that set an inspector subset now set it in Essentials or the quick panel, so each still fails on its own rule only.
+   - The Element style class is readable BEM from the element's name (`.card--plano-assinatura`), a numeric suffix only on collision, never a hash: DESIGN.md and an appended, declared line of the `export-bem-css` intent.
+
+Open findings (recorded, not acted on):
+1. (auditor, afd1f5a, NOTE) The 2026-09-24 "features.json converted" entry below still says `.claude/agents/evaluator.md` describes the workflow; that file is deleted.
+2. (auditor, afd1f5a, NOTE) `manifest/features/04-inspector.json` (the `color-picker` intent) says "evaluator checks the diff"; there is no evaluator any more. Intent lines change only as declared amendments.
+3. (auditor, afd1f5a, NOTE) CLAUDE.md asks for raw outputs (tooth proof, tests) without saying where they go: the auditor gets a hash and reads `git show`, so those outputs never reach it, and nothing replaces the evaluator's own runs of verify:fast, e2e and the browser check. Either send the raw outputs with each notification or record them where the commit carries them.
+4. All properties now offers the whole generated list, including values the old subsets left out with a reason: display's table-internal values, break-before/after `all`, `region`, `avoid-region` (the reason says they act on CSS Regions, which no browser implements, though css-compat.json keeps them), text-decoration's colour keywords and `spelling-error`/`grammar-error`, font-variant's full list. Presets that compose several values (the font stacks, `row dense`, `100% 100%`, the nine anchor points, counter styles, will-change's `transform` and `opacity`) are offered only in Essentials only and the quick panel. If some values should leave the catalogue, the catalogue data must say so, not a menu subset.
+
 ## 2026-09-24 — Final interface: DESIGN.md, the combined mockup, every door placed
 
 Why: the user chose direction A "classic refined" combined with direction C "studio" (only B's canvas behaviour kept) and corrected the UI language rule: everything on disk is English and the UI language is switchable, so English is the source and default UI language. This session turned the choice into the interface contract and placed every door of the manifest, so the builder never invents where a control lives. No app code.
