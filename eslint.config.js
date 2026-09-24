@@ -5,7 +5,8 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default defineConfig(
-  globalIgnores(['dist', 'reference', 'node_modules', 'test-results', 'playwright-report']),
+  // .cache holds the running Pager copy and .playwright-mcp the browser tool's scratch files; neither is project code.
+  globalIgnores(['dist', 'reference', '.cache', '.playwright-mcp', 'node_modules', 'test-results', 'playwright-report']),
   js.configs.recommended,
   tseslint.configs.strict,
   {
@@ -14,7 +15,7 @@ export default defineConfig(
     extends: [reactHooks.configs.flat.recommended],
   },
   {
-    files: ['*.config.{js,ts}', 'tests/**/*.ts'],
+    files: ['*.config.{js,ts}', '.dependency-cruiser.cjs', 'tests/**/*.ts'],
     languageOptions: { globals: globals.node },
   },
   {

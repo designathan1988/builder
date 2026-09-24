@@ -25,6 +25,6 @@ export default defineConfig(({ command }) => ({
   optimizeDeps: { entries: ['index.html'] },
   server:
     command === 'serve'
-      ? { port: readPort(), strictPort: true, watch: { ignored: ['**/reference/**'] } }
+      ? { port: readPort(), strictPort: true, watch: { ignored: ['**/reference/**', '**/.cache/**', '**/.playwright-mcp/**'] } }
       : {},
 }));

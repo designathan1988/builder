@@ -6,6 +6,8 @@ const baseURL = `http://localhost:${port}`;
 
 export default defineConfig({
   testDir: 'tests/e2e',
+  // Never discover tests in the reference projects, the Pager copy or the browser tool's scratch files.
+  testIgnore: ['**/reference/**', '**/.cache/**', '**/.playwright-mcp/**'],
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: 0,
