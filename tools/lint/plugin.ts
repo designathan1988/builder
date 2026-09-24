@@ -42,8 +42,17 @@ function propertyName(node: Node & { type: 'MemberExpression' }): string | null 
   return null;
 }
 
+// The reads that bypass the ports: object → property → what it gives (the time or randomness for an id).
+const BYPASSES: Readonly<Record<string, Readonly<Record<string, 'time' | 'id'>>>> = {
+  Date: { now: 'time' },
+  performance: { now: 'time' },
+  Math: { random: 'id' },
+  crypto: { randomUUID: 'id', getRandomValues: 'id' },
+};
+
 // builder/use-ports: the time is read only through the Clock port and ids come only from the IdGenerator port.
-// The two port modules are the only files the configuration exempts.
+// The two port modules are the only files the configuration exempts. A read is caught as a member (Date.now,
+// window.performance.now), a computed member (Math['random']) or a destructuring (const { now } = Date).
 const usePorts: Rule.RuleModule = {
   meta: {
     type: 'problem',
@@ -59,9 +68,22 @@ const usePorts: Rule.RuleModule = {
       MemberExpression(node) {
         const object = objectName(node.object as Node);
         const property = propertyName(node);
-        if (object === 'Date' && property === 'now') context.report({ node, messageId: 'time', data: { what: 'Date.now' } });
-        if (object === 'Math' && property === 'random') context.report({ node, messageId: 'id', data: { what: 'Math.random' } });
-        if (property === 'randomUUID') context.report({ node, messageId: 'id', data: { what: 'crypto.randomUUID' } });
+        if (property === null) return;
+        const kind = object !== null ? BYPASSES[object]?.[property] : undefined;
+        if (kind !== undefined) context.report({ node, messageId: kind, data: { what: `${object ?? ''}.${property}` } });
+        // randomUUID and getRandomValues make ids whatever object they are read from
+        else if (property === 'randomUUID' || property === 'getRandomValues') context.report({ node, messageId: 'id', data: { what: `crypto.${property}` } });
+      },
+      VariableDeclarator(node) {
+        if (node.id.type !== 'ObjectPattern' || !node.init) return;
+        const object = objectName(node.init as Node);
+        const reads = object !== null ? BYPASSES[object] : undefined;
+        if (!reads) return;
+        for (const p of node.id.properties) {
+          if (p.type !== 'Property' || p.computed || p.key.type !== 'Identifier') continue;
+          const kind = reads[p.key.name];
+          if (kind !== undefined) context.report({ node: p, messageId: kind, data: { what: `${object ?? ''}.${p.key.name}` } });
+        }
       },
       NewExpression(node) {
         if (objectName(node.callee as Node) === 'Date' && node.arguments.length === 0) context.report({ node, messageId: 'time', data: { what: 'new Date()' } });

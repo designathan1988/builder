@@ -16,6 +16,34 @@ const tsx = new RuleTester({
   languageOptions: { parser: tseslint.parser, parserOptions: { ecmaFeatures: { jsx: true } } },
 });
 
+const scripts = new RuleTester({ languageOptions: { parser: tseslint.parser } });
+
+scripts.run('builder/use-ports', builder.rules['use-ports'], {
+  valid: [
+    'const now = clock.now();',
+    'const id = ids.next();',
+    'const date = new Date(0);',
+    'const { now } = clock;',
+    'const x = Math.max(1, 2);',
+  ],
+  invalid: [
+    { code: 'const t = Date.now();', errors: [{ messageId: 'time' }] },
+    { code: 'const t = performance.now();', errors: [{ messageId: 'time' }] },
+    { code: 'const t = window.performance.now();', errors: [{ messageId: 'time' }] },
+    { code: 'const t = new Date();', errors: [{ messageId: 'time' }] },
+    { code: 'const t = Date();', errors: [{ messageId: 'time' }] },
+    { code: "const r = Math['random']();", errors: [{ messageId: 'id' }] },
+    { code: 'const r = Math.random();', errors: [{ messageId: 'id' }] },
+    { code: 'const u = crypto.randomUUID();', errors: [{ messageId: 'id' }] },
+    { code: 'const u = globalThis.crypto.randomUUID();', errors: [{ messageId: 'id' }] },
+    { code: 'crypto.getRandomValues(new Uint8Array(4));', errors: [{ messageId: 'id' }] },
+    { code: 'const { now } = Date;', errors: [{ messageId: 'time' }] },
+    { code: 'const { now: tick } = performance;', errors: [{ messageId: 'time' }] },
+    { code: 'const { random } = Math;', errors: [{ messageId: 'id' }] },
+    { code: 'const { randomUUID, getRandomValues } = crypto;', errors: [{ messageId: 'id' }, { messageId: 'id' }] },
+  ],
+});
+
 describe('style values', () => {
   it('turns React style keys into CSS property names', () => {
     expect(cssPropertyName('backgroundColor')).toBe('background-color');
