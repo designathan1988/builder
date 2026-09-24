@@ -12,6 +12,7 @@ import { createRequire } from 'node:module';
 import path from 'node:path';
 import type { DSNode, Lexer } from 'css-tree';
 import { createCssMatcher, type CssMatcher } from '../../src/manifest/css.ts';
+import { exclusionsFileSchema } from '../../src/manifest/schema.ts';
 import { REPO_ROOT } from '../manifest/load.ts';
 import { bcdVersion, generateCompatProperties, generateUnits, generateValueFunctions } from './compat.ts';
 import { TOKENS_CSS, generateTokens } from './tokens.ts';
@@ -225,11 +226,29 @@ export function generateCss(): GeneratedCssData & Record<string, unknown> {
 
 // ---------------------------------------------------------------- browser support
 
+// manifest/css-exclusions.json: keywords every browser parses but none implements. Each one is marked unsupported in
+// every browser, with its evidence as the reason, so it leaves every generated list.
+export const EXCLUSIONS_FILE = 'manifest/css-exclusions.json';
+
+function applyExclusions(properties: Record<string, { keywords: Record<string, { chrome: unknown; firefox: unknown; safari: unknown; why: Record<string, string> }> }>): void {
+  const { exclusions } = exclusionsFileSchema.parse(JSON.parse(fs.readFileSync(path.join(REPO_ROOT, EXCLUSIONS_FILE), 'utf8')));
+  for (const x of exclusions) {
+    const entry = properties[x.property]?.keywords[x.keyword.toLowerCase()];
+    if (entry === undefined) throw new Error(`${EXCLUSIONS_FILE}: ${x.property} has no keyword ${x.keyword} in the generated data`);
+    const why = `excluded (${EXCLUSIONS_FILE}): ${x.evidence.note}`;
+    entry.chrome = false;
+    entry.firefox = false;
+    entry.safari = false;
+    entry.why = { chrome: why, firefox: why, safari: why };
+  }
+}
+
 export function generateCompat(css: GeneratedCssData): unknown {
   const bcd = bcdVersion();
   const matcher = createCssMatcher({ properties: Object.fromEntries(Object.entries(css.properties).map(([name, p]) => [name, p.syntax])), types: css.types });
   const longhands = css.properties as Record<string, { longhands?: string[] }>;
   const { browsers, properties } = generateCompatProperties(Object.keys(css.properties), matcher.lexer, css.types, (name) => longhands[name]?.longhands ?? [], css.scopedFunctions);
+  applyExclusions(properties as Record<string, { keywords: Record<string, { chrome: unknown; firefox: unknown; safari: unknown; why: Record<string, string> }> }>);
   // the general-purpose functions of CSS Values (calc(), min(), clamp()...), which no property's syntax names
   const webref = require('@webref/css/css.json') as WebrefCss;
   const valueFunctions = webref.functions.filter((f) => /\/css-values-\d+\//.test(f.href ?? '') && f.for === undefined).map((f) => f.name.replace(/\(\)$/, ''));

@@ -1815,6 +1815,34 @@
     {
       "field": "layout:panels{}.open",
       "reader": "src/editor/workspace/panels.ts"
+    },
+    {
+      "field": "css-exclusions:exclusions",
+      "reader": "tools/gen/generate.ts"
+    },
+    {
+      "field": "css-exclusions:exclusions[].property",
+      "reader": "tools/gen/generate.ts"
+    },
+    {
+      "field": "css-exclusions:exclusions[].keyword",
+      "reader": "tools/gen/generate.ts"
+    },
+    {
+      "field": "css-exclusions:exclusions[].evidence",
+      "reader": "tools/gen/generate.ts"
+    },
+    {
+      "field": "css-exclusions:exclusions[].evidence.kind",
+      "reader": "tools/gen/generate.ts"
+    },
+    {
+      "field": "css-exclusions:exclusions[].evidence.source",
+      "reader": "tools/gen/generate.ts"
+    },
+    {
+      "field": "css-exclusions:exclusions[].evidence.note",
+      "reader": "tools/gen/generate.ts"
     }
   ]
 }

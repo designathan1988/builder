@@ -1,0 +1,67 @@
+{
+  "exclusions": [
+    {
+      "property": "break-before",
+      "keyword": "region",
+      "evidence": {
+        "kind": "spec",
+        "source": "https://drafts.csswg.org/css-break-3/#break-between and https://drafts.csswg.org/css-regions-1/",
+        "note": "The Fragmentation 3 values region and avoid-region force or avoid a break between CSS Regions. CSS Regions has no implementation in the current Chrome, Firefox or Safari (Blink removed it in 2014; BCD css.properties.flow-into has no support in any of them), so every browser parses these values and none acts on them. BCD has no entry of their own, so css-compat.json gave them the support of the property."
+      }
+    },
+    {
+      "property": "break-before",
+      "keyword": "avoid-region",
+      "evidence": {
+        "kind": "spec",
+        "source": "https://drafts.csswg.org/css-break-3/#break-between and https://drafts.csswg.org/css-regions-1/",
+        "note": "The Fragmentation 3 values region and avoid-region force or avoid a break between CSS Regions. CSS Regions has no implementation in the current Chrome, Firefox or Safari (Blink removed it in 2014; BCD css.properties.flow-into has no support in any of them), so every browser parses these values and none acts on them. BCD has no entry of their own, so css-compat.json gave them the support of the property."
+      }
+    },
+    {
+      "property": "break-after",
+      "keyword": "region",
+      "evidence": {
+        "kind": "spec",
+        "source": "https://drafts.csswg.org/css-break-3/#break-between and https://drafts.csswg.org/css-regions-1/",
+        "note": "The Fragmentation 3 values region and avoid-region force or avoid a break between CSS Regions. CSS Regions has no implementation in the current Chrome, Firefox or Safari (Blink removed it in 2014; BCD css.properties.flow-into has no support in any of them), so every browser parses these values and none acts on them. BCD has no entry of their own, so css-compat.json gave them the support of the property."
+      }
+    },
+    {
+      "property": "break-after",
+      "keyword": "avoid-region",
+      "evidence": {
+        "kind": "spec",
+        "source": "https://drafts.csswg.org/css-break-3/#break-between and https://drafts.csswg.org/css-regions-1/",
+        "note": "The Fragmentation 3 values region and avoid-region force or avoid a break between CSS Regions. CSS Regions has no implementation in the current Chrome, Firefox or Safari (Blink removed it in 2014; BCD css.properties.flow-into has no support in any of them), so every browser parses these values and none acts on them. BCD has no entry of their own, so css-compat.json gave them the support of the property."
+      }
+    },
+    {
+      "property": "break-inside",
+      "keyword": "avoid-region",
+      "evidence": {
+        "kind": "spec",
+        "source": "https://drafts.csswg.org/css-break-3/#break-between and https://drafts.csswg.org/css-regions-1/",
+        "note": "The Fragmentation 3 values region and avoid-region force or avoid a break between CSS Regions. CSS Regions has no implementation in the current Chrome, Firefox or Safari (Blink removed it in 2014; BCD css.properties.flow-into has no support in any of them), so every browser parses these values and none acts on them. BCD has no entry of their own, so css-compat.json gave them the support of the property."
+      }
+    },
+    {
+      "property": "text-decoration",
+      "keyword": "blink",
+      "evidence": {
+        "kind": "spec",
+        "source": "https://drafts.csswg.org/css-text-decor-3/#valdef-text-decoration-line-blink",
+        "note": "The Text Decoration 3 value blink lets conforming user agents not blink the text, and the current Chrome, Firefox and Safari parse it and never blink: the declaration changes nothing on the page."
+      }
+    },
+    {
+      "property": "text-decoration-line",
+      "keyword": "blink",
+      "evidence": {
+        "kind": "spec",
+        "source": "https://drafts.csswg.org/css-text-decor-3/#valdef-text-decoration-line-blink",
+        "note": "The Text Decoration 3 value blink lets conforming user agents not blink the text, and the current Chrome, Firefox and Safari parse it and never blink: the declaration changes nothing on the page."
+      }
+    }
+  ]
+}

@@ -931,6 +931,27 @@ export const generatedHtmlSchema = z.strictObject({
 });
 
 // The icons of the editor's one icon library (Lucide), by name.
+// ---------------------------------------------------------------- css-exclusions (generator input)
+// Keywords every browser parses but none implements, which BCD cannot tell apart because it has no entry of their own
+// (css-compat.json then gives each the support of its property). npm run gen marks each one unsupported in every
+// browser, so it leaves every generated list; manifest:check rule exclusion requires the evidence and refuses an
+// excluded value in any declared list. Never a menu subset: the exclusion is data about the browsers.
+export const exclusionsFileSchema = z.strictObject({
+  exclusions: z.array(
+    z.strictObject({
+      property: cssName,
+      keyword: z.string().min(1),
+      evidence: z.strictObject({
+        // what shows the keyword does nothing: the specification's status, BCD, or the observed behaviour in Chrome
+        kind: z.enum(['spec', 'bcd', 'chrome']),
+        // where to read it (a specification section, a BCD path, the steps of the observation)
+        source: z.string(),
+        note: z.string(),
+      }),
+    }),
+  ),
+});
+
 export const generatedIconsSchema = z.strictObject({
   $generated: generatedHeader,
   icons: z.array(iconName),
@@ -952,6 +973,7 @@ export const FILE_SCHEMAS = {
   'generated/css-compat': generatedCompatSchema,
   'generated/html-elements': generatedHtmlSchema,
   'generated/icons': generatedIconsSchema,
+  'css-exclusions': exclusionsFileSchema,
 } as const;
 
 export type Environment = z.infer<typeof environmentSchema>;
@@ -985,4 +1007,5 @@ export type GeneratedCss = z.infer<typeof generatedCssSchema>;
 export type GeneratedCompat = z.infer<typeof generatedCompatSchema>;
 export type GeneratedHtml = z.infer<typeof generatedHtmlSchema>;
 export type GeneratedIcons = z.infer<typeof generatedIconsSchema>;
+export type ExclusionsFile = z.infer<typeof exclusionsFileSchema>;
 export type Locale = z.infer<typeof localeSchema>;

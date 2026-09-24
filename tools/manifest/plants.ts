@@ -891,6 +891,24 @@ PLANTS.push(
     },
   },
   {
+    id: 'exclusion-without-evidence',
+    rule: 'exclusion',
+    description: 'css-exclusions.json excludes text-decoration-line: blink without saying what shows it does nothing',
+    apply: (m) => {
+      const entry = list(obj(m.files['css-exclusions.json']).exclusions).find((x) => x.property === 'text-decoration-line');
+      obj(obj(entry).evidence).note = '';
+    },
+  },
+  {
+    id: 'excluded-value-offered',
+    rule: 'exclusion',
+    description: 'the break-before field offers region among its presets, which no browser implements',
+    apply: (m) => {
+      list(property(m, 'break-before').subsets).push({ id: 'planted-presets', values: ['region'], units: null, reason: 'planted' });
+      obj(obj(door(m, 'style.set', 'inspector-break-before').adapter).offers).presets = 'planted-presets';
+    },
+  },
+  {
     id: 'label-names-two-properties',
     rule: 'label-term',
     description: 'pt-BR labels gap "Preenchimento", the term of the SVG fill (the mockups used it for padding and fill)',

@@ -27,6 +27,8 @@ import {
   generatedCssSchema,
   generatedHtmlSchema,
   generatedIconsSchema,
+  exclusionsFileSchema,
+  type ExclusionsFile,
   glossarySchema,
   interactionsFileSchema,
   layoutFileSchema,
@@ -99,6 +101,7 @@ export const RULES = [
   'icon-name',
   'icon-required',
   'panel',
+  'exclusion',
   'fixture',
   'document-path',
   'step',
@@ -184,6 +187,8 @@ export interface ManifestSummary {
   keyContexts: number;
   scenarios: number;
   fixtures: number;
+  // property: keyword of every excluded keyword (css-exclusions.json)
+  exclusions: string[];
   i18nKeys: number;
 }
 
@@ -205,6 +210,7 @@ interface Parsed {
   compat: GeneratedCompat;
   html: GeneratedHtml;
   icons: GeneratedIcons;
+  exclusions: ExclusionsFile;
   commandFiles: { file: string; data: CommandsFile }[];
   featureFiles: { file: string; data: FeaturesFile }[];
   // fixture id → the project document of manifest/features/fixtures/<id>.json, validated by rule fixture
@@ -224,6 +230,7 @@ const SINGLE_FILES: Record<string, { key: keyof Parsed; schema: z.ZodType }> = {
   'generated/css-compat.json': { key: 'compat', schema: generatedCompatSchema },
   'generated/html-elements.json': { key: 'html', schema: generatedHtmlSchema },
   'generated/icons.json': { key: 'icons', schema: generatedIconsSchema },
+  'css-exclusions.json': { key: 'exclusions', schema: exclusionsFileSchema },
 };
 
 function issuePath(path: readonly PropertyKey[]): string {
@@ -589,6 +596,8 @@ export function checkManifest(input: ManifestInput): CheckResult {
 
   // Browser support (css-compat.json). Keyword keys are lower-case.
   const compat = p.compat.properties;
+  // the keywords css-exclusions.json excludes: rule exclusion, not browser-support, reports a list that offers one
+  const excludedKeyword = new Set(p.exclusions.exclusions.map((x) => `${x.property}:${x.keyword.toLowerCase()}`));
   type Support = { chrome: string | false; firefox: string | false; safari: string | false; why: Partial<Record<Browser, string>> };
   const lacking = (s: Support): Browser[] => BROWSERS.filter((b) => s[b] === false);
   const describeLack = (s: Support) => lacking(s).map((b) => `${b} (${s.why[b] ?? 'not supported'})`).join(', ');
@@ -1111,6 +1120,7 @@ export function checkManifest(input: ManifestInput): CheckResult {
     const lacks = (s: Support) => (browser === null ? lacking(s).length > 0 : s[browser] === false);
     const why = (s: Support) => (browser === null ? describeLack(s) : (s.why[browser] ?? 'not supported'));
     result.keywords.forEach((k, i) => {
+      if (excludedKeyword.has(`${property}:${k.toLowerCase()}`)) return;
       const listed = entry.keywords[k];
       // a keyword inside a function has that function's support for it (from in rgb(from …))
       const fn = result.keywordFunctions[i] ?? null;
@@ -1603,6 +1613,33 @@ export function checkManifest(input: ManifestInput): CheckResult {
     }
   }
 
+  // ---- exclusion: every excluded keyword names its evidence, is a keyword of its property, is marked unsupported
+  // by npm run gen, and no declared list (a subset: presets, Essentials only, a quick panel list) offers it
+  p.exclusions.exclusions.forEach((x, i) => {
+    const at = `exclusions[${i}]`;
+    if (x.evidence.source.trim() === '' || x.evidence.note.trim() === '') report('exclusion', 'css-exclusions.json', `${at}.evidence`, `${x.property}: ${x.keyword} is excluded without evidence: name its source and what it shows`);
+    const keyword = x.keyword.toLowerCase();
+    const entry = compat[x.property]?.keywords[keyword];
+    if (!(p.css.properties[x.property]?.keywords ?? []).some((k) => k.toLowerCase() === keyword)) {
+      report('exclusion', 'css-exclusions.json', `${at}.keyword`, `${x.keyword} is not a keyword of ${x.property} in css-properties.json`);
+    } else if (entry === undefined || BROWSERS.some((b) => entry[b] !== false)) {
+      report('exclusion', 'css-exclusions.json', at, `${x.property}: ${x.keyword} is excluded but css-compat.json still gives it support: run npm run gen`);
+    }
+  });
+  const declaredLists = [
+    ...p.properties.properties.map((prop, i) => ({ id: prop.id, subsets: prop.subsets, path: `properties[${i}]` })),
+    ...p.properties.composites.map((c, i) => ({ id: c.id, subsets: c.subsets, path: `composites[${i}]` })),
+  ];
+  for (const owner of declaredLists) {
+    owner.subsets.forEach((subset, si) => {
+      for (const value of subset.values ?? []) {
+        for (const word of value.toLowerCase().split(/\s+/)) {
+          if (excludedKeyword.has(`${owner.id}:${word}`)) report('exclusion', 'properties.json', `${owner.path}.subsets[${si}]`, `the list "${subset.id}" of ${owner.id} offers ${word}, which css-exclusions.json excludes: no browser implements it`);
+        }
+      }
+    });
+  }
+
   // ---- scenario-terminal: a scenario ends on the screen, in storage after a reload, or in the exported files
   for (const f of features) {
     for (const [si, s] of f.feature.scenarios.entries()) {
@@ -2081,6 +2118,7 @@ export function checkManifest(input: ManifestInput): CheckResult {
     keyContexts: p.interactions.keyContexts.length,
     scenarios: features.reduce((n, f) => n + f.feature.scenarios.length, 0),
     fixtures: p.fixtures.size,
+    exclusions: p.exclusions.exclusions.map((x) => `${x.property}: ${x.keyword}`),
     i18nKeys: keyUses.size,
   };
   return { problems, summary };

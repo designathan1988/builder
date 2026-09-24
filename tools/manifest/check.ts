@@ -35,6 +35,7 @@ function printSummary(s: ManifestSummary): void {
   for (const entry of s.storedWhole) console.log(`    - ${entry}`);
   console.log(`  icons        ${s.iconsNamed} icons named from ${s.iconLibrary}, the editor's one icon library; ${s.doorsWithIcon} doors show an icon, every toolbar door and icon button among them`);
   console.log(`  interactions ${s.keyContexts} key contexts, ${s.constants} constants, ${s.gestures} gestures`);
+  console.log(`  exclusions   ${s.exclusions.length} keywords every browser parses and none implements, out of every generated list (css-exclusions.json): ${s.exclusions.join('; ')}`);
   console.log(`  scenarios    ${s.scenarios}, from ${s.fixtures} fixture files and the empty project`);
   console.log(`  i18n         ${s.i18nKeys} referenced keys, each present in every locale; ${s.glossaryConcepts} glossary concepts, each the label of its property in every locale, and no label names two CSS properties`);
 }
