@@ -6,7 +6,8 @@
       "id": "palette-click-insert",
       "titleKey": "feature.paletteClickInsert",
       "commands": [
-        "element.insert"
+        "element.insert",
+        "workspace.setPanelOpen"
       ],
       "dependsOn": [
         "canvas-page-iframe"
@@ -65,7 +66,8 @@
       "titleKey": "feature.layersTree",
       "commands": [
         "selection.select",
-        "layers.setExpanded"
+        "layers.setExpanded",
+        "workspace.setPanelOpen"
       ],
       "dependsOn": [
         "select-click"

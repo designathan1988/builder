@@ -5,7 +5,9 @@
     {
       "id": "editor-shell",
       "titleKey": "feature.editorShell",
-      "commands": [],
+      "commands": [
+        "workspace.setPanelOpen"
+      ],
       "dependsOn": [],
       "spec": null,
       "intent": {

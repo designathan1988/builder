@@ -138,7 +138,8 @@
       "commands": [
         "interactions.add",
         "interactions.update",
-        "interactions.remove"
+        "interactions.remove",
+        "workspace.setActiveTab"
       ],
       "dependsOn": [],
       "spec": "spec/behavior/events-actions.md",

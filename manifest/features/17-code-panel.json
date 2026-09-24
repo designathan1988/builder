@@ -6,7 +6,8 @@
       "id": "code-panel-view",
       "titleKey": "feature.codePanelView",
       "commands": [
-        "workspace.setPanelOpen"
+        "workspace.setPanelOpen",
+        "view.setEditorView"
       ],
       "dependsOn": [],
       "spec": null,

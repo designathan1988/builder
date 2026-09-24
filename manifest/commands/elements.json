@@ -48,7 +48,10 @@
           "control": "field",
           "labelKey": "command.setTag",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 2
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -64,7 +67,10 @@
           "control": "tag",
           "labelKey": "quickPanel.tag",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "quick-panel",
+            "order": 1
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -121,7 +127,10 @@
           "control": "field",
           "labelKey": "command.setAttribute",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 5
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -141,7 +150,10 @@
           "control": "field",
           "labelKey": "command.setAttribute",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 8
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -161,7 +173,10 @@
           "control": "field",
           "labelKey": "command.setAttribute",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 9
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -181,7 +196,10 @@
           "control": "field",
           "labelKey": "command.setAttribute",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 10
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -201,7 +219,10 @@
           "control": "field",
           "labelKey": "command.setAttribute",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 11
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -221,7 +242,10 @@
           "control": "field",
           "labelKey": "command.setAttribute",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 12
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -241,7 +265,10 @@
           "control": "field",
           "labelKey": "command.setAttribute",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 13
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -261,7 +288,10 @@
           "control": "field",
           "labelKey": "command.setAttribute",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 14
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -281,7 +311,10 @@
           "control": "field",
           "labelKey": "command.setAttribute",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 15
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -301,7 +334,10 @@
           "control": "field",
           "labelKey": "command.setAttribute",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 16
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -321,7 +357,10 @@
           "control": "field",
           "labelKey": "command.setAttribute",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 17
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -341,7 +380,10 @@
           "control": "field",
           "labelKey": "command.setAttribute",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 18
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -361,7 +403,10 @@
           "control": "field",
           "labelKey": "command.setAttribute",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 19
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -381,7 +426,10 @@
           "control": "field",
           "labelKey": "command.setAttribute",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 20
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -401,7 +449,10 @@
           "control": "field",
           "labelKey": "command.setAttribute",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 21
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -421,7 +472,10 @@
           "control": "field",
           "labelKey": "command.setAttribute",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 22
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -441,7 +495,10 @@
           "control": "field",
           "labelKey": "command.setAttribute",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 23
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -461,7 +518,10 @@
           "control": "field",
           "labelKey": "command.setAttribute",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 26
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -481,7 +541,10 @@
           "control": "field",
           "labelKey": "command.setAttribute",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 27
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -501,7 +564,10 @@
           "control": "field",
           "labelKey": "command.setAttribute",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 28
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -521,7 +587,10 @@
           "control": "field",
           "labelKey": "command.setAttribute",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 29
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -541,7 +610,10 @@
           "control": "field",
           "labelKey": "command.setAttribute",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 30
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -561,7 +633,10 @@
           "control": "field",
           "labelKey": "command.setAttribute",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 31
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -581,7 +656,10 @@
           "control": "field",
           "labelKey": "command.setAttribute",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 32
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -601,7 +679,10 @@
           "control": "field",
           "labelKey": "command.setAttribute",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 33
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -621,7 +702,10 @@
           "control": "field",
           "labelKey": "command.setAttribute",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 34
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -641,7 +725,10 @@
           "control": "field",
           "labelKey": "command.setAttribute",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 35
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -661,7 +748,10 @@
           "control": "field",
           "labelKey": "command.setAttribute",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 36
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -681,7 +771,10 @@
           "control": "field",
           "labelKey": "command.setAttribute",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 37
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -701,7 +794,10 @@
           "control": "field",
           "labelKey": "command.setAttribute",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 38
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -721,7 +817,10 @@
           "control": "field",
           "labelKey": "command.setAttribute",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 39
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -741,7 +840,10 @@
           "control": "field",
           "labelKey": "command.setAttribute",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 40
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -760,7 +862,10 @@
           "gesture": null,
           "labelKey": "assets.picker.choose",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "asset-picker",
+            "order": 1
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -814,7 +919,10 @@
           "control": "field",
           "labelKey": "command.setId",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 3
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -865,7 +973,10 @@
           "control": "field",
           "labelKey": "command.setClasses",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 4
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -931,7 +1042,10 @@
           "control": "field",
           "labelKey": "command.setLink",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 6
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -951,7 +1065,10 @@
           "control": "field",
           "labelKey": "inspector.link.openInNewTab",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 7
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -970,7 +1087,10 @@
           "gesture": null,
           "labelKey": "linkPicker.page",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "link-picker",
+            "order": 2
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -989,7 +1109,10 @@
           "gesture": null,
           "labelKey": "linkPicker.anchor",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "link-picker",
+            "order": 3
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -1008,7 +1131,10 @@
           "gesture": null,
           "labelKey": "linkPicker.url",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "link-picker",
+            "order": 1
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -1027,7 +1153,10 @@
           "gesture": null,
           "labelKey": "linkPicker.email",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "link-picker",
+            "order": 4
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -1046,7 +1175,10 @@
           "gesture": null,
           "labelKey": "linkPicker.phone",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "link-picker",
+            "order": 5
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -1111,7 +1243,10 @@
           "control": "field",
           "labelKey": "command.setInputType",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 24
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -1161,7 +1296,10 @@
           "control": "field",
           "labelKey": "command.setLabelTarget",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 25
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -1217,7 +1355,10 @@
           "gesture": null,
           "labelKey": "inspector.customAttribute.add",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 52
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -1236,7 +1377,10 @@
           "gesture": null,
           "labelKey": "inspector.customAttribute.value",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 53
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -1285,7 +1429,10 @@
           "gesture": null,
           "labelKey": "command.removeCustomAttribute",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 54
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -1336,7 +1483,10 @@
           "control": "field",
           "labelKey": "command.setSvgMarkup",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 41
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -1386,7 +1536,10 @@
           "control": "field",
           "labelKey": "command.setEmbedMarkup",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 42
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -1443,7 +1596,10 @@
           "gesture": null,
           "labelKey": "command.applyHtml",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "code-view",
+            "order": 4
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -1496,7 +1652,10 @@
           "gesture": null,
           "labelKey": "inspector.table.caption",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 63
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -1517,7 +1676,10 @@
           "gesture": null,
           "labelKey": "inspector.table.tableHead",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 64
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -1538,7 +1700,10 @@
           "gesture": null,
           "labelKey": "inspector.table.tableFoot",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 65
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -1604,7 +1769,10 @@
           "gesture": null,
           "labelKey": "inspector.parts.add.option",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 55
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -1625,7 +1793,10 @@
           "gesture": null,
           "labelKey": "inspector.parts.add.optionGroup",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 56
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -1646,7 +1817,10 @@
           "gesture": null,
           "labelKey": "inspector.parts.add.source",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 57
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -1667,7 +1841,10 @@
           "gesture": null,
           "labelKey": "inspector.parts.add.track",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 59
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -1688,7 +1865,10 @@
           "gesture": null,
           "labelKey": "inspector.parts.add.rectangle",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 60
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -1709,7 +1889,10 @@
           "gesture": null,
           "labelKey": "inspector.parts.add.ellipse",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 61
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -1730,7 +1913,10 @@
           "gesture": null,
           "labelKey": "inspector.parts.add.line",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 62
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -1751,7 +1937,10 @@
           "gesture": null,
           "labelKey": "inspector.parts.add.source",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 58
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -1807,7 +1996,10 @@
           "gesture": null,
           "labelKey": "inspector.parts.moveUp",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 66
+          },
           "adapter": {
             "selection": "target",
             "offers": null,
@@ -1828,7 +2020,10 @@
           "gesture": null,
           "labelKey": "inspector.parts.moveDown",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 67
+          },
           "adapter": {
             "selection": "target",
             "offers": null,
@@ -1879,7 +2074,10 @@
           "gesture": null,
           "labelKey": "command.parts.remove",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 68
+          },
           "adapter": {
             "selection": "target",
             "offers": null,
@@ -1937,7 +2135,10 @@
           "entry": "command",
           "labelKey": "command.table.addColumnAfter",
           "disabledReasonKey": "status.table.selectCell",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 8
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -1995,7 +2196,10 @@
           "entry": "command",
           "labelKey": "command.table.addColumnEnd",
           "disabledReasonKey": "status.table.selectPart",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 9
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -2054,7 +2258,10 @@
           "entry": "command",
           "labelKey": "command.table.removeColumn",
           "disabledReasonKey": "status.table.selectCell",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 10
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -2112,7 +2319,10 @@
           "entry": "command",
           "labelKey": "command.table.addRowAfter",
           "disabledReasonKey": "status.table.selectCell",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 11
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -2171,7 +2381,10 @@
           "entry": "command",
           "labelKey": "command.table.removeRow",
           "disabledReasonKey": "status.table.selectCell",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 12
+          },
           "adapter": {
             "selection": "single",
             "offers": null,

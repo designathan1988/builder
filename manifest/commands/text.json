@@ -65,7 +65,10 @@
           "entry": "command",
           "labelKey": "command.editText",
           "disabledReasonKey": "status.textEdit.notText",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 47
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -159,7 +162,10 @@
           "control": "field",
           "labelKey": "command.setText",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 1
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -275,6 +281,25 @@
             "fields": []
           },
           "args": {}
+        },
+        {
+          "id": "toolbar-text-toolbar-bold",
+          "kind": "toolbar",
+          "feature": "text-inline-formatting",
+          "toolbar": "text-toolbar",
+          "labelKey": "command.textEdit.bold",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "text-toolbar",
+            "order": 1
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
         }
       ]
     },
@@ -304,6 +329,25 @@
           "labelKey": "command.textEdit.italic",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "toolbar-text-toolbar-italic",
+          "kind": "toolbar",
+          "feature": "text-inline-formatting",
+          "toolbar": "text-toolbar",
+          "labelKey": "command.textEdit.italic",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "text-toolbar",
+            "order": 2
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -342,6 +386,25 @@
           "labelKey": "command.textEdit.link",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "toolbar-text-toolbar-link",
+          "kind": "toolbar",
+          "feature": "text-inline-formatting",
+          "toolbar": "text-toolbar",
+          "labelKey": "command.textEdit.link",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "text-toolbar",
+            "order": 3
+          },
           "adapter": {
             "selection": "none",
             "offers": null,

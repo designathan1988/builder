@@ -47,7 +47,10 @@
           "entry": "command",
           "labelKey": "command.newBlankPage",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 27
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -90,7 +93,10 @@
           "gesture": null,
           "labelKey": "command.restoreVersion",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "recovery-dialog",
+            "order": 1
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -127,7 +133,10 @@
           "gesture": null,
           "labelKey": "tabGuard.takeOver",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "tab-guard",
+            "order": 1
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -180,7 +189,10 @@
           "entry": "command",
           "labelKey": "command.saveProject",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 28
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -240,7 +252,10 @@
           "entry": "command",
           "labelKey": "command.openProject",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 29
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -299,7 +314,10 @@
           "entry": "command",
           "labelKey": "command.openFolder",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 30
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -362,7 +380,10 @@
           "entry": "command",
           "labelKey": "command.importHtml",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 31
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -415,7 +436,10 @@
           "toolbar": "top-bar",
           "labelKey": "command.exportPage",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "top-bar",
+            "order": 11
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -431,7 +455,10 @@
           "toolbar": "preview-bar",
           "labelKey": "command.exportPage",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "preview-bar",
+            "order": 6
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -447,7 +474,10 @@
           "entry": "command",
           "labelKey": "command.exportPage",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 32
+          },
           "adapter": {
             "selection": "none",
             "offers": null,

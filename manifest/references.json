@@ -332,6 +332,11 @@
     },
     {
       "kind": "handler",
+      "id": "files.closeTab",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
       "id": "files.upload",
       "status": "planned"
     },
@@ -843,6 +848,11 @@
     {
       "kind": "handler",
       "id": "view.setBreakpoint",
+      "status": "planned"
+    },
+    {
+      "kind": "handler",
+      "id": "view.setEditorView",
       "status": "planned"
     },
     {

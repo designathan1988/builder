@@ -193,22 +193,26 @@
     {
       "id": "desktop",
       "labelKey": "breakpoint.desktop",
-      "width": 1440
+      "width": 1440,
+      "base": true
     },
     {
       "id": "laptop",
       "labelKey": "breakpoint.laptop",
-      "width": 1180
+      "width": 1180,
+      "base": false
     },
     {
       "id": "tablet",
       "labelKey": "breakpoint.tablet",
-      "width": 834
+      "width": 834,
+      "base": false
     },
     {
       "id": "phone",
       "labelKey": "breakpoint.phone",
-      "width": 390
+      "width": 390,
+      "base": false
     }
   ],
   "states": [
@@ -1737,7 +1741,7 @@
       "essential": true,
       "doors": [
         "style.set#inspector-background-color",
-        "style.set#quick-panel-fill"
+        "style.set#quick-panel-background"
       ],
       "subsets": []
     },
@@ -2340,7 +2344,8 @@
       "appliesTo": "text",
       "essential": true,
       "doors": [
-        "style.set#inspector-font-family"
+        "style.set#inspector-font-family",
+        "style.set#quick-panel-font-family"
       ],
       "subsets": [
         {
@@ -2390,7 +2395,8 @@
       "appliesTo": "text",
       "essential": true,
       "doors": [
-        "style.set#inspector-font-weight"
+        "style.set#inspector-font-weight",
+        "style.set#quick-panel-font-weight"
       ],
       "subsets": [
         {
@@ -2452,7 +2458,8 @@
       "appliesTo": "text",
       "essential": true,
       "doors": [
-        "style.set#inspector-line-height"
+        "style.set#inspector-line-height",
+        "style.set#quick-panel-line-height"
       ],
       "subsets": []
     },
@@ -2467,7 +2474,8 @@
       "appliesTo": "text",
       "essential": false,
       "doors": [
-        "style.set#inspector-letter-spacing"
+        "style.set#inspector-letter-spacing",
+        "style.set#quick-panel-letter-spacing"
       ],
       "subsets": []
     },
@@ -2497,7 +2505,8 @@
       "appliesTo": "text",
       "essential": false,
       "doors": [
-        "style.set#inspector-text-align"
+        "style.set#inspector-text-align",
+        "style.set#quick-panel-text-align"
       ],
       "subsets": []
     },
@@ -3244,7 +3253,9 @@
       "essential": false,
       "doors": [
         "style.setTransform#inspector-transform-transform-skew-x",
-        "style.setTransform#inspector-transform-transform-skew-y"
+        "style.setTransform#inspector-transform-transform-skew-y",
+        "style.setTransform#quick-panel-skew-x",
+        "style.setTransform#quick-panel-skew-y"
       ],
       "subsets": []
     },

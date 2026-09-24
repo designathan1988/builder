@@ -21,7 +21,7 @@ interface Intent {
 }
 interface Amendment {
   feature: string;
-  field: 'steps' | 'expected';
+  field: 'title' | 'steps' | 'expected';
   op: 'append' | 'replace';
   from?: string;
   to: string;
@@ -199,6 +199,30 @@ export const AMENDMENTS: Amendment[] = [
     to: 'Anchoring the centre stores left and right 0 with auto side margins and a fit-content width (top, bottom, auto margins and a fit-content height for the vertical centre), so the element stays centred without translate, which belongs to Move X/Y.',
     why: 'property model: translate belongs to Move X/Y, so centring uses auto margins (measured centred in Chrome 153)',
   },
+  {
+    feature: 'ui-language',
+    field: 'title',
+    op: 'replace',
+    from: 'UI language: Brazilian Portuguese by default, English available',
+    to: 'UI language: English by default, Brazilian Portuguese available',
+    why: 'the design decision brief: everything on disk is in English and the UI language is switchable, so English is the source and default UI language and pt-BR is a translation',
+  },
+  {
+    feature: 'ui-language',
+    field: 'steps',
+    op: 'replace',
+    from: 'Switch the UI language to English from the app menu, then back to Português (Brasil).',
+    to: 'Switch the UI language to Português (Brasil) from the app menu, then back to English.',
+    why: 'the design decision brief: everything on disk is in English and the UI language is switchable, so English is the source and default UI language and pt-BR is a translation',
+  },
+  {
+    feature: 'ui-language',
+    field: 'expected',
+    op: 'replace',
+    from: 'A fresh profile shows every UI text in pt-BR: menus, panels, tooltips, status bar messages and accessible names.',
+    to: 'A fresh profile shows every UI text in English: menus, panels, tooltips, status bar messages and accessible names; after switching to Português (Brasil) every one of them is in pt-BR.',
+    why: 'the design decision brief: everything on disk is in English and the UI language is switchable, so English is the source and default UI language and pt-BR is a translation',
+  },
 ];
 
 function readOldFeatures(): { source: string; features: OldFeature[] } {
@@ -236,7 +260,13 @@ const used = new Set<Amendment>();
 for (const f of old) {
   const target = manifest.find((m) => m.id === f.id);
   if (!target) continue;
-  if (target.intent.title === f.title) titles++;
+  let wantTitle = f.title;
+  for (const a of AMENDMENTS.filter((x) => x.feature === f.id && x.field === 'title')) {
+    if (a.from === f.title) wantTitle = a.to;
+    else failures.push(`${f.id}.title: the amendment "${a.why}" did not find its title`);
+    used.add(a);
+  }
+  if (target.intent.title === wantTitle) titles++;
   else failures.push(`${f.id}: title changed`);
   for (const field of ['steps', 'expected'] as const) {
     const want = [...f[field]];
@@ -259,7 +289,7 @@ for (const a of AMENDMENTS) if (!used.has(a)) failures.push(`amendment for ${a.f
 
 console.log(`Mapping check: ${source} → manifest/features/ (${manifest.length} features)`);
 console.log(`  ids:      ${oldIds.length - failures.filter((x) => x.includes('expected exactly 1')).length} of ${oldIds.length} features.json ids map to exactly one manifest feature; same order: ${sameOrder ? 'yes' : 'NO'}`);
-console.log(`  titles:   ${titles} of ${old.length} verbatim in intent.title`);
+console.log(`  titles:   ${titles} of ${old.length} in intent.title, verbatim or as a declared amendment`);
 console.log(`  lines:    ${verbatim} of ${lines} steps and expected lines verbatim in intent; the others are the declared amendments:`);
 for (const a of AMENDMENTS) {
   console.log(`    - ${a.feature}.${a.field} ${a.op === 'append' ? 'gains one line' : 'replaces one line'}: ${a.why}`);

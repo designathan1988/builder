@@ -1,0 +1,94 @@
+{
+  "concepts": [
+    {
+      "id": "margin",
+      "property": "margin",
+      "terms": {
+        "en": "Margin",
+        "pt-BR": "Margem"
+      },
+      "note": "The space outside the border. Never \"Espaço\", which names the Space section (margin and padding together)."
+    },
+    {
+      "id": "padding",
+      "property": "padding",
+      "terms": {
+        "en": "Padding",
+        "pt-BR": "Padding"
+      },
+      "note": "The space inside the border. pt-BR keeps the CSS word: \"Preenchimento\" is the SVG fill."
+    },
+    {
+      "id": "gap",
+      "property": "gap",
+      "terms": {
+        "en": "Gap",
+        "pt-BR": "Gap"
+      },
+      "note": "The space between the children of a flex or grid container. Never \"Espaçamento\", which reads as margin or padding."
+    },
+    {
+      "id": "background",
+      "property": "background-color",
+      "terms": {
+        "en": "Background",
+        "pt-BR": "Fundo"
+      },
+      "note": "The background colour of a box. Its gradient and image layers are \"Background layers\" / \"Camadas de fundo\"."
+    },
+    {
+      "id": "fill",
+      "property": "fill",
+      "terms": {
+        "en": "Fill",
+        "pt-BR": "Preenchimento"
+      },
+      "note": "The SVG fill only; a box has a Background, never a Fill."
+    },
+    {
+      "id": "stroke",
+      "property": "stroke",
+      "terms": {
+        "en": "Stroke",
+        "pt-BR": "Traço"
+      },
+      "note": "The SVG stroke only; a box has a Border."
+    },
+    {
+      "id": "border",
+      "property": "border",
+      "terms": {
+        "en": "Border",
+        "pt-BR": "Borda"
+      },
+      "note": "The border of a box: width, style and colour of each side."
+    },
+    {
+      "id": "radius",
+      "property": "border-radius",
+      "terms": {
+        "en": "Radius",
+        "pt-BR": "Raio"
+      },
+      "note": "The rounding of the corners of a box."
+    },
+    {
+      "id": "outline",
+      "property": "outline",
+      "terms": {
+        "en": "Outline",
+        "pt-BR": "Contorno"
+      },
+      "note": "The line drawn outside the border that takes no space."
+    },
+    {
+      "id": "opacity",
+      "property": "opacity",
+      "terms": {
+        "en": "Opacity",
+        "pt-BR": "Opacidade"
+      },
+      "note": "The transparency of the whole element."
+    }
+  ]
+}

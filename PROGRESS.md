@@ -2,6 +2,75 @@
 
 Handoff notes between sessions. Newest entry first.
 
+## 2026-09-24 — Final interface: DESIGN.md, the combined mockup, every door placed
+
+Why: the user chose direction A "classic refined" combined with direction C "studio" (only B's canvas behaviour kept) and corrected the UI language rule: everything on disk is English and the UI language is switchable, so English is the source and default UI language. This session turned the choice into the interface contract and placed every door of the manifest, so the builder never invents where a control lives. No app code.
+
+Done:
+- UI language: English is the default everywhere it is declared: `CLAUDE.md`, `manifest/environment.json` (`default: en`, available `en`, `pt-BR`), the `ui-language` intent (title, one step and one expected line, declared amendments in `tools/manifest/map-features.ts`, which now accepts title amendments; `npm run manifest:map` passes), and `spec/behavior/shortcuts-panel.md`.
+- `DESIGN.md`: the regions and what each holds in order, the placement rule of every door kind, menu anchors, the canvas (breakpoints belong to the page, states to the element, views, overlays, the label rule, the quick panel, the refined requirement 7), the inspector (tabs, selector bar, legend, Essentials / All, search, sections, the Element export rule), generated versus user files, file tabs and code, the dock, the keyboard model, the glossary in both languages, the UI language rule, density and tokens.
+- `manifest/layout.json` (schema `layoutFileSchema`): 51 regions (fixed, overlays, menus, and component regions for the parts of repeated controls) and the button of each of the 12 menus, with its label key and anchors. Every door now has a placement: 630 placed in regions, 228 keys and pointer gestures with `none`. `manifest:check` prints the count per region.
+- `manifest/checks.json` (new): the categories of the Checks tab (accessibility, links, SEO, export), each with its label and the feature that brings it. `properties.json` breakpoints gained `base` (the first, and only it; the list is the cascade order).
+- New `manifest:check` rules, each with a planted fixture that fails on that rule alone (`tools/manifest/plants.ts`, locked by `tools/manifest/check.test.ts`):
+  - `placement`: a door still unplaced, a key or gesture given a place, an unknown region, a menu item outside its menu, a menu without an anchor, two controls in one position of a region (plant `door-unplaced`);
+  - `state-placement`: a control that chooses a style state on the canvas frame or the canvas toolbar, or its menu opening from there (plant `state-door-on-canvas-toolbar`);
+  - `label-term`: one label, in either language, naming two CSS properties, or a glossary concept whose property is labelled other than its term (plant `label-names-two-properties`, pt-BR "Preenchimento" for gap).
+  Three older plants that reused another property's label now plant a label of their own, so each still fails on its own rule only.
+- `src/i18n/glossary.json`: 10 concepts (margin, padding, gap, background, fill, stroke, border, radius, outline, opacity) with their term in both languages. Labels changed to one term per concept: pt-BR Padding (was Preenchimento), Gap (was Espaçamento), Fundo for background-color, Preenchimento for the SVG fill only, Tamanho base for flex-basis (Base was also bottom); English Background (was Background colour), Text direction, Text columns, Column balancing (column-fill), Gradient. The palette's export command reads "Export project (ZIP)" (key `command.exportPage` kept, because intents cite it).
+- Doors (resolved findings and the chosen interface):
+  - `commandBar.open`: Ctrl+Shift+K in the global and the text-editing contexts (text editing does not inherit global keys; there Ctrl+K stays the link), and the top bar search button.
+  - `view.setBreakpoint`: the four top-bar doors are now the breakpoint tabs on the frame (`toolbar-breakpoint-tabs-*`).
+  - `view.setEditorView` (new, introduced by `code-panel-view`): Canvas / Split / Code on the canvas toolbar; View > Code moved here (Split). `workspace.setPanelOpen` no longer has the panel `code`.
+  - File tabs: `pages.switch#file-tab`, `files.open#file-tab`, and `files.closeTab` (new, introduced by `explorer-file-system`). Top bar page switcher `pages.switch#toolbar-top-bar-page-switcher`.
+  - `interactions.update#inspector-interaction-scope`: whether an interaction applies to this element or to its class.
+  - The inspector's tabs Style, Settings, Interactions (`workspace.setActiveTab#inspector-tab-*`).
+  - The activity bar: Explorer, Insert, Styles (`workspace.setPanelOpen#toolbar-activity-bar-*`); the Layers toggle is the Layers section header; snap and the canvas-tools toggle moved to the canvas toolbar.
+  - The floating text toolbar: Bold, Italic, Link (`toolbar-text-toolbar-*`).
+  - The top bar has no page properties any more (`page.openProperties#toolbar-top-bar-page` removed; the inspector header and the palette open them), as the brief lists the top bar.
+  - Quick panel: Background (`background-color`) and Fill (SVG `fill` only) are two fields; font, weight, line height, letter spacing, text align, skew X and skew Y are new quick panel fields (`quick-panel` lists `style.setTransform`).
+  - No door placed a state control on the canvas frame or the canvas toolbar (they were all unplaced or in `menu:style-state`), so none was removed; `state-placement` now keeps it so.
+- Build order: `workspace.setPanelOpen` is introduced by `editor-shell` (the activity bar's Insert and Explorer arrive with `palette-click-insert` and `layers-tree`), `workspace.setActiveTab` by `inspector-panel` (the Settings tab holds the content and attribute fields).
+- `design/final/`:
+  - `index.html`: the combined interface in English, 12 states (default, hover, selection, drag, multi, breakpoint, state, text, interaction, palette, menu, context), the Split view, light and dark, English and pt-BR read from the real catalogues. Every control carries `data-door` or `data-menu` inside its `data-region`. `canvas.css`: the overlays.
+  - `tokens.json` (DTCG, light and dark). `npm run gen` builds `src/ui/tokens.css` from it with Style Dictionary 5.5.5 (`tools/gen/tokens.ts`); `gen:check` covers the file. The mockup reads that CSS, so editing the tokens changes the mockup.
+  - `shots/`: `1440-01-default.png` … `1440-12-context.png`, `1440-13-split.png`, `1440-01-default-pt-BR.png`, `1440-01-default-dark.png`, `1920-01-default.png`.
+  - `npm run design:shots` (`tools/design/shots.ts`) writes the shots and checks each one: clipped or overflowing text, targets under 24 px not spaced per WCAG 2.2 2.5.8 (a small target nested in another counts), console errors, canvas labels (and the handle's number field) over page content, every drawn door in the region the manifest places it in and in its order there, every drawn control a door, a menu button or a `data-local` control, and inline English equal to the en catalogue. 16 screenshots, 0 findings. The canvas area is 888 px wide at 1440 in the default view (direction A had 888) and 1368 px at 1920.
+- Tokens gained the type styles micro (10/14) and overline (11/16, letter spacing), so badges, ruler numbers and sidebar headers stay on the type scale; `tools/gen/tokens.ts` also writes letter spacing.
+- i18n: about 115 new keys in both catalogues (menus, regions, canvas labels, selector bar, legend, status messages, palette, checks categories, interactions).
+
+Decisions taken here (change them in DESIGN.md and the manifest if the user disagrees):
+- The default sidebar view is Explorer (Pages, Files, Layers); Insert shows the element grid in two columns at this width.
+- Theme and Language are submenus of View; Language also opens from the status bar; the Zoom menu opens from the canvas toolbar and the status bar.
+- The Tablet state selects the plans heading, not the lead paragraph: the sample page sets its paragraphs' margins to 0, so the lead has no free space for a label.
+- The state drawn is `.btn:hover` (3 elements) to show that only the elements with the class are drawn in the state.
+- The number field of a handle follows the label rule; the selection shot edits the bottom padding so the field sits below the card over no content, with its hint on the same line.
+
+Review: the evaluator's first answer was NEEDS_WORK with 19 findings (menus offering commands that cannot apply, two specs contradicting corrections 10 and 2, a menu button sharing a slot with a tab, the section order and missing sections, drawn controls without a door, three small nested targets and the check that let them through, the number field over content, literals outside the tokens, a hard-coded :hover in a message, the file tree, drawing order, check categories and the base breakpoint without manifest data, page properties in the top bar, tokens in Styles, "Preenchimento" outside SVG fill, four contradictions in DESIGN.md, the Insert counts, menu separators). Each was fixed in the manifest, DESIGN.md, the catalogues, the checks or the mockup, or is recorded below.
+
+Open findings (recorded, not acted on):
+1. Intent lines that still describe the old layout. They are guidance only, but the scenario session reads them; the user decides whether to amend them: `editor-shell` expected 1 and 4 (a left dock with the Elements panel above Layers; now the activity bar and Explorer); `breakpoints-switch` step 0 ("in the top bar"; now the frame tabs); `snap-toggle-settings` step 0 and expected 0 ("in the top bar"; now the canvas toolbar); `dock-toggles` step 2 and expected 2 (top bar toggles; now the activity bar and the Layers header); `state-styles` expected 0 ("a canvas badge reads 'Editing Hover'"; now only the selected element's label shows the state); `context-menu` expected 1 (disabled and "not available yet" items; now the context menu shows only what applies); `code-panel-view` expected 0 and 3 (a workbench tab that floats; now the Split and Code views); `explorer-pages` expected 0 (a tab next to Elements, Elements the default); `quick-panel` step 1 and expected 0–1 ("Fill" for the background; now Background, and Fill is the SVG fill); `events-actions` expected 2 ("stored per element"; now an interaction applies to the element or to its class); `app-menu` step 0 ("from the logo button"; now a menubar) and expected 1 (Theme and Language as menus; now View submenus); `status-bar` expected 0 (the status bar shows the state; the brief's status bar has no state); `page-properties` step 0 ("Click Page in the top bar"; page properties now open from the inspector header and the palette).
+5. Two specs contradict the contract and were not edited (their "Problems in Pager" corrections are requirements for the scenario session): `spec/behavior/context-menu.md` Problems 2 and 5 require disabled and "not available yet" items in the context menu (correction 10: the context menu shows only what applies); `spec/behavior/quick-panel.md` Problem 6 calls the box background "Fill" (correction 2: Fill is the SVG fill only).
+6. `manifest/checks.json` names the Links, SEO and Export categories and the features that bring them (`link-picker`, `page-seo-meta`, `export-file-tree`), but no intent or spec says which checks those categories run; the scenario sessions of those features must define them.
+7. `design:shots` checks the order of the drawn doors and the regions, not whether a menu's disabled items are the right ones (Move up and Make child of previous layer disabled for a first child): that stays with the scenarios of `app-menu` and `context-menu`.
+
+The evaluator's second (final) answer rechecked the 19 findings: 15 fixed or recorded, 4 still reported. Per the brief they are recorded here:
+8. (finding 5) DESIGN.md still named the palette scopes "Elements @" and "Pages and files /", which no command-bar door backs. Corrected after the review, not re-reviewed: DESIGN.md now names the scopes of the mockup and the catalogues (All, Commands >, Insert +, Panels /, Properties #).
+9. (finding 6) On the Hero and Planos Layers rows the caret and the colour dot hit areas overlap by 2 px (negative margins against the row gap in `design/final/index.html`), leaving the caret 22 × 24 usable; `tools/design/shots.ts` tests spacing only for targets under 23.5 px, so an overlapped 24 px target passes. Not fixed (mockup only); the real Layers row must give each part its own 24 px.
+10. (finding 8) A few literals remain in the mockup: radii 1px (handles), 22px and 24px (drop and pick outlines), and line heights 21px, 22px and 16px (number input, box core, badge). Not fixed (mockup only); the build uses only token values.
+11. (finding 16) The pt-BR `feature.timelineAnimationSettings` read "… estado fora da animação da animação" after the replacement. Corrected after the review, not re-reviewed.
+2. Class-scoped interactions need a data decision in the `events-actions` spec: where an interaction whose scope is the class is stored and how the export writes it. The door carries the scope inside `changes`.
+3. `ARCHITECTURE.md` does not exist yet; it must confirm the owners of the new concepts: the editor view (`src/editor/view/editor-view.ts`), open file tabs (`src/editor/explorer/file-tabs.ts`), the interaction scope (`src/core/events/interactions.ts`), placement and menu anchors (`src/editor/doors/placement.ts`).
+4. The inspector's Settings tab is described in DESIGN.md but drawn in none of the 12 states.
+
+Fragile / worth knowing:
+- `gen:check` compares against the git index: `src/ui/tokens.css` and every regenerated file must be staged before `verify:fast` passes.
+- `npm run design:shots` serves the repository over a local HTTP server (the page fetches the catalogues) and needs the installed Chrome. Opened from disk, the page stays in English.
+- The layout of the mockup's inspector is illustrative: the sample page's CSS (`.site p { margin: 0 }`) ignores some values the inspector shows.
+
+Next:
+1. The user reviews DESIGN.md, `design/final/` and the open findings (intent amendments first).
+2. `ARCHITECTURE.md`, then the scenario runner and the scenario session for `01-foundation`.
+
 ## 2026-09-24 — Interface mockups: three directions to choose from
 
 Why: every earlier attempt left the interface for last and ended generic and cluttered. The user picks a direction before anything is built. This session wrote static HTML and CSS only: no app code, no manifest change.

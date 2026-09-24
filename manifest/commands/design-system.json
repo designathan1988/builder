@@ -37,7 +37,10 @@
           "gesture": null,
           "labelKey": "colorPicker.saveCurrent",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "color-picker",
+            "order": 1
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -84,7 +87,10 @@
           "gesture": null,
           "labelKey": "colorPicker.removeSwatch",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "color-picker",
+            "order": 2
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -147,7 +153,10 @@
           "gesture": null,
           "labelKey": "command.tokens.create",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "styles",
+            "order": 1
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -201,7 +210,10 @@
           "gesture": null,
           "labelKey": "command.tokens.update",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "styles",
+            "order": 3
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -255,7 +267,10 @@
           "gesture": null,
           "labelKey": "command.tokens.rename",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "styles",
+            "order": 2
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -304,7 +319,10 @@
           "gesture": null,
           "labelKey": "command.tokens.delete",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "styles",
+            "order": 4
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -353,7 +371,10 @@
           "gesture": null,
           "labelKey": "command.classes.create",
           "disabledReasonKey": "status.needsSingleSelection",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-selector-bar",
+            "order": 4
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -402,7 +423,10 @@
           "gesture": null,
           "labelKey": "command.classes.apply",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-selector-bar",
+            "order": 3
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -451,7 +475,10 @@
           "gesture": null,
           "labelKey": "command.classes.detach",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-selector-bar",
+            "order": 2
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -502,7 +529,10 @@
           "gesture": null,
           "labelKey": "command.inspector.styleTarget",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-selector-bar",
+            "order": 1
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -560,7 +590,10 @@
           "entry": "command",
           "labelKey": "command.components.create",
           "disabledReasonKey": "status.needsSingleSelection",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 6
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -626,7 +659,10 @@
           "gesture": null,
           "labelKey": "command.components.insertInstance",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "insert",
+            "order": 7
+          },
           "adapter": {
             "selection": "primary",
             "offers": null,
@@ -700,7 +736,10 @@
           "entry": "command",
           "labelKey": "command.components.detach",
           "disabledReasonKey": "status.components.notInstance",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 7
+          },
           "adapter": {
             "selection": "single",
             "offers": null,

@@ -42,7 +42,8 @@
         "files.rename",
         "files.move",
         "files.delete",
-        "files.open"
+        "files.open",
+        "files.closeTab"
       ],
       "dependsOn": [
         "explorer-pages"

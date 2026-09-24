@@ -46,7 +46,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 5
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -71,7 +74,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 6
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -96,7 +102,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 7
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -121,7 +130,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 9
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -146,7 +158,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 11
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -171,7 +186,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 13
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -196,7 +214,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 16
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -222,7 +243,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 14
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -247,7 +271,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 15
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -272,7 +299,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 17
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -297,7 +327,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 19
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -322,7 +355,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 20
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -347,7 +383,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 21
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -372,7 +411,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 22
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -397,7 +439,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 23
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -419,7 +464,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 24
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -441,7 +489,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 25
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -466,7 +517,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 26
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -491,7 +545,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 27
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -516,7 +573,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 28
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -538,7 +598,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 29
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -561,7 +624,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 30
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -584,7 +650,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 39
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -610,7 +679,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 31
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -635,7 +707,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 32
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -660,7 +735,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 33
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -685,7 +763,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 34
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -710,7 +791,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 35
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -732,7 +816,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 36
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -757,7 +844,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 37
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -782,7 +872,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 38
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -807,7 +900,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 40
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -832,7 +928,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 41
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -857,7 +956,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 42
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -882,7 +984,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 43
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -907,7 +1012,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 44
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -932,7 +1040,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 45
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -957,7 +1068,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 46
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -982,7 +1096,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 47
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1007,7 +1124,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 48
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1032,7 +1152,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 49
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1057,7 +1180,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 50
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1082,7 +1208,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 51
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1107,7 +1236,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 63
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1132,7 +1264,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 64
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1157,7 +1292,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 65
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1182,7 +1320,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 66
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1207,7 +1348,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 67
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1232,7 +1376,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 68
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1257,7 +1404,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 69
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1282,7 +1432,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 70
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1307,7 +1460,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 74
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1333,7 +1489,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 71
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1358,7 +1517,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 72
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1383,7 +1545,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 73
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1408,7 +1573,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 75
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1433,7 +1601,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 76
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1458,7 +1629,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 78
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1483,7 +1657,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 79
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1508,7 +1685,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 80
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1533,7 +1713,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 81
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1558,7 +1741,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 82
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1583,7 +1769,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 83
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1608,7 +1797,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 84
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1633,7 +1825,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 86
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -1655,7 +1850,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 97
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1680,7 +1878,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 103
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1706,7 +1907,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 98
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1731,7 +1935,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 99
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1756,7 +1963,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 100
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1781,7 +1991,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 101
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1806,7 +2019,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 102
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1831,7 +2047,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 106
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1856,7 +2075,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 107
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1881,7 +2103,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 108
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1906,7 +2131,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 127
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1933,7 +2161,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 126
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -1958,7 +2189,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 128
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -1980,7 +2214,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 129
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2005,7 +2242,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 130
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2030,7 +2270,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 131
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2055,7 +2298,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 132
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2080,7 +2326,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 133
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2105,7 +2354,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 134
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2130,7 +2382,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 135
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2155,7 +2410,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 136
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2180,7 +2438,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 142
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2208,7 +2469,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 137
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2233,7 +2497,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 138
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2258,7 +2525,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 139
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2283,7 +2553,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 143
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2309,7 +2582,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 140
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2334,7 +2610,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 141
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2359,7 +2638,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 144
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2384,7 +2666,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 151
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2414,7 +2699,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 145
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2439,7 +2727,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 146
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2464,7 +2755,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 147
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2489,7 +2783,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 152
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -2515,7 +2812,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 148
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2540,7 +2840,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 149
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2565,7 +2868,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 150
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2590,7 +2896,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 153
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2615,7 +2924,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 154
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2640,7 +2952,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 155
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2665,7 +2980,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 156
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2690,7 +3008,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 157
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2715,7 +3036,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 158
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2740,7 +3064,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 159
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -2762,7 +3089,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 160
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2787,7 +3117,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 161
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2812,7 +3145,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 162
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2837,7 +3173,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 206
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2862,7 +3201,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 207
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2887,7 +3229,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 209
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2913,7 +3258,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 208
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2938,7 +3286,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 190
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2963,7 +3314,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 191
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -2988,7 +3342,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 192
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -3013,7 +3370,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 199
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -3038,7 +3398,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 200
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -3063,7 +3426,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 201
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -3088,7 +3454,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 202
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -3113,7 +3482,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 203
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -3138,7 +3510,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 204
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -3163,7 +3538,10 @@
           "control": "field",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 205
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -3192,7 +3570,10 @@
           "control": "stretch-button",
           "labelKey": "inspector.flex.stretch",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 12
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -3217,7 +3598,10 @@
           "control": "spread-button",
           "labelKey": "inspector.flex.spread",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 10
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -3242,7 +3626,10 @@
           "control": "add-track",
           "labelKey": "inspector.grid.addColumn",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 18
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -3263,7 +3650,10 @@
           "control": "width",
           "labelKey": "quickPanel.width",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "quick-panel",
+            "order": 4
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -3284,7 +3674,10 @@
           "control": "height",
           "labelKey": "quickPanel.height",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "quick-panel",
+            "order": 5
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -3299,18 +3692,41 @@
           "args": {}
         },
         {
+          "id": "quick-panel-background",
+          "kind": "quick-panel",
+          "feature": "quick-panel",
+          "control": "background",
+          "labelKey": "property.backgroundColor",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "quick-panel",
+            "order": 14
+          },
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": [
+              "background-color"
+            ],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
           "id": "quick-panel-fill",
           "kind": "quick-panel",
           "feature": "quick-panel",
           "control": "fill",
           "labelKey": "quickPanel.fill",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "quick-panel",
+            "order": 15
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
             "writes": [
-              "background-color",
               "fill"
             ],
             "fields": []
@@ -3324,7 +3740,10 @@
           "control": "text-colour",
           "labelKey": "quickPanel.textColour",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "quick-panel",
+            "order": 20
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -3342,7 +3761,10 @@
           "control": "font-size",
           "labelKey": "quickPanel.fontSize",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "quick-panel",
+            "order": 22
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -3357,13 +3779,136 @@
           "args": {}
         },
         {
+          "id": "quick-panel-font-family",
+          "kind": "quick-panel",
+          "feature": "quick-panel",
+          "control": "font-family",
+          "labelKey": "property.fontFamily",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "quick-panel",
+            "order": 21
+          },
+          "adapter": {
+            "selection": "all",
+            "offers": {
+              "property": "font-family",
+              "list": "stacks"
+            },
+            "writes": [
+              "font-family"
+            ],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "quick-panel-font-weight",
+          "kind": "quick-panel",
+          "feature": "quick-panel",
+          "control": "font-weight",
+          "labelKey": "property.fontWeight",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "quick-panel",
+            "order": 23
+          },
+          "adapter": {
+            "selection": "all",
+            "offers": {
+              "property": "font-weight",
+              "list": "menu"
+            },
+            "writes": [
+              "font-weight"
+            ],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "quick-panel-line-height",
+          "kind": "quick-panel",
+          "feature": "quick-panel",
+          "control": "line-height",
+          "labelKey": "property.lineHeight",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "quick-panel",
+            "order": 24
+          },
+          "adapter": {
+            "selection": "all",
+            "offers": {
+              "property": "line-height",
+              "list": "generated"
+            },
+            "writes": [
+              "line-height"
+            ],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "quick-panel-letter-spacing",
+          "kind": "quick-panel",
+          "feature": "quick-panel",
+          "control": "letter-spacing",
+          "labelKey": "property.letterSpacing",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "quick-panel",
+            "order": 25
+          },
+          "adapter": {
+            "selection": "all",
+            "offers": {
+              "property": "letter-spacing",
+              "list": "generated"
+            },
+            "writes": [
+              "letter-spacing"
+            ],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "quick-panel-text-align",
+          "kind": "quick-panel",
+          "feature": "quick-panel",
+          "control": "text-align",
+          "labelKey": "property.textAlign",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "quick-panel",
+            "order": 26
+          },
+          "adapter": {
+            "selection": "all",
+            "offers": {
+              "property": "text-align",
+              "list": "generated"
+            },
+            "writes": [
+              "text-align"
+            ],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
           "id": "quick-panel-opacity",
           "kind": "quick-panel",
           "feature": "quick-panel",
           "control": "opacity",
           "labelKey": "quickPanel.opacity",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "quick-panel",
+            "order": 18
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -3381,7 +3926,10 @@
           "entry": "set-property",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 57
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -3459,7 +4007,10 @@
           "control": "translate-x",
           "labelKey": "inspector.transform.moveX",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 193
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -3484,7 +4035,10 @@
           "control": "translate-y",
           "labelKey": "inspector.transform.moveY",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 194
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -3509,7 +4063,10 @@
           "control": "rotate",
           "labelKey": "inspector.transform.rotate",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 195
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -3534,7 +4091,10 @@
           "control": "scale",
           "labelKey": "inspector.transform.scale",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 196
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -3555,7 +4115,10 @@
           "control": "translate-x",
           "labelKey": "inspector.transform.moveX",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "quick-panel",
+            "order": 27
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -3576,7 +4139,10 @@
           "control": "rotate",
           "labelKey": "inspector.transform.rotate",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "quick-panel",
+            "order": 28
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -3597,7 +4163,10 @@
           "control": "scale",
           "labelKey": "inspector.transform.scale",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "quick-panel",
+            "order": 29
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -3692,7 +4261,10 @@
           "control": "box-model",
           "labelKey": "command.setSpacing",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 62
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -3720,7 +4292,10 @@
           "control": "box-model",
           "labelKey": "command.setSpacing",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 53
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -3745,7 +4320,10 @@
           "control": "box-model",
           "labelKey": "command.setSpacing",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 54
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -3770,7 +4348,10 @@
           "control": "box-model",
           "labelKey": "command.setSpacing",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 55
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -3795,7 +4376,10 @@
           "control": "box-model",
           "labelKey": "command.setSpacing",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 56
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -3820,7 +4404,10 @@
           "control": "box-model",
           "labelKey": "command.setSpacing",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 61
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -3848,7 +4435,10 @@
           "control": "box-model",
           "labelKey": "command.setSpacing",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 57
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -3873,7 +4463,10 @@
           "control": "box-model",
           "labelKey": "command.setSpacing",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 58
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -3898,7 +4491,10 @@
           "control": "box-model",
           "labelKey": "command.setSpacing",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 59
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -3923,7 +4519,10 @@
           "control": "box-model",
           "labelKey": "command.setSpacing",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 60
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -3944,7 +4543,10 @@
           "entry": "set-property",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 58
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -4142,7 +4744,10 @@
           "gesture": null,
           "labelKey": "inspector.spacing.linkAll",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 52
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -4214,7 +4819,10 @@
           "control": "border-editor",
           "labelKey": "command.setBorder",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 113
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -4250,7 +4858,10 @@
           "control": "border-editor",
           "labelKey": "command.setBorder",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 114
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -4278,7 +4889,10 @@
           "control": "border-editor",
           "labelKey": "command.setBorder",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 115
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -4306,7 +4920,10 @@
           "control": "border-editor",
           "labelKey": "command.setBorder",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 116
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -4331,7 +4948,10 @@
           "control": "border-editor",
           "labelKey": "command.setBorder",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 117
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -4358,7 +4978,10 @@
           "control": "border-editor",
           "labelKey": "command.setBorder",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 109
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -4383,7 +5006,10 @@
           "control": "border-editor",
           "labelKey": "command.setBorder",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 118
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -4410,7 +5036,10 @@
           "control": "border-editor",
           "labelKey": "command.setBorder",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 110
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -4435,7 +5064,10 @@
           "control": "border-editor",
           "labelKey": "command.setBorder",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 119
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -4462,7 +5094,10 @@
           "control": "border-editor",
           "labelKey": "command.setBorder",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 111
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -4487,7 +5122,10 @@
           "control": "border-editor",
           "labelKey": "command.setBorder",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 120
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -4514,7 +5152,10 @@
           "control": "border-editor",
           "labelKey": "command.setBorder",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 112
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -4535,7 +5176,10 @@
           "control": "border",
           "labelKey": "quickPanel.border",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "quick-panel",
+            "order": 17
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -4567,7 +5211,10 @@
           "entry": "set-property",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 59
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -4705,7 +5352,10 @@
           "control": "radius-editor",
           "labelKey": "command.setRadius",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 125
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -4733,7 +5383,10 @@
           "control": "radius-editor",
           "labelKey": "command.setRadius",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 121
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -4758,7 +5411,10 @@
           "control": "radius-editor",
           "labelKey": "command.setRadius",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 122
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -4783,7 +5439,10 @@
           "control": "radius-editor",
           "labelKey": "command.setRadius",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 123
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -4808,7 +5467,10 @@
           "control": "radius-editor",
           "labelKey": "command.setRadius",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 124
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -4829,7 +5491,10 @@
           "entry": "set-property",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 60
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -4903,7 +5568,10 @@
           "control": "field",
           "labelKey": "command.setBackgroundImage",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 87
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -4928,7 +5596,10 @@
           "control": "gradient-add",
           "labelKey": "inspector.gradient.add",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 104
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -4960,7 +5631,10 @@
           "control": "gradient-type",
           "labelKey": "inspector.gradient.type",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 88
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -4985,7 +5659,10 @@
           "control": "gradient-bar",
           "labelKey": "inspector.gradient.addStopHere",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 89
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -5010,7 +5687,10 @@
           "control": "gradient-stop-colour",
           "labelKey": "inspector.gradient.stopColour",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 90
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -5035,7 +5715,10 @@
           "control": "gradient-stop-position",
           "labelKey": "inspector.gradient.stopPosition",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 91
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -5060,7 +5743,10 @@
           "control": "gradient-angle",
           "labelKey": "inspector.gradient.angle",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 92
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -5085,7 +5771,10 @@
           "control": "gradient-reverse",
           "labelKey": "inspector.gradient.reverse",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 93
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -5110,7 +5799,10 @@
           "control": "gradient-distribute",
           "labelKey": "inspector.gradient.distribute",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 94
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -5135,7 +5827,10 @@
           "control": "gradient-add-stop",
           "labelKey": "inspector.gradient.addStop",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 95
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -5160,7 +5855,10 @@
           "control": "gradient-remove-stop",
           "labelKey": "inspector.gradient.removeStop",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 96
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -5185,7 +5883,10 @@
           "control": "gradient-reset",
           "labelKey": "inspector.gradient.remove",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 105
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -5305,7 +6006,10 @@
           "control": "fill-gradient",
           "labelKey": "quickPanel.fillGradient",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "quick-panel",
+            "order": 16
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -5323,7 +6027,10 @@
           "entry": "set-property",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 61
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -5382,7 +6089,10 @@
           "control": "shadow-add",
           "labelKey": "inspector.shadow.add",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 163
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -5406,7 +6116,10 @@
           "control": "shadow-x",
           "labelKey": "inspector.shadow.x",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 164
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -5432,7 +6145,10 @@
           "control": "shadow-y",
           "labelKey": "inspector.shadow.y",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 165
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -5458,7 +6174,10 @@
           "control": "shadow-blur",
           "labelKey": "inspector.shadow.blur",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 166
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -5484,7 +6203,10 @@
           "control": "shadow-spread",
           "labelKey": "inspector.shadow.spread",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 167
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -5510,7 +6232,10 @@
           "control": "shadow-inset",
           "labelKey": "inspector.shadow.inset",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 168
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -5536,7 +6261,10 @@
           "control": "shadow-colour",
           "labelKey": "inspector.shadow.colour",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 169
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -5562,7 +6290,10 @@
           "control": "shadow-visibility",
           "labelKey": "inspector.shadow.visibility",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 170
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -5588,7 +6319,10 @@
           "control": "shadow-remove",
           "labelKey": "inspector.shadow.remove",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 171
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -5612,7 +6346,10 @@
           "control": "shadow-reset",
           "labelKey": "inspector.shadow.reset",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 172
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -5636,7 +6373,10 @@
           "control": "shadow-add",
           "labelKey": "inspector.shadow.add",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 173
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -5660,7 +6400,10 @@
           "control": "shadow-x",
           "labelKey": "inspector.shadow.x",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 174
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -5686,7 +6429,10 @@
           "control": "shadow-y",
           "labelKey": "inspector.shadow.y",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 175
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -5712,7 +6458,10 @@
           "control": "shadow-blur",
           "labelKey": "inspector.shadow.blur",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 176
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -5738,7 +6487,10 @@
           "control": "shadow-colour",
           "labelKey": "inspector.shadow.colour",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 177
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -5764,7 +6516,10 @@
           "control": "shadow-visibility",
           "labelKey": "inspector.shadow.visibility",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 178
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -5790,7 +6545,10 @@
           "control": "shadow-remove",
           "labelKey": "inspector.shadow.remove",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 179
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -5814,7 +6572,10 @@
           "control": "shadow-reset",
           "labelKey": "inspector.shadow.reset",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 180
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -5976,7 +6737,10 @@
           "entry": "set-property",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 62
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -6072,7 +6836,10 @@
           "control": "filter-blur",
           "labelKey": "inspector.filters.blur",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 181
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -6097,7 +6864,10 @@
           "control": "filter-brightness",
           "labelKey": "inspector.filters.brightness",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 182
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -6122,7 +6892,10 @@
           "control": "filter-contrast",
           "labelKey": "inspector.filters.contrast",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 183
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -6147,7 +6920,10 @@
           "control": "filter-saturate",
           "labelKey": "inspector.filters.saturate",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 184
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -6172,7 +6948,10 @@
           "control": "filter-hue-rotate",
           "labelKey": "inspector.filters.hueRotate",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 185
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -6197,7 +6976,10 @@
           "control": "filter-grayscale",
           "labelKey": "inspector.filters.grayscale",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 186
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -6222,7 +7004,10 @@
           "control": "filter-invert",
           "labelKey": "inspector.filters.invert",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 187
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -6247,7 +7032,10 @@
           "control": "filter-sepia",
           "labelKey": "inspector.filters.sepia",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 188
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -6272,7 +7060,10 @@
           "control": "filter-remove",
           "labelKey": "inspector.filters.remove",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 189
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -6293,7 +7084,10 @@
           "control": "effects",
           "labelKey": "quickPanel.effects",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "quick-panel",
+            "order": 19
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -6311,7 +7105,10 @@
           "entry": "set-property",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 63
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -6362,7 +7159,34 @@
           "control": "transform-skew-x",
           "labelKey": "inspector.transform.skewX",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 197
+          },
+          "adapter": {
+            "selection": "all",
+            "offers": {
+              "property": "transform",
+              "list": "generated"
+            },
+            "writes": [
+              "transform"
+            ],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "quick-panel-skew-x",
+          "kind": "quick-panel",
+          "feature": "quick-panel",
+          "control": "skew-x",
+          "labelKey": "inspector.transform.skewX",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "quick-panel",
+            "order": 30
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -6387,7 +7211,34 @@
           "control": "transform-skew-y",
           "labelKey": "inspector.transform.skewY",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 198
+          },
+          "adapter": {
+            "selection": "all",
+            "offers": {
+              "property": "transform",
+              "list": "generated"
+            },
+            "writes": [
+              "transform"
+            ],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "quick-panel-skew-y",
+          "kind": "quick-panel",
+          "feature": "quick-panel",
+          "control": "skew-y",
+          "labelKey": "inspector.transform.skewY",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "quick-panel",
+            "order": 31
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -6408,7 +7259,10 @@
           "entry": "set-property",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 64
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -6470,7 +7324,10 @@
           "gesture": null,
           "labelKey": "command.setAlignment",
           "disabledReasonKey": "status.layout.notFlex",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 8
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -6523,7 +7380,10 @@
           "gesture": null,
           "labelKey": "command.setCustomDeclarations",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 210
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -6573,7 +7433,10 @@
           "gesture": null,
           "labelKey": "command.applyCss",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "code-view",
+            "order": 5
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -6622,7 +7485,10 @@
           "gesture": null,
           "labelKey": "command.resetValue",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "field",
+            "order": 4
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -6681,7 +7547,10 @@
           "entry": "command",
           "labelKey": "command.resetAllValues",
           "disabledReasonKey": "refusal.nothingSelected",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 46
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -6823,7 +7692,10 @@
           "gesture": null,
           "labelKey": "field.stepUp",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "field",
+            "order": 2
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -6845,7 +7717,10 @@
           "gesture": null,
           "labelKey": "field.stepDown",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "field",
+            "order": 3
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -6937,7 +7812,10 @@
           "gesture": null,
           "labelKey": "command.fieldSetUnit",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "field",
+            "order": 1
+          },
           "adapter": {
             "selection": "none",
             "offers": null,

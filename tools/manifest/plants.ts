@@ -7,6 +7,7 @@ type Json = Record<string, unknown>;
 interface MutableInput {
   files: Record<string, unknown>;
   catalogues: Record<string, unknown>;
+  glossary: unknown;
   fileExists: ManifestInput['fileExists'];
   registered: ManifestInput['registered'];
 }
@@ -68,9 +69,16 @@ function recipe(input: MutableInput, id: string): Json {
   return found;
 }
 
+// a label of its own, in every catalogue, for a planted property or door, so that it names no other property
+function plantedLabel(m: MutableInput, key: string, text: string): string {
+  for (const catalogue of Object.values(m.catalogues)) obj(catalogue)[key] = text;
+  return key;
+}
+
 // an edited property with no door, for plants that only need the property itself
-function editedProperty(id: string, fields: Json): Json {
-  return { id, labelKey: 'property.width', section: 'size', group: 'size', control: 'length-field', valueType: 'length', codec: 'length', appliesTo: 'hasBox', essential: false, doors: [], subsets: [], ...fields };
+function editedProperty(m: MutableInput, id: string, fields: Json): Json {
+  const labelKey = plantedLabel(m, `plant.${id.replace(/^-/, '').replace(/-([a-z])/g, (_x, c: string) => c.toUpperCase())}`, `Planted ${id}`);
+  return { id, labelKey, section: 'size', group: 'size', control: 'length-field', valueType: 'length', codec: 'length', appliesTo: 'hasBox', essential: false, doors: [], subsets: [], ...fields };
 }
 
 function element(input: MutableInput, id: string): Json {
@@ -201,9 +209,9 @@ export const PLANTS: Plant[] = [
         kind: 'quick-panel',
         feature: 'quick-panel',
         control: 'gap',
-        labelKey: 'quickPanel.width',
+        labelKey: 'property.gap',
         disabledReasonKey: 'common.notAvailableYet',
-        placement: 'unplaced',
+        placement: { region: 'quick-panel', order: 99 },
         adapter: { selection: 'all', offers: null, writes: ['gap'], fields: [] },
         args: {},
       });
@@ -214,7 +222,7 @@ export const PLANTS: Plant[] = [
     rule: 'browser-support',
     description: 'column-height is edited as a property; only Chrome implements it (Firefox and Safari lack it in css-compat.json)',
     apply: (m) => {
-      list(properties(m).properties).push(editedProperty('column-height', { section: 'layout', group: 'columns', appliesTo: 'container', labelKey: 'property.columns' }));
+      list(properties(m).properties).push(editedProperty(m, 'column-height', { section: 'layout', group: 'columns', appliesTo: 'container' }));
     },
   },
   {
@@ -231,7 +239,7 @@ export const PLANTS: Plant[] = [
     rule: 'vendor-prefix',
     description: '-webkit-text-stroke-width, which all three browsers support, is edited as a plain property instead of inside a recipe',
     apply: (m) => {
-      list(properties(m).properties).push(editedProperty('-webkit-text-stroke-width', { section: 'text', group: 'typography', appliesTo: 'text' }));
+      list(properties(m).properties).push(editedProperty(m, '-webkit-text-stroke-width', { section: 'text', group: 'typography', appliesTo: 'text' }));
     },
   },
   {
@@ -365,7 +373,7 @@ export const PLANTS: Plant[] = [
     rule: 'shorthand-write',
     description: 'inset-block is edited whole although Chrome, Firefox and Safari implement both its longhands',
     apply: (m) => {
-      list(properties(m).properties).push(editedProperty('inset-block', { section: 'position', group: 'position', appliesTo: 'positioned' }));
+      list(properties(m).properties).push(editedProperty(m, 'inset-block', { section: 'position', group: 'position', appliesTo: 'positioned' }));
     },
   },
   {
@@ -373,7 +381,7 @@ export const PLANTS: Plant[] = [
     rule: 'shorthand-write',
     description: 'text-align is stored whole, and its longhand text-align-last is edited as well',
     apply: (m) => {
-      list(properties(m).properties).push(editedProperty('text-align-last', { section: 'text', group: 'typography', appliesTo: 'text', control: 'keyword-menu', valueType: 'keyword', codec: 'keyword' }));
+      list(properties(m).properties).push(editedProperty(m, 'text-align-last', { section: 'text', group: 'typography', appliesTo: 'text', control: 'keyword-menu', valueType: 'keyword', codec: 'keyword' }));
     },
   },
   {
@@ -526,10 +534,50 @@ export const PLANTS: Plant[] = [
   },
 ];
 
+// The placement rules of DESIGN.md: every door has a region, a state is never chosen on the canvas frame or
+// the canvas toolbar, and no label names two CSS properties.
+PLANTS.push(
+  {
+    id: 'door-unplaced',
+    rule: 'placement',
+    description: 'the top bar Undo button is still unplaced',
+    apply: (m) => {
+      door(m, 'history.undo', 'toolbar-top-bar').placement = 'unplaced';
+    },
+  },
+  {
+    id: 'state-door-on-canvas-toolbar',
+    rule: 'state-placement',
+    description: 'a Hover state button is drawn on the canvas toolbar (a state belongs to the class, not the page)',
+    apply: (m) => {
+      list(command(m, 'view.setStyleState').entryPoints).push({
+        id: 'toolbar-canvas-toolbar-state-hover',
+        kind: 'toolbar',
+        feature: 'state-styles',
+        toolbar: 'canvas-toolbar',
+        labelKey: 'styleState.hover',
+        disabledReasonKey: 'common.notAvailableYet',
+        placement: { region: 'canvas-toolbar', order: 13 },
+        adapter: { selection: 'none', offers: null, writes: [], fields: [] },
+        args: { state: 'hover' },
+      });
+    },
+  },
+  {
+    id: 'label-names-two-properties',
+    rule: 'label-term',
+    description: 'pt-BR labels gap "Preenchimento", the term of the SVG fill (the mockups used it for padding and fill)',
+    apply: (m) => {
+      obj(m.catalogues['pt-BR'])['property.gap'] = 'Preenchimento';
+    },
+  },
+);
+
 export function planted(input: ManifestInput, plant: Plant): ManifestInput {
   const copy: MutableInput = {
     files: structuredClone(input.files) as Record<string, unknown>,
     catalogues: structuredClone(input.catalogues) as Record<string, unknown>,
+    glossary: structuredClone(input.glossary),
     fileExists: input.fileExists,
     registered: input.registered,
   };

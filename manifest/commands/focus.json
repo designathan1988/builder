@@ -963,7 +963,10 @@
           "gesture": null,
           "labelKey": "command.dismiss",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "overlay",
+            "order": 1
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -1018,7 +1021,10 @@
           "gesture": null,
           "labelKey": "command.dismiss",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "dialog",
+            "order": 1
+          },
           "adapter": {
             "selection": "none",
             "offers": null,

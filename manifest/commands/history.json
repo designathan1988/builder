@@ -42,7 +42,10 @@
           "toolbar": "top-bar",
           "labelKey": "command.undo",
           "disabledReasonKey": "status.undo.nothing",
-          "placement": "unplaced",
+          "placement": {
+            "region": "top-bar",
+            "order": 8
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -61,7 +64,10 @@
           "gesture": null,
           "labelKey": "toast.undo",
           "disabledReasonKey": "status.undo.nothing",
-          "placement": "unplaced",
+          "placement": {
+            "region": "toast",
+            "order": 1
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -96,7 +102,10 @@
           "entry": "command",
           "labelKey": "command.undo",
           "disabledReasonKey": "status.undo.nothing",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 21
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -166,7 +175,10 @@
           "toolbar": "top-bar",
           "labelKey": "command.redo",
           "disabledReasonKey": "status.redo.nothing",
-          "placement": "unplaced",
+          "placement": {
+            "region": "top-bar",
+            "order": 9
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -201,7 +213,10 @@
           "entry": "command",
           "labelKey": "command.redo",
           "disabledReasonKey": "status.redo.nothing",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 22
+          },
           "adapter": {
             "selection": "none",
             "offers": null,

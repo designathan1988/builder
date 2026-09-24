@@ -102,6 +102,80 @@ describe('manifest:check', () => {
     declaration.value = value;
   };
 
+  it('has the planted fixtures of the placement rules of DESIGN.md, each on its own rule', () => {
+    const rules = new Map(PLANTS.map((p) => [p.id, p.rule]));
+    expect({
+      'door-unplaced': rules.get('door-unplaced'),
+      'state-door-on-canvas-toolbar': rules.get('state-door-on-canvas-toolbar'),
+      'label-names-two-properties': rules.get('label-names-two-properties'),
+    }).toEqual({
+      'door-unplaced': 'placement',
+      'state-door-on-canvas-toolbar': 'state-placement',
+      'label-names-two-properties': 'label-term',
+    });
+  });
+
+  it('places every door with a control, and only in a region DESIGN.md names', () => {
+    const summary = checkManifest(loaded.input).summary;
+    const placed = Object.values(summary?.doorsByRegion ?? {}).reduce((n, x) => n + x, 0);
+    expect(placed + (summary?.doorsByKind.shortcut ?? 0)).toBeLessThanOrEqual(summary?.doors ?? 0);
+    expect(placed).toBeGreaterThan(0);
+    const unknownRegion = mutated((m) => {
+      const commands = (m.files['commands/history.json'] as Json).commands as Json[];
+      const undo = ((commands.find((c) => c.id === 'history.undo') as Json).entryPoints as Json[]).find((d) => d.id === 'toolbar-top-bar') as Json;
+      undo.placement = { region: 'floating-toolbar', order: 1 };
+    });
+    expect([...unknownRegion]).toEqual(['placement']);
+    const keyWithPlace = mutated((m) => {
+      const commands = (m.files['commands/history.json'] as Json).commands as Json[];
+      const undo = ((commands.find((c) => c.id === 'history.undo') as Json).entryPoints as Json[]).find((d) => d.kind === 'shortcut') as Json;
+      undo.placement = { region: 'top-bar', order: 1 };
+    });
+    expect([...keyWithPlace]).toEqual(['placement']);
+  });
+
+  it('refuses two controls in one position of a region', () => {
+    const twoDoors = mutated((m) => {
+      const commands = (m.files['commands/history.json'] as Json).commands as Json[];
+      const redo = ((commands.find((c) => c.id === 'history.redo') as Json).entryPoints as Json[]).find((d) => d.id === 'toolbar-top-bar') as Json;
+      redo.placement = { region: 'top-bar', order: 8 };
+    });
+    expect([...twoDoors]).toEqual(['placement']);
+    const doorAndMenu = mutated((m) => {
+      const menus = (m.files['layout.json'] as Json).menus as Json[];
+      (menus.find((x) => x.id === 'element-actions') as Json).anchors = [{ region: 'inspector-header', order: 2 }];
+    });
+    expect([...doorAndMenu]).toEqual(['placement']);
+  });
+
+  it('refuses a cascade whose first breakpoint is not the only base', () => {
+    const rules = mutated((m) => {
+      const breakpoints = (m.files['properties.json'] as Json).breakpoints as Json[];
+      (breakpoints[0] as Json).base = false;
+      (breakpoints[3] as Json).base = true;
+    });
+    expect([...rules]).toEqual(['schema']);
+  });
+
+  it('refuses a state menu that opens from the canvas frame', () => {
+    const rules = mutated((m) => {
+      const menus = (m.files['layout.json'] as Json).menus as Json[];
+      (menus.find((x) => x.id === 'style-state') as Json).anchors = [{ region: 'canvas-frame', order: 5 }];
+    });
+    expect([...rules]).toEqual(['state-placement']);
+  });
+
+  it('refuses one English label for two CSS properties, and a label that is not its glossary term', () => {
+    const twoProperties = mutated((m) => {
+      ((m.catalogues as Json).en as Json)['property.direction'] = 'Direction';
+    });
+    expect([...twoProperties]).toEqual(['label-term']);
+    const notTheTerm = mutated((m) => {
+      ((m.catalogues as Json)['pt-BR'] as Json)['property.padding'] = 'Espaçamento interno';
+    });
+    expect([...notTheTerm]).toEqual(['label-term']);
+  });
+
   it('rejects a recipe value outside the allowlist, even when the property has no prefix', () => {
     expect(mutated((m) => setDeclaration(m, 'overflow-x', 'overlay')).has('syntax-fallback')).toBe(true);
   });

@@ -1,0 +1,338 @@
+{
+  "regions": [
+    {
+      "id": "top-bar",
+      "area": "top-bar"
+    },
+    {
+      "id": "preview-bar",
+      "area": "top-bar"
+    },
+    {
+      "id": "activity-bar",
+      "area": "left"
+    },
+    {
+      "id": "explorer-pages",
+      "area": "left"
+    },
+    {
+      "id": "explorer-files",
+      "area": "left"
+    },
+    {
+      "id": "explorer-layers",
+      "area": "left"
+    },
+    {
+      "id": "insert",
+      "area": "left"
+    },
+    {
+      "id": "styles",
+      "area": "left"
+    },
+    {
+      "id": "file-tabs",
+      "area": "centre"
+    },
+    {
+      "id": "canvas-toolbar",
+      "area": "centre"
+    },
+    {
+      "id": "canvas-frame",
+      "area": "centre"
+    },
+    {
+      "id": "quick-panel",
+      "area": "centre"
+    },
+    {
+      "id": "text-toolbar",
+      "area": "centre"
+    },
+    {
+      "id": "code-view",
+      "area": "centre"
+    },
+    {
+      "id": "inspector-header",
+      "area": "right"
+    },
+    {
+      "id": "inspector-selector-bar",
+      "area": "right"
+    },
+    {
+      "id": "inspector-style",
+      "area": "right"
+    },
+    {
+      "id": "inspector-settings",
+      "area": "right"
+    },
+    {
+      "id": "inspector-interactions",
+      "area": "right"
+    },
+    {
+      "id": "dock-strip",
+      "area": "dock"
+    },
+    {
+      "id": "dock-timeline",
+      "area": "dock"
+    },
+    {
+      "id": "dock-checks",
+      "area": "dock"
+    },
+    {
+      "id": "status-bar",
+      "area": "status-bar"
+    },
+    {
+      "id": "command-palette",
+      "area": "overlay"
+    },
+    {
+      "id": "context-menu",
+      "area": "overlay"
+    },
+    {
+      "id": "menu:file",
+      "area": "overlay"
+    },
+    {
+      "id": "menu:edit",
+      "area": "overlay"
+    },
+    {
+      "id": "menu:arrange",
+      "area": "overlay"
+    },
+    {
+      "id": "menu:view",
+      "area": "overlay"
+    },
+    {
+      "id": "menu:help",
+      "area": "overlay"
+    },
+    {
+      "id": "menu:theme",
+      "area": "overlay"
+    },
+    {
+      "id": "menu:language",
+      "area": "overlay"
+    },
+    {
+      "id": "menu:element-actions",
+      "area": "overlay"
+    },
+    {
+      "id": "menu:zoom",
+      "area": "overlay"
+    },
+    {
+      "id": "menu:snap",
+      "area": "overlay"
+    },
+    {
+      "id": "menu:style-state",
+      "area": "overlay"
+    },
+    {
+      "id": "menu:layers-row-details",
+      "area": "overlay"
+    },
+    {
+      "id": "color-picker",
+      "area": "overlay"
+    },
+    {
+      "id": "link-picker",
+      "area": "overlay"
+    },
+    {
+      "id": "asset-picker",
+      "area": "overlay"
+    },
+    {
+      "id": "guides-grids-dialog",
+      "area": "overlay"
+    },
+    {
+      "id": "snap-settings-dialog",
+      "area": "overlay"
+    },
+    {
+      "id": "recovery-dialog",
+      "area": "overlay"
+    },
+    {
+      "id": "tab-guard",
+      "area": "overlay"
+    },
+    {
+      "id": "toast",
+      "area": "overlay"
+    },
+    {
+      "id": "overlay",
+      "area": "overlay"
+    },
+    {
+      "id": "field",
+      "area": "component"
+    },
+    {
+      "id": "layers-row",
+      "area": "component"
+    },
+    {
+      "id": "tab-strip",
+      "area": "component"
+    },
+    {
+      "id": "panel-header",
+      "area": "component"
+    },
+    {
+      "id": "dialog",
+      "area": "component"
+    }
+  ],
+  "menus": [
+    {
+      "id": "file",
+      "labelKey": "menu.file",
+      "anchors": [
+        {
+          "region": "top-bar",
+          "order": 1
+        }
+      ]
+    },
+    {
+      "id": "edit",
+      "labelKey": "menu.edit",
+      "anchors": [
+        {
+          "region": "top-bar",
+          "order": 2
+        }
+      ]
+    },
+    {
+      "id": "arrange",
+      "labelKey": "menu.arrange",
+      "anchors": [
+        {
+          "region": "top-bar",
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": "view",
+      "labelKey": "menu.view",
+      "anchors": [
+        {
+          "region": "top-bar",
+          "order": 4
+        }
+      ]
+    },
+    {
+      "id": "help",
+      "labelKey": "menu.help",
+      "anchors": [
+        {
+          "region": "top-bar",
+          "order": 5
+        }
+      ]
+    },
+    {
+      "id": "theme",
+      "labelKey": "menu.theme",
+      "anchors": [
+        {
+          "region": "menu:view",
+          "order": 17
+        }
+      ]
+    },
+    {
+      "id": "language",
+      "labelKey": "menu.language",
+      "anchors": [
+        {
+          "region": "menu:view",
+          "order": 18
+        },
+        {
+          "region": "status-bar",
+          "order": 6
+        }
+      ]
+    },
+    {
+      "id": "element-actions",
+      "labelKey": "menu.elementActions",
+      "anchors": [
+        {
+          "region": "inspector-header",
+          "order": 5
+        }
+      ]
+    },
+    {
+      "id": "zoom",
+      "labelKey": "menu.zoom",
+      "anchors": [
+        {
+          "region": "canvas-toolbar",
+          "order": 12
+        },
+        {
+          "region": "status-bar",
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": "snap",
+      "labelKey": "menu.snap",
+      "anchors": [
+        {
+          "region": "canvas-toolbar",
+          "order": 11
+        }
+      ]
+    },
+    {
+      "id": "style-state",
+      "labelKey": "menu.styleState",
+      "anchors": [
+        {
+          "region": "inspector-selector-bar",
+          "order": 5
+        }
+      ]
+    },
+    {
+      "id": "layers-row-details",
+      "labelKey": "layers.rowDetails",
+      "anchors": [
+        {
+          "region": "explorer-layers",
+          "order": 4
+        }
+      ]
+    }
+  ]
+}

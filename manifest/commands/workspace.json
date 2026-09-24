@@ -5,7 +5,7 @@
       "id": "workspace.setPanelOpen",
       "labelKey": "command.togglePanel",
       "owner": "src/editor/workspace/panels.ts",
-      "introducedBy": "app-menu",
+      "introducedBy": "editor-shell",
       "args": {
         "panel": {
           "type": "enum",
@@ -14,7 +14,6 @@
             "layers",
             "inspector",
             "explorer",
-            "code",
             "timeline",
             "variables",
             "checks",
@@ -134,28 +133,6 @@
           }
         },
         {
-          "id": "menu-view-code",
-          "kind": "menu",
-          "feature": "code-panel-view",
-          "menu": "view",
-          "labelKey": "panel.code",
-          "disabledReasonKey": "common.notAvailableYet",
-          "placement": {
-            "region": "menu:view",
-            "order": 5
-          },
-          "adapter": {
-            "selection": "none",
-            "offers": null,
-            "writes": [],
-            "fields": []
-          },
-          "args": {
-            "panel": "code",
-            "open": "toggle"
-          }
-        },
-        {
           "id": "menu-view-timeline",
           "kind": "menu",
           "feature": "timeline-animations",
@@ -266,13 +243,16 @@
           }
         },
         {
-          "id": "toolbar-top-bar-canvas-tools",
+          "id": "toolbar-canvas-toolbar-canvas-tools",
           "kind": "toolbar",
           "feature": "canvas-outlines-zones",
-          "toolbar": "top-bar",
+          "toolbar": "canvas-toolbar",
           "labelKey": "panel.canvasTools",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "canvas-toolbar",
+            "order": 4
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -285,13 +265,38 @@
           }
         },
         {
-          "id": "toolbar-top-bar-elements",
+          "id": "toolbar-activity-bar-explorer",
           "kind": "toolbar",
-          "feature": "dock-toggles",
-          "toolbar": "top-bar",
-          "labelKey": "panel.elements",
+          "feature": "layers-tree",
+          "toolbar": "activity-bar",
+          "labelKey": "panel.explorer",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "activity-bar",
+            "order": 1
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {
+            "panel": "explorer",
+            "open": "toggle"
+          }
+        },
+        {
+          "id": "toolbar-activity-bar-insert",
+          "kind": "toolbar",
+          "feature": "palette-click-insert",
+          "toolbar": "activity-bar",
+          "labelKey": "activity.insert",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "activity-bar",
+            "order": 2
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -304,13 +309,38 @@
           }
         },
         {
-          "id": "toolbar-top-bar-layers",
+          "id": "toolbar-activity-bar-styles",
+          "kind": "toolbar",
+          "feature": "css-variables-tokens",
+          "toolbar": "activity-bar",
+          "labelKey": "activity.styles",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "activity-bar",
+            "order": 3
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {
+            "panel": "variables",
+            "open": "toggle"
+          }
+        },
+        {
+          "id": "toolbar-layers-header-toggle",
           "kind": "toolbar",
           "feature": "dock-toggles",
-          "toolbar": "top-bar",
+          "toolbar": "layers-header",
           "labelKey": "panel.layers",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "explorer-layers",
+            "order": 1
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -332,7 +362,10 @@
           "gesture": null,
           "labelKey": "panel.close",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "panel-header",
+            "order": 1
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -350,7 +383,10 @@
           "entry": "open-panel",
           "labelKey": "command.openPanel",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 55
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -393,7 +429,10 @@
           "gesture": null,
           "labelKey": "workbench.closeTab",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "dock-strip",
+            "order": 3
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -650,7 +689,10 @@
           "entry": "command",
           "labelKey": "command.resetWorkspace",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 53
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -696,7 +738,10 @@
           "toolbar": "workbench-strip",
           "labelKey": "workbench.toggle",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "dock-strip",
+            "order": 1
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -714,7 +759,10 @@
           "toolbar": "workbench-strip",
           "labelKey": "workbench.maximize",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "dock-strip",
+            "order": 2
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -731,7 +779,7 @@
       "id": "workspace.setActiveTab",
       "labelKey": "command.showTab",
       "owner": "src/editor/workspace/layout.ts",
-      "introducedBy": "workbench-panel",
+      "introducedBy": "inspector-panel",
       "args": {
         "group": {
           "type": "string",
@@ -755,6 +803,81 @@
       },
       "entryPoints": [
         {
+          "id": "inspector-tab-style",
+          "kind": "panel-control",
+          "feature": "inspector-panel",
+          "panel": "inspector",
+          "control": "tab-style",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "inspector.tab.style",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "inspector-header",
+            "order": 1
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {
+            "group": "inspector",
+            "panel": "style"
+          }
+        },
+        {
+          "id": "inspector-tab-settings",
+          "kind": "panel-control",
+          "feature": "inspector-panel",
+          "panel": "inspector",
+          "control": "tab-settings",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "inspector.tab.settings",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "inspector-header",
+            "order": 2
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {
+            "group": "inspector",
+            "panel": "settings"
+          }
+        },
+        {
+          "id": "inspector-tab-interactions",
+          "kind": "panel-control",
+          "feature": "events-actions",
+          "panel": "inspector",
+          "control": "tab-interactions",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "inspector.tab.interactions",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "inspector-header",
+            "order": 3
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {
+            "group": "inspector",
+            "panel": "interactions"
+          }
+        },
+        {
           "id": "tab-strip-tab",
           "kind": "panel-control",
           "feature": "workbench-panel",
@@ -764,7 +887,10 @@
           "gesture": null,
           "labelKey": "command.showTab",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "tab-strip",
+            "order": 1
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -1285,6 +1411,61 @@
           "args": {}
         },
         {
+          "id": "key-ctrl-shift-k-in-global",
+          "kind": "shortcut",
+          "feature": "command-bar",
+          "chord": "Ctrl+Shift+K",
+          "context": "global",
+          "gesture": null,
+          "labelKey": "command.commandBar",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-ctrl-shift-k-in-text-editing",
+          "kind": "shortcut",
+          "feature": "command-bar",
+          "chord": "Ctrl+Shift+K",
+          "context": "text-editing",
+          "gesture": null,
+          "labelKey": "command.commandBar",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "toolbar-top-bar-search",
+          "kind": "toolbar",
+          "feature": "command-bar",
+          "toolbar": "top-bar",
+          "labelKey": "command.commandBar",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "top-bar",
+            "order": 7
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
           "id": "menu-file",
           "kind": "menu",
           "feature": "command-bar",
@@ -1337,7 +1518,10 @@
           "gesture": null,
           "labelKey": "command.palette.toggleGroup",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "insert",
+            "order": 5
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -1385,7 +1569,10 @@
           "gesture": null,
           "labelKey": "palette.density.list",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "insert",
+            "order": 1
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -1406,7 +1593,10 @@
           "gesture": null,
           "labelKey": "palette.density.twoColumns",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "insert",
+            "order": 2
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -1427,7 +1617,10 @@
           "gesture": null,
           "labelKey": "palette.density.threeColumns",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "insert",
+            "order": 3
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -1448,7 +1641,10 @@
           "gesture": null,
           "labelKey": "palette.density.icons",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "insert",
+            "order": 4
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -1502,7 +1698,10 @@
           "gesture": null,
           "labelKey": "command.layers.toggleBranch",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "layers-row",
+            "order": 4
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -1558,7 +1757,10 @@
           "toolbar": "layers-header",
           "labelKey": "layers.collapseAll",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "explorer-layers",
+            "order": 3
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -1592,7 +1794,10 @@
           "toolbar": "layers-header",
           "labelKey": "layers.expandAll",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "explorer-layers",
+            "order": 2
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -1825,7 +2030,10 @@
           "gesture": null,
           "labelKey": "command.inspector.toggleSection",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 4
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -1871,7 +2079,10 @@
           "gesture": null,
           "labelKey": "inspector.mode.essentials",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 1
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -1892,7 +2103,10 @@
           "gesture": null,
           "labelKey": "inspector.mode.all",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 2
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -1942,7 +2156,10 @@
           "gesture": null,
           "labelKey": "command.editProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 3
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -1958,7 +2175,10 @@
           "entry": "edit-property",
           "labelKey": "command.editProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 65
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -2017,7 +2237,10 @@
           "gesture": null,
           "labelKey": "codePanel.copyPane",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "code-view",
+            "order": 1
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -2054,7 +2277,10 @@
           "gesture": null,
           "labelKey": "codePanel.downloadPane",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "code-view",
+            "order": 2
+          },
           "adapter": {
             "selection": "none",
             "offers": null,

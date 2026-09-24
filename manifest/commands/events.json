@@ -68,7 +68,10 @@
           "gesture": null,
           "labelKey": "command.interactions.add",
           "disabledReasonKey": "status.needsSingleSelection",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-interactions",
+            "order": 1
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -122,7 +125,10 @@
           "gesture": null,
           "labelKey": "command.interactions.update",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-interactions",
+            "order": 4
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -141,7 +147,10 @@
           "gesture": null,
           "labelKey": "command.interactions.update",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-interactions",
+            "order": 5
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -160,7 +169,32 @@
           "gesture": null,
           "labelKey": "command.interactions.update",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-interactions",
+            "order": 6
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-interaction-scope",
+          "kind": "panel-control",
+          "feature": "events-actions",
+          "panel": "inspector",
+          "control": "interaction-scope",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "inspector.interactionScope",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "inspector-interactions",
+            "order": 3
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -199,7 +233,10 @@
           "gesture": null,
           "labelKey": "interactions.pickTarget",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "layers-row",
+            "order": 10
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -248,7 +285,10 @@
           "gesture": null,
           "labelKey": "command.interactions.remove",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-interactions",
+            "order": 2
+          },
           "adapter": {
             "selection": "none",
             "offers": null,

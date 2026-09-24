@@ -6,6 +6,7 @@ import type { ManifestInput, Problem, ReferenceKind } from '../../src/manifest/c
 
 export const REPO_ROOT = fileURLToPath(new URL('../../', import.meta.url));
 export const CATALOGUE_DIR = 'src/i18n/locales';
+export const GLOSSARY_FILE = 'src/i18n/glossary.json';
 
 export interface LoadedManifest {
   input: ManifestInput;
@@ -69,8 +70,10 @@ export function loadManifest(root: string = REPO_ROOT): LoadedManifest {
     const json = read(full, `${CATALOGUE_DIR}/${path.basename(full)}`);
     if (json !== undefined) catalogues[path.basename(full, '.json')] = json;
   }
+  const glossaryPath = path.join(root, GLOSSARY_FILE);
+  const glossary = fs.existsSync(glossaryPath) ? read(glossaryPath, GLOSSARY_FILE) : undefined;
   return {
-    input: { files, catalogues, fileExists: (repoPath) => fs.existsSync(path.join(root, repoPath)), registered: registeredIds(root) },
+    input: { files, catalogues, glossary, fileExists: (repoPath) => fs.existsSync(path.join(root, repoPath)), registered: registeredIds(root) },
     problems,
   };
 }

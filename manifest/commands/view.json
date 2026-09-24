@@ -62,7 +62,10 @@
           "toolbar": "status-bar",
           "labelKey": "command.zoomIn",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "status-bar",
+            "order": 4
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -78,7 +81,10 @@
           "entry": "command",
           "labelKey": "command.zoomIn",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 48
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -132,7 +138,10 @@
           "toolbar": "status-bar",
           "labelKey": "command.zoomOut",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "status-bar",
+            "order": 2
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -148,7 +157,10 @@
           "entry": "command",
           "labelKey": "command.zoomOut",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 49
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -200,7 +212,10 @@
           "entry": "command",
           "labelKey": "command.zoomReset",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 50
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -363,7 +378,10 @@
           "toolbar": "status-bar",
           "labelKey": "command.zoomFit",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "status-bar",
+            "order": 5
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -398,7 +416,10 @@
           "entry": "command",
           "labelKey": "command.zoomFit",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 51
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -579,13 +600,16 @@
       },
       "entryPoints": [
         {
-          "id": "toolbar-top-bar-desktop",
+          "id": "toolbar-breakpoint-tabs-desktop",
           "kind": "toolbar",
           "feature": "breakpoints-switch",
-          "toolbar": "top-bar",
+          "toolbar": "breakpoint-tabs",
           "labelKey": "breakpoint.desktop",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "canvas-frame",
+            "order": 1
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -597,13 +621,16 @@
           }
         },
         {
-          "id": "toolbar-top-bar-laptop",
+          "id": "toolbar-breakpoint-tabs-laptop",
           "kind": "toolbar",
           "feature": "breakpoints-switch",
-          "toolbar": "top-bar",
+          "toolbar": "breakpoint-tabs",
           "labelKey": "breakpoint.laptop",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "canvas-frame",
+            "order": 2
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -615,13 +642,16 @@
           }
         },
         {
-          "id": "toolbar-top-bar-tablet",
+          "id": "toolbar-breakpoint-tabs-tablet",
           "kind": "toolbar",
           "feature": "breakpoints-switch",
-          "toolbar": "top-bar",
+          "toolbar": "breakpoint-tabs",
           "labelKey": "breakpoint.tablet",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "canvas-frame",
+            "order": 3
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -633,13 +663,16 @@
           }
         },
         {
-          "id": "toolbar-top-bar-phone",
+          "id": "toolbar-breakpoint-tabs-phone",
           "kind": "toolbar",
           "feature": "breakpoints-switch",
-          "toolbar": "top-bar",
+          "toolbar": "breakpoint-tabs",
           "labelKey": "breakpoint.phone",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "canvas-frame",
+            "order": 4
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -657,7 +690,10 @@
           "toolbar": "preview-bar",
           "labelKey": "breakpoint.desktop",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "preview-bar",
+            "order": 1
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -675,7 +711,10 @@
           "toolbar": "preview-bar",
           "labelKey": "breakpoint.laptop",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "preview-bar",
+            "order": 2
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -693,7 +732,10 @@
           "toolbar": "preview-bar",
           "labelKey": "breakpoint.tablet",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "preview-bar",
+            "order": 3
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -711,7 +753,10 @@
           "toolbar": "preview-bar",
           "labelKey": "breakpoint.phone",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "preview-bar",
+            "order": 4
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -720,6 +765,118 @@
           },
           "args": {
             "breakpoint": "phone"
+          }
+        }
+      ]
+    },
+    {
+      "id": "view.setEditorView",
+      "labelKey": "command.setEditorView",
+      "owner": "src/editor/view/editor-view.ts",
+      "introducedBy": "code-panel-view",
+      "args": {
+        "view": {
+          "type": "enum",
+          "values": [
+            "canvas",
+            "split",
+            "code"
+          ],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "history": {
+        "undoable": false
+      },
+      "entryPoints": [
+        {
+          "id": "toolbar-canvas-toolbar-canvas",
+          "kind": "toolbar",
+          "feature": "code-panel-view",
+          "toolbar": "canvas-toolbar",
+          "labelKey": "editorView.canvas",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "canvas-toolbar",
+            "order": 1
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {
+            "view": "canvas"
+          }
+        },
+        {
+          "id": "toolbar-canvas-toolbar-split",
+          "kind": "toolbar",
+          "feature": "code-panel-view",
+          "toolbar": "canvas-toolbar",
+          "labelKey": "editorView.split",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "canvas-toolbar",
+            "order": 2
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {
+            "view": "split"
+          }
+        },
+        {
+          "id": "toolbar-canvas-toolbar-code",
+          "kind": "toolbar",
+          "feature": "code-panel-view",
+          "toolbar": "canvas-toolbar",
+          "labelKey": "editorView.code",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "canvas-toolbar",
+            "order": 3
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {
+            "view": "code"
+          }
+        },
+        {
+          "id": "menu-view-code",
+          "kind": "menu",
+          "feature": "code-panel-view",
+          "menu": "view",
+          "labelKey": "editorView.split",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "menu:view",
+            "order": 5
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {
+            "view": "split"
           }
         }
       ]
@@ -954,7 +1111,10 @@
           "toolbar": "top-bar",
           "labelKey": "command.preview",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "top-bar",
+            "order": 10
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -970,7 +1130,10 @@
           "entry": "command",
           "labelKey": "command.preview",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 52
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -1040,7 +1203,10 @@
           "toolbar": "preview-bar",
           "labelKey": "command.exitPreview",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "preview-bar",
+            "order": 5
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -1077,7 +1243,10 @@
           "gesture": null,
           "labelKey": "command.toggleOutlines",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "canvas-toolbar",
+            "order": 5
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -1114,7 +1283,10 @@
           "gesture": null,
           "labelKey": "command.toggleZones",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "canvas-toolbar",
+            "order": 6
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -1151,7 +1323,10 @@
           "gesture": null,
           "labelKey": "command.toggleRulers",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "guides-grids-dialog",
+            "order": 1
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -1188,7 +1363,10 @@
           "gesture": null,
           "labelKey": "command.toggleSmartGuides",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "guides-grids-dialog",
+            "order": 5
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -1225,7 +1403,10 @@
           "gesture": null,
           "labelKey": "command.toggleEqualSpacing",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "guides-grids-dialog",
+            "order": 6
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -1284,7 +1465,10 @@
           "gesture": null,
           "labelKey": "command.grid.columns",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "canvas-toolbar",
+            "order": 7
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -1303,7 +1487,10 @@
           "gesture": null,
           "labelKey": "command.grid.columns",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "guides-grids-dialog",
+            "order": 7
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -1344,7 +1531,10 @@
           "gesture": null,
           "labelKey": "command.grid.rows",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "canvas-toolbar",
+            "order": 8
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -1363,7 +1553,10 @@
           "gesture": null,
           "labelKey": "command.grid.rows",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "guides-grids-dialog",
+            "order": 9
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -1404,7 +1597,10 @@
           "gesture": null,
           "labelKey": "command.grid.dots",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "canvas-toolbar",
+            "order": 9
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -1423,7 +1619,10 @@
           "gesture": null,
           "labelKey": "command.grid.dots",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "guides-grids-dialog",
+            "order": 11
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -1481,7 +1680,10 @@
           "gesture": null,
           "labelKey": "command.grid.settings",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "guides-grids-dialog",
+            "order": 8
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -1502,7 +1704,10 @@
           "gesture": null,
           "labelKey": "command.grid.settings",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "guides-grids-dialog",
+            "order": 10
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -1523,7 +1728,10 @@
           "gesture": null,
           "labelKey": "command.grid.settings",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "guides-grids-dialog",
+            "order": 12
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -1616,7 +1824,10 @@
           "gesture": null,
           "labelKey": "command.guides.create",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "guides-grids-dialog",
+            "order": 3
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -1842,7 +2053,10 @@
           "gesture": null,
           "labelKey": "command.guides.delete",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "guides-grids-dialog",
+            "order": 4
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -1925,7 +2139,10 @@
           "gesture": null,
           "labelKey": "command.guides.visible",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "guides-grids-dialog",
+            "order": 2
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -1963,13 +2180,16 @@
       },
       "entryPoints": [
         {
-          "id": "toolbar-top-bar-snap",
+          "id": "toolbar-canvas-toolbar-snap",
           "kind": "toolbar",
           "feature": "snap-toggle-settings",
-          "toolbar": "top-bar",
+          "toolbar": "canvas-toolbar",
           "labelKey": "command.snap",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "canvas-toolbar",
+            "order": 10
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -2063,7 +2283,10 @@
           "gesture": null,
           "labelKey": "command.snap.settings",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "snap-settings-dialog",
+            "order": 1
+          },
           "adapter": {
             "selection": "none",
             "offers": null,

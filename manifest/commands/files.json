@@ -39,7 +39,10 @@
           "gesture": null,
           "labelKey": "command.pages.add",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "explorer-pages",
+            "order": 1
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -93,7 +96,10 @@
           "gesture": null,
           "labelKey": "command.pages.rename",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "explorer-pages",
+            "order": 3
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -140,7 +146,10 @@
           "gesture": null,
           "labelKey": "command.pages.duplicate",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "explorer-pages",
+            "order": 4
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -193,7 +202,10 @@
           "gesture": null,
           "labelKey": "command.pages.delete",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "explorer-pages",
+            "order": 5
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -236,7 +248,51 @@
           "gesture": null,
           "labelKey": "command.pages.switch",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "explorer-pages",
+            "order": 2
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "file-tab",
+          "kind": "panel-control",
+          "feature": "explorer-pages",
+          "panel": "file-tabs",
+          "control": "page-tab",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.pages.switch",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "file-tabs",
+            "order": 1
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "toolbar-top-bar-page-switcher",
+          "kind": "toolbar",
+          "feature": "explorer-pages",
+          "toolbar": "top-bar",
+          "labelKey": "topbar.pageSwitcher",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "top-bar",
+            "order": 6
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -286,7 +342,10 @@
           "gesture": null,
           "labelKey": "command.files.newFolder",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "explorer-files",
+            "order": 2
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -336,7 +395,10 @@
           "gesture": null,
           "labelKey": "command.files.newFile",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "explorer-files",
+            "order": 1
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -391,7 +453,10 @@
           "gesture": null,
           "labelKey": "command.files.rename",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "explorer-files",
+            "order": 5
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -464,7 +529,10 @@
           "gesture": null,
           "labelKey": "command.files.moveTo",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "explorer-files",
+            "order": 6
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -518,7 +586,10 @@
           "gesture": null,
           "labelKey": "command.files.delete",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "explorer-files",
+            "order": 7
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -561,7 +632,78 @@
           "gesture": null,
           "labelKey": "command.files.open",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "explorer-files",
+            "order": 4
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "file-tab",
+          "kind": "panel-control",
+          "feature": "explorer-file-system",
+          "panel": "file-tabs",
+          "control": "file-tab",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.files.open",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "file-tabs",
+            "order": 3
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "files.closeTab",
+      "labelKey": "command.files.closeTab",
+      "owner": "src/editor/explorer/file-tabs.ts",
+      "introducedBy": "explorer-file-system",
+      "args": {
+        "path": {
+          "type": "path",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "history": {
+        "undoable": false
+      },
+      "entryPoints": [
+        {
+          "id": "file-tab-close",
+          "kind": "panel-control",
+          "feature": "explorer-file-system",
+          "panel": "file-tabs",
+          "control": "close",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.files.closeTab",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "file-tabs",
+            "order": 2
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -616,7 +758,10 @@
           "gesture": null,
           "labelKey": "command.files.upload",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "explorer-files",
+            "order": 3
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -689,7 +834,10 @@
           "gesture": null,
           "labelKey": "command.files.save",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "code-view",
+            "order": 6
+          },
           "adapter": {
             "selection": "none",
             "offers": null,

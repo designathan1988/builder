@@ -40,5 +40,5 @@ Not applicable.
 ## Problems in Pager
 
 1. **The panel lists only the `KEYMAP` rows.** Shortcuts declared as commands (`Ctrl+D`, `Ctrl+K`, `Ctrl+B`, `Ctrl+Alt+B`, `Ctrl+\`, `Ctrl+=`, `Ctrl+-`, `Ctrl+0`, `Ctrl+'`, `Ctrl+P`, `Alt+Shift+Arrows`), text-editing keys (`Ctrl+B/I/K`, Enter, Shift+Enter, Escape), guide keys, spacing-band keys and menu keys are missing. Required: one keymap table holds every binding; the panel lists all of them grouped by context (anywhere, on the canvas, while editing text, during a drag, with something in hand, on panels) with keys and a description (manifest feature `shortcuts-panel`).
-2. **Descriptions are lower-case developer phrases** ("raise the receiver level") in English only. Required: descriptions come from i18n (pt-BR by default).
+2. **Descriptions are lower-case developer phrases** ("raise the receiver level") in English only. Required: descriptions come from i18n (English by default, pt-BR available).
 3. **No Help → Keyboard shortcuts door.** Required: Help → Keyboard shortcuts opens the panel as a tab in the bottom workbench.

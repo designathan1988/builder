@@ -1,0 +1,24 @@
+{
+  "categories": [
+    {
+      "id": "accessibility",
+      "labelKey": "checks.category.accessibility",
+      "feature": "accessibility-checks"
+    },
+    {
+      "id": "links",
+      "labelKey": "checks.category.links",
+      "feature": "link-picker"
+    },
+    {
+      "id": "seo",
+      "labelKey": "checks.category.seo",
+      "feature": "page-seo-meta"
+    },
+    {
+      "id": "export",
+      "labelKey": "checks.category.export",
+      "feature": "export-file-tree"
+    }
+  ]
+}

@@ -53,7 +53,10 @@
           "gesture": "layers-row-click",
           "labelKey": "command.select",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "layers-row",
+            "order": 1
+          },
           "adapter": {
             "selection": "target",
             "offers": null,
@@ -90,7 +93,10 @@
           "gesture": null,
           "labelKey": "command.select",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "status-bar",
+            "order": 1
+          },
           "adapter": {
             "selection": "target",
             "offers": null,
@@ -109,7 +115,10 @@
           "gesture": null,
           "labelKey": "command.select",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "dock-checks",
+            "order": 1
+          },
           "adapter": {
             "selection": "target",
             "offers": null,
@@ -128,7 +137,10 @@
           "gesture": null,
           "labelKey": "command.select",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "code-view",
+            "order": 3
+          },
           "adapter": {
             "selection": "target",
             "offers": null,
@@ -219,7 +231,10 @@
           "entry": "command",
           "labelKey": "command.clearSelection",
           "disabledReasonKey": "refusal.nothingSelected",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 33
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -282,7 +297,10 @@
           "gesture": "layers-row-click",
           "labelKey": "command.selectionAdd",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "layers-row",
+            "order": 2
+          },
           "adapter": {
             "selection": "target",
             "offers": null,
@@ -345,7 +363,10 @@
           "gesture": "layers-row-click",
           "labelKey": "command.selectionToggle",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "layers-row",
+            "order": 3
+          },
           "adapter": {
             "selection": "target",
             "offers": null,
@@ -568,7 +589,10 @@
           "entry": "command",
           "labelKey": "command.selectAllInContainer",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 34
+          },
           "adapter": {
             "selection": "primary",
             "offers": null,
@@ -682,7 +706,10 @@
           "gesture": null,
           "labelKey": "command.openContextMenu",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "layers-row",
+            "order": 11
+          },
           "adapter": {
             "selection": "target",
             "offers": null,
@@ -698,7 +725,10 @@
           "control": "more-actions",
           "labelKey": "quickPanel.moreActions",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "quick-panel",
+            "order": 2
+          },
           "adapter": {
             "selection": "target",
             "offers": null,

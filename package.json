@@ -17,7 +17,8 @@
     "gen:check": "node tools/gen/check.ts",
     "verify:fast": "npm run gen:check && npm run typecheck && npm run lint && npm run unit && npm run manifest:check",
     "manifest:check": "node tools/manifest/check.ts",
-    "manifest:map": "node tools/manifest/map-features.ts"
+    "manifest:map": "node tools/manifest/map-features.ts",
+    "design:shots": "node tools/design/shots.ts"
   },
   "dependencies": {
     "react": "^19.3.0",
@@ -39,6 +40,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "globals": "^17.12.0",
     "html-validate": "^11.16.0",
+    "style-dictionary": "^5.5.5",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.70.1",
     "vite": "^8.3.0",

@@ -39,7 +39,10 @@
           "gesture": null,
           "labelKey": "timeline.newAnimation",
           "disabledReasonKey": "status.needsSingleSelection",
-          "placement": "unplaced",
+          "placement": {
+            "region": "dock-timeline",
+            "order": 1
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -93,7 +96,10 @@
           "gesture": null,
           "labelKey": "command.animation.rename",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "dock-timeline",
+            "order": 2
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -140,7 +146,10 @@
           "gesture": null,
           "labelKey": "command.animation.delete",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "dock-timeline",
+            "order": 3
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -192,7 +201,10 @@
           "gesture": null,
           "labelKey": "timeline.addKeyframe",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "dock-timeline",
+            "order": 16
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -295,7 +307,10 @@
           "gesture": null,
           "labelKey": "command.animation.easing",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "dock-timeline",
+            "order": 17
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -342,7 +357,10 @@
           "gesture": null,
           "labelKey": "command.animation.deleteKeyframe",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "dock-timeline",
+            "order": 18
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -427,7 +445,10 @@
           "gesture": null,
           "labelKey": "timeline.setting.duration",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "dock-timeline",
+            "order": 4
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -448,7 +469,10 @@
           "gesture": null,
           "labelKey": "timeline.setting.delay",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "dock-timeline",
+            "order": 5
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -469,7 +493,10 @@
           "gesture": null,
           "labelKey": "timeline.setting.iterations",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "dock-timeline",
+            "order": 6
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -490,7 +517,10 @@
           "gesture": null,
           "labelKey": "timeline.setting.direction",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "dock-timeline",
+            "order": 7
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -511,7 +541,10 @@
           "gesture": null,
           "labelKey": "timeline.setting.fill",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "dock-timeline",
+            "order": 8
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -532,7 +565,10 @@
           "gesture": null,
           "labelKey": "timeline.setting.timing",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "dock-timeline",
+            "order": 9
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -553,7 +589,10 @@
           "gesture": null,
           "labelKey": "timeline.setting.playState",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "dock-timeline",
+            "order": 10
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -616,7 +655,10 @@
           "gesture": null,
           "labelKey": "command.timeline.playhead",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "dock-timeline",
+            "order": 15
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -653,7 +695,10 @@
           "gesture": null,
           "labelKey": "timeline.play",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "dock-timeline",
+            "order": 11
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -690,7 +735,10 @@
           "gesture": null,
           "labelKey": "timeline.pause",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "dock-timeline",
+            "order": 12
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -727,7 +775,10 @@
           "gesture": null,
           "labelKey": "timeline.stop",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "dock-timeline",
+            "order": 13
+          },
           "adapter": {
             "selection": "none",
             "offers": null,
@@ -764,7 +815,10 @@
           "gesture": null,
           "labelKey": "timeline.toggleLoop",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "dock-timeline",
+            "order": 14
+          },
           "adapter": {
             "selection": "none",
             "offers": null,

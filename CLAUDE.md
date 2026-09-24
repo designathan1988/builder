@@ -20,7 +20,7 @@ Do the work yourself. Do not delegate code or reviews to other models or externa
 ## The manifest is the contract
 
 - A change of behaviour starts in the manifest, in the same commit as the code, and `npm run manifest:check` stays green.
-- The UI registers doors only from the manifest. Every button, menu item, context-menu item, shortcut, field, handle and drag target is generated from a door in `manifest/commands/*.json`; there is no other keymap, menu table or button list. A door whose feature is not built yet is shown disabled with "not available yet".
+- The UI registers doors only from the manifest. Every button, menu item, context-menu item, shortcut, field, handle and drag target is generated from a door in `manifest/commands/*.json`; there is no other keymap, menu table or button list. A door whose feature is not built yet is shown disabled with "not available yet", except in the context menu, which shows only the commands that apply to the selection (DESIGN.md).
 - A door's adapter data (the values it offers, the selection it acts on, the properties it writes) is read from the manifest, never re-listed in code.
 - A feature's `intent` is guidance for scenario authors only. No test reads it.
 - Status comes only from the runner: a feature passes when every scenario passes through every door it names and every terminal it expects, at the current commit, on a clean tree. Never write a status or `passes` field anywhere.
@@ -33,7 +33,7 @@ Do the work yourself. Do not delegate code or reviews to other models or externa
 - One store. State changes only through `dispatch(command)`. No document or selection state in `useState` or `useRef`.
 - Follow `ARCHITECTURE.md`: every concept has one owner module. A new concept gets its owner in `ARCHITECTURE.md` and its data in the manifest, in the same commit.
 - Follow `DESIGN.md`. Colors, spacing, fonts, radii and shadows come only from the design tokens.
-- Code, file names and commits in English. UI text only through i18n (`src/i18n/locales/pt-BR.json` and `en.json`); the default UI language is Brazilian Portuguese. The product name appears only in `src/config/product.ts`.
+- Code, file names and commits in English. UI text only through i18n (`src/i18n/locales/en.json` and `pt-BR.json`); English is the source catalogue and the default UI language, and Brazilian Portuguese is available through the language switch. One term per concept in each language (`src/i18n/glossary.json`). The product name appears only in `src/config/product.ts`.
 - Export: a ZIP with HTML plus a separate CSS file, BEM classes, no inline styles, standard HTML/CSS that works in any browser.
 - The dev server port comes from the `PORT` environment variable.
 

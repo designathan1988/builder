@@ -303,8 +303,10 @@ export const propertiesFileSchema = z.strictObject({
       }),
     )
     .min(1),
+  // in cascade order: the first is the base breakpoint (base: true, the only one), the others inherit
+  // from the one before them (desktop-first: Desktop, Laptop, Tablet, Phone)
   breakpoints: z
-    .array(z.strictObject({ id: kebabId, labelKey: i18nKey, width: z.number().int().positive() }))
+    .array(z.strictObject({ id: kebabId, labelKey: i18nKey, width: z.number().int().positive(), base: z.boolean() }))
     .min(1),
   states: z.array(z.strictObject({ id: kebabId, labelKey: i18nKey, pseudo: z.string().nullable() })).min(1),
   structures: z.array(structureSchema),
@@ -393,10 +395,14 @@ const adapterSchema = z.strictObject({
   fields: z.array(camelId),
 });
 
+// A region of the interface DESIGN.md names (layout.json lists them); a menu's own region is "menu:<menu>".
+const regionId = z.string().regex(/^[a-z]+(-[a-z]+)*(:[a-z]+(-[a-z]+)*)?$/, 'a region id such as "canvas-toolbar" or "menu:view"');
+
 const placementSchema = z.union([
   z.literal('none'), // a key or a canvas gesture has no control of its own
-  z.literal('unplaced'), // placed by DESIGN.md
-  z.strictObject({ region: z.string().min(1), order: z.number().int().positive() }),
+  z.literal('unplaced'), // not placed yet: manifest:check rule placement refuses it
+  // the region of DESIGN.md that draws the control, and its position there (1 first)
+  z.strictObject({ region: regionId, order: z.number().int().positive() }),
 ]);
 
 const doorCommon = {
@@ -546,6 +552,52 @@ export const commandSchema = z
 export const commandsFileSchema = z.strictObject({
   domain: kebabId,
   commands: z.array(commandSchema).min(1),
+});
+
+// ---------------------------------------------------------------- layout (the regions of DESIGN.md)
+// Every region DESIGN.md draws, and the control that opens each menu. A door's placement names one of
+// these regions. The area says where the region sits: a fixed part of the window, an overlay that
+// opens over it, or "component", the parts of a control repeated wherever it is drawn (every field,
+// every Layers row, every tab strip).
+
+export const REGION_AREAS = ['top-bar', 'left', 'centre', 'right', 'dock', 'status-bar', 'overlay', 'component'] as const;
+// The regions a state control never occupies: a state belongs to the element's class selector, never
+// to the page, so it is chosen only in the inspector's selector bar (manifest:check rule state-placement).
+export const PAGE_REGIONS = ['canvas-frame', 'canvas-toolbar'] as const;
+
+export const layoutFileSchema = z.strictObject({
+  regions: z.array(z.strictObject({ id: regionId, area: z.enum(REGION_AREAS) })).min(1),
+  // the button that opens each menu (its items are the menu's doors): its label, where it is drawn, and its order there
+  menus: z.array(
+    z.strictObject({
+      id: menuIdSchema,
+      labelKey: i18nKey,
+      anchors: z.array(z.strictObject({ region: regionId, order: z.number().int().positive() })).min(1),
+    }),
+  ),
+});
+
+// ---------------------------------------------------------------- checks (the Checks tab of the dock)
+// The categories the Checks tab groups its issues by, each arriving with the feature that produces its checks.
+export const checksFileSchema = z.strictObject({
+  categories: z.array(z.strictObject({ id: kebabId, labelKey: i18nKey, feature: featureId })).min(1),
+});
+
+// ---------------------------------------------------------------- glossary (src/i18n/glossary.json)
+// One term per concept in each language. Each concept names the CSS property whose label is its term;
+// manifest:check rule label-term proves every label of that property is the term, and that no label, in
+// either language, names two different CSS properties.
+export const glossarySchema = z.strictObject({
+  concepts: z
+    .array(
+      z.strictObject({
+        id: kebabId,
+        property: cssName,
+        terms: z.strictObject({ en: z.string().min(1), 'pt-BR': z.string().min(1) }),
+        note: z.string().min(1),
+      }),
+    )
+    .min(1),
 });
 
 // ---------------------------------------------------------------- scenarios and features
@@ -777,6 +829,8 @@ export const FILE_SCHEMAS = {
   properties: propertiesFileSchema,
   interactions: interactionsFileSchema,
   commands: commandsFileSchema,
+  layout: layoutFileSchema,
+  checks: checksFileSchema,
   features: featuresFileSchema,
   references: referencesFileSchema,
   consumers: consumersFileSchema,
@@ -804,6 +858,9 @@ export type DoorKind = Door['kind'];
 export type History = z.infer<typeof historySchema>;
 export type Command = z.infer<typeof commandSchema>;
 export type CommandsFile = z.infer<typeof commandsFileSchema>;
+export type LayoutFile = z.infer<typeof layoutFileSchema>;
+export type ChecksFile = z.infer<typeof checksFileSchema>;
+export type Glossary = z.infer<typeof glossarySchema>;
 export type Scenario = z.infer<typeof scenarioSchema>;
 export type Feature = z.infer<typeof featureSchema>;
 export type FeaturesFile = z.infer<typeof featuresFileSchema>;

@@ -10,8 +10,10 @@ import {
   COUPLING_ACTIONS,
   COUPLING_PREDICATES,
   GESTURE_DOOR_KINDS,
+  PAGE_REGIONS,
   REFERENCE_KINDS,
   STRUCTURED_VALUE_TYPES,
+  checksFileSchema,
   commandsFileSchema,
   consumersFileSchema,
   elementsFileSchema,
@@ -20,10 +22,14 @@ import {
   generatedCompatSchema,
   generatedCssSchema,
   generatedHtmlSchema,
+  glossarySchema,
   interactionsFileSchema,
+  layoutFileSchema,
+  menuIdSchema,
   propertiesFileSchema,
   referencesFileSchema,
   type Browser,
+  type ChecksFile,
   type Command,
   type CommandsFile,
   type Composite,
@@ -37,6 +43,8 @@ import {
   type FeaturesFile,
   type GeneratedCompat,
   type GeneratedCss,
+  type Glossary,
+  type LayoutFile,
   type GeneratedHtml,
   type InteractionsFile,
   type PropertiesFile,
@@ -76,6 +84,9 @@ export const RULES = [
   'order',
   'spec-missing',
   'scenario-terminal',
+  'placement',
+  'state-placement',
+  'label-term',
 ] as const;
 
 export type RuleId = (typeof RULES)[number];
@@ -93,6 +104,8 @@ export interface ManifestInput {
   files: Readonly<Record<string, unknown>>;
   // locale → i18n catalogue (key → text)
   catalogues: Readonly<Record<string, unknown>>;
+  // src/i18n/glossary.json: one term per concept in each language
+  glossary: unknown;
   // whether a path relative to the repository root exists
   fileExists: (repoPath: string) => boolean;
   // ids that code under src/ registers, by kind (registerHandler, registerPredicate, ...)
@@ -106,6 +119,11 @@ export interface ManifestSummary {
   undoableCommands: number;
   doors: number;
   doorsByKind: Record<string, number>;
+  // placed doors per region of DESIGN.md (layout.json), and the regions and menus declared
+  doorsByRegion: Record<string, number>;
+  regions: number;
+  menuAnchors: number;
+  glossaryConcepts: number;
   elements: number;
   paletteEntries: number;
   attributes: number;
@@ -155,6 +173,8 @@ interface Parsed {
   elements: ElementsFile;
   properties: PropertiesFile;
   interactions: InteractionsFile;
+  layout: LayoutFile;
+  checks: ChecksFile;
   references: ReferencesFile;
   consumers: ConsumersFile;
   css: GeneratedCss;
@@ -169,6 +189,8 @@ const SINGLE_FILES: Record<string, { key: keyof Parsed; schema: z.ZodType }> = {
   'elements.json': { key: 'elements', schema: elementsFileSchema },
   'properties.json': { key: 'properties', schema: propertiesFileSchema },
   'interactions.json': { key: 'interactions', schema: interactionsFileSchema },
+  'layout.json': { key: 'layout', schema: layoutFileSchema },
+  'checks.json': { key: 'checks', schema: checksFileSchema },
   'references.json': { key: 'references', schema: referencesFileSchema },
   'consumers.json': { key: 'consumers', schema: consumersFileSchema },
   'generated/css-properties.json': { key: 'css', schema: generatedCssSchema },
@@ -579,6 +601,10 @@ export function checkManifest(input: ManifestInput): CheckResult {
     unique(`group of section ${s.id}`, 'properties.json', s.groups.map((g, i) => ({ id: g.id, path: `sections[${si}].groups[${i}]` })));
   }
   unique('breakpoint', 'properties.json', p.properties.breakpoints.map((b, i) => ({ id: b.id, path: `breakpoints[${i}]` })));
+  if (p.properties.breakpoints.filter((b) => b.base).length !== 1 || p.properties.breakpoints[0]?.base !== true) {
+    report('schema', 'properties.json', 'breakpoints', 'the breakpoints are listed in cascade order: exactly one is the base, and it is the first');
+  }
+  unique('check category', 'checks.json', p.checks.categories.map((k, i) => ({ id: k.id, path: `categories[${i}]` })));
   unique('state', 'properties.json', p.properties.states.map((s, i) => ({ id: s.id, path: `states[${i}]` })));
   unique('key context', 'interactions.json', p.interactions.keyContexts.map((k, i) => ({ id: k.id, path: `keyContexts[${i}]` })));
   unique('constant', 'interactions.json', p.interactions.constants.map((c, i) => ({ id: c.id, path: `constants[${i}]` })));
@@ -629,6 +655,7 @@ export function checkManifest(input: ManifestInput): CheckResult {
     checkPlace('properties.json', `recipes[${i}]`, r);
     for (const [di, d] of r.doors.entries()) ref(doorByRef.has(d), 'properties.json', `recipes[${i}].doors[${di}]`, `unknown door "${d}"`);
   }
+  for (const [i, k] of p.checks.categories.entries()) ref(featureIndex.has(k.feature), 'checks.json', `categories[${i}].feature`, `unknown feature "${k.feature}"`);
   for (const [i, k] of p.interactions.keyContexts.entries()) {
     if (k.inherits !== null) ref(contextIds.has(k.inherits), 'interactions.json', `keyContexts[${i}].inherits`, `unknown key context "${k.inherits}"`);
   }
@@ -810,6 +837,8 @@ export function checkManifest(input: ManifestInput): CheckResult {
   p.properties.composites.forEach((c, i) => noteKey(c.labelKey, `properties.json composites[${i}].labelKey`));
   p.properties.recipes.forEach((r, i) => noteKey(r.labelKey, `properties.json recipes[${i}].labelKey`));
   p.interactions.keyContexts.forEach((k, i) => noteKey(k.labelKey, `interactions.json keyContexts[${i}].labelKey`));
+  p.layout.menus.forEach((m, i) => noteKey(m.labelKey, `layout.json menus[${i}].labelKey`));
+  p.checks.categories.forEach((k, i) => noteKey(k.labelKey, `checks.json categories[${i}].labelKey`));
 
   const catalogues = new Map<string, Record<string, unknown>>();
   for (const locale of p.environment.locales.available) {
@@ -1498,6 +1527,144 @@ export function checkManifest(input: ManifestInput): CheckResult {
     }
   }
 
+  // ---- placement: every door with a control of its own is drawn in a region of DESIGN.md (layout.json)
+  const regionById = new Map(p.layout.regions.map((r) => [r.id, r]));
+  unique('region', 'layout.json', p.layout.regions.map((r, i) => ({ id: r.id, path: `regions[${i}]` })));
+  unique('menu', 'layout.json', p.layout.menus.map((m, i) => ({ id: m.id, path: `menus[${i}]` })));
+  const menuAnchors = new Map(p.layout.menus.map((m) => [m.id, m.anchors]));
+  for (const menu of menuIdSchema.options) {
+    if (!menuAnchors.has(menu)) report('placement', 'layout.json', 'menus', `menu "${menu}" has no anchor: name the region whose button opens it`);
+    if (!regionById.has(`menu:${menu}`)) report('placement', 'layout.json', 'regions', `menu "${menu}" has no region "menu:${menu}" for its items`);
+  }
+  for (const [mi, m] of p.layout.menus.entries()) {
+    for (const [ai, a] of m.anchors.entries()) {
+      if (!regionById.has(a.region)) report('placement', 'layout.json', `menus[${mi}].anchors[${ai}].region`, `unknown region "${a.region}"`);
+    }
+  }
+  // doors that are a key or a pointer gesture have no control to place
+  const CONTROLLESS: readonly DoorKind[] = ['shortcut', 'canvas-drag', 'canvas-click', 'canvas-wheel', 'canvas-handle', 'layers-drag', 'panel-drag'];
+  const doorsByRegion: Record<string, number> = {};
+  for (const { file, path, door, ref: doorRef } of doors) {
+    const placement = door.placement;
+    if (CONTROLLESS.includes(door.kind)) {
+      if (placement !== 'none') report('placement', file, `${path}.placement`, `${doorRef} is a ${door.kind} door: it has no control, so its placement is "none"`);
+      continue;
+    }
+    if (placement === 'unplaced' || placement === 'none') {
+      report('placement', file, `${path}.placement`, `${doorRef} is ${placement === 'none' ? 'placed "none"' : 'still unplaced'}: DESIGN.md gives every ${door.kind} door a region and an order`);
+      continue;
+    }
+    doorsByRegion[placement.region] = (doorsByRegion[placement.region] ?? 0) + 1;
+    if (!regionById.has(placement.region)) {
+      report('placement', file, `${path}.placement.region`, `${doorRef} is placed in the unknown region "${placement.region}" (layout.json lists the regions of DESIGN.md)`);
+      continue;
+    }
+    const expected =
+      door.kind === 'menu' ? `menu:${door.menu}` : door.kind === 'context-menu' ? 'context-menu' : door.kind === 'command-bar' ? 'command-palette' : door.kind === 'quick-panel' ? 'quick-panel' : null;
+    if (expected !== null && placement.region !== expected) report('placement', file, `${path}.placement.region`, `${doorRef} is a ${door.kind} door, drawn in "${expected}", not in "${placement.region}"`);
+    if (door.kind === 'inspector-field' && !placement.region.startsWith('inspector-')) report('placement', file, `${path}.placement.region`, `${doorRef} is an inspector field, drawn in an inspector region, not in "${placement.region}"`);
+  }
+  // one control per position: two doors, or a door and a menu button, never share a region's order
+  const slots = new Map<string, string>();
+  const claim = (region: string, order: number, who: string, file: string, path: string) => {
+    const slot = `${region}@${order}`;
+    const first = slots.get(slot);
+    if (first !== undefined) report('placement', file, path, `${who} takes order ${order} of region "${region}", already taken by ${first}`);
+    else slots.set(slot, who);
+  };
+  for (const { file, path, door, ref: doorRef } of doors) {
+    if (typeof door.placement === 'object') claim(door.placement.region, door.placement.order, doorRef, file, `${path}.placement.order`);
+  }
+  for (const [mi, m] of p.layout.menus.entries()) {
+    for (const [ai, a] of m.anchors.entries()) claim(a.region, a.order, `the button of menu "${m.id}"`, 'layout.json', `menus[${mi}].anchors[${ai}].order`);
+  }
+
+  // ---- state-placement: a state belongs to the element's class selector, never to the page, so no
+  // control that chooses a state is drawn on the canvas frame or the canvas toolbar
+  const pageRegions: readonly string[] = PAGE_REGIONS;
+  const choosesState = (command: Command) => Object.values(command.args).some((a) => a.type === 'state');
+  const stateMenus = new Set<string>();
+  for (const { file, path, command, door, ref: doorRef } of doors) {
+    if (!choosesState(command)) continue;
+    if (door.kind === 'menu') stateMenus.add(door.menu);
+    const placement = door.placement;
+    if (typeof placement === 'object' && pageRegions.includes(placement.region)) {
+      report('state-placement', file, `${path}.placement.region`, `${doorRef} chooses a style state but is drawn in "${placement.region}": a state belongs to the element's class, so it is chosen only in the inspector's selector bar`);
+    }
+  }
+  for (const [mi, m] of p.layout.menus.entries()) {
+    if (!stateMenus.has(m.id)) continue;
+    for (const [ai, a] of m.anchors.entries()) {
+      if (pageRegions.includes(a.region)) report('state-placement', 'layout.json', `menus[${mi}].anchors[${ai}].region`, `menu "${m.id}" chooses a style state but opens from "${a.region}": a state is chosen only in the inspector's selector bar`);
+    }
+  }
+
+  // ---- label-term: one label names one CSS property in each language, and each glossary term is the
+  // label of its property. A label names a property when it labels an edited property, a composite (its
+  // shorthand) or a recipe, or a field that edits one of them as a whole under a label of its own (not
+  // a control of a structured value, which adds, removes or edits its layers and fields, not a button that
+  // writes one fixed value, not a field that shows its property's label and carries only its command's label).
+  const glossaryParse = glossarySchema.safeParse(input.glossary);
+  const glossary: Glossary | null = glossaryParse.success ? glossaryParse.data : null;
+  if (!glossaryParse.success) problems.push(...schemaProblems('i18n/glossary', glossaryParse.error));
+  const namedBy: { key: string; property: string; where: string }[] = [];
+  p.properties.properties.forEach((prop, i) => namedBy.push({ key: prop.labelKey, property: prop.id, where: `properties.json properties[${i}]` }));
+  p.properties.composites.forEach((c, i) => {
+    if (c.shorthand !== null) namedBy.push({ key: c.labelKey, property: c.shorthand, where: `properties.json composites[${i}]` });
+  });
+  p.properties.recipes.forEach((r, i) => namedBy.push({ key: r.labelKey, property: r.id, where: `properties.json recipes[${i}]` }));
+  const sameSet = (a: readonly string[], b: readonly string[]) => a.length === b.length && a.every((x) => b.includes(x));
+  for (const { file, path, command, door } of doors) {
+    if (door.kind !== 'inspector-field' && door.kind !== 'quick-panel') continue;
+    if (door.adapter.fields.length > 0 || 'value' in door.args || door.labelKey === command.labelKey) continue;
+    if (door.kind === 'inspector-field' && door.property !== null && structureOf(door.property) !== undefined) continue;
+    let named: string[] = [];
+    if (door.kind === 'inspector-field') {
+      if (door.property !== null) named = [door.property];
+      else if (door.composite !== null) named = [compositeById.get(door.composite)?.shorthand ?? ''].filter((x) => x !== '');
+      else if (door.recipe !== null) named = [door.recipe];
+    } else {
+      const writes = door.adapter.writes;
+      const composite = p.properties.composites.find((c) => c.shorthand !== null && sameSet(c.longhands, writes));
+      const recipe = p.properties.recipes.find((r) => sameSet(r.declarations.map((d) => d.property), writes));
+      named = writes.length === 1 ? [...writes] : composite?.shorthand ? [composite.shorthand] : recipe ? [recipe.id] : [...writes];
+    }
+    for (const property of named) namedBy.push({ key: door.labelKey, property, where: `${file} ${path}` });
+  }
+  for (const [locale, catalogue] of catalogues) {
+    const byLabel = new Map<string, Map<string, string>>();
+    for (const n of namedBy) {
+      const text = catalogue[n.key];
+      if (typeof text !== 'string' || text.trim() === '') continue;
+      const label = text.trim().toLowerCase();
+      const properties = byLabel.get(label) ?? new Map<string, string>();
+      if (!properties.has(n.property)) properties.set(n.property, `${n.key} (${n.where})`);
+      byLabel.set(label, properties);
+    }
+    for (const [label, properties] of byLabel) {
+      if (properties.size < 2) continue;
+      const list = [...properties].map(([property, from]) => `${property} by ${from}`).join('; ');
+      report('label-term', `i18n/${locale}`, label, `the label "${label}" names ${properties.size} CSS properties: ${list}. One term per concept: give each property its own label`);
+    }
+  }
+  if (glossary !== null) {
+    unique('glossary concept', 'i18n/glossary', glossary.concepts.map((c, i) => ({ id: c.id, path: `concepts[${i}]` })));
+    for (const [i, concept] of glossary.concepts.entries()) {
+      const labels = [...new Set(namedBy.filter((n) => n.property === concept.property).map((n) => n.key))];
+      if (labels.length === 0) {
+        report('label-term', 'i18n/glossary', `concepts[${i}].property`, `concept "${concept.id}" names ${concept.property}, which no field labels`);
+        continue;
+      }
+      for (const [locale, catalogue] of catalogues) {
+        const term = concept.terms[locale as keyof typeof concept.terms];
+        for (const key of labels) {
+          const text = catalogue[key];
+          if (typeof text === 'string' && text.trim() !== term) report('label-term', `i18n/${locale}`, key, `${key} labels ${concept.property} "${text}", but the glossary term of "${concept.id}" in ${locale} is "${term}"`);
+        }
+      }
+    }
+  }
+
   const doorsByKind: Record<string, number> = {};
   for (const { door } of doors) doorsByKind[door.kind] = (doorsByKind[door.kind] ?? 0) + 1;
   const referencesByKind: Record<string, number> = {};
@@ -1509,6 +1676,10 @@ export function checkManifest(input: ManifestInput): CheckResult {
     undoableCommands: commands.filter((c) => c.command.history.undoable).length,
     doors: doors.length,
     doorsByKind: Object.fromEntries(Object.entries(doorsByKind).sort(([a], [b]) => a.localeCompare(b))),
+    doorsByRegion: Object.fromEntries(p.layout.regions.map((r) => [r.id, doorsByRegion[r.id] ?? 0])),
+    regions: p.layout.regions.length,
+    menuAnchors: p.layout.menus.reduce((n, m) => n + m.anchors.length, 0),
+    glossaryConcepts: glossary?.concepts.length ?? 0,
     elements: p.elements.elements.length,
     paletteEntries: paletteEntryIds.size,
     attributes: p.elements.attributes.length,

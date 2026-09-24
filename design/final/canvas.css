@@ -1,0 +1,144 @@
+/*
+  Canvas overlays of the final interface: selection, handles, spacing bands, the number field of a handle,
+  measurement, drop indicator, drag ghost, text caret and toolbar, interaction target and the quick panel.
+  They sit inside the zoomed page. Pieces that keep a constant screen size counter the zoom with
+  `zoom: var(--iz)`; lengths inside them are screen pixels. Spacing bands stay in page pixels.
+  Type, spacing, radii, shadows and colours come from src/ui/tokens.css (the --cv-* names are set from the
+  tokens by index.html). Border widths and the positions of overlays are geometry, not tokens.
+
+  Label rule (DESIGN.md): a canvas label sits above its element when the space above is free; otherwise
+  inside its top-left corner when that corner is free; otherwise below the element. It never covers page
+  content, and it hides while the pointer is over it. The number field of a handle follows the same rule.
+*/
+.ov { position: absolute; inset: 0; pointer-events: none; z-index: 40; }
+.ov * { box-sizing: border-box; }
+.ov, .ov-tag, .ov-size, .ov-chip, .ov-num, .qp, .ttb, .ghost { letter-spacing: normal; text-transform: none; font-style: normal; text-align: left; }
+
+/* outlines */
+.ov-sel { position: absolute; inset: 0; outline: calc(1.5px * var(--iz)) solid var(--cv-sel); border-radius: inherit; }
+.ov-sel.is-state { outline-color: var(--cv-state); }
+.ov-hov { position: absolute; inset: 0; outline: calc(1px * var(--iz)) solid var(--cv-hov); }
+.ov-dash { position: absolute; inset: 0; outline: calc(1.5px * var(--iz)) dashed var(--cv-sel); }
+.ov-text { position: absolute; inset: 0; outline: calc(1.5px * var(--iz)) solid var(--cv-text); }
+
+/* labels: the element's name, its size */
+.ov-tag, .ov-size, .ov-chip {
+  position: absolute;
+  zoom: var(--iz);
+  font: var(--weight-semibold) var(--fs-caption)/var(--lh-body) var(--font-ui);
+  padding: 0 var(--space-3);
+  white-space: nowrap;
+  color: var(--cv-on);
+  background: var(--cv-sel);
+  border-radius: var(--radius-sm);
+}
+.ov-tag { bottom: 100%; left: 0; translate: 0 calc(-1 * var(--space-1)); }
+.ov-tag.is-below { bottom: auto; top: 100%; translate: 0 var(--space-2); }
+.ov-tag small { font-weight: var(--weight-regular); margin-left: var(--space-2); font-size: var(--fs-caption); }
+.ov-size { top: 100%; left: 50%; translate: -50% var(--space-2); }
+.ov-size.is-hov { background: var(--cv-hov); color: var(--cv-on-hov); }
+.is-text.ov-chip, .is-text.ov-tag { background: var(--cv-text); color: var(--cv-on-text); }
+.is-state.ov-tag { background: var(--cv-state); color: var(--cv-on-state); }
+.is-target.ov-tag { background: var(--cv-target); color: var(--cv-on-state); }
+.is-drop.ov-tag { background: var(--cv-drop); color: var(--cv-on); }
+
+/* resize handles */
+.ov-h { position: absolute; zoom: var(--iz); width: 8px; height: 8px; translate: -50% -50%; background: var(--cv-handle); border: 1.5px solid var(--cv-sel); border-radius: 1px; }
+.ov-h.nw { left: 0; top: 0; } .ov-h.n { left: 50%; top: 0; } .ov-h.ne { left: 100%; top: 0; }
+.ov-h.e { left: 100%; top: 50%; } .ov-h.se { left: 100%; top: 100%; } .ov-h.s { left: 50%; top: 100%; }
+.ov-h.sw { left: 0; top: 100%; } .ov-h.w { left: 0; top: 50%; }
+
+/* radius handles, inside each corner */
+.ov-rad { position: absolute; zoom: var(--iz); width: 8px; height: 8px; border-radius: var(--radius-pill); background: var(--cv-handle); border: 1.5px solid var(--cv-sel); }
+.ov-rad.nw { left: var(--space-5); top: var(--space-5); } .ov-rad.ne { right: var(--space-5); top: var(--space-5); }
+.ov-rad.se { right: var(--space-5); bottom: var(--space-5); } .ov-rad.sw { left: var(--space-5); bottom: var(--space-5); }
+
+/* rotation zone just outside the top-right corner */
+.ov-rot { position: absolute; zoom: var(--iz); left: 100%; top: 0; translate: var(--space-3) calc(-1 * var(--space-9)); width: 16px; height: 16px; color: var(--cv-sel); }
+
+/* spacing bands (page pixels) */
+.ov-band {
+  position: absolute;
+  --c: var(--cv-pad);
+  background:
+    repeating-linear-gradient(-45deg, color-mix(in srgb, var(--c) 55%, transparent) 0 calc(1px * var(--iz)), transparent 0 calc(6px * var(--iz))),
+    color-mix(in srgb, var(--c) 12%, transparent);
+}
+.ov-band.is-margin { --c: var(--cv-mar); }
+.ov-band.is-gap { --c: var(--cv-gap); }
+.ov-band.is-hot { background: color-mix(in srgb, var(--c) 34%, transparent); outline: calc(1px * var(--iz)) solid var(--c); }
+.ov-band.pt { left: 0; right: 0; top: 0; height: var(--pt); }
+.ov-band.pb { left: 0; right: 0; bottom: 0; height: var(--pb); }
+.ov-band.pl { left: 0; top: var(--pt); bottom: var(--pb); width: var(--pl); }
+.ov-band.pr { right: 0; top: var(--pt); bottom: var(--pb); width: var(--pr); }
+.ov-band.gap { left: 0; right: 0; top: 100%; height: var(--gap); }
+.ov-bandval {
+  position: absolute; left: 50%; top: 50%; translate: -50% -50%; zoom: var(--iz);
+  font: var(--weight-semibold) var(--fs-caption)/var(--lh-caption) var(--font-ui); padding: 0 var(--space-2); border-radius: var(--radius-xs); white-space: nowrap;
+  color: var(--cv-on-band); background: color-mix(in srgb, var(--c) 80%, var(--cv-band-shade));
+}
+
+/* the number field a press on a handle opens, with its modifier hint (kept from direction B) */
+.ov-num {
+  position: absolute; zoom: var(--iz); z-index: 60; display: flex; align-items: center; gap: var(--space-3);
+  height: 32px; padding: 0 var(--space-4); border-radius: var(--radius-md); background: var(--cv-tip-bg); color: var(--cv-tip-text);
+  font: var(--fw-body) var(--fs-body)/var(--lh-body) var(--font-ui); box-shadow: var(--shadow-3); white-space: nowrap;
+}
+.ov-num .in { display: inline-block; width: 44px; height: var(--size-target-min); padding: 0 var(--space-3); border: 1.5px solid var(--cv-sel); border-radius: var(--radius-sm); background: var(--cv-field-bg); color: var(--cv-field-text); font: var(--weight-semibold) var(--fs-body)/21px var(--font-ui); }
+.ov-num .hint { color: var(--cv-tip-muted); }
+
+/* measurement */
+.ov-mx { position: absolute; height: 0; border-top: calc(1px * var(--iz)) solid var(--cv-measure); }
+.ov-mx::before, .ov-mx::after { content: ""; position: absolute; top: calc(-5px * var(--iz)); height: calc(9px * var(--iz)); border-left: calc(1px * var(--iz)) solid var(--cv-measure); }
+.ov-mx::before { left: 0; } .ov-mx::after { right: 0; }
+.ov-mval { position: absolute; left: 50%; bottom: 100%; translate: -50% calc(-1 * var(--space-1)); zoom: var(--iz); font: var(--weight-semibold) var(--fs-caption)/var(--lh-caption) var(--font-ui); padding: 0 var(--space-2); border-radius: var(--radius-xs); color: var(--cv-on-band); background: var(--cv-measure); white-space: nowrap; }
+
+/* drag: insertion line, compact ghost beside the cursor, drop container */
+.ov-drop-v { position: absolute; top: -6px; bottom: -6px; width: calc(3px * var(--iz)); translate: -50% 0; border-radius: var(--radius-xs); background: var(--cv-drop); box-shadow: 0 0 0 calc(2px * var(--iz)) color-mix(in srgb, var(--cv-drop) 25%, transparent); }
+.ov-drop-v::before, .ov-drop-v::after { content: ""; position: absolute; left: 50%; width: calc(9px * var(--iz)); height: calc(9px * var(--iz)); translate: -50% -50%; border-radius: var(--radius-pill); background: var(--cv-handle); border: calc(2px * var(--iz)) solid var(--cv-drop); }
+.ov-drop-v::before { top: 0; } .ov-drop-v::after { top: 100%; }
+.ov-droparea { position: absolute; inset: -6px; outline: calc(1.5px * var(--iz)) dashed var(--cv-drop); background: color-mix(in srgb, var(--cv-drop) 5%, transparent); border-radius: 24px; }
+.ghost {
+  position: absolute; zoom: var(--iz); z-index: 70; display: flex; align-items: center; gap: var(--space-3);
+  height: 28px; padding: 0 var(--space-4) 0 var(--space-1); border-radius: var(--radius-md); white-space: nowrap;
+  font: var(--weight-semibold) var(--fs-body)/var(--lh-body) var(--font-ui); color: var(--cv-ghost-text); background: var(--cv-ghost-bg);
+  box-shadow: var(--shadow-2); border: 1px solid var(--cv-ghost-border);
+}
+.ghost .thumb { width: 22px; height: 22px; border-radius: var(--radius-sm); background: linear-gradient(135deg, #9dbb8a, #3f6b4f); }
+.ghost small { font-weight: var(--weight-regular); color: var(--cv-ghost-muted); font-size: var(--fs-caption); }
+
+/* cursors */
+.ov-cursor { position: absolute; zoom: var(--iz); width: 22px; height: 22px; z-index: 65; filter: drop-shadow(0 1px 1px var(--cv-cursor-shadow)); }
+
+/* text editing */
+.tsel { background: color-mix(in srgb, var(--cv-text) 30%, transparent); color: inherit; border-radius: var(--radius-xs); }
+.caret { display: inline-block; width: 0; height: 1.05em; vertical-align: -0.12em; margin-left: 1px; border-left: calc(2px * var(--iz)) solid var(--cv-text); }
+.ttb { position: absolute; zoom: var(--iz); display: flex; flex-direction: column-reverse; align-items: flex-start; gap: var(--space-2); z-index: 60; }
+.ttb .ov-chip { position: static; zoom: 1; }
+.ttb-bar { display: flex; gap: var(--space-1); padding: var(--space-1); border-radius: var(--radius-md); background: var(--cv-panel-bg); border: 1px solid var(--cv-panel-border); box-shadow: var(--shadow-2); }
+.ttb-bar button { display: grid; place-items: center; width: var(--size-target-min); height: var(--size-target-min); padding: 0; border: 0; border-radius: var(--radius-sm); background: none; color: var(--cv-panel-text); font: var(--weight-semibold) var(--fs-title)/1 var(--font-ui); pointer-events: auto; }
+.ttb-bar button.is-on { background: var(--cv-panel-on); }
+.ttb-bar button.is-italic { font-style: italic; font-weight: var(--weight-regular); }
+
+/* interaction target picking */
+.ov-pick { position: absolute; inset: -5px; outline: calc(2px * var(--iz)) dashed var(--cv-target); background: color-mix(in srgb, var(--cv-target) 6%, transparent); border-radius: 22px; }
+
+/* the quick panel: a chip by default, beside the selection on the side with the most free space */
+.qp { position: absolute; zoom: var(--iz); z-index: 55; pointer-events: auto; font: var(--fw-body) var(--fs-body)/var(--lh-body) var(--font-ui); color: var(--cv-panel-text); }
+.qp-chip { display: grid; place-items: center; width: var(--size-target-min); height: var(--size-target-min); padding: 0; border-radius: var(--radius-md); border: 1px solid var(--cv-panel-border); background: var(--cv-panel-bg); color: var(--cv-panel-muted); box-shadow: var(--shadow-1); }
+.qp-chip svg { width: 14px; height: 14px; }
+.qp-panel { width: 196px; padding: var(--space-3) var(--space-4) var(--space-4); border-radius: var(--radius-lg); border: 1px solid var(--cv-panel-border); background: var(--cv-panel-bg); box-shadow: var(--shadow-3); }
+.qp-head { display: flex; align-items: center; gap: var(--space-2); height: 26px; margin-bottom: var(--space-1); }
+.qp-head b { font-weight: var(--weight-semibold); white-space: nowrap; }
+.qp-head .grow { flex: 1; }
+.qp-head button { display: grid; place-items: center; min-width: var(--size-target-min); height: var(--size-target-min); border: 0; border-radius: var(--radius-sm); background: none; color: var(--cv-panel-muted); padding: 0; }
+.qp-grp { margin-top: var(--space-3); padding-top: var(--space-3); border-top: 1px solid var(--cv-panel-border); }
+.qp-grp > span { display: block; font-size: var(--fs-caption); line-height: var(--lh-caption); color: var(--cv-panel-muted); margin-bottom: var(--space-1); }
+.qp-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2); margin-top: var(--space-2); }
+.qp-f { display: flex; align-items: center; gap: var(--space-2); height: var(--size-target-min); min-width: 0; padding: 0 var(--space-3); border-radius: var(--radius-sm); background: var(--cv-field-soft); white-space: nowrap; }
+.qp-f .k { color: var(--cv-panel-muted); font-size: var(--fs-caption); }
+.qp-f .u { margin-left: auto; color: var(--cv-panel-muted); font-size: var(--fs-caption); }
+.qp-f.o-here { color: var(--cv-origin-here); background: var(--cv-origin-here-soft); font-weight: var(--weight-semibold); }
+.qp-f.o-bp { color: var(--cv-origin-bp); background: var(--cv-origin-bp-soft); }
+.qp-f.o-inh { color: var(--cv-origin-inh); background: var(--cv-origin-inh-soft); }
+.qp-f .sw { width: 12px; height: 12px; border-radius: var(--radius-xs); border: 1px solid var(--cv-panel-border); flex: none; }

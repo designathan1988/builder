@@ -47,7 +47,10 @@
           "gesture": null,
           "labelKey": "layers.renameByDoubleClick",
           "disabledReasonKey": "status.needsSingleSelection",
-          "placement": "unplaced",
+          "placement": {
+            "region": "layers-row",
+            "order": 6
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -118,7 +121,10 @@
           "entry": "command",
           "labelKey": "command.rename",
           "disabledReasonKey": "status.needsSingleSelection",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 23
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -172,7 +178,10 @@
           "gesture": null,
           "labelKey": "layers.renameField",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "layers-row",
+            "order": 7
+          },
           "adapter": {
             "selection": "target",
             "offers": null,
@@ -221,7 +230,10 @@
           "gesture": null,
           "labelKey": "command.lock",
           "disabledReasonKey": "refusal.nothingSelected",
-          "placement": "unplaced",
+          "placement": {
+            "region": "layers-row",
+            "order": 9
+          },
           "adapter": {
             "selection": "target",
             "offers": null,
@@ -274,7 +286,10 @@
           "entry": "command",
           "labelKey": "command.lock",
           "disabledReasonKey": "refusal.nothingSelected",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 24
+          },
           "adapter": {
             "selection": "primary",
             "offers": null,
@@ -323,7 +338,10 @@
           "gesture": null,
           "labelKey": "command.hide",
           "disabledReasonKey": "refusal.nothingSelected",
-          "placement": "unplaced",
+          "placement": {
+            "region": "layers-row",
+            "order": 8
+          },
           "adapter": {
             "selection": "target",
             "offers": null,
@@ -376,7 +394,10 @@
           "entry": "command",
           "labelKey": "command.hide",
           "disabledReasonKey": "refusal.nothingSelected",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 25
+          },
           "adapter": {
             "selection": "primary",
             "offers": null,
@@ -428,7 +449,10 @@
           "gesture": null,
           "labelKey": "command.setLayerColor",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "layers-row",
+            "order": 5
+          },
           "adapter": {
             "selection": "target",
             "offers": null,

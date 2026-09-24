@@ -1,0 +1,243 @@
+# Design
+
+The single interface contract. It says what every region of the window holds, where every door of the manifest is drawn and in which order, how the canvas behaves, and which tokens the interface uses. The builder never invents where a control lives: if a control is not placed by this document and by the manifest, stop and ask.
+
+The interface combines direction A "classic refined" (top bar, inspector, element grid, rulers, breakpoint warning) with direction C "studio" (activity bar, explorer, file tabs, Canvas / Split / Code). Only B's canvas behaviour is kept (number field on a handle, hover measurement, drop indicator).
+
+Sources, in this order of authority:
+
+| What | Where |
+|---|---|
+| Regions and menu anchors | `manifest/layout.json` (schema `layoutFileSchema` in `src/manifest/schema.ts`) |
+| The breakpoints in cascade order, the first the base | `breakpoints` of `manifest/properties.json` (`base: true` on the first and only there) |
+| The categories of the Checks tab | `manifest/checks.json` |
+| The region and order of every door | `placement` of each door in `manifest/commands/*.json` |
+| The visual source | `design/final/index.html` (12 states, the Split view, light and dark, English and pt-BR) and its screenshots in `design/final/shots/` |
+| Design tokens | `design/final/tokens.json` (DTCG), built by `npm run gen` into `src/ui/tokens.css` |
+| One term per concept | `src/i18n/glossary.json` |
+
+The older mockups in `design/a-classic-refined`, `design/b-pen`, `design/c-studio` and `design/OPTIONS.md` are history: where they differ from `design/final/`, `design/final/` wins.
+
+Checks that hold this contract (both are part of the evidence of every session that touches the interface):
+
+- `npm run manifest:check`, rules `placement` (every door with a control has a region of `layout.json`, keys and gestures have none, a menu's items are in `menu:<menu>`, context-menu items in `context-menu`, palette entries in `command-palette`, quick panel fields in `quick-panel`, inspector fields in an inspector region, every menu has an anchor, two controls never share a region's order), `state-placement` (no control that chooses a style state is drawn on the canvas frame or the canvas toolbar, and no menu of such controls opens from them) and `label-term` (one label, in either language, never names two CSS properties, and each glossary term is the label of its property). The summary prints the number of doors placed in each region.
+- `npm run design:shots` renders `design/final/index.html` in the installed Chrome and fails on clipped or overflowing text (English and pt-BR), a pointer target under 24 px that is not spaced as WCAG 2.2 criterion 2.5.8 allows, a console error, a canvas label over page content, a control drawn in a region other than the one the manifest places it in or out of its order there, a control drawn with no door, and a text whose inline English is not its i18n key's English. Every control of the mockup carries `data-door="<command>#<door>"`, `data-menu` for a menu's button, or `data-local` for a control that is not a command, and sits inside `data-region="<region>"`.
+
+## The window
+
+```
+┌──────────────────────────────── top bar ─────────────────────────────────┐
+│act│ sidebar  │ file tabs                                   │ inspector    │
+│ivi│ Explorer │ canvas toolbar                              │ Style        │
+│ty │ Insert   │ ruler ┌ breakpoint tabs ┐                   │ Settings     │
+│   │ Styles   │   ┆   │ frame (the page, zoomed)            │ Interactions │
+│bar│          │       └──────────────────  [code pane]      │              │
+│   │          │ dock strip: Timeline · Checks (collapsed)   │              │
+├───┴──────────┴─────────────────── status bar ──────────────┴──────────────┤
+```
+
+Sizes come from the tokens: top bar 40, activity bar 40, sidebar 224, inspector 288, file tabs 34, canvas toolbar 36, rulers 20, frame tabs 28, dock strip 28 (open dock 212), status bar 24, code pane 400. In the default Canvas view the canvas area (file tabs, canvas toolbar, rulers and stage) is 888 px wide at 1440 × 900, the width it had in direction A, and 1368 px at 1920 × 1080. The sidebar, the inspector and the dock are fixed, resizable with their splitters and collapsible (Ctrl+B, Ctrl+Alt+B, Ctrl+\\); nothing floats except menus, the palette, popovers, the quick panel and the text toolbar.
+
+Theme: it follows the system setting (`prefers-color-scheme`); the Theme menu (View > Theme) can force Light or Dark. Light and dark are both complete token sets.
+
+## Regions
+
+Every region below is an id of `manifest/layout.json`. "Order" is the `order` of the placement: 1 is first (leftmost in a row, topmost in a column). Component regions are the parts of a control that repeats wherever it is drawn.
+
+### Fixed regions
+
+| Region | Area | What it holds, in order |
+|---|---|---|
+| `top-bar` | top | 1–5 the menu buttons File, Edit, Arrange, View, Help (anchors of the application menus) · 6 page switcher (the current page and its file name; its list switches the page) · 7 command palette search (Ctrl+K) · 8 Undo · 9 Redo · 10 Preview · 11 Export project (ZIP). The save state ("Saved") sits before Preview and is not a control. Breakpoints and page properties are never in the top bar (page properties open from the inspector header and the palette). |
+| `preview-bar` | top (preview mode only) | 1–4 breakpoints Desktop, Laptop, Tablet, Phone · 5 Exit preview · 6 Export. It replaces the top bar while previewing; docks, selection, guides and handles are hidden. |
+| `activity-bar` | left | 1 Explorer · 2 Insert · 3 Styles. Each shows its view in the sidebar; the active one is marked with the accent bar. |
+| `explorer-pages` | left, Explorer view | 1 Add a page (section header) · 2 page row (opens the page) · 3 page name field · 4 Duplicate · 5 Delete. |
+| `explorer-files` | left, Explorer view | 1 New file · 2 New folder · 3 Upload (section header) · 4 file row (opens the file in a file tab) · 5 file name field · 6 Move to… · 7 Delete. |
+| `explorer-layers` | left, Explorer view | 1 the Layers section header (shows or hides the Layers section) · 2 Expand every branch · 3 Collapse every branch · 4 the button of the menu "What each row shows". Then the tree, whose rows are the `layers-row` component. |
+| `insert` | left, Insert view | The search field (typing filters; not a command) · 1–4 density: List, Two columns, Three columns, Icon grid · 5 group header · 6 element tile · 7 component tile. Two columns is the default in this sidebar width. |
+| `styles` | left, Styles view | The classes, a read-only list (each class with the number of elements it styles and its states; a class is edited through the selector bar) · the variables, which are the project's design tokens, grouped by type (Colours, Sizes, Fonts): 1 New variable · 2 variable name field · 3 variable value field · 4 Delete the variable. |
+| `file-tabs` | centre | Each tab is its name then its close button: 1 page tab (switches the page) · 2 Close the file tab · 3 file tab (shows a code file in the Code view). |
+| `canvas-toolbar` | centre | 1–3 the view switch Canvas / Split / Code · 4 Canvas tools (shows or hides 5–9) · 5 Outlines · 6 Zones · 7 Column grid · 8 Row grid · 9 Dot grid · 10 Snap · 11 the button of the Snap options menu · 12 the zoom button (opens the Zoom menu). The key hint of the current gesture (Alt measuring, drag keys, text keys, picking) is text at the right, not a control. No state control is ever here (`state-placement`). |
+| `canvas-frame` | centre | The breakpoint tabs attached to the top of the frame: 1 Desktop · 2 Laptop · 3 Tablet · 4 Phone, along the cascade from the base breakpoint (Desktop, 1440, marked "base"). No state control is ever here. |
+| `quick-panel` | centre, floating | The quick panel's fields, in this order: 1 Tag · 2 More actions · 3 Edit on canvas · 4 W · 5 H · 6–11 Align left, centre, right, top, middle, bottom · 12–13 Distribute horizontally, vertically · 14 Background · 15 Fill (SVG) · 16 Gradient · 17 Border · 18 Opacity · 19 Effects (filter) · 20 Text colour · 21 Font · 22 Size · 23 Font weight · 24 Line height · 25 Letter spacing · 26 Text align · 27 Move X · 28 Rotate · 29 Scale · 30 Skew X · 31 Skew Y. A field shows only when its property applies to the selection. |
+| `text-toolbar` | centre, floating | While editing text: 1 Bold · 2 Italic · 3 Link. |
+| `code-view` | centre | The code pane of the Split and Code views: 1 Copy this pane · 2 Download this pane · 3 a code line (clicking selects its element) · 4 Apply the HTML · 5 Apply the CSS · 6 Save the file. Its HTML / CSS / JS tabs are the `tab-strip` component. |
+| `inspector-header` | right | 1 Style · 2 Settings · 3 Interactions (the inspector's tabs) · 4 Page properties · 5 the button of the Element actions menu (Lock, Hide, Reset every value). |
+| `inspector-selector-bar` | right, Style tab only | The selected element's icon, name and tag (not controls) · 1 the target chips: Element, then each class (choosing one makes it the style target) · 2 the × of a class chip (removes the class from the element) · 3 + Class · 4 Save the styles as a class · 5 the state picker (the button of the State menu). Below the chips, the count of elements the target reaches (".card affects 3 elements"), and the active breakpoint, read-only, beside the state picker. |
+| `inspector-style` | right, Style tab | The value-origin legend (not a control) · 1 Essentials only · 2 All properties · 3 the property search result (reveals the field) · 4 the section header (collapses a section) · then every style field, from order 5 on, by section, group and property (see "Inspector"); the alignment matrix follows direction and wrap, and the margin box is drawn around the padding box. |
+| `inspector-settings` | right, Settings tab | The text of a text element first, then every attribute field in the order of `elements.json` attributes, then the custom attributes (add, value, remove) and the parts editors (options, sources, tracks, SVG shapes, table parts, move up, move down, remove). |
+| `inspector-interactions` | right, Interactions tab | 1 Add an interaction · then each interaction card: 2 Remove the interaction (in its header) · 3 Applies to (this element or its class) · 4 Trigger · 5 Action · 6 Options. The Target field starts picking (not a command); the target is picked on the canvas or on a Layers row. |
+| `dock-strip` | bottom | The dock's tabs (Timeline, Checks, and Keyboard shortcuts and Document when they are opened; the `tab-strip` component) · a one-line preview of the first check when the dock is collapsed (not a control) · 1 Show or hide the workbench · 2 Maximize · 3 Close a tab. |
+| `dock-timeline` | bottom | Left, the animations: 1 New animation · 2 animation name field · 3 Delete the animation · 4–10 the settings Duration, Delay, Repeat, Direction, Fill mode, Timing function, Play state. Right, the timeline: 11 Play · 12 Pause · 13 Stop · 14 Loop · 15 the time ruler (moves the playhead) · 16 Add keyframe · 17 keyframe easing · 18 Delete the keyframe. |
+| `dock-checks` | bottom | 1 an issue row (selects its element). Issues are grouped by the categories of `manifest/checks.json`: Accessibility, Links, SEO, Export, each arriving with the feature that produces its checks. |
+| `status-bar` | bottom | The last message (an `aria-live` region) · 1 the breadcrumb of the selection (each ancestor selects it) · the size W × H · the breakpoint · the element count · 2 Zoom out · 3 the zoom value (opens the Zoom menu) · 4 Zoom in · 5 Fit · 6 the language (opens the Language menu) · the save state. |
+
+### Overlays
+
+| Region | What it holds |
+|---|---|
+| `command-palette` | Ctrl+K or Ctrl+Shift+K. Every command-bar door, commands first, then insert, open panel, set property and edit property entries, each group in the order of the command files. Scopes (filters, not commands): All, Commands `>`, Insert `+`, Panels `/`, Properties `#`, one per kind of command-bar entry. Only commands that apply to the selection are offered. The export command is "Export project (ZIP)", because the export is the whole file tree. |
+| `context-menu` | Opened by a secondary click on the canvas or on a Layers row, or by More actions of the quick panel. Its items keep the manifest order, and it shows only the commands that apply to the selection: no disabled item, and no "not available yet" item (on the first child of a container, Move up and Make child of previous layer are left out; on an element with no natural child, Create … inside is left out). |
+| `menu:<menu>` | The items of each menu, in their order. Application menus (File, Edit, Arrange, View, Help, and View's submenus Theme and Language) show every item: an item that cannot apply now is disabled, and an item whose feature is not built yet is disabled with "not available yet". These are the only places where "not available yet" items appear in a menu. Menus have no separators or group labels: the manifest declares none. |
+| `color-picker`, `link-picker`, `asset-picker` | Popovers opened from a field; their controls in the listed order. |
+| `guides-grids-dialog`, `snap-settings-dialog`, `recovery-dialog`, `tab-guard` | Dialogs; their controls in the listed order. |
+| `toast` | Undo on the toast that follows a delete. |
+| `overlay` | The backdrop that closes a menu or popover. |
+
+### Component regions
+
+| Region | Where it repeats | Parts, in order |
+|---|---|---|
+| `field` | every number or length field (inspector, quick panel) | 1 unit menu · 2 step up · 3 step down · 4 reset this value |
+| `layers-row` | every Layers row | 1 click (select) · 2 Shift+click (add) · 3 Ctrl+click (toggle) · 4 caret · 5 colour dot · 6 name (double-click renames) · 7 name field · 8 Hide · 9 Lock (8 and 9 appear on the row under the pointer, so a selected row keeps its whole name) · 10 pick as the interaction target · 11 secondary click (context menu) |
+| `tab-strip` | the dock's tabs and the code view's HTML / CSS / JS tabs | 1 a tab |
+| `panel-header` | every closable panel | 1 Close the panel |
+| `dialog` | every dialog | 1 Close |
+
+### Menu buttons (`layout.json` `menus`)
+
+| Menu | Opens from |
+|---|---|
+| File, Edit, Arrange, View, Help | `top-bar` 1–5 |
+| Theme | View, item 17 |
+| Language | View, item 18, and `status-bar` 6 |
+| Element actions | `inspector-header` 5 |
+| Zoom | `canvas-toolbar` 12 and `status-bar` 3 |
+| Snap options | `canvas-toolbar` 11 |
+| State | `inspector-selector-bar` 5 (the state picker) |
+| What each row shows | `explorer-layers` 4 |
+
+## Placement rule for every door kind
+
+| Door kind | Placement |
+|---|---|
+| `shortcut`, `canvas-click`, `canvas-drag`, `canvas-wheel`, `canvas-handle`, `layers-drag`, `panel-drag` | `none`: a key or a pointer gesture has no control of its own. Handles are drawn on the selection (see "Canvas"). |
+| `menu` | `menu:<menu>`, in the order the features gave the items. |
+| `context-menu` | `context-menu`, in the order the features gave the items. |
+| `command-bar` | `command-palette`, commands first, then insert, open panel, set property, edit property. |
+| `quick-panel` | `quick-panel`, in the order of the table above. |
+| `inspector-field` | A style property, composite or recipe: `inspector-style`, ordered by section, then group, then the order of the property (properties, then composites, then recipes) in `properties.json`, then the door's order in its command. Editor controls: the alignment matrix follows direction and wrap in Flex, the spacing link opens Margin and padding (margin before padding), the anchor control opens Anchors; custom declarations close the tab. An attribute, or the text of a text element: `inspector-settings`. |
+| `toolbar` | The region of its toolbar: `top-bar`, `preview-bar`, `status-bar`, `activity-bar`, `canvas-toolbar`, `text-toolbar`; `breakpoint-tabs` → `canvas-frame`; `layers-header` → `explorer-layers`; `workbench-strip` → `dock-strip`. |
+| `panel-control` | By its panel: `inspector` → the inspector region that holds it (header, selector bar, style, settings, interactions) or `field`; `explorer` → `explorer-pages` or `explorer-files`; `layers` → `layers-row`; `elements` → `insert`; `variables` → `styles`; `file-tabs` → `file-tabs`; `canvas-tools` → `canvas-toolbar`; `code-panel` → `code-view`; `timeline` → `dock-timeline`; `checks` → `dock-checks`; `workbench` → `dock-strip`; `tab-strip` → `tab-strip`; `status-bar` → `status-bar`; `guides-grids`, `snap-settings`, `recovery-dialog`, `tab-guard`, `color-picker`, `link-picker`, `asset-picker`, `toast`, `overlay`, `dialog`, `panel-header` → the region of the same name. |
+
+What is not a command, and so not a door (`data-local` in the mockup): opening a menu, a popover or the quick panel (its chip); typing in a search field (the Insert search, the property search) before choosing a result; the palette's scope filters; starting to pick an interaction's target (the pick itself is a door); scrolling a panel. Read-only displays are not controls: the active breakpoint in the selector bar, the save state, sizes, counts, the class list of the Styles view, the check preview, key hints.
+
+Build order. A door is shown disabled with "not available yet" until its feature is built, except in the context menu, which leaves it out. The activity bar's Insert and Explorer buttons arrive with `palette-click-insert` and `layers-tree`, so `workspace.setPanelOpen` is introduced by `editor-shell`; the inspector's Style and Settings tabs arrive with `inspector-panel`, so `workspace.setActiveTab` is introduced there; the Interactions tab arrives with `events-actions`. Before `explorer-pages`, the Explorer view shows only Layers.
+
+## Canvas
+
+The page renders inside an iframe scaled with CSS `zoom`. The frame sits 24 px from the left ruler; rulers show page pixels and highlight the selection's extent.
+
+**Breakpoints belong to the page.** A breakpoint is the viewport width. Its tabs are attached to the top of the frame, ordered along the cascade from the base breakpoint, as `properties.json` lists them (desktop-first: Desktop 1440 "base", Laptop 1180, Tablet 834, Phone 390). When a breakpoint other than the base is active, the frame gets the breakpoint outline (`--color-mode-breakpoint`) and a band under the tabs reads "Tablet · 834 px — edits apply to Tablet" (`canvas.breakpointWarning`). The inspector shows the active breakpoint read-only, and values that come from another breakpoint wear the breakpoint origin colour.
+
+**States belong to the element.** A state is part of the element's class selector (`.card:hover` applies to every element with `.card`). The state picker lives only in the inspector's selector bar. While a state other than Base is active:
+
+- only the selected element's canvas label shows it ("Assinar agora · :hover", `canvas.elementState`, in the state colour);
+- only the elements that have the target class are drawn in that state;
+- the selector bar says how far the edit reaches (".btn:hover affects 3 elements", `inspector.affects.*`);
+- no frame colour, band or toolbar control shows the state.
+
+**Views.** Canvas (the default), Split (the canvas and the code pane side by side, the selection's lines highlighted and scrolled into view; clicking a line selects its element) and Code (the code pane alone). The View menu's item Split (`view.setEditorView`) switches to Split.
+
+**Overlays and states drawn** (`design/final/shots/1440-NN-<state>.png`):
+
+| State | What the canvas shows |
+|---|---|
+| default | The selection outline, its name label and size chip, and the quick panel chip beside it. |
+| hover | The hover outline and size of the element under the pointer; with Alt held, the distance to the selection (`--color-canvas-measure`). |
+| selection | Resize handles (8), radius handles (4), the rotation zone outside the top-right corner, padding, margin and gap bands; pressing a spacing handle opens the number field with its hint "Drag or type · Shift step 10 · Alt opposite side · Ctrl no snapping" (`canvas.handleHint`) on that handle's side of the element, following the label rule (the shot edits the bottom padding: the field sits below the card, over no content); the size chip hides while it is open. |
+| drag | Dragging an element that is not selected selects it first; dragging an element that is part of the selection drags the whole selection. The inspector, Layers and the breadcrumb show what is being dragged. The ghost is a compact chip (a small thumbnail and the element name) beside the cursor; the drop indicator and the drop container outline are never under it; the drop label reads "Drop in Grade de cartões · position 2 of 3". Arrow keys change the level (the key hint in the canvas toolbar). |
+| multi | Each selected element outlined, the union dashed, one label "3 elements selected · 1248 × 390"; the inspector shows Mixed where values differ. |
+| breakpoint | As above; the quick panel is open on the side with the most free space. |
+| state | As above. |
+| text | The text outline, the caret and the text selection; the floating text toolbar (Bold, Italic, Link) and the label "Editing text · Título principal" above the element, in free space. Ctrl+B, Ctrl+I, Ctrl+K do the same. |
+| interaction | The target being picked, dashed in the target colour with its label; the matching Layers row marked; the dock open on the Timeline. The editing canvas never runs interactions. |
+
+**Label rule** (selection name, "N elements selected", drop target, text editing, state, and the number field of a handle). A label never covers page content: it sits above its element when the space above is free; otherwise inside the element's top-left corner when that corner is free; otherwise below the element. When the name label moves below, the size joins it. A label hides while the pointer is over it. `npm run design:shots` fails when a label intersects page text or an image.
+
+**Quick panel.** A small panel near the selection, collapsed to a chip (24 × 24) by default. It exists to give typography, filters and skew a canvas door. It never covers the selection or the content directly above it; it goes to the side of the selection with the most free space (the page margin, or the canvas outside the frame). While text is edited, the text toolbar replaces it.
+
+**Canvas doors (requirement 7, refined).** Geometric properties are edited with direct handles on the selection: size (resize handles), padding, margin, gap, radius, border width, shadow (offset and blur), rotation, position (move, anchors) and grid tracks. Typography (font, size, weight, line height, letter spacing, alignment, colour), filters (Effects) and skew get their canvas door as fields in the quick panel. Every such field runs the same command as the inspector field and writes the same document JSON.
+
+## Inspector
+
+Three tabs: Style, Settings, Interactions.
+
+**Style tab**, top to bottom:
+
+1. **Selector bar** (only in this tab): the element's icon, name and tag; the target chips — **Element** first, then each class; + Class; Save the styles as a class; the count of elements the target reaches; the state picker; the active breakpoint, read-only.
+2. **Value-origin legend**: Here (this target, breakpoint and state), Other breakpoint, Other state, Inherited, Default. Every field and its label wear the origin colour of their value; a field never shows a blank: it shows the effective value and where it comes from.
+3. **Essentials only / All properties** (`inspector.setMode`), remembered once chosen.
+4. **Property search**: typing lists matching properties; choosing one reveals and focuses its field.
+5. **Sections**, always all eight and always in this order: Layout (display, direction and wrap, the alignment matrix, gap, grid, in parent, columns, scrolling, table), Space (the box model: margin outside, padding inside), Size, Position, Paint, Border, Text, Effects. Inside a section the fields follow the placement order of the manifest. A section is open until the user collapses it; the collapsed state is remembered per section, and a collapsed section shows a summary of its values (Position: static · z auto). The shots show sections as a user left them.
+
+Every property field shows the CSS property name in its tooltip (`padding-top`, `background-color`). A field's unit menu, step buttons and reset are the `field` component.
+
+**The Element chip** styles only this element. The export writes those styles as a generated unique BEM class for that element (for example `.card--a3f2` on that one element), never as a `style` attribute and never as an `#id` selector, because the export has no inline styles.
+
+**Settings tab**: the text of a text element, the attributes (id, link, alt, form attributes…), custom attributes and the parts editors.
+
+**Interactions tab**: no selector bar. The element's name and tag, Add, then each interaction with its trigger, action, target and options, and **Applies to**: this element, or every element with its class ("Every element with .btn (3)").
+
+## Files, tabs and code
+
+The Explorer separates what the document generates from the user's own files:
+
+- Each page's HTML, the generated stylesheet `css/styles.css` and, when the project has interactions, `js/interactions.js` carry a "generated" badge (`files.generated`). They cannot be deleted (a page file goes with its page). Editing a page's HTML or the stylesheet in the code view becomes commands on the document (`element.applyHtml`, `style.applyCssRule`): the document JSON is the source of truth. `js/interactions.js` opens read-only; interactions are edited in the Interactions tab.
+- The user's files (images, fonts, JS, an imported CSS file no page links any more) are ordinary files: rename, move, delete, and edit and save in the code view (`files.saveContent`).
+
+File tabs list the open pages and code files. A page tab shows the page on the canvas; a code file tab shows the file in the Code view.
+
+The project is a file tree and the export is that same tree as a ZIP.
+
+## Dock and status bar
+
+The bottom dock is collapsed to its strip by default. Its tabs are **Timeline** and **Checks**; Keyboard shortcuts (Help) and Document (developer tools) open there as tabs when asked. Checks is one list with the categories Accessibility, Links, SEO and Export; the collapsed strip previews the first issue. Checks never block editing or export.
+
+The status bar shows the last message, the selection path, the size, the breakpoint, the element count, the zoom, the language and the save state.
+
+## Keyboard model
+
+The keymap is the shortcut doors of the manifest; there is no other list. Key contexts (`interactions.json`) decide which binding wins: text editing, menus, the palette, dialogs and fields do not inherit the global keys.
+
+- **Ctrl+K** opens the command palette; inside text editing it is the link shortcut. **Ctrl+Shift+K** opens the palette in the global context (and so on the canvas, in Layers and in the panels that inherit it) and while editing text; menus, dialogs, fields and the palette itself keep their own keys.
+- **Ctrl+D** duplicates and **Ctrl+P** previews: the Figma and Webflow conventions. Chrome does not reserve them; the page prevents their defaults.
+- **Ctrl+B** hides and shows the left sidebar, and is Bold while editing text; **Ctrl+Alt+B** the inspector; **Ctrl+\\** every dock.
+- Undo **Ctrl+Z**, redo **Ctrl+Shift+Z** or **Ctrl+Y**; copy, cut, paste; **Ctrl+Alt+C / V** copy and paste style.
+- On the canvas: arrows walk the tree, **Enter** edits text, **F2** renames, **Delete** deletes, **Alt+↑ / ↓** move, **Alt+→** nests, **P** promotes, **R / C** wrap in a row or a column, **M** takes into the hand, **Esc** clears the selection.
+- Held keys have one meaning per gesture: **Shift** steps by 10 (or constrains), **Alt** measures or acts on the opposite side (resizes from the centre), **Ctrl** suspends snapping, **Space** pans.
+- **F6 / Shift+F6** move focus between regions; every control is reachable with Tab and shows the focus ring (`--color-focus`).
+
+## Glossary
+
+One term per concept, in each language (`src/i18n/glossary.json`). `manifest:check` rule `label-term` fails when one label, in either language, names two different CSS properties, or when a concept's property is labelled other than its term.
+
+| Concept | CSS property | English | pt-BR | Note |
+|---|---|---|---|---|
+| margin | `margin` | Margin | Margem | Never "Espaço", which names the Space section. |
+| padding | `padding` | Padding | Padding | pt-BR keeps the CSS word: "Preenchimento" is the SVG fill. |
+| gap | `gap` | Gap | Gap | Never "Espaçamento". |
+| background | `background-color` | Background | Fundo | Its gradient and image layers are "Background layers" / "Camadas de fundo". |
+| fill | `fill` | Fill | Preenchimento | SVG fill only: a box has a Background, never a Fill. |
+| stroke | `stroke` | Stroke | Traço | SVG only; a box has a Border. |
+| border | `border` | Border | Borda | |
+| radius | `border-radius` | Radius | Raio | |
+| outline | `outline` | Outline | Contorno | |
+| opacity | `opacity` | Opacity | Opacidade | |
+
+The quick panel follows the same terms: Background writes `background-color`, Fill writes the SVG `fill`, Gradient writes `background-image`.
+
+## UI language
+
+Everything on disk (code, file names, commits, this document) is in English. The UI language is switchable: English (`src/i18n/locales/en.json`) is the source catalogue and the default; Brazilian Portuguese (`pt-BR.json`) is a translation with the same keys and placeholders, chosen in View > Language or from the status bar. All UI text goes through i18n keys; `design:shots` renders the default state in pt-BR, where the longer labels are, and fails on any clipped text. The sample site content (the Aurora café) and the names users give to elements are user content and are never translated.
+
+## Density and tokens
+
+Colours, type, spacing, sizes, radii and shadows come only from the custom properties of `src/ui/tokens.css`, generated by `npm run gen` (Style Dictionary 5) from `design/final/tokens.json`; `gen:check` fails when the CSS is stale or edited by hand. The only literal colours are the sample page's.
+
+- Type: micro 10/14 semibold (badges, ruler numbers, file-type tags), overline 11/16 semibold with 0.66 px letter spacing (upper-case sidebar headers), caption 11/16, body 12/18, label 12/16 semibold, title 13/18 semibold, dialog 14/20, input 15/22, code 12/18 mono.
+- Spacing scale: 0, 2, 4, 6, 8, 10, 12, 16, 20, 24, 32.
+- Targets: 24 × 24 px at least (`--size-target-min`); rows 24; fields 24; top bar and picker controls 28.
+- Radii: 3, 4, 6, 8, pill. Shadows: three elevations per theme.
+- Colours per theme: surfaces, borders, text (muted and subtle keep 4.5:1 on the surface), accent, focus, the five value origins and their soft backgrounds, the canvas overlay colours (selection, hover, measure, padding, margin, gap, drop, target, handle), the mode colours (breakpoint, state, text editing) with their on-colours, syntax colours for the code view, danger, warning, success and the scrim.
+- High density like direction A: every inspector section present and open until collapsed, labels in a 100 px column, values in the rest.

@@ -58,7 +58,10 @@
           "gesture": null,
           "labelKey": "command.insertElement",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "insert",
+            "order": 6
+          },
           "adapter": {
             "selection": "primary",
             "offers": null,
@@ -128,7 +131,10 @@
           "entry": "insert",
           "labelKey": "command.insertElement",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 54
+          },
           "adapter": {
             "selection": "primary",
             "offers": null,
@@ -469,7 +475,10 @@
           "entry": "command",
           "labelKey": "command.moveUp",
           "disabledReasonKey": "refusal.nothingSelected",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 35
+          },
           "adapter": {
             "selection": "roots-same-parent",
             "offers": null,
@@ -584,7 +593,10 @@
           "entry": "command",
           "labelKey": "command.moveDown",
           "disabledReasonKey": "refusal.nothingSelected",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 36
+          },
           "adapter": {
             "selection": "roots-same-parent",
             "offers": null,
@@ -688,7 +700,10 @@
           "entry": "command",
           "labelKey": "command.wrapRow",
           "disabledReasonKey": "refusal.nothingSelected",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 37
+          },
           "adapter": {
             "selection": "roots-same-parent",
             "offers": null,
@@ -792,7 +807,10 @@
           "entry": "command",
           "labelKey": "command.wrapColumn",
           "disabledReasonKey": "refusal.nothingSelected",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 38
+          },
           "adapter": {
             "selection": "roots-same-parent",
             "offers": null,
@@ -894,7 +912,10 @@
           "entry": "command",
           "labelKey": "command.nestIntoPrevious",
           "disabledReasonKey": "status.nest.noPrevious",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 39
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -997,7 +1018,10 @@
           "entry": "command",
           "labelKey": "command.promote",
           "disabledReasonKey": "status.needsSingleSelection",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 40
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -1094,7 +1118,10 @@
           "entry": "command",
           "labelKey": "command.duplicate",
           "disabledReasonKey": "refusal.nothingSelected",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 41
+          },
           "adapter": {
             "selection": "roots",
             "offers": null,
@@ -1244,7 +1271,10 @@
           "entry": "command",
           "labelKey": "command.delete",
           "disabledReasonKey": "refusal.nothingSelected",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 42
+          },
           "adapter": {
             "selection": "roots",
             "offers": null,
@@ -1329,7 +1359,10 @@
           "entry": "command",
           "labelKey": "command.unwrap",
           "disabledReasonKey": "status.unwrap.unavailable",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 43
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -1388,7 +1421,10 @@
           "entry": "command",
           "labelKey": "command.createNaturalChild",
           "disabledReasonKey": "status.naturalChild.none",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 44
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -1481,7 +1517,10 @@
           "entry": "command",
           "labelKey": "command.takeIntoHand",
           "disabledReasonKey": "status.needsSingleSelection",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 45
+          },
           "adapter": {
             "selection": "single",
             "offers": null,

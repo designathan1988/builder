@@ -53,14 +53,14 @@
       "dependsOn": [],
       "spec": null,
       "intent": {
-        "title": "UI language: Brazilian Portuguese by default, English available",
+        "title": "UI language: English by default, Brazilian Portuguese available",
         "steps": [
           "Open the app with a fresh profile.",
-          "Switch the UI language to English from the app menu, then back to Português (Brasil).",
+          "Switch the UI language to Português (Brasil) from the app menu, then back to English.",
           "Reload."
         ],
         "expected": [
-          "A fresh profile shows every UI text in pt-BR: menus, panels, tooltips, status bar messages and accessible names.",
+          "A fresh profile shows every UI text in English: menus, panels, tooltips, status bar messages and accessible names; after switching to Português (Brasil) every one of them is in pt-BR.",
           "Switching the language re-renders every visible text without a reload; the choice is stored in the preferences store and restored after reload.",
           "A unit test proves that the pt-BR and en catalogues have the same keys with the same placeholders.",
           "Tests that assert UI text set the language explicitly or read the text through its i18n key."

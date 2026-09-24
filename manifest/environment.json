@@ -15,10 +15,10 @@
     }
   ],
   "locales": {
-    "default": "pt-BR",
+    "default": "en",
     "available": [
-      "pt-BR",
-      "en"
+      "en",
+      "pt-BR"
     ]
   },
   "zoomLevels": [

@@ -46,7 +46,10 @@
           "control": "field",
           "labelKey": "command.setPosition",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 77
+          },
           "adapter": {
             "selection": "all",
             "offers": {
@@ -67,7 +70,10 @@
           "entry": "set-property",
           "labelKey": "command.setProperty",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 56
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -669,7 +675,10 @@
           "gesture": null,
           "labelKey": "command.setAnchors",
           "disabledReasonKey": "status.position.notPositioned",
-          "placement": "unplaced",
+          "placement": {
+            "region": "inspector-style",
+            "order": 85
+          },
           "adapter": {
             "selection": "single",
             "offers": null,
@@ -733,7 +742,10 @@
           "control": "align-left",
           "labelKey": "command.align.left",
           "disabledReasonKey": "status.align.needsPositioned",
-          "placement": "unplaced",
+          "placement": {
+            "region": "quick-panel",
+            "order": 6
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -772,7 +784,10 @@
           "entry": "command",
           "labelKey": "command.align.left",
           "disabledReasonKey": "status.align.needsPositioned",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 13
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -790,7 +805,10 @@
           "control": "align-horizontal-center",
           "labelKey": "command.align.horizontalCenter",
           "disabledReasonKey": "status.align.needsPositioned",
-          "placement": "unplaced",
+          "placement": {
+            "region": "quick-panel",
+            "order": 7
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -829,7 +847,10 @@
           "entry": "command",
           "labelKey": "command.align.horizontalCenter",
           "disabledReasonKey": "status.align.needsPositioned",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 14
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -847,7 +868,10 @@
           "control": "align-right",
           "labelKey": "command.align.right",
           "disabledReasonKey": "status.align.needsPositioned",
-          "placement": "unplaced",
+          "placement": {
+            "region": "quick-panel",
+            "order": 8
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -886,7 +910,10 @@
           "entry": "command",
           "labelKey": "command.align.right",
           "disabledReasonKey": "status.align.needsPositioned",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 15
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -904,7 +931,10 @@
           "control": "align-top",
           "labelKey": "command.align.top",
           "disabledReasonKey": "status.align.needsPositioned",
-          "placement": "unplaced",
+          "placement": {
+            "region": "quick-panel",
+            "order": 9
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -943,7 +973,10 @@
           "entry": "command",
           "labelKey": "command.align.top",
           "disabledReasonKey": "status.align.needsPositioned",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 16
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -961,7 +994,10 @@
           "control": "align-vertical-center",
           "labelKey": "command.align.verticalCenter",
           "disabledReasonKey": "status.align.needsPositioned",
-          "placement": "unplaced",
+          "placement": {
+            "region": "quick-panel",
+            "order": 10
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -1000,7 +1036,10 @@
           "entry": "command",
           "labelKey": "command.align.verticalCenter",
           "disabledReasonKey": "status.align.needsPositioned",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 17
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -1018,7 +1057,10 @@
           "control": "align-bottom",
           "labelKey": "command.align.bottom",
           "disabledReasonKey": "status.align.needsPositioned",
-          "placement": "unplaced",
+          "placement": {
+            "region": "quick-panel",
+            "order": 11
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -1057,7 +1099,10 @@
           "entry": "command",
           "labelKey": "command.align.bottom",
           "disabledReasonKey": "status.align.needsPositioned",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 18
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -1109,7 +1154,10 @@
           "control": "distribute-horizontal",
           "labelKey": "command.distribute.horizontal",
           "disabledReasonKey": "status.align.needsPositioned",
-          "placement": "unplaced",
+          "placement": {
+            "region": "quick-panel",
+            "order": 12
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -1148,7 +1196,10 @@
           "entry": "command",
           "labelKey": "command.distribute.horizontal",
           "disabledReasonKey": "status.align.needsPositioned",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 19
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -1166,7 +1217,10 @@
           "control": "distribute-vertical",
           "labelKey": "command.distribute.vertical",
           "disabledReasonKey": "status.align.needsPositioned",
-          "placement": "unplaced",
+          "placement": {
+            "region": "quick-panel",
+            "order": 13
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -1205,7 +1259,10 @@
           "entry": "command",
           "labelKey": "command.distribute.vertical",
           "disabledReasonKey": "status.align.needsPositioned",
-          "placement": "unplaced",
+          "placement": {
+            "region": "command-palette",
+            "order": 20
+          },
           "adapter": {
             "selection": "all",
             "offers": null,
@@ -1372,7 +1429,10 @@
           "control": "edit-on-canvas",
           "labelKey": "quickPanel.editOnCanvas",
           "disabledReasonKey": "common.notAvailableYet",
-          "placement": "unplaced",
+          "placement": {
+            "region": "quick-panel",
+            "order": 3
+          },
           "adapter": {
             "selection": "none",
             "offers": null,

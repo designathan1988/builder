@@ -205,6 +205,10 @@
       "reader": "src/editor/view/breakpoints.ts"
     },
     {
+      "field": "properties:breakpoints[].base",
+      "reader": "src/editor/view/breakpoints.ts"
+    },
+    {
       "field": "properties:states",
       "reader": "src/editor/view/style-state.ts"
     },
@@ -883,6 +887,58 @@
     {
       "field": "commands:commands[].entryPoints[].panel",
       "reader": "src/editor/doors/registry.ts"
+    },
+    {
+      "field": "layout:regions",
+      "reader": "src/editor/doors/placement.ts"
+    },
+    {
+      "field": "layout:regions[].id",
+      "reader": "src/editor/doors/placement.ts"
+    },
+    {
+      "field": "layout:regions[].area",
+      "reader": "src/editor/doors/placement.ts"
+    },
+    {
+      "field": "layout:menus",
+      "reader": "src/editor/doors/placement.ts"
+    },
+    {
+      "field": "layout:menus[].id",
+      "reader": "src/editor/doors/placement.ts"
+    },
+    {
+      "field": "layout:menus[].labelKey",
+      "reader": "src/editor/doors/placement.ts"
+    },
+    {
+      "field": "layout:menus[].anchors",
+      "reader": "src/editor/doors/placement.ts"
+    },
+    {
+      "field": "layout:menus[].anchors[].region",
+      "reader": "src/editor/doors/placement.ts"
+    },
+    {
+      "field": "layout:menus[].anchors[].order",
+      "reader": "src/editor/doors/placement.ts"
+    },
+    {
+      "field": "checks:categories",
+      "reader": "src/editor/checks/checks.ts"
+    },
+    {
+      "field": "checks:categories[].id",
+      "reader": "src/editor/checks/checks.ts"
+    },
+    {
+      "field": "checks:categories[].labelKey",
+      "reader": "src/editor/checks/checks.ts"
+    },
+    {
+      "field": "checks:categories[].feature",
+      "reader": "src/editor/checks/checks.ts"
     },
     {
       "field": "features:group",

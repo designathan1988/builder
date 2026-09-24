@@ -9,7 +9,8 @@
         "element.toggleLock",
         "element.toggleHidden",
         "text.set",
-        "inspector.toggleSection"
+        "inspector.toggleSection",
+        "workspace.setActiveTab"
       ],
       "dependsOn": [],
       "spec": null,
@@ -738,7 +739,8 @@
         "style.setBackgroundImage",
         "style.setFilter",
         "element.setTag",
-        "quickPanel.setOffset"
+        "quickPanel.setOffset",
+        "style.setTransform"
       ],
       "dependsOn": [
         "inspector-panel"
