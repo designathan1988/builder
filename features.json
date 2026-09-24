@@ -32,6 +32,7 @@
   },
   {
     "id": "palette-click-insert",
+    "spec": "spec/behavior/palette-click-insert.md",
     "title": "Insert Section, Container, Heading and Paragraph by clicking the Elements panel",
     "steps": [
       "With nothing selected, click Section in the Elements panel.",
@@ -50,6 +51,7 @@
   },
   {
     "id": "select-click",
+    "spec": "spec/behavior/select-click.md",
     "title": "Select an element by clicking it on the canvas",
     "steps": [
       "Insert a Section containing a Heading and a Paragraph.",
@@ -69,6 +71,7 @@
   },
   {
     "id": "layers-tree",
+    "spec": "spec/behavior/layers-tree.md",
     "title": "Layers panel shows the document tree and selects in sync with the canvas",
     "steps": [
       "Insert a Section containing a Heading and a Paragraph, then a Container after the Section.",
@@ -87,6 +90,7 @@
   },
   {
     "id": "undo-redo",
+    "spec": "spec/behavior/undo-redo.md",
     "title": "Undo and redo every document change",
     "steps": [
       "Insert three elements.",
@@ -106,6 +110,7 @@
   },
   {
     "id": "delete-element",
+    "spec": "spec/behavior/delete-element.md",
     "title": "Delete the selected element with Delete or Backspace",
     "steps": [
       "Insert a Section with a Heading and two Paragraphs.",
@@ -124,6 +129,7 @@
   },
   {
     "id": "drag-reorder-canvas",
+    "spec": "spec/behavior/drag-reorder-canvas.md",
     "title": "Drag an element before or after a sibling on the canvas",
     "steps": [
       "Insert a Section with a Heading and two Paragraphs.",
@@ -141,6 +147,7 @@
   },
   {
     "id": "drag-drop-inside",
+    "spec": "spec/behavior/drag-drop-inside.md",
     "title": "Drop an element inside a container and move it across parents",
     "steps": [
       "Insert a Section with a Heading and a Paragraph, then an empty Container after the Section.",
@@ -158,6 +165,7 @@
   },
   {
     "id": "drag-level-keys-escape",
+    "spec": "spec/behavior/drag-level-keys-escape.md",
     "title": "Change the drop level with arrow keys and cancel a drag with Escape",
     "steps": [
       "Insert a Section containing a Container that contains a Paragraph, and a Heading after the Section.",
@@ -173,6 +181,7 @@
   },
   {
     "id": "palette-drag-insert",
+    "spec": "spec/behavior/palette-drag-insert.md",
     "title": "Drag an element type from the Elements panel to a position on the canvas",
     "steps": [
       "Insert a Section with a Heading and a Paragraph.",
@@ -191,6 +200,7 @@
   },
   {
     "id": "layers-drag",
+    "spec": "spec/behavior/layers-drag.md",
     "title": "Reorder and nest by dragging rows in the Layers panel",
     "steps": [
       "Insert a Section with a Heading and a Paragraph, and an empty Container after it.",
@@ -208,6 +218,7 @@
   },
   {
     "id": "move-up-down",
+    "spec": "spec/behavior/move-up-down.md",
     "title": "Move the selection up or down among its siblings with Alt+ArrowUp and Alt+ArrowDown",
     "steps": [
       "Insert a Section with a Heading and two Paragraphs.",
@@ -224,6 +235,7 @@
   },
   {
     "id": "wrap-row-column",
+    "spec": "spec/behavior/wrap-row-column.md",
     "title": "Wrap the selection in a Row or a Column with R and C",
     "steps": [
       "Insert a Section with a Heading and a Paragraph.",
@@ -241,6 +253,7 @@
   },
   {
     "id": "context-menu",
+    "spec": "spec/behavior/context-menu.md",
     "title": "Right-click context menu on the canvas and in Layers",
     "steps": [
       "Insert a Container and a Paragraph after it.",
@@ -259,6 +272,7 @@
   },
   {
     "id": "unwrap",
+    "spec": "spec/behavior/unwrap.md",
     "title": "Remove a wrapper and lift its children into its place",
     "steps": [
       "Insert a Section containing a Container with a Heading and a Paragraph.",
@@ -275,6 +289,7 @@
   },
   {
     "id": "nest-into-previous",
+    "spec": "spec/behavior/nest-into-previous.md",
     "title": "Nest the selection into its previous sibling",
     "steps": [
       "Insert a Container, then a Paragraph after it, both in Page.",
@@ -290,6 +305,7 @@
   },
   {
     "id": "promote-out",
+    "spec": "spec/behavior/promote-out.md",
     "title": "Move the selection out of its parent with P",
     "steps": [
       "Insert a Section containing a Container that contains a Paragraph.",
@@ -307,6 +323,7 @@
   },
   {
     "id": "duplicate",
+    "spec": "spec/behavior/duplicate.md",
     "title": "Duplicate the selection with Ctrl+D",
     "steps": [
       "Insert a Section with a Heading and a Paragraph.",
@@ -321,6 +338,7 @@
   },
   {
     "id": "clipboard-copy-paste",
+    "spec": "spec/behavior/clipboard-copy-paste.md",
     "title": "Copy and paste elements inside the editor with Ctrl+C and Ctrl+V",
     "steps": [
       "Insert a Section with a Heading, and an empty Container after the Section.",
@@ -337,6 +355,7 @@
   },
   {
     "id": "keyboard-tree-walk",
+    "spec": "spec/behavior/keyboard-tree-walk.md",
     "title": "Walk the tree with the arrow keys",
     "steps": [
       "Insert a Section with a Heading and a Paragraph.",
@@ -353,6 +372,7 @@
   },
   {
     "id": "hand-keyboard-move",
+    "spec": "spec/behavior/hand-keyboard-move.md",
     "title": "Take the selection into the hand with M and place it with the keyboard",
     "steps": [
       "Insert a Section with a Heading and a Paragraph, and a Container after the Section.",
@@ -370,6 +390,7 @@
   },
   {
     "id": "text-edit-inline",
+    "spec": "spec/behavior/text-edit-inline.md",
     "title": "Edit text in place with double-click or Enter",
     "steps": [
       "Insert a Paragraph.",
@@ -387,6 +408,7 @@
   },
   {
     "id": "text-inline-formatting",
+    "spec": "spec/behavior/text-inline-formatting.md",
     "title": "Bold, italic and links inside text with Ctrl+B, Ctrl+I and Ctrl+K",
     "steps": [
       "Insert a Paragraph and double-click it.",
@@ -405,6 +427,7 @@
   },
   {
     "id": "rename-element",
+    "spec": "spec/behavior/rename-element.md",
     "title": "Rename an element with F2 or inline in Layers",
     "steps": [
       "Insert a Section.",
@@ -422,6 +445,7 @@
   },
   {
     "id": "multi-select-click",
+    "spec": "spec/behavior/multi-select-click.md",
     "title": "Select several elements with Shift+click and Ctrl+click",
     "steps": [
       "Insert a Section with a Heading and two Paragraphs.",
@@ -440,6 +464,7 @@
   },
   {
     "id": "marquee-select",
+    "spec": "spec/behavior/marquee-select.md",
     "title": "Select elements by dragging a marquee on the page",
     "steps": [
       "Insert a Section with a Heading and two Paragraphs.",
@@ -457,6 +482,7 @@
   },
   {
     "id": "multi-select-actions",
+    "spec": "spec/behavior/multi-select-actions.md",
     "title": "Delete, move and duplicate several selected elements at once",
     "steps": [
       "Insert a Section with a Heading and three Paragraphs.",
@@ -474,6 +500,7 @@
   },
   {
     "id": "select-container-children",
+    "spec": "spec/behavior/select-container-children.md",
     "title": "Select every element in the current container with Ctrl+A",
     "steps": [
       "Insert a Section with three Paragraphs, and a Container after the Section.",
@@ -491,6 +518,7 @@
   },
   {
     "id": "lock-element",
+    "spec": "spec/behavior/lock-element.md",
     "title": "Lock an element so it cannot be moved, edited or deleted",
     "steps": [
       "Insert a Section with a Paragraph.",
@@ -508,6 +536,7 @@
   },
   {
     "id": "hide-element",
+    "spec": "spec/behavior/hide-element.md",
     "title": "Hide and show an element",
     "steps": [
       "Insert a Section with two Paragraphs.",
@@ -523,6 +552,7 @@
   },
   {
     "id": "app-menu",
+    "spec": "spec/behavior/app-menu.md",
     "title": "Application menu: File, Edit, Arrange, View, Help and Theme",
     "steps": [
       "Open the app menu from the logo button.",
@@ -678,6 +708,7 @@
   },
   {
     "id": "inspector-number-fields",
+    "spec": "spec/behavior/inspector-number-fields.md",
     "title": "Numeric property fields, built with the Size section's Width and Height: typing, units, steppers and scrubbing",
     "steps": [
       "Select a Container.",
@@ -810,6 +841,7 @@
   },
   {
     "id": "color-picker",
+    "spec": "spec/behavior/color-picker.md",
     "title": "Colour picker: area, sliders, HSB/RGB/Hex fields, preview, Apply and Cancel",
     "steps": [
       "Select a Container and open the background colour picker in the Paint section.",
@@ -904,6 +936,7 @@
   },
   {
     "id": "gradient-editor",
+    "spec": "spec/behavior/gradient-editor.md",
     "title": "Gradient editor: linear, radial and conic gradients with stops",
     "steps": [
       "Select a Section and click 'Add a gradient'.",
@@ -953,6 +986,7 @@
   },
   {
     "id": "shadow-editor",
+    "spec": "spec/behavior/shadow-editor.md",
     "title": "Box shadow and text shadow editor",
     "steps": [
       "Select a Container and click 'Add a shadow'.",
@@ -1120,6 +1154,7 @@
   },
   {
     "id": "quick-panel",
+    "spec": "spec/behavior/quick-panel.md",
     "title": "Floating quick panel over the selection",
     "steps": [
       "Select a Section.",
@@ -1154,6 +1189,7 @@
   },
   {
     "id": "selection-actions-bar",
+    "spec": "spec/behavior/selection-actions-bar.md",
     "title": "Action bar for the selection",
     "steps": [
       "Select a Paragraph inside a Section and click More actions in the quick panel.",
@@ -1168,6 +1204,7 @@
   },
   {
     "id": "resize-handles",
+    "spec": "spec/behavior/resize-handles.md",
     "title": "Resize an element with its eight handles",
     "steps": [
       "Select a Container with a fixed size.",
@@ -1185,6 +1222,7 @@
   },
   {
     "id": "spacing-handles",
+    "spec": "spec/behavior/spacing-handles.md",
     "title": "Edit padding and margin by dragging on the canvas",
     "steps": [
       "Select a Section and choose Padding in 'Edit on canvas'.",
@@ -1201,6 +1239,7 @@
   },
   {
     "id": "radius-border-gap-handles",
+    "spec": "spec/behavior/radius-border-gap-handles.md",
     "title": "Edit radius, border width and gaps by dragging on the canvas",
     "steps": [
       "Select a Container and choose Radius in 'Edit on canvas'; drag the corner handle inward.",
@@ -1216,6 +1255,7 @@
   },
   {
     "id": "shadow-handles",
+    "spec": "spec/behavior/shadow-handles.md",
     "title": "Edit shadow offset and blur by dragging on the canvas",
     "steps": [
       "Select a Container with a box shadow.",
@@ -1322,6 +1362,7 @@
   },
   {
     "id": "nesting-grammar",
+    "spec": "spec/behavior/nesting-grammar.md",
     "title": "HTML nesting rules for inserting, dragging and pasting",
     "steps": [
       "Select the Page root and click List item in the Elements panel.",
@@ -1339,6 +1380,7 @@
   },
   {
     "id": "nesting-grammar-structure",
+    "spec": "spec/behavior/nesting-grammar-structure.md",
     "title": "HTML nesting rules for wrap, unwrap, promote, tag switch and hand",
     "steps": [
       "Select a List item and press R.",
@@ -1371,6 +1413,7 @@
   },
   {
     "id": "table-commands",
+    "spec": "spec/behavior/table-commands.md",
     "title": "Add and remove table rows and columns",
     "steps": [
       "Insert a Table with a Head row of two Header cells and a Body with two rows of two Cells, and select a body Cell.",
@@ -1419,6 +1462,7 @@
   },
   {
     "id": "elements-form-inputs-rules",
+    "spec": "spec/behavior/elements-form-inputs-rules.md",
     "title": "Per-type input attributes, type switching, label targets and canvas focus",
     "steps": [
       "Select a Checkbox and a Number input and compare their attribute fields.",
@@ -1484,6 +1528,7 @@
   },
   {
     "id": "elements-svg-shapes",
+    "spec": "spec/behavior/elements-svg-shapes.md",
     "title": "SVG/Icon, Rectangle, Ellipse and Line",
     "steps": [
       "Insert an SVG/Icon and put a Rectangle, an Ellipse and a Line inside it.",
@@ -1515,6 +1560,7 @@
   },
   {
     "id": "natural-child-command",
+    "spec": "spec/behavior/natural-child-command.md",
     "title": "Create the natural child inside a container",
     "steps": [
       "Select an Unordered list and run 'Create <li> inside' from the context menu.",
@@ -1545,6 +1591,7 @@
   },
   {
     "id": "templates-layout",
+    "spec": "spec/behavior/templates-layout.md",
     "title": "Layout templates: Container, Row, Column, Grid",
     "steps": [
       "Click each layout template in the Templates group.",
@@ -1624,6 +1671,7 @@
   },
   {
     "id": "layers-expand-collapse-all",
+    "spec": "spec/behavior/layers-expand-collapse-all.md",
     "title": "Collapse and expand every branch in Layers",
     "steps": [
       "Insert several nested templates.",
@@ -1682,6 +1730,7 @@
   },
   {
     "id": "zoom-keyboard-buttons",
+    "spec": "spec/behavior/zoom-keyboard-buttons.md",
     "title": "Zoom with the keyboard, the status bar buttons and Fit",
     "steps": [
       "Press Ctrl+= three times, Ctrl+- once, Ctrl+0.",
@@ -1699,6 +1748,7 @@
   },
   {
     "id": "zoom-wheel-pan",
+    "spec": "spec/behavior/zoom-wheel-pan.md",
     "title": "Ctrl+wheel zoom, wheel scroll and Space-drag pan",
     "steps": [
       "Place the pointer over a heading and scroll the wheel with Ctrl held.",
@@ -1714,6 +1764,7 @@
   },
   {
     "id": "rulers",
+    "spec": "spec/behavior/rulers.md",
     "title": "Rulers along the canvas",
     "steps": [
       "Look at the top and left rulers; zoom in and scroll.",
@@ -1730,6 +1781,7 @@
   },
   {
     "id": "guides-manual",
+    "spec": "spec/behavior/guides-manual.md",
     "title": "Create, move and delete guides from the rulers",
     "steps": [
       "Drag from the top ruler down onto the page and release.",
@@ -1762,6 +1814,7 @@
   },
   {
     "id": "layout-grid-overlay",
+    "spec": "spec/behavior/layout-grid-overlay.md",
     "title": "Column grid, row grid and dot grid overlays",
     "steps": [
       "Press Ctrl+'.",
@@ -1794,6 +1847,7 @@
   },
   {
     "id": "absolute-free-drag",
+    "spec": "spec/behavior/absolute-free-drag.md",
     "title": "Free positioning of absolute children by dragging",
     "steps": [
       "Insert a Section with a Heading; set the Heading position to absolute.",
@@ -1808,6 +1862,7 @@
   },
   {
     "id": "absolute-nudge",
+    "spec": "spec/behavior/absolute-nudge.md",
     "title": "Nudge positioned elements with the arrow keys",
     "steps": [
       "Select an absolutely positioned element on the canvas.",
@@ -1822,6 +1877,7 @@
   },
   {
     "id": "absolute-anchors",
+    "spec": "spec/behavior/absolute-anchors.md",
     "title": "Anchor positioned elements to edges and centres",
     "steps": [
       "Select an absolutely positioned element.",
@@ -1838,6 +1894,7 @@
   },
   {
     "id": "snap-toggle-settings",
+    "spec": "spec/behavior/snap-toggle-settings.md",
     "title": "Snap on/off and snap settings",
     "steps": [
       "Click 'Snap: Off' in the top bar.",
@@ -1853,6 +1910,7 @@
   },
   {
     "id": "snap-while-moving",
+    "spec": "spec/behavior/snap-while-moving.md",
     "title": "Snapping while resizing and moving positioned elements",
     "steps": [
       "Turn snap on and add a vertical guide at x=400.",
@@ -1869,6 +1927,7 @@
   },
   {
     "id": "smart-guides",
+    "spec": "spec/behavior/smart-guides.md",
     "title": "Smart alignment and equal spacing guides",
     "steps": [
       "Place three absolutely positioned boxes in a positioned container.",
@@ -1933,6 +1992,7 @@
   },
   {
     "id": "preview-mode",
+    "spec": "spec/behavior/preview-mode.md",
     "title": "Preview the page without editor chrome",
     "steps": [
       "Build a page with a Button that has a hover state and a Details element.",
@@ -1965,6 +2025,7 @@
   },
   {
     "id": "dock-toggles",
+    "spec": "spec/behavior/dock-toggles.md",
     "title": "Show and hide the docks and panels",
     "steps": [
       "Press Ctrl+B twice; press Ctrl+Alt+B twice.",
@@ -1980,6 +2041,7 @@
   },
   {
     "id": "command-bar",
+    "spec": "spec/behavior/command-bar.md",
     "title": "Command bar with Ctrl+K",
     "steps": [
       "Press Ctrl+K.",
@@ -1998,6 +2060,7 @@
   },
   {
     "id": "command-bar-set-property",
+    "spec": "spec/behavior/command-bar-set-property.md",
     "title": "Set a property or jump to it from the command bar",
     "steps": [
       "Select a flex Container, press Ctrl+K, type 'gap 24' and press Enter.",
@@ -2013,6 +2076,7 @@
   },
   {
     "id": "layout-explanation",
+    "spec": "spec/behavior/layout-explanation.md",
     "title": "Explain drops and layout decisions",
     "steps": [
       "Choose View > Layout read-out.",
@@ -2028,6 +2092,7 @@
   },
   {
     "id": "shortcuts-panel",
+    "spec": "spec/behavior/shortcuts-panel.md",
     "title": "Keyboard shortcuts panel generated from the keymap",
     "steps": [
       "Open Help > Keyboard shortcuts."
@@ -2041,6 +2106,7 @@
   },
   {
     "id": "workbench-panel",
+    "spec": "spec/behavior/workbench-panel.md",
     "title": "Bottom workbench: tabs, collapse, maximise and developer tools",
     "steps": [
       "Open the Layout read-out and Keyboard shortcuts tabs and switch between them.",
@@ -2056,6 +2122,7 @@
   },
   {
     "id": "panel-resize",
+    "spec": "spec/behavior/panel-resize.md",
     "title": "Resize docks and panels with splitters",
     "steps": [
       "Drag the splitter between the left dock and the canvas; drag the splitter between Elements and Layers.",
@@ -2072,6 +2139,7 @@
   },
   {
     "id": "floating-panels",
+    "spec": "spec/behavior/floating-panels.md",
     "title": "Float a panel as a window and dock it again",
     "steps": [
       "Drag the Layers panel header onto the canvas and release.",
@@ -2089,6 +2157,7 @@
   },
   {
     "id": "panel-combine-tabs",
+    "spec": "spec/behavior/panel-combine-tabs.md",
     "title": "Combine panels as tabs or stack them",
     "steps": [
       "Drag the Layers panel over the upper part of the Elements panel and release.",
@@ -2118,6 +2187,7 @@
   },
   {
     "id": "status-bar",
+    "spec": "spec/behavior/status-bar.md",
     "title": "Status bar: messages, breadcrumb, size, context, count, zoom and save state",
     "steps": [
       "Select a nested element; click an ancestor in the breadcrumb.",
@@ -2132,6 +2202,7 @@
   },
   {
     "id": "keyboard-panel-navigation",
+    "spec": "spec/behavior/keyboard-panel-navigation.md",
     "title": "Move between panels and inside them with the keyboard",
     "steps": [
       "Press F6 repeatedly, then Shift+F6.",
@@ -2149,6 +2220,7 @@
   },
   {
     "id": "layers-keyboard-navigation",
+    "spec": "spec/behavior/layers-keyboard-navigation.md",
     "title": "Operate the Layers tree with the keyboard",
     "steps": [
       "Focus the Layers tree.",
@@ -2164,6 +2236,7 @@
   },
   {
     "id": "clipboard-cut-system",
+    "spec": "spec/behavior/clipboard-cut-system.md",
     "title": "Cut, and copy and paste through the system clipboard",
     "steps": [
       "Insert the Card template, select its root and press Ctrl+X.",
@@ -2260,6 +2333,7 @@
   },
   {
     "id": "clipboard-paste-external",
+    "spec": "spec/behavior/clipboard-paste-external.md",
     "title": "Paste HTML and text copied from outside the app",
     "steps": [
       "Put text/html of a small article (heading, paragraphs, a list, a script tag) on the system clipboard and press Ctrl+V with a Section selected.",
@@ -2290,6 +2364,7 @@
   },
   {
     "id": "code-panel-selection-sync",
+    "spec": "spec/behavior/code-panel-selection-sync.md",
     "title": "Code panel follows the selection",
     "steps": [
       "Open the Code panel and select an element on the canvas.",
@@ -2347,6 +2422,7 @@
   },
   {
     "id": "timeline-keyframes",
+    "spec": "spec/behavior/timeline-keyframes.md",
     "title": "Add, edit, move and delete keyframes on the timeline",
     "steps": [
       "Select the 'fade-in' animation, move the playhead to 50% and click 'Add keyframe'.",
@@ -2375,6 +2451,7 @@
   },
   {
     "id": "timeline-preview",
+    "spec": "spec/behavior/timeline-preview.md",
     "title": "Preview animations by playing and scrubbing the timeline",
     "steps": [
       "Click Play on the 'fade-in' animation, then Pause, then Stop.",
@@ -2434,6 +2511,7 @@
   },
   {
     "id": "explorer-assets",
+    "spec": "spec/behavior/explorer-assets.md",
     "title": "Upload and manage image assets",
     "steps": [
       "In the Explorer's Assets folder upload two images with the file picker.",
@@ -2449,6 +2527,7 @@
   },
   {
     "id": "explorer-assets-use",
+    "spec": "spec/behavior/explorer-assets-use.md",
     "title": "Use assets in Image elements and drop images onto the canvas",
     "steps": [
       "Select an Image and choose an uploaded asset with the asset picker of its Source field.",
@@ -2490,6 +2569,7 @@
   },
   {
     "id": "shortcuts-e2e-sweep",
+    "spec": "spec/behavior/shortcuts-e2e-sweep.md",
     "title": "Every listed shortcut works in its context",
     "steps": [
       "Run the shortcut sweep test: for each row of the keymap, set up its context and press its keys."
