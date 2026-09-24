@@ -3,7 +3,7 @@ import { RULES, checkManifest, generatedOffer, generatedUnits, htmlRefusal, norm
 import { createCssMatcher } from '../../src/manifest/css.ts';
 import { generatedCompatSchema, generatedCssSchema, generatedHtmlSchema, propertiesFileSchema } from '../../src/manifest/schema.ts';
 import { loadManifest } from './load.ts';
-import { PLANTS, planted, type Plant } from './plants.ts';
+import { PLANTS, ownGenerated, planted, type Plant } from './plants.ts';
 
 const loaded = loadManifest();
 
@@ -234,10 +234,9 @@ describe('manifest:check', () => {
 
   it('refuses a unit a browser lacks', () => {
     const rules = mutated((m) => {
-      const units = (m.files['generated/css-compat.json'] as Json).units as Record<string, Json>;
-      const rcap = units.rcap as Json;
+      const rcap = ownGenerated(m, 'generated/css-compat.json', 'units', 'rcap');
       rcap.safari = false;
-      (rcap.why as Json).safari = 'planted';
+      rcap.why = { ...(rcap.why as Json), safari: 'planted' };
       const div = ((m.files['elements.json'] as Json).elements as Json[]).find((e) => e.id === 'div') as Json;
       (div.defaultStyles as Json).width = '10rcap';
     });
@@ -253,6 +252,22 @@ describe('manifest:check', () => {
       ((m.files['properties.json'] as Json).couplings as Json[]).push({ id: 'planted-shadow', trigger: { property: 'opacity', values: null, via: null }, condition: { predicate: 'always', property: null, values: [] }, effect: { action: 'setValue', property: 'box-shadow', value: '0 1px 2px red' }, feature: 'props-effects-basic' });
     });
     expect(rules.has('structured-value')).toBe(true);
+  });
+
+  it('reads the generated files once: every fixture shares them, frozen, and a plant copies only what it changes', () => {
+    const generated = Object.keys(loaded.input.files).filter((file) => file.startsWith('generated/'));
+    expect(generated).toEqual(['generated/css-compat.json', 'generated/css-properties.json', 'generated/html-elements.json']);
+    for (const file of generated) expect(Object.isFrozen(loaded.input.files[file])).toBe(true);
+    const plant = PLANTS.find((p) => p.id === 'door-unplaced');
+    if (!plant) throw new Error('no plant door-unplaced');
+    const fixture = planted(loaded.input, plant);
+    for (const file of generated) expect(fixture.files[file]).toBe(loaded.input.files[file]);
+    const unit = PLANTS.find((p) => p.id === 'offered-unit-unsupported');
+    if (!unit) throw new Error('no plant offered-unit-unsupported');
+    const compat = planted(loaded.input, unit).files['generated/css-compat.json'] as Json;
+    const shared = loaded.input.files['generated/css-compat.json'] as Json;
+    expect(compat).not.toBe(shared);
+    expect(compat.properties).toBe(shared.properties);
   });
 
   it('never changes the real manifest when planting', () => {

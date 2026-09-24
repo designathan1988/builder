@@ -267,6 +267,19 @@ function prefixProblems(files: Readonly<Record<string, unknown>>, skip: (file: s
   return problems;
 }
 
+// A frozen file cannot change, so its parsed form is kept: the generated web data, frozen by the loader, is
+// parsed once however many times the manifest is checked (every planted fixture shares it).
+const parsedFrozen = new WeakMap<object, z.ZodSafeParseResult<unknown>>();
+function parseFile(schema: z.ZodType, json: unknown): z.ZodSafeParseResult<unknown> {
+  if (json === null || typeof json !== 'object' || !Object.isFrozen(json)) return schema.safeParse(json);
+  let result = parsedFrozen.get(json);
+  if (!result) {
+    result = schema.safeParse(json);
+    parsedFrozen.set(json, result);
+  }
+  return result;
+}
+
 function parseFiles(input: ManifestInput): { parsed: Parsed | null; problems: Problem[] } {
   const problems: Problem[] = [];
   const out: Partial<Parsed> & { commandFiles: Parsed['commandFiles']; featureFiles: Parsed['featureFiles'] } = {
@@ -276,7 +289,7 @@ function parseFiles(input: ManifestInput): { parsed: Parsed | null; problems: Pr
   for (const [file, json] of Object.entries(input.files)) {
     const single = SINGLE_FILES[file];
     if (single) {
-      const result = single.schema.safeParse(json);
+      const result = parseFile(single.schema, json);
       if (result.success) (out as Record<string, unknown>)[single.key] = result.data;
       else problems.push(...schemaProblems(file, result.error));
     } else if (/^commands\/[a-z0-9-]+\.json$/.test(file)) {

@@ -48,6 +48,16 @@ export function registeredIds(root: string = REPO_ROOT): Record<ReferenceKind, s
   return out;
 }
 
+// The generated web data (css-compat.json alone is 6.7 MB) is read once and frozen, so every check and every
+// planted fixture shares it: nothing can change it in place, and checkManifest parses each frozen file once.
+function deepFreeze<T>(value: T): T {
+  if (value !== null && typeof value === 'object' && !Object.isFrozen(value)) {
+    Object.freeze(value);
+    for (const item of Object.values(value)) deepFreeze(item);
+  }
+  return value;
+}
+
 export function loadManifest(root: string = REPO_ROOT): LoadedManifest {
   const problems: Problem[] = [];
   const read = (full: string, label: string): unknown => {
@@ -63,7 +73,7 @@ export function loadManifest(root: string = REPO_ROOT): LoadedManifest {
   for (const full of jsonFiles(manifestDir)) {
     const rel = path.relative(manifestDir, full).split(path.sep).join('/');
     const json = read(full, rel);
-    if (json !== undefined) files[rel] = json;
+    if (json !== undefined) files[rel] = rel.startsWith('generated/') ? deepFreeze(json) : json;
   }
   const catalogues: Record<string, unknown> = {};
   for (const full of jsonFiles(path.join(root, CATALOGUE_DIR))) {

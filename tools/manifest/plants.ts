@@ -81,6 +81,20 @@ function editedProperty(m: MutableInput, id: string, fields: Json): Json {
   return { id, labelKey, section: 'size', group: 'size', control: 'length-field', valueType: 'length', codec: 'length', appliesTo: 'hasBox', essential: false, doors: [], subsets: [], ...fields };
 }
 
+// The generated files are shared by every fixture, read once and frozen (load.ts). A plant that changes one
+// copies only the objects on the way to what it changes, and the fixture holds that copy.
+export function ownGenerated(input: { files: Record<string, unknown> }, file: string, ...keys: string[]): Json {
+  const root = { ...obj(input.files[file]) };
+  input.files[file] = root;
+  let at = root;
+  for (const key of keys) {
+    const next = { ...obj(at[key]) };
+    at[key] = next;
+    at = next;
+  }
+  return at;
+}
+
 function element(input: MutableInput, id: string): Json {
   const found = list(obj(input.files['elements.json']).elements).find((e) => e.id === id);
   if (!found) throw new Error(`plant: no element ${id}`);
@@ -308,11 +322,8 @@ export const PLANTS: Plant[] = [
     rule: 'value-set',
     description: 'Safari loses every text-align keyword in css-compat.json, so the Text align buttons would be empty',
     apply: (m) => {
-      const textAlign = obj(obj(obj(m.files['generated/css-compat.json']).properties)['text-align']);
-      for (const k of Object.values(obj(textAlign.keywords))) {
-        obj(k).safari = false;
-        obj(obj(k).why).safari = 'planted';
-      }
+      const keywords = ownGenerated(m, 'generated/css-compat.json', 'properties', 'text-align', 'keywords');
+      for (const [name, k] of Object.entries(keywords)) keywords[name] = { ...obj(k), safari: false, why: { ...obj(obj(k).why), safari: 'planted' } };
     },
   },
   {
@@ -345,9 +356,9 @@ export const PLANTS: Plant[] = [
     rule: 'browser-support',
     description: 'Safari loses the rcap unit in css-compat.json, and a width subset offers it',
     apply: (m) => {
-      const rcap = obj(obj(obj(m.files['generated/css-compat.json']).units).rcap);
+      const rcap = ownGenerated(m, 'generated/css-compat.json', 'units', 'rcap');
       rcap.safari = false;
-      obj(rcap.why).safari = 'planted';
+      rcap.why = { ...obj(rcap.why), safari: 'planted' };
       property(m, 'width').subsets = [{ id: 'units', values: null, units: ['px', 'rcap'], reason: 'planted' }];
     },
   },
@@ -582,9 +593,10 @@ PLANTS.push(
   },
 );
 
+// A fixture copies the hand-written files and shares the generated ones (ownGenerated copies what a plant changes).
 export function planted(input: ManifestInput, plant: Plant): ManifestInput {
   const copy: MutableInput = {
-    files: structuredClone(input.files) as Record<string, unknown>,
+    files: Object.fromEntries(Object.entries(input.files).map(([file, json]) => [file, file.startsWith('generated/') ? json : structuredClone(json)])),
     catalogues: structuredClone(input.catalogues) as Record<string, unknown>,
     glossary: structuredClone(input.glossary),
     fileExists: input.fileExists,
