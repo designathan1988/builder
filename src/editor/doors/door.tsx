@@ -1,0 +1,134 @@
+// Door rendering (ARCHITECTURE.md): one door of the manifest drawn as the control its drawnAs names, with the icon
+// the manifest names, its label from the catalogue, its shortcut as a hint, and disabled with "not available yet"
+// while its command's entry in the command table is NOT_AVAILABLE_YET. Every icon comes from the sprite by a name
+// the manifest gives (a door's icon, a glyph, a panel, an element); no component chooses one.
+import type { ReactNode } from 'react';
+import { COMMANDS, PREDICATES } from '../../app/commands.ts';
+import { isBuilt, type PredicateTable } from '../../core/commands/registry.ts';
+import type { DispatchResult } from '../../core/store/store.ts';
+import type { CommandId, MessageId, PredicateId } from '../../generated/ids.ts';
+import type { DoorEntry } from '../../manifest/runtime.ts';
+import { chordHint } from '../input/keymap.ts';
+import type { EditorUi } from '../state.ts';
+import { useEditorState, useStore } from '../store.ts';
+import { useT } from '../text.ts';
+import { isCurrent } from './current.ts';
+import { GLYPHS } from './placement.ts';
+
+export function Icon({ name, size = 'md' }: { readonly name: string; readonly size?: 'xs' | 'sm' | 'md' | 'lg' }) {
+  return (
+    <svg className={`icon icon--${size}`} aria-hidden="true" focusable="false">
+      <use href={`#${name}`} />
+    </svg>
+  );
+}
+
+export function isDoorBuilt(entry: DoorEntry): boolean {
+  return isBuilt(COMMANDS[entry.command.id]);
+}
+
+export interface DoorState {
+  readonly label: string;
+  readonly title: string;
+  readonly built: boolean;
+  // built and its availability predicate holds now (Undo with an empty history does not)
+  readonly available: boolean;
+  readonly current: boolean;
+  readonly chord: string | null;
+  // why the control is disabled: "not available yet" while its command is not built (DESIGN.md "Build order"), then
+  // the door's own reason (disabledReasonKey) while its predicate does not hold; null when it is enabled
+  readonly reason: MessageId | null;
+  readonly run: () => void;
+}
+
+// What every control of a door needs: its label, its tooltip (with the shortcut, or why it is disabled), whether its
+// command is built, whether it stands for the current state, and running it through the store. A control that
+// stands for one property, attribute or palette entry is labelled by it (the door's own label names the command
+// with placeholders: "Set {property} to {value}"), so the caller passes that label.
+export function useDoor(entry: DoorEntry, args: Readonly<Record<string, unknown>> = {}, labelled?: string): DoorState {
+  const t = useT();
+  const store = useStore();
+  const built = isDoorBuilt(entry);
+  const current = useEditorState((s) => isCurrent(entry, s, args));
+  const available = useEditorState((s) => built && ((PREDICATES as PredicateTable<EditorUi>)[entry.command.availability.predicate as PredicateId]?.test(s) ?? true));
+  const label = labelled ?? t(entry.door.labelKey as MessageId);
+  const chord = chordHint(entry.command.id);
+  const reason: MessageId | null = !built ? 'common.notAvailableYet' : available ? null : (entry.door.disabledReasonKey as MessageId);
+  const title = reason !== null ? t('common.disabledTitle', { label, reason: { key: reason } }) : chord !== null ? t('common.withShortcut', { label, shortcut: chord }) : label;
+  const run = () => {
+    if (!built || !available) return;
+    const dispatch = store.dispatch as (id: CommandId, args: unknown) => DispatchResult;
+    dispatch(entry.command.id, { ...entry.door.args, ...args });
+  };
+  return { label, title, built, available, current, chord, reason, run };
+}
+
+export interface DoorControlProps {
+  readonly entry: DoorEntry;
+  // arguments the context adds (the panel a close button belongs to, the page a row stands for)
+  readonly args?: Readonly<Record<string, unknown>>;
+  // the content of an item, a tab or a disclosure (a row's name, a tab's width); the label otherwise
+  readonly children?: ReactNode;
+  // a disclosure's state
+  readonly expanded?: boolean;
+  readonly className?: string;
+  // the label of what the control stands for (a palette entry), instead of the door's own
+  readonly label?: string;
+}
+
+// A toolbar or panel control, drawn as its door's drawnAs says.
+export function DoorControl({ entry, args = {}, children, expanded, className, label }: DoorControlProps) {
+  const door = useDoor(entry, args, label);
+  const { door: d } = entry;
+  const drawnAs = d.kind === 'toolbar' || d.kind === 'panel-control' ? d.drawnAs : 'button';
+  const icon = d.icon !== null ? <Icon name={d.icon} size={drawnAs === 'icon-button' ? 'md' : 'sm'} /> : null;
+  const common = {
+    type: 'button' as const,
+    className: ['door', `door--${drawnAs}`, door.current ? 'is-current' : '', door.available ? '' : 'is-unavailable', className ?? ''].filter((c) => c !== '').join(' '),
+    'data-door': entry.ref,
+    title: door.title,
+    'aria-disabled': door.available ? undefined : true,
+    onClick: door.run,
+  };
+  switch (drawnAs) {
+    case 'icon-button':
+      return (
+        <button {...common} aria-label={door.label} aria-pressed={isToggle(entry) ? door.current : undefined}>
+          {icon}
+        </button>
+      );
+    case 'tab':
+      return (
+        <button {...common} role="tab" aria-selected={door.current}>
+          {icon}
+          {children ?? <span className="door__label">{door.label}</span>}
+        </button>
+      );
+    case 'segment':
+      return (
+        <button {...common} aria-pressed={door.current} aria-label={door.label}>
+          {icon}
+          {children ?? <span className="door__label">{door.label}</span>}
+        </button>
+      );
+    case 'disclosure':
+      return (
+        <button {...common} aria-expanded={expanded ?? true}>
+          <Icon name={expanded === false ? GLYPHS.collapsed : GLYPHS.expanded} size="xs" />
+          {children ?? <span className="door__label">{door.label}</span>}
+        </button>
+      );
+    default:
+      return (
+        <button {...common} aria-label={children !== undefined ? door.label : undefined}>
+          {icon}
+          {children ?? <span className="door__label">{door.label}</span>}
+        </button>
+      );
+  }
+}
+
+// the doors that switch a state on and off show whether it is on
+function isToggle(entry: DoorEntry): boolean {
+  return entry.command.id === 'workspace.setPanelOpen' || entry.command.id === 'workspace.setWorkbenchState';
+}

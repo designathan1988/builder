@@ -14,12 +14,16 @@ import type { StoreState } from '../store/store.ts';
 export const NOT_AVAILABLE_YET = Object.freeze({ notAvailableYet: true as const });
 export type NotAvailableYet = typeof NOT_AVAILABLE_YET;
 
+// A parameter of a message is plain text, a number, or another catalogue key, translated when the message is shown
+// (so "{panel} opened." names the panel in the language the person reads it in).
+export type MessageParam = string | number | { readonly key: MessageId };
+
 export interface Message {
   readonly key: MessageId;
-  readonly params: Readonly<Record<string, string | number>>;
+  readonly params: Readonly<Record<string, MessageParam>>;
 }
 
-export function message(key: MessageId, params: Readonly<Record<string, string | number>> = {}): Message {
+export function message(key: MessageId, params: Readonly<Record<string, MessageParam>> = {}): Message {
   return { key, params };
 }
 

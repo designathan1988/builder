@@ -25,8 +25,13 @@ function jsonFiles(dir: string): string[] {
 }
 
 // Code registers what the manifest names by id with registerHandler('<id>', ...),
-// registerPredicate, registerAction or registerCodec. The ids found under src/ are "registered".
-const REGISTER = /\bregister(Handler|Predicate|Action|Codec)\(\s*['"]([^'"]+)['"]/g;
+// registerPredicate, registerAction or registerCodec, with or without type arguments
+// (registerHandler<'<id>', EditorUi>('<id>', ...)). The ids found under src/ are "registered".
+const REGISTER = /\bregister(Handler|Predicate|Action|Codec)\s*(?:<[^()]*?>)?\s*\(\s*['"]([^'"]+)['"]/g;
+
+export function registrationsIn(text: string): { kind: ReferenceKind; id: string }[] {
+  return [...text.matchAll(REGISTER)].map((match) => ({ kind: (match[1] ?? '').toLowerCase() as ReferenceKind, id: match[2] ?? '' }));
+}
 
 function sourceFiles(dir: string): string[] {
   if (!fs.existsSync(dir)) return [];
@@ -40,9 +45,7 @@ function sourceFiles(dir: string): string[] {
 export function registeredIds(root: string = REPO_ROOT): Record<ReferenceKind, string[]> {
   const out: Record<ReferenceKind, string[]> = { handler: [], predicate: [], action: [], codec: [] };
   for (const file of sourceFiles(path.join(root, 'src'))) {
-    for (const match of fs.readFileSync(file, 'utf8').matchAll(REGISTER)) {
-      const kind = (match[1] ?? '').toLowerCase() as ReferenceKind;
-      const id = match[2] ?? '';
+    for (const { kind, id } of registrationsIn(fs.readFileSync(file, 'utf8'))) {
       if (!out[kind].includes(id)) out[kind].push(id);
     }
   }

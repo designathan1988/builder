@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { RULES, architectureOwners, checkManifest, generatedOffer, generatedUnits, htmlRefusal, normaliseChord, supportedKeywords, type RuleId } from '../../src/manifest/check.ts';
+import { RULES, architectureOwners, checkManifest, generatedOffer, generatedUnits, htmlRefusal, supportedKeywords, type RuleId } from '../../src/manifest/check.ts';
+import { normaliseChord } from '../../src/manifest/chord.ts';
 import { createCssMatcher } from '../../src/manifest/css.ts';
 import { generatedCompatSchema, generatedCssSchema, generatedHtmlSchema, propertiesFileSchema } from '../../src/manifest/schema.ts';
-import { loadManifest } from './load.ts';
+import { loadManifest, registrationsIn } from './load.ts';
 import { PLANTS, ownGenerated, planted, type Plant } from './plants.ts';
 
 const loaded = loadManifest();
@@ -293,6 +294,21 @@ describe('manifest:check', () => {
       m.architecture = `${m.architecture ?? ''}| \`src/core/history/redo.ts\` | \`history.redo\`, \`history.rewind\` | planned |\n`;
     });
     expect([...twice]).toEqual(['owner']);
+  });
+
+  it('reads a registration with or without type arguments, and nothing that only names the function', () => {
+    const code = [
+      "export const undo = registerHandler('history.undo', () => ({ kind: 'undo' }));",
+      "export const open = registerHandler<'workspace.setPanelOpen', EditorUi>('workspace.setPanelOpen', ({ state }) => state);",
+      'export const can = registerPredicate<EditorUi>(\n  "canUndo", (s) => true);',
+      'const f = registerHandler;',
+      'const g = registerHandler(id, run);',
+    ].join('\n');
+    expect(registrationsIn(code)).toEqual([
+      { kind: 'handler', id: 'history.undo' },
+      { kind: 'handler', id: 'workspace.setPanelOpen' },
+      { kind: 'predicate', id: 'canUndo' },
+    ]);
   });
 
   it('never changes the real manifest when planting', () => {

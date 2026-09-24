@@ -10,6 +10,8 @@ import { deepEqual } from '../history/transaction.ts';
 import { manualClock, type ManualClock } from '../ports/clock.ts';
 import { sequentialIds, type IdGenerator } from '../ports/ids.ts';
 import { InvalidStateError, createStore, type Store } from './store.ts';
+import { INITIAL_PREFERENCES } from '../../editor/preferences/preferences.ts';
+import { initialEditorUi, type EditorUi } from '../../editor/state.ts';
 
 // The store under test: the real command table with test handlers in place of a few commands the core does not
 // build yet, so the manifest's availability and history declarations of those commands (undoable, coalescing,
@@ -68,20 +70,20 @@ const TEST_COMMANDS = {
   'selection.select': select,
   'position.move': move,
   'geometry.resize': resize,
-} satisfies CommandTable<never>;
+} satisfies CommandTable<EditorUi>;
 
 const TEST_PREDICATES = {
   ...PREDICATES,
   hasSelection: registerPredicate('hasSelection', (state) => state.selection.length > 0),
   positionedSelection: registerPredicate('positionedSelection', (state) => state.selection.length > 0),
-} satisfies PredicateTable<never>;
+} satisfies PredicateTable<EditorUi>;
 
 const RULES = rulesFromManifest(manifest.elements, manifest.properties);
 const MANIFEST_COMMANDS = new Map(manifest.commands.map((c) => [c.id as CommandId, c]));
 const CONSTANTS = new Map(manifest.interactions.constants.map((c) => [c.id as ConstantId, c.value]));
 
 interface TestStore {
-  readonly store: Store<never>;
+  readonly store: Store<EditorUi>;
   readonly clock: ManualClock;
   readonly ids: IdGenerator;
   readonly root: string;
@@ -91,11 +93,11 @@ function emptyDocument(ids: IdGenerator): DocumentJson {
   return createEmptyDocument(ids, { page: 'Home', root: 'Page' }, RULES.root);
 }
 
-function testStore(table: CommandTable<never> = TEST_COMMANDS, predicates: PredicateTable<never> = TEST_PREDICATES): TestStore {
+function testStore(table: CommandTable<EditorUi> = TEST_COMMANDS, predicates: PredicateTable<EditorUi> = TEST_PREDICATES): TestStore {
   const clock = manualClock(1_000_000);
   const ids = sequentialIds('n');
   const document = emptyDocument(ids);
-  const store = createStore<never>({
+  const store = createStore<EditorUi>({
     table,
     predicates,
     commands: MANIFEST_COMMANDS,
@@ -103,7 +105,7 @@ function testStore(table: CommandTable<never> = TEST_COMMANDS, predicates: Predi
     rules: RULES,
     clock,
     ids,
-    initial: { document, ui: undefined as never },
+    initial: { document, ui: initialEditorUi(INITIAL_PREFERENCES) },
     freeze: true,
   });
   return { store, clock, ids, root: document.pages[0]?.tree.id ?? '' };
@@ -329,7 +331,7 @@ describe('the store', () => {
     const { hasSelection, ...withoutHasSelection } = TEST_PREDICATES;
     expect(hasSelection.id).toBe('hasSelection');
     expect(() =>
-      createStore<never>({
+      createStore<EditorUi>({
         table: TEST_COMMANDS,
         predicates: withoutHasSelection,
         commands: MANIFEST_COMMANDS,
@@ -337,7 +339,7 @@ describe('the store', () => {
         rules: RULES,
         clock: manualClock(),
         ids,
-        initial: { document: emptyDocument(ids), ui: undefined as never },
+        initial: { document: emptyDocument(ids), ui: initialEditorUi(INITIAL_PREFERENCES) },
         freeze: true,
       }),
     ).toThrow(/predicate "hasSelection" is not registered/);
@@ -455,7 +457,7 @@ describe('the command table', () => {
   });
 
   it('holds, for every built command, the handler registered for that command, and NOT_AVAILABLE_YET for the others', () => {
-    const entries = Object.entries(COMMANDS as CommandTable<never>);
+    const entries = Object.entries(COMMANDS as CommandTable<EditorUi>);
     for (const [id, entry] of entries) {
       if (isBuilt(entry)) expect(entry.command).toBe(id);
     }

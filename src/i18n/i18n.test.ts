@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { DEFAULT_LOCALE, LOCALES, MESSAGE_IDS, type MessageId } from '../generated/ids.ts';
-import { formatMessage, isLocale, translate, translator, type Locale, type MessageParams } from './index.ts';
+import { formatMessage, isLocale, pluralForm, translate, translator, type Locale, type MessageParams } from './index.ts';
 import en from './locales/en.json';
 import ptBR from './locales/pt-BR.json';
 
@@ -29,6 +29,11 @@ describe('formatMessage', () => {
 });
 
 describe('the i18n runtime', () => {
+  it('chooses the plural form of a count by the rules of the locale', () => {
+    expect([0, 1, 2].map((n) => translate('en', `status.elementCount.${pluralForm('en', n)}`, { count: n }))).toEqual(['0 elements', '1 element', '2 elements']);
+    expect([1, 2].map((n) => translate('pt-BR', `status.elementCount.${pluralForm('pt-BR', n)}`, { count: n }))).toEqual(['1 elemento', '2 elementos']);
+  });
+
   it('has English as the default UI language', () => {
     expect(DEFAULT_LOCALE).toBe('en');
     expect(translate(DEFAULT_LOCALE, 'editor.label')).toBe('Page editor');

@@ -45,6 +45,11 @@ export function translate(locale: Locale, key: MessageId, params: MessageParams 
   return formatMessage(text, params);
 }
 
+// Which of a key's plural forms (key.one, key.other) a count takes in a locale, by the locale's plural rules.
+export function pluralForm(locale: Locale, count: number): 'one' | 'other' {
+  return new Intl.PluralRules(locale).select(count) === 'one' ? 'one' : 'other';
+}
+
 // A translate function bound to one locale.
 export function translator(locale: Locale): Translate {
   return (key, params) => translate(locale, key, params);

@@ -1,0 +1,67 @@
+// The keymap (ARCHITECTURE.md): the shortcut doors of the manifest, run in their key contexts. There is no other key
+// table. A context inherits the bindings of the contexts interactions.json names (text editing, menus, the palette,
+// dialogs and fields inherit nothing, so they keep their own keys). A bound chord's browser default is prevented,
+// whether or not its command is built yet (DESIGN.md "Keyboard model").
+import type { CommandId, KeyContextId } from '../../generated/ids.ts';
+import { normaliseChord } from '../../manifest/chord.ts';
+import { keyContextChain, manifest, type DoorEntry } from '../../manifest/runtime.ts';
+import type { DispatchResult } from '../../core/store/store.ts';
+import type { EditorStore } from '../store.ts';
+
+// The key of an event as the manifest writes it: a letter or a digit by its physical key (so Ctrl+Alt+B is B on any
+// layout), the other printable keys by the character they type, named keys by name.
+function keyOf(event: KeyboardEvent): string {
+  if (/^Key[A-Z]$/.test(event.code)) return event.code.slice(3);
+  if (/^Digit[0-9]$/.test(event.code)) return event.code.slice(5);
+  if (event.key === ' ') return 'Space';
+  return event.key.length === 1 ? event.key.toUpperCase() : event.key;
+}
+
+export function chordOf(event: KeyboardEvent): string {
+  const mods = [event.ctrlKey && 'Ctrl', event.altKey && 'Alt', event.shiftKey && 'Shift', event.metaKey && 'Meta'].filter((m): m is string => typeof m === 'string');
+  const key = keyOf(event);
+  // a shifted punctuation key types its own character ("+" is Shift+=): the character carries the Shift
+  const shiftInKey = event.shiftKey && key.length === 1 && !/[A-Z0-9]/.test(key);
+  return [...mods.filter((m) => !(shiftInKey && m === 'Shift')), key].join('+');
+}
+
+const shortcuts = manifest.doors.filter((d) => d.door.kind === 'shortcut');
+
+// The binding of a chord in a context: its own shortcut first, then the contexts it inherits from.
+export function bindingFor(context: KeyContextId, chord: string): DoorEntry | null {
+  for (const c of keyContextChain(context)) {
+    const found = shortcuts.find((d) => d.door.kind === 'shortcut' && d.door.context === c && normaliseChord(d.door.chord) === chord);
+    if (found) return found;
+  }
+  return null;
+}
+
+// The chord shown next to a command's label: its first shortcut in the global context.
+export function chordHint(command: CommandId): string | null {
+  const door = shortcuts.find((d) => d.command.id === command && d.door.kind === 'shortcut' && d.door.context === 'global');
+  return door && door.door.kind === 'shortcut' ? door.door.chord : null;
+}
+
+// The key context of the element that has focus: a field keeps its keys; a region names its context with
+// data-key-context; everything else is the global context.
+export function contextOf(target: EventTarget | null): KeyContextId {
+  if (target instanceof HTMLElement) {
+    if (target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)) return 'field';
+    const region = target.closest('[data-key-context]');
+    const named = region?.getAttribute('data-key-context');
+    if (named && (manifest.interactions.keyContexts as readonly { id: string }[]).some((k) => k.id === named)) return named as KeyContextId;
+  }
+  return 'global';
+}
+
+export function installKeymap(store: EditorStore, target: Window = window): () => void {
+  const onKeyDown = (event: KeyboardEvent) => {
+    const binding = bindingFor(contextOf(event.target), chordOf(event));
+    if (!binding) return;
+    event.preventDefault();
+    const dispatch = store.dispatch as (id: CommandId, args: unknown) => DispatchResult;
+    dispatch(binding.command.id, binding.door.args);
+  };
+  target.addEventListener('keydown', onKeyDown);
+  return () => target.removeEventListener('keydown', onKeyDown);
+}

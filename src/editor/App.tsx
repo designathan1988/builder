@@ -1,12 +1,10 @@
-import { PRODUCT_NAME } from '../config/product.ts';
-import { DEFAULT_LOCALE } from '../generated/ids.ts';
-import { translate } from '../i18n/index.ts';
-import './app.css';
+import { Shell } from './shell/shell.tsx';
+import { StoreContext, type EditorStore } from './store.ts';
 
-export function App() {
+export function App({ store }: { readonly store: EditorStore }) {
   return (
-    <main className="app" aria-label={translate(DEFAULT_LOCALE, 'editor.label')}>
-      <h1 className="app__title">{PRODUCT_NAME}</h1>
-    </main>
+    <StoreContext.Provider value={store}>
+      <Shell />
+    </StoreContext.Provider>
   );
 }

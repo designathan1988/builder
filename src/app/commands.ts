@@ -4,6 +4,10 @@
 // type error (src/app/commands.typecheck.ts proves it). The order is the manifest's.
 import { NOT_AVAILABLE_YET, always, type CommandTable, type PredicateTable } from '../core/commands/registry.ts';
 import { canRedo, canUndo, redoCommand, undoCommand } from '../core/history/history.ts';
+import { setLanguage, setTheme } from '../editor/preferences/preferences.ts';
+import type { EditorUi } from '../editor/state.ts';
+import { setWorkbenchState } from '../editor/workspace/layout.ts';
+import { collapseDocks, setPanelOpen, toggleInspector, toggleLeftDock } from '../editor/workspace/panels.ts';
 
 export const COMMANDS = {
   'animation.create': NOT_AVAILABLE_YET,
@@ -197,19 +201,19 @@ export const COMMANDS = {
   'snap.setEnabled': NOT_AVAILABLE_YET,
   'snap.setSettings': NOT_AVAILABLE_YET,
   'workspace.openDialog': NOT_AVAILABLE_YET,
-  'workspace.setPanelOpen': NOT_AVAILABLE_YET,
-  'workspace.toggleLeftDock': NOT_AVAILABLE_YET,
-  'workspace.toggleInspector': NOT_AVAILABLE_YET,
-  'workspace.collapseDocks': NOT_AVAILABLE_YET,
+  'workspace.setPanelOpen': setPanelOpen,
+  'workspace.toggleLeftDock': toggleLeftDock,
+  'workspace.toggleInspector': toggleInspector,
+  'workspace.collapseDocks': collapseDocks,
   'workspace.toggleDeveloperTools': NOT_AVAILABLE_YET,
   'workspace.reset': NOT_AVAILABLE_YET,
-  'workspace.setWorkbenchState': NOT_AVAILABLE_YET,
+  'workspace.setWorkbenchState': setWorkbenchState,
   'workspace.setActiveTab': NOT_AVAILABLE_YET,
   'workspace.resizeSplitter': NOT_AVAILABLE_YET,
   'workspace.movePanel': NOT_AVAILABLE_YET,
   'quickPanel.setOffset': NOT_AVAILABLE_YET,
-  'preferences.setLanguage': NOT_AVAILABLE_YET,
-  'preferences.setTheme': NOT_AVAILABLE_YET,
+  'preferences.setLanguage': setLanguage,
+  'preferences.setTheme': setTheme,
   'commandBar.open': NOT_AVAILABLE_YET,
   'palette.toggleGroup': NOT_AVAILABLE_YET,
   'palette.setDensity': NOT_AVAILABLE_YET,
@@ -224,7 +228,7 @@ export const COMMANDS = {
   'inspector.reveal': NOT_AVAILABLE_YET,
   'codePanel.copyPane': NOT_AVAILABLE_YET,
   'codePanel.downloadPane': NOT_AVAILABLE_YET,
-} as const satisfies CommandTable<never>;
+} as const satisfies CommandTable<EditorUi>;
 
 // The availability predicates code has registered; a built command's predicate must be here (createStore checks it).
-export const PREDICATES = { always, canUndo, canRedo } as const satisfies PredicateTable<never>;
+export const PREDICATES = { always, canUndo, canRedo } as const satisfies PredicateTable<EditorUi>;
