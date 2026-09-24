@@ -12,6 +12,7 @@ import { chordHint } from '../input/keymap.ts';
 import type { EditorUi } from '../state.ts';
 import { useEditorState, useStore } from '../store.ts';
 import { useT } from '../text.ts';
+import { opensEmptyPanel } from '../workspace/panels.ts';
 import { isCurrent } from './current.ts';
 import { GLYPHS } from './placement.ts';
 
@@ -51,7 +52,8 @@ export interface DoorState {
 export function useDoor(entry: DoorEntry, args: Readonly<Record<string, unknown>> = {}, labelled?: string): DoorState {
   const t = useT();
   const store = useStore();
-  const built = isDoorBuilt(entry);
+  // a door whose only effect is to open a panel without its content is not available yet, like an unbuilt command
+  const built = isDoorBuilt(entry) && !opensEmptyPanel({ ...entry.door.args, ...args });
   const current = useEditorState((s) => built && isCurrent(entry, s, args));
   const available = useEditorState((s) => built && ((PREDICATES as PredicateTable<EditorUi>)[entry.command.availability.predicate as PredicateId]?.test(s) ?? true));
   const label = labelled ?? t(entry.door.labelKey as MessageId);

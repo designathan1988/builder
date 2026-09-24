@@ -1185,6 +1185,13 @@ kbd {
   color: var(--color-text-subtle);
 }
 
+/* a sidebar view whose content is not built yet says so under its headings */
+.view__empty {
+  margin: 0;
+  padding: var(--space-3) var(--space-6);
+  color: var(--color-text-subtle);
+}
+
 .checks-category {
   display: flex;
   gap: var(--space-4);

@@ -6,7 +6,7 @@ import { DoorControl, Icon } from '../doors/door.tsx';
 import { doorSlots } from '../doors/placement.ts';
 import { useEditorState } from '../store.ts';
 import { useT } from '../text.ts';
-import { PANELS, panelName, type Panel } from '../workspace/panels.ts';
+import { PANELS, hasContent, panelName, type Panel } from '../workspace/panels.ts';
 import { Slots } from './slots.tsx';
 
 const TAB = doorSlots('tab-strip')[0];
@@ -14,6 +14,8 @@ const CLOSE = doorSlots('dock-strip').find((d) => d.command.id === 'workspace.se
 
 function DockBody({ tab }: { readonly tab: Panel }) {
   const t = useT();
+  // a panel without its content says so (panels.ts PANEL_CONTENT)
+  if (!hasContent(tab)) return <div className="dock-body dock-body--empty">{t('common.notAvailableYet')}</div>;
   if (tab === 'timeline') {
     return (
       <div className="dock-body dock-body--timeline" data-region="dock-timeline" data-key-context="timeline">

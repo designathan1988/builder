@@ -4,7 +4,7 @@
 // What a panel is (its name, its place, whether it is open at the first start) is data: `panels` of layout.json.
 import type { CommandArgs } from '../../generated/commands.ts';
 import type { MessageId } from '../../generated/ids.ts';
-import { message, registerHandler, type Message } from '../../core/commands/registry.ts';
+import { NOT_AVAILABLE_YET, message, registerHandler, type Message, type NotAvailableYet } from '../../core/commands/registry.ts';
 import { manifest } from '../../manifest/runtime.ts';
 import type { EditorUi } from '../state.ts';
 import { withActiveDockTab, withDock, type DockState } from './layout.ts';
@@ -15,6 +15,30 @@ export type PanelPlace = PanelData['place'];
 
 // manifest:check rule panel proves layout.json declares every panel of workspace.setPanelOpen, and only those
 export const PANELS = manifest.layout.panels as Readonly<Record<Panel, PanelData>>;
+
+// Which panels have their content. A panel still without it is NOT_AVAILABLE_YET: a door whose only effect is to open
+// it is drawn disabled with "not available yet" (CLAUDE.md), as a door of a command that is not built, and the panel
+// itself says "not available yet". Typed by Panel: a new panel is a type error until it is listed here.
+export const PANEL_CONTENT: Readonly<Record<Panel, 'built' | NotAvailableYet>> = {
+  elements: 'built',
+  layers: 'built',
+  inspector: 'built',
+  explorer: 'built',
+  timeline: NOT_AVAILABLE_YET,
+  variables: NOT_AVAILABLE_YET,
+  checks: NOT_AVAILABLE_YET,
+  workbench: 'built',
+  shortcuts: NOT_AVAILABLE_YET,
+  document: NOT_AVAILABLE_YET,
+  'canvas-tools': 'built',
+};
+
+export const hasContent = (panel: Panel): boolean => PANEL_CONTENT[panel] !== NOT_AVAILABLE_YET;
+
+// A door's arguments open a panel without its content: they name the panel and do not close it.
+export function opensEmptyPanel(args: Readonly<Record<string, unknown>>): boolean {
+  return typeof args.panel === 'string' && args.panel in PANEL_CONTENT && args.open !== 'close' && !hasContent(args.panel as Panel);
+}
 
 // a panel's name in the catalogue
 export const panelName = (panel: Panel): MessageId => PANELS[panel].labelKey as MessageId;

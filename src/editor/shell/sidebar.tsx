@@ -8,7 +8,7 @@ import { manifest, type DoorEntry } from '../../manifest/runtime.ts';
 import { DoorControl, Icon, useDoor } from '../doors/door.tsx';
 import { GLYPHS, doorSlots } from '../doors/placement.ts';
 import { useEditorState } from '../store.ts';
-import { isPanelOpen, panelName } from '../workspace/panels.ts';
+import { hasContent, isPanelOpen, panelName } from '../workspace/panels.ts';
 import { useT } from '../text.ts';
 import { Slots } from './slots.tsx';
 
@@ -183,6 +183,7 @@ function Styles() {
         <span className="section-title__text">{t('styles.classes')}</span>
       </div>
       <SectionTitle title={t(panelName('variables'))} region="styles" />
+      {hasContent('variables') ? null : <p className="view__empty">{t('common.notAvailableYet')}</p>}
     </section>
   );
 }
