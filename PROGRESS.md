@@ -74,6 +74,8 @@ Open findings (recorded, not acted on):
 26. (auditor, 048f4a5, NOTE) `src/editor/shell/canvas.tsx` RULER_STEP = 200 is a design constant in code; the constants belong in interactions.json.
 27. (auditor, 048f4a5, NOTE) `inspector.tsx` BoxModel names margin-top … padding-left and the composites margin and padding in code to place the sides of the box model.
 28. (auditor, 048f4a5, NOTE 4, fixed) The inspector's fields were drawn disabled unconditionally, not from the door's built and available state; fixed with the BLOCKING findings.
+29. (auditor, 380745b, NOTE) design/final draws `classes.apply#inspector-class-add` with the text "+ Class" (key `inspector.addClass`) and the tooltip "Apply a class", but the shell's button reads "Apply a class". A control's short face text must be door data, not chosen in code.
+30. (auditor, 380745b, OK) The auditor verified part 1 on the clean tree at 380745b: verify:fast exit 0 (231 tests), e2e 6/6 exit 0, and at 1440 × 900 every region measures as DESIGN.md says (top bar 40, activity bar 40, sidebar 224, inspector 288, file tabs 34, canvas toolbar 36, ruler 20, frame tabs 28, dock strip 28, status bar 24; canvas area 888 wide, frame 24 px from the ruler); only built commands' doors are enabled.
 16. Items 3 and 4 were committed as 6391196 (generated types) and the next commit (registry, command table and the core): the registry's handler contract uses the store's types, so it could not land before the core.
 
 ## 2026-09-24 — Final interface: DESIGN.md, the combined mockup, every door placed
