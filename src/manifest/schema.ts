@@ -380,12 +380,16 @@ const offersSchema = z.strictObject({
   property: z.union([cssName, kebabId]),
   // "generated": the keywords of manifest/generated/css-properties.json that css-compat.json says
   // Chrome, Firefox and Safari all support, and the units; otherwise the id of a subset declared on
-  // that property or composite. An inspector field's list is what it offers in All properties, where
-  // every control offers the whole catalogue: always "generated" (manifest:check rule all-properties).
-  // Only a quick panel field names a subset here.
+  // that property or composite. An inspector field offers in All properties every value the browser data
+  // allows, so its list is always "generated" (manifest:check rule all-properties); only a quick panel
+  // field names a subset here.
   list: kebabId,
-  // the declared subset an inspector field offers in Essentials only; null for every other door, and for
-  // a field that offers the whole catalogue in both modes
+  // a list declared on that property or composite whose values an inspector field offers in All properties
+  // besides the generated ones: the presets that compose values (font stacks, named weights 100 to 900,
+  // "100% 100%", "top left"); null when it offers none
+  presets: kebabId.nullable(),
+  // the declared list an inspector field offers in Essentials only: never a value All properties lacks
+  // (generated plus presets). null for every other door, and for a field that offers the same values in both modes
   essentials: kebabId.nullable(),
 });
 

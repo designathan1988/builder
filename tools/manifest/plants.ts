@@ -208,9 +208,9 @@ export const PLANTS: Plant[] = [
   {
     id: 'keyword-rejected-by-syntax',
     rule: 'css-syntax',
-    description: 'the Display menu subset offers "flexbox", which the official display syntax rejects',
+    description: 'the background-size presets (All properties and Essentials only) offer "stretch-to-fit", which the official background-size syntax rejects',
     apply: (m) => {
-      strings(list(property(m, 'display').subsets)[0]?.values).push('flexbox');
+      strings(list(property(m, 'background-size').subsets)[0]?.values).push('stretch-to-fit');
     },
   },
   {
@@ -242,10 +242,12 @@ export const PLANTS: Plant[] = [
   {
     id: 'offered-keyword-unsupported',
     rule: 'browser-support',
-    description: 'the flex-wrap menu offers, in Essentials only, a subset with balance, which only Chrome supports',
+    description: 'the flex-wrap menu offers, as presets and in Essentials only, a list with balance, which only Chrome supports',
     apply: (m) => {
       property(m, 'flex-wrap').subsets = [{ id: 'menu', values: ['nowrap', 'wrap', 'wrap-reverse', 'balance'], units: null, reason: 'planted' }];
-      obj(obj(door(m, 'style.set', 'inspector-flex-wrap').adapter).offers).essentials = 'menu';
+      const offers = obj(obj(door(m, 'style.set', 'inspector-flex-wrap').adapter).offers);
+      offers.presets = 'menu';
+      offers.essentials = 'menu';
     },
   },
   {
@@ -287,10 +289,10 @@ export const PLANTS: Plant[] = [
   {
     id: 'offered-type-keyword-unsupported',
     rule: 'browser-support',
-    description: 'the accent-color field offers, in Essentials only, a subset with Mark, a system colour Safari lacks (BCD css.types.color.system-color.mark)',
+    description: 'the accent-color field offers, as presets and in Essentials only, a list with Mark, a system colour Safari lacks (BCD css.types.color.system-color.mark)',
     apply: (m) => {
       property(m, 'accent-color').subsets = [{ id: 'swatches', values: ['canvastext', 'mark'], units: null, reason: 'planted' }];
-      obj(door(m, 'style.set', 'inspector-accent-color').adapter).offers = { property: 'accent-color', list: 'generated', essentials: 'swatches' };
+      obj(door(m, 'style.set', 'inspector-accent-color').adapter).offers = { property: 'accent-color', list: 'generated', presets: 'swatches', essentials: 'swatches' };
     },
   },
   {
@@ -580,7 +582,15 @@ PLANTS.push(
     description: 'the inspector Direction field offers only row and column in All properties (All properties offers every value of the catalogue)',
     apply: (m) => {
       property(m, 'flex-direction').subsets = [{ id: 'row-column', values: ['row', 'column'], units: null, reason: 'planted' }];
-      obj(door(m, 'style.set', 'inspector-flex-direction').adapter).offers = { property: 'flex-direction', list: 'row-column', essentials: null };
+      obj(door(m, 'style.set', 'inspector-flex-direction').adapter).offers = { property: 'flex-direction', list: 'row-column', presets: null, essentials: null };
+    },
+  },
+  {
+    id: 'essentials-value-missing-from-all-properties',
+    rule: 'all-properties',
+    description: 'the inspector Font field offers the font stacks in Essentials only but not in All properties (it lost its presets)',
+    apply: (m) => {
+      obj(obj(door(m, 'style.set', 'inspector-font-family').adapter).offers).presets = null;
     },
   },
   {

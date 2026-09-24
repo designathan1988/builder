@@ -55,6 +55,7 @@
             "offers": {
               "property": "display",
               "list": "generated",
+              "presets": null,
               "essentials": "menu"
             },
             "writes": [
@@ -84,6 +85,7 @@
             "offers": {
               "property": "flex-direction",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -113,6 +115,7 @@
             "offers": {
               "property": "flex-wrap",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -142,6 +145,7 @@
             "offers": {
               "property": "justify-content",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -171,6 +175,7 @@
             "offers": {
               "property": "align-items",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -200,6 +205,7 @@
             "offers": {
               "property": "align-content",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -229,6 +235,7 @@
             "offers": {
               "property": "gap",
               "list": "generated",
+              "presets": null,
               "essentials": "field"
             },
             "writes": [
@@ -259,6 +266,7 @@
             "offers": {
               "property": "row-gap",
               "list": "generated",
+              "presets": null,
               "essentials": "field"
             },
             "writes": [
@@ -288,6 +296,7 @@
             "offers": {
               "property": "column-gap",
               "list": "generated",
+              "presets": null,
               "essentials": "field"
             },
             "writes": [
@@ -317,6 +326,7 @@
             "offers": {
               "property": "grid-template-columns",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -346,6 +356,7 @@
             "offers": {
               "property": "grid-template-rows",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -375,6 +386,7 @@
             "offers": {
               "property": "grid-auto-flow",
               "list": "generated",
+              "presets": "menu",
               "essentials": "menu"
             },
             "writes": [
@@ -404,6 +416,7 @@
             "offers": {
               "property": "justify-items",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -433,6 +446,7 @@
             "offers": {
               "property": "grid-template-areas",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -512,6 +526,7 @@
             "offers": {
               "property": "flex-basis",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -541,6 +556,7 @@
             "offers": {
               "property": "align-self",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -570,6 +586,7 @@
             "offers": {
               "property": "justify-self",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -676,6 +693,7 @@
             "offers": {
               "property": "columns",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -706,6 +724,7 @@
             "offers": {
               "property": "column-span",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -735,6 +754,7 @@
             "offers": {
               "property": "column-fill",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -764,6 +784,7 @@
             "offers": {
               "property": "column-rule-width",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -793,6 +814,7 @@
             "offers": {
               "property": "column-rule-style",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -847,6 +869,7 @@
             "offers": {
               "property": "break-before",
               "list": "generated",
+              "presets": null,
               "essentials": "menu"
             },
             "writes": [
@@ -876,6 +899,7 @@
             "offers": {
               "property": "break-after",
               "list": "generated",
+              "presets": null,
               "essentials": "menu"
             },
             "writes": [
@@ -905,6 +929,7 @@
             "offers": {
               "property": "break-inside",
               "list": "generated",
+              "presets": null,
               "essentials": "menu"
             },
             "writes": [
@@ -934,6 +959,7 @@
             "offers": {
               "property": "scroll-behavior",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -963,6 +989,7 @@
             "offers": {
               "property": "scroll-snap-type",
               "list": "generated",
+              "presets": "menu",
               "essentials": "menu"
             },
             "writes": [
@@ -992,6 +1019,7 @@
             "offers": {
               "property": "scroll-snap-align",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -1021,6 +1049,7 @@
             "offers": {
               "property": "border-collapse",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -1050,6 +1079,7 @@
             "offers": {
               "property": "border-spacing",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -1079,6 +1109,7 @@
             "offers": {
               "property": "table-layout",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -1108,6 +1139,7 @@
             "offers": {
               "property": "caption-side",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -1137,6 +1169,7 @@
             "offers": {
               "property": "empty-cells",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -1166,6 +1199,7 @@
             "offers": {
               "property": "contain",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -1195,6 +1229,7 @@
             "offers": {
               "property": "content-visibility",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -1224,6 +1259,7 @@
             "offers": {
               "property": "counter-reset",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -1253,6 +1289,7 @@
             "offers": {
               "property": "counter-increment",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -1282,6 +1319,7 @@
             "offers": {
               "property": "width",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -1311,6 +1349,7 @@
             "offers": {
               "property": "height",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -1340,6 +1379,7 @@
             "offers": {
               "property": "min-width",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -1369,6 +1409,7 @@
             "offers": {
               "property": "max-width",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -1398,6 +1439,7 @@
             "offers": {
               "property": "min-height",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -1427,6 +1469,7 @@
             "offers": {
               "property": "max-height",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -1456,6 +1499,7 @@
             "offers": {
               "property": "box-sizing",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -1485,6 +1529,7 @@
             "offers": {
               "property": "aspect-ratio",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -1514,6 +1559,7 @@
             "offers": {
               "property": "overflow",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -1544,6 +1590,7 @@
             "offers": {
               "property": "overflow-x",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -1573,6 +1620,7 @@
             "offers": {
               "property": "overflow-y",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -1602,6 +1650,7 @@
             "offers": {
               "property": "resize",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -1631,6 +1680,7 @@
             "offers": {
               "property": "object-fit",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -1660,6 +1710,7 @@
             "offers": {
               "property": "object-position",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -1689,6 +1740,7 @@
             "offers": {
               "property": "top",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -1718,6 +1770,7 @@
             "offers": {
               "property": "right",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -1747,6 +1800,7 @@
             "offers": {
               "property": "bottom",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -1776,6 +1830,7 @@
             "offers": {
               "property": "left",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -1805,6 +1860,7 @@
             "offers": {
               "property": "z-index",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -1834,6 +1890,7 @@
             "offers": {
               "property": "float",
               "list": "generated",
+              "presets": null,
               "essentials": "menu"
             },
             "writes": [
@@ -1863,6 +1920,7 @@
             "offers": {
               "property": "clear",
               "list": "generated",
+              "presets": null,
               "essentials": "menu"
             },
             "writes": [
@@ -1917,6 +1975,7 @@
             "offers": {
               "property": "background-size",
               "list": "generated",
+              "presets": "menu",
               "essentials": "menu"
             },
             "writes": [
@@ -1946,6 +2005,7 @@
             "offers": {
               "property": "background-position",
               "list": "generated",
+              "presets": "menu",
               "essentials": "menu"
             },
             "writes": [
@@ -1976,6 +2036,7 @@
             "offers": {
               "property": "background-repeat",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -2005,6 +2066,7 @@
             "offers": {
               "property": "background-attachment",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -2034,6 +2096,7 @@
             "offers": {
               "property": "background-origin",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -2063,6 +2126,7 @@
             "offers": {
               "property": "background-clip",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -2092,6 +2156,7 @@
             "offers": {
               "property": "background-blend-mode",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -2121,6 +2186,7 @@
             "offers": {
               "property": "fill",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -2150,6 +2216,7 @@
             "offers": {
               "property": "stroke",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -2179,6 +2246,7 @@
             "offers": {
               "property": "stroke-width",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -2208,6 +2276,7 @@
             "offers": {
               "property": "outline",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -2239,6 +2308,7 @@
             "offers": {
               "property": "outline-offset",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -2293,6 +2363,7 @@
             "offers": {
               "property": "font-family",
               "list": "generated",
+              "presets": "stacks",
               "essentials": "stacks"
             },
             "writes": [
@@ -2322,6 +2393,7 @@
             "offers": {
               "property": "font-size",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -2351,6 +2423,7 @@
             "offers": {
               "property": "font-weight",
               "list": "generated",
+              "presets": "menu",
               "essentials": "menu"
             },
             "writes": [
@@ -2380,6 +2453,7 @@
             "offers": {
               "property": "font-style",
               "list": "generated",
+              "presets": null,
               "essentials": "menu"
             },
             "writes": [
@@ -2409,6 +2483,7 @@
             "offers": {
               "property": "line-height",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -2438,6 +2513,7 @@
             "offers": {
               "property": "letter-spacing",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -2467,6 +2543,7 @@
             "offers": {
               "property": "word-spacing",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -2496,6 +2573,7 @@
             "offers": {
               "property": "text-align",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -2525,6 +2603,7 @@
             "offers": {
               "property": "text-decoration",
               "list": "generated",
+              "presets": "menu",
               "essentials": "menu"
             },
             "writes": [
@@ -2557,6 +2636,7 @@
             "offers": {
               "property": "text-transform",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -2586,6 +2666,7 @@
             "offers": {
               "property": "text-indent",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -2615,6 +2696,7 @@
             "offers": {
               "property": "text-overflow",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -2644,6 +2726,7 @@
             "offers": {
               "property": "white-space",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -2674,6 +2757,7 @@
             "offers": {
               "property": "word-break",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -2703,6 +2787,7 @@
             "offers": {
               "property": "vertical-align",
               "list": "generated",
+              "presets": null,
               "essentials": "menu"
             },
             "writes": [
@@ -2732,6 +2817,7 @@
             "offers": {
               "property": "font-stretch",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -2761,6 +2847,7 @@
             "offers": {
               "property": "font-variant",
               "list": "generated",
+              "presets": null,
               "essentials": "menu"
             },
             "writes": [
@@ -2795,6 +2882,7 @@
             "offers": {
               "property": "font-feature-settings",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -2824,6 +2912,7 @@
             "offers": {
               "property": "overflow-wrap",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -2853,6 +2942,7 @@
             "offers": {
               "property": "hyphens",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -2911,6 +3001,7 @@
             "offers": {
               "property": "direction",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -2940,6 +3031,7 @@
             "offers": {
               "property": "writing-mode",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -2969,6 +3061,7 @@
             "offers": {
               "property": "text-orientation",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -2998,6 +3091,7 @@
             "offers": {
               "property": "list-style-type",
               "list": "generated",
+              "presets": "menu",
               "essentials": "menu"
             },
             "writes": [
@@ -3027,6 +3121,7 @@
             "offers": {
               "property": "list-style-position",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -3056,6 +3151,7 @@
             "offers": {
               "property": "list-style-image",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -3085,6 +3181,7 @@
             "offers": {
               "property": "accent-color",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -3114,6 +3211,7 @@
             "offers": {
               "property": "caret-color",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -3143,6 +3241,7 @@
             "offers": {
               "property": "appearance",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -3197,6 +3296,7 @@
             "offers": {
               "property": "visibility",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -3226,6 +3326,7 @@
             "offers": {
               "property": "mix-blend-mode",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -3255,6 +3356,7 @@
             "offers": {
               "property": "isolation",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -3284,6 +3386,7 @@
             "offers": {
               "property": "cursor",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -3313,6 +3416,7 @@
             "offers": {
               "property": "pointer-events",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -3342,6 +3446,7 @@
             "offers": {
               "property": "user-select",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -3372,6 +3477,7 @@
             "offers": {
               "property": "will-change",
               "list": "generated",
+              "presets": "menu",
               "essentials": "menu"
             },
             "writes": [
@@ -3401,6 +3507,7 @@
             "offers": {
               "property": "backdrop-filter",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -3430,6 +3537,7 @@
             "offers": {
               "property": "clip-path",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -3459,6 +3567,7 @@
             "offers": {
               "property": "mask-image",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -3488,6 +3597,7 @@
             "offers": {
               "property": "transform-origin",
               "list": "generated",
+              "presets": "menu",
               "essentials": "menu"
             },
             "writes": [
@@ -3517,6 +3627,7 @@
             "offers": {
               "property": "perspective",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -3546,6 +3657,7 @@
             "offers": {
               "property": "perspective-origin",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -3575,6 +3687,7 @@
             "offers": {
               "property": "transform-style",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -3604,6 +3717,7 @@
             "offers": {
               "property": "backface-visibility",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -3633,6 +3747,7 @@
             "offers": {
               "property": "transform-box",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -3662,6 +3777,7 @@
             "offers": {
               "property": "transition",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -3751,6 +3867,7 @@
             "offers": {
               "property": "grid-template-columns",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -3776,6 +3893,7 @@
             "offers": {
               "property": "width",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -3801,6 +3919,7 @@
             "offers": {
               "property": "height",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -3889,6 +4008,7 @@
             "offers": {
               "property": "font-size",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -3914,6 +4034,7 @@
             "offers": {
               "property": "font-family",
               "list": "stacks",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -3939,6 +4060,7 @@
             "offers": {
               "property": "font-weight",
               "list": "menu",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -3964,6 +4086,7 @@
             "offers": {
               "property": "line-height",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -3989,6 +4112,7 @@
             "offers": {
               "property": "letter-spacing",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -4014,6 +4138,7 @@
             "offers": {
               "property": "text-align",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -4141,6 +4266,7 @@
             "offers": {
               "property": "translate",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -4170,6 +4296,7 @@
             "offers": {
               "property": "translate",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -4199,6 +4326,7 @@
             "offers": {
               "property": "rotate",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -4228,6 +4356,7 @@
             "offers": {
               "property": "scale",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -4253,6 +4382,7 @@
             "offers": {
               "property": "translate",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -4278,6 +4408,7 @@
             "offers": {
               "property": "rotate",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -4303,6 +4434,7 @@
             "offers": {
               "property": "scale",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -4402,6 +4534,7 @@
             "offers": {
               "property": "padding",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -4434,6 +4567,7 @@
             "offers": {
               "property": "padding-top",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -4463,6 +4597,7 @@
             "offers": {
               "property": "padding-right",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -4492,6 +4627,7 @@
             "offers": {
               "property": "padding-bottom",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -4521,6 +4657,7 @@
             "offers": {
               "property": "padding-left",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -4550,6 +4687,7 @@
             "offers": {
               "property": "margin",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -4582,6 +4720,7 @@
             "offers": {
               "property": "margin-top",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -4611,6 +4750,7 @@
             "offers": {
               "property": "margin-right",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -4640,6 +4780,7 @@
             "offers": {
               "property": "margin-bottom",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -4669,6 +4810,7 @@
             "offers": {
               "property": "margin-left",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -4970,6 +5112,7 @@
             "offers": {
               "property": "border",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -5010,6 +5153,7 @@
             "offers": {
               "property": "border-width",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -5042,6 +5186,7 @@
             "offers": {
               "property": "border-style",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -5102,6 +5247,7 @@
             "offers": {
               "property": "border-top",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -5133,6 +5279,7 @@
             "offers": {
               "property": "border-top-width",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -5162,6 +5309,7 @@
             "offers": {
               "property": "border-right",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -5193,6 +5341,7 @@
             "offers": {
               "property": "border-right-width",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -5222,6 +5371,7 @@
             "offers": {
               "property": "border-bottom",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -5253,6 +5403,7 @@
             "offers": {
               "property": "border-bottom-width",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -5282,6 +5433,7 @@
             "offers": {
               "property": "border-left",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -5313,6 +5465,7 @@
             "offers": {
               "property": "border-left-width",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -5338,6 +5491,7 @@
             "offers": {
               "property": "border-style",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -5515,6 +5669,7 @@
             "offers": {
               "property": "border-radius",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -5547,6 +5702,7 @@
             "offers": {
               "property": "border-top-left-radius",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -5576,6 +5732,7 @@
             "offers": {
               "property": "border-top-right-radius",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -5605,6 +5762,7 @@
             "offers": {
               "property": "border-bottom-right-radius",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -5634,6 +5792,7 @@
             "offers": {
               "property": "border-bottom-left-radius",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -5736,6 +5895,7 @@
             "offers": {
               "property": "background-image",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -5765,6 +5925,7 @@
             "offers": {
               "property": "background-image",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -5801,6 +5962,7 @@
             "offers": {
               "property": "background-image",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -5830,6 +5992,7 @@
             "offers": {
               "property": "background-image",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -5859,6 +6022,7 @@
             "offers": {
               "property": "background-image",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -5888,6 +6052,7 @@
             "offers": {
               "property": "background-image",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -5917,6 +6082,7 @@
             "offers": {
               "property": "background-image",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -5946,6 +6112,7 @@
             "offers": {
               "property": "background-image",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -5975,6 +6142,7 @@
             "offers": {
               "property": "background-image",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -6004,6 +6172,7 @@
             "offers": {
               "property": "background-image",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -6033,6 +6202,7 @@
             "offers": {
               "property": "background-image",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -6062,6 +6232,7 @@
             "offers": {
               "property": "background-image",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -7016,6 +7187,7 @@
             "offers": {
               "property": "filter",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -7045,6 +7217,7 @@
             "offers": {
               "property": "filter",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -7074,6 +7247,7 @@
             "offers": {
               "property": "filter",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -7103,6 +7277,7 @@
             "offers": {
               "property": "filter",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -7132,6 +7307,7 @@
             "offers": {
               "property": "filter",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -7161,6 +7337,7 @@
             "offers": {
               "property": "filter",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -7190,6 +7367,7 @@
             "offers": {
               "property": "filter",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -7219,6 +7397,7 @@
             "offers": {
               "property": "filter",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -7248,6 +7427,7 @@
             "offers": {
               "property": "filter",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -7348,6 +7528,7 @@
             "offers": {
               "property": "transform",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -7373,6 +7554,7 @@
             "offers": {
               "property": "transform",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -7402,6 +7584,7 @@
             "offers": {
               "property": "transform",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [
@@ -7427,6 +7610,7 @@
             "offers": {
               "property": "transform",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [

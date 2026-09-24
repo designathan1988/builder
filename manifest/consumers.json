@@ -797,6 +797,10 @@
       "reader": "src/editor/doors/adapter.ts"
     },
     {
+      "field": "commands:commands[].entryPoints[].adapter.offers.presets",
+      "reader": "src/editor/doors/adapter.ts"
+    },
+    {
       "field": "commands:commands[].entryPoints[].adapter.offers.essentials",
       "reader": "src/editor/doors/adapter.ts"
     },

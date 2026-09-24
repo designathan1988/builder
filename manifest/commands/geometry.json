@@ -55,6 +55,7 @@
             "offers": {
               "property": "position",
               "list": "generated",
+              "presets": null,
               "essentials": null
             },
             "writes": [

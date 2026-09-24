@@ -935,20 +935,36 @@ export function checkManifest(input: ManifestInput): CheckResult {
     }
   }
 
-  // ---- all-properties: in All properties every inspector field offers the whole catalogue (the generated
-  // list: all four flex directions, every text-align value, space-between, space-around and space-evenly).
-  // A declared subset is offered only in Essentials only (offers.essentials) and in the quick panel.
+  // ---- all-properties: in All properties an inspector field offers every value the browser data allows (the
+  // generated list: all four flex directions, every text-align value, space-between, space-around and
+  // space-evenly) plus its declared presets (font stacks, named weights). Essentials only may offer fewer
+  // values, never one All properties lacks. A declared subset stands alone only in the quick panel.
+  const declaredList = (target: string, id: string) => subsetsOf(target).find((s) => s.id === id);
   for (const { file, path, door, ref: doorRef } of doors) {
     const offers = door.adapter.offers;
     if (!offers) continue;
+    const inspector = door.kind === 'inspector-field';
     if (offers.list !== 'generated' && door.kind !== 'quick-panel') {
-      report('all-properties', file, `${path}.adapter.offers.list`, door.kind === 'inspector-field'
-        ? `${doorRef} offers the subset "${offers.list}" in All properties, which offers every value of the catalogue: offer "generated" and name the subset in offers.essentials`
-        : `${doorRef} is a ${door.kind} door and offers the subset "${offers.list}": a declared subset is offered only in Essentials only and in the quick panel`);
+      report('all-properties', file, `${path}.adapter.offers.list`, inspector
+        ? `${doorRef} offers the subset "${offers.list}" in All properties, which offers every value the browser data allows: offer "generated", name the presets in offers.presets and the shorter list in offers.essentials`
+        : `${doorRef} is a ${door.kind} door and offers the subset "${offers.list}": a declared subset stands alone only in the quick panel`);
     }
-    if (offers.essentials === null) continue;
-    if (door.kind !== 'inspector-field') report('all-properties', file, `${path}.adapter.offers.essentials`, `${doorRef} is a ${door.kind} door: only an inspector field has an Essentials only list`);
-    else if (!subsetsOf(offers.property).some((s) => s.id === offers.essentials)) report('all-properties', file, `${path}.adapter.offers.essentials`, `${doorRef} offers "${offers.essentials}" in Essentials only, which is not a subset declared on ${offers.property}`);
+    for (const [field, id] of [['presets', offers.presets], ['essentials', offers.essentials]] as const) {
+      if (id === null) continue;
+      if (!inspector) report('all-properties', file, `${path}.adapter.offers.${field}`, `${doorRef} is a ${door.kind} door: only an inspector field has ${field === 'presets' ? 'All properties presets' : 'an Essentials only list'}`);
+      else if (!declaredList(offers.property, id)) report('all-properties', file, `${path}.adapter.offers.${field}`, `${doorRef} names "${id}" as its ${field}, which is not a list declared on ${offers.property}`);
+    }
+    if (!inspector || offers.list !== 'generated' || offers.essentials === null) continue;
+    const essentials = declaredList(offers.property, offers.essentials);
+    if (!essentials) continue;
+    const presets = offers.presets === null ? undefined : declaredList(offers.property, offers.presets);
+    const lower = (xs: readonly string[]) => new Set(xs.map((x) => x.toLowerCase()));
+    const allValues = lower([...(generatedOffer(offerData, offers.property) ?? []), ...(presets?.values ?? [])]);
+    const allUnits = lower([...(generatedUnits(offerData, offers.property) ?? []), ...(presets?.units ?? [])]);
+    const missing = [...(essentials.values ?? []).filter((v) => !allValues.has(v.toLowerCase())), ...(essentials.units ?? []).filter((u) => !allUnits.has(u.toLowerCase())).map((u) => `the unit ${u}`)];
+    if (missing.length > 0) {
+      report('all-properties', file, `${path}.adapter.offers.essentials`, `${doorRef} offers ${missing.map((v) => `"${v}"`).join(', ')} in Essentials only, which All properties lacks (the generated list of ${offers.property}${presets ? ` and the presets "${presets.id}"` : ', no presets'}): Essentials only is a subset of All properties`);
+    }
   }
 
   // ---- css-syntax: every value a door offers or writes matches the official syntax (CSSTree's lexer)

@@ -78,8 +78,8 @@ export const AMENDMENTS: Amendment[] = [
     field: 'expected',
     op: 'replace',
     from: 'The Display control offers every keyword the property catalogue has for display, and nothing else (a unit test checks that the control options equal the catalogue keyword list).',
-    to: 'In All properties the Display control offers every keyword of the catalogue (the generated display keywords Chrome, Firefox and Safari all support) and nothing else; in Essentials only it offers the declared display subset its door names (a unit test checks that the control options equal each list); a typed value is accepted only when it matches the official display syntax.',
-    why: 'All properties offers every value of the catalogue; a declared subset only in Essentials only and the quick panel (foundation contract fix)',
+    to: 'In All properties the Display control offers every display keyword the browser data allows (the generated keywords Chrome, Firefox and Safari all support) and nothing else; in Essentials only it offers the declared display subset its door names, which All properties also offers (a unit test checks that the control options equal each list); a typed value is accepted only when it matches the official display syntax.',
+    why: 'All properties offers every value the browser data allows plus the declared presets; Essentials only is a subset of it (foundation contract fix, corrected)',
   },
   {
     feature: 'props-spacing',
@@ -94,8 +94,8 @@ export const AMENDMENTS: Amendment[] = [
     field: 'expected',
     op: 'replace',
     from: 'Each keyword control offers every keyword the property catalogue defines for it.',
-    to: 'In All properties each keyword control offers every value of the catalogue: the generated keywords of the property that Chrome, Firefox and Safari all support according to css-compat.json. A subset the manifest declares with its reason is offered only in Essentials only and in the quick panel.',
-    why: 'All properties offers every value of the catalogue; a declared subset only in Essentials only and the quick panel (foundation contract fix)',
+    to: 'In All properties each keyword control offers every value the browser data allows (the generated keywords of the property that Chrome, Firefox and Safari all support according to css-compat.json) plus the presets the manifest declares for it (the font stacks, the named weights 100 to 900). Essentials only may offer a declared subset of that list, never a value All properties lacks.',
+    why: 'All properties offers every value the browser data allows plus the declared presets; Essentials only is a subset of it (foundation contract fix, corrected)',
   },
   {
     feature: 'props-typography-advanced',
