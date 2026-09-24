@@ -26,7 +26,7 @@
       "The canvas holds exactly one iframe whose body renders the Page root node of the document JSON.",
       "The canvas reserves a 20 px band along its top and left edges for rulers (empty until rulers are built); the remaining area is the canvas viewport. Inside the iframe the page is 1440 CSS px wide (the Desktop breakpoint); the iframe is scaled with CSS zoom so the whole page width fits in the canvas viewport, horizontally centred in it.",
       "The zoom percentage in the status bar equals the iframe zoom factor and is recomputed after the resize.",
-      "An empty page shows the hint 'Click an element or drag it onto this page'; the hint is not a node in the document JSON."
+      "An empty page shows the hint 'Click an element or drag it onto this page' [canvas.emptyHint]; the hint is not a node in the document JSON."
     ],
     "passes": false
   },
@@ -44,8 +44,8 @@
       "The Elements panel lists each element type with its label and HTML tag under a group heading with a count.",
       "With nothing selected, the Section is appended as the last child of Page in the document JSON and becomes the selection.",
       "With a container selected, the Heading is appended as its last child; with a non-container selected, the Paragraph is inserted right after it in the same parent.",
-      "Every inserted element becomes the selection; the iframe shows <section>, <h2> 'New heading', <p> with default text and an empty <div> with a visible minimum height.",
-      "The status bar reads 'Placed <name> in <parent>, position N of M.' after each insert."
+      "Every inserted element becomes the selection; the iframe shows <section>, <h2> 'New heading' [element.heading.defaultText], <p> with default text and an empty <div> with a visible minimum height.",
+      "The status bar reads 'Placed <name> in <parent>, position N of M.' [status.placed] after each insert."
     ],
     "passes": false
   },
@@ -104,7 +104,7 @@
       "The top bar Undo and Redo buttons do the same and are disabled when there is nothing to undo or redo.",
       "A new command after an undo empties the redo stack (Redo becomes disabled).",
       "After undo or redo the selection is the one that belonged to that document state.",
-      "The status bar reads 'Undone' or 'Redone'."
+      "The status bar reads 'Undone' [status.undone] or 'Redone' [status.redone]."
     ],
     "passes": false
   },
@@ -138,7 +138,7 @@
       "Press and release on a Paragraph moving the mouse less than 4 px."
     ],
     "expected": [
-      "While dragging, an insertion line is drawn in the gap where the element will land, the receiving parent is tinted, a chip with the element name follows the pointer, and a label reads 'Move to position N · <parent> · before <sibling>'.",
+      "While dragging, an insertion line is drawn in the gap where the element will land, the receiving parent is tinted, a chip with the element name follows the pointer, and a label reads 'Move to position N · <parent> · before <sibling>' [drag.label.before].",
       "On release the order of children in the document JSON matches the last indicator exactly and the dragged element stays selected.",
       "A press and release under the drag threshold only selects; the document JSON is unchanged.",
       "Each drop is exactly one undo step."
@@ -156,7 +156,7 @@
       "Drag the Container onto the Paragraph inside it and release."
     ],
     "expected": [
-      "The empty Container shows a minimum drop area, is outlined as the receiver and the label reads 'Into <container>'.",
+      "The empty Container shows a minimum drop area, is outlined as the receiver and the label reads 'Into <container>' [drag.label.into].",
       "The Heading becomes the Container's only child, then the Paragraph becomes its first child, in the document JSON.",
       "Leaf elements (heading, paragraph) are never offered as receivers.",
       "Dropping an element into itself or one of its descendants is refused: the indicator shows the refusal and release leaves the document JSON unchanged."
@@ -173,8 +173,8 @@
       "Start another drag of the Heading, press Escape, then release the mouse."
     ],
     "expected": [
-      "ArrowUp moves the target out one level at a time ('After Paragraph' -> 'After Container' -> 'After Section'); ArrowDown moves it back one level; the indicator and label follow.",
-      "Release drops exactly at the level the label showed ('After Container').",
+      "ArrowUp moves the target out one level at a time and the status bar names it ('After Paragraph' [status.drop.after] -> 'After Container' [status.drop.after] -> 'After Section' [status.drop.after]); ArrowDown moves it back one level; the indicator and label follow.",
+      "Release drops exactly at the level last shown ('After Container' [status.drop.after] in the status bar).",
       "Escape removes every drag indicator and the following release changes nothing in the document JSON."
     ],
     "passes": false
@@ -228,7 +228,7 @@
     ],
     "expected": [
       "Each Alt+ArrowUp swaps the element with its previous sibling in the document JSON; Alt+ArrowDown with its next sibling.",
-      "At the first or last position the document JSON is unchanged and the status bar reads 'Already at the start of <parent>' or 'Already at the end of <parent>'.",
+      "At the first or last position the document JSON is unchanged and the status bar reads 'Already at the start of <parent>' [status.move.alreadyFirst] or 'Already at the end of <parent>' [status.move.alreadyLast].",
       "The element stays selected and each move is one undo step."
     ],
     "passes": false
@@ -244,8 +244,8 @@
       "Select the Page root and press R."
     ],
     "expected": [
-      "R replaces the Paragraph at its index with a new div named 'Row' whose only child is the Paragraph; the Row has display:flex and flex-direction:row in the document JSON and its computed style.",
-      "C does the same with a div named 'Column' and flex-direction:column.",
+      "R replaces the Paragraph at its index with a new div named 'Row' [node.name.row] whose only child is the Paragraph; the Row has display:flex and flex-direction:row in the document JSON and its computed style.",
+      "C does the same with a div named 'Column' [node.name.column] and flex-direction:column.",
       "The new wrapper is selected; one undo restores the original tree.",
       "The Page root cannot be wrapped and the status bar says so."
     ],
@@ -259,31 +259,15 @@
       "Insert a Container and a Paragraph after it.",
       "Right-click the Paragraph on the canvas.",
       "Move through the items with ArrowDown and ArrowUp and run one with Enter.",
+      "Hover each item to read its tooltip, then run each enabled item on a Paragraph inside a Section.",
       "Right-click a row in Layers and press Escape.",
       "Right-click an element near the right edge of the canvas."
     ],
     "expected": [
-      "Right-click selects the element and opens a menu at the pointer that contains at least, in this order, Rename, Copy, Cut, Paste, Duplicate, Move up, Move down, Wrap in a row, Wrap in a column, Remove wrapper, Make child of previous layer, Move out of parent and Delete, each with its shortcut; later entries may add items.",
-      "Every item runs the same command as its shortcut and produces the same document JSON; items that cannot apply to the selection are disabled; items whose feature is not built yet are disabled and labelled 'not available yet' — which features are built is read from one feature registry, and the test checks the UI against that registry instead of a fixed list, so it stays valid as later entries are built.",
+      "Right-click selects the element and opens a menu at the pointer that contains at least, in this order, Rename [command.rename], Copy [command.copy], Cut [command.cut], Paste [command.paste], Duplicate [command.duplicate], Move up [command.moveUp], Move down [command.moveDown], Wrap in a row [command.wrapRow], Wrap in a column [command.wrapColumn], Remove wrapper [command.unwrap], Make child of previous layer [command.nestIntoPrevious], Move out of parent [command.promote], Take into the hand [command.takeIntoHand], Lock [command.lock], Hide [command.hide] and Delete [command.delete]; later entries may add items.",
+      "Each item has a tooltip naming its action and its shortcut where it has one, and runs the same command as its shortcut or menu row, producing the same document JSON; items that cannot apply to the selection are disabled; items whose feature is not built yet are disabled and labelled 'not available yet' [common.notAvailableYet] — which features are built is read from one feature registry, and the test checks the UI against that registry instead of a fixed list, so it stays valid as later entries are built.",
       "The menu is operable with ArrowUp/ArrowDown and Enter, closes with Escape or a click outside, and always stays fully inside the window.",
       "The same menu opens on Layers rows."
-    ],
-    "passes": false
-  },
-  {
-    "id": "unwrap",
-    "spec": "spec/behavior/unwrap.md",
-    "title": "Remove a wrapper and lift its children into its place",
-    "steps": [
-      "Insert a Section containing a Container with a Heading and a Paragraph.",
-      "Right-click the Container and choose 'Remove wrapper'.",
-      "Undo, right-click the Page root and open the same menu."
-    ],
-    "expected": [
-      "The Container disappears from the document JSON and the Heading and Paragraph take its index in the Section, in their original order.",
-      "The lifted children become the selection.",
-      "The command is unavailable for the Page root and for elements without children.",
-      "One undo restores the Container with its children."
     ],
     "passes": false
   },
@@ -293,7 +277,7 @@
     "title": "Nest the selection into its previous sibling",
     "steps": [
       "Insert a Container, then a Paragraph after it, both in Page.",
-      "Right-click the Paragraph and choose 'Make child of previous layer'.",
+      "Right-click the Paragraph and choose 'Make child of previous layer' [command.nestIntoPrevious].",
       "Right-click the Container, which has no previous sibling, and open the same menu."
     ],
     "expected": [
@@ -310,12 +294,12 @@
     "steps": [
       "Insert a Section containing a Container that contains a Paragraph.",
       "Select the Paragraph on the canvas and press P.",
-      "Right-click the Paragraph and choose 'Move out of parent'.",
+      "Right-click the Paragraph and choose 'Move out of parent' [command.promote].",
       "Select a direct child of Page and press P."
     ],
     "expected": [
-      "P and the 'Move out of parent' menu item move the element into its grandparent, directly after its former parent, in the document JSON.",
-      "The status bar reads 'Promoted <name> into <parent>, position N'.",
+      "P and the 'Move out of parent' [command.promote] menu item move the element into its grandparent, directly after its former parent, in the document JSON.",
+      "The status bar reads 'Promoted <name> into <parent>, position N' [status.promoted].",
       "A direct child of Page cannot be promoted and the status bar says there is nothing to promote to.",
       "Each promotion is one undo step and the element stays selected."
     ],
@@ -339,15 +323,17 @@
   {
     "id": "clipboard-copy-paste",
     "spec": "spec/behavior/clipboard-copy-paste.md",
-    "title": "Copy and paste elements inside the editor with Ctrl+C and Ctrl+V",
+    "title": "Copy and paste elements through the system clipboard with Ctrl+C and Ctrl+V",
     "steps": [
       "Insert a Section with a Heading, and an empty Container after the Section.",
       "Select the Heading, press Ctrl+C.",
       "Select the Container and press Ctrl+V.",
-      "Select the Section and press Ctrl+V."
+      "Select the Section and press Ctrl+V.",
+      "Read the system clipboard."
     ],
     "expected": [
-      "Pasting with a container selected appends the copy as its last child; with a non-container selected it inserts the copy right after it.",
+      "Ctrl+C writes the selected element to the system clipboard in the app's element format (its subtree with texts and styles); nothing is kept only in memory, and reading the system clipboard after Ctrl+C returns that element.",
+      "Ctrl+V reads the system clipboard: with a container selected the copy is appended as its last child; with a non-container selected it is inserted right after it.",
       "The pasted subtree has new ids and unique names, and the same styles and text as the source.",
       "The pasted element is selected and each paste is one undo step."
     ],
@@ -364,7 +350,7 @@
     ],
     "expected": [
       "ArrowRight selects the next sibling and ArrowLeft the previous one; ArrowUp selects the parent; ArrowDown selects the first child.",
-      "The status bar announces each move, e.g. 'Paragraph selected. Sibling 2 of 2.'.",
+      "The status bar announces each move, e.g. 'Paragraph selected. Sibling 2 of 2.' [status.walk.sibling].",
       "At the ends and at the Page root the selection stays and the status bar explains why.",
       "Walking never changes the document JSON."
     ],
@@ -381,7 +367,7 @@
       "Select the Paragraph, press M, move the aim and press Escape."
     ],
     "expected": [
-      "After M the status bar reads 'Holding <name>. Arrows aim, Enter places, Esc drops.' and the canvas shows the same insertion indicator a mouse drag shows.",
+      "After M the status bar reads 'Holding <name>. Arrows aim, Enter places, Esc drops.' [status.hand.holding] and the canvas shows the same insertion indicator a mouse drag shows.",
       "ArrowDown/ArrowRight aim at the next position, ArrowUp climbs a receiver level, ArrowLeft descends; the status bar names the receiver, position and level after each key.",
       "Enter moves the element to the aimed place in the document JSON (one undo step).",
       "Escape drops the hand and leaves the document JSON unchanged."
@@ -399,7 +385,7 @@
       "Double-click it, type text and click elsewhere on the canvas."
     ],
     "expected": [
-      "Double-click or Enter makes the element's text editable in place with a caret; the status bar says 'Editing text — Enter or click away to keep it, Escape to cancel'.",
+      "Double-click or Enter makes the element's text editable in place with a caret; the status bar says 'Editing text — Enter or click away to keep it, Escape to cancel' [status.textEdit.editing].",
       "Enter or clicking away writes the new text into the document JSON as one undo step.",
       "Escape restores the text that was there before editing and leaves the document JSON unchanged.",
       "While editing, Delete, arrow keys and letter shortcuts act on the text, not on the tree."
@@ -414,13 +400,12 @@
       "Insert a Paragraph and double-click it.",
       "Select a word and press Ctrl+B; select another word and press Ctrl+I.",
       "Select a word, press Ctrl+K and enter https://example.com.",
-      "Select the bold word and press Ctrl+B again; press Ctrl+U.",
-      "Paste rich HTML from the clipboard and press Enter."
+      "Select the bold word and press Ctrl+B again.",
+      "Put HTML with bold, italic, a link, a heading and a script on the system clipboard, paste it and press Enter."
     ],
     "expected": [
       "Ctrl+B wraps the selection in <strong>, Ctrl+I in <em>, Ctrl+K in <a href>; pressing the shortcut again inside the mark removes it.",
-      "Ctrl+U does nothing (no underline tag is produced).",
-      "Pasted content is inserted as plain text only.",
+      "Pasted content keeps the supported marks (strong, em, and links with safe URLs) and drops everything else: other tags become their plain text and scripts are removed.",
       "After Enter the document JSON stores the text as a tree of plain strings, strong, em and a nodes; unsafe URLs such as javascript: are refused."
     ],
     "passes": false
@@ -431,13 +416,13 @@
     "title": "Rename an element with F2 or inline in Layers",
     "steps": [
       "Insert a Section.",
-      "Select it on the canvas, press F2, type 'Intro' and confirm.",
+      "Select it on the canvas, press F2, type 'Intro' and press Enter.",
       "Double-click its row in Layers, type 'Hero' and press Enter.",
       "Double-click the row again, clear the name and press Enter; do it again and press Escape."
     ],
     "expected": [
-      "F2 opens a dialog 'Name for this node' with the current name; confirming writes the new name into the document JSON.",
-      "Double-clicking the row name edits it in place; Enter commits, Escape cancels.",
+      "F2 edits the selection's name in place in its Layers row, the same inline edit as double-clicking the row name, with the current name selected; no dialog opens.",
+      "Enter commits the new name into the document JSON; Escape cancels.",
       "An empty name keeps the previous name.",
       "The new name appears in Layers and on the canvas label; each rename is one undo step."
     ],
@@ -456,9 +441,26 @@
     ],
     "expected": [
       "Shift+click adds to the selection and Ctrl+click toggles an element in or out; each selected element has its own outline and its Layers row is highlighted.",
-      "The canvas label reads 'N elements'.",
+      "The canvas label reads 'N elements' [canvas.label.selectionCount].",
       "Shift+click in Layers adds to the selection the same way.",
       "Escape clears the whole selection."
+    ],
+    "passes": false
+  },
+  {
+    "id": "unwrap",
+    "spec": "spec/behavior/unwrap.md",
+    "title": "Remove a wrapper and lift its children into its place",
+    "steps": [
+      "Insert a Section containing a Container with a Heading and a Paragraph.",
+      "Right-click the Container and choose 'Remove wrapper' [command.unwrap].",
+      "Undo, right-click the Page root and open the same menu."
+    ],
+    "expected": [
+      "The Container disappears from the document JSON and the Heading and Paragraph take its index in the Section, in their original order.",
+      "The lifted children become the selection.",
+      "The command is unavailable for the Page root and for elements without children.",
+      "One undo restores the Container with its children."
     ],
     "passes": false
   },
@@ -474,7 +476,7 @@
     ],
     "expected": [
       "While dragging a translucent rectangle follows the pointer.",
-      "On release every element the rectangle touches, except the elements that contain the start point, is selected; the status bar reads 'N elements selected.'.",
+      "On release every element the rectangle touches, except the elements that contain the start point, is selected; the status bar reads 'N elements selected.' [status.selection.count].",
       "Shift adds to the existing selection; Ctrl toggles the touched elements.",
       "Pressing on an element starts a move drag, never a marquee."
     ],
@@ -489,12 +491,15 @@
       "Select two Paragraphs and press Alt+ArrowUp.",
       "Press Ctrl+D.",
       "Press Delete.",
-      "Select two Paragraphs and press R."
+      "Select the Heading and the last Paragraph and press R; undo; press C.",
+      "Select a Paragraph and the Section and press R.",
+      "Select two Paragraphs and press P."
     ],
     "expected": [
       "Alt+ArrowUp moves every selected element one position up keeping their relative order.",
       "Ctrl+D duplicates each selected element right after itself; Delete removes all of them; each is one undo step.",
-      "Commands that need a single element (wrap, promote, hand, rename, edit text) are refused with 'This needs a single selection' and the document JSON is unchanged."
+      "R (or C) with several siblings of one parent selected wraps them together in one new Row (or Column) placed where the first of them was, keeping their order, as one undo step; a selection whose elements have different parents is refused with 'These elements must share a parent' [status.wrap.needsSameParent] and the document JSON is unchanged.",
+      "Commands that need a single element (promote, hand, rename, edit text) are refused with 'This needs a single selection' [status.needsSingleSelection] and the document JSON is unchanged."
     ],
     "passes": false
   },
@@ -528,7 +533,7 @@
     ],
     "expected": [
       "The lock flag is stored in the document JSON and a lock icon shows on the row.",
-      "Every structural change to the locked element or its descendants is refused with a status message such as 'Unlock <name> before deleting it'; the document JSON does not change.",
+      "Every structural change to the locked element or its descendants is refused with a status message such as 'Unlock <name> before deleting it' [status.locked.delete]; the document JSON does not change.",
       "Locked elements can still be selected.",
       "Unlocking restores all actions; lock and unlock are undo steps."
     ],
@@ -553,18 +558,34 @@
   {
     "id": "app-menu",
     "spec": "spec/behavior/app-menu.md",
-    "title": "Application menu: File, Edit, Arrange, View, Help and Theme",
+    "title": "Application menu: File, Edit, Arrange, View, Help, Theme and Language",
     "steps": [
       "Open the app menu from the logo button.",
       "Open each submenu with the mouse, then again with Enter and the arrow keys.",
-      "Run Undo from Edit, and 'Wrap in a row' from Arrange with a Paragraph selected.",
+      "Run Undo from Edit, and 'Wrap in a row' [command.wrapRow] from Arrange with a Paragraph selected.",
       "Open File and look at an item whose feature is not built yet."
     ],
     "expected": [
-      "File has Save project, Open project, Import HTML, Export page, New blank page and Commands; Edit has Undo, Redo, Duplicate, Copy, Cut, Paste, Delete, Select all in container, Clear the selection and Why is it laid out like this?; Arrange has Move up, Move down, Wrap in a row, Wrap in a column, Remove wrapper, Make child of previous layer, Move out of parent, Take into the hand and Rename.",
-      "View has toggles for the Elements, Layers, Inspector, Explorer, Code, Timeline, Layout read-out and Workbench panels, Guides & Grids, Canvas tools, Toggle left dock (Ctrl+B), Toggle inspector (Ctrl+Alt+B), Collapse every dock (Ctrl+\\), Developer tools and Reset workspace; Help has Keyboard shortcuts; Theme has Light, Dark and System.",
-      "Each item shows its shortcut and runs the same command as the shortcut, producing the same document JSON; items that cannot apply now are disabled; items whose feature is not built yet are disabled and labelled 'not available yet' — which features are built is read from one feature registry, and the test checks the UI against that registry instead of a fixed list, so it stays valid as later entries are built.",
+      "File [menu.file] has Save project [command.saveProject], Open project [command.openProject], Open folder [command.openFolder], Import HTML [command.importHtml], Export page [command.exportPage], New blank page [command.newBlankPage] and Commands [command.commandBar]; Edit [menu.edit] has Undo [command.undo], Redo [command.redo], Duplicate [command.duplicate], Copy [command.copy], Cut [command.cut], Paste [command.paste], Delete [command.delete], Select all in container [command.selectAllInContainer] and Clear the selection [command.clearSelection]; Arrange [menu.arrange] has Move up [command.moveUp], Move down [command.moveDown], Wrap in a row [command.wrapRow], Wrap in a column [command.wrapColumn], Remove wrapper [command.unwrap], Make child of previous layer [command.nestIntoPrevious], Move out of parent [command.promote], Take into the hand [command.takeIntoHand] and Rename [command.rename].",
+      "View [menu.view] has toggles for the Elements [panel.elements], Layers [panel.layers], Inspector [panel.inspector], Explorer [panel.explorer], Code [panel.code], Timeline [panel.timeline], Variables [panel.variables], Checks [panel.checks] and Workbench [panel.workbench] panels, Guides & Grids [panel.guidesGrids], Canvas tools [panel.canvasTools], Toggle left dock (Ctrl+B) [command.toggleLeftDock], Toggle inspector (Ctrl+Alt+B) [command.toggleInspector], Collapse every dock (Ctrl+\\) [command.collapseDocks], Developer tools [command.developerTools] and Reset workspace [command.resetWorkspace]; Help [menu.help] has Keyboard shortcuts [panel.shortcuts]; Theme [menu.theme] has Light [theme.light], Dark [theme.dark] and System [theme.system]; Language [menu.language] has Português (Brasil) [language.ptBR] and English [language.en].",
+      "Each item shows its shortcut where it has one and runs the same command as the shortcut, producing the same document JSON; items that cannot apply now are disabled; items whose feature is not built yet are disabled and labelled 'not available yet' [common.notAvailableYet] — which features are built is read from one feature registry, and the test checks the UI against that registry instead of a fixed list, so it stays valid as later entries are built.",
       "The menu opens with Enter or ArrowDown, moves with the arrow keys, closes with Escape and returns focus to the logo button."
+    ],
+    "passes": false
+  },
+  {
+    "id": "ui-language",
+    "title": "UI language: Brazilian Portuguese by default, English available",
+    "steps": [
+      "Open the app with a fresh profile.",
+      "Switch the UI language to English from the app menu, then back to Português (Brasil).",
+      "Reload."
+    ],
+    "expected": [
+      "A fresh profile shows every UI text in pt-BR: menus, panels, tooltips, status bar messages and accessible names.",
+      "Switching the language re-renders every visible text without a reload; the choice is stored in the preferences store and restored after reload.",
+      "A unit test proves that the pt-BR and en catalogues have the same keys with the same placeholders.",
+      "Tests that assert UI text set the language explicitly or read the text through its i18n key."
     ],
     "passes": false
   },
@@ -573,13 +594,13 @@
     "title": "Autosave to IndexedDB and restore the work after a reload",
     "steps": [
       "Insert a Section with a Heading, edit the Heading text and select the Heading.",
-      "Wait for the status bar to read 'Saved'.",
+      "Wait for the status bar to read 'Saved' [status.save.saved].",
       "Reload the page."
     ],
     "expected": [
-      "After each change the status bar shows 'Saving…' and then 'Saved' when the project record in IndexedDB matches the document JSON.",
+      "After each change the status bar shows 'Saving…' [status.save.saving] and then 'Saved' [status.save.saved] when the project record in IndexedDB matches the document JSON.",
       "After the reload the document JSON and the selection are exactly what they were.",
-      "A fresh profile with no saved record shows an empty page and 'Not saved'."
+      "A fresh profile with no saved record shows an empty page and 'Not saved' [status.save.notSaved]."
     ],
     "passes": false
   },
@@ -588,13 +609,13 @@
     "title": "Never lose an edit that is not yet saved",
     "steps": [
       "Insert a Section and reload the page immediately, before the autosave delay has passed.",
-      "Make another change and try to close the tab while the status bar still reads 'Saving…'.",
+      "Make another change and try to close the tab while the status bar still reads 'Saving…' [status.save.saving].",
       "Make a change, switch to another tab and back, then reload."
     ],
     "expected": [
       "Pending changes are written to IndexedDB on pagehide and visibilitychange, so the Section is present after the immediate reload.",
-      "Closing or reloading while a save is pending or has failed triggers the browser's leave-page confirmation; once the status reads 'Saved' no confirmation appears.",
-      "If IndexedDB refuses a write, the status bar reads 'Not saved' with the reason and the change stays in memory until a later write succeeds."
+      "Closing or reloading while a save is pending or has failed triggers the browser's leave-page confirmation; once the status reads 'Saved' [status.save.saved] no confirmation appears.",
+      "If IndexedDB refuses a write, the status bar reads 'Not saved' [status.save.notSaved] with the reason and the change stays in memory until a later write succeeds."
     ],
     "passes": false
   },
@@ -608,68 +629,6 @@
     "expected": [
       "The app keeps the last 10 saved versions of the project in IndexedDB, each with its time.",
       "After the crash the last saved document is restored and a notice says the work was recovered."
-    ],
-    "passes": false
-  },
-  {
-    "id": "autosave-corruption-recovery",
-    "title": "Recover from a corrupted saved project",
-    "steps": [
-      "Build a page and wait for Saved.",
-      "Corrupt the current project record in IndexedDB and reload.",
-      "Open the recovery dialog and restore the newest earlier version."
-    ],
-    "expected": [
-      "A corrupted current record is left untouched in storage; the app opens with the status 'Recovery required' and a dialog listing earlier versions with their times.",
-      "Restoring a version loads exactly that document JSON and it becomes the current saved record.",
-      "Until something is restored or a new page is started, autosave does not overwrite the corrupted record."
-    ],
-    "passes": false
-  },
-  {
-    "id": "multi-tab-guard",
-    "title": "Only one tab edits the project at a time",
-    "steps": [
-      "Open the app, build a page and wait for Saved.",
-      "Open the app in a second tab.",
-      "In the second tab click 'Take over editing'.",
-      "Go back to the first tab and try to insert an element."
-    ],
-    "expected": [
-      "A tab that opens while another tab is editing shows the project read-only with a notice and a 'Take over editing' button; it never writes to IndexedDB.",
-      "Taking over reloads the latest saved project in that tab and makes the other tab read-only with a notice (tabs coordinate with BroadcastChannel).",
-      "A read-only tab refuses every document command with a status message, so autosave from two tabs never interleaves."
-    ],
-    "passes": false
-  },
-  {
-    "id": "project-save-json",
-    "title": "Save the project as a JSON file",
-    "steps": [
-      "Build a page with a few elements and styles.",
-      "Choose File > Save project."
-    ],
-    "expected": [
-      "A file 'project.json' is downloaded.",
-      "It contains the format version and the whole project from the document JSON (pages, their trees and page settings), and nothing that depends on the editor session (no selection, no zoom, no DOM ids).",
-      "Saving the same document twice produces byte-identical files apart from the saved timestamp."
-    ],
-    "passes": false
-  },
-  {
-    "id": "project-open-json",
-    "title": "Open a project JSON file",
-    "steps": [
-      "Save a project to a file, then change the page.",
-      "Choose File > Open project, pick the saved file and cancel the confirmation; do it again and confirm.",
-      "Choose File > Open project and pick a file that is not valid JSON, then a JSON file of an older format version."
-    ],
-    "expected": [
-      "Before replacing the current page a confirmation asks; Cancel leaves the document JSON unchanged.",
-      "Opening the saved file restores exactly the saved document JSON.",
-      "An invalid file shows an error dialog naming the problem and leaves the current document JSON unchanged.",
-      "An older format version is migrated to the current format on open and the migrated document renders.",
-      "After opening, the undo history is empty and the project is autosaved."
     ],
     "passes": false
   },
@@ -690,6 +649,68 @@
     "passes": false
   },
   {
+    "id": "autosave-corruption-recovery",
+    "title": "Recover from a corrupted saved project",
+    "steps": [
+      "Build a page and wait for Saved.",
+      "Corrupt the current project record in IndexedDB and reload.",
+      "Open the recovery dialog and restore the newest earlier version."
+    ],
+    "expected": [
+      "A corrupted current record is left untouched in storage; the app opens with the status 'Recovery required' [status.save.recoveryRequired] and a dialog listing earlier versions with their times.",
+      "Restoring a version loads exactly that document JSON and it becomes the current saved record.",
+      "Until something is restored or a new page is started, autosave does not overwrite the corrupted record."
+    ],
+    "passes": false
+  },
+  {
+    "id": "multi-tab-guard",
+    "title": "Only one tab edits the project at a time",
+    "steps": [
+      "Open the app, build a page and wait for Saved.",
+      "Open the app in a second tab.",
+      "In the second tab click 'Take over editing' [tabGuard.takeOver].",
+      "Go back to the first tab and try to insert an element."
+    ],
+    "expected": [
+      "A tab that opens while another tab is editing shows the project read-only with a notice and a 'Take over editing' [tabGuard.takeOver] button; it never writes to IndexedDB.",
+      "Taking over reloads the latest saved project in that tab and makes the other tab read-only with a notice (tabs coordinate with BroadcastChannel).",
+      "A read-only tab refuses every document command with a status message, so autosave from two tabs never interleaves."
+    ],
+    "passes": false
+  },
+  {
+    "id": "project-save-json",
+    "title": "Save the project as one archive file",
+    "steps": [
+      "Build a page with a few elements and styles.",
+      "Choose File > Save project."
+    ],
+    "expected": [
+      "A single project archive 'project.zip' is downloaded; it holds project.json and every file the project stores next to the document, at its path, so files added by later features are saved with the project.",
+      "project.json contains the format version and the whole document JSON (its page trees and every setting it holds), and nothing that depends on the editor session (no selection, no zoom, no DOM ids).",
+      "Saving the same document twice produces byte-identical archives apart from the saved timestamp."
+    ],
+    "passes": false
+  },
+  {
+    "id": "project-open-json",
+    "title": "Open a project archive",
+    "steps": [
+      "Save a project to a file, then change the page.",
+      "Choose File > Open project, pick the saved archive and cancel the confirmation; do it again and confirm.",
+      "Choose File > Open project and pick a file that is not a valid project archive, then an archive whose format version is newer than the app's."
+    ],
+    "expected": [
+      "Before replacing the current project a confirmation asks; Cancel leaves the document JSON unchanged.",
+      "Opening the saved archive restores exactly the saved document JSON and every file the archive holds.",
+      "An invalid file shows an error dialog naming the problem and leaves the current document JSON unchanged.",
+      "An archive with a newer or unknown format version is refused with an error naming the version, and the current document JSON is unchanged.",
+      "After opening, the undo history is empty and the project is autosaved."
+    ],
+    "passes": false
+  },
+  {
     "id": "inspector-panel",
     "title": "Inspector shows the selection's identity and collapsible property sections",
     "steps": [
@@ -698,7 +719,7 @@
       "Collapse the Text section, select the Section, then select the Paragraph again."
     ],
     "expected": [
-      "With nothing selected the Inspector shows 'Nothing selected', short hints and a Page properties button (disabled and labelled 'not available yet' until page properties are built — which features are built is read from one feature registry, and the test checks the UI against that registry instead of a fixed list, so it stays valid as later entries are built).",
+      "With nothing selected the Inspector shows 'Nothing selected' [inspector.nothingSelected], short hints and a Page properties button (disabled and labelled 'not available yet' [common.notAvailableYet] until page properties are built — which features are built is read from one feature registry, and the test checks the UI against that registry instead of a fixed list, so it stays valid as later entries are built).",
       "With an element selected it shows the element icon, name and tag, and, in this order, the sections that apply to the element type among Content, Layout, Space, Size, Position, Paint, Border, Text and Effects; later entries may add sections after Effects. Each section header summarises its current values (e.g. Layout: block, Size: auto x auto).",
       "Sections collapse and expand; the collapsed state is remembered per section across selections and reloads.",
       "For text elements the Content section shows the text in a field; editing it there updates the canvas and the document JSON as one undo step.",
@@ -763,7 +784,7 @@
     "title": "Grid container controls: column and row tracks, gap and auto flow",
     "steps": [
       "Select a Container, set display:grid and insert four Paragraphs into it.",
-      "Click 'Add a column' three times, change the second track to 2fr and the third to 200px.",
+      "Click 'Add a column' [inspector.grid.addColumn] three times, change the second track to 2fr and the third to 200px.",
       "Edit the track expression text to 'repeat(4, minmax(0, 1fr))'.",
       "Set rows, gap, grid-auto-flow, justify-items and grid-template-areas."
     ],
@@ -784,7 +805,7 @@
       "Inside a grid Container select a child; set grid-column '1 / 3', grid-row and justify-self."
     ],
     "expected": [
-      "An 'In parent' group appears only when the parent is flex or grid and shows the item properties that apply to that parent type.",
+      "An 'In parent' [inspector.group.inParent] group appears only when the parent is flex or grid and shows the item properties that apply to that parent type.",
       "Each value is written to the document JSON and changes the measured geometry of the child as CSS predicts."
     ],
     "passes": false
@@ -795,7 +816,7 @@
     "steps": [
       "Select a Section.",
       "Click the top padding number in the box model diagram and type 32.",
-      "Turn on 'Link all four sides' for margin and type 16.",
+      "Turn on 'Link all four sides' [inspector.spacing.linkAll] for margin and type 16.",
       "Set a negative margin-left; try a negative padding.",
       "Change the padding unit to rem."
     ],
@@ -879,7 +900,7 @@
     "id": "color-swatches-eyedropper",
     "title": "Saved and recent colours and the eyedropper",
     "steps": [
-      "Open a colour picker, pick a colour and click 'Save current'.",
+      "Open a colour picker, pick a colour and click 'Save current' [colorPicker.saveCurrent].",
       "Apply a few different colours to different elements.",
       "Open the picker and click a saved swatch and a recent swatch.",
       "Click the eyedropper button and pick a colour."
@@ -903,7 +924,8 @@
     "expected": [
       "The font menu lists system and web-safe font stacks; weight offers 100-900 with names.",
       "Every value is written to the document JSON and the computed style of the paragraph in the iframe matches.",
-      "Each keyword control offers every keyword the property catalogue defines for it."
+      "Each keyword control offers every keyword the property catalogue defines for it.",
+      "Each value is written by one command per property, and every other control for the same property must use that command."
     ],
     "passes": false
   },
@@ -930,7 +952,7 @@
     ],
     "expected": [
       "Each value is written to the document JSON and the computed background of the section in the iframe matches.",
-      "The Paint section summary shows the colour swatch or 'None'."
+      "The Paint section summary shows the colour swatch or 'None' [inspector.summary.none]."
     ],
     "passes": false
   },
@@ -939,7 +961,7 @@
     "spec": "spec/behavior/gradient-editor.md",
     "title": "Gradient editor: linear, radial and conic gradients with stops",
     "steps": [
-      "Select a Section and click 'Add a gradient'.",
+      "Select a Section and click 'Add a gradient' [inspector.gradient.add].",
       "Switch between Linear, Radial and Conic.",
       "Drag a stop, click the bar to add a stop, change a stop colour and position, delete a stop.",
       "Change the angle, click reverse and distribute evenly."
@@ -948,7 +970,8 @@
       "The gradient bar previews the gradient with draggable stop handles.",
       "The CSS text of the gradient is shown and written to background-image in the document JSON after each change.",
       "The computed background-image in the iframe equals that text.",
-      "Removing the gradient returns background-image to none."
+      "Removing the gradient returns background-image to none.",
+      "Every gradient change is written by one command, and every other control for the background fill must use that command."
     ],
     "passes": false
   },
@@ -966,7 +989,8 @@
       "The border style control offers every catalogue keyword (none, solid, dashed, dotted, double, groove, ridge, inset, outset, hidden).",
       "All-sides edits write the shorthand; single-edge edits write that side only; the computed borders in the iframe match.",
       "Per-corner radius values are written and the computed border radii match.",
-      "Outline and outline-offset are written and computed as set."
+      "Outline and outline-offset are written and computed as set.",
+      "Each value is written by one command per property, and every other control for the same property must use that command."
     ],
     "passes": false
   },
@@ -980,7 +1004,8 @@
     ],
     "expected": [
       "Opacity 50% is written as 0.5 and the computed opacity matches.",
-      "Each other value is written to the document JSON and the computed style matches."
+      "Each other value is written to the document JSON and the computed style matches.",
+      "Each value is written by one command per property, and every other control for the same property must use that command."
     ],
     "passes": false
   },
@@ -989,7 +1014,7 @@
     "spec": "spec/behavior/shadow-editor.md",
     "title": "Box shadow and text shadow editor",
     "steps": [
-      "Select a Container and click 'Add a shadow'.",
+      "Select a Container and click 'Add a shadow' [inspector.shadow.add].",
       "Drag the light pad; set X, Y, blur, spread, colour and inset.",
       "Add a second shadow, hide the first, remove the second.",
       "Select a Paragraph and set a text shadow."
@@ -1011,8 +1036,9 @@
     ],
     "expected": [
       "The filter sliders compose one filter value in a fixed order and write it to the document JSON; the computed filter matches.",
-      "A 'Remove filters' button in the filter group removes the filter property from the document JSON.",
-      "backdrop-filter, clip-path and mask-image are written and computed as set."
+      "A 'Remove filters' [inspector.filters.remove] button in the filter group removes the filter property from the document JSON.",
+      "backdrop-filter, clip-path and mask-image are written and computed as set.",
+      "Each value is written by one command per property, and every other control for the same property must use that command."
     ],
     "passes": false
   },
@@ -1026,7 +1052,8 @@
     ],
     "expected": [
       "The transform fields compose one transform value written to the document JSON; the computed transform matrix in the iframe matches it.",
-      "The other transform properties are written and computed as set."
+      "The other transform properties are written and computed as set.",
+      "Move X/Y, Rotate, Scale and Skew are written by one transform command that composes the transform value, and every other control of the transform (on the canvas or elsewhere) must use that command."
     ],
     "passes": false
   },
@@ -1049,11 +1076,12 @@
     "steps": [
       "Select a Container.",
       "Set contain, content-visibility, columns, column-span, column-fill, column-rule width/style/colour, break-before, break-after, break-inside.",
-      "Set scroll-behavior, overscroll-behavior, scroll-snap-type, scroll-snap-align, touch-action, counter-reset, counter-increment, content and all."
+      "Set scroll-behavior, overscroll-behavior, scroll-snap-type, scroll-snap-align, counter-reset, counter-increment and all."
     ],
     "expected": [
       "Every property listed is present in the inspector with the control type the catalogue declares (keyword menu, length or text).",
-      "Each value is written to the document JSON and the computed style matches."
+      "Each value is written to the document JSON and the computed style matches.",
+      "touch-action (touch devices only) and content (it acts only on ::before and ::after, which the editor cannot target) are not offered."
     ],
     "passes": false
   },
@@ -1080,12 +1108,12 @@
     "steps": [
       "Select a Paragraph and set its padding, color and font size.",
       "Reset the color with its reset control.",
-      "Run 'Reset every value' from the element actions menu."
+      "Run 'Reset every value' [command.resetAllValues] from the element actions menu."
     ],
     "expected": [
       "Every property with a value set on this element shows a dot; each section header shows the number of values set as a separate badge next to its summary, and the summary text itself is unchanged.",
       "Resetting a property removes it from the element styles in the document JSON and the field shows the inherited or default value in a muted style.",
-      "The element actions menu gains 'Reset every value', which removes all style values of the element in one undo step."
+      "The element actions menu gains 'Reset every value' [command.resetAllValues], which removes all style values of the element in one undo step."
     ],
     "passes": false
   },
@@ -1110,8 +1138,8 @@
     "title": "Switch the inspector between all properties and essentials only",
     "steps": [
       "Select a Paragraph.",
-      "Click 'Essentials only' at the bottom of the inspector.",
-      "Set a value on a non-essential property, click 'All properties', then 'Essentials only' again.",
+      "Click 'Essentials only' [inspector.mode.essentials] at the bottom of the inspector.",
+      "Set a value on a non-essential property, click 'All properties' [inspector.mode.all], then 'Essentials only' [inspector.mode.essentials] again.",
       "Reload."
     ],
     "expected": [
@@ -1158,14 +1186,17 @@
     "title": "Floating quick panel over the selection",
     "steps": [
       "Select a Section.",
-      "Read the quick panel above it; type a new W and H value; change the tag menu; click Fill and pick a colour.",
-      "Select a Paragraph and change Size in the quick panel.",
+      "Read the quick panel above it; type a new W and H value; change the tag menu; click Fill and pick a colour, then switch the fill to a gradient.",
+      "Select a Paragraph and change Size and Text colour in the quick panel.",
+      "Set Border, Opacity, Effects (blur) and Transform (Move X, Rotate, Scale) from the quick panel.",
+      "Click More actions.",
       "Drag the quick panel by its handle to another spot, select another element and come back.",
       "Select the first element at the very top of the page."
     ],
     "expected": [
-      "The quick panel shows the tag menu, a drag handle, a More actions button, W and H, Fill, font Size for text elements and the 'Edit on canvas' mode menu; controls and modes whose feature is not built yet are disabled and labelled 'not available yet' — which features are built is read from one feature registry, and the test checks the UI against that registry instead of a fixed list, so it stays valid as later entries are built.",
-      "Edits in the quick panel write the same document JSON as the inspector and both stay in sync.",
+      "The quick panel shows the tag menu, a drag handle, a More actions button, W and H, Fill, Text colour and font Size for text elements, Border, Opacity, Effects, Transform and the 'Edit on canvas' [quickPanel.editOnCanvas] mode menu; controls and modes whose feature is not built yet are disabled and labelled 'not available yet' [common.notAvailableYet] — which features are built is read from one feature registry, and the test checks the UI against that registry instead of a fixed list, so it stays valid as later entries are built.",
+      "Every quick panel control runs the same command as the matching inspector field and writes the same document JSON, and both stay in sync; Fill opens the same fill editor as the inspector (solid colour or gradient), and Transform writes the same transform value as the inspector's transform fields.",
+      "More actions opens the element's context menu at the button: the same menu as a right-click on the element.",
       "A dragged quick panel keeps its offset for that element.",
       "The quick panel is always placed inside the canvas viewport; with no room above the element it goes below it."
     ],
@@ -1181,24 +1212,9 @@
       "Press Ctrl+Z."
     ],
     "expected": [
-      "Fields whose values differ between the selected elements show 'Mixed'; equal values are shown normally.",
+      "Fields whose values differ between the selected elements show 'Mixed' [inspector.mixed]; equal values are shown normally.",
       "A committed value is written to every selected element in the document JSON as one undo step.",
       "Undo restores each element's own previous value."
-    ],
-    "passes": false
-  },
-  {
-    "id": "selection-actions-bar",
-    "spec": "spec/behavior/selection-actions-bar.md",
-    "title": "Action bar for the selection",
-    "steps": [
-      "Select a Paragraph inside a Section and click More actions in the quick panel.",
-      "Use each button: drag, move up, move down, wrap in a row, wrap in a column, promote, remove wrapper, take into the hand, duplicate, lock, hide, remove."
-    ],
-    "expected": [
-      "Each button has a tooltip naming its action and shortcut, and runs the same command as the shortcut, producing the same document JSON.",
-      "Buttons for actions that cannot apply to the selection are disabled.",
-      "Dragging the drag button moves the element exactly like dragging the element."
     ],
     "passes": false
   },
@@ -1216,7 +1232,7 @@
       "Eight handles sit on the corners and edge centres of the selection outline.",
       "Edge handles change one dimension and corner handles both; the change in CSS px equals the pointer movement divided by the zoom; width and height are written to the document JSON.",
       "Shift keeps the aspect ratio; Alt resizes symmetrically around the centre.",
-      "The status bar shows the live size while dragging and 'Resized to W x H' at the end; each resize is one undo step."
+      "The status bar shows the live size while dragging and 'Resized to W x H' [status.resized] at the end; each resize is one undo step."
     ],
     "passes": false
   },
@@ -1225,7 +1241,7 @@
     "spec": "spec/behavior/spacing-handles.md",
     "title": "Edit padding and margin by dragging on the canvas",
     "steps": [
-      "Select a Section and choose Padding in 'Edit on canvas'.",
+      "Select a Section and choose Padding in 'Edit on canvas' [quickPanel.editOnCanvas].",
       "Drag the top padding band down by 20 screen px.",
       "Drag the left band with Alt held; drag the bottom band with Shift held.",
       "Choose Margin and drag the top margin band."
@@ -1242,7 +1258,7 @@
     "spec": "spec/behavior/radius-border-gap-handles.md",
     "title": "Edit radius, border width and gaps by dragging on the canvas",
     "steps": [
-      "Select a Container and choose Radius in 'Edit on canvas'; drag the corner handle inward.",
+      "Select a Container and choose Radius in 'Edit on canvas' [quickPanel.editOnCanvas]; drag the corner handle inward.",
       "Choose Border and drag an edge handle.",
       "Select a flex Container with children; choose Gap, Row gap and Column gap and drag the gap bands."
     ],
@@ -1259,12 +1275,14 @@
     "title": "Edit shadow offset and blur by dragging on the canvas",
     "steps": [
       "Select a Container with a box shadow.",
-      "Choose Shadow offset in 'Edit on canvas' and drag the handle.",
-      "Choose Shadow blur and drag the handle."
+      "Choose Shadow offset in 'Edit on canvas' [quickPanel.editOnCanvas] and drag the handle.",
+      "Choose Shadow blur and drag the handle.",
+      "Select a Paragraph with a text shadow and repeat both modes."
     ],
     "expected": [
       "Shadow offset mode moves the first shadow's X and Y with the pointer; Shadow blur mode changes its blur.",
-      "The box-shadow in the document JSON and the computed style update; each drag is one undo step."
+      "On a text element with a text shadow the same modes edit the first text shadow: X, Y and blur.",
+      "The box-shadow or text-shadow in the document JSON and the computed style update; each drag is one undo step."
     ],
     "passes": false
   },
@@ -1293,8 +1311,23 @@
     "expected": [
       "A ZIP is downloaded containing index.html and css/styles.css, and index.html links css/styles.css.",
       "index.html has a doctype, <html lang dir>, <meta charset>, viewport meta and the page <title>; every node is written with its semantic tag, text is escaped and inline marks are kept.",
-      "No element in index.html has a style attribute, a data-* attribute or an editor-generated id; hidden elements carry the hidden attribute.",
+      "No element in index.html has a style attribute, an editor-generated data-* attribute or an editor-generated id; hidden elements carry the hidden attribute.",
       "The exported page opened in Chrome renders every element with the same computed styles as the canvas, apart from editor-only aids (empty-container minimum height, closed details and dialogs shown while selected, selection chrome)."
+    ],
+    "passes": false
+  },
+  {
+    "id": "css-variables-tokens",
+    "title": "Design tokens as CSS variables",
+    "steps": [
+      "Open the Variables panel and create a colour, a spacing and a font-size variable.",
+      "Use the colour variable as a Section's background and the spacing variable as its padding.",
+      "Change the colour variable."
+    ],
+    "expected": [
+      "Variables are stored in the project; colour, length and font fields offer them next to typed values.",
+      "Every element that uses a variable updates when it changes, as one undo step.",
+      "The export writes the variables in :root and uses var(--name) where they are used."
     ],
     "passes": false
   },
@@ -1316,14 +1349,14 @@
   },
   {
     "id": "elements-structure",
-    "title": "Structure elements: Container, Header, Navigation, Main, Section, Article, Aside, Footer, Card, Link Block",
+    "title": "Structure elements: Container, Header, Navigation, Main, Section, Article, Aside, Footer, Link Block",
     "steps": [
       "Insert each structure element from the Elements panel.",
       "Set the Link Block's link to https://example.com.",
       "Export."
     ],
     "expected": [
-      "Each element has its default name, default styles and renders as its tag: div, header, nav, main, section, article, aside, footer, div (card look) and a (block link).",
+      "Each element has its default name, default styles and renders as its tag: div, header, nav, main, section, article, aside, footer and a (block link); there is no Card element type.",
       "Empty structure elements keep a visible minimum height on the canvas that is not exported.",
       "The export writes the same tags; the Link Block has the href."
     ],
@@ -1331,15 +1364,15 @@
   },
   {
     "id": "elements-text",
-    "title": "Text elements: Heading, Paragraph, Link, Blockquote, Preformatted, Divider, Badge",
+    "title": "Text elements: Heading, Paragraph, Link, Blockquote, Preformatted, Divider",
     "steps": [
       "Insert each text element.",
-      "Set the Heading level to h3, the Link URL and 'open in a new tab'.",
+      "Set the Heading level to h3, the Link URL and 'open in a new tab' [inspector.link.openInNewTab].",
       "Type multi-line text with extra spaces in Preformatted.",
       "Export."
     ],
     "expected": [
-      "Elements render as h1-h6, p, a, blockquote, pre, hr and span with their default text and styles.",
+      "Elements render as h1-h6, p, a, blockquote, pre and hr with their default text and styles; there is no Badge element type.",
       "The Link stores href and target=_blank with rel='noopener noreferrer'; unsafe URLs are refused.",
       "Preformatted keeps line breaks and spaces; Divider is a void element with no text.",
       "The export writes the same tags and attributes."
@@ -1348,14 +1381,15 @@
   },
   {
     "id": "elements-lists",
-    "title": "List elements: Unordered, Ordered, Definition, List item, Term, Description",
+    "title": "List elements: Unordered, Ordered and Definition lists with their items",
     "steps": [
-      "Insert an Unordered list, an Ordered list and a Definition list.",
-      "Insert List items into the lists and Terms and Descriptions into the Definition list.",
+      "Insert an Unordered list, an Ordered list and a Definition list from the Elements panel.",
+      "Add items by duplicating a list item (Ctrl+D); in the Definition list duplicate the term and the description.",
       "Export."
     ],
     "expected": [
-      "New lists come with one natural child (li for ul/ol, dt for dl) so they are never empty.",
+      "The Elements panel offers Unordered, Ordered and Definition lists; List item, Term and Description are not palette items.",
+      "New lists come with their items so they are never empty: ul and ol with one li, dl with one dt and one dd.",
       "The iframe and the export render ul/ol/li and dl/dt/dd with the texts and default styles."
     ],
     "passes": false
@@ -1365,13 +1399,13 @@
     "spec": "spec/behavior/nesting-grammar.md",
     "title": "HTML nesting rules for inserting, dragging and pasting",
     "steps": [
-      "Select the Page root and click List item in the Elements panel.",
+      "Select an Unordered list and click Paragraph in the Elements panel.",
       "Drag a Paragraph into an Unordered list on the canvas and in Layers.",
       "Copy a List item and paste it into a Section.",
       "Try to put a Link Block inside a Link Block."
     ],
     "expected": [
-      "Each attempt is refused with a message such as 'Refused. <ul> only accepts <li>' and the document JSON is unchanged.",
+      "Each attempt is refused with a message such as 'Refused. <ul> only accepts <li>' [status.refused.onlyAccepts] and the document JSON is unchanged.",
       "During a drag the refused target shows a refusal indicator and no insertion line.",
       "The rules live in one table covering allowed children (only), required parents (needs), unique children, void elements and no interactive content inside interactive content; a unit test checks the table.",
       "Click insert, canvas drag, Layers drag and paste call the same rule function."
@@ -1400,12 +1434,15 @@
     "id": "elements-tables",
     "title": "Table elements: Table, Caption, Head, Body, Footer, Row, Header cell, Cell",
     "steps": [
-      "Insert a Table, add a Caption, a Head with a Row of Header cells, a Body with Rows of Cells and a Footer.",
+      "Insert a Table from the Elements panel.",
+      "In the Table's controls in the Inspector turn on Caption and Footer, then turn Head off and on again.",
       "Edit cell texts.",
       "Export."
     ],
     "expected": [
-      "The iframe renders a table with caption, thead, tbody, tfoot, tr, th and td in valid order (caption first).",
+      "The Elements panel offers Table only; Caption, Head, Body, Footer, Row, Header cell and Cell are not palette items.",
+      "A new Table comes with a head row of two header cells and a body of two rows of two cells.",
+      "The Table's controls add and remove its caption, head and footer; the iframe renders caption, thead, tbody, tfoot, tr, th and td in valid order (caption first).",
       "Only one caption, thead and tfoot are allowed per table.",
       "The export writes the same table markup."
     ],
@@ -1417,11 +1454,11 @@
     "title": "Add and remove table rows and columns",
     "steps": [
       "Insert a Table with a Head row of two Header cells and a Body with two rows of two Cells, and select a body Cell.",
-      "Run 'Add a column after this one', 'Add a column at the end' and 'Remove this column' from the context menu.",
-      "Run 'Add a row after this one' and 'Remove this row'."
+      "Run 'Add a column after this one' [command.table.addColumnAfter], 'Add a column at the end' [command.table.addColumnEnd] and 'Remove this column' [command.table.removeColumn] from the context menu.",
+      "Run 'Add a row after this one' [command.table.addRowAfter] and 'Remove this row' [command.table.removeRow]."
     ],
     "expected": [
-      "Adding a column inserts a cell at the same index in every row (th in head rows, td elsewhere); the status bar reads 'Column created in N rows'.",
+      "Adding a column inserts a cell at the same index in every row (th in head rows, td elsewhere); the status bar reads 'Column created in N rows' [status.table.columnCreated].",
       "Removing a column removes the cell at that index from every row.",
       "Adding a row copies the row's cell structure with empty cells; removing a row removes it.",
       "Each command is one undo step."
@@ -1433,16 +1470,47 @@
     "title": "Form structure elements: Form, Fieldset, Legend, Label, Button, Output",
     "steps": [
       "Insert a Form and set action and method.",
-      "Insert a Fieldset with a Legend, and a Label with text.",
+      "Insert a Fieldset (it comes with its Legend) and a Label with text.",
       "Insert a Button and set type submit/button/reset; insert an Output.",
       "Insert a Link, switch its tag to button and back to a.",
       "Export."
     ],
     "expected": [
-      "Elements render as form, fieldset, legend, label, button and output with their attributes; a Fieldset allows one Legend, as its first child.",
+      "Elements render as form, fieldset, legend, label, button and output with their attributes.",
+      "A new Fieldset comes with its Legend, which is not a palette item; a Fieldset allows one Legend, as its first child.",
       "Switching a Link to a button and back keeps its text and styles; the link URL is kept on the a and not written on the button.",
       "Buttons and form submission do not navigate the editor when clicked on the canvas.",
       "The export writes the same tags and attributes."
+    ],
+    "passes": false
+  },
+  {
+    "id": "element-attributes-aria",
+    "title": "Custom attributes and accessibility fields",
+    "steps": [
+      "Select a Button and add aria-label, aria-expanded and data-state attributes and a role.",
+      "Try to add an onclick attribute and an attribute with an invalid name.",
+      "Export."
+    ],
+    "expected": [
+      "Custom attributes (aria-*, data-*, role) are stored in the document JSON and rendered in the iframe and the export; they are the user's own, unlike the editor-generated attributes that the export never writes.",
+      "on* attributes and invalid attribute names are refused with a message.",
+      "Each change is one undo step."
+    ],
+    "passes": false
+  },
+  {
+    "id": "shared-style-classes",
+    "title": "Reusable style classes",
+    "steps": [
+      "Style a Button and save its styles as the class 'button-primary'.",
+      "Apply the class to two other buttons.",
+      "Change the class's background; override the background on one button only."
+    ],
+    "expected": [
+      "A class holds styles shared by every element that uses it; editing the class updates all of them.",
+      "An element's own values override the class and the inspector shows which values come from the class.",
+      "The export writes one rule for the class and element rules only for the overrides."
     ],
     "passes": false
   },
@@ -1483,11 +1551,13 @@
     "title": "Textarea, Select, Option group, Option, Progress and Meter",
     "steps": [
       "Insert a Textarea and set rows and placeholder.",
-      "Insert a Select, add an Option group with Options, set option values and a selected option.",
+      "Insert a Select; in its options editor in the Inspector add an Option group with two Options, set option values and a selected option, reorder and remove an option.",
       "Insert a Progress and a Meter and set value, min and max.",
       "Export."
     ],
     "expected": [
+      "The Elements panel offers Textarea, Select, Progress and Meter; Option group and Option are not palette items.",
+      "A new Select comes with three options; its options editor adds, reorders and removes options and option groups.",
       "Each element renders with its attributes in the iframe.",
       "A Select only accepts option and optgroup; an optgroup only accepts option.",
       "The export writes the same markup and attributes."
@@ -1500,10 +1570,11 @@
     "steps": [
       "Insert an Image without a source.",
       "Set its source URL and alt text.",
-      "Insert a Picture with a Source (srcset, media) and an Image; insert a Figure with an Image and a Caption.",
+      "Insert a Picture and add a Source (srcset, media) with the Picture's controls; insert a Figure (it comes with an Image and a Caption).",
       "Export."
     ],
     "expected": [
+      "Source and Caption are not palette items: a Picture comes with an Image and its controls add, reorder and remove Sources; a Figure comes with an Image and a Caption.",
       "An image without a source shows a placeholder with its size (e.g. '800 x 300') on the canvas.",
       "Source URL and alt are stored in the document JSON; unsafe URLs are refused.",
       "The iframe and the export render img, picture/source and figure/figcaption; an exported image without alt gets alt=''."
@@ -1514,12 +1585,13 @@
     "id": "elements-media-embeds",
     "title": "Video, Audio, Track, Embedded frame and Canvas",
     "steps": [
-      "Insert a Video with a Source and a Track; set controls, autoplay, loop, muted and poster.",
-      "Insert an Audio with a Source.",
+      "Insert a Video; add a Source and a Track with the Video's controls; set controls, autoplay, loop, muted and poster.",
+      "Insert an Audio and add a Source with its controls.",
       "Insert an Embedded frame with a URL and title; insert a Canvas with width and height.",
       "Export."
     ],
     "expected": [
+      "Source and Track are not palette items: Video and Audio add, reorder and remove their Sources and Tracks from their own controls.",
       "Each element renders with its attributes; media do not autoplay inside the editor canvas.",
       "The embedded frame is sandboxed in the editor so it cannot steal pointer events from the canvas.",
       "The export writes video/audio/source/track/iframe/canvas with the attributes."
@@ -1531,14 +1603,16 @@
     "spec": "spec/behavior/elements-svg-shapes.md",
     "title": "SVG/Icon, Rectangle, Ellipse and Line",
     "steps": [
-      "Insert an SVG/Icon and put a Rectangle, an Ellipse and a Line inside it.",
-      "Set fill, stroke and stroke width on the shapes and size them with the handles.",
+      "Insert an SVG/Icon and add a Rectangle, an Ellipse and a Line with the SVG's controls.",
+      "Set fill, stroke and stroke width on the shapes, set one shape's fill from the quick panel's Fill, and size the shapes with the handles.",
+      "Paste icon markup (an <svg> with a path) into the SVG's markup field.",
       "Export."
     ],
     "expected": [
-      "Shapes only go inside an SVG; the SVG has a viewBox that matches its size.",
-      "Fill, stroke and stroke-width are stored and rendered.",
-      "The export writes inline <svg> with rect, ellipse and line."
+      "Rectangle, Ellipse and Line are not palette items: they are added inside a selected SVG from its controls and only go inside an SVG; the SVG has a viewBox that matches its size.",
+      "Fill, stroke and stroke-width are stored and rendered; the quick panel's Fill writes a shape's fill with the same command as the inspector.",
+      "Markup typed or pasted into the SVG's markup field becomes the SVG's content, rendered and exported as written, with scripts and event attributes removed.",
+      "The export writes inline <svg> with its shapes and markup."
     ],
     "passes": false
   },
@@ -1546,12 +1620,12 @@
     "id": "elements-interactive",
     "title": "Details, Summary and Dialog",
     "steps": [
-      "Insert a Details with a Summary and content; toggle its open attribute.",
+      "Insert a Details (it comes with its Summary) and add content; toggle its open attribute.",
       "Insert a Dialog with content; toggle its open attribute.",
       "Export."
     ],
     "expected": [
-      "A Details always has exactly one Summary as first child.",
+      "Summary is not a palette item: a Details always has exactly one Summary as first child.",
       "The open attribute is stored; on the canvas a closed Details still shows its content while it or a descendant is selected.",
       "A closed Dialog is visible on the canvas while selected and exported closed (no open attribute) unless set.",
       "The export writes details/summary and dialog."
@@ -1563,7 +1637,7 @@
     "spec": "spec/behavior/natural-child-command.md",
     "title": "Create the natural child inside a container",
     "steps": [
-      "Select an Unordered list and run 'Create <li> inside' from the context menu.",
+      "Select an Unordered list and run 'Create <li> inside' [command.createNaturalChild] from the context menu.",
       "Do the same on a Select (option), a Figure without caption (figcaption) and a table body (tr).",
       "Select a Details and open the context menu."
     ],
@@ -1629,6 +1703,21 @@
     "passes": false
   },
   {
+    "id": "reusable-components",
+    "title": "Reusable components with instances",
+    "steps": [
+      "Turn a Card into a component and place two more instances.",
+      "Edit the component's heading style; override the text of one instance.",
+      "Detach one instance."
+    ],
+    "expected": [
+      "Instances follow the component's structure and styles; per-instance overrides of text and attributes are kept.",
+      "Detaching turns an instance into a normal subtree.",
+      "The export writes plain HTML for every instance, with the component's styles written once."
+    ],
+    "passes": false
+  },
+  {
     "id": "templates-components",
     "title": "Component templates: Form group, Button group, Tabs, Accordion, Modal",
     "steps": [
@@ -1649,8 +1738,8 @@
       "Clear the search; collapse the Text group and reload."
     ],
     "expected": [
-      "Groups are Structure and layout, Text, Lists, Tables, Forms, Images and media, Interactive and Templates, each with its count.",
-      "Searching filters by label and tag; 'inp' shows the 14 input types; the footer reads 'N of 95 elements match'.",
+      "Groups are Structure and layout, Text, Lists, Tables, Forms, Images and media, Interactive and Templates, each with its count; internal parts of composite elements (list items, table parts, options and option groups, sources, tracks, captions, legend, summary, SVG shapes) are not listed.",
+      "Searching filters by label and tag; 'inp' shows the 14 input types; the footer reads 'N of M elements match' [palette.search.matchCount], where M is the number of entries in the Elements panel.",
       "A search with no match says so.",
       "Collapsed groups stay collapsed after reload."
     ],
@@ -1675,7 +1764,7 @@
     "title": "Collapse and expand every branch in Layers",
     "steps": [
       "Insert several nested templates.",
-      "Click 'Collapse every branch', then 'Expand every branch'.",
+      "Click 'Collapse every branch' [layers.collapseAll], then 'Expand every branch' [layers.expandAll].",
       "Collapse all, then select a deeply nested element on the canvas."
     ],
     "expected": [
@@ -1703,7 +1792,7 @@
     "id": "layers-row-columns",
     "title": "Choose what each Layers row shows",
     "steps": [
-      "Open 'What each row shows' in the Layers toolbar.",
+      "Open 'What each row shows' [layers.rowDetails] in the Layers toolbar.",
       "Turn on ID, Classes and Attributes; turn off HTML tag.",
       "Reload."
     ],
@@ -1741,8 +1830,26 @@
       "Ctrl+= and Ctrl+- change zoom by 10 points, Ctrl+0 sets 100%; the iframe CSS zoom and the percentage in the status bar match.",
       "Zoom stays between 10% and 800%; the page point at the centre of the canvas stays under the centre.",
       "Clicking the percentage opens a menu with 25%, 50%, 100%, 200%, 400% and Fit.",
-      "Fit sets the zoom so the whole page width fits in the canvas and keeps it fitted when the canvas or the breakpoint width changes; any manual zoom leaves Fit mode until Fit is chosen again.",
+      "Fit sets the zoom so the whole page width fits in the canvas and keeps it fitted when the canvas size changes; any manual zoom leaves Fit mode until Fit is chosen again.",
       "The zoom (or Fit mode) is restored after a reload."
+    ],
+    "passes": false
+  },
+  {
+    "id": "rotation-handle",
+    "spec": "spec/behavior/rotation-handle.md",
+    "title": "Rotate an element with a handle on the canvas",
+    "steps": [
+      "Select a Container.",
+      "Drag its rotation handle a quarter turn clockwise; repeat with Shift held.",
+      "Type 30 in the inspector's Rotate field.",
+      "Zoom to 200% and rotate again with the handle."
+    ],
+    "expected": [
+      "A rotation handle sits outside the selection outline at a fixed screen distance; over it the cursor shows rotation.",
+      "Dragging rotates around the transform-origin and the angle follows the pointer; Shift snaps to 15° steps; the status bar shows the live angle.",
+      "The handle and the Rotate field run the same command and write the rotate part of the one transform value; a whole drag is one undo step.",
+      "The angle does not depend on the zoom; the outline and handles follow the rotated box."
     ],
     "passes": false
   },
@@ -1823,7 +1930,7 @@
     ],
     "expected": [
       "Ctrl+' toggles a 12-column grid overlay (1280 px wide, 24 px gutter, 80 px margin by default) drawn over the page at the right page coordinates.",
-      "The row grid draws horizontal bands and the dot grid draws dots at the configured spacing.",
+      "The row grid draws horizontal bands and the dot grid draws dots, each at its default spacing.",
       "Grid settings are stored per page in the document JSON and never exported."
     ],
     "passes": false
@@ -1870,7 +1977,7 @@
     ],
     "expected": [
       "For a selection that is absolutely or fixed positioned, arrows move the element by 1 px and Shift+arrows by 10 px instead of walking the tree; top/left in the document JSON change accordingly.",
-      "The status bar reads 'Moved to x, y'.",
+      "The status bar reads 'Moved to x, y' [status.movedTo].",
       "A quick burst of nudges is one undo step."
     ],
     "passes": false
@@ -1893,17 +2000,33 @@
     "passes": false
   },
   {
+    "id": "align-distribute",
+    "spec": "spec/behavior/align-distribute.md",
+    "title": "Align and distribute positioned elements",
+    "steps": [
+      "Place three absolutely positioned boxes in a positioned Container and select them.",
+      "Run Align left, Align centre and Align top; then Distribute horizontally.",
+      "Select one box and run Align centre."
+    ],
+    "expected": [
+      "With several elements selected, align works on the selection's bounds; with one element, on its parent's box.",
+      "Distribute makes the gaps between the elements equal.",
+      "The commands are in the quick panel and the Arrange menu; top and left are written for each element as one undo step, and the measured positions in the iframe match."
+    ],
+    "passes": false
+  },
+  {
     "id": "snap-toggle-settings",
     "spec": "spec/behavior/snap-toggle-settings.md",
     "title": "Snap on/off and snap settings",
     "steps": [
-      "Click 'Snap: Off' in the top bar.",
+      "Click 'Snap: Off' [topbar.snap.off] in the top bar.",
       "Open the snap menu and choose Snap settings.",
       "Untick Grid and Centers, set snap distance 10 and Apply; reopen and Cancel after changes."
     ],
     "expected": [
-      "The top bar button toggles between 'Snap: Off' and 'Snap: On'.",
-      "Snap settings lists Page, Parent, Elements, Guides, Rulers, Grid, Centers, Edges and Spacing targets and a snap distance in px.",
+      "The top bar button toggles between 'Snap: Off' [topbar.snap.off] and 'Snap: On' [topbar.snap.on].",
+      "Snap settings lists Page, Parent, Elements, Guides, Rulers, Grid, Centers and Edges targets and a snap distance in px.",
       "Apply stores the settings in preferences; Cancel discards changes."
     ],
     "passes": false
@@ -1942,13 +2065,31 @@
     "passes": false
   },
   {
+    "id": "hover-measure",
+    "spec": "spec/behavior/hover-measure.md",
+    "title": "Measure sizes and distances on the canvas",
+    "steps": [
+      "Hover an element with nothing selected.",
+      "Select a Container, hold Alt and hover a sibling.",
+      "Hold Alt and hover the selection's parent.",
+      "Zoom to 50% and repeat."
+    ],
+    "expected": [
+      "Hovering shows the element's size (W × H in CSS px) next to its hover outline.",
+      "With a selection, holding Alt over another element draws distance lines between the nearest edges, each labelled in CSS px; over an ancestor it shows the distances from the selection to the ancestor's inner edges.",
+      "The values are CSS px at any zoom and equal the measured geometry in the iframe.",
+      "Measuring never changes the selection or the document JSON."
+    ],
+    "passes": false
+  },
+  {
     "id": "breakpoints-switch",
     "title": "Switch between Desktop, Laptop, Tablet and Phone breakpoints",
     "steps": [
       "Click Laptop, Tablet, Phone and Desktop in the top bar."
     ],
     "expected": [
-      "The page width inside the iframe becomes 1440, 1180, 834 and 390 CSS px; in Fit mode the canvas refits the zoom.",
+      "The page width inside the iframe becomes 1180 CSS px for Laptop, 834 for Tablet, 390 for Phone and 1440 for Desktop; in Fit mode the canvas refits the zoom.",
       "The status bar shows the active breakpoint; the buttons show their widths in tooltips.",
       "The breakpoint buttons and the canvas widths read one breakpoint table (a unit test checks it).",
       "The active breakpoint is restored after a reload."
@@ -1984,7 +2125,7 @@
       "Export."
     ],
     "expected": [
-      "The State menu lists Base, Hover, Focus, Active, Disabled, Invalid and Placeholder shown; while a state is chosen a canvas badge reads 'Editing Hover' and the canvas shows the element with that state's values.",
+      "The State menu lists Base, Hover, Focus, Active, Disabled, Invalid and Placeholder shown; while a state is chosen a canvas badge reads 'Editing Hover' [canvas.badge.editingState] and the canvas shows the element with that state's values.",
       "State values are stored per state (and per breakpoint) in the document JSON and do not change the base values.",
       "styles.css contains :hover, :focus and @media rules for them; in the exported page hovering the button changes its computed background."
     ],
@@ -2005,6 +2146,21 @@
       "The page renders exactly like the export: hover states apply and details open; links do not navigate the editor away.",
       "Escape or Ctrl+Enter exits preview and restores the previous selection and zoom.",
       "Preview never changes the document JSON."
+    ],
+    "passes": false
+  },
+  {
+    "id": "embed-html",
+    "title": "Embed custom HTML",
+    "steps": [
+      "Insert an Embed and paste third-party widget markup with a script.",
+      "Preview the page.",
+      "Export."
+    ],
+    "expected": [
+      "The markup is stored as-is and shown sandboxed on the editing canvas, where its scripts never run.",
+      "Preview runs it.",
+      "The export writes it verbatim at its place; Layers marks it as an embed."
     ],
     "passes": false
   },
@@ -2050,7 +2206,7 @@
       "Press Ctrl+K, type 'layers' and press Enter; press Ctrl+K and Escape."
     ],
     "expected": [
-      "The command bar lists commands, panels ('Open Layers') and element types ('Insert Hero'), each with its shortcut; fuzzy search filters them.",
+      "The command bar lists commands, panels ('Open Layers' [command.openPanel]) and element types ('Insert Hero' [command.insertElement]), each with its shortcut where it has one; fuzzy search filters them.",
       "ArrowUp/ArrowDown move the highlight, Enter runs it and closes the bar; Escape and clicking outside close it.",
       "Commands that cannot apply to the current selection are not offered.",
       "Recently run commands are listed first.",
@@ -2065,28 +2221,12 @@
     "steps": [
       "Select a flex Container, press Ctrl+K, type 'gap 24' and press Enter.",
       "Press Ctrl+K, type 'width 50%' and press Enter.",
-      "Press Ctrl+K, type 'border-color' and choose 'Edit property border-color'."
+      "Press Ctrl+K, type 'border-color' and choose 'Edit property border-color' [command.editProperty]."
     ],
     "expected": [
-      "Typing '<property> <value>' offers 'Set <property> to <value>'; running it writes the value to the selection in the document JSON as one undo step.",
+      "Typing '<property> <value>' offers 'Set <property> to <value>' [command.setProperty]; running it writes the value to the selection in the document JSON as one undo step.",
       "Invalid values are not offered.",
-      "'Edit property X' opens the section, reveals the field in the inspector and focuses it."
-    ],
-    "passes": false
-  },
-  {
-    "id": "layout-explanation",
-    "spec": "spec/behavior/layout-explanation.md",
-    "title": "Explain drops and layout decisions",
-    "steps": [
-      "Choose View > Layout read-out.",
-      "Drag an element over several targets and release.",
-      "Select a flex child and press ?; choose Edit > 'Why is it laid out like this?'."
-    ],
-    "expected": [
-      "The read-out opens as a tab in the bottom workbench dock under the canvas; the workbench is closed by default and opens with its first tab.",
-      "During and after a drag it shows the current decision, the receiving parent and its layout, the relation and position, and why that target was chosen; the drop executes exactly the last shown decision.",
-      "? explains the selection's layout (its display, its parent's layout and its index) in the status bar and the read-out."
+      "'Edit property X' [command.editProperty] opens the section, reveals the field in the inspector and focuses it."
     ],
     "passes": false
   },
@@ -2098,7 +2238,7 @@
       "Open Help > Keyboard shortcuts."
     ],
     "expected": [
-      "The shortcuts open as a tab in the bottom workbench.",
+      "The shortcuts open as a tab in the bottom workbench dock; the workbench is closed by default and opens with its first tab.",
       "The panel lists every binding grouped by context (anywhere, on the canvas, while editing text, during a drag, with something in hand, on panels) with keys and a description.",
       "It is rendered from the single keymap table: a unit test adds a binding to the table and the panel shows it without other changes."
     ],
@@ -2109,9 +2249,9 @@
     "spec": "spec/behavior/workbench-panel.md",
     "title": "Bottom workbench: tabs, collapse, maximise and developer tools",
     "steps": [
-      "Open the Layout read-out and Keyboard shortcuts tabs and switch between them.",
-      "Click 'Show or hide the workbench', then 'Maximize the workbench' and restore it.",
-      "Turn on View > Developer tools; make a change on the canvas."
+      "Open the Keyboard shortcuts tab; turn on View > Developer tools and switch between the Keyboard shortcuts and Document tabs.",
+      "Click 'Show or hide the workbench' [workbench.toggle], then 'Maximize the workbench' [workbench.maximize] and restore it.",
+      "Make a change on the canvas; close the Document tab."
     ],
     "expected": [
       "The workbench shows one tab strip; the chosen tab's content fills it; tabs can be closed.",
@@ -2149,7 +2289,7 @@
     ],
     "expected": [
       "A panel dragged out of its dock becomes a floating window at the drop point, kept inside the viewport.",
-      "Near the left or right edge a 'Dock left'/'Dock right' hint appears and release docks the panel there.",
+      "Near the left or right edge a 'Dock left' [workspace.hint.dockLeft]/'Dock right' [workspace.hint.dockRight] hint appears and release docks the panel there.",
       "Escape cancels the drag and returns the panel where it was.",
       "The floating layout is restored after reload."
     ],
@@ -2165,8 +2305,8 @@
       "Drag the Layers tab over the lower part of the Elements panel and release."
     ],
     "expected": [
-      "Over the upper part a 'Combine as tabs' hint appears and release shows both panels as tabs of one panel.",
-      "Over the lower part a 'Stack panels' hint appears and release stacks them vertically.",
+      "Over the upper part a 'Combine as tabs' [workspace.hint.combineTabs] hint appears and release shows both panels as tabs of one panel.",
+      "Over the lower part a 'Stack panels' [workspace.hint.stackPanels] hint appears and release stacks them vertically.",
       "The arrangement is restored after reload."
     ],
     "passes": false
@@ -2197,6 +2337,21 @@
       "The status bar shows the last message (in an aria-live region), the breadcrumb of the selection, its W x H, the breakpoint and state, the node count, the zoom and the save state.",
       "Clicking a breadcrumb ancestor selects it.",
       "Every value updates immediately after each command."
+    ],
+    "passes": false
+  },
+  {
+    "id": "accessibility-checks",
+    "spec": "spec/behavior/accessibility-checks.md",
+    "title": "Accessibility and structure checks",
+    "steps": [
+      "Build a page with an image without alt, a skipped heading level, low-contrast text and a link without text.",
+      "Open the Checks panel and click each issue."
+    ],
+    "expected": [
+      "Each issue is listed with its rule, the element and a suggested fix; clicking it selects the element on the canvas and in Layers.",
+      "The list updates after every command.",
+      "Checks never block editing or export."
     ],
     "passes": false
   },
@@ -2237,18 +2392,32 @@
   {
     "id": "clipboard-cut-system",
     "spec": "spec/behavior/clipboard-cut-system.md",
-    "title": "Cut, and copy and paste through the system clipboard",
+    "title": "Cut, and copy elements as HTML for other applications",
     "steps": [
       "Insert the Card template, select its root and press Ctrl+X.",
       "Select a Section and press Ctrl+V.",
-      "Press Ctrl+C on the pasted Card, open the app in a second tab, click 'Take over editing' there and press Ctrl+V with the Page selected.",
-      "Read the system clipboard."
+      "Press Ctrl+C on the pasted Card and read the system clipboard's text/html."
     ],
     "expected": [
-      "Ctrl+X copies and deletes the element as one undo step.",
-      "Copy writes the element to the system clipboard both in the app JSON format and as text/html of its exported markup with its CSS rules.",
-      "Pasting in another tab recreates the element with identical structure, text and styles and new ids.",
-      "The clipboard text/html contains no editor attributes, ids or inline styles."
+      "Ctrl+X copies the element to the system clipboard and deletes it as one undo step; Cut appears in the context menu and the Edit menu.",
+      "Copy also writes text/html of the element's exported markup with its CSS rules, next to the app's element format.",
+      "The clipboard text/html contains no editor attributes, editor-generated ids or inline styles."
+    ],
+    "passes": false
+  },
+  {
+    "id": "copy-paste-styles",
+    "spec": "spec/behavior/copy-paste-styles.md",
+    "title": "Copy and paste styles between elements",
+    "steps": [
+      "Select a styled Heading and press Ctrl+Alt+C.",
+      "Select a Paragraph and press Ctrl+Alt+V.",
+      "Press Ctrl+Z."
+    ],
+    "expected": [
+      "Copy style puts every style value of the element on the system clipboard in the app format.",
+      "Paste style replaces the target's style values with the copied ones as one undo step; text, children and attributes stay.",
+      "Both commands are in the context menu and the Edit menu with their shortcuts."
     ],
     "passes": false
   },
@@ -2270,12 +2439,13 @@
     "id": "html-import-cleaning",
     "title": "Import cleaning: scripts, unknown elements, broken nesting and the import report",
     "steps": [
-      "Import an HTML file that contains a <script>, onclick attributes, an unknown custom element, a <div> inside a <p> and a <li> outside any list."
+      "Import an HTML file that contains an inline <script>, a <script src>, onclick attributes, an unknown custom element, a <div> inside a <p> and a <li> outside any list."
     ],
     "expected": [
-      "Scripts and event handler attributes are dropped; unknown elements are unwrapped into their children.",
+      "Scripts are not dropped: each is kept with its page (its code or its src), never run on the editing canvas, written back by the export, and listed in the report; event handler attributes are removed and listed in the report.",
+      "Unknown elements are unwrapped into their children.",
       "Structures that break the nesting rules are repaired (e.g. a stray li gets a ul) or dropped; the resulting document always passes the nesting rules.",
-      "An import report lists everything that was dropped, unwrapped or repaired, with the source line."
+      "An import report lists everything that was dropped, unwrapped, repaired or kept, with the source line."
     ],
     "passes": false
   },
@@ -2283,11 +2453,14 @@
     "id": "html-import-styles",
     "title": "Import CSS: style attributes, style blocks and linked stylesheets",
     "steps": [
-      "Import an HTML file with a linked stylesheet, a <style> block with class, tag and id rules, and style attributes (a fixture whose rules are all mappable)."
+      "Choose File > Import HTML and pick, in one selection, an HTML file and the stylesheet it links; the page also has a <style> block with class, tag and id rules and style attributes (a fixture whose rules are all mappable).",
+      "Import the same page again without its stylesheet."
     ],
     "expected": [
+      "The import accepts several files at once; a linked stylesheet is found by its path among the picked files.",
       "Declarations that apply to each element, resolved by specificity and order, become that element styles in the document JSON.",
-      "For this fixture, the computed styles of every element in the iframe match the original file opened in Chrome."
+      "For this fixture, the computed styles of every element in the iframe match the original file opened in Chrome.",
+      "A linked stylesheet that was not picked is listed in the import report."
     ],
     "passes": false
   },
@@ -2322,11 +2495,12 @@
     "title": "Exported pages import back unchanged",
     "steps": [
       "Build a page using templates, breakpoint overrides and hover states and export it.",
-      "Import the exported index.html with its css/styles.css.",
+      "Choose File > Import HTML and pick the exported ZIP.",
       "Export again."
     ],
     "expected": [
-      "The imported document equals the original in tag structure, texts, attributes and styles per breakpoint and state; element types are compared by HTML tag (types that share a tag, such as Container and Card, cannot be told apart in plain HTML); ids and editor-only data (locks, layer colours, guides, grid settings, saved colours) are ignored.",
+      "Importing a ZIP imports its pages together with their linked CSS files as a whole.",
+      "The imported document equals the original in tag structure, texts, attributes and styles per breakpoint and state; element types are compared by HTML tag (types that share a tag, such as Link and Link Block, cannot be told apart in plain HTML); ids and editor-only data (locks, layer colours, guides, grid settings, saved colours) are ignored.",
       "Element names are recovered from their BEM classes, so the second export is byte-identical to the first."
     ],
     "passes": false
@@ -2340,7 +2514,7 @@
       "Put multi-line text/plain on the system clipboard and press Ctrl+V with a Section selected."
     ],
     "expected": [
-      "Pasted HTML goes through the HTML importer (same cleaning and nesting rules) and is inserted into the selection as one undo step.",
+      "Pasted HTML goes through the HTML importer (same cleaning and nesting rules) and is inserted into the selection as one undo step; scripts in pasted HTML are not kept, because a pasted fragment has no page to keep them with.",
       "Plain text becomes one Paragraph per line.",
       "Anything the importer drops is reported in the status bar."
     ],
@@ -2356,7 +2530,7 @@
     ],
     "expected": [
       "View > Code opens the Code panel as a tab in the bottom workbench.",
-      "The panel shows read-only index.html and styles.css with line numbers and syntax colouring, identical to the files the export writes.",
+      "The panel shows index.html and styles.css with line numbers and syntax colouring, identical to the files the export writes.",
       "It updates after every command.",
       "It can be resized and floated like other panels."
     ],
@@ -2380,8 +2554,8 @@
     "id": "code-panel-copy-download",
     "title": "Copy or download what the Code panel shows",
     "steps": [
-      "In the Code panel click 'Copy this pane'.",
-      "Click 'Download this pane'."
+      "In the Code panel click 'Copy this pane' [codePanel.copyPane].",
+      "Click 'Download this pane' [codePanel.downloadPane]."
     ],
     "expected": [
       "The clipboard receives exactly the text of the open tab.",
@@ -2405,11 +2579,26 @@
     "passes": false
   },
   {
+    "id": "code-panel-edit-html",
+    "title": "Edit HTML in the Code panel",
+    "steps": [
+      "Select a Section and open the HTML tab.",
+      "Edit its markup: change a text, add a paragraph, change an attribute; apply.",
+      "Type markup that breaks the nesting rules (an li outside a list) and apply; type unparsable markup and apply."
+    ],
+    "expected": [
+      "Applying parses the markup with the HTML importer's rules and replaces the element's subtree in the document JSON as one undo step; the canvas, Layers and the inspector update.",
+      "Unchanged nodes keep their ids, names and styles.",
+      "Markup that breaks the nesting rules or cannot be parsed is refused with the line and the reason, and the document JSON is unchanged."
+    ],
+    "passes": false
+  },
+  {
     "id": "timeline-animations",
     "title": "Timeline panel: create animations for an element",
     "steps": [
       "Select a Heading and open the Timeline panel.",
-      "Click 'New animation', name it 'fade-in'.",
+      "Click 'New animation' [timeline.newAnimation], name it 'fade-in'.",
       "Create a second animation and rename and delete it."
     ],
     "expected": [
@@ -2425,7 +2614,7 @@
     "spec": "spec/behavior/timeline-keyframes.md",
     "title": "Add, edit, move and delete keyframes on the timeline",
     "steps": [
-      "Select the 'fade-in' animation, move the playhead to 50% and click 'Add keyframe'.",
+      "Select the 'fade-in' animation, move the playhead to 50% and click 'Add keyframe' [timeline.addKeyframe].",
       "With the playhead on the 0% keyframe set opacity 0 and Move Y 20px in the inspector; on 100% set opacity 1 and Move Y 0.",
       "Drag the 50% keyframe to 30%; set its easing to ease-out; delete it."
     ],
@@ -2438,14 +2627,13 @@
   },
   {
     "id": "timeline-animation-settings",
-    "title": "Animation duration, delay, repeat, direction, fill and trigger",
+    "title": "Animation duration, delay, repeat, direction and fill",
     "steps": [
-      "Set duration 800 ms, delay 200 ms, iteration count infinite, direction alternate, fill mode both, timing function ease-in-out and play state paused, then running.",
-      "Set the trigger to 'on hover'."
+      "Set duration 800 ms, delay 200 ms, iteration count infinite, direction alternate, fill mode both, timing function ease-in-out and play state paused, then running."
     ],
     "expected": [
       "Each setting is stored with the animation in the document JSON.",
-      "An 'on load' animation is applied to the element's base rule; an 'on hover' animation to its :hover rule."
+      "The animation has no trigger setting of its own."
     ],
     "passes": false
   },
@@ -2469,12 +2657,45 @@
     "id": "export-keyframes",
     "title": "Export animations as @keyframes",
     "steps": [
-      "Build an element with the 'fade-in' animation and settings, then export."
+      "Build an element with the 'fade-in' animation and settings, and export."
     ],
     "expected": [
-      "styles.css contains @keyframes fade-in with every keyframe and its values, and the animation properties on the element's rule (or its :hover rule for hover triggers).",
+      "styles.css contains @keyframes fade-in with every keyframe and its values, and the animation properties on the element's base rule, so the animation plays when the page loads.",
       "A @media (prefers-reduced-motion: reduce) block turns the animations off; it is written only when the page has animations, so pages without animations export exactly as before.",
       "In the exported page the element's computed animation-name is fade-in and two exports are byte-identical."
+    ],
+    "passes": false
+  },
+  {
+    "id": "events-actions",
+    "spec": "spec/behavior/events-actions.md",
+    "title": "Events and actions per element",
+    "steps": [
+      "Select a Button, open the Interactions section and add: on click, toggle the class 'is-open' on a Container.",
+      "Add: on hover, show a hidden element; on scroll into view, play the 'fade-in' animation; on page load, scroll to an element; on submit of a Form, hide the form and show a message; on click, open a link in a new tab.",
+      "Remove an action and undo."
+    ],
+    "expected": [
+      "Triggers are click, hover (enter and leave), scroll into view, page load and form submit; actions are show, hide, toggle class, play animation, scroll to and open link.",
+      "Targets are picked from the page or Layers, never typed ids; combinations that cannot apply (form submit on a non-form) are not offered.",
+      "Interactions are stored per element in the document JSON; each add, edit and remove is one undo step.",
+      "The editing canvas never runs them."
+    ],
+    "passes": false
+  },
+  {
+    "id": "export-events-js",
+    "title": "Export interactions as standard JavaScript",
+    "steps": [
+      "Build the interactions of events-actions, preview the page and trigger each event, then export."
+    ],
+    "expected": [
+      "The ZIP contains the plain JavaScript file js/interactions.js (no framework, no inline handlers), linked with <script defer> from every page that uses interactions.",
+      "Targets are addressed by their BEM class or user id, never by editor ids or data attributes.",
+      "An animation played by an event gets a class rule in styles.css, next to its @keyframes, that the script adds when the event fires.",
+      "Preview runs every interaction exactly like the exported page; an animation used by a play-animation action no longer plays on page load and plays when its event fires.",
+      "In the exported page opened in Chrome every trigger performs its action, checked by class, computed style or scroll position.",
+      "Pages without interactions export exactly as before, with no script."
     ],
     "passes": false
   },
@@ -2488,8 +2709,8 @@
     ],
     "expected": [
       "View > Explorer opens the Explorer as a tab next to Elements in the left dock; Elements stays the default tab.",
-      "The Explorer lists the project pages; the active page is highlighted and shown on the canvas.",
-      "Each page has its own document tree, guides and settings in the project JSON; page names are unique; the home page is exported as index.html and the others get file names from their names (about-us.html).",
+      "The Explorer lists the project pages as .html files; the active page is highlighted and shown on the canvas.",
+      "Each page has its own document tree, guides and settings in the project JSON; page names are unique; each page is an .html file whose path follows its name: the home page is index.html and the others take their file name from their name (about-us.html).",
       "The home page cannot be deleted; delete asks for confirmation; every page operation is an undo step.",
       "File > New blank page now empties only the active page; File > Open project replaces all pages.",
       "The active page is restored after reload."
@@ -2497,31 +2718,69 @@
     "passes": false
   },
   {
+    "id": "explorer-file-system",
+    "spec": "spec/behavior/explorer-file-system.md",
+    "title": "File explorer with a virtual file system",
+    "steps": [
+      "Open the Explorer.",
+      "Create the folders 'js' and 'img/icons' and the file 'js/main.js'.",
+      "Rename a folder; drag a file into another folder; delete a folder that holds files, after confirming.",
+      "Click css/styles.css and a page file in the tree.",
+      "Undo the delete; reload."
+    ],
+    "expected": [
+      "The Explorer shows the project's file tree (pages, CSS, JS, images, fonts) with folders: one .html per page, css/styles.css, js/interactions.js when the project has interactions, and every file the project holds.",
+      "Files and folders can be created, renamed, moved (drag and drop, and a Move to… command) and deleted; names are unique per folder.",
+      "css/styles.css and js/interactions.js are generated from the document and keep fixed paths: they cannot be renamed, moved or deleted, neither can a folder that holds one of them, and creating or moving another file to either path is refused, even before js/interactions.js exists.",
+      "Pages can be moved into folders; a page file is deleted by deleting its page, and a folder that holds a page file cannot be deleted; renaming a page file renames its page and moving it moves the page; a page stores its file name, so a renamed or imported file keeps its exact name (Contact Us.html stays Contact Us.html) while a new page still gets a file name derived from its name (about-us.html); page names are unique within each folder, and pages in different folders may share a name (about/index.html and blog/index.html); the home page's index.html cannot be renamed or moved out of the root.",
+      "Deleting a folder that holds files asks for confirmation; every operation is one undo step.",
+      "Clicking a page file or css/styles.css opens it in the Code panel; the tree updates when pages or files change.",
+      "The tree is stored with the project in IndexedDB and restored after reload; File > Save project and Open project include every file of the tree, and an archive saved in the earlier format (before pages and the file tree) opens and is migrated to the current format; the autosaved project and its saved versions from that format are migrated the same way when the app loads them."
+    ],
+    "passes": false
+  },
+  {
+    "id": "link-picker",
+    "title": "Link to pages, anchors, email and phone",
+    "steps": [
+      "Select a Link and pick another page as its target.",
+      "Pick an element of the current page as an anchor target.",
+      "Enter an email address and a phone number as targets.",
+      "Rename and move the target page."
+    ],
+    "expected": [
+      "The picker offers the pages of the file tree, the elements of a page (giving them an id if they have none), a URL, email (mailto:) and phone (tel:); unsafe URLs are refused.",
+      "Page links are stored as references to the page file.",
+      "Renaming or moving the target page updates every link to it."
+    ],
+    "passes": false
+  },
+  {
     "id": "export-multi-page",
     "title": "Export every page of the project",
     "steps": [
-      "Create a project with pages Home and About us, link from Home to About us with the page link picker, and export."
+      "Create a project with pages Home and About us, move About us into a folder 'company', link from Home to About us with the link picker, and export."
     ],
     "expected": [
-      "The ZIP contains index.html, about-us.html and one shared css/styles.css.",
-      "Links chosen with the page link picker are written as relative links to the page file.",
-      "Each page file has its own title, lang and dir."
+      "The ZIP contains index.html, company/about-us.html and one shared css/styles.css, each at its path in the file tree.",
+      "Links chosen with the link picker are written as relative links computed from the two files' paths (company/about-us.html from index.html, ../index.html back).",
+      "Each page file has its own title, lang and dir, and links the shared stylesheet with a path relative to its folder."
     ],
     "passes": false
   },
   {
     "id": "explorer-assets",
     "spec": "spec/behavior/explorer-assets.md",
-    "title": "Upload and manage image assets",
+    "title": "Upload and manage image and font files",
     "steps": [
-      "In the Explorer's Assets folder upload two images with the file picker.",
-      "Drop a third image file onto the Explorer (the test dispatches a drop whose DataTransfer holds the file).",
-      "Rename an asset; delete an asset."
+      "In the Explorer upload two images and a font file with the file picker.",
+      "Drop a third image file onto a folder in the Explorer (the test dispatches a drop whose DataTransfer holds the file).",
+      "Rename a file; delete a file."
     ],
     "expected": [
-      "Uploaded images are stored in IndexedDB and listed with thumbnail, name and size.",
-      "Renaming changes the listed name; names stay unique.",
-      "Deleting an unused asset removes it from the list and from IndexedDB, as an undo step."
+      "Uploaded files are ordinary files of the file tree, stored in IndexedDB, placed in the folder they were uploaded or dropped into (img/ by default for images, fonts/ for fonts), and listed with a thumbnail for images, their name and size.",
+      "Renaming changes the listed name; names stay unique per folder.",
+      "Deleting an unused file removes it from the tree and from IndexedDB, as an undo step."
     ],
     "passes": false
   },
@@ -2538,32 +2797,93 @@
       "The Image stores a reference to the asset in the document JSON and renders it on the canvas.",
       "Dropping an image file on the canvas uploads it as an asset and inserts an Image that uses it at the drop position, as one undo step.",
       "Renaming an asset keeps every Image that uses it working.",
-      "Deleting an asset in use asks for confirmation and lists where it is used."
+      "Deleting an asset in use, or a folder that holds one, asks for confirmation and lists where it is used."
+    ],
+    "passes": false
+  },
+  {
+    "id": "export-file-tree",
+    "title": "Export the file tree as a ZIP",
+    "steps": [
+      "Create folders and files in the Explorer, including a page inside a folder and an image used by it, and export."
+    ],
+    "expected": [
+      "The ZIP holds exactly the Explorer's tree: every folder and file at its path, pages generated from the document, CSS in separate files with BEM classes.",
+      "Relative links between pages and to files (stylesheets, scripts, images) are computed from their paths, so they follow a moved or renamed file.",
+      "Two exports without changes are byte-identical."
     ],
     "passes": false
   },
   {
     "id": "export-assets",
-    "title": "Export includes the used assets",
+    "title": "Export includes every file of the tree",
     "steps": [
-      "Use two uploaded assets in Images, leave a third unused, and export."
+      "Use two uploaded images in Images, leave a third image unused in its folder, and export."
     ],
     "expected": [
-      "The ZIP contains assets/ with exactly the two used files, byte-identical to the uploads.",
+      "The ZIP contains every file of the tree at its path, byte-identical to the uploads, the unused image included.",
       "The img src attributes are relative paths to those files and the exported page shows the images."
     ],
     "passes": false
   },
   {
-    "id": "explorer-files-tree",
-    "title": "Explorer shows the files the export will produce",
+    "id": "page-seo-meta",
+    "title": "Page metadata for search and sharing",
     "steps": [
-      "Open the Explorer and expand the Files section.",
-      "Click styles.css and a page file."
+      "Open Page properties and set the description, the canonical URL, the Open Graph title and image, and the favicon.",
+      "Export."
     ],
     "expected": [
-      "The Files section shows the export tree: one .html per page, css/styles.css and assets/ with the used assets.",
-      "Clicking a file opens it in the Code panel; the tree updates when pages or assets change."
+      "The values are stored in the page settings of the document JSON; image fields pick files from the file tree.",
+      "The exported page head has meta description, link rel=canonical, the og: tags and link rel=icon with paths relative to the page file."
+    ],
+    "passes": false
+  },
+  {
+    "id": "custom-fonts",
+    "title": "Use custom font files",
+    "steps": [
+      "Add two .woff2 font files to the project.",
+      "Select a Heading and choose the new font in the font menu.",
+      "Export."
+    ],
+    "expected": [
+      "The font menu lists the project fonts above the system stacks, each previewed in its own face.",
+      "The canvas renders the Heading with the font.",
+      "The export writes @font-face rules in the CSS pointing to the font files at their paths in the tree, and the exported page renders with the font."
+    ],
+    "passes": false
+  },
+  {
+    "id": "explorer-open-folder",
+    "title": "Open a whole folder from disk",
+    "steps": [
+      "Choose File > Open folder and pick a folder with index.html, about/index.html, css/site.css, js/app.js and img/logo.png.",
+      "Confirm replacing the project.",
+      "Export."
+    ],
+    "expected": [
+      "The folder is read with Chrome's directory picker and every file lands at the same path in the virtual file system, except a file whose path belongs to a generated file (css/styles.css, js/interactions.js): it is kept under a new name (css/styles-1.css) and the import report lists it.",
+      "HTML pages go through the HTML importer with their linked CSS resolved from the folder; each becomes a page named after its file, at its path (about/index.html is the page index in the folder about), and the root index.html is the home page (a folder without one gets an empty home page index.html, listed in the report); CSS, JS, images and fonts are kept as files.",
+      "The import report lists what was converted, kept as-is or dropped.",
+      "The export right after reproduces the same folder structure."
+    ],
+    "passes": false
+  },
+  {
+    "id": "code-panel-edit-js",
+    "title": "Edit JavaScript files in the Code panel",
+    "steps": [
+      "Create js/main.js in the Explorer, open it in the Code panel, type code and save.",
+      "Type a syntax error and save.",
+      "Link the script to the page in Page properties and open Preview."
+    ],
+    "expected": [
+      "JS files open with line numbers and syntax colouring; saving writes the file in the file tree as one undo step; js/interactions.js, which is generated, opens read-only.",
+      "Syntax errors are shown with the line and the reason.",
+      "Preview runs the linked scripts and reloads after each save; the editing canvas never runs them.",
+      "The export writes the files unchanged and links them from their pages.",
+      "Deleting a JS file that a page links, or a folder that holds one, asks for confirmation and lists those pages."
     ],
     "passes": false
   },
@@ -2576,7 +2896,7 @@
     ],
     "expected": [
       "Every binding listed in the Keyboard shortcuts panel runs its command in its context, checked by the document JSON, the selection or the UI state it changes.",
-      "No two bindings in the same context use the same keys (unit test on the keymap).",
+      "No two bindings in the same context use the same keys (unit test on the keymap); a context includes what is selected or focused, so the arrow keys nudge a positioned selection and walk the tree otherwise, and keys handled inside a tree, tab strip, splitter or field belong to that control.",
       "Each keymap row declares its own context setup and check next to its binding, so rows added by any entry are swept without editing the sweep test."
     ],
     "passes": false

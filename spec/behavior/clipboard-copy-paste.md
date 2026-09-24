@@ -1,4 +1,4 @@
-# clipboard-copy-paste — Copy and paste elements inside the editor with Ctrl+C and Ctrl+V
+# clipboard-copy-paste — Copy and paste elements through the system clipboard with Ctrl+C and Ctrl+V
 
 How Pager behaves, observed by running it from `.cache/pager-run` (Chrome, window 1600×900) and read from its source. Source references are `path:line` inside Pager. Test document: Section > Heading, and an empty Container after the Section.
 
@@ -43,5 +43,5 @@ Not affected.
 ## Problems in Pager
 
 1. **Copy takes only the primary node of a multi-selection.** Required: copy takes every selected root; paste inserts them in document order (see `multi-select-actions.md`).
-2. **The clipboard is an in-memory variable,** lost on reload and invisible to other tabs and apps. Required for this entry: copy/paste inside the editor works as above; the system clipboard is covered by `clipboard-cut-system.md`.
+2. **The clipboard is an in-memory variable,** lost on reload and invisible to other tabs and apps. Required: Ctrl+C writes the element to the system clipboard in the app's element format and Ctrl+V reads it from there; nothing is kept only in memory (features.json `clipboard-copy-paste`). The text/html format for other applications is covered by `clipboard-cut-system.md`.
 3. **Pasting with a container selected always goes inside it,** even when the person wanted a sibling of the container. Required: behaviour as features.json states (container selected → last child; non-container → right after it), plus a status message that says which of the two happened (`Pasted Heading 3 into Section, position 2 of 2.`).

@@ -1,4 +1,4 @@
-# explorer-assets — Upload and manage image assets
+# explorer-assets — Upload and manage image and font files
 
 How Pager behaves, observed by running it from `.cache/pager-run` (Chrome, window 1600×900) and read from its source. Source references are `path:line` inside Pager.
 
@@ -41,9 +41,9 @@ None in Pager.
 
 ## Problems in Pager
 
-1. **No asset management.** Required (features.json `explorer-assets`):
-   - The Explorer's Assets folder uploads images with the file picker and also accepts image files dropped onto the Explorer.
-   - Uploaded images are stored in IndexedDB and listed with thumbnail, name and size.
+1. **No file uploads.** Required (features.json `explorer-assets`):
+   - The Explorer uploads images and font files with the file picker and accepts image files dropped onto a folder.
+   - Uploaded files are ordinary files of the file tree, stored in IndexedDB, placed in the folder they were uploaded or dropped into (img/ by default for images, fonts/ for fonts), and listed with a thumbnail for images, their name and size.
 2. **Rename and delete.** Required:
-   - Renaming an asset changes its listed name, and names stay unique.
-   - Deleting an unused asset removes it from the list and from IndexedDB, as an undo step.
+   - Renaming a file changes its listed name; names stay unique per folder.
+   - Deleting an unused file removes it from the tree and from IndexedDB, as an undo step.

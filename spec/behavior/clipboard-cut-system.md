@@ -1,4 +1,4 @@
-# clipboard-cut-system — Cut, and copy and paste through the system clipboard
+# clipboard-cut-system — Cut, and copy elements as HTML for other applications
 
 How Pager behaves, read from its source and checked by running it from `.cache/pager-run` (Chrome, window 1600×900). Source references are `path:line` inside Pager.
 
@@ -38,4 +38,4 @@ Not applicable.
 ## Problems in Pager
 
 1. **No Cut.** Required: `Ctrl+X` copies and deletes the selection as one undo step (features.json `clipboard-cut-system`); Cut appears in the context menu and the Edit menu.
-2. **No system clipboard.** Required: Copy writes the element to the system clipboard both in the app's JSON format (a custom MIME type or a marked JSON payload inside `text/plain`) and as `text/html` of its exported markup with its CSS rules; that `text/html` has no editor attributes, ids or inline styles. Pasting in another tab recreates the element with identical structure, text and styles and new ids.
+2. **No system clipboard.** Required: the app's element format on the system clipboard is covered by `clipboard-copy-paste.md`. This entry adds that Copy also writes `text/html` of the element's exported markup with its CSS rules, next to the app format, and that `text/html` has no editor attributes, ids or inline styles (features.json `clipboard-cut-system`).

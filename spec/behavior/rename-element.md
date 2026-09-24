@@ -45,4 +45,4 @@ Not affected.
 ## Problems in Pager
 
 1. **Double-clicking a Layers row does not rename.** Required: double-clicking the row's name edits it in place; Enter commits, Escape cancels, blur commits (features.json `rename-element`).
-2. **Two rename implementations** (modal prompt for F2, inline input for the menu) with different empty-name handling paths. Required: one rename command; F2 opens the dialog `Name for this node`, the Layers double-click edits inline, and both write through that command.
+2. **Two rename implementations** (modal prompt for F2, inline input for the menu) with different empty-name handling paths. Required: one rename command and one inline edit: F2 edits the selection's name in place in its Layers row, exactly like double-clicking the row name, with no dialog (features.json `rename-element`).

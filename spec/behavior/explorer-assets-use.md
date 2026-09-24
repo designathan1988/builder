@@ -48,4 +48,4 @@ None in Pager.
    - On drop, the file is uploaded as an asset and an Image that uses it is inserted at the indicated position, as one undo step.
 3. **Renaming and deleting assets in use.** Required:
    - Renaming an asset keeps every Image that uses it working.
-   - Deleting an asset in use asks for confirmation and lists where it is used.
+   - Deleting an asset in use, or a folder that holds one, asks for confirmation and lists where it is used.

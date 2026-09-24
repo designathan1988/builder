@@ -62,3 +62,4 @@ The keys above.
 
 1. **After a multi-delete nothing is selected.** Required: the selection moves to the element after the last removed one, else before the first, else the common parent (as for a single delete).
 2. **`Moved 2 selected elements` / `Removed 2 selected elements`** are fine, but the single-element cases reuse the plural sentence (`Moved 1 selected elements`). Required: correct singular/plural through i18n.
+3. **Wrap refuses a multi-selection** (`This action needs one selected element.`, `src/app/boot.js:275-277`). Required: R or C with several siblings of one parent selected wraps them together in one new Row or Column placed where the first of them was, keeping their order, as one undo step; a selection whose elements have different parents is refused with a message (features.json `multi-select-actions`).
