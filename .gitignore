@@ -1,0 +1,10 @@
+reference/
+node_modules/
+dist/
+test-results/
+playwright-report/
+.env*
+*.zip
+coverage/
+blob-report/
+*.tsbuildinfo
