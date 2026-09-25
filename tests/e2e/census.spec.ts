@@ -9,10 +9,10 @@
 // While the manifest has no built undoable command, a built command none of whose drawn doors is enabled (Undo and
 // Redo: there is nothing to undo) is proven instead by a test that runs each of its doors and shows it cannot run yet
 // (annotation "door-unavailable"); from the first undoable command on it needs tests of its own (the user's answer).
-import { execFileSync } from 'node:child_process';
+import { execFile } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 import { shortcutRuns } from '../../src/editor/input/shortcut-rule.ts';
 import { FEATURE_COMMANDS } from '../../src/generated/commands.ts';
 import { DOOR_ANNOTATION, UNAVAILABLE_ANNOTATION, runDoor } from './door.ts';
@@ -37,9 +37,12 @@ interface Listed {
   readonly suites?: readonly Listed[];
 }
 // the doors each annotation type names, over every test of the suite (Playwright's list, which starts no server)
-function annotated(): Map<string, Set<string>> {
+async function annotated(): Promise<Map<string, Set<string>>> {
   const cli = path.join('node_modules', '@playwright', 'test', 'cli.js');
-  const report = JSON.parse(execFileSync(process.execPath, [cli, 'test', '--list', '--reporter=json'], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 })) as { suites: Listed[] };
+  const listed = await new Promise<string>((resolve, reject) =>
+    execFile(process.execPath, [cli, 'test', '--list', '--reporter=json'], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }, (error, stdout) => (error ? reject(error) : resolve(stdout))),
+  );
+  const report = JSON.parse(listed) as { suites: Listed[] };
   const found = new Map<string, Set<string>>();
   const walk = (suite: Listed) => {
     for (const spec of suite.specs ?? []) for (const t of spec.tests) for (const a of t.annotations) if (a.description !== undefined) found.set(a.type, (found.get(a.type) ?? new Set()).add(a.description));
@@ -49,26 +52,21 @@ function annotated(): Map<string, Set<string>> {
   return found;
 }
 
-test('every working command is proven by a browser test, and no door looks usable without a command', async ({ page }) => {
-  // it visits every state a built door leads to, each from a fresh profile
-  test.setTimeout(240_000);
-  const tests = annotated();
-  const runsDoor = tests.get(DOOR_ANNOTATION) ?? new Set<string>();
-  const runsUnavailable = tests.get(UNAVAILABLE_ANNOTATION) ?? new Set<string>();
+// how many states are read at the same time, each in a browser context of its own
+const PARALLEL = 6;
 
-  await page.setViewportSize({ width: 1440, height: 900 });
-  const fresh = async () => {
-    await page.goto('/');
-    await page.evaluate(() => window.localStorage.clear());
-    await page.reload();
-    await expect(page.locator('.workbench')).toBeVisible();
-  };
+test('every working command is proven by a browser test, and no door looks usable without a command', async ({ browser }, testInfo) => {
+  // it visits every state a built door leads to, each from a fresh profile: a new browser context
+  test.setTimeout(120_000);
+  // Playwright's list of the suite, read while the states are visited
+  const listing = annotated();
+  const baseURL = testInfo.project.use.baseURL;
 
   // every door drawn on screen, and whether a user can use it: a control that is not disabled; a door drawn as a
   // container (a field row, a label) counts by the controls it holds that are not doors of their own. `drawn` keeps,
   // over every state the census reaches, whether a door was ever drawn enabled.
   const drawn = new Map<string, boolean>();
-  const read = async (state: Map<string, boolean>) => {
+  const read = async (page: Page, state: Map<string, boolean>) => {
     const seen = await page.evaluate(() => {
       const CONTROL = 'button, input, select, textarea, [role^="menuitem"], [role="treeitem"], [role="tab"], [tabindex]';
       const usable = (el: Element) => el.getAttribute('aria-disabled') !== 'true' && !el.matches(':disabled');
@@ -84,22 +82,33 @@ test('every working command is proven by a browser test, and no door looks usabl
     }
   };
   // one state: the screen, then every menu and submenu opened in turn; `screen` keeps what the screen draws with no
-  // menu open
-  const readState = async () => {
+  // menu open. A state already read (the same doors drawn the same way, the same selection and history, read through
+  // the test port) is not read again: it holds nothing new and leads nowhere new.
+  const seenStates = new Set<string>();
+  const readState = async (page: Page) => {
     const state = new Map<string, boolean>();
-    await read(state);
+    await read(page, state);
     const screen = new Set(state.keys());
+    const fingerprint = JSON.stringify([
+      [...state].sort(),
+      await page.evaluate(() => {
+        const p = (window as unknown as Record<string, { selection: () => unknown; history: () => unknown }>).__builderTestPort;
+        return p ? [p.selection(), p.history()] : null;
+      }),
+    ]);
+    if (seenStates.has(fingerprint)) return null;
+    seenStates.add(fingerprint);
     const buttons = page.locator('.menu-button[data-menu]');
     for (let m = 0; m < (await buttons.count()); m += 1) {
       await page.keyboard.press('Escape');
       // a menu button of a region the state hides (the canvas toolbar under a maximised dock) is not there to open
       if (!(await buttons.nth(m).isVisible())) continue;
       await buttons.nth(m).click();
-      await read(state);
+      await read(page, state);
       const subs = page.locator('.menu__sub > [aria-haspopup="menu"]');
       for (let s = 0; s < (await subs.count()); s += 1) {
         await subs.nth(s).hover();
-        await read(state);
+        await read(page, state);
       }
     }
     await page.keyboard.press('Escape');
@@ -117,20 +126,51 @@ test('every working command is proven by a browser test, and no door looks usabl
   const explored = new Set<string>();
   const queue: string[][] = [[]];
   let states = 0;
-  for (let path = queue.shift(); path !== undefined; path = queue.shift()) {
-    await fresh();
-    // a door drawn once per item (a Layers row, an Insert tile) is run on its first item
-    for (const ref of path) await runDoor(page, ref, { any: true });
-    const { state, screen } = await readState();
-    states += 1;
-    const leads = (ref: string) => screen.has(ref) || KIND.get(ref) === 'menu';
-    const next = [...[...state].filter(([ref, enabled]) => enabled && BUILT.has(commandOf(ref)) && leads(ref)).map(([ref]) => ref), ...(path.length === 0 ? shortcuts : [])];
-    for (const ref of next) {
-      if (explored.has(ref)) continue;
-      explored.add(ref);
-      queue.push([...path, ref]);
+  // one path: a fresh browser context, the path's doors run in order, then the state it reaches read
+  const visit = async (path: readonly string[]) => {
+    const context = await browser.newContext({ ...(baseURL !== undefined ? { baseURL } : {}), viewport: { width: 1440, height: 900 } });
+    try {
+      const page = await context.newPage();
+      await page.goto('/');
+      await expect(page.locator('.workbench')).toBeVisible();
+      // a door drawn once per item (a Layers row, an Insert tile) is run on its first item
+      for (const ref of path) await runDoor(page, ref, { any: true });
+      const read = await readState(page);
+      states += 1;
+      if (read === null) return;
+      const leads = (ref: string) => read.screen.has(ref) || KIND.get(ref) === 'menu';
+      const next = [...[...read.state].filter(([ref, enabled]) => enabled && BUILT.has(commandOf(ref)) && leads(ref)).map(([ref]) => ref), ...(path.length === 0 ? shortcuts : [])];
+      for (const ref of next) {
+        if (explored.has(ref)) continue;
+        explored.add(ref);
+        queue.push([...path, ref]);
+      }
+    } finally {
+      await context.close();
     }
-  }
+  };
+  // PARALLEL workers take paths from the queue until it is empty and none of them can add to it
+  let busy = 0;
+  const worker = async () => {
+    for (;;) {
+      const path = queue.shift();
+      if (path === undefined) {
+        if (busy === 0) return;
+        await new Promise((resolve) => setTimeout(resolve, 20));
+        continue;
+      }
+      busy += 1;
+      try {
+        await visit(path);
+      } finally {
+        busy -= 1;
+      }
+    }
+  };
+  await Promise.all(Array.from({ length: PARALLEL }, worker));
+  const tests = await listing;
+  const runsDoor = tests.get(DOOR_ANNOTATION) ?? new Set<string>();
+  const runsUnavailable = tests.get(UNAVAILABLE_ANNOTATION) ?? new Set<string>();
   expect(drawn.size).toBeGreaterThan(200);
   expect(states).toBeGreaterThan(20);
 
@@ -155,5 +195,5 @@ test('every working command is proven by a browser test, and no door looks usabl
     for (const r of reachable) if (!runsDoor.has(r)) missing.push(`${r}: usable, and no browser test runs it`);
   }
   expect(missing, 'built commands and usable doors without a browser test').toEqual([]);
-  console.log(`census: ${BUILT.size} built commands, ${states} states visited, ${drawn.size} doors drawn (${[...drawn.values()].filter(Boolean).length} enabled), ${runsDoor.size} doors run by tests, ${runsUnavailable.size} shown unavailable; built undoable commands: ${UNDOABLE_BUILT ? 'yes' : 'none'}`);
+  console.log(`census: ${BUILT.size} built commands, ${states} states visited (${seenStates.size} distinct), ${drawn.size} doors drawn (${[...drawn.values()].filter(Boolean).length} enabled), ${runsDoor.size} doors run by tests, ${runsUnavailable.size} shown unavailable; built undoable commands: ${UNDOABLE_BUILT ? 'yes' : 'none'}`);
 });
