@@ -63,8 +63,10 @@ export function isPanelOpen(ui: EditorUi, panel: Panel): boolean {
       return p.sidebar && p.sidebarView === panel;
     case 'section':
       return p.sidebar && p.sidebarView === data.in && p.open[panel];
+    // a dock panel is open when it shows: its tab is the active one of a dock that is not folded, so a View item
+    // that toggles it shows it first (the user's decision) and takes the tab out only while it shows
     case 'dock':
-      return p.dockTabs.includes(panel);
+      return p.dockTabs.includes(panel) && ui.layout.dock !== 'collapsed' && ui.layout.activeDockTab === panel;
     case 'workbench':
       return ui.layout.dock !== 'collapsed';
     default:

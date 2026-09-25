@@ -21,14 +21,16 @@ const store = () => createEditorStore({ storage: memory(), ids: sequentialIds('n
 const openPanels = (s: ReturnType<typeof store>): Panel[] => (Object.keys(PANELS) as Panel[]).filter((panel) => isPanelOpen(s.getState().ui, panel));
 
 describe('panel visibility (workspace/panels.ts)', () => {
-  it('starts with every panel as layout.json says: open at the first start or not', () => {
+  it('starts with every panel as layout.json says: open at the first start or not (a dock panel: a tab of the dock)', () => {
     const s = store();
-    for (const panel of Object.keys(PANELS) as Panel[]) expect([panel, isPanelOpen(s.getState().ui, panel)]).toEqual([panel, PANELS[panel].open]);
+    const { ui } = s.getState();
+    const atStart = (panel: Panel) => (PANELS[panel].place === 'dock' ? ui.panels.dockTabs.includes(panel) : isPanelOpen(ui, panel));
+    for (const panel of Object.keys(PANELS) as Panel[]) expect([panel, atStart(panel)]).toEqual([panel, PANELS[panel].open]);
   });
 
-  it('starts with the Explorer, Layers and the inspector open and the dock collapsed with Timeline and Checks', () => {
+  it('starts with the Explorer, Layers and the inspector open and the dock collapsed with Timeline and Checks, neither shown', () => {
     const s = store();
-    expect(openPanels(s)).toEqual(['explorer', 'layers', 'inspector', 'canvas-tools', 'timeline', 'checks']);
+    expect(openPanels(s)).toEqual(['explorer', 'layers', 'inspector', 'canvas-tools']);
     expect(s.getState().ui.panels.dockTabs).toEqual(['timeline', 'checks']);
     expect(s.getState().ui.layout).toEqual({ dock: 'collapsed', activeDockTab: 'timeline' });
   });

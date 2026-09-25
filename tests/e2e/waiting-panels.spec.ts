@@ -32,12 +32,11 @@ test.beforeEach(async ({ page }) => {
 test('View › Timeline opens the Timeline tab with the 18 doors of dock-timeline, each not available yet', runs('workspace.setPanelOpen#menu-view-timeline'), async ({ page }) => {
   const tabs = () => page.locator('[data-region="tab-strip"] [role="tab"]').evaluateAll((els) => els.map((el) => el.textContent));
   const canvas = await page.locator('.centre').boundingBox();
-  // a fresh profile has Timeline as a tab of the folded dock, so the first click takes it out, the second opens it
+  // a fresh profile has Timeline as a tab of the folded dock: View › Timeline shows it (the user's decision), it does
+  // not take the tab out
   expect(await tabs()).toEqual(['Timeline', 'Checks']);
   await runDoor(page, 'workspace.setPanelOpen#menu-view-timeline');
-  expect(await tabs()).toEqual(['Checks']);
-  await runDoor(page, 'workspace.setPanelOpen#menu-view-timeline');
-  expect(await tabs()).toEqual(['Checks', 'Timeline']);
+  expect(await tabs()).toEqual(['Timeline', 'Checks']);
   await expect(page.getByRole('tabpanel')).toHaveAttribute('aria-label', 'Timeline');
   expect((await page.locator('.centre').boundingBox())?.height).toBeLessThan((canvas?.height ?? 0) - 50);
 
@@ -46,6 +45,11 @@ test('View › Timeline opens the Timeline tab with the 18 doors of dock-timelin
   const drawn = await drawnIn(page, 'dock-timeline');
   expect([...new Set(drawn.map((d) => d.ref))].sort()).toEqual([...placed].sort());
   expect(drawn.filter((d) => !d.disabled || !d.title.includes('not available yet')).map((d) => d.ref)).toEqual([]);
+
+  // with Timeline showing, View › Timeline takes its tab out, and the dock shows the next one
+  await runDoor(page, 'workspace.setPanelOpen#menu-view-timeline');
+  expect(await tabs()).toEqual(['Checks']);
+  await expect(page.getByRole('tabpanel')).toHaveAttribute('aria-label', 'Checks');
 });
 
 for (const ref of ['workspace.setPanelOpen#toolbar-activity-bar-styles', 'workspace.setPanelOpen#menu-view-variables']) {
