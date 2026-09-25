@@ -2090,6 +2090,10 @@ export function checkManifest(input: ManifestInput): CheckResult {
               report('step', f.file, `${at}.steps[${ti}].args.${name}`, `the ${arg.type} "${name}" of ${command.id} is produced by the gesture: a step leaves it out`);
               continue;
             }
+            if (arg.type === 'clipboard') {
+              report('step', f.file, `${at}.steps[${ti}].args.${name}`, `the clipboard "${name}" of ${command.id} is read by the door when it runs: a step leaves it out`);
+              continue;
+            }
             const problem = argProblem(arg, value);
             if (problem !== null) report('step', f.file, `${at}.steps[${ti}].args.${name}`, `${JSON.stringify(value)}: the argument "${name}" of ${command.id} ${problem}`);
           }
@@ -2097,7 +2101,7 @@ export function checkManifest(input: ManifestInput): CheckResult {
           if (release) return;
           const fixed = entry?.door.args ?? {};
           for (const [name, arg] of Object.entries(command.args)) {
-            if (arg.optional || arg.type === 'rect' || arg.type === 'point' || name in fixed || name in step.args) continue;
+            if (arg.optional || arg.type === 'rect' || arg.type === 'point' || arg.type === 'clipboard' || name in fixed || name in step.args) continue;
             report('step', f.file, `${at}.steps[${ti}].args`, `${step.door} needs the argument "${name}" (${arg.type}) of ${command.id}: the door does not fix it`);
           }
         });

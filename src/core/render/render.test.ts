@@ -318,6 +318,34 @@ describe('the renderer (src/core/render/render.ts)', () => {
     expect(target.head.querySelectorAll('style[data-node-style="root"]').length).toBe(1);
   });
 
+  it('draws a text’s marks (spec text-inline-formatting): <strong>, <em> and <a href> around its runs, patched in the same element', () => {
+    const marked = ['In', { tag: 'strong', children: ['t', { tag: 'em', children: ['r'] }] }, { tag: 'a', href: 'https://example.com', children: ['o'] }];
+    const { target, after } = check(doc, [{ op: 'add', path: at('children', 0, 'children', 1, 'inline'), value: marked }]);
+    expect(target.querySelector('[data-node="intro"]')?.innerHTML).toBe('In<strong>t<em>r</em></strong><a href="https://example.com">o</a>');
+    const plain = check(after, [{ op: 'remove', path: at('children', 0, 'children', 1, 'inline') }]);
+    expect(plain.target.querySelector('[data-node="intro"]')?.innerHTML).toBe('Intro');
+  });
+
+  it('reads the edited text back as runs with its selection, and draws a change of its marks with the range selected', () => {
+    const { target, renderer } = mounted();
+    renderer.editText(doc, 'intro' as NodeId, 'text-editing');
+    // the caret at the end of the text
+    expect(renderer.editedContent()).toEqual({ runs: ['Intro'], range: { start: 5, end: 5 } });
+    renderer.showEdited([{ tag: 'strong', children: ['Int'] }, 'ro'], { start: 0, end: 3 });
+    const intro = must(target.querySelector('[data-node="intro"]'));
+    expect(intro.innerHTML).toBe('<strong>Int</strong>ro');
+    expect(renderer.editedContent()).toEqual({ runs: [{ tag: 'strong', children: ['Int'] }, 'ro'], range: { start: 0, end: 3 } });
+    expect(target.getSelection()?.toString()).toBe('Int');
+    // a line break at the very end gets the <br> a browser needs after it, which the text read back leaves out
+    renderer.showEdited(['Intro\n'], { start: 6, end: 6 });
+    expect(intro.innerHTML).toBe('Intro<br><br>');
+    expect(renderer.editedContent()?.runs).toEqual(['Intro\n']);
+    // the edit ends: the page shows the text the document holds
+    renderer.editText(doc, null, 'text-editing');
+    expect(intro.innerHTML).toBe('Intro');
+    expect(renderer.editedContent()).toBeNull();
+  });
+
   it('never writes an event attribute, even one a model would name', () => {
     const withEvent: RenderModel = { ...model, attributes: new Map([...model.attributes, ['clickHandler', 'onclick']]) };
     const d = applyPatches(doc, [{ op: 'add', path: at('children', 2, 'attributes', 'clickHandler'), value: 'alert(1)' }]).document;

@@ -32,7 +32,7 @@ export const FEATURES = {
   'keyboard-tree-walk': registerFeature('keyboard-tree-walk'),
   'hand-keyboard-move': registerFeature('hand-keyboard-move'),
   'text-edit-inline': registerFeature('text-edit-inline'),
-  'text-inline-formatting': NOT_AVAILABLE_YET,
+  'text-inline-formatting': registerFeature('text-inline-formatting'),
   'rename-element': registerFeature('rename-element'),
   'multi-select-click': registerFeature('multi-select-click'),
   unwrap: registerFeature('unwrap'),

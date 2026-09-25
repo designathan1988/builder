@@ -18,7 +18,8 @@
 // inside the same gesture.
 //
 // A double-click on a text element starts its edit in place; while a text is edited, a press elsewhere keeps the text
-// once its own door has run (spec text-edit-inline).
+// once its own door has run (spec text-edit-inline), and a press on the text toolbar over the canvas is its control's
+// click, which leaves the focus in the text (spec text-inline-formatting).
 //
 // A primary press on a palette tile (the tile door of the command whose canvas-drag door takes a palette tile as its
 // source) is a gesture too (spec palette-drag-insert, "Trigger"): released below drag.threshold it is the tile's click
@@ -46,7 +47,7 @@ import { canvasFrame, flowAxis, geometryOf, nodeAt, nodeBox, nodesUnder, screenT
 import { drawnProposal, liveDrag } from '../drag/drag-session.ts';
 import { proposeDrop, type DropProposal } from '../drag/drop.ts';
 import type { EditorStore } from '../store.ts';
-import { editArgs, editedNode, isTextElement } from '../canvas/text-edit.ts';
+import { TEXT_TOOLBAR, editArgs, editedNode, isTextElement } from '../canvas/text-edit.ts';
 
 const threshold = manifest.interactions.constants.find((c) => c.id === 'drag.threshold')?.value;
 export const DRAG_THRESHOLD = typeof threshold === 'number' ? threshold : 4;
@@ -320,11 +321,18 @@ export function modifierOf(event: Readonly<Record<(typeof MODIFIERS)[number][0],
   return held.length === 1 ? (held[0] ?? null) : held.length === 0 ? null : 'several';
 }
 
+// The text toolbar over the canvas while a text is edited (text-toolbar.tsx): its controls run their own doors, so a
+// press there is no press on the page under it, and it leaves the focus in the edited text (spec
+// text-inline-formatting: Bold, Italic and Link act on what is selected there).
+const TEXT_TOOLBAR_AREA = `[data-canvas-overlay] [data-region="${TEXT_TOOLBAR}"]`;
+const onTextToolbar = (target: EventTarget | null) => target instanceof Element && target.closest(TEXT_TOOLBAR_AREA) !== null;
+
 // What a pointer event is on: the label of an element on the canvas chrome (spec select-click, "Hit zones": the
 // selection label and the hover label select or drag the element they name), the page under the overlay, the
-// stage, or neither (the rest of the editor).
+// stage, or neither (the rest of the editor, and the text toolbar drawn over the canvas).
 function pressAt(event: MouseEvent, isRoot: (node: string) => boolean): Press | null | 'elsewhere' {
   const target = event.target instanceof Element ? event.target : null;
+  if (onTextToolbar(target)) return 'elsewhere';
   const named = target?.closest('[data-canvas-overlay] [data-label-for]')?.getAttribute('data-label-for') ?? null;
   if (named !== null) return { on: 'node', node: named, root: isRoot(named), label: true };
   if (target?.closest('[data-canvas-overlay]')) {
@@ -597,12 +605,13 @@ export function installPointer(store: EditorStore, target: Window = window): () 
     if (event.target instanceof Element && event.target.closest(EDITOR_MENU_AREA)) event.preventDefault();
   };
   // A secondary press there moves no focus: the context menu it opens takes the focus at once, and the press would
-  // otherwise hand it to the page body right after. Nor does a press on the text edited in place: the focus stays in
-  // the text.
+  // otherwise hand it to the page body right after. Nor does a press on the text edited in place, or on the text
+  // toolbar while it is edited: the focus, and the text selection, stay in the text.
   const onMouseDown = (event: MouseEvent) => {
     const keep = keepFocus;
     keepFocus = false;
-    if (keep || (event.button === 2 && event.target instanceof Element && event.target.closest(EDITOR_MENU_AREA))) event.preventDefault();
+    const toolbar = editedNode(store.getState()) !== null && onTextToolbar(event.target);
+    if (keep || toolbar || (event.button === 2 && event.target instanceof Element && event.target.closest(EDITOR_MENU_AREA))) event.preventDefault();
   };
 
   // A drag Escape cancelled ends its gesture at once, its button still down: the drag and what it would do at the

@@ -4,8 +4,9 @@
 // with ArrowUp from inside it or through its Layers row, the breakpoint, the style state, the zoom),
 // every step through its door with the real mouse and keyboard (a click on the node it targets, a drag released
 // where its drop says or held across the next steps, a marquee drawn from its target's empty area to its drop's node,
-// the characters it types; an inspector field clicked, what it holds selected, then typed into), then the end
-// terminals the scenario
+// the characters it types, into the text edited in place or the field a door opened, such as the link prompt; an
+// inspector field clicked, what it holds selected, then typed into; a paste reads the system clipboard, which the
+// setup allows and empties), then the end terminals the scenario
 // names: the document diff, the selection and the history read through the read-only test port, computed style and
 // geometry inside the frame, the feedback in the status bar, the editor's regions, storage after an immediate
 // reload, and the refusals. After the setup and after the steps the canvas must draw the document the port reads;
@@ -765,6 +766,11 @@ async function setUp(page: Page, s: Scenario): Promise<unknown> {
   await page.evaluate(() => window.localStorage.clear());
   await page.reload();
   await expect(page.locator('.workbench')).toBeVisible();
+  // the system clipboard as the editor reads it (a paste in the text edited in place, spec text-inline-formatting):
+  // allowed, as a person allows it once when the browser asks, and empty, whatever an earlier test in this browser
+  // copied (the browser's clipboard outlives a test's context)
+  await page.context().grantPermissions(['clipboard-read', 'clipboard-write']);
+  await page.evaluate(() => navigator.clipboard.writeText('').catch(() => undefined));
   if (s.setup.locale !== environment.locales.default) await runDoor(page, settingDoor('preferences.setLanguage', 'locale', s.setup.locale));
   // the editor shows the setup's language, whether a door switched it or it is the default
   await expect.poll(() => uiLocale(page), { message: `setup locale ${s.setup.locale}` }).toBe(s.setup.locale);

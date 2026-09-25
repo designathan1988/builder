@@ -7,12 +7,13 @@
 // the page lays out at its breakpoint's width and the stage shows it at the canvas zoom.
 import { useEffect, useRef, useState } from 'react';
 import { PageRenderer, renderModelFromManifest } from '../../core/render/render.ts';
+import { applyInlineChange, plainText, type TextRange } from '../../core/text/inline.ts';
 import { manifest } from '../../manifest/runtime.ts';
 import { installKeymap } from '../input/keymap.ts';
 import { useEditorState, useStore } from '../store.ts';
 import { CanvasChrome } from './chrome.tsx';
 import { registerFrame } from './coordinates.ts';
-import { TEXT_EDITING, registerEditReader } from './text-edit.ts';
+import { TEXT_EDITING, openLinkPrompt, registerEditReader } from './text-edit.ts';
 
 const MODEL = renderModelFromManifest(manifest.elements, manifest.properties, manifest.interactions);
 // an empty page the renderer fills: no script, no style of the editor
@@ -54,9 +55,14 @@ export function CanvasFrame({ width, zoom }: { readonly width: number; readonly 
       let edited: string | null = null;
       let lineBreaks = store.getState().ui.textEdit.lineBreaks;
       let selectAlls = store.getState().ui.textEdit.selectAlls;
+      let changes = store.getState().ui.textEdit.changes;
+      // while the link prompt holds the focus, the text selection it acts on, as a range of the edited text's characters
+      let prompting = false;
+      let kept: TextRange | null = null;
       let stopKeys = () => {};
       const followEdit = () => {
-        const edit = store.getState().ui.textEdit;
+        const ui = store.getState().ui;
+        const edit = ui.textEdit;
         if (edit.node !== edited) {
           edited = edit.node;
           stopKeys();
@@ -74,9 +80,25 @@ export function CanvasFrame({ width, zoom }: { readonly width: number; readonly 
           selectAlls = edit.selectAlls;
           if (edit.node !== null) renderer.selectEditedText();
         }
+        // the link prompt opens: the selection it acts on is kept, as the prompt takes the focus
+        const open = openLinkPrompt(ui) !== null;
+        if (open && !prompting) kept = renderer.editedContent()?.range ?? null;
+        // a change of the marks (spec text-inline-formatting): applied to the edited text's runs over its selection (or
+        // the one the link prompt kept), and drawn with the range it leaves selected
+        if (edit.changes !== changes) {
+          changes = edit.changes;
+          const content = edit.node !== null && edit.change !== null ? renderer.editedContent() : null;
+          if (content !== null && edit.change !== null) {
+            const end = plainText(content.runs).length;
+            const after = applyInlineChange(content.runs, (prompting ? kept : null) ?? content.range ?? { start: end, end }, edit.change);
+            renderer.showEdited(after.runs, after.range);
+          }
+        } else if (prompting && !open && edit.node !== null) renderer.focusEdited(kept);
+        if (!open) kept = null;
+        prompting = open;
       };
       const stopEdit = store.subscribe(followEdit);
-      const stopReader = registerEditReader(() => renderer.editedText());
+      const stopReader = registerEditReader(() => renderer.editedContent());
       followEdit();
       stop = () => {
         stopDocument();

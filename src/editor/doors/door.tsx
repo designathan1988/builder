@@ -113,11 +113,13 @@ export interface DoorControlProps {
   readonly label?: string;
   // false while what the control stands for arrives with a feature not registered as built (a palette entry's)
   readonly ready?: boolean;
+  // the key context the control acts in, whose shortcut its title shows (the text toolbar's: the text editing keys)
+  readonly keysIn?: KeyContextId;
 }
 
 // A toolbar or panel control, drawn as its door's drawnAs says.
-export function DoorControl({ entry, args = {}, children, expanded, className, label, ready = true }: DoorControlProps) {
-  const door = useDoor(entry, args, label, ready);
+export function DoorControl({ entry, args = {}, children, expanded, className, label, ready = true, keysIn = 'global' }: DoorControlProps) {
+  const door = useDoor(entry, args, label, ready, keysIn);
   const { door: d } = entry;
   const pointerRuns = pressedByPointer(entry);
   const drawnAs = d.kind === 'toolbar' || d.kind === 'panel-control' ? d.drawnAs : 'button';

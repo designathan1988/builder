@@ -788,22 +788,22 @@
     {
       "kind": "handler",
       "id": "text.toggleBold",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",
       "id": "text.toggleItalic",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",
       "id": "text.editLink",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",
       "id": "text.paste",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",

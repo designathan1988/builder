@@ -14,6 +14,11 @@ export interface Rect {
   readonly width: number;
   readonly height: number;
 }
+// what the system clipboard held when a door read it (an argument of type "clipboard"): its HTML as a tree of texts and
+// elements (each element's tag, its href when it has one, its children), its plain text, each null when absent; or
+// the browser's refusal to let the editor read it
+export type ClipboardNode = string | { readonly tag: string; readonly href: string | null; readonly children: readonly ClipboardNode[] };
+export type ClipboardContent = { readonly status: 'read'; readonly html: readonly ClipboardNode[] | null; readonly text: string | null } | { readonly status: 'denied' };
 
 // the arguments of each command (manifest/commands/*.json args)
 export interface CommandArgs {
@@ -176,8 +181,8 @@ export interface CommandArgs {
   "text.insertLineBreak": Record<string, never>;
   "text.toggleBold": Record<string, never>;
   "text.toggleItalic": Record<string, never>;
-  "text.editLink": Record<string, never>;
-  "text.paste": Record<string, never>;
+  "text.editLink": { readonly href?: string };
+  "text.paste": { readonly clipboard: ClipboardContent };
   "text.selectAll": Record<string, never>;
   "view.zoomIn": Record<string, never>;
   "view.zoomOut": Record<string, never>;

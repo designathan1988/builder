@@ -4,6 +4,7 @@
 import type { NodeId } from '../../generated/commands.ts';
 import type { AttributeId, BreakpointId, ElementType, PropertyId, StateId } from '../../generated/ids.ts';
 import type { IdGenerator } from '../ports/ids.ts';
+import type { InlineRun } from '../text/inline.ts';
 
 export type { NodeId };
 
@@ -28,6 +29,9 @@ export interface DocNode {
   readonly styles: Styles;
   // the text of a text element or the markup of a markup element; null for the others
   readonly text: string | null;
+  // the marks of a text element's text (bold, italic, links; src/core/text/inline.ts): its canonical tree of runs, whose
+  // plain text is `text`; absent while nothing in the text is marked (spec text-inline-formatting)
+  readonly inline?: readonly InlineRun[];
   readonly children: readonly DocNode[];
   // hidden on the canvas with its whole subtree, still in the document and in Layers (element.toggleHidden, spec
   // hide-element): true, absent while the element shows. A page's root is never hidden.

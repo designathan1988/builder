@@ -26,16 +26,22 @@
 // important so that no display of the node's own rules shows it; showing it again removes the mark, and the element
 // takes back the layout its own rules give it.
 //
+// A text element's text is drawn with its inline marks (src/core/text/inline.ts): <strong>, <em> and <a href> around
+// its runs, a <br> for each line break.
+//
 // Editor-only too, while a text is edited in place (src/editor/canvas/text-edit.ts): the edited element carries
 // contenteditable="plaintext-only" and data-key-context naming the key context of the edit, is focused with the caret
-// at the end of its text, and takes a line break at the caret when asked; its text is read back from the element (a
-// <br> is "\n"). The marks go when the edit ends, and the element shows again the text the document holds. They are
-// the renderer's state, never the document's, and the page still gets no event handler.
+// at the end of its text, and takes a line break at the caret when asked; its content is read back from the element
+// as runs (a <br> is "\n", <strong> or <b> bold, <em> or <i> italic, <a href> a link), with the text selection as a
+// range of its characters, and is drawn again with the runs and the range a change of its marks produced (spec
+// text-inline-formatting). The marks go when the edit ends, and the element shows again the text the document holds.
+// They are the renderer's state, never the document's, and the page still gets no event handler.
 import type { NodeId } from '../../generated/commands.ts';
 import type { ElementsFile, InteractionsFile, PropertiesFile } from '../../manifest/schema.ts';
 import { walk, type DocNode, type DocumentJson } from '../document/model.ts';
 import { applyPatches, deepEqual, type Patch } from '../history/transaction.ts';
 import { isPageSetting } from '../page/settings.ts';
+import { canonical, runsOf, type InlineRun, type Segment, type TextRange } from '../text/inline.ts';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const ELEMENT_NODE = 1;
@@ -166,22 +172,63 @@ function findNode(root: DocNode, id: NodeId): DocNode | null {
   return null;
 }
 
-// The text an element of a text element shows: its text nodes, a <br> for each line break.
-function shownText(element: Element): string {
-  return [...element.childNodes].map((n) => (n.nodeType === TEXT_NODE ? (n.nodeValue ?? '') : n.nodeName === 'BR' ? '\n' : '')).join('');
+// The pieces of a text element's text on the page, in order: its text nodes and its <br>s ("\n"), each with the marks
+// of the elements around it inside the element (<strong> and <b> bold, <em> and <i> italic, <a href> a link; any other
+// element only holds its text).
+interface Leaf {
+  readonly node: Node;
+  readonly text: string;
+  readonly marks: Omit<Segment, 'text'>;
+}
+const MARK_ELEMENTS: Readonly<Record<string, 'strong' | 'em'>> = { STRONG: 'strong', B: 'strong', EM: 'em', I: 'em' };
+function leavesOf(element: Element): Leaf[] {
+  const out: Leaf[] = [];
+  const visit = (parent: Node, marks: Omit<Segment, 'text'>) => {
+    for (const child of parent.childNodes) {
+      if (child.nodeType === TEXT_NODE) out.push({ node: child, text: child.nodeValue ?? '', marks });
+      else if (child.nodeType !== ELEMENT_NODE) continue;
+      else if (child.nodeName.toUpperCase() === 'BR') out.push({ node: child, text: '\n', marks });
+      else {
+        const name = child.nodeName.toUpperCase();
+        const mark = MARK_ELEMENTS[name];
+        const href = name === 'A' ? (child as Element).getAttribute('href') : null;
+        visit(child, mark !== undefined ? { ...marks, [mark]: true } : href !== null ? { ...marks, href } : marks);
+      }
+    }
+  };
+  visit(element, { strong: false, em: false, href: null });
+  return out;
+}
+const runsOfLeaves = (leaves: readonly Leaf[]): InlineRun[] => runsOf(leaves.map((l) => ({ text: l.text, ...l.marks })));
+
+// The last <br> of an edited text when nothing but empty text follows it: the one a browser needs to show a line
+// break at the very end, which the text read back leaves out.
+function browserBreak(leaves: readonly Leaf[]): Leaf | null {
+  const last = leaves.findLast((l) => l.text !== '');
+  return last !== undefined && last.node.nodeName.toUpperCase() === 'BR' ? last : null;
+}
+
+// Whether a leaf of a text (a text node or a <br>, never the point's own container) lies before a boundary point: the
+// point is inside no leaf but its container, so a leaf is wholly before it or wholly after it.
+const DOCUMENT_POSITION_PRECEDING = 2;
+function precedes(leaf: Node, container: Node, offset: number): boolean {
+  if (container.nodeType === TEXT_NODE) return (container.compareDocumentPosition(leaf) & DOCUMENT_POSITION_PRECEDING) !== 0;
+  const next = container.childNodes[offset] ?? null;
+  if (next === null) return container.contains(leaf) || (container.compareDocumentPosition(leaf) & DOCUMENT_POSITION_PRECEDING) !== 0;
+  return next !== leaf && !next.contains(leaf) && (next.compareDocumentPosition(leaf) & DOCUMENT_POSITION_PRECEDING) !== 0;
+}
+
+// Whether nothing but empty text follows a node of an element's text inside the element (a mark around it included).
+function lastContent(element: Element, node: Node): boolean {
+  const leaves = leavesOf(element);
+  const at = leaves.findIndex((l) => l.node === node);
+  return at >= 0 && leaves.slice(at + 1).every((l) => l.text === '');
 }
 
 // Gives an element exactly the attributes wanted, writing only what differs.
 function writeAttributes(element: Element, wanted: ReadonlyMap<string, string>): void {
   for (const attribute of [...element.attributes]) if (!wanted.has(attribute.name)) element.removeAttribute(attribute.name);
   for (const [name, value] of wanted) if (element.getAttribute(name) !== value) element.setAttribute(name, value);
-}
-
-// Whether nothing but empty text follows a node inside its element.
-function lastContent(node: Node): boolean {
-  let next = node.nextSibling;
-  while (next !== null && next.nodeType === TEXT_NODE && (next.nodeValue ?? '') === '') next = next.nextSibling;
-  return next === null;
 }
 
 export class PageRenderer {
@@ -234,7 +281,7 @@ export class PageRenderer {
     range.deleteContents();
     const lineBreak = this.target.createElement('br');
     range.insertNode(lineBreak);
-    if (lastContent(lineBreak)) lineBreak.after(this.target.createElement('br'));
+    if (lastContent(element, lineBreak)) lineBreak.after(this.target.createElement('br'));
     range.setStartAfter(lineBreak);
     range.collapse(true);
     selection.removeAllRanges();
@@ -249,14 +296,90 @@ export class PageRenderer {
     selection.selectAllChildren(element);
   }
 
-  // The text the edited element holds now ("\n" for each line break, the browser's last <br> left out), or null when
-  // no text is edited.
-  editedText(): string | null {
+  // What the edited element holds now, or null when no text is edited: its canonical runs ("\n" for each line break,
+  // the browser's last <br> left out) and the text selection as a range of their characters, null when the selection
+  // is not inside the element.
+  editedContent(): { readonly runs: InlineRun[]; readonly range: TextRange | null } | null {
     const element = this.edit ? this.elements.get(this.edit.node) : undefined;
     if (!element) return null;
-    const text = shownText(element);
-    const last = [...element.childNodes].filter((n) => !(n.nodeType === TEXT_NODE && (n.nodeValue ?? '') === '')).at(-1);
-    return last?.nodeName === 'BR' ? text.slice(0, -1) : text;
+    const all = leavesOf(element);
+    const dropped = browserBreak(all);
+    const leaves = all.filter((l) => l !== dropped);
+    const length = leaves.reduce((n, l) => n + l.text.length, 0);
+    const selection = this.target.getSelection();
+    const range = selection && selection.rangeCount > 0 ? selection.getRangeAt(0) : null;
+    if (range === null || !element.contains(range.startContainer) || !element.contains(range.endContainer)) return { runs: runsOfLeaves(leaves), range: null };
+    const start = Math.min(this.offsetIn(leaves, range.startContainer, range.startOffset), length);
+    const end = Math.min(this.offsetIn(leaves, range.endContainer, range.endOffset), length);
+    return { runs: runsOfLeaves(leaves), range: { start, end } };
+  }
+
+  // Draws the edited element again with the runs a change of its marks produced (the <br> a browser needs after a line
+  // break at the very end included), selects the range given in it, and gives it the focus back without scrolling.
+  showEdited(runs: readonly InlineRun[], range: TextRange): void {
+    const element = this.edit ? this.elements.get(this.edit.node) : undefined;
+    if (!element) return;
+    element.replaceChildren(...this.runNodes(runs));
+    const leaves = leavesOf(element);
+    if (leaves.findLast((l) => l.text !== '')?.node.nodeName.toUpperCase() === 'BR') element.append(this.target.createElement('br'));
+    this.focusEdited(range);
+  }
+
+  // Gives the edited element the focus back without scrolling, with the range given selected in it (or, with none, the
+  // selection it kept): after a control outside the page held the focus (the link prompt).
+  focusEdited(range: TextRange | null): void {
+    const element = this.edit ? this.elements.get(this.edit.node) : undefined;
+    if (!element) return;
+    (element as HTMLElement).focus({ preventScroll: true });
+    const selection = this.target.getSelection();
+    if (range === null || !selection) return;
+    const all = leavesOf(element);
+    const dropped = browserBreak(all);
+    const leaves = all.filter((l) => l !== dropped);
+    const [endNode, endOffset] = this.pointAt(element, leaves, Math.max(range.start, range.end), false);
+    if (range.start === range.end) {
+      selection.collapse(endNode, endOffset);
+      return;
+    }
+    const [startNode, startOffset] = this.pointAt(element, leaves, Math.min(range.start, range.end), true);
+    selection.setBaseAndExtent(startNode, startOffset, endNode, endOffset);
+  }
+
+  // The number of characters of an edited text before a boundary point inside its element.
+  private offsetIn(leaves: readonly Leaf[], container: Node, offset: number): number {
+    let count = 0;
+    for (const leaf of leaves) {
+      if (leaf.node === container) return count + (leaf.node.nodeType === TEXT_NODE ? offset : 0);
+      if (!precedes(leaf.node, container, offset)) break;
+      count += leaf.text.length;
+    }
+    return count;
+  }
+
+  // The boundary point at a number of characters into an edited text: inside a text node, or before a <br>; at a
+  // boundary between two texts, the start of the next one (`next`, a range's start) or the end of the previous one
+  // (a range's end and a caret, so what is typed next takes the marks of what it follows).
+  private pointAt(element: Element, leaves: readonly Leaf[], offset: number, next: boolean): [Node, number] {
+    let count = 0;
+    for (const leaf of leaves) {
+      const length = leaf.text.length;
+      if (leaf.node.nodeType === TEXT_NODE) {
+        if (offset < count + length || (offset === count + length && !next)) return [leaf.node, offset - count];
+      } else if (offset <= count && leaf.node.parentNode !== null) return [leaf.node.parentNode, [...leaf.node.parentNode.childNodes].indexOf(leaf.node as ChildNode)];
+      count += length;
+    }
+    return [element, element.childNodes.length];
+  }
+
+  // The page's nodes of runs: a text node for each line of a string with a <br> between lines, an element for each mark.
+  private runNodes(runs: readonly InlineRun[]): Node[] {
+    return runs.flatMap((run): Node[] => {
+      if (typeof run === 'string') return run.split('\n').flatMap((line, i) => (i === 0 ? [this.target.createTextNode(line)] : [this.target.createElement('br'), this.target.createTextNode(line)]));
+      const element = this.target.createElement(run.tag);
+      if (run.tag === 'a') element.setAttribute('href', run.href);
+      element.append(...this.runNodes(run.children));
+      return [element];
+    });
   }
 
   // Builds the whole page: once, and when the rendered page itself is replaced.
@@ -371,10 +494,10 @@ export class PageRenderer {
     writeAttributes(element, wanted);
     if (root) writeAttributes(this.target.documentElement, page);
     if (this.model.elements.get(node.type)?.content !== 'text' || edited) return;
-    const text = node.text ?? '';
-    if (!rewrite && shownText(element) === text) return;
-    const lines = text.split('\n');
-    element.replaceChildren(...lines.flatMap((line, i) => (i === 0 ? [this.target.createTextNode(line)] : [this.target.createElement('br'), this.target.createTextNode(line)])));
+    // the text with its marks (src/core/text/inline.ts), or the plain text when nothing is marked
+    const runs = node.inline ?? [node.text ?? ''];
+    if (!rewrite && deepEqual(runsOfLeaves(leavesOf(element)), canonical(runs))) return;
+    element.replaceChildren(...this.runNodes(runs));
   }
 
   // After a change of the node itself: a new tag builds a new element around the same children elements.

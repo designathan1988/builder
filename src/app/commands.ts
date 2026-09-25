@@ -29,7 +29,7 @@ import { canNestIntoPrevious, moveDownCommand, moveToCommand, moveUpCommand, nes
 import { deleteCommand } from '../core/structure/remove.ts';
 import { canUnwrap, unwrapCommand, wrapColumnCommand, wrapRowCommand } from '../core/structure/wrap.ts';
 import { setTextCommand } from '../core/text/text.ts';
-import { cancelEdit, insertLineBreak, selectAllText, singleTextSelection, startEdit } from '../editor/canvas/text-edit.ts';
+import { cancelEdit, editLink, insertLineBreak, pasteText, selectAllText, singleTextSelection, startEdit, toggleBold, toggleItalic } from '../editor/canvas/text-edit.ts';
 import { cancelDrag, levelDown, levelUp } from '../editor/drag/drag-session.ts';
 import { focusActivate, focusFirst, focusLast, focusNext, focusPrevious } from '../editor/focus/focus.ts';
 import { startRename } from '../editor/layers/rename.ts';
@@ -204,10 +204,10 @@ export const COMMANDS = {
   'text.set': setTextCommand,
   'text.cancelEdit': cancelEdit,
   'text.insertLineBreak': insertLineBreak,
-  'text.toggleBold': NOT_AVAILABLE_YET,
-  'text.toggleItalic': NOT_AVAILABLE_YET,
-  'text.editLink': NOT_AVAILABLE_YET,
-  'text.paste': NOT_AVAILABLE_YET,
+  'text.toggleBold': toggleBold,
+  'text.toggleItalic': toggleItalic,
+  'text.editLink': editLink,
+  'text.paste': pasteText,
   'text.selectAll': selectAllText,
   'view.zoomIn': NOT_AVAILABLE_YET,
   'view.zoomOut': NOT_AVAILABLE_YET,

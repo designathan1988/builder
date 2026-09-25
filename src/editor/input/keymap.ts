@@ -3,7 +3,8 @@
 // interactions.json names (text editing, menus, the palette, dialogs and fields inherit nothing, so they keep their
 // own keys). A bound chord's browser default is prevented, whether or not its door runs yet (DESIGN.md "Keyboard
 // model"); a door runs when shortcut-rule.ts says so (DESIGN.md "Build order"). While the hand holds an element
-// (core/structure/hand.ts) the canvas's keys are the hand context's, and they act at the hand's aim.
+// (core/structure/hand.ts) the canvas's keys are the hand context's, and they act at the hand's aim. A command that
+// takes what the system clipboard holds runs once the clipboard is read (src/editor/clipboard.ts).
 import type { CommandId, DoorId, KeyContextId } from '../../generated/ids.ts';
 import { normaliseChord } from '../../manifest/chord.ts';
 import { commandOf, keyContextChain, manifest, type DoorEntry } from '../../manifest/runtime.ts';
@@ -13,6 +14,7 @@ import { isBuilt } from '../../core/commands/registry.ts';
 import { aimArgs, heldHand } from '../../core/structure/hand.ts';
 import { FEATURE_COMMANDS } from '../../generated/commands.ts';
 import { TEXT_EDITING, editArgs } from '../canvas/text-edit.ts';
+import { readClipboard } from '../clipboard.ts';
 import type { EditorStore } from '../store.ts';
 import { openGesture } from './pointer.ts';
 import { shortcutRuns } from './shortcut-rule.ts';
@@ -132,7 +134,12 @@ export function installKeymap(store: EditorStore, target: Window = window): () =
           : focusedArgs(event.target, binding.command.id);
     if (own === null) return;
     const dispatch = (gesture?.gesture.dispatch ?? store.dispatch) as (id: CommandId, args: unknown) => DispatchResult;
-    dispatch(binding.command.id, { ...own, ...binding.door.args });
+    const args = { ...own, ...binding.door.args };
+    // a command that takes what the system clipboard holds (an argument of type clipboard: text.paste) runs once the
+    // clipboard is read (src/editor/clipboard.ts); a key held during a gesture never waits for it
+    const clipboard = Object.entries(binding.command.args).find(([name, arg]) => arg.type === 'clipboard' && !(name in args))?.[0];
+    if (clipboard === undefined) dispatch(binding.command.id, args);
+    else if (gesture === null) void readClipboard().then((content) => dispatch(binding.command.id, { ...args, [clipboard]: content }));
   };
   target.addEventListener('keydown', onKeyDown);
   return () => target.removeEventListener('keydown', onKeyDown);

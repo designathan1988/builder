@@ -572,6 +572,9 @@ const argSchema = z.strictObject({
     'point',
     'rect',
     'file',
+    // what the system clipboard holds when the door runs: the door reads it (src/editor/clipboard.ts) and the command
+    // runs with it, so a scenario's step leaves it out, as it leaves out a gesture's rect or point
+    'clipboard',
   ]),
   values: z.array(z.string()),
   optional: z.boolean(),

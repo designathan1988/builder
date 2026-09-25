@@ -12,7 +12,8 @@
 // tile and fades out (spec drag-level-keys-escape, Problems in Pager 4). While the keyboard's hand holds an element
 // (core/structure/hand.ts), the same indicator stands at the hand's aim, with the refusal the move would meet there
 // (spec hand-keyboard-move, "Visual feedback"). While a text is edited in place, its outline and label ("Editing
-// text · Intro") wear the text editing mode colour instead of the selection's.
+// text · Intro") wear the text editing mode colour instead of the selection's, and the text toolbar (text-toolbar.tsx)
+// sits above the label, the two placed as one by the label rule; the toolbar's controls take presses of their own.
 // The label of the one selected element is the one part of the chrome that takes a
 // press: pointer.ts reads it (data-label-for) as a press on that element (spec select-click, "Hit zones"). Where a
 // node is on the screen comes from the
@@ -36,6 +37,7 @@ import { band, drag, ghostReturn, hover, type DragView, type GhostReturn } from 
 import { useEditorState } from '../store.ts';
 import { useT } from '../text.ts';
 import { canvasFrame, contentBoxes, flowAxis, nodeBox } from './coordinates.ts';
+import { TextToolbar } from './text-toolbar.tsx';
 
 // the palette's entries by id: the element a creation drag inserts and the words that name it
 const PALETTE = new Map(manifest.elements.palette.flatMap((g) => g.entries.map((e) => [e.id, e] as const)));
@@ -99,10 +101,12 @@ interface Layout {
   readonly union: Box | null;
   readonly hovered: Box | null;
   readonly label: { readonly box: Box; readonly placement: Placement } | null;
+  // where the text toolbar goes while a text is edited in place: above the edit's label, placed with it as one
+  readonly toolbar: { readonly x: number; readonly y: number } | null;
   // the marquee's band while one is drawn (pointer.ts)
   readonly band: Box | null;
 }
-const EMPTY: Layout = { selected: [], union: null, hovered: null, label: null, band: null };
+const EMPTY: Layout = { selected: [], union: null, hovered: null, label: null, toolbar: null, band: null };
 
 // the smallest box around every box given; null for none
 export function unionOf(boxes: readonly Box[]): Box | null {
@@ -327,6 +331,8 @@ export function CanvasChrome() {
   const t = useT();
   const layer = useRef<HTMLDivElement>(null);
   const label = useRef<HTMLDivElement>(null);
+  // the text toolbar while a text is edited in place (text-toolbar.tsx)
+  const bar = useRef<HTMLDivElement>(null);
   const [layout, setLayout] = useState<Layout>(EMPTY);
 
   useEffect(() => {
@@ -338,6 +344,7 @@ export function CanvasChrome() {
     }
     let placedFor = '';
     let placed: Layout['label'] = null;
+    let placedToolbar: Layout['toolbar'] = null;
     const measure = () => {
       const iframe = canvasFrame();
       const origin = layer.current?.getBoundingClientRect();
@@ -348,24 +355,32 @@ export function CanvasChrome() {
         // the label belongs to the one selected node, or to the union of several
         const first = union ?? selected[0];
         const size = label.current ? { width: label.current.offsetWidth, height: label.current.offsetHeight } : null;
+        const tools = editing && bar.current ? { width: bar.current.offsetWidth, height: bar.current.offsetHeight } : null;
         // the label is placed again only when its element or its size moved: reading the page's content is the slow part
-        const key = JSON.stringify([first, size]);
-        if (first === undefined || size === null) placed = null;
-        else if (key !== placedFor) {
+        const key = JSON.stringify([first, size, tools]);
+        if (first === undefined || size === null) {
+          placed = null;
+          placedToolbar = null;
+        } else if (key !== placedFor) {
           const gap = parseFloat(getComputedStyle(layer.current as HTMLDivElement).getPropertyValue('--space-2')) || 0;
           const content = contentBoxes(iframe).map((b) => local(b) as Box);
-          placed = placeLabel(first, size, gap, content, { x: 0, y: 0, width: origin.width, height: origin.height });
+          // while a text is edited in place, its toolbar sits above its label and the two are placed as one, by the
+          // label rule, in free space (DESIGN.md "Canvas", text)
+          const whole = tools === null ? size : { width: Math.max(size.width, tools.width), height: tools.height + gap + size.height };
+          const spot = placeLabel(first, whole, gap, content, { x: 0, y: 0, width: origin.width, height: origin.height });
+          placed = tools === null ? spot : { placement: spot.placement, box: { x: spot.box.x, y: spot.box.y + tools.height + gap, ...size } };
+          placedToolbar = tools === null ? null : { x: spot.box.x, y: spot.box.y };
         }
         placedFor = key;
         const hoveredBox = hovered !== null && !selection.includes(hovered as (typeof selection)[number]) ? local(nodeBox(iframe, hovered)) : null;
-        const next: Layout = { selected, union, hovered: hoveredBox, label: placed, band: local(drawnBand) };
+        const next: Layout = { selected, union, hovered: hoveredBox, label: placed, toolbar: placedToolbar, band: local(drawnBand) };
         setLayout((before) => (same(before, next) ? before : next));
       }
       request = requestAnimationFrame(measure);
     };
     request = requestAnimationFrame(measure);
     return () => cancelAnimationFrame(request);
-  }, [selection, targets, hovered, node, drawnBand]);
+  }, [selection, targets, hovered, node, drawnBand, editing]);
 
   const at = (b: Box): CSSProperties => ({ left: b.x, top: b.y, width: b.width, height: b.height });
   const shown = selection.length === 0 && hovered === null && drawnBand === null ? EMPTY : layout;
@@ -415,6 +430,7 @@ export function CanvasChrome() {
           )}
         </div>
       ) : null}
+      {editing && node !== null ? <TextToolbar bar={bar} className={shown.toolbar ? '' : 'is-measuring'} style={shown.toolbar ? { left: shown.toolbar.x, top: shown.toolbar.y } : undefined} /> : null}
     </div>
   );
 }

@@ -434,7 +434,13 @@
       "labelKey": "command.textEdit.link",
       "owner": "src/editor/canvas/text-edit.ts",
       "introducedBy": "text-inline-formatting",
-      "args": {},
+      "args": {
+        "href": {
+          "type": "string",
+          "values": [],
+          "optional": true
+        }
+      },
       "availability": {
         "predicate": "always",
         "refusalKey": null
@@ -497,12 +503,19 @@
       "labelKey": "command.textEdit.paste",
       "owner": "src/editor/canvas/text-edit.ts",
       "introducedBy": "text-inline-formatting",
-      "args": {},
+      "args": {
+        "clipboard": {
+          "type": "clipboard",
+          "values": [],
+          "optional": false
+        }
+      },
       "availability": {
         "predicate": "always",
         "refusalKey": null
       },
       "refusals": [
+        "status.paste.empty",
         "status.clipboard.denied"
       ],
       "confirmation": null,

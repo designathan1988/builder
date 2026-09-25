@@ -993,6 +993,85 @@ kbd {
   color: var(--color-on-mode-text);
 }
 
+/* the text toolbar while a text is edited in place (text-toolbar.tsx): Bold, Italic and Link in a floating bar above
+   the edit's label; its controls take presses of their own (pointer.ts leaves the focus in the text) */
+.text-toolbar {
+  position: absolute;
+  display: flex;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-2);
+  pointer-events: auto;
+}
+
+.text-toolbar.is-measuring {
+  visibility: hidden;
+}
+
+.text-toolbar .door--icon-button {
+  width: var(--size-target-min);
+  min-width: var(--size-target-min);
+  height: var(--size-target-min);
+}
+
+/* the link prompt under the text toolbar, over its backdrop, over every region of the window */
+.link-prompt {
+  display: contents;
+}
+
+.link-prompt__panel {
+  position: fixed;
+  z-index: 50;
+  display: grid;
+  gap: var(--space-2);
+  width: calc(var(--size-inspector) - var(--space-8));
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-2);
+  color: var(--color-text);
+  font: var(--fw-body) var(--fs-body) / var(--lh-body) var(--font-ui);
+}
+
+.link-prompt__panel.is-measuring {
+  visibility: hidden;
+}
+
+.link-prompt__label {
+  font: var(--fw-label) var(--fs-label) / var(--lh-label) var(--font-ui);
+}
+
+.link-prompt__field {
+  height: var(--size-control-lg);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-sunken);
+  color: var(--color-text);
+}
+
+.link-prompt__field[aria-invalid='true'] {
+  border-color: var(--color-danger);
+}
+
+.link-prompt__field::placeholder {
+  color: var(--color-text-subtle);
+}
+
+.link-prompt__hint {
+  margin: 0;
+  color: var(--color-text-muted);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-ui);
+}
+
+.link-prompt__hint.is-refused {
+  color: var(--color-danger);
+}
+
 /* the label of the one selected element is a hit target of the canvas (select-click, drag-reorder-canvas): a press on
    it selects that element and arms its drag (pointer.ts); the rest of the chrome takes no pointer event */
 .chrome__label.is-target:not(.is-measuring, .is-hidden) {

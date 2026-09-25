@@ -7,6 +7,8 @@
 import type { ElementType, MessageId } from '../../generated/ids.ts';
 import type { Attribute, ElementsFile, GeneratedHtml, PropertiesFile } from '../../manifest/schema.ts';
 import { contentModelFrom, type ContentModel } from '../elements/content-model.ts';
+import { deepEqual } from '../history/transaction.ts';
+import { canonical, hasMarks, parseInline, plainText } from '../text/inline.ts';
 import { DOCUMENT_VERSION, walk, type DocNode, type DocumentJson, type Selection } from './model.ts';
 
 export interface ElementRules {
@@ -199,6 +201,17 @@ function validateNode(
   const holdsText = element.content === 'text' || element.content === 'markup';
   if (holdsText && typeof node.text !== 'string') bad(`${at}/text`, `a ${node.type} holds its ${element.content}`);
   if (!holdsText && node.text !== null) bad(`${at}/text`, `a ${node.type} holds no text`);
+  // the marks of a text element's text (model.ts, src/core/text/inline.ts): the canonical tree of its text, links with
+  // allowed addresses only, and only while something is marked
+  if ('inline' in node) {
+    const runs = parseInline(node.inline);
+    if (element.content !== 'text') bad(`${at}/inline`, `a ${node.type} holds no marked text`);
+    else if (runs === null) bad(`${at}/inline`, 'inline is a tree of strings, strong, em and a runs');
+    else if (runs === 'unsafe') bad(`${at}/inline`, 'a link’s address starts with http, https, mailto or tel');
+    else if (!hasMarks(runs)) bad(`${at}/inline`, 'inline is absent while nothing in the text is marked');
+    else if (plainText(runs) !== node.text) bad(`${at}/inline`, 'the text of inline is the element’s text');
+    else if (!deepEqual(canonical(runs), runs)) bad(`${at}/inline`, 'inline is the canonical tree of the marked text');
+  }
   if (!Array.isArray(node.children)) {
     bad(`${at}/children`, 'children is a list');
     return;

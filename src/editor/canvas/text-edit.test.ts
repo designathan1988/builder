@@ -13,7 +13,7 @@ import { manifest } from '../../manifest/runtime.ts';
 import { clickDoor, editEndDoor, type Press } from '../input/pointer.ts';
 import { INITIAL_PREFERENCES } from '../preferences/preferences.ts';
 import { initialEditorUi, type EditorUi } from '../state.ts';
-import { editArgs, endOffSelection, endOnUndoable, isTextElement, registerEditReader } from './text-edit.ts';
+import { editArgs, editedLinkAddress, endOffSelection, endOnUndoable, isTextElement, openLinkPrompt, registerEditReader } from './text-edit.ts';
 
 const AURORA = fixture as DocumentJson;
 const COMMAND = new Map(manifest.commands.map((c) => [c.id as CommandId, c]));
@@ -75,12 +75,12 @@ describe('inline text editing', () => {
   it('asks for a line break at the caret only while editing, and Escape ends the edit recording nothing', () => {
     const store = editorStore();
     store.dispatch('text.insertLineBreak', {});
-    expect(store.getState().ui.textEdit).toEqual({ node: null, lineBreaks: 0, selectAlls: 0 });
+    expect(store.getState().ui.textEdit).toEqual({ node: null, lineBreaks: 0, selectAlls: 0, changes: 0, change: null, linkPrompt: null });
     store.dispatch('selection.select', { target: 'n-intro' });
     store.dispatch('text.startEdit', {});
     store.dispatch('text.insertLineBreak', {});
     store.dispatch('text.insertLineBreak', {});
-    expect(store.getState().ui.textEdit).toEqual({ node: 'n-intro', lineBreaks: 2, selectAlls: 0 });
+    expect(store.getState().ui.textEdit).toEqual({ node: 'n-intro', lineBreaks: 2, selectAlls: 0, changes: 0, change: null, linkPrompt: null });
     store.dispatch('text.cancelEdit', {});
     expect(store.getState().ui.textEdit.node).toBeNull();
     expect(store.getState().message).toEqual({ key: 'status.textEdit.cancelled', params: { name: 'Intro' } });
@@ -108,7 +108,7 @@ describe('inline text editing', () => {
 
   it("hands a door of the edit the node and the text the page's element holds, for the arguments it declares", () => {
     const store = editorStore();
-    const stop = registerEditReader(() => 'typed');
+    const stop = registerEditReader(() => ({ runs: ['typed'], range: null }));
     expect(editArgs(store.getState(), command('text.set'))).toBeNull();
     store.dispatch('selection.select', { target: 'n-intro' });
     store.dispatch('text.startEdit', {});
@@ -134,6 +134,90 @@ describe('inline text editing', () => {
     expect(editEndDoor(title, 'primary', 1, null, text)).toBeNull();
     // the press's own door is never the one that keeps the text
     expect(clickDoor(title, 'primary', 1, null, editing)?.ref).toBe('selection.select#canvas-click-element-or-page');
+  });
+
+  it('asks for a mark toggled only while editing (spec text-inline-formatting): Ctrl+B bold, Ctrl+I italic', () => {
+    const store = editorStore();
+    store.dispatch('text.toggleBold', {});
+    expect(store.getState().ui.textEdit.changes).toBe(0);
+    store.dispatch('selection.select', { target: 'n-intro' });
+    store.dispatch('text.startEdit', {});
+    store.dispatch('text.toggleBold', {});
+    expect(store.getState().ui.textEdit).toMatchObject({ changes: 1, change: { kind: 'mark', mark: 'strong' } });
+    store.dispatch('text.toggleItalic', {});
+    expect(store.getState().ui.textEdit).toMatchObject({ changes: 2, change: { kind: 'mark', mark: 'em' } });
+    // nothing is written until the text is kept
+    expect(store.getState().document).toBe(AURORA);
+    expect(store.getState().history.past).toHaveLength(0);
+  });
+
+  it('opens the link prompt for an address, refuses one that is not allowed and keeps the prompt, and closes it with the address', () => {
+    const store = editorStore();
+    store.dispatch('selection.select', { target: 'n-intro' });
+    store.dispatch('text.startEdit', {});
+    store.dispatch('text.editLink', {});
+    expect(openLinkPrompt(store.getState().ui)).toEqual({ count: 1, dismissals: 0 });
+    expect(store.getState().message).toEqual({ key: 'status.link.asking', params: {} });
+    expect(store.dispatch('text.editLink', { href: 'javascript:alert(1)' })).toEqual({ status: 'refused', message: { key: 'status.link.unsafe', params: {} } });
+    expect(openLinkPrompt(store.getState().ui)).not.toBeNull();
+    expect(store.getState().ui.textEdit.changes).toBe(0);
+    store.dispatch('text.editLink', { href: ' https://example.com ' });
+    expect(openLinkPrompt(store.getState().ui)).toBeNull();
+    expect(store.getState().ui.textEdit).toMatchObject({ changes: 1, change: { kind: 'link', href: 'https://example.com' } });
+    // an empty address removes the link
+    store.dispatch('text.editLink', {});
+    store.dispatch('text.editLink', { href: '' });
+    expect(store.getState().ui.textEdit).toMatchObject({ changes: 2, change: { kind: 'link', href: null }, linkPrompt: null });
+    expect(store.getState().document).toBe(AURORA);
+  });
+
+  it('closes the link prompt on a dismissal (its backdrop) and when the edit ends', () => {
+    const store = editorStore();
+    store.dispatch('selection.select', { target: 'n-intro' });
+    store.dispatch('text.startEdit', {});
+    store.dispatch('text.editLink', {});
+    store.dispatch('ui.dismiss', {});
+    expect(openLinkPrompt(store.getState().ui)).toBeNull();
+    expect(store.getState().ui.textEdit.node).toBe('n-intro');
+    store.dispatch('text.editLink', {});
+    expect(openLinkPrompt(store.getState().ui)).not.toBeNull();
+    store.dispatch('text.cancelEdit', {});
+    expect(store.getState().ui.textEdit.linkPrompt).toBeNull();
+  });
+
+  it('pastes what the clipboard held as marked text, and refuses an empty or unreadable clipboard', () => {
+    const store = editorStore();
+    store.dispatch('selection.select', { target: 'n-intro' });
+    store.dispatch('text.startEdit', {});
+    expect(store.dispatch('text.paste', { clipboard: { status: 'denied' } })).toEqual({ status: 'refused', message: { key: 'status.clipboard.denied', params: {} } });
+    expect(store.dispatch('text.paste', { clipboard: { status: 'read', html: null, text: null } })).toEqual({ status: 'refused', message: { key: 'status.paste.empty', params: {} } });
+    expect(store.dispatch('text.paste', { clipboard: { status: 'read', html: [{ tag: 'script', href: null, children: ['alert(1)'] }], text: null } }).status).toBe('refused');
+    expect(store.getState().ui.textEdit.changes).toBe(0);
+    store.dispatch('text.paste', { clipboard: { status: 'read', html: [{ tag: 'b', href: null, children: ['RICH'] }, ' x'], text: 'RICH x' } });
+    expect(store.getState().ui.textEdit).toMatchObject({ changes: 1, change: { kind: 'insert', runs: [{ tag: 'strong', children: ['RICH'] }, ' x'] } });
+    expect(store.getState().document).toBe(AURORA);
+  });
+
+  it('hands text.set the tree of runs when something in the edited text is marked, the plain text otherwise', () => {
+    const store = editorStore();
+    store.dispatch('selection.select', { target: 'n-intro' });
+    store.dispatch('text.startEdit', {});
+    const stop = registerEditReader(() => ({ runs: ['Fresh ', { tag: 'strong', children: ['coffee'] }], range: { start: 6, end: 12 } }));
+    expect(editArgs(store.getState(), command('text.set'))).toEqual({ target: 'n-intro', content: ['Fresh ', { tag: 'strong', children: ['coffee'] }] });
+    expect(editedLinkAddress()).toBeNull();
+    stop();
+    const linked = registerEditReader(() => ({ runs: [{ tag: 'a', href: 'https://example.com', children: ['Fresh'] }, ' coffee'], range: { start: 2, end: 2 } }));
+    expect(editedLinkAddress()).toBe('https://example.com');
+    linked();
+    // a node that holds marks: an edit that took them all off hands its whole tree, so the marks go
+    store.dispatch('text.set', { target: 'n-intro', content: [{ tag: 'strong', children: ['Fresh'] }, ' coffee, roasted every week.'] });
+    expect(locate(store.getState().document, 'n-intro')?.node.inline).toEqual([{ tag: 'strong', children: ['Fresh'] }, ' coffee, roasted every week.']);
+    store.dispatch('text.startEdit', {});
+    const plain = registerEditReader(() => ({ runs: ['Fresh coffee, roasted every week.'], range: null }));
+    expect(editArgs(store.getState(), command('text.set'))).toEqual({ target: 'n-intro', content: ['Fresh coffee, roasted every week.'] });
+    store.dispatch('text.set', { target: 'n-intro', content: ['Fresh coffee, roasted every week.'] });
+    expect(locate(store.getState().document, 'n-intro')?.node).not.toHaveProperty('inline');
+    plain();
   });
 
   it('knows the text elements of the manifest', () => {
