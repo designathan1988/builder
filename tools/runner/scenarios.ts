@@ -183,6 +183,20 @@ export function blockers(f: Feature): string[] {
 export const runnable = (f: Feature) => registered(f) && blockers(f).length === 0;
 export const FEATURE_TAG = (id: string) => `@feature:${id}`;
 
+// the language the editor shows now (the shell writes it on the document element)
+const uiLocale = (page: Page) => page.evaluate(() => document.documentElement.lang);
+// the language the scenario expects after its steps (the action step run through `action`): the one the last step
+// that chooses a language chooses (its door's or its own `locale`), else the setup's
+function localeAfter(s: Scenario, action: string): string {
+  for (const step of [...s.steps].reverse()) {
+    const ref = step.action ? action : step.door;
+    if (commandOf(ref) !== 'preferences.setLanguage') continue;
+    const chosen = doorData(ref).args.locale ?? step.args.locale;
+    if (typeof chosen === 'string') return chosen;
+  }
+  return s.setup.locale;
+}
+
 // a message's text, as the app's own i18n runtime writes it (src/i18n/index.ts, served by the dev server)
 const text = (page: Page, locale: string, key: string, params: Record<string, string | number>) =>
   page.evaluate(
@@ -659,6 +673,8 @@ async function setUp(page: Page, s: Scenario): Promise<unknown> {
   await page.reload();
   await expect(page.locator('.workbench')).toBeVisible();
   if (s.setup.locale !== environment.locales.default) await runDoor(page, settingDoor('preferences.setLanguage', 'locale', s.setup.locale));
+  // the editor shows the setup's language, whether a door switched it or it is the default
+  await expect.poll(() => uiLocale(page), { message: `setup locale ${s.setup.locale}` }).toBe(s.setup.locale);
   if (s.setup.fixture !== EMPTY_FIXTURE) {
     // File › Open, with the browser's file chooser, as a user opens a project
     await openMenu(page, 'file');
@@ -759,7 +775,8 @@ export function registerScenarioTests(): void {
             }
             const last = render.feedback.at(-1);
             if (render.feedback.length > 1) throw new Error('the status bar shows the last message only');
-            if (last) await expect(page.getByRole('status'), 'feedback').toHaveText(await text(page, s.setup.locale, last.key, last.params));
+            // in the language the scenario expects after its steps: a step may choose one (ui-language)
+            if (last) await expect(page.getByRole('status'), 'feedback').toHaveText(await text(page, localeAfter(s, door), last.key, last.params));
           }
 
           const editor = s.expect.editor;
@@ -800,7 +817,7 @@ export function registerScenarioTests(): void {
           // of the same key
           for (const refusal of s.refusals) {
             const params = render?.feedback.find((f) => f.key === refusal.key)?.params ?? {};
-            await expect(page.getByRole('status'), 'refusal').toHaveText(await text(page, s.setup.locale, refusal.key, params));
+            await expect(page.getByRole('status'), 'refusal').toHaveText(await text(page, localeAfter(s, door), refusal.key, params));
             expect(matchDocument(after.document, beforeAction), 'refused: the refused step leaves the document unchanged').toEqual([]);
           }
 

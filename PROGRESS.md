@@ -7,7 +7,7 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 - Group 01 and the foundation pass. One e2e suite at a time (E2E_WORKERS=4), no dev server meanwhile; helpers: 3.
 - First task: the feature table runs the runner, the census and the Insert tiles; every door gated by its feature
   (branch wip/feature-table) waits for project-open-json, whose File › Open loads every fixture.
-- Group 03 passing: autosave-restore, project-save-json. Waiting for the user: project-open-json (below; code on
+- Group 03 passing: autosave-restore, project-save-json, ui-language. Waiting for the user: project-open-json (below; code on
   branch wip/project-open-json, 4 of 5 scenarios pass).
 - Group 02 passing: select-click, layers-tree, keyboard-tree-walk, palette-click-insert, undo-redo,
   multi-select-click, marquee-select, delete-element, move-up-down, wrap-row-column, drag-reorder-canvas,

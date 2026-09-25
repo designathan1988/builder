@@ -109,6 +109,12 @@ Decisions by small ambiguity (moved here from PROGRESS.md):
   lands second reconciles. The tooth now also switches off the commands of a feature's scenario action doors
   (drag.cancel here), so a scenario acting through another command's door still fails. Runner paths proven off:
   the tile press (4 of 4 failed) and the held drag (the held scenario failed on the document).
+- ui-language: Pager never calls setLocale (unreachable catalogue); ours switches from View › Language and the
+  status bar, stored in the preferences. The runner now asserts the setup's language (the shell's
+  documentElement.lang) and reads feedback in the language the scenario expects after its steps (the last step that
+  chooses one): reading the page's current language instead left a scenario without a tooth (it passed with the
+  handler off), so the expected language comes from the scenario's own data. A unit test proves both catalogues share
+  keys and placeholders (planted "{nome}" failed it).
 - The tooth proof prints why each test failed (the first line and the matcher) and counts a failure that only ran
   out of time on an action or a wait (`locator.click: Timeout 5000ms exceeded.`) as no tooth, like a test timeout: a
   tooth fails on an assertion (brief "a aplicação completa").

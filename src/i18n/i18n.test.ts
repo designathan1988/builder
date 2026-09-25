@@ -61,6 +61,15 @@ describe('the i18n runtime', () => {
     expect(translate('pt-BR', 'canvas.pickTarget', { name: 'Card' })).toBe('Alvo: Card · clique para escolher');
   });
 
+  it('has the same keys in both catalogues, and for every key the same placeholders (spec ui-language, Problem 3)', () => {
+    const placeholders = (text: string) => [...new Set([...text.matchAll(/\{(\w+)\}/g)].map((m) => m[1]))].sort();
+    expect(Object.keys(ptBR).sort()).toEqual(Object.keys(en).sort());
+    const differ = Object.entries(en)
+      .filter(([key, text]) => JSON.stringify(placeholders(text)) !== JSON.stringify(placeholders((ptBR as Record<string, string>)[key] ?? '')))
+      .map(([key]) => key);
+    expect(differ, 'keys whose placeholders differ between en and pt-BR').toEqual([]);
+  });
+
   it('throws when a placeholder has no value, in both locales', () => {
     expect(() => translate('en', 'canvas.editingText')).toThrow('Missing parameter "name"');
     expect(() => translate('pt-BR', 'canvas.editingText')).toThrow('Missing parameter "name"');

@@ -43,7 +43,7 @@ export const FEATURES = {
   'hide-element': NOT_AVAILABLE_YET,
   // 03 app and persistence
   'app-menu': NOT_AVAILABLE_YET,
-  'ui-language': NOT_AVAILABLE_YET,
+  'ui-language': registerFeature('ui-language'),
   'autosave-restore': registerFeature('autosave-restore'),
   'unsaved-work-guard': NOT_AVAILABLE_YET,
   'autosave-crash-recovery': NOT_AVAILABLE_YET,
