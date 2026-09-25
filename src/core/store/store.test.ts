@@ -143,7 +143,7 @@ describe('the store', () => {
   it('changes nothing for a command whose entry is NOT_AVAILABLE_YET', () => {
     const { store } = testStore();
     const before = store.getState();
-    expect(store.dispatch('element.duplicate', {})).toEqual({ status: 'not-available-yet' });
+    expect(store.dispatch('timeline.stop', {})).toEqual({ status: 'not-available-yet' });
     expect(store.getState()).toBe(before);
   });
 
@@ -282,7 +282,7 @@ describe('the store', () => {
     s.store.dispatch('selection.select', { target: id });
     s.store.dispatch('position.move', { dx: 1, dy: 0 });
     // a command that is not available yet is a command in between as well
-    s.store.dispatch('element.duplicate', {});
+    s.store.dispatch('timeline.stop', {});
     s.store.dispatch('position.move', { dx: 1, dy: 0 });
     expect(s.store.getState().history.past.map((t) => t.command)).toEqual(['element.insert', 'position.move', 'position.move', 'position.move']);
   });
@@ -367,7 +367,7 @@ describe('the store', () => {
     let calls = 0;
     const off = s.store.subscribe(() => calls++);
     insertInto(s);
-    s.store.dispatch('element.duplicate', {});
+    s.store.dispatch('timeline.stop', {});
     expect(calls).toBe(1);
     off();
     insertInto(s);

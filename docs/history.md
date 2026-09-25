@@ -62,6 +62,10 @@ Decisions by small ambiguity (moved here from PROGRESS.md):
   selects that node; running an item dispatches ui.dismiss; the Layers row's secondary door is drawn by the row
   itself (manifest: control "row", button "secondary", schema field added); a step before the action whose canvas
   click hits a node with no point of its own runs the same command's Layers row door instead (annotated).
+- duplicate (waited for context-menu: its scenario duplicate-from-the-menu opens it): each node of a copy gets a new
+  id and the first free numbered name ("Intro 2" copies to "Intro 3"); several selected roots each copied after
+  their original in one undo step, the copies selected (primary's first), status.duplicatedMany; the page root is
+  refused. Not built: status.refused.singleChild, status.locked.edit, renaming HTML ids inside a copy.
 - Playwright runs at most 3 workers (the machine froze with helpers in parallel at the default 12; the test Chrome
   already draws on the RTX 3060 through ANGLE D3D11, checked).
 

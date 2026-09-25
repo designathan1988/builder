@@ -17,6 +17,7 @@ import {
   walkParentCommand,
   walkPreviousSiblingCommand,
 } from '../core/selection/selection.ts';
+import { duplicateCommand } from '../core/structure/duplicate.ts';
 import { insertCommand } from '../core/structure/insert.ts';
 import { moveDownCommand, moveToCommand, moveUpCommand } from '../core/structure/move.ts';
 import { deleteCommand } from '../core/structure/remove.ts';
@@ -157,7 +158,7 @@ export const COMMANDS = {
   'element.wrapColumn': wrapColumnCommand,
   'element.nestIntoPrevious': NOT_AVAILABLE_YET,
   'element.promote': NOT_AVAILABLE_YET,
-  'element.duplicate': NOT_AVAILABLE_YET,
+  'element.duplicate': duplicateCommand,
   'element.delete': deleteCommand,
   'element.unwrap': NOT_AVAILABLE_YET,
   'element.createNaturalChild': NOT_AVAILABLE_YET,
