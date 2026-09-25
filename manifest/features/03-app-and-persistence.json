@@ -51,7 +51,7 @@
         "preferences.setLanguage"
       ],
       "dependsOn": [],
-      "spec": null,
+      "spec": "spec/behavior/ui-language.md",
       "intent": {
         "title": "UI language: English by default, Brazilian Portuguese available",
         "steps": [
@@ -66,7 +66,46 @@
           "Tests that assert UI text set the language explicitly or read the text through its i18n key."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "portuguese-re-renders-the-editor-and-is-kept",
+          "setup": { "fixture": "aurora", "selection": [], "context": "global", "breakpoint": "desktop", "state": "base", "locale": "en", "viewport": "desktop-1440", "zoom": "fit" },
+          "steps": [
+            { "door": "preferences.setLanguage#menu-language-pt-br", "args": {}, "target": null, "drop": null, "action": true, "hold": false, "type": null },
+            { "door": "selection.select#canvas-click-element-or-page", "args": { "target": "/Page/Hero/Intro" }, "target": "/Page/Hero/Intro", "drop": null, "action": false, "hold": false, "type": null }
+          ],
+          "doors": ["preferences.setLanguage#menu-language-pt-br"],
+          "expect": {
+            "document": [],
+            "selection": ["/Page/Hero/Intro"],
+            "history": { "undoSteps": 0, "undoRestores": true, "redoRestores": true },
+            "render": { "computed": [], "geometry": [], "feedback": [{ "key": "status.selected", "params": { "name": "Intro" } }] },
+            "editor": null,
+            "persistence": { "reload": "immediate", "document": null, "preferences": "same" },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "english-brings-the-editor-back-and-is-kept",
+          "setup": { "fixture": "aurora", "selection": [], "context": "global", "breakpoint": "desktop", "state": "base", "locale": "pt-BR", "viewport": "desktop-1440", "zoom": "fit" },
+          "steps": [
+            { "door": "preferences.setLanguage#menu-language-en", "args": {}, "target": null, "drop": null, "action": true, "hold": false, "type": null },
+            { "door": "selection.select#canvas-click-element-or-page", "args": { "target": "/Page/Hero/Intro" }, "target": "/Page/Hero/Intro", "drop": null, "action": false, "hold": false, "type": null }
+          ],
+          "doors": ["preferences.setLanguage#menu-language-en"],
+          "expect": {
+            "document": [],
+            "selection": ["/Page/Hero/Intro"],
+            "history": { "undoSteps": 0, "undoRestores": true, "redoRestores": true },
+            "render": { "computed": [], "geometry": [], "feedback": [{ "key": "status.selected", "params": { "name": "Intro" } }] },
+            "editor": null,
+            "persistence": { "reload": "immediate", "document": null, "preferences": "same" },
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
     },
     {
       "id": "autosave-restore",
