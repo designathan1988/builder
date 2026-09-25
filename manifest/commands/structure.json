@@ -36,6 +36,7 @@
         "status.refused.labelOneControl",
         "status.refused.noChildren",
         "status.locked.insert",
+        "status.locked.byAncestor",
         "status.drop.outsidePage",
         "status.readOnlyTab"
       ],
@@ -188,6 +189,8 @@
         "status.refused.noChildren",
         "status.refused.intoItself",
         "status.locked.move",
+        "status.locked.insert",
+        "status.locked.byAncestor",
         "status.drop.outsidePage"
       ],
       "confirmation": null,
@@ -410,7 +413,8 @@
       "refusals": [
         "status.move.alreadyFirst",
         "status.wrap.needsSameParent",
-        "status.locked.move"
+        "status.locked.move",
+        "status.locked.byAncestor"
       ],
       "confirmation": null,
       "history": {
@@ -539,7 +543,8 @@
       "refusals": [
         "status.move.alreadyLast",
         "status.wrap.needsSameParent",
-        "status.locked.move"
+        "status.locked.move",
+        "status.locked.byAncestor"
       ],
       "confirmation": null,
       "history": {
@@ -675,7 +680,8 @@
         "status.refused.singleChild",
         "status.refused.labelOneControl",
         "status.refused.noChildren",
-        "status.locked.edit"
+        "status.locked.edit",
+        "status.locked.byAncestor"
       ],
       "confirmation": null,
       "history": {
@@ -791,7 +797,8 @@
         "status.refused.singleChild",
         "status.refused.labelOneControl",
         "status.refused.noChildren",
-        "status.locked.edit"
+        "status.locked.edit",
+        "status.locked.byAncestor"
       ],
       "confirmation": null,
       "history": {
@@ -905,7 +912,9 @@
         "status.refused.singleChild",
         "status.refused.labelOneControl",
         "status.refused.noChildren",
-        "status.locked.move"
+        "status.locked.move",
+        "status.locked.insert",
+        "status.locked.byAncestor"
       ],
       "confirmation": null,
       "history": {
@@ -1020,7 +1029,8 @@
         "status.refused.singleChild",
         "status.refused.labelOneControl",
         "status.refused.noChildren",
-        "status.locked.move"
+        "status.locked.move",
+        "status.locked.byAncestor"
       ],
       "confirmation": null,
       "history": {
@@ -1129,7 +1139,8 @@
       "refusals": [
         "status.duplicate.root",
         "status.refused.singleChild",
-        "status.locked.edit"
+        "status.locked.edit",
+        "status.locked.byAncestor"
       ],
       "confirmation": null,
       "history": {
@@ -1237,7 +1248,8 @@
       },
       "refusals": [
         "status.delete.root",
-        "status.locked.delete"
+        "status.locked.delete",
+        "status.locked.byAncestor"
       ],
       "confirmation": null,
       "history": {
@@ -1412,7 +1424,8 @@
         "status.refused.singleChild",
         "status.refused.labelOneControl",
         "status.refused.noChildren",
-        "status.locked.edit"
+        "status.locked.edit",
+        "status.locked.byAncestor"
       ],
       "confirmation": null,
       "history": {

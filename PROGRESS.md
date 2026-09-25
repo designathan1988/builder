@@ -12,7 +12,7 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 - Group 02 passing: select-click, layers-tree, keyboard-tree-walk, palette-click-insert, undo-redo,
   multi-select-click, marquee-select, delete-element, move-up-down, wrap-row-column, drag-reorder-canvas,
   drag-drop-inside, context-menu, duplicate, text-edit-inline, palette-drag-insert, unwrap, nest-into-previous,
-  promote-out, hide-element, select-container-children, hand-keyboard-move. Conditions: a runner path is proven by its
+  promote-out, hide-element, select-container-children, hand-keyboard-move, lock-element. Conditions: a runner path is proven by its
   first feature switching it off; finding 11's parts are fixed before the feature that needs each.
 
 ## Pending decisions of the user
@@ -48,12 +48,12 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 24. Escape on a focused palette tile is bound to focus.canvas (not built). 25. A Layers row's Shift/Ctrl doors
     have no data-door of their own; the census counts them only through scenarios.
 26. marquee: Escape during a band should cancel it (drag.cancel is built now); hidden and locked nodes are not left
-    out (no flags yet; status.selection.skipped unused); a lost pointer restores it, untested. 27. delete and move
-    up/down do not refuse a locked element (lock-element adds it). 28. Arrange › Move up/down enabled at an edge.
+    out (status.selection.skipped unused); a lost pointer restores it, untested. 27. M (hand.take) does not refuse
+    a locked element yet; text.set's refusal of one has no browser test until inspector-panel's scenario lands. 28. Arrange › Move up/down enabled at an edge.
 29. The runner selects a node with no point of its own by a descendant plus ArrowUp; adding one with Shift needs its
     Layers row and then focus.canvas#key-escape-in-layers-tree (not built; multi-select-actions needs it). The census
     reads the test list, so it sees the canvas click named, not the substitute door run (both have their own tests).
 30. Declared, not built: wrap refusals requiresParent, interactiveInside, formInForm, singleChild, labelOneControl;
     drop.emptyAimMin (40 px aim of an empty container); the hover label as a hit target (it covered a container's
     marquee corner); DESIGN's "a label hides while the pointer is over it" contradicts the label as a hit target.
-31. Ctrl+A leaves out hidden siblings only; locked ones join when lock-element lands.
+31. Escape does not cancel a rename in Layers: no door of the manifest runs it (rename-element needs one).

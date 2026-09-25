@@ -66,6 +66,16 @@ describe('validateDocument', () => {
     expect(paths({ ...doc, pages: [{ ...page, tree: { ...page.tree, hidden: true } }] })).toEqual(['/pages/0/tree/hidden']);
   });
 
+  it('accepts the lock flag as true below the root, and refuses any other value and a locked page root', () => {
+    expect(paths(project([div('a', { locked: true, children: [div('b', { locked: true })] })]))).toEqual([]);
+    expect(paths(project([div('a', { locked: false } as unknown as Partial<DocNode>)]))).toEqual(['/pages/0/tree/children/0/locked']);
+    expect(paths(project([div('a', { locked: 'yes' } as unknown as Partial<DocNode>)]))).toEqual(['/pages/0/tree/children/0/locked']);
+    const doc = project();
+    const page = doc.pages[0];
+    if (!page) throw new Error('no page');
+    expect(paths({ ...doc, pages: [{ ...page, tree: { ...page.tree, locked: true } }] })).toEqual(['/pages/0/tree/locked']);
+  });
+
   it('refuses a selection that names a missing node or one node twice', () => {
     expect(paths(project([div('a')]), ['a', 'zz', 'a'])).toEqual(['/selection/1', '/selection/2']);
   });

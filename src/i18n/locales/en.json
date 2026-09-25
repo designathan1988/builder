@@ -1203,6 +1203,7 @@
   "status.js.invalidAt": "JavaScript error on line {line}: {reason}",
   "status.layout.notFlex": "Alignment applies to flex and grid containers.",
   "status.link.unsafe": "Links must start with http, https, mailto or tel.",
+  "status.lock.root": "The page root cannot be locked.",
   "status.locked": "Locked: {name}",
   "status.locked.byAncestor": "{name} is locked by {ancestor}; unlock {ancestor} first.",
   "status.locked.delete": "Unlock {name} before deleting it.",

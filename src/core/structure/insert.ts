@@ -2,13 +2,15 @@
 // or, without them, where the selection says (spec palette-click-insert, "Hit zones"): with nothing selected, the last
 // child of the shown page's root; with a container selected, its last child; with a leaf selected, right after it in
 // its parent. The placement follows the content model (src/core/elements/content-model.ts): a parent that does not
-// accept the element refuses it and nothing changes, never wrapped in another element (spec, Problems 1 and 2). The
+// accept the element refuses it and nothing changes, never wrapped in another element (spec, Problems 1 and 2); so
+// does a locked parent or one inside a locked element (spec lock-element). The
 // new element is named by its type in the person's language, with a number when a node already has that name, holds
 // its default text and styles (elements.json), and becomes the selection.
 import type { NodeId } from '../../generated/commands.ts';
 import { message, registerHandler, type Outcome } from '../commands/registry.ts';
 import { allNodes, locate, type DocNode, type DocumentJson, type Location, type Selection, type Styles } from '../document/model.ts';
 import type { ModelRules } from '../document/validate.ts';
+import { lockRefusal } from '../nodes/flags.ts';
 
 // A name no node of the document has: the base itself, else the base followed by the first free number from 2.
 export function uniqueName(document: DocumentJson, base: string): string {
@@ -47,6 +49,9 @@ export const insertCommand = registerHandler('element.insert', ({ state, ids, ru
   const at = placement(state.document, state.selection, rules, parent, index);
   if (at === null) throw new Error(`element.insert: the document has no node ${String(parent)}`);
   const receiver = at.parent.node;
+  // a locked parent, or one inside a locked element, takes no new child (spec lock-element)
+  const locked = lockRefusal(state.document, receiver.id, 'status.locked.insert');
+  if (locked !== null) return { kind: 'refused', message: locked };
   if (rules.elements.get(receiver.type)?.content !== 'children') return { kind: 'refused', message: message('status.refused.noChildren', { parent: receiver.name }) };
   const tag = element.tags[0] ?? null;
   const only = receiver.tag !== null && tag !== null ? rules.contentModel.refusal(receiver.tag, tag) : null;

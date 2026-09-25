@@ -1203,6 +1203,7 @@
   "status.js.invalidAt": "Erro de JavaScript na linha {line}: {reason}",
   "status.layout.notFlex": "O alinhamento se aplica a contêineres flex e grid.",
   "status.link.unsafe": "Links precisam começar com http, https, mailto ou tel.",
+  "status.lock.root": "A raiz da página não pode ser bloqueada.",
   "status.locked": "Bloqueado: {name}",
   "status.locked.byAncestor": "{name} está bloqueado por {ancestor}; desbloqueie {ancestor} primeiro.",
   "status.locked.delete": "Desbloqueie {name} antes de excluí-lo.",

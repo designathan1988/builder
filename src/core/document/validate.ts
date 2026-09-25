@@ -136,6 +136,11 @@ function validateNode(
     if (node.hidden !== true) bad(`${at}/hidden`, 'hidden is true, or absent while the element shows');
     else if (root) bad(`${at}/hidden`, 'a page’s root is never hidden');
   }
+  // the lock flag (model.ts): true, or absent while the element is unlocked; a page's root is never locked
+  if ('locked' in node) {
+    if (node.locked !== true) bad(`${at}/locked`, 'locked is true, or absent while the element is unlocked');
+    else if (root) bad(`${at}/locked`, 'a page’s root is never locked');
+  }
 
   if (!isRecord(node.attributes)) bad(`${at}/attributes`, 'attributes is an object');
   else {

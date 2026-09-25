@@ -131,6 +131,16 @@ Decisions by small ambiguity (moved here from PROGRESS.md):
 - The tooth proof prints why each test failed (the first line and the matcher) and counts a failure that only ran
   out of time on an action or a wait (`locator.click: Timeout 5000ms exceeded.`) as no tooth, like a test timeout: a
   tooth fails on an assertion (brief "a aplicação completa").
+- lock-element (helper, worktree .cache/wt/lock-element): the Layers lock, Element actions and the context menu lock
+  and unlock (status Locked/Unlocked; the page root refused); the lock holds the whole subtree (flags.ts lockOver,
+  lockRefusal naming the outermost lock): delete, move up/down, promote, nest, drag, wrap, unwrap, duplicate, a
+  palette insert into it, text editing (double-click, Enter, text.set) and the Hide/Lock of rows inside it are refused
+  with "Unlock <name> before …"; Ctrl+A leaves locked siblings out. Two runner rules, each proven by switching it off
+  (a scenario failed on an assertion): a refusal is checked right after its refused step (the action, else the last
+  later step whose command declares the key; ported from the drag-level-keys-escape branch), and a canvas key whose
+  step names an element, pressed while a Layers control holds the focus, first clicks that element on the canvas
+  (allowed only when it is the selection alone). Browser tests with every lock check off: 7 of 10 failed; with the
+  root check off, its test failed.
 
 ## 2026-09-25 — Slice 1: the rest of the foundation and the first usable block of group 02
 

@@ -3,23 +3,25 @@
 // the parent's children without the moved nodes, so it is the position the first moved node ends at (spec
 // drag-reorder-canvas, "Result in the document": the dragged node is removed from its parent and inserted at the
 // proposal's parent and index). The moved nodes stay selected; the status bar says "Moved … to position" among its
-// siblings and "Moved … into" another parent (spec drag-drop-inside). A parent inside a moved node (the node itself
-// included), a parent that holds no children and a parent the content model does not let hold a moved node refuse
-// the move, in that order, and nothing changes. A
+// siblings and "Moved … into" another parent (spec drag-drop-inside). A moved node that is locked or inside a locked
+// element, a locked parent or one inside a locked element (spec lock-element, src/core/nodes/flags.ts), a parent
+// inside a moved node (the node itself included), a parent that holds no children and a parent the content model
+// does not let hold a moved node refuse the move, in that order, and nothing changes. A
 // move that leaves every node where it was changes nothing and records no history (the store drops it).
 //
 // element.moveUp and element.moveDown (ARCHITECTURE.md, Command owners; spec move-up-down): the selection's roots
 // (the doors' adapter.selection "roots-same-parent") swap places with their previous (up) or next (down) sibling that
 // is not selected, in one transaction; the relative order of the selected nodes is kept and they never leave their
-// parent. One command for every door (spec, Problems 2). Roots that do not share one parent are refused; so is a
-// press that moves nothing: the first (last) place says "Already at the start (end) of <parent>" and adds no history
-// entry. The status bar names the one moved node with its new position among its siblings, or counts several
+// parent. One command for every door (spec, Problems 2). Roots that do not share one parent are refused, and so is a
+// locked root or one inside a locked element (spec lock-element); so is a press that moves nothing: the first (last)
+// place says "Already at the start (end) of <parent>" and adds no history entry. The status bar names the one moved node with its new position among its siblings, or counts several
 // (spec, Problems 1). The selection stays as it is.
 import type { NodeId } from '../../generated/commands.ts';
 import { message, registerHandler, registerPredicate, type Outcome } from '../commands/registry.ts';
 import { locate, walk, type DocNode, type DocumentJson, type Selection } from '../document/model.ts';
 import type { ModelRules } from '../document/validate.ts';
 import { applyPatches, type Patch } from '../history/transaction.ts';
+import { firstLockRefusal, lockRefusal } from '../nodes/flags.ts';
 import { selectionRoots } from './remove.ts';
 
 export const moveToCommand = registerHandler('element.moveTo', ({ state, rules }, { parent, index }): Outcome<never> => moveSelectionTo(state, rules, parent, index));
@@ -35,6 +37,10 @@ export function moveSelectionTo(state: { readonly document: DocumentJson; readon
   for (const at of moved) if (!at.parent) throw new Error(`element.moveTo: ${at.node.id} is a page, it cannot move`);
   const roots = moved.map((at) => at.node.id);
 
+  // a locked node, or one inside a locked element, stays where it is, and a locked parent takes no new child (spec
+  // lock-element: locked containers and what they hold are no drop receivers)
+  const locked = firstLockRefusal(state.document, roots, 'status.locked.move') ?? lockRefusal(state.document, parent, 'status.locked.insert');
+  if (locked !== null) return { kind: 'refused', message: locked };
   // a parent inside a moved node first: a moved leaf itself is refused as that, not as a leaf
   for (const at of moved) for (const inner of walk(at.node)) if (inner.id === parent) return { kind: 'refused', message: message('status.refused.intoItself') };
   if (rules.elements.get(receiver.node.type)?.content !== 'children') return { kind: 'refused', message: message('status.refused.noChildren', { parent: receiver.node.name }) };
@@ -147,6 +153,9 @@ function move(document: DocumentJson, selection: Selection, direction: Direction
   const within = parent?.name ?? document.pages[first.page]?.name ?? '';
   const edge = message(direction === 'up' ? 'status.move.alreadyFirst' : 'status.move.alreadyLast', { parent: within });
   if (parent === null) return { kind: 'refused', message: edge };
+  // a locked node, or one inside a locked element, keeps its place (spec lock-element)
+  const locked = firstLockRefusal(document, roots.map((r) => r.node.id), 'status.locked.move');
+  if (locked !== null) return { kind: 'refused', message: locked };
   const { patches, moved } = shiftAmongSiblings(parent, first.path.slice(0, -2), new Set(roots.map((r) => r.node.id)), direction);
   if (patches.length === 0) return { kind: 'refused', message: edge };
   const only = roots.length === 1 ? moved.get(first.node.id) : undefined;

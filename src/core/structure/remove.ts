@@ -1,13 +1,15 @@
 // element.delete (ARCHITECTURE.md, Command owners): the selected nodes leave the document with their whole subtrees, in
 // one transaction (spec delete-element, "Result in the document"). It acts on the selection's roots (the manifest's
 // adapter.selection "roots"): a selected node inside another selected node goes with that one. The page root is never
-// deleted: the status bar says why and nothing changes. Undo puts every subtree back at its index with its ids, and
+// deleted, nor a locked element or one inside a locked element (spec lock-element, src/core/nodes/flags.ts): the
+// status bar says why and nothing changes. Undo puts every subtree back at its index with its ids, and
 // the selection from before the command (history.ts). After a delete the selection moves to the next sibling of the
 // primary node, else its previous sibling, else its parent (spec, Problems 1), so the next key has a target.
 import type { NodeId } from '../../generated/commands.ts';
 import { message, registerHandler, type Outcome } from '../commands/registry.ts';
 import { locate, walk, type DocNode, type DocumentJson, type Location, type Selection } from '../document/model.ts';
 import type { Patch } from '../history/transaction.ts';
+import { firstLockRefusal } from '../nodes/flags.ts';
 import type { StoreState } from '../store/store.ts';
 
 // The selected nodes no other selected node holds, in document order.
@@ -49,6 +51,9 @@ export const deleteCommand = registerHandler('element.delete', ({ state }): Outc
   const primary = roots.find((r) => r.node.id === primaryId) ?? roots.find((r) => primaryId !== undefined && [...walk(r.node)].some((n) => n.id === primaryId)) ?? roots[0];
   if (primary === undefined) throw new Error('element.delete: the selection names no node of the document');
   if (roots.some((r) => r.parent === null)) return { kind: 'refused', message: message('status.delete.root') };
+  // a locked root, or one inside a locked element, stays (spec lock-element)
+  const locked = firstLockRefusal(state.document, roots.map((r) => r.node.id), 'status.locked.delete');
+  if (locked !== null) return { kind: 'refused', message: locked };
   const after = selectionAfter(roots, primary);
   // the last root first, so every path taken from the document before the delete still points at its node
   const patches: Patch[] = roots

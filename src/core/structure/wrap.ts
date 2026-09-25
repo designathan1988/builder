@@ -3,13 +3,15 @@
 // the first one's index by a new element of the wrapper's definition (elements.json wrappers, one for every door),
 // named in the person's language and numbered when the name is taken, holding them in their order, with the
 // wrapper's styles at the base breakpoint and state; the status names the styles it added. The page root cannot be
-// wrapped, and a parent whose content model refuses the wrapper's element refuses it; nothing changes then. The
+// wrapped, nor a locked element or one inside a locked element (spec lock-element), and a parent whose content model
+// refuses the wrapper's element refuses it; nothing changes then. The
 // wrapper becomes the selection. element.unwrap (feature unwrap, below) takes a wrapper away and lifts its children.
 import type { NodeId } from '../../generated/commands.ts';
 import { message, registerHandler, registerPredicate, type HandlerContext, type Outcome } from '../commands/registry.ts';
 import { locate, type DocNode, type Location, type Styles } from '../document/model.ts';
 import type { WrapperId } from '../document/validate.ts';
 import type { Patch } from '../history/transaction.ts';
+import { firstLockRefusal, lockRefusal } from '../nodes/flags.ts';
 import { uniqueName } from './insert.ts';
 
 // the styles as the status names them: "display: flex; flex-direction: row"
@@ -42,6 +44,9 @@ function wrap(id: WrapperId, { state, ids, rules, words }: HandlerContext<never>
   if (selected.some((l) => l.parent === null)) return { kind: 'refused', message: message('status.wrap.root') };
   const parent = first.parent as DocNode;
   if (selected.some((l) => l.parent?.id !== parent.id)) return { kind: 'refused', message: message('status.wrap.needsSameParent') };
+  // a locked root, or one inside a locked element, is not wrapped (spec lock-element)
+  const locked = firstLockRefusal(state.document, selected.map((l) => l.node.id), 'status.locked.edit');
+  if (locked !== null) return { kind: 'refused', message: locked };
 
   const wrapper = rules.wrappers.get(id);
   const element = wrapper === undefined ? undefined : rules.elements.get(wrapper.element);
@@ -78,8 +83,9 @@ export const wrapRowCommand = registerHandler('element.wrapRow', (context): Outc
 export const wrapColumnCommand = registerHandler('element.wrapColumn', (context): Outcome<never> => wrap('column', context));
 
 // element.unwrap (spec unwrap): the one selected element with children, below the page root, leaves its parent and
-// its children take its place, in their order, the same nodes; the wrapper's own styles go with it. A parent whose
-// content model refuses one of the children refuses the whole unwrap, and nothing changes. The lifted children
+// its children take its place, in their order, the same nodes; the wrapper's own styles go with it. A locked wrapper
+// or one inside a locked element (spec lock-element), and a parent whose content model refuses one of the children,
+// refuse the whole unwrap, and nothing changes. The lifted children
 // become the selection; one undo step restores the wrapper around them.
 function unwrappable(state: { readonly document: Parameters<typeof locate>[0]; readonly selection: readonly NodeId[] }): Location | null {
   const [only, ...others] = state.selection;
@@ -106,6 +112,9 @@ export const unwrapCommand = registerHandler('element.unwrap', ({ state, rules }
   // the availability predicate (canUnwrap) keeps anything else from reaching here
   if (wrapper === null || wrapper.parent === null) throw new Error('element.unwrap: the selection is not one element with children below the page root');
   const parent = wrapper.parent;
+  // a locked wrapper, or one inside a locked element, keeps its children (spec lock-element)
+  const locked = lockRefusal(state.document, wrapper.node.id, 'status.locked.edit');
+  if (locked !== null) return { kind: 'refused', message: locked };
   for (const child of wrapper.node.children) {
     const only = parent.tag !== null && child.tag !== null ? rules.contentModel.refusal(parent.tag, child.tag) : null;
     if (only !== null) return { kind: 'refused', message: message('status.refused.onlyAccepts', { parent: `<${parent.tag ?? ''}>`, children: only.map((t) => `<${t}>`).join(', ') }) };

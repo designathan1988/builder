@@ -13,7 +13,8 @@
       },
       "refusals": [
         "status.needsSingleSelection",
-        "status.locked.editText"
+        "status.locked.editText",
+        "status.locked.byAncestor"
       ],
       "confirmation": null,
       "history": {
@@ -108,6 +109,7 @@
       },
       "refusals": [
         "status.locked.editText",
+        "status.locked.byAncestor",
         "status.link.unsafe"
       ],
       "confirmation": null,

@@ -32,6 +32,10 @@ export interface DocNode {
   // hidden on the canvas with its whole subtree, still in the document and in Layers (element.toggleHidden, spec
   // hide-element): true, absent while the element shows. A page's root is never hidden.
   readonly hidden?: true;
+  // locked with its whole subtree (element.toggleLock, spec lock-element): no command moves, deletes or edits it or
+  // anything inside it, adds to it, or toggles a flag inside it; it can still be selected. True, absent while it is
+  // unlocked. A page's root is never locked.
+  readonly locked?: true;
 }
 
 export interface Page {

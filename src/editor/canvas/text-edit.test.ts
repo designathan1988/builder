@@ -58,6 +58,20 @@ describe('inline text editing', () => {
     expect(store.getState().history.past).toHaveLength(0);
   });
 
+  it('does not start on a locked text, nor on one inside a locked element, and says what to unlock (spec lock-element)', () => {
+    const store = editorStore();
+    store.dispatch('selection.select', { target: 'n-intro' });
+    store.dispatch('element.toggleLock', { target: 'n-intro' });
+    expect(store.dispatch('text.startEdit', {})).toEqual({ status: 'refused', message: { key: 'status.locked.editText', params: { name: 'Intro' } } });
+    store.dispatch('element.toggleLock', { target: 'n-intro' });
+    store.dispatch('element.toggleLock', { target: 'n-hero' });
+    store.dispatch('selection.select', { target: 'n-title' });
+    expect(store.dispatch('text.startEdit', {})).toEqual({ status: 'refused', message: { key: 'status.locked.byAncestor', params: { name: 'Title', ancestor: 'Hero' } } });
+    expect(store.getState().ui.textEdit.node).toBeNull();
+    store.dispatch('element.toggleLock', { target: 'n-hero' });
+    expect(store.dispatch('text.startEdit', {}).status).toBe('done');
+  });
+
   it('asks for a line break at the caret only while editing, and Escape ends the edit recording nothing', () => {
     const store = editorStore();
     store.dispatch('text.insertLineBreak', {});

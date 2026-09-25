@@ -39,7 +39,7 @@ export const FEATURES = {
   'marquee-select': registerFeature('marquee-select'),
   'multi-select-actions': NOT_AVAILABLE_YET,
   'select-container-children': registerFeature('select-container-children'),
-  'lock-element': NOT_AVAILABLE_YET,
+  'lock-element': registerFeature('lock-element'),
   'hide-element': registerFeature('hide-element'),
   // 03 app and persistence
   'app-menu': NOT_AVAILABLE_YET,

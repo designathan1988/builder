@@ -3,10 +3,12 @@
 // original in one transaction (spec duplicate, "Result in the document"). Every node of a copy gets a fresh id and a
 // name no node of the document has (spec, Problems 1: Pager kept the children's names). The copies become the
 // selection, the primary's copy first; undo takes them away and gives back the selection from before (history.ts).
-// The page root is never duplicated: the status bar says why and nothing changes.
+// The page root is never duplicated, nor a locked element or one inside a locked element (spec lock-element): the
+// status bar says why and nothing changes.
 import { message, registerHandler, type Outcome } from '../commands/registry.ts';
 import { allNodes, walk, type DocNode, type Location } from '../document/model.ts';
 import type { Patch } from '../history/transaction.ts';
+import { firstLockRefusal } from '../nodes/flags.ts';
 import type { IdGenerator } from '../ports/ids.ts';
 import { selectionRoots } from './remove.ts';
 
@@ -37,6 +39,9 @@ export const duplicateCommand = registerHandler('element.duplicate', ({ state, i
   // lacks is a defect of the store
   if (roots.length === 0) throw new Error('element.duplicate: the selection names no node of the document');
   if (roots.some((r) => r.parent === null)) return { kind: 'refused', message: message('status.duplicate.root') };
+  // a locked root, or one inside a locked element, is not copied (spec lock-element)
+  const locked = firstLockRefusal(state.document, roots.map((r) => r.node.id), 'status.locked.edit');
+  if (locked !== null) return { kind: 'refused', message: locked };
 
   const taken = new Set<string>();
   for (const node of allNodes(state.document)) taken.add(node.name);

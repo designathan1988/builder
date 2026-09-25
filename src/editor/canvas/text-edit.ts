@@ -11,6 +11,7 @@
 // loaded project).
 import { message, registerHandler, registerPredicate } from '../../core/commands/registry.ts';
 import { locate, type DocNode, type DocumentJson, type NodeId } from '../../core/document/model.ts';
+import { lockRefusal } from '../../core/nodes/flags.ts';
 import type { StoreState } from '../../core/store/store.ts';
 import type { KeyContextId } from '../../generated/ids.ts';
 import { manifest } from '../../manifest/runtime.ts';
@@ -67,6 +68,10 @@ export const singleTextSelection = registerPredicate<EditorUi>(
 export const startEdit = registerHandler<'text.startEdit', EditorUi>('text.startEdit', ({ state }) => {
   const node = singleText(state);
   if (node === null) return { kind: 'refused', message: message('status.needsSingleSelection') };
+  // the text of a locked element, or of one inside a locked element, is not edited, and the status bar says what to
+  // unlock (spec lock-element, Problems in Pager 3)
+  const locked = lockRefusal(state.document, node.id, 'status.locked.editText');
+  if (locked !== null) return { kind: 'refused', message: locked };
   return { kind: 'change', ui: withEdit(state.ui, { ...state.ui.textEdit, node: node.id }), message: message('status.textEdit.editing') };
 });
 

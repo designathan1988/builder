@@ -87,7 +87,14 @@ const interactions = read('manifest/interactions.json') as {
 };
 const COMMANDS = fs
   .readdirSync('manifest/commands')
-  .flatMap((f) => (read(path.join('manifest/commands', f)) as { commands: { id: string; introducedBy: string; args: Record<string, { type: string }>; entryPoints: Door[] }[] }).commands);
+  .flatMap(
+    (f) =>
+      (
+        read(path.join('manifest/commands', f)) as {
+          commands: { id: string; introducedBy: string; args: Record<string, { type: string }>; refusals: string[]; availability: { refusalKey: string | null }; entryPoints: Door[] }[];
+        }
+      ).commands,
+  );
 const BASE_BREAKPOINT = properties.breakpoints.find((b) => b.base)?.id;
 const BASE_STATE = properties.states.find((s) => s.pseudo === null)?.id;
 const CONTENT = new Map(elements.elements.map((e) => [e.id, e.content]));
@@ -141,6 +148,22 @@ const BACK_TO_CANVAS_DOOR = shortcutIn('focus.canvas', 'layers-tree');
 const UNDO_DOOR = 'history.undo#toolbar-top-bar';
 const REDO_DOOR = 'history.redo#toolbar-top-bar';
 
+// When a refusal is checked: right after its refused step, the action step when its command can refuse with that key
+// (its manifest refusals or its availability's refusal key), else the last step after it whose command can (a Delete
+// refused after the action locked the element); that step leaves the document as it was just before it, and the
+// status bar shows the refusal right after it, whatever steps follow (a held drag released after a refused level
+// key). When no step's command declares the key, once the steps are over, against the document before the action.
+function refusalCheck(s: Scenario, key: string): { readonly after: number; readonly unchangedFrom: number } {
+  const refuses = (step: Step | undefined) => {
+    const command = step === undefined ? undefined : COMMANDS.find((c) => c.id === commandOf(step.door));
+    return command !== undefined && (command.refusals.includes(key) || command.availability.refusalKey === key);
+  };
+  const action = s.steps.findIndex((step) => step.action);
+  if (refuses(s.steps[action])) return { after: action, unchangedFrom: action };
+  const last = s.steps.findLastIndex((step, index) => index > action && refuses(step));
+  return last >= 0 ? { after: last, unchangedFrom: last } : { after: s.steps.length - 1, unchangedFrom: action };
+}
+
 // The doors a scenario's setup runs, in order: File › Open for a fixture, the language, the selection (the first node
 // clicked, the others added, on the canvas; a node its children cover whole is reached through ArrowUp or its Layers
 // row, which the test's annotations name once it runs, ranAlso and ranInstead), the breakpoint, the style state and
@@ -187,8 +210,8 @@ export const FEATURE_TAG = (id: string) => `@feature:${id}`;
 const uiLocale = (page: Page) => page.evaluate(() => document.documentElement.lang);
 // the language the scenario expects after its steps (the action step run through `action`): the one the last step
 // that chooses a language chooses (its door's or its own `locale`), else the setup's
-function localeAfter(s: Scenario, action: string): string {
-  for (const step of [...s.steps].reverse()) {
+function localeAfter(s: Scenario, action: string, last = s.steps.length - 1): string {
+  for (const step of s.steps.slice(0, last + 1).reverse()) {
     const ref = step.action ? action : step.door;
     if (commandOf(ref) !== 'preferences.setLanguage') continue;
     const chosen = doorData(ref).args.locale ?? step.args.locale;
@@ -509,6 +532,8 @@ const EDIT_CONTEXT = 'text-editing';
 // the key context of the keyboard's hand (interactions.json): while it holds an element, the canvas's keys are its
 // own (keymap.ts), and the canvas draws its aim as a drop (spec hand-keyboard-move)
 const HAND_CONTEXT = 'hand';
+// the key context of the canvas (interactions.json), which the frame's page and the page body name
+const CANVAS_CONTEXT = 'canvas';
 
 // the focused key context and the contexts it inherits (keymap.ts): the text edited in place names its own, a field
 // keeps its keys, a region names its context, the page body is the canvas's
@@ -577,6 +602,18 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
   if (d.kind === 'shortcut' && d.context === HAND_CONTEXT) {
     expect((await focusedContexts(page))[0], `step ${ref}: the focus is on the canvas`).toBe('canvas');
     await expect(page.locator('[data-chrome="drop"]'), `step ${ref}: the hand holds an element (the canvas draws its aim)`).toHaveCount(1);
+  }
+  // a key of the canvas acting on the element the step names, pressed while a control elsewhere holds the focus (the
+  // Layers lock a step before clicked): the person gives the canvas the focus back by clicking that element on it,
+  // which leaves the selection as it is only when it is that element alone
+  if (d.kind === 'shortcut' && d.context === CANVAS_CONTEXT && step.target !== null && !(await focusedContexts(page)).includes(CANVAS_CONTEXT)) {
+    const before = await port(page);
+    const node = nodeAt(before.document, step.target);
+    expect(before.selection, `step ${ref}: the focus is off the canvas, and a click on ${step.target} gives it back only when it is the selection alone`).toEqual([node.id]);
+    const at = await nodePoint(page, node.id, isRoot(before.document, step.target), step.target);
+    await page.mouse.click(at.x, at.y);
+    expect((await focusedContexts(page)).includes(CANVAS_CONTEXT), `step ${ref}: a click on ${step.target} gives the canvas the focus`).toBe(true);
+    expect((await port(page)).selection, `step ${ref}: the click leaves the selection as it was`).toEqual(before.selection);
   }
   const { document } = await port(page);
   const args = resolveArgs(ref, step.args, document);
@@ -750,11 +787,19 @@ export function registerScenarioTests(): void {
           page.on('download', (d) => downloads.push(d));
           const fixture = await setUp(page, s);
           const held = { current: null as Held | null };
-          // the document just before the (last) action step: a refused action leaves it as it was
-          let beforeAction: unknown = fixture;
-          for (const step of s.steps) {
-            if (step.action) beforeAction = (await port(page)).document;
+          // each refusal is checked right after its refused step (refusalCheck), against the document just before it
+          const refusalsAt = s.refusals.map((refusal) => ({ refusal, ...refusalCheck(s, refusal.key) }));
+          const before = new Map<number, unknown>();
+          for (const [index, step] of s.steps.entries()) {
+            if (refusalsAt.some((r) => r.unchangedFrom === index)) before.set(index, (await port(page)).document);
             await runStep(page, step, step.action ? door : step.door, held, step.action);
+            // a refusal names its key; the words it fills in ("No next sibling in {parent}.") are those of the feedback
+            // of the same key
+            for (const { refusal, unchangedFrom } of refusalsAt.filter((r) => r.after === index)) {
+              const params = s.expect.render?.feedback.find((f) => f.key === refusal.key)?.params ?? {};
+              await expect(page.getByRole('status'), 'refusal').toHaveText(await text(page, localeAfter(s, door, index), refusal.key, params));
+              expect(matchDocument((await port(page)).document, before.get(unchangedFrom)), 'refused: the refused step leaves the document unchanged').toEqual([]);
+            }
           }
           // a drag its Escape cancelled is let go where the pointer is; any other drag still held is a scenario's error
           if (held.current?.cancelled === true) {
@@ -785,8 +830,10 @@ export function registerScenarioTests(): void {
             }
             const last = render.feedback.at(-1);
             if (render.feedback.length > 1) throw new Error('the status bar shows the last message only');
+            // a refusal a step before the last showed is checked there (refusalCheck); a later step may replace it
+            const shownEarlier = last !== undefined && refusalsAt.some((r) => r.refusal.key === last.key && r.after < s.steps.length - 1);
             // in the language the scenario expects after its steps: a step may choose one (ui-language)
-            if (last) await expect(page.getByRole('status'), 'feedback').toHaveText(await text(page, localeAfter(s, door), last.key, last.params));
+            if (last && !shownEarlier) await expect(page.getByRole('status'), 'feedback').toHaveText(await text(page, localeAfter(s, door), last.key, last.params));
           }
 
           const editor = s.expect.editor;
@@ -821,14 +868,6 @@ export function registerScenarioTests(): void {
               for (const p of f.present) expect(text, `${f.path} holds ${p}`).toContain(p);
               for (const a of f.absent) expect(text, `${f.path} does not hold ${a}`).not.toContain(a);
             }
-          }
-
-          // a refusal names its key; the words it fills in ("No next sibling in {parent}.") are those of the feedback
-          // of the same key
-          for (const refusal of s.refusals) {
-            const params = render?.feedback.find((f) => f.key === refusal.key)?.params ?? {};
-            await expect(page.getByRole('status'), 'refusal').toHaveText(await text(page, localeAfter(s, door), refusal.key, params));
-            expect(matchDocument(after.document, beforeAction), 'refused: the refused step leaves the document unchanged').toEqual([]);
           }
 
           // undo and redo restore the document through their doors

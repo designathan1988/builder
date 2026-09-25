@@ -228,7 +228,8 @@
         "refusalKey": "refusal.nothingSelected"
       },
       "refusals": [
-        "status.locked.byAncestor"
+        "status.locked.byAncestor",
+        "status.lock.root"
       ],
       "confirmation": null,
       "history": {

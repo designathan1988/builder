@@ -601,11 +601,14 @@ kbd {
   color: var(--color-text-subtle);
 }
 
-.row--hidden .row__meta {
+/* a locked node's row (spec lock-element): its Lock pressed and shown in place of the tag */
+.row--hidden .row__meta,
+.row--locked .row__meta {
   visibility: hidden;
 }
 
-.row--hidden .row__actions > .door[aria-pressed='true'] {
+.row--hidden .row__actions > .door[aria-pressed='true'],
+.row--locked .row__actions > .door[aria-pressed='true'] {
   opacity: 1;
 }
 

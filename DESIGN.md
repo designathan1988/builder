@@ -90,7 +90,7 @@ Every region below is an id of `manifest/layout.json`. "Order" is the `order` of
 | Region | Where it repeats | Parts, in order |
 |---|---|---|
 | `field` | every number or length field (inspector, quick panel) | 1 unit menu · 2 step up · 3 step down · 4 reset this value |
-| `layers-row` | every Layers row | 1 click (select) · 2 Shift+click (add) · 3 Ctrl+click (toggle) · 4 caret · 5 colour dot · 6 name (double-click renames) · 7 name field · 8 Hide · 9 Lock (8 and 9 appear on the row under the pointer, so a selected row keeps its whole name; the row of a hidden element is dimmed and keeps its Hide shown, pressed) · 10 pick as the interaction target · 11 secondary click (context menu) |
+| `layers-row` | every Layers row | 1 click (select) · 2 Shift+click (add) · 3 Ctrl+click (toggle) · 4 caret · 5 colour dot · 6 name (double-click renames) · 7 name field · 8 Hide · 9 Lock (8 and 9 appear on the row under the pointer, so a selected row keeps its whole name; the row of a hidden element is dimmed and keeps its Hide shown, pressed; the row of a locked element keeps its Lock shown, pressed) · 10 pick as the interaction target · 11 secondary click (context menu) |
 | `tab-strip` | the dock's tabs and the code view's HTML / CSS / JS tabs | 1 a tab |
 | `panel-header` | every closable panel | 1 Close the panel |
 | `dialog` | every dialog | 1 Close |

@@ -3,6 +3,7 @@
 // restore the selection that belonged to the document state they go back to (history.ts).
 import { message, registerHandler, registerPredicate, type Outcome } from '../commands/registry.ts';
 import { locate, type DocNode, type Location } from '../document/model.ts';
+import { lockOver } from '../nodes/flags.ts';
 import type { StoreState } from '../store/store.ts';
 import type { Rect } from '../../generated/commands.ts';
 
@@ -25,13 +26,14 @@ export const clearSelectionCommand = registerHandler('selection.clear', () => ({
 
 // selection.selectAllInContainer (spec select-container-children): the selected element and every sibling of it
 // become the selection, in their order; with nothing selected, or the page root selected, every child of the page.
-// A hidden child is left out, and the status bar counts what it left out (Problems in Pager 2).
+// A hidden child is left out, and so is a locked one, or one inside a locked element (spec lock-element: the lock
+// holds the whole subtree; src/core/nodes/flags.ts), and the status bar counts what it left out (Problems in Pager 2).
 export const selectAllInContainerCommand = registerHandler('selection.selectAllInContainer', ({ state }): Outcome<never> => {
   const [primary] = state.selection;
   const at = primary === undefined ? null : locate(state.document, primary);
   const container = at?.parent ?? at?.node ?? state.document.pages[0]?.tree ?? null;
   if (container === null) return { kind: 'change' };
-  const taken = container.children.filter((child) => child.hidden !== true);
+  const taken = container.children.filter((child) => child.hidden !== true && lockOver(state.document, child.id) === null);
   const skipped = container.children.length - taken.length;
   return {
     kind: 'change',
