@@ -38,7 +38,7 @@ export const FEATURES = {
   unwrap: registerFeature('unwrap'),
   'marquee-select': registerFeature('marquee-select'),
   'multi-select-actions': NOT_AVAILABLE_YET,
-  'select-container-children': NOT_AVAILABLE_YET,
+  'select-container-children': registerFeature('select-container-children'),
   'lock-element': NOT_AVAILABLE_YET,
   'hide-element': registerFeature('hide-element'),
   // 03 app and persistence

@@ -1254,7 +1254,7 @@
   "status.selected": "{name} selected.",
   "status.selection.cleared": "Nothing selected.",
   "status.selection.count": "{count} elements selected.",
-  "status.selection.skipped": "{count} elements selected, {skipped} locked left out.",
+  "status.selection.skipped": "{count} elements selected, {skipped} locked or hidden left out.",
   "status.shadow.none": "{name} has no shadow to edit.",
   "status.sidebar.hidden": "Sidebar hidden.",
   "status.sidebar.shown": "Sidebar shown.",

@@ -12,6 +12,7 @@ import {
   hasSelection,
   singleSelection,
   marqueeCommand,
+  selectAllInContainerCommand,
   selectCommand,
   toggleCommand,
   walkFirstChildCommand,
@@ -25,7 +26,7 @@ import { canNestIntoPrevious, moveDownCommand, moveToCommand, moveUpCommand, nes
 import { deleteCommand } from '../core/structure/remove.ts';
 import { canUnwrap, unwrapCommand, wrapColumnCommand, wrapRowCommand } from '../core/structure/wrap.ts';
 import { setTextCommand } from '../core/text/text.ts';
-import { cancelEdit, insertLineBreak, singleTextSelection, startEdit } from '../editor/canvas/text-edit.ts';
+import { cancelEdit, insertLineBreak, selectAllText, singleTextSelection, startEdit } from '../editor/canvas/text-edit.ts';
 import { cancelDrag } from '../editor/drag/drag-session.ts';
 import { focusActivate, focusFirst, focusLast, focusNext, focusPrevious } from '../editor/focus/focus.ts';
 import { setExpanded } from '../editor/layers/tree.ts';
@@ -149,7 +150,7 @@ export const COMMANDS = {
   'selection.walkPreviousSibling': walkPreviousSiblingCommand,
   'selection.walkParent': walkParentCommand,
   'selection.walkFirstChild': walkFirstChildCommand,
-  'selection.selectAllInContainer': NOT_AVAILABLE_YET,
+  'selection.selectAllInContainer': selectAllInContainerCommand,
   'selection.marquee': marqueeCommand,
   'contextMenu.open': contextMenuOpen,
   'element.insert': insertCommand,
@@ -198,7 +199,7 @@ export const COMMANDS = {
   'text.toggleItalic': NOT_AVAILABLE_YET,
   'text.editLink': NOT_AVAILABLE_YET,
   'text.paste': NOT_AVAILABLE_YET,
-  'text.selectAll': NOT_AVAILABLE_YET,
+  'text.selectAll': selectAllText,
   'view.zoomIn': NOT_AVAILABLE_YET,
   'view.zoomOut': NOT_AVAILABLE_YET,
   'view.zoomReset': NOT_AVAILABLE_YET,

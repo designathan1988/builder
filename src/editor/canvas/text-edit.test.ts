@@ -61,12 +61,12 @@ describe('inline text editing', () => {
   it('asks for a line break at the caret only while editing, and Escape ends the edit recording nothing', () => {
     const store = editorStore();
     store.dispatch('text.insertLineBreak', {});
-    expect(store.getState().ui.textEdit).toEqual({ node: null, lineBreaks: 0 });
+    expect(store.getState().ui.textEdit).toEqual({ node: null, lineBreaks: 0, selectAlls: 0 });
     store.dispatch('selection.select', { target: 'n-intro' });
     store.dispatch('text.startEdit', {});
     store.dispatch('text.insertLineBreak', {});
     store.dispatch('text.insertLineBreak', {});
-    expect(store.getState().ui.textEdit).toEqual({ node: 'n-intro', lineBreaks: 2 });
+    expect(store.getState().ui.textEdit).toEqual({ node: 'n-intro', lineBreaks: 2, selectAlls: 0 });
     store.dispatch('text.cancelEdit', {});
     expect(store.getState().ui.textEdit.node).toBeNull();
     expect(store.getState().message).toEqual({ key: 'status.textEdit.cancelled', params: { name: 'Intro' } });

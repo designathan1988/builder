@@ -1254,7 +1254,7 @@
   "status.selected": "{name} selecionado.",
   "status.selection.cleared": "Nada selecionado.",
   "status.selection.count": "{count} elementos selecionados.",
-  "status.selection.skipped": "{count} elementos selecionados, {skipped} bloqueados deixados de fora.",
+  "status.selection.skipped": "{count} elementos selecionados, {skipped} bloqueados ou ocultos deixados de fora.",
   "status.shadow.none": "{name} não tem sombra para editar.",
   "status.sidebar.hidden": "Barra lateral oculta.",
   "status.sidebar.shown": "Barra lateral exibida.",

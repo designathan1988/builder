@@ -12,7 +12,7 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 - Group 02 passing: select-click, layers-tree, keyboard-tree-walk, palette-click-insert, undo-redo,
   multi-select-click, marquee-select, delete-element, move-up-down, wrap-row-column, drag-reorder-canvas,
   drag-drop-inside, context-menu, duplicate, text-edit-inline, palette-drag-insert, unwrap, nest-into-previous,
-  promote-out, hide-element. To integrate: feature/hand-keyboard-move. Conditions: a runner path is proven by its
+  promote-out, hide-element, select-container-children. To integrate: feature/hand-keyboard-move. Conditions: a runner path is proven by its
   first feature switching it off; finding 11's parts are fixed before the feature that needs each.
 
 ## Pending decisions of the user
@@ -56,5 +56,5 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 30. Declared, not built: wrap refusals requiresParent, interactiveInside, formInForm, singleChild, labelOneControl;
     drop.emptyAimMin (40 px aim of an empty container); the hover label as a hit target (it covered a container's
     marquee corner); DESIGN's "a label hides while the pointer is over it" contradicts the label as a hit target.
-31. Ctrl+A while editing a text does nothing: text.selectAll (select-container-children). 32. The top bar's
+31. Ctrl+A leaves out hidden siblings only; locked ones join when lock-element lands. 32. The top bar's
     "Export project (ZIP)" wears the accent colour while "not available yet" (`.door--primary` is never dimmed).

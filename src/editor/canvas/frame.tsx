@@ -53,6 +53,7 @@ export function CanvasFrame({ width, zoom }: { readonly width: number; readonly 
       // the frame for the editor's page body (the canvas key context).
       let edited: string | null = null;
       let lineBreaks = store.getState().ui.textEdit.lineBreaks;
+      let selectAlls = store.getState().ui.textEdit.selectAlls;
       let stopKeys = () => {};
       const followEdit = () => {
         const edit = store.getState().ui.textEdit;
@@ -68,6 +69,10 @@ export function CanvasFrame({ width, zoom }: { readonly width: number; readonly 
         if (edit.lineBreaks !== lineBreaks) {
           lineBreaks = edit.lineBreaks;
           if (edit.node !== null) renderer.insertLineBreak();
+        }
+        if (edit.selectAlls !== selectAlls) {
+          selectAlls = edit.selectAlls;
+          if (edit.node !== null) renderer.selectEditedText();
         }
       };
       const stopEdit = store.subscribe(followEdit);

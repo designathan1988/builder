@@ -23,6 +23,23 @@ export const selectCommand = registerHandler('selection.select', ({ state }, { t
 // selection.clear: nothing is selected any more
 export const clearSelectionCommand = registerHandler('selection.clear', () => ({ kind: 'change', selection: [], message: message('status.selection.cleared') }));
 
+// selection.selectAllInContainer (spec select-container-children): the selected element and every sibling of it
+// become the selection, in their order; with nothing selected, or the page root selected, every child of the page.
+// A hidden child is left out, and the status bar counts what it left out (Problems in Pager 2).
+export const selectAllInContainerCommand = registerHandler('selection.selectAllInContainer', ({ state }): Outcome<never> => {
+  const [primary] = state.selection;
+  const at = primary === undefined ? null : locate(state.document, primary);
+  const container = at?.parent ?? at?.node ?? state.document.pages[0]?.tree ?? null;
+  if (container === null) return { kind: 'change' };
+  const taken = container.children.filter((child) => child.hidden !== true);
+  const skipped = container.children.length - taken.length;
+  return {
+    kind: 'change',
+    selection: taken.map((child) => child.id),
+    message: skipped > 0 ? message('status.selection.skipped', { count: taken.length, skipped }) : message('status.selection.count', { count: taken.length }),
+  };
+});
+
 // selection.marquee (spec marquee-select): the band a drag draws from the empty area of the page or of a container
 // selects what it covers, with the corrections of the spec's "Problems in Pager": the band starts at its press point
 // (rect x, y; its width and height run from there to the pointer and are negative when the pointer went left or up),

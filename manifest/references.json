@@ -563,7 +563,7 @@
     {
       "kind": "handler",
       "id": "selection.selectAllInContainer",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",
@@ -808,7 +808,7 @@
     {
       "kind": "handler",
       "id": "text.selectAll",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",

@@ -22,9 +22,11 @@ export interface TextEditState {
   readonly node: NodeId | null;
   // the line breaks asked for (Shift+Enter); the count tells a new request from one carried out
   readonly lineBreaks: number;
+  // the "select all the text" asked for (Ctrl+A while editing, select-container-children), counted the same way
+  readonly selectAlls: number;
 }
 
-export const INITIAL_TEXT_EDIT: TextEditState = { node: null, lineBreaks: 0 };
+export const INITIAL_TEXT_EDIT: TextEditState = { node: null, lineBreaks: 0, selectAlls: 0 };
 
 // the key context of the edited text (interactions.json): it inherits nothing, so the tree's keys never reach it
 export const TEXT_EDITING: KeyContextId = 'text-editing';
@@ -79,6 +81,13 @@ export const cancelEdit = registerHandler<'text.cancelEdit', EditorUi>('text.can
 export const insertLineBreak = registerHandler<'text.insertLineBreak', EditorUi>('text.insertLineBreak', ({ state }) => {
   if (state.ui.textEdit.node === null) return { kind: 'change' };
   return { kind: 'change', ui: withEdit(state.ui, { ...state.ui.textEdit, lineBreaks: state.ui.textEdit.lineBreaks + 1 }) };
+});
+
+// Ctrl+A while editing (spec select-container-children): every character of the edited text becomes the text
+// selection, so what is typed next replaces it; the element selection stays as it is
+export const selectAllText = registerHandler<'text.selectAll', EditorUi>('text.selectAll', ({ state }) => {
+  if (state.ui.textEdit.node === null) return { kind: 'change' };
+  return { kind: 'change', ui: withEdit(state.ui, { ...state.ui.textEdit, selectAlls: state.ui.textEdit.selectAlls + 1 }) };
 });
 
 // The editor state after the selection changed: an edit ends when the selection is no longer its node alone.

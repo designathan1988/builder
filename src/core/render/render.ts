@@ -227,6 +227,14 @@ export class PageRenderer {
     selection.addRange(range);
   }
 
+  // Every character of the edited text as the text selection, so what is typed next replaces it.
+  selectEditedText(): void {
+    const element = this.edit ? this.elements.get(this.edit.node) : undefined;
+    const selection = this.target.getSelection();
+    if (!element || !selection) return;
+    selection.selectAllChildren(element);
+  }
+
   // The text the edited element holds now ("\n" for each line break, the browser's last <br> left out), or null when
   // no text is edited.
   editedText(): string | null {
