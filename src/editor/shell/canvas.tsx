@@ -1,7 +1,7 @@
 // The centre column (DESIGN.md "Regions" and "Canvas"): the file tabs, the canvas toolbar with the Canvas / Split /
 // Code switch, the rulers, and the frame with its breakpoint tabs along the cascade from the base breakpoint, and the
 // page's iframe (src/editor/canvas/frame.tsx) at the zoom that fits the frame to the stage.
-import { useContext, useEffect, useRef, useState, type CSSProperties } from 'react';
+import { useContext, useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
 import type { MessageId } from '../../generated/ids.ts';
 import { manifest, type DoorEntry } from '../../manifest/runtime.ts';
 import { CanvasFrame } from '../canvas/frame.tsx';
@@ -136,10 +136,17 @@ function BreakpointTabs() {
 export function CanvasColumn() {
   const stage = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ width: 0, height: 0, gap: 0 });
-  useEffect(() => {
+  // measured before the first paint, so the canvas never shows an unfitted frame (at zoom 1) before it fits: a layout
+  // read right after the editor appears must see the fitted canvas; the observer then follows every later resize
+  useLayoutEffect(() => {
     const element = stage.current;
     if (!element) return;
     const gap = parseFloat(getComputedStyle(element).getPropertyValue(FRAME_GAP_TOKEN)) || 0;
+    const first = element.getBoundingClientRect();
+    const style = getComputedStyle(element);
+    const width = first.width - (parseFloat(style.paddingLeft) || 0) - (parseFloat(style.paddingRight) || 0) - (parseFloat(style.borderLeftWidth) || 0) - (parseFloat(style.borderRightWidth) || 0);
+    const height = first.height - (parseFloat(style.paddingTop) || 0) - (parseFloat(style.paddingBottom) || 0) - (parseFloat(style.borderTopWidth) || 0) - (parseFloat(style.borderBottomWidth) || 0);
+    setSize({ width, height, gap });
     const observer = new ResizeObserver(([entry]) => {
       if (entry) setSize({ width: entry.contentRect.width, height: entry.contentRect.height, gap });
     });
@@ -149,7 +156,7 @@ export function CanvasColumn() {
   // the zoom that fits the base breakpoint's width, with the frame's gap on both sides
   const zoom = size.width > 0 && BASE ? Math.max(0.1, (size.width - 2 * size.gap) / BASE.width) : 1;
   const report = useContext(ReportFitZoom);
-  useEffect(() => report(zoom), [report, zoom]);
+  useLayoutEffect(() => report(zoom), [report, zoom]);
   return (
     <>
       <main className="centre" data-key-context="canvas">
