@@ -96,6 +96,36 @@ scripts.run('builder/frame-owner', builder.rules['frame-owner'], {
   ],
 });
 
+tsx.run('builder/keyboard-owner', builder.rules['keyboard-owner'], {
+  valid: ['input.addEventListener("change", pick);', 'const i = <input onChange={type} onFocus={f} />;', 'const b = <button onClick={run} />;'],
+  invalid: [
+    { code: 'document.addEventListener("keydown", escape);', errors: [{ messageId: 'listener' }] },
+    { code: 'window.removeEventListener(`keyup`, up);', errors: [{ messageId: 'listener' }] },
+    { code: 'el.addEventListener("keypress", press);', errors: [{ messageId: 'listener' }] },
+    { code: 'el.onkeydown = handle;', errors: [{ messageId: 'listener' }] },
+    { code: 'const m = <div onKeyDown={arrows} />;', errors: [{ messageId: 'prop' }] },
+    { code: 'const m = <div onKeyUpCapture={u} onKeyPress={p} />;', errors: [{ messageId: 'prop' }, { messageId: 'prop' }] },
+  ],
+});
+
+tsx.run('builder/no-manifest-id', builder.rules['no-manifest-id'], {
+  valid: [
+    'const x = registerHandler("selection.select", run);',
+    'const p = registerPredicate("hasSelection", test);',
+    'type Theme = CommandArgs["preferences.setTheme"]["theme"];',
+    'const tab = doorSlots("file-tabs").find((d) => d.door.drawnAs === "item");',
+    'const side = "block-start";',
+  ],
+  invalid: [
+    { code: 'if (entry.command.id === "selection.select") run();', errors: [{ messageId: 'id' }] },
+    { code: 'const door = "history.undo#toolbar-top-bar";', errors: [{ messageId: 'id' }] },
+    { code: 'const sides = ["top", "left"];', errors: [{ messageId: 'id' }, { messageId: 'id' }] },
+    { code: 'const d = <div data-door="ui.dismiss#overlay-backdrop" />;', errors: [{ messageId: 'id' }] },
+    { code: 'dispatch(`element.insert`, args);', errors: [{ messageId: 'id' }] },
+    { code: 'const h = other("selection.select", run);', errors: [{ messageId: 'id' }] },
+  ],
+});
+
 describe('style values', () => {
   it('turns React style keys into CSS property names', () => {
     expect(cssPropertyName('backgroundColor')).toBe('background-color');

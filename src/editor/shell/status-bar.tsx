@@ -6,6 +6,7 @@ import { manifest } from '../../manifest/runtime.ts';
 import { allNodes } from '../../core/document/model.ts';
 import { pluralForm } from '../../i18n/index.ts';
 import { MenuButton } from '../doors/menu.tsx';
+import { drawnAsOf } from '../doors/placement.ts';
 import { useEditorState } from '../store.ts';
 import { panelName } from '../workspace/panels.ts';
 import { messageText, useLocale, useT } from '../text.ts';
@@ -28,7 +29,8 @@ export function StatusBar() {
       <Slots
         region="status-bar"
         render={(slot) => {
-          if (slot.kind === 'door' && slot.entry.command.id === 'selection.select') {
+          // the region's item is the breadcrumb of the selection (DESIGN.md "Regions": 1 the breadcrumb)
+          if (slot.kind === 'door' && drawnAsOf(slot.entry) === 'item') {
             // the breadcrumb of the selection: empty without one, then the breakpoint and the element count
             return [
               <nav key="breadcrumb" className="status-bar__breadcrumb" aria-label={t(panelName('layers'))} />,

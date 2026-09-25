@@ -9,7 +9,8 @@ import type { BodyTable } from './bodies.ts';
 import { Slots } from './slots.tsx';
 
 const TAB = doorSlots('tab-strip')[0];
-const CLOSE = doorSlots('dock-strip').find((d) => d.command.id === 'workspace.setPanelOpen');
+// the strip's button that closes the tab it shows (its door's own arguments close a panel)
+const CLOSE = doorSlots('dock-strip').find((d) => d.door.args.open === 'close');
 
 // The Timeline tab: the doors the manifest places in dock-timeline, where the animation features' doors wait, each
 // disabled with "not available yet" until its command is built (the user's correction of decision 2).

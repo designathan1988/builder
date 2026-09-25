@@ -154,7 +154,9 @@ kbd {
   background: var(--color-surface);
 }
 
-.door--button.door--primary {
+/* the region's main action (drawnAs primary): a button filled with the accent */
+.door--primary {
+  padding: 0 var(--space-5);
   background: var(--color-accent);
   border-color: var(--color-accent);
   color: var(--color-on-accent);
@@ -354,6 +356,7 @@ kbd {
 }
 
 .top-bar__page {
+  padding: 0 var(--space-5);
   border: 1px solid var(--color-border);
   background: var(--color-surface-sunken);
   color: var(--color-text);
@@ -368,6 +371,7 @@ kbd {
 .top-bar__search {
   width: calc(var(--size-target-min) * 10);
   margin: 0 auto;
+  padding: 0 var(--space-5);
   justify-content: flex-start;
   gap: var(--space-3);
   border: 1px solid var(--color-border);
@@ -1123,22 +1127,23 @@ kbd {
   text-align: center;
 }
 
-.box__side--top {
+/* the sides of a box, named as CSS Logical Properties name them in a horizontal, top-to-bottom writing mode */
+.box__side--block-start {
   grid-column: 2;
   grid-row: 1;
 }
 
-.box__side--bottom {
+.box__side--block-end {
   grid-column: 2;
   grid-row: 3;
 }
 
-.box__side--left {
+.box__side--inline-start {
   grid-column: 1;
   grid-row: 2;
 }
 
-.box__side--right {
+.box__side--inline-end {
   grid-column: 3;
   grid-row: 2;
 }

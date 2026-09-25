@@ -474,7 +474,7 @@
         {
           "id": "toolbar-top-bar-export",
           "kind": "toolbar",
-          "drawnAs": "button",
+          "drawnAs": "primary",
           "pressed": false,
           "feature": "export-zip",
           "toolbar": "top-bar",

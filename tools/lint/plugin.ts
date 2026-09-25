@@ -9,6 +9,7 @@ import type { RuleDefinition, RuleVisitor } from '@eslint/core';
 import type { CSSRuleDefinition } from '@eslint/css';
 import type { TSESTree } from '@typescript-eslint/utils';
 import type { Linter, Rule, SourceCode } from 'eslint';
+import { COMMAND_IDS, DOOR_IDS, PROPERTY_IDS } from '../../src/generated/ids.ts';
 import { cssPropertyName, DEFAULT_TOKENS_FILE, numberLiteral, styleLiterals, tokenNames, type StyleLiteral } from './style-values.ts';
 
 type Node = Rule.Node;
@@ -344,6 +345,8 @@ const memberName = (node: TSESTree.MemberExpression): string | null =>
   !node.computed && node.property.type === 'Identifier' ? node.property.name : node.computed && node.property.type === 'Literal' && typeof node.property.value === 'string' ? node.property.value : null;
 
 type TsVisitor = RuleVisitor & {
+  Literal?: (node: TSESTree.Literal) => void;
+  TemplateLiteral?: (node: TSESTree.TemplateLiteral) => void;
   CallExpression?: (node: TSESTree.CallExpression) => void;
   AssignmentExpression?: (node: TSESTree.AssignmentExpression) => void;
   MemberExpression?: (node: TSESTree.MemberExpression) => void;
@@ -498,6 +501,83 @@ const frameOwner: TsRuleDefinition<'reach' | 'write' | 'element'> = {
   },
 };
 
+// builder/keyboard-owner: keys belong to the keymap (src/editor/input/keymap.ts), the one file the configuration
+// exempts, which runs them as the manifest's shortcut doors. A keydown, keyup or keypress listener and an onKeyDown,
+// onKeyUp or onKeyPress prop are refused anywhere else; a native text field still takes its typing.
+const KEY_EVENT = /^key(down|up|press)$/i;
+const KEY_PROP = /^onKey(Down|Up|Press)(Capture)?$/;
+const keyboardOwner: TsRuleDefinition<'listener' | 'prop'> = {
+  meta: {
+    type: 'problem',
+    docs: { description: 'Keys are handled only by the keymap' },
+    messages: {
+      listener: '{{what}}: keys belong to the keymap (src/editor/input/keymap.ts), which runs them as the manifest\'s shortcut doors.',
+      prop: '{{what}}: keys belong to the keymap (src/editor/input/keymap.ts), which runs them as the manifest\'s shortcut doors.',
+    },
+    schema: [],
+  },
+  create(context) {
+    return {
+      CallExpression(node) {
+        if (node.callee.type !== 'MemberExpression') return;
+        const method = memberName(node.callee);
+        if (method !== 'addEventListener' && method !== 'removeEventListener') return;
+        const event = staticText(node.arguments[0]);
+        if (event !== null && KEY_EVENT.test(event)) context.report({ node, messageId: 'listener', data: { what: `${method}('${event}')` } });
+      },
+      AssignmentExpression(node) {
+        if (node.left.type !== 'MemberExpression') return;
+        const property = memberName(node.left);
+        if (property !== null && property.startsWith('on') && KEY_EVENT.test(property.slice(2))) context.report({ node, messageId: 'listener', data: { what: property } });
+      },
+      JSXAttribute(node) {
+        const name = node.name.type === 'JSXIdentifier' ? node.name.name : null;
+        if (name !== null && KEY_PROP.test(name)) context.report({ node, messageId: 'prop', data: { what: name } });
+      },
+    };
+  },
+};
+
+// builder/no-manifest-id: code takes a command, a door or an edited property from the manifest's data, never from a
+// text written by hand. A string literal (or a template without expressions) that is a CommandId, a DoorId or a
+// PropertyId of the generated lists (src/generated/ids.ts) is refused, except as the id a handler or a predicate
+// registers (the first argument of registerHandler or registerPredicate, which manifest:check reads) and in a type
+// (CommandArgs['…'], checked by TypeScript against the same lists). The configuration exempts src/generated/, the
+// manifest's own reader and checker (src/manifest/), the command table and the tests.
+const MANIFEST_IDS = new Map<string, string>([
+  ...PROPERTY_IDS.map((id) => [id, 'an edited property'] as const),
+  ...COMMAND_IDS.map((id) => [id, 'a command'] as const),
+  ...DOOR_IDS.map((id) => [id, 'a door'] as const),
+]);
+const REGISTRARS = new Set(['registerHandler', 'registerPredicate']);
+const noManifestId: TsRuleDefinition<'id'> = {
+  meta: {
+    type: 'problem',
+    docs: { description: 'Manifest ids come from the manifest, never from a literal' },
+    messages: { id: '"{{id}}" is {{what}} of the manifest written by hand: read it from the manifest\'s data (a door\'s drawing, its command\'s arguments, the region\'s placement).' },
+    schema: [],
+  },
+  create(context) {
+    const check = (node: TSESTree.Node, text: string) => {
+      const what = MANIFEST_IDS.get(text);
+      if (what === undefined) return;
+      const parent = node.parent;
+      if (parent?.type === 'TSLiteralType') return;
+      if (parent?.type === 'CallExpression' && parent.arguments[0] === node && parent.callee.type === 'Identifier' && REGISTRARS.has(parent.callee.name)) return;
+      context.report({ node, messageId: 'id', data: { id: text, what } });
+    };
+    return {
+      Literal(node: TSESTree.Literal) {
+        if (typeof node.value === 'string') check(node, node.value);
+      },
+      TemplateLiteral(node: TSESTree.TemplateLiteral) {
+        const text = staticText(node);
+        if (text !== null) check(node, text);
+      },
+    };
+  },
+};
+
 const plugin = {
   meta: { name: 'builder' },
   rules: {
@@ -507,6 +587,8 @@ const plugin = {
     'pointer-owner': pointerOwner,
     'gesture-owner': gestureOwner,
     'frame-owner': frameOwner,
+    'keyboard-owner': keyboardOwner,
+    'no-manifest-id': noManifestId,
   },
 };
 

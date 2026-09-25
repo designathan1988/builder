@@ -309,7 +309,7 @@
         {
           "id": "toolbar-top-bar-page-switcher",
           "kind": "toolbar",
-          "drawnAs": "button",
+          "drawnAs": "item",
           "pressed": false,
           "feature": "explorer-pages",
           "toolbar": "top-bar",

@@ -929,6 +929,10 @@
       "reader": "src/editor/doors/placement.ts"
     },
     {
+      "field": "layout:regions[].breaks",
+      "reader": "src/editor/doors/placement.ts"
+    },
+    {
       "field": "layout:menus",
       "reader": "src/editor/doors/placement.ts"
     },

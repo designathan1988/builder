@@ -104,11 +104,16 @@ function withPanel(ui: EditorUi, panel: Panel, open: boolean): EditorUi {
 
 const panelMessage = (panel: Panel, open: boolean): Message => message(open ? 'status.panel.opened' : 'status.panel.closed', { panel: { key: panelName(panel) } });
 
-export const setPanelOpen = registerHandler<'workspace.setPanelOpen', EditorUi>('workspace.setPanelOpen', ({ state }, args) => {
-  const open = args.open === 'toggle' ? !isPanelOpen(state.ui, args.panel) : args.open === 'open';
-  const ui = withPanel(state.ui, args.panel, open);
-  return { kind: 'change', ui, message: panelMessage(args.panel, open) };
-});
+export const setPanelOpen = registerHandler<'workspace.setPanelOpen', EditorUi>(
+  'workspace.setPanelOpen',
+  ({ state }, args) => {
+    const open = args.open === 'toggle' ? !isPanelOpen(state.ui, args.panel) : args.open === 'open';
+    const ui = withPanel(state.ui, args.panel, open);
+    return { kind: 'change', ui, message: panelMessage(args.panel, open) };
+  },
+  // a toggle shows whether its panel is open; an open or a close button stands for no state
+  (state, args) => args.open === 'toggle' && typeof args.panel === 'string' && args.panel in PANELS && isPanelOpen(state.ui, args.panel as Panel),
+);
 
 export const toggleLeftDock = registerHandler<'workspace.toggleLeftDock', EditorUi>('workspace.toggleLeftDock', ({ state }) => {
   const sidebar = !state.ui.panels.sidebar;

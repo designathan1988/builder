@@ -1601,7 +1601,7 @@
         {
           "id": "toolbar-top-bar-search",
           "kind": "toolbar",
-          "drawnAs": "button",
+          "drawnAs": "field",
           "pressed": false,
           "feature": "command-bar",
           "toolbar": "top-bar",

@@ -424,11 +424,12 @@ const placementSchema = z.union([
 ]);
 
 // How a toolbar or panel control is drawn (DESIGN.md "Icons"): an icon button (the icon alone, the label as its
-// tooltip), a button (its label, after its icon when it has one), one of a segmented group, a tab, an item of a list
-// (a row, a tile, a file tab, a chip: its icon and text come from the item), a field, a toggle, an area of a
-// larger control (a ruler, a matrix, a backdrop), or a disclosure (a caret or a section header, whose icon is the
-// layout's expanded or collapsed glyph, by its state, and never its own).
-export const DRAWN_AS = ['icon-button', 'button', 'segment', 'tab', 'item', 'field', 'toggle', 'area', 'disclosure'] as const;
+// tooltip), a button (its label, after its icon when it has one), the primary button (a button filled with the accent,
+// the region's main action), one of a segmented group, a tab, an item (a row, a tile, a file tab, a chip, the page
+// switcher: its icon and text come from the item it stands for), a field (an input, or a control drawn as one, such as
+// the palette's search), a toggle, an area of a larger control (a ruler, a matrix, a backdrop), or a disclosure (a
+// caret or a section header, whose icon is the layout's expanded or collapsed glyph, by its state, and never its own).
+export const DRAWN_AS = ['icon-button', 'button', 'primary', 'segment', 'tab', 'item', 'field', 'toggle', 'area', 'disclosure'] as const;
 
 // Whether an icon button or a button is a toggle button: it switches a state on and off and says whether it is on
 // (aria-pressed, from the current state of its built command). A segment and a tab always say it; other controls never.
@@ -615,7 +616,8 @@ export const REGION_AREAS = ['top-bar', 'left', 'centre', 'right', 'dock', 'stat
 export const PAGE_REGIONS = ['canvas-frame', 'canvas-toolbar'] as const;
 
 export const layoutFileSchema = z.strictObject({
-  regions: z.array(z.strictObject({ id: regionId, area: z.enum(REGION_AREAS) })).min(1),
+  // each region, where it sits, and the orders before which it draws a separator between groups of its controls
+  regions: z.array(z.strictObject({ id: regionId, area: z.enum(REGION_AREAS), breaks: z.array(z.number().int().positive()).optional() })).min(1),
   // the button that opens each menu (its items are the menu's doors): its label, where it is drawn, and its order there
   menus: z.array(
     z.strictObject({

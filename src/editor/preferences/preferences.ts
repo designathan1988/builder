@@ -8,8 +8,28 @@ import type { Store } from '../../core/store/store.ts';
 import type { EditorUi } from '../state.ts';
 
 export type Theme = CommandArgs['preferences.setTheme']['theme'];
+
+// a language item or a theme item stands for the language or the theme the editor shows
+export const setLanguage = registerHandler<'preferences.setLanguage', EditorUi>(
+  'preferences.setLanguage',
+  ({ state }, args) => {
+    if (state.ui.preferences.locale === args.locale) return { kind: 'change' };
+    return { kind: 'change', ui: { ...state.ui, preferences: { ...state.ui.preferences, locale: args.locale } } };
+  },
+  (state, args) => args.locale === state.ui.preferences.locale,
+);
+
+export const setTheme = registerHandler<'preferences.setTheme', EditorUi>(
+  'preferences.setTheme',
+  ({ state }, args) => {
+    if (state.ui.preferences.theme === args.theme) return { kind: 'change' };
+    return { kind: 'change', ui: { ...state.ui, preferences: { ...state.ui.preferences, theme: args.theme } } };
+  },
+  (state, args) => args.theme === state.ui.preferences.theme,
+);
+
 // the themes preferences.setTheme offers, read from the manifest
-const THEMES: readonly string[] = commandOf('preferences.setTheme').args.theme?.values ?? [];
+const THEMES: readonly string[] = commandOf(setTheme.command).args.theme?.values ?? [];
 const isTheme = (value: unknown): value is Theme => typeof value === 'string' && THEMES.includes(value);
 
 export interface Preferences {
@@ -71,13 +91,3 @@ export function persistPreferences(store: Store<EditorUi>, storage: PreferenceSt
     storage.write(JSON.stringify(now));
   });
 }
-
-export const setLanguage = registerHandler<'preferences.setLanguage', EditorUi>('preferences.setLanguage', ({ state }, args) => {
-  if (state.ui.preferences.locale === args.locale) return { kind: 'change' };
-  return { kind: 'change', ui: { ...state.ui, preferences: { ...state.ui.preferences, locale: args.locale } } };
-});
-
-export const setTheme = registerHandler<'preferences.setTheme', EditorUi>('preferences.setTheme', ({ state }, args) => {
-  if (state.ui.preferences.theme === args.theme) return { kind: 'change' };
-  return { kind: 'change', ui: { ...state.ui, preferences: { ...state.ui.preferences, theme: args.theme } } };
-});

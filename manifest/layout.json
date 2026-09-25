@@ -2,7 +2,8 @@
   "regions": [
     {
       "id": "top-bar",
-      "area": "top-bar"
+      "area": "top-bar",
+      "breaks": [6, 10]
     },
     {
       "id": "preview-bar",

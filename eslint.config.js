@@ -51,6 +51,21 @@ export default defineConfig(
     rules: { 'builder/gesture-owner': 'error' },
   },
   {
+    // Keys belong to the keymap, which runs the manifest's shortcut doors (ARCHITECTURE.md, Keymap).
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: ['src/editor/input/keymap.ts'],
+    plugins: { builder },
+    rules: { 'builder/keyboard-owner': 'error' },
+  },
+  {
+    // Commands, doors and edited properties come from the manifest's data; the generated lists, the manifest's own
+    // reader and checker, the command table and the tests name them.
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: ['src/generated/**', 'src/manifest/**', 'src/app/commands.ts', 'src/app/commands.typecheck.ts', 'src/**/*.test.ts', 'src/**/*.test.tsx'],
+    plugins: { builder },
+    rules: { 'builder/no-manifest-id': 'error' },
+  },
+  {
     // Only the renderer writes the canvas iframe's page (ARCHITECTURE.md, Renderer); its tests build pages of their own.
     files: ['src/**/*.{ts,tsx}'],
     ignores: ['src/core/render/render.ts', 'src/**/*.test.ts'],

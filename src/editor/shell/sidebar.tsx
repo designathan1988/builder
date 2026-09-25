@@ -33,10 +33,12 @@ function itemOrder(region: RegionId): number {
 const PAGE_ROW = requireDoor('explorer-pages', (d) => drawnAs(d) === 'item');
 const PAGE_ACTIONS = doorSlots('explorer-pages').filter((d) => drawnAs(d) === 'icon-button' && orderOf(d) > orderOf(PAGE_ROW));
 const LAYERS_HEADER = requireDoor('explorer-layers', (d) => drawnAs(d) === 'disclosure');
-const LAYERS_SELECT = requireDoor('layers-row', (d) => d.command.id === 'selection.select');
+// a Layers row's plain click: the row's door of the layers-row-click gesture with no key held
+const LAYERS_SELECT = requireDoor('layers-row', (d) => d.door.kind === 'panel-control' && d.door.gesture === 'layers-row-click' && d.door.modifier === null);
 const LAYERS_CARET = requireDoor('layers-row', (d) => drawnAs(d) === 'disclosure');
 const LAYERS_BUTTONS = doorSlots('layers-row').filter((d) => drawnAs(d) === 'icon-button');
-const INSERT_TILE = requireDoor('insert', (d) => d.command.id === 'element.insert');
+// an element tile: the item whose command takes a palette entry (a component tile takes a component)
+const INSERT_TILE = requireDoor('insert', (d) => drawnAs(d) === 'item' && Object.values(d.command.args).some((a) => a.type === 'palette-entry'));
 const INSERT_GROUP = requireDoor('insert', (d) => drawnAs(d) === 'disclosure');
 
 export function ActivityBar() {

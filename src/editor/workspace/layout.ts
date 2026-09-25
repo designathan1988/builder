@@ -40,7 +40,12 @@ export function withActiveDockTab(ui: EditorUi, tab: Panel | null): EditorUi {
   return ui.layout.activeDockTab === tab ? ui : { ...ui, layout: { ...ui.layout, activeDockTab: tab } };
 }
 
-export const setWorkbenchState = registerHandler<'workspace.setWorkbenchState', EditorUi>('workspace.setWorkbenchState', ({ state }, args) => ({
-  kind: 'change',
-  ui: withDock(state.ui, nextDock(state.ui.layout.dock, args.state)),
-}));
+export const setWorkbenchState = registerHandler<'workspace.setWorkbenchState', EditorUi>(
+  'workspace.setWorkbenchState',
+  ({ state }, args) => ({
+    kind: 'change',
+    ui: withDock(state.ui, nextDock(state.ui.layout.dock, args.state)),
+  }),
+  // maximise says whether the workbench is maximised; the others whether it shows
+  (state, args) => (args.state === 'toggle-max' ? state.ui.layout.dock === 'max' : state.ui.layout.dock !== 'collapsed'),
+);

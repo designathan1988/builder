@@ -52,11 +52,18 @@ export interface RegisteredHandler<Id extends CommandId, Ui> {
   readonly command: Id;
   // A method, so a core handler written for any editor state (Ui = never) fits every table.
   run(context: HandlerContext<Ui>, args: CommandArgs[Id]): Outcome<Ui>;
+  // Whether a door with these arguments stands for the state the store holds now (a checked theme, a pressed panel
+  // toggle); a command whose doors stand for no state has none. The command's owner knows it, beside its handler.
+  current?(state: StoreState<Ui>, args: Readonly<Record<string, unknown>>): boolean;
 }
 
 // manifest:check reads `registerHandler('<id>'` to mark the id registered in references.json.
-export function registerHandler<Id extends CommandId, Ui = never>(command: Id, run: (context: HandlerContext<Ui>, args: CommandArgs[Id]) => Outcome<Ui>): RegisteredHandler<Id, Ui> {
-  return { command, run };
+export function registerHandler<Id extends CommandId, Ui = never>(
+  command: Id,
+  run: (context: HandlerContext<Ui>, args: CommandArgs[Id]) => Outcome<Ui>,
+  current?: (state: StoreState<Ui>, args: Readonly<Record<string, unknown>>) => boolean,
+): RegisteredHandler<Id, Ui> {
+  return current === undefined ? { command, run } : { command, run, current };
 }
 
 export type CommandEntry<Id extends CommandId, Ui> = RegisteredHandler<Id, Ui> | NotAvailableYet;

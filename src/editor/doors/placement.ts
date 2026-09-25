@@ -28,6 +28,24 @@ export function doorSlots(region: RegionId): readonly DoorEntry[] {
   return slotsIn(region).flatMap((s) => (s.kind === 'door' ? [s.entry] : []));
 }
 
+// the orders before which a region draws a separator between groups of its controls (layout.json)
+export function breaksIn(region: RegionId): readonly number[] {
+  return manifest.layout.regions.find((r) => r.id === region)?.breaks ?? [];
+}
+
+// how a toolbar or panel control is drawn (the door's drawnAs), null for the other door kinds
+export function drawnAsOf(entry: DoorEntry): string | null {
+  return entry.door.kind === 'toolbar' || entry.door.kind === 'panel-control' ? entry.door.drawnAs : null;
+}
+
+// The control drawn inside an item of a region (a tab's close button, a class chip's ×): the icon button placed right
+// after the item (DESIGN.md "Regions": each tab is its name then its close button).
+export function partOf(region: RegionId, item: DoorEntry): DoorEntry | null {
+  const doors = doorSlots(region);
+  const next = doors[doors.indexOf(item) + 1];
+  return next !== undefined && drawnAsOf(item) === 'item' && drawnAsOf(next) === 'icon-button' ? next : null;
+}
+
 export function menuOf(menu: MenuId): LayoutFile['menus'][number] {
   const found = manifest.layout.menus.find((m) => m.id === menu);
   if (!found) throw new Error(`unknown menu ${menu}`);

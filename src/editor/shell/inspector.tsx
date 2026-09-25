@@ -10,7 +10,7 @@ import { GENERATED_VALUES } from '../../generated/value-lists.ts';
 import { manifest, type DoorEntry } from '../../manifest/runtime.ts';
 import { DoorControl, Icon, useDoor } from '../doors/door.tsx';
 import { MenuButton } from '../doors/menu.tsx';
-import { GLYPHS, doorSlots, slotsIn } from '../doors/placement.ts';
+import { GLYPHS, doorSlots, drawnAsOf, partOf, slotsIn } from '../doors/placement.ts';
 import { useEditorState } from '../store.ts';
 import { isPanelOpen, panelName } from '../workspace/panels.ts';
 import { useT } from '../text.ts';
@@ -37,6 +37,9 @@ const BASE_BREAKPOINT = manifest.properties.breakpoints.find((b) => b.base);
 const BASE_STATE = manifest.properties.states[0];
 // the icon the frame's tab of the base breakpoint shows, for the read-only active breakpoint
 const BASE_BREAKPOINT_ICON = doorSlots('canvas-frame').find((d) => d.door.args.breakpoint === BASE_BREAKPOINT?.id)?.door.icon ?? null;
+// the selector bar's target chip and the × drawn inside a class chip
+const CHIP = doorSlots('inspector-selector-bar').find((d) => drawnAsOf(d) === 'item');
+const CHIP_PART = CHIP ? partOf('inspector-selector-bar', CHIP) : null;
 const ORIGINS: readonly { readonly key: MessageId; readonly origin: string }[] = [
   { key: 'inspector.legend.here', origin: 'here' },
   { key: 'inspector.legend.breakpoint', origin: 'breakpoint' },
@@ -143,8 +146,9 @@ function BoxLabel({ entry, label }: { readonly entry: DoorEntry; readonly label:
 }
 
 // A box-sides composite lists its four longhands in its shorthand's order (CSS Box 3: top, right, bottom, left); the
-// index of a side's property there places its field.
-const BOX_SIDES = ['top', 'right', 'bottom', 'left'] as const;
+// index of a side's property there places its field. The sides are named as CSS Logical Properties name them in a
+// horizontal, top-to-bottom writing mode, in that same order.
+const BOX_SIDES = ['block-start', 'inline-end', 'block-end', 'inline-start'] as const;
 
 // The box model (DESIGN.md "Sections": margin outside, padding inside): the composites drawn as a box model
 // (properties.json control box-model), each a box around the next in their placement order, the first outermost;
@@ -164,11 +168,11 @@ function BoxModel({ doors }: { readonly doors: readonly DoorEntry[] }) {
     return (
       <div className={`box box--${target.id}`}>
         <BoxLabel entry={box} label={t(target.labelKey as MessageId)} />
-        {side('top')}
-        {side('left')}
+        {side('block-start')}
+        {side('inline-start')}
         {draw(level + 1)}
-        {side('right')}
-        {side('bottom')}
+        {side('inline-end')}
+        {side('block-end')}
       </div>
     );
   };
@@ -256,8 +260,8 @@ export function Inspector() {
             render={(slot) => {
               if (slot.kind === 'menu') return null;
               const drawn = slot.entry.door.kind === 'panel-control' ? slot.entry.door.drawnAs : null;
-              // the target chips and their × stand for the element's targets: there are none without a selection
-              if (drawn === 'item' || slot.entry.command.id === 'classes.detach') return null;
+              // the target chips and the × drawn inside them stand for the element's targets: none without a selection
+              if (drawn === 'item' || slot.entry === CHIP_PART) return null;
               return undefined;
             }}
           />

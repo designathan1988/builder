@@ -7,7 +7,7 @@ import { manifest, type DoorEntry } from '../../manifest/runtime.ts';
 import { CanvasFrame } from '../canvas/frame.tsx';
 import { DoorControl, Icon } from '../doors/door.tsx';
 import { MenuButton } from '../doors/menu.tsx';
-import { doorSlots, slotsIn } from '../doors/placement.ts';
+import { doorSlots, partOf, slotsIn } from '../doors/placement.ts';
 import { useEditorState } from '../store.ts';
 import { isPanelOpen } from '../workspace/panels.ts';
 import { useT } from '../text.ts';
@@ -25,8 +25,9 @@ const drawnAs = (entry: DoorEntry): string | null => (entry.door.kind === 'toolb
 
 function FileTabs() {
   const page = useEditorState((s) => s.document.pages[0]);
-  const tab = doorSlots('file-tabs').find((d) => d.command.id === 'pages.switch');
-  const close = doorSlots('file-tabs').find((d) => drawnAs(d) === 'icon-button');
+  // the region's first item is the page's tab (DESIGN.md "Regions": 1 page tab), its close button drawn inside it
+  const tab = doorSlots('file-tabs').find((d) => drawnAs(d) === 'item');
+  const close = tab ? partOf('file-tabs', tab) : null;
   if (!page || !tab) return <div className="file-tabs" data-region="file-tabs" />;
   return (
     <div className="file-tabs" data-region="file-tabs" role="tablist">
@@ -51,8 +52,9 @@ function ZoomValue() {
 
 function CanvasToolbar() {
   const toolsOpen = useEditorState((s) => isPanelOpen(s.ui, 'canvas-tools'));
-  const toggleOrder = slotsIn('canvas-toolbar').find((s) => s.kind === 'door' && s.entry.command.id === 'workspace.setPanelOpen')?.order ?? 0;
+  // the canvas tools, and the toolbar door that shows or hides them (the one that opens their panel)
   const tools = slotsIn('canvas-toolbar').filter((s) => s.kind === 'door' && s.entry.door.kind === 'panel-control' && s.entry.door.panel === 'canvas-tools').map((s) => s.order);
+  const toggleOrder = slotsIn('canvas-toolbar').find((s) => s.kind === 'door' && s.entry.door.args.panel === 'canvas-tools')?.order ?? 0;
   return (
     <div className="canvas-toolbar" data-region="canvas-toolbar" data-key-context="toolbar">
       <div className="segmented" role="group">
