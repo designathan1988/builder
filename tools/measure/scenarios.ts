@@ -24,7 +24,7 @@ export const SCENARIOS: readonly Scenario[] = [
   { id: 's2-central-function', what: "a function of the pointer owner, run by every canvas press (a press leaves a focused field)", commit: '1177fe8', files: ['src/editor/input/pointer.ts'], hunk: 2 },
   { id: 's3-css-and-test', what: 'a stylesheet rule and the test that pins it (a main action that cannot run is not accented)', commit: 'd0c0de7', files: ['src/editor/shell/shell.css', 'tests/e2e/door-state.spec.ts'] },
   { id: 's4-scenario-data', what: "one scenario's steps in the contract (drag-level-keys-escape)", commit: 'b31f6b4', files: ['manifest/features/02-structure-editing.json'] },
-  { id: 's5-config', what: 'the Playwright configuration (the worker count from E2E_WORKERS)', commit: 'bcd255e', files: ['playwright.config.ts'] },
+  { id: 's5-config', what: "the project configuration (package.json's verify:fast script)", commit: '7daedd7', files: ['package.json'] },
 ];
 
 const FLOWS: Record<string, string> = { before: 'npm run verify:fast && npm run e2e', after: 'npm run check' };
