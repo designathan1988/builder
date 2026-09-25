@@ -11,6 +11,7 @@ import { createStore, type Store, type StoreState } from '../core/store/store.ts
 import type { CommandId, ConstantId } from '../generated/ids.ts';
 import { translate } from '../i18n/index.ts';
 import { manifest } from '../manifest/runtime.ts';
+import { revealSelection } from './layers/tree.ts';
 import { browserStorage, loadPreferences, persistPreferences, type PreferenceStorage } from './preferences/preferences.ts';
 import { initialEditorUi, type EditorUi } from './state.ts';
 
@@ -41,6 +42,7 @@ export function createEditorStore(options: EditorStoreOptions = {}): EditorStore
     ids,
     initial: { document, ui: initialEditorUi(preferences) },
     freeze: import.meta.env.DEV,
+    followSelection: revealSelection,
   });
   persistPreferences(store, storage);
   return store;

@@ -1,12 +1,13 @@
 // The activity bar and the sidebar (DESIGN.md "Regions"): Explorer (Pages, Files, Layers), Insert (the element grid
 // of elements.json's palette) and Styles (classes and variables). Rows and tiles are the doors of their regions, one
 // per page, node or palette entry; a section's actions are the region's controls before its first item.
-import type { CSSProperties } from 'react';
-import type { DocNode } from '../../core/document/model.ts';
+import { useEffect, useRef, type CSSProperties, type MouseEvent } from 'react';
+import { walk, type DocNode } from '../../core/document/model.ts';
 import type { MessageId, RegionId } from '../../generated/ids.ts';
 import { manifest, type DoorEntry } from '../../manifest/runtime.ts';
 import { DoorControl, Icon, useDoor } from '../doors/door.tsx';
 import { GLYPHS, doorSlots } from '../doors/placement.ts';
+import { isExpanded } from '../layers/tree.ts';
 import { useEditorState } from '../store.ts';
 import { isPanelOpen, panelName, type Panel } from '../workspace/panels.ts';
 import { useT } from '../text.ts';
@@ -78,14 +79,30 @@ function PageRow({ page }: { readonly page: { readonly id: string; readonly name
   );
 }
 
+// A node's row, then, while its branch is unfolded, its children's rows. A click on the row selects its node; a
+// click on a control of its own (the caret, Hide, Lock) runs that control's door alone. The primary selection's row
+// is scrolled into view, at the nearest edge and without animation, whichever surface selected it (spec layers-tree,
+// Problems in Pager 1).
 function LayersRow({ node, depth }: { readonly node: DocNode; readonly depth: number }) {
   const door = useDoor(LAYERS_SELECT, { target: node.id });
   const selected = useEditorState((s) => s.selection.includes(node.id));
+  const primary = useEditorState((s) => s.selection[0] === node.id);
+  const expanded = useEditorState((s) => isExpanded(s.ui, node.id));
+  const row = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (primary) row.current?.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'instant' });
+  }, [primary]);
+  const branch = node.children.length > 0;
+  const select = (event: MouseEvent<HTMLDivElement>) => {
+    if (event.target instanceof Element && event.target.closest('[data-door]') === event.currentTarget) door.run();
+  };
   return (
     <>
       <div
+        ref={row}
         role="treeitem"
         aria-selected={selected}
+        aria-expanded={branch ? expanded : undefined}
         aria-disabled={door.built ? undefined : true}
         aria-level={depth + 1}
         tabIndex={-1}
@@ -94,10 +111,10 @@ function LayersRow({ node, depth }: { readonly node: DocNode; readonly depth: nu
         title={door.title}
         data-door={LAYERS_SELECT.ref}
         data-args={JSON.stringify({ target: node.id })}
-        onClick={door.run}
+        onClick={select}
       >
-        {node.children.length > 0 ? (
-          <DoorControl entry={LAYERS_CARET} args={{ target: node.id }} expanded>
+        {branch ? (
+          <DoorControl entry={LAYERS_CARET} args={{ target: node.id }} expanded={expanded}>
             {null}
           </DoorControl>
         ) : (
@@ -112,12 +129,17 @@ function LayersRow({ node, depth }: { readonly node: DocNode; readonly depth: nu
           ))}
         </span>
       </div>
-      {node.children.map((child) => (
-        <LayersRow key={child.id} node={child} depth={depth + 1} />
-      ))}
+      {expanded
+        ? node.children.map((child) => (
+            <LayersRow key={child.id} node={child} depth={depth + 1} />
+          ))
+        : null}
     </>
   );
 }
+
+// how many nodes the tree has, whatever is folded (spec layers-tree, Problems in Pager 3)
+const nodeCount = (tree: DocNode): number => [...walk(tree)].length;
 
 function Explorer() {
   const t = useT();
@@ -139,6 +161,11 @@ function Explorer() {
       <div data-region="explorer-layers" className="layers">
         <div className="section-title">
           <DoorControl entry={LAYERS_HEADER} expanded={layersOpen} className="section-title__toggle" />
+          {tree ? (
+            <span className="section-title__count" data-count="layers">
+              {nodeCount(tree)}
+            </span>
+          ) : null}
           <span className="section-title__actions">
             <Slots region="explorer-layers" render={(slot) => (slot.kind === 'door' && slot.entry === LAYERS_HEADER ? null : undefined)} />
           </span>

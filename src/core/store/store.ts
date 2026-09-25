@@ -78,6 +78,9 @@ export interface StoreOptions<Ui> {
   readonly initial: { readonly document: DocumentJson; readonly selection?: Selection; readonly ui: Ui };
   // deep-freeze every committed state (development and tests)
   readonly freeze: boolean;
+  // the editor state that follows a new selection, whichever command or undo step changed it (the editor's owner of
+  // that state knows it: Layers unfolds the branches that hide a selected node)
+  readonly followSelection?: (state: StoreState<Ui>) => Ui;
 }
 
 export function deepFreeze<T>(value: T): T {
@@ -122,8 +125,18 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
   // so a burst merges only when no other command came in between (spec absolute-nudge)
   let lastMergeable: string | null = null;
 
-  const publish = (next: StoreState<Ui>, patches: readonly Patch[] = []) => {
+  // a committed state whose selection changed, with the editor state that follows it
+  const followSelection = (before: StoreState<Ui>, next: StoreState<Ui>): StoreState<Ui> => {
+    if (options.followSelection === undefined || deepEqual(before.selection, next.selection)) return next;
+    const ui = options.followSelection(next);
+    if (ui === next.ui) return next;
+    const followed = { ...next, ui };
+    return options.freeze ? deepFreeze(followed) : followed;
+  };
+
+  const publish = (committed: StoreState<Ui>, patches: readonly Patch[] = []) => {
     const before = state;
+    const next = followSelection(before, committed);
     state = next;
     if (next.document !== before.document) {
       const change: DocumentChange = { before: before.document, after: next.document, patches };

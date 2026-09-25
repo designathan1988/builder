@@ -484,6 +484,15 @@ kbd {
   margin-left: auto;
 }
 
+.section-title__count {
+  padding: 0 var(--space-2);
+  font: var(--fw-micro) var(--fs-micro) / var(--lh-micro) var(--font-ui);
+  letter-spacing: var(--ls-micro);
+  color: var(--color-text-subtle);
+  background: var(--color-surface-hover);
+  border-radius: var(--radius-pill);
+}
+
 .section-title__actions .door--icon-button {
   width: var(--size-target-min);
   height: var(--size-target-min);

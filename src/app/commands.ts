@@ -7,6 +7,7 @@ import { canRedo, canUndo, redoCommand, undoCommand } from '../core/history/hist
 import { openProject } from '../core/project/archive.ts';
 import { clearSelectionCommand, hasSelection, selectCommand } from '../core/selection/selection.ts';
 import { focusActivate, focusFirst, focusLast, focusNext, focusPrevious } from '../editor/focus/focus.ts';
+import { setExpanded } from '../editor/layers/tree.ts';
 import { dismiss } from '../editor/menus/overlays.ts';
 import { setLanguage, setTheme } from '../editor/preferences/preferences.ts';
 import type { EditorUi } from '../editor/state.ts';
@@ -221,7 +222,7 @@ export const COMMANDS = {
   'commandBar.open': NOT_AVAILABLE_YET,
   'palette.toggleGroup': NOT_AVAILABLE_YET,
   'palette.setDensity': NOT_AVAILABLE_YET,
-  'layers.setExpanded': NOT_AVAILABLE_YET,
+  'layers.setExpanded': setExpanded,
   'layers.collapseAll': NOT_AVAILABLE_YET,
   'layers.expandAll': NOT_AVAILABLE_YET,
   'layers.expandOrFocusChild': NOT_AVAILABLE_YET,
