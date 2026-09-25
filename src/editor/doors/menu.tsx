@@ -4,7 +4,8 @@
 // menu is open is this component's own state. A menu has no key or pointer listener of its own: its keys are the
 // doors of the "menu" key context, run by the keymap (the arrows, Home and End move the focus, Enter runs the focused
 // item, Escape dismisses), and a press outside lands on the backdrop, the door ui.dismiss#overlay-backdrop drawn
-// under an open menu. A dismissal closes the menus open when it arrives (menus/overlays.ts).
+// under an open menu. A dismissal closes the menus open when it arrives (menus/overlays.ts), and a dismissed menu
+// gives the focus back to its button.
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import type { MenuId, MessageId } from '../../generated/ids.ts';
 import type { DoorEntry } from '../../manifest/runtime.ts';
@@ -92,12 +93,21 @@ export function MenuButton({ menu, anchor, children, indicator = false, classNam
   const dismissals = useEditorState((s) => s.ui.overlays.dismissals);
   const [openedAt, setOpenedAt] = useState<number | null>(null);
   const open = openedAt !== null && openedAt === dismissals;
+  // closed by a dismissal newer than its opening (Escape in the menu, a press on the backdrop)
+  const dismissed = openedAt !== null && !open;
+  const button = useRef<HTMLButtonElement>(null);
+  // A dismissed menu gives the focus back to its button (WAI-ARIA menu button pattern) when the focus went down with
+  // the menu's items or its backdrop and rests on the page body, so a keyboard user is never left without focus.
+  useEffect(() => {
+    if (dismissed && (document.activeElement === null || document.activeElement === document.body)) button.current?.focus();
+  }, [dismissed]);
   const t = useT();
   const label = t(menuOf(menu).labelKey as MessageId);
   const icon = anchor.icon !== null ? <Icon name={anchor.icon} size={anchor.drawnAs === 'icon-button' ? 'md' : 'sm'} /> : null;
   return (
     <div className={['menu-anchor', className ?? ''].filter((c) => c !== '').join(' ')}>
       <button
+        ref={button}
         type="button"
         className={`menu-button menu-button--${anchor.drawnAs}${open ? ' is-open' : ''}`}
         data-menu={menu}

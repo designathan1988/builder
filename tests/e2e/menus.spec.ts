@@ -63,11 +63,16 @@ test('Enter runs the focused item: View › Inspector gives the inspector column
   await expect(page.locator('[data-region="inspector-header"]')).toHaveCount(0);
 });
 
-test('Escape closes the open menu', runs('ui.dismiss#key-escape-in-menu'), async ({ page }) => {
+test('Escape closes the open menu and gives the focus back to the button that opened it', runs('ui.dismiss#key-escape-in-menu'), async ({ page }) => {
   await openMenu(page, 'file');
   await expect(page.getByRole('menu', { name: 'File' })).toBeVisible();
+  // the focus is on the menu's first item when Escape is pressed
+  expect((await items(page, 'File')).focused).toBe(0);
   await page.keyboard.press('Escape');
   await expect(page.getByRole('menu', { name: 'File' })).toHaveCount(0);
+  // WAI-ARIA menu button: the focus returns to the File button, never to the page body
+  await expect(page.locator('.menu-button[data-menu="file"]')).toBeFocused();
+  expect(await page.evaluate(() => document.activeElement === document.body)).toBe(false);
 });
 
 test('a press outside an open menu lands on its backdrop and closes it; a press on its own background keeps it open', runs('ui.dismiss#overlay-backdrop'), async ({ page }) => {
