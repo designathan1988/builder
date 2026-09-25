@@ -14,9 +14,11 @@ log path, is `docs/history.md` (not read at the start of a conversation).
 - Speed: Playwright waits 5 s per action and expect; verify:fast runs its steps in parallel (33.6 s → 20.4 s); the
   census uses a fresh context per state, skips states already read, visits six at once (71.6 s → 15.1 s); the whole
   e2e takes about 32 s.
-- Next: slice 1 item 4, one conversation per feature, in this order: select-click; palette-click-insert with
-  undo-redo (one commit); layers-tree; delete-element. Each passes all its scenarios through every door, with
-  `npm run e2e:tooth` and the census green.
+- Now: group 02 brief (user, 2026-09-25). A coordinator opens up to 3 helpers at once, each in a git worktree
+  `.cache/wt/<feature>` (branch feature/<feature>, node_modules as a junction, its own E2E_PORT/TOOTH_PORT), and
+  integrates one at a time after verify:fast, e2e with the census, e2e:tooth and the status. Order: finding 17;
+  select-click; palette-click-insert with undo-redo (one commit); layers-tree; delete-element; the rest of group 02
+  in manifest order. Finding 16 fixed first (testIgnore anchored to the project root) so tests run in a worktree.
 - Work in progress for select-click, not committed, kept in `.cache/scratch/4a/` (whole files and diffs made
   before items 3's later commits; reapply by point edits, the keymap has changed since): selection.ts (select,
   clear, hasSelection), the canvas chrome (selection outline and label by the label rule, hover outline),
@@ -52,6 +54,5 @@ log path, is `docs/history.md` (not read at the start of a conversation).
 14. sidebar.tsx writes the argument name "target" (the manifest gives it in adapter.selection) and builds data-args
     apart from DoorControl.
 15. shell.tsx keeps the fit zoom in useState; it moves to the store with the zoom commands.
-16. playwright.config.ts `testIgnore` '**/.cache/**' finds no test when the repository path contains `.cache`.
 17. After Escape closes a menu the focus rests on the page body, not on the menu's button (the menu has no key
     listener of its own now).

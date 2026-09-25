@@ -1,13 +1,22 @@
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from '@playwright/test';
 
 // The e2e run starts its own dev server on this port so it never talks to a stale or foreign server.
 const port = process.env.E2E_PORT ?? '5310';
 const baseURL = `http://localhost:${port}`;
 
+// A folder of this project, matched on the absolute path from the project's own root: a pattern such as
+// '**/.cache/**' would also ignore every test when the project itself sits under a .cache folder (a worktree in
+// .cache/wt/).
+const root = path.dirname(fileURLToPath(import.meta.url));
+const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const under = (dir: string) => new RegExp(`^${[...root.split(/[\\/]/), dir].map(escape).join('[\\\\/]')}[\\\\/]`, 'i');
+
 export default defineConfig({
   testDir: 'tests/e2e',
   // Never discover tests in the reference projects, the Pager copy or the browser tool's scratch files.
-  testIgnore: ['**/reference/**', '**/.cache/**', '**/.playwright-mcp/**'],
+  testIgnore: [under('reference'), under('.cache'), under('.playwright-mcp')],
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: 0,
