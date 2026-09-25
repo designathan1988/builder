@@ -11,9 +11,20 @@ import { Slots } from './slots.tsx';
 const TAB = doorSlots('tab-strip')[0];
 const CLOSE = doorSlots('dock-strip').find((d) => d.command.id === 'workspace.setPanelOpen');
 
+// The Timeline tab: the doors the manifest places in dock-timeline, where the animation features' doors wait, each
+// disabled with "not available yet" until its command is built (the user's correction of decision 2).
+function Timeline() {
+  return (
+    <div className="dock-region" data-region="dock-timeline" data-key-context="timeline">
+      <Slots region="dock-timeline" />
+    </div>
+  );
+}
+
 // The body of each dock tab the editor draws; a tab without one says "not available yet" and the doors that only open
-// it are not available yet (bodies.ts). Timeline, Checks, Keyboard shortcuts and Document arrive with their features.
-export const DOCK_TABS: BodyTable = {};
+// it are not available yet (bodies.ts). Checks (no check exists yet), Keyboard shortcuts and Document arrive with
+// their features.
+export const DOCK_TABS: BodyTable = { timeline: Timeline };
 
 // the tab's panel, named after its tab
 function DockBody({ tab }: { readonly tab: Panel }) {

@@ -1185,6 +1185,11 @@ kbd {
   color: var(--color-text-subtle);
 }
 
+/* a dock tab drawn from a region of the manifest: its doors in a row that wraps, as the body lays them out */
+.dock-region {
+  display: contents;
+}
+
 /* a sidebar view the editor draws no body for says so under its title */
 .view__empty {
   margin: 0;

@@ -1,13 +1,13 @@
 // A door whose only effect is to open a panel without its content is disabled with "not available yet" (CLAUDE.md;
-// the user's decision after the auditor's report): Help › Keyboard shortcuts, View › Timeline, Checks and Variables, and
-// the activity bar's Styles. The doors of the panels that exist (the sidebar's Explorer with Layers, Insert, the
-// inspector, the dock, the canvas tools) stay enabled.
+// the user's decision 2 as the user corrected it): Help › Keyboard shortcuts and View › Checks. The doors of the panels
+// that exist (the sidebar's Explorer with Layers, Insert and Styles, the inspector, the dock with its Timeline, the
+// canvas tools) stay enabled.
 import fs from 'node:fs';
 import path from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
 
-const EMPTY = ['variables', 'timeline', 'checks', 'shortcuts'];
-const BUILT = ['explorer', 'elements', 'layers', 'inspector', 'workbench', 'canvas-tools'];
+const EMPTY = ['checks', 'shortcuts'];
+const BUILT = ['explorer', 'elements', 'variables', 'layers', 'inspector', 'workbench', 'timeline', 'canvas-tools'];
 
 interface Door {
   id: string;
@@ -44,14 +44,8 @@ test.beforeEach(async ({ page }) => {
 
 test('a door that only opens a panel without its content is disabled with "not available yet" and changes nothing', async ({ page }) => {
   const empty = panelDoors.filter((d) => EMPTY.includes(d.panel));
-  // Help › Keyboard shortcuts, View › Timeline, Checks and Variables, and the activity bar's Styles
-  expect(empty.map((d) => d.ref).sort()).toEqual([
-    'workspace.setPanelOpen#menu-help-shortcuts',
-    'workspace.setPanelOpen#menu-view-checks',
-    'workspace.setPanelOpen#menu-view-timeline',
-    'workspace.setPanelOpen#menu-view-variables',
-    'workspace.setPanelOpen#toolbar-activity-bar-styles',
-  ]);
+  // Help › Keyboard shortcuts and View › Checks
+  expect(empty.map((d) => d.ref).sort()).toEqual(['workspace.setPanelOpen#menu-help-shortcuts', 'workspace.setPanelOpen#menu-view-checks']);
   for (const door of empty) {
     const before = { sidebar: await page.locator('.sidebar').boundingBox(), centre: await page.locator('.centre').boundingBox(), styles: await page.locator('[data-region="styles"]').count() };
     const button = await control(page, door);

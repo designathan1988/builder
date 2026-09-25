@@ -1,7 +1,6 @@
-// The activity bar and the sidebar (DESIGN.md "Regions"): Explorer (Pages, Files, Layers) and Insert (the element grid
-// of elements.json's palette); Styles (classes and variables) comes with its features. Rows and tiles are the doors of
-// their regions, one per page, node or palette entry; a section's actions are the region's controls before its first
-// item.
+// The activity bar and the sidebar (DESIGN.md "Regions"): Explorer (Pages, Files, Layers), Insert (the element grid
+// of elements.json's palette) and Styles (classes and variables). Rows and tiles are the doors of their regions, one
+// per page, node or palette entry; a section's actions are the region's controls before its first item.
 import type { CSSProperties } from 'react';
 import type { DocNode } from '../../core/document/model.ts';
 import type { MessageId, RegionId } from '../../generated/ids.ts';
@@ -176,9 +175,24 @@ function Insert() {
   );
 }
 
+// The Styles view: its Classes and Variables sections, with the doors the manifest places in the styles region, each
+// disabled with "not available yet" until its command is built (the user's correction of decision 2).
+function Styles() {
+  const t = useT();
+  return (
+    <section className="view" aria-label={t('activity.styles')} data-region="styles">
+      <div className="view__title">{t('activity.styles')}</div>
+      <div className="section-title">
+        <span className="section-title__text">{t('styles.classes')}</span>
+      </div>
+      <SectionTitle title={t(panelName('variables'))} region="styles" />
+    </section>
+  );
+}
+
 // The body of each sidebar view the editor draws; a view without one says "not available yet" and the doors that
-// only open it are not available yet (bodies.ts). Styles (classes and variables) arrives with its features.
-export const SIDEBAR_VIEWS: BodyTable = { explorer: Explorer, elements: Insert };
+// only open it are not available yet (bodies.ts).
+export const SIDEBAR_VIEWS: BodyTable = { explorer: Explorer, elements: Insert, variables: Styles };
 
 function EmptyView({ panel }: { readonly panel: Panel }) {
   const t = useT();
