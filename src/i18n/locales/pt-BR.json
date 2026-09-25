@@ -1240,6 +1240,7 @@
   "status.refused.singleChild": "Recusado. {parent} aceita um único {child}.",
   "status.rename.empty": "Um nome não pode ficar vazio; {name} mantém o nome.",
   "status.renamed": "{old} renomeado para {name}.",
+  "status.project.saved": "Projeto salvo como {file}.",
   "status.save.failed": "Falha ao salvar",
   "status.save.notSaved": "Não salvo",
   "status.save.saved": "Salvo",

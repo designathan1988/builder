@@ -314,7 +314,7 @@
         "project.save"
       ],
       "dependsOn": [],
-      "spec": null,
+      "spec": "spec/behavior/project-save-json.md",
       "intent": {
         "title": "Save the project as one archive file",
         "steps": [
@@ -327,7 +327,61 @@
           "Saving the same document twice produces byte-identical archives apart from the saved timestamp."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "save-downloads-the-project-archive",
+          "setup": { "fixture": "aurora", "selection": ["/Page/Hero/Intro"], "context": "global", "breakpoint": "desktop", "state": "base", "locale": "en", "viewport": "desktop-1440", "zoom": "fit" },
+          "steps": [
+            { "door": "project.save#menu-file", "args": {}, "target": null, "drop": null, "action": true, "hold": false, "type": null }
+          ],
+          "doors": ["project.save#menu-file"],
+          "expect": {
+            "document": [],
+            "selection": ["/Page/Hero/Intro"],
+            "history": { "undoSteps": 0, "undoRestores": true, "redoRestores": true },
+            "render": { "computed": [], "geometry": [], "feedback": [{ "key": "status.project.saved", "params": { "file": "project.zip" } }] },
+            "editor": null,
+            "persistence": null,
+            "export": {
+              "files": [
+                {
+                  "path": "project.json",
+                  "present": ["\"version\"", "\"pages\"", "\"Welcome to Aurora\"", "\"Fresh coffee, roasted every week.\"", "\"n-intro\"", "\"index.html\""],
+                  "absent": ["\"selection\"", "\"zoom\"", "\"savedAt\"", "\"saved\""]
+                }
+              ]
+            }
+          },
+          "refusals": []
+        },
+        {
+          "id": "save-writes-the-document-as-it-is-now",
+          "setup": { "fixture": "aurora", "selection": ["/Page/Hero/Intro"], "context": "global", "breakpoint": "desktop", "state": "base", "locale": "en", "viewport": "desktop-1440", "zoom": "fit" },
+          "steps": [
+            { "door": "element.delete#key-delete-in-canvas", "args": {}, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "project.save#menu-file", "args": {}, "target": null, "drop": null, "action": true, "hold": false, "type": null }
+          ],
+          "doors": ["project.save#menu-file"],
+          "expect": {
+            "document": [{ "op": "remove", "path": "/Page/Hero/Intro" }],
+            "selection": ["/Page/Hero/Actions"],
+            "history": { "undoSteps": 1, "undoRestores": true, "redoRestores": true },
+            "render": { "computed": [], "geometry": [], "feedback": [{ "key": "status.project.saved", "params": { "file": "project.zip" } }] },
+            "editor": null,
+            "persistence": null,
+            "export": {
+              "files": [
+                {
+                  "path": "project.json",
+                  "present": ["\"Welcome to Aurora\"", "\"n-actions\""],
+                  "absent": ["\"Fresh coffee, roasted every week.\"", "\"n-intro\""]
+                }
+              ]
+            }
+          },
+          "refusals": []
+        }
+      ]
     },
     {
       "id": "project-open-json",
