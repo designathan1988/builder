@@ -13,14 +13,22 @@ const root = path.dirname(fileURLToPath(import.meta.url));
 const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const under = (dir: string) => new RegExp(`^${[...root.split(/[\\/]/), dir].map(escape).join('[\\\\/]')}[\\\\/]`, 'i');
 
+// E2E_WORKERS must be a whole number of at least 1; a typo fails the run instead of silently using every core.
+function workerCount(value: string | undefined): number {
+  if (value === undefined || value === '') return 4;
+  const count = Number(value);
+  if (!Number.isInteger(count) || count < 1) throw new Error(`E2E_WORKERS must be a whole number >= 1, got "${value}"`);
+  return count;
+}
+
 export default defineConfig({
   testDir: 'tests/e2e',
   // Never discover tests in the reference projects, the Pager copy or the browser tool's scratch files.
   testIgnore: [under('reference'), under('.cache'), under('.playwright-mcp')],
   fullyParallel: true,
-  // at most 3 browsers per run: the default (half the cores, 12 here) with helpers running in parallel froze the
-  // machine; the test Chrome already draws on the GPU (ANGLE D3D11), the load was the number of browsers
-  workers: 3,
+  // the number of browsers per run comes from E2E_WORKERS, 4 when unset: the default (half the cores, 12 here)
+  // froze the machine; the test Chrome already draws on the GPU (ANGLE D3D11), the load was the number of browsers
+  workers: workerCount(process.env.E2E_WORKERS),
   forbidOnly: !!process.env.CI,
   retries: 0,
   // the list of results, then each feature's status derived from its scenario tests (tools/runner/status.ts)
