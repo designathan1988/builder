@@ -473,12 +473,12 @@
     {
       "kind": "handler",
       "id": "page.openProperties",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",
       "id": "page.setSetting",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",

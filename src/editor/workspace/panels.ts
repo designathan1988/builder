@@ -124,8 +124,9 @@ export const toggleLeftDock = registerHandler<'workspace.toggleLeftDock', Editor
   return { kind: 'change', ui: { ...state.ui, panels: { ...state.ui.panels, sidebar } }, message: message(sidebar ? 'status.sidebar.shown' : 'status.sidebar.hidden') };
 });
 
-// the inspector column: the panels placed there (layout.json names one, the inspector)
-const withInspector = (ui: EditorUi, open: boolean): EditorUi => panelsAt('inspector').reduce((next, panel) => withPanel(next, panel, open), ui);
+// the inspector column: the panels placed there (layout.json names one, the inspector), shown or hidden (Ctrl+Alt+B,
+// Ctrl+\, and Page properties, which shows the page in it: page-properties.ts)
+export const withInspector = (ui: EditorUi, open: boolean): EditorUi => panelsAt('inspector').reduce((next, panel) => withPanel(next, panel, open), ui);
 const inspectorOpen = (ui: EditorUi): boolean => panelsAt('inspector').some((panel) => isPanelOpen(ui, panel));
 
 export const toggleInspector = registerHandler<'workspace.toggleInspector', EditorUi>('workspace.toggleInspector', ({ state }) => {

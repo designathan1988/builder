@@ -90,7 +90,7 @@ export const FEATURES = {
   'radius-border-gap-handles': NOT_AVAILABLE_YET,
   'shadow-handles': NOT_AVAILABLE_YET,
   // 06 page and export
-  'page-properties': NOT_AVAILABLE_YET,
+  'page-properties': registerFeature('page-properties'),
   'export-zip': NOT_AVAILABLE_YET,
   'css-variables-tokens': NOT_AVAILABLE_YET,
   'export-bem-css': NOT_AVAILABLE_YET,

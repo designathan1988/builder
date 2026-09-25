@@ -6,6 +6,7 @@ import { NOT_AVAILABLE_YET, always, type CommandTable, type PredicateTable } fro
 import { canRedo, canUndo, redoCommand, undoCommand } from '../core/history/history.ts';
 import { toggleHiddenCommand, toggleLockCommand } from '../core/nodes/flags.ts';
 import { renameCommand } from '../core/nodes/names.ts';
+import { setPageSettingCommand } from '../core/page/settings.ts';
 import { openProject, saveProject } from '../core/project/archive.ts';
 import {
   addCommand,
@@ -37,6 +38,7 @@ import { contextMenuOpen } from '../editor/menus/context-menu.ts';
 import { dismiss } from '../editor/menus/overlays.ts';
 import { setLanguage, setTheme } from '../editor/preferences/preferences.ts';
 import type { EditorUi } from '../editor/state.ts';
+import { openPageProperties } from '../editor/inspector/page-properties.ts';
 import { toggleSection } from '../editor/inspector/sections.ts';
 import { setActiveTab, setWorkbenchState } from '../editor/workspace/layout.ts';
 import { collapseDocks, setPanelOpen, toggleInspector, toggleLeftDock } from '../editor/workspace/panels.ts';
@@ -139,8 +141,8 @@ export const COMMANDS = {
   'element.toggleLock': toggleLockCommand,
   'element.toggleHidden': toggleHiddenCommand,
   'element.setLayerColor': NOT_AVAILABLE_YET,
-  'page.openProperties': NOT_AVAILABLE_YET,
-  'page.setSetting': NOT_AVAILABLE_YET,
+  'page.openProperties': openPageProperties,
+  'page.setSetting': setPageSettingCommand,
   'project.newBlankPage': NOT_AVAILABLE_YET,
   'project.restoreVersion': NOT_AVAILABLE_YET,
   'project.takeOverEditing': NOT_AVAILABLE_YET,

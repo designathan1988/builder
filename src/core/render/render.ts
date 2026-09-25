@@ -6,6 +6,10 @@
 // patch that replaces or shifts the rendered page itself builds the page again. A patch of another page, or of a
 // field of the page that is not rendered (its name, its file), leaves the page as it is.
 //
+// The page root's element is the page's <body>. The settings of the page it stores (the attributes elements.json gives
+// a page root alone, src/core/page/settings.ts) are the page's own: their HTML attributes (lang, dir) are written on
+// the page's <html>, never on <body>, so the canvas lays the page out in its language and direction as the export does.
+//
 // Every element carries data-node="<id>" so the canvas and the tests find the element of a node; the export writes
 // its own markup (BEM classes, no data attributes). The node's styles are one style element per node in the head,
 // marked data-node-style="<id>", with rules keyed by data-node: the base breakpoint without a media query, the
@@ -31,6 +35,7 @@ import type { NodeId } from '../../generated/commands.ts';
 import type { ElementsFile, InteractionsFile, PropertiesFile } from '../../manifest/schema.ts';
 import { walk, type DocNode, type DocumentJson } from '../document/model.ts';
 import { applyPatches, deepEqual, type Patch } from '../history/transaction.ts';
+import { isPageSetting } from '../page/settings.ts';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const ELEMENT_NODE = 1;
@@ -51,6 +56,8 @@ export interface RenderModel {
   readonly elements: ReadonlyMap<string, { readonly namespace: 'html' | 'svg'; readonly content: 'children' | 'text' | 'markup' | 'none' }>;
   // attribute id → its HTML attribute name, or null when it is not one (the text, the tag)
   readonly attributes: ReadonlyMap<string, string | null>;
+  // attribute id → the element types it applies to, or "all" (a setting of the page applies to a page root's alone)
+  readonly appliesTo: ReadonlyMap<string, readonly string[] | 'all'>;
   // the breakpoints in cascade order: the base first, with no media query
   readonly breakpoints: readonly { readonly id: string; readonly width: number; readonly base: boolean }[];
   // state id → its pseudo-class, or null for the base state
@@ -67,6 +74,7 @@ export function renderModelFromManifest(elements: ElementsFile, properties: Prop
   return {
     elements: new Map(elements.elements.map((e) => [e.id, { namespace: e.namespace, content: e.content }])),
     attributes: new Map(elements.attributes.map((a) => [a.id, a.html])),
+    appliesTo: new Map(elements.attributes.map((a) => [a.id, a.elements])),
     breakpoints: properties.breakpoints.map((b) => ({ id: b.id, width: b.width, base: b.base })),
     states: new Map(properties.states.map((s) => [s.id, s.pseudo])),
     recipes: new Map(properties.recipes.map((r) => [r.id, r.declarations])),
@@ -161,6 +169,12 @@ function findNode(root: DocNode, id: NodeId): DocNode | null {
 // The text an element of a text element shows: its text nodes, a <br> for each line break.
 function shownText(element: Element): string {
   return [...element.childNodes].map((n) => (n.nodeType === TEXT_NODE ? (n.nodeValue ?? '') : n.nodeName === 'BR' ? '\n' : '')).join('');
+}
+
+// Gives an element exactly the attributes wanted, writing only what differs.
+function writeAttributes(element: Element, wanted: ReadonlyMap<string, string>): void {
+  for (const attribute of [...element.attributes]) if (!wanted.has(attribute.name)) element.removeAttribute(attribute.name);
+  for (const [name, value] of wanted) if (element.getAttribute(name) !== value) element.setAttribute(name, value);
 }
 
 // Whether nothing but empty text follows a node inside its element.
@@ -260,7 +274,8 @@ export class PageRenderer {
     body.replaceChildren();
     const tree = doc.pages[this.page]?.tree ?? null;
     if (!tree) {
-      for (const attribute of [...body.attributes]) body.removeAttribute(attribute.name);
+      writeAttributes(body, new Map());
+      writeAttributes(this.target.documentElement, new Map());
       return;
     }
     this.elements.set(tree.id, body);
@@ -333,9 +348,12 @@ export class PageRenderer {
   // The node's own attributes, classes and text on its element, writing only what differs. The text of the element
   // being edited is the edit's until it ends (`rewrite` then writes the document's text whatever the element shows).
   private dress(element: Element, node: DocNode, rewrite = false): void {
+    // the page root's element is the page's <body>; the settings of the page it stores are the page's <html>'s
+    const root = element === this.target.body;
     const wanted = new Map<string, string>([[NODE_ATTRIBUTE, node.id]]);
+    const page = new Map<string, string>();
     // a container below the page root (editor-only: see the top of this file)
-    if (element !== this.target.body && this.model.elements.get(node.type)?.content === 'children') wanted.set(CONTAINER_ATTRIBUTE, '');
+    if (!root && this.model.elements.get(node.type)?.content === 'children') wanted.set(CONTAINER_ATTRIBUTE, '');
     // a hidden node (editor-only: see the top of this file)
     if (node.hidden === true) wanted.set(HIDDEN_ATTRIBUTE, '');
     const edited = this.edit?.node === node.id ? this.edit : null;
@@ -348,10 +366,10 @@ export class PageRenderer {
       const name = this.model.attributes.get(id);
       // never an event attribute: the page has no handler of its own
       if (name === null || name === undefined || name.startsWith('on') || value === false) continue;
-      wanted.set(name, value === true ? '' : String(value));
+      (root && isPageSetting(this.model.appliesTo.get(id), node.type) ? page : wanted).set(name, value === true ? '' : String(value));
     }
-    for (const attribute of [...element.attributes]) if (!wanted.has(attribute.name)) element.removeAttribute(attribute.name);
-    for (const [name, value] of wanted) if (element.getAttribute(name) !== value) element.setAttribute(name, value);
+    writeAttributes(element, wanted);
+    if (root) writeAttributes(this.target.documentElement, page);
     if (this.model.elements.get(node.type)?.content !== 'text' || edited) return;
     const text = node.text ?? '';
     if (!rewrite && shownText(element) === text) return;

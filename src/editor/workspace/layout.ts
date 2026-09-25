@@ -1,5 +1,6 @@
 // The workspace layout (ARCHITECTURE.md): the dock's state, collapsed to its strip, open, or maximised over the
-// canvas area, and the active tab of each tab group: the dock's and the inspector's (workspace.setActiveTab). Later:
+// canvas area, and the active tab of each tab group: the dock's and the inspector's (workspace.setActiveTab; Page
+// properties shows the inspector's Settings tab, page-properties.ts). Later:
 // splitter sizes and floating panel positions. The first state is data: the workbench and the dock panels of
 // layout.json that are open, and the inspector's first tab.
 import { registerHandler } from '../../core/commands/registry.ts';
@@ -42,6 +43,19 @@ export function inspectorTab(ui: EditorUi): string {
   return ui.layout.inspectorTab ?? FIRST_INSPECTOR_TAB;
 }
 
+// The inspector tab that draws a region: each tab draws the region named after it, inspector-<tab> (DESIGN.md
+// "Regions": inspector-style, inspector-settings, inspector-interactions); null when no tab draws it.
+export function inspectorTabDrawing(region: string): string | null {
+  return INSPECTOR_TABS.find((tab) => region === `inspector-${tab}`) ?? null;
+}
+
+// The editor state with an inspector tab shown: the same state when it shows already.
+export function withInspectorTab(ui: EditorUi, panel: string): EditorUi {
+  if (!INSPECTOR_TABS.includes(panel)) throw new Error(`the inspector has no tab ${panel}`);
+  if (inspectorTab(ui) === panel) return ui;
+  return { ...ui, layout: { ...ui.layout, inspectorTab: panel === FIRST_INSPECTOR_TAB ? undefined : panel } };
+}
+
 export type WorkbenchRequest = 'collapsed' | 'open' | 'max' | 'toggle' | 'toggle-max';
 
 // toggle shows or hides the workbench; toggle-max maximises it, or restores it to open
@@ -70,7 +84,7 @@ export const setActiveTab = registerHandler<'workspace.setActiveTab', EditorUi>(
       // a door names a tab of the inspector's header; anything else is a defect of the door
       if (!INSPECTOR_TABS.includes(panel)) throw new Error(`workspace.setActiveTab: the inspector has no tab ${panel}`);
       if (inspectorTab(ui) === panel) return { kind: 'change' };
-      return { kind: 'change', ui: { ...ui, layout: { ...ui.layout, inspectorTab: panel === FIRST_INSPECTOR_TAB ? undefined : panel } } };
+      return { kind: 'change', ui: withInspectorTab(ui, panel) };
     }
     if (group === WORKBENCH_GROUP) {
       const tab = panel as Panel;

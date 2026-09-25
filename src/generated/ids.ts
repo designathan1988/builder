@@ -3397,6 +3397,7 @@ export const MESSAGE_IDS = [
   "status.open.newerVersion",
   "status.open.opened",
   "status.page.settingInvalid",
+  "status.page.settingRemoved",
   "status.page.settingSet",
   "status.pages.homeUndeletable",
   "status.pages.nameTaken",

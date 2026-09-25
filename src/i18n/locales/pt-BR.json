@@ -1241,6 +1241,7 @@
   "status.open.newerVersion": "Este projeto usa a versão de formato {version}, que este aplicativo não consegue ler.",
   "status.open.opened": "Projeto aberto.",
   "status.page.settingInvalid": "{setting} não aceita {value}.",
+  "status.page.settingRemoved": "{setting}: sem valor.",
   "status.page.settingSet": "{setting}: {value}.",
   "status.pages.homeUndeletable": "A página inicial não pode ser excluída.",
   "status.pages.nameTaken": "Já existe uma página chamada {name} nesta pasta.",

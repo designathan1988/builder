@@ -11,12 +11,15 @@
 //    keyword-buttons control with the keyword icons of properties.json; the commands behind them arrive with their
 //    features, so each shows "not available yet".
 //  - Settings: no selector bar; its region starts under the header. The text of the one selected text element (its
-//    field keeps the text with text.set), then the attribute fields that apply to the element's type, in their order.
+//    field keeps the text with text.set), then the attribute fields that apply to the element's type, in their order;
+//    on the page root, the fields of the page's settings keep what is typed with page.setSetting.
 import { Fragment, useEffect, useMemo, useRef, useState, type ComponentType, type ReactNode } from 'react';
-import type { CommandId, KeyContextId, MessageId, SectionId, StyleTargetId } from '../../generated/ids.ts';
+import type { AttributeId, CommandId, FeatureId, KeyContextId, MessageId, SectionId, StyleTargetId } from '../../generated/ids.ts';
 import type { CommandArgs } from '../../generated/commands.ts';
 import { GENERATED_VALUES } from '../../generated/value-lists.ts';
+import { isFeatureBuilt } from '../../app/features.ts';
 import { locate, type DocNode, type NodeId } from '../../core/document/model.ts';
+import { isPageSetting } from '../../core/page/settings.ts';
 import type { DispatchResult } from '../../core/store/store.ts';
 import { elementIcon, manifest, type DoorEntry } from '../../manifest/runtime.ts';
 import { computedValues } from '../canvas/coordinates.ts';
@@ -25,7 +28,7 @@ import { MenuButton } from '../doors/menu.tsx';
 import { GLYPHS, doorSlots, drawnAsOf, partOf, slotsIn } from '../doors/placement.ts';
 import { openGesture } from '../input/pointer.ts';
 import { collapsedSections, summaryOf, summaryProperties } from '../inspector/sections.ts';
-import { useEditorState, useStore, type EditorStore } from '../store.ts';
+import { MODEL_RULES, useEditorState, useStore, type EditorStore } from '../store.ts';
 import { inspectorTab } from '../workspace/layout.ts';
 import { isPanelOpen, panelName } from '../workspace/panels.ts';
 import { useLocale, useT } from '../text.ts';
@@ -363,20 +366,25 @@ function StyleTab() {
 const ATTRIBUTES = new Map(manifest.elements.attributes.map((a) => [a.id, a]));
 const SETTINGS_FIELDS = doorSlots('inspector-settings').filter((d) => d.door.kind === 'inspector-field' && d.door.attribute !== null);
 
-// Keeps a text with the door's command (text.set), from a field: at once, or, when a press on the canvas opened a
-// pointer gesture before the field lost the focus (a click elsewhere), once that gesture ends, since a command recorded
-// once per dispatch never joins a gesture. Nothing is kept for a node the document no longer holds.
-function keepText(store: EditorStore, command: CommandId, target: NodeId, content: string): void {
-  const run = () => {
-    if (locate(store.getState().document, target) === null) return;
-    (store.dispatch as (id: CommandId, args: CommandArgs['text.set']) => DispatchResult)(command, { target, content });
-  };
+// Runs what a field keeps as it loses the focus: at once, or, when a press on the canvas opened a pointer gesture before
+// the field lost the focus (a click elsewhere), once that gesture ends, since a command recorded once per dispatch never
+// joins a gesture.
+function keepAfterGesture(run: () => void): void {
   if (openGesture() === null) {
     run();
     return;
   }
   const wait = () => (openGesture() === null ? run() : requestAnimationFrame(wait));
   requestAnimationFrame(wait);
+}
+
+// Keeps a text with the door's command (text.set), from a field (keepAfterGesture). Nothing is kept for a node the
+// document no longer holds.
+function keepText(store: EditorStore, command: CommandId, target: NodeId, content: string): void {
+  keepAfterGesture(() => {
+    if (locate(store.getState().document, target) === null) return;
+    (store.dispatch as (id: CommandId, args: CommandArgs['text.set']) => DispatchResult)(command, { target, content });
+  });
 }
 
 // the key context the text field names (interactions.json), whose doors are Enter (text.set keeps what the field holds,
@@ -436,6 +444,70 @@ function TextField({ entry, node, label }: { readonly entry: DoorEntry; readonly
   );
 }
 
+// A setting of the page (spec page-properties, Problems in Pager 1), drawn for its door on the page root: a one-line
+// text field that stands for its setting (the command's argument that takes an attribute, by its manifest type, names
+// it) and whose text fills the command's other argument. Typing changes only the field, which keeps its keys (the
+// field key context binds no Enter). The field is the one field of a form of its own, so Enter submits it, as the
+// browser submits a form implicitly (no key is handled here): the submission keeps its text, and so does leaving the
+// field (Tab, a click elsewhere) or its going (another selection, another tab), whenever the text differs from the one
+// it last showed or kept; each keeping is one undo step (keepAfterGesture). The field shows the value the page root
+// stores (empty while it has none): when it is drawn, when that value changes, and after every command that says
+// something (the value kept, or refused while the document keeps its own). A field whose door's feature is not
+// registered as built (the page's description, until page-seo-meta) is not available yet, although the command it
+// shares is built.
+function SettingField({ entry, node, attribute, label }: { readonly entry: DoorEntry; readonly node: DocNode; readonly attribute: AttributeId; readonly label: string }) {
+  const store = useStore();
+  const named = Object.entries(entry.command.args).find(([, arg]) => arg.type === 'attribute')?.[0];
+  const filled = Object.keys(entry.command.args).find((name) => name !== named);
+  const args = useMemo(() => (named === undefined ? {} : { [named]: attribute }), [named, attribute]);
+  const door = useDoor(entry, args, label, isFeatureBuilt(entry.door.feature as FeatureId));
+  const form = useRef<HTMLFormElement>(null);
+  const field = useRef<HTMLInputElement>(null);
+  // the text the field last showed or kept: the field's own draft, never document state
+  const draft = useRef({ shown: '' });
+  const said = useEditorState((s) => s.message);
+  const value = node.attributes[attribute];
+  const stored = value === undefined ? '' : String(value);
+  const command = entry.command.id;
+  useEffect(() => {
+    const element = field.current;
+    if (element === null) return;
+    element.value = stored;
+    draft.current.shown = stored;
+  }, [stored, said]);
+  useEffect(() => {
+    const row = form.current;
+    const element = field.current;
+    const typing = draft.current;
+    if (row === null || element === null || filled === undefined) return;
+    const keep = () => {
+      const text = element.value;
+      if (text === typing.shown) return;
+      typing.shown = text;
+      keepAfterGesture(() => (store.dispatch as (id: CommandId, args: unknown) => DispatchResult)(command, { ...args, [filled]: text }));
+    };
+    // the form's submission never leaves the editor
+    const submit = (event: Event) => {
+      event.preventDefault();
+      keep();
+    };
+    row.addEventListener('submit', submit);
+    element.addEventListener('blur', keep);
+    return () => {
+      row.removeEventListener('submit', submit);
+      element.removeEventListener('blur', keep);
+      // the field goes (another selection, another tab) with a text not kept yet: it is kept
+      keep();
+    };
+  }, [store, command, args, filled]);
+  return (
+    <form ref={form} className={`field-row${door.available ? '' : ' is-unavailable'}`} data-door={entry.ref} data-args={JSON.stringify(args)} title={door.title}>
+      <span className="field-row__label">{label}</span>
+      <input ref={field} className="input" disabled={!door.available} aria-label={label} spellCheck={false} />
+    </form>
+  );
+}
+
 // An attribute field of the Settings tab whose command arrives with its feature: drawn disabled, "not available yet".
 function AttributeField({ entry, label, toggle }: { readonly entry: DoorEntry; readonly label: string; readonly toggle: boolean }) {
   const door = useDoor(entry, {}, label);
@@ -468,11 +540,10 @@ function SettingsTab() {
             const attribute = entry.door.kind === 'inspector-field' && entry.door.attribute !== null ? ATTRIBUTES.get(entry.door.attribute) : undefined;
             if (attribute === undefined || (attribute.elements !== 'all' && !attribute.elements.includes(node.type))) return null;
             const label = t(attribute.labelKey as MessageId);
-            return 'content' in entry.command.args ? (
-              <TextField key={`${entry.ref}@${node.id}`} entry={entry} node={node} label={label} />
-            ) : (
-              <AttributeField key={entry.ref} entry={entry} label={label} toggle={attribute.valueType === 'boolean'} />
-            );
+            if ('content' in entry.command.args) return <TextField key={`${entry.ref}@${node.id}`} entry={entry} node={node} label={label} />;
+            // a setting of the page, on the page root (core/page/settings.ts)
+            if (isPageSetting(attribute.elements, MODEL_RULES.root.type)) return <SettingField key={`${entry.ref}@${node.id}`} entry={entry} node={node} attribute={attribute.id as AttributeId} label={label} />;
+            return <AttributeField key={entry.ref} entry={entry} label={label} toggle={attribute.valueType === 'boolean'} />;
           })
         )}
       </div>

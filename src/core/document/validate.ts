@@ -5,7 +5,7 @@
 // src/core/elements/content-model.ts; the rules carry it for the commands that place an element, and validation
 // checks it once nesting-grammar completes it.
 import type { ElementType, MessageId } from '../../generated/ids.ts';
-import type { ElementsFile, GeneratedHtml, PropertiesFile } from '../../manifest/schema.ts';
+import type { Attribute, ElementsFile, GeneratedHtml, PropertiesFile } from '../../manifest/schema.ts';
 import { contentModelFrom, type ContentModel } from '../elements/content-model.ts';
 import { DOCUMENT_VERSION, walk, type DocNode, type DocumentJson, type Selection } from './model.ts';
 
@@ -19,10 +19,21 @@ export interface ElementRules {
   readonly defaultTextKey: MessageId | null;
 }
 
+// What an attribute's value is (elements.json): its value type, the keywords a keyword attribute takes one of, its
+// HTML attribute (null when it is none) and its name in the catalogue.
+export interface AttributeRules {
+  readonly valueType: Attribute['valueType'];
+  readonly keywords: readonly string[];
+  readonly html: string | null;
+  readonly labelKey: MessageId;
+}
+
 export interface ModelRules {
   readonly elements: ReadonlyMap<string, ElementRules>;
   // attribute id → the element types it applies to, or "all"
   readonly attributes: ReadonlyMap<string, readonly string[] | 'all'>;
+  // attribute id → what its value is
+  readonly attributeValues: ReadonlyMap<string, AttributeRules>;
   readonly properties: ReadonlySet<string>;
   readonly breakpoints: ReadonlySet<string>;
   readonly states: ReadonlySet<string>;
@@ -53,6 +64,7 @@ export function rulesFromManifest(elements: ElementsFile, properties: Properties
       ]),
     ),
     attributes: new Map(elements.attributes.map((a) => [a.id, a.elements])),
+    attributeValues: new Map(elements.attributes.map((a) => [a.id, { valueType: a.valueType, keywords: a.keywords, html: a.html, labelKey: a.labelKey as MessageId }] as const)),
     properties: new Set(properties.properties.map((p) => p.id)),
     breakpoints: new Set(properties.breakpoints.map((b) => b.id)),
     states: new Set(properties.states.map((s) => s.id)),

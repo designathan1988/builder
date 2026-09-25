@@ -293,6 +293,24 @@ describe('the renderer (src/core/render/render.ts)', () => {
     expect([...section.querySelectorAll(`[${HIDDEN_ATTRIBUTE}]`)].map((e) => e.getAttribute('data-node'))).toEqual(['hero']);
   });
 
+  it('writes the settings of the page on its <html>, never on <body>, as patches set, change and remove them', () => {
+    const set: Patch[] = [
+      { op: 'add', path: at('attributes', 'pageLanguage'), value: 'pt-BR' },
+      { op: 'add', path: at('attributes', 'pageDirection'), value: 'rtl' },
+      { op: 'add', path: at('attributes', 'pageTitle'), value: 'Landing' },
+    ];
+    const { target, after } = check(doc, set);
+    // the title is no HTML attribute: the export writes it (export-zip)
+    expect([...target.documentElement.attributes].map((a) => `${a.name}=${a.value}`).sort()).toEqual(['dir=rtl', 'lang=pt-BR']);
+    expect(target.body.hasAttribute('lang') || target.body.hasAttribute('dir')).toBe(false);
+    expect(mounted(after).target.documentElement.getAttribute('dir')).toBe('rtl');
+    const changed = check(after, [{ op: 'replace', path: at('attributes', 'pageDirection'), value: 'ltr' }]);
+    expect(changed.target.documentElement.getAttribute('dir')).toBe('ltr');
+    const removed = check(after, [{ op: 'remove', path: at('attributes', 'pageDirection') }]);
+    expect(removed.target.documentElement.hasAttribute('dir')).toBe(false);
+    expect(removed.target.documentElement.getAttribute('lang')).toBe('pt-BR');
+  });
+
   it('a mount removes the style elements an earlier renderer of the same document left', () => {
     const { target } = mounted();
     new PageRenderer(target, model).mount(applyPatches(doc, [{ op: 'remove', path: at('children', 0) }]).document);
