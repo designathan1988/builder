@@ -73,7 +73,8 @@
       "titleKey": "feature.autosaveRestore",
       "commands": [],
       "dependsOn": [],
-      "spec": null,
+      "spec": "spec/behavior/autosave-restore.md",
+      "toothProof": "src/editor/persistence/autosave.ts",
       "intent": {
         "title": "Autosave to IndexedDB and restore the work after a reload",
         "steps": [
@@ -88,7 +89,104 @@
           "The IndexedDB record carries the schema version of the saved format from the first save, the same version project.json carries; every future migration is tested on this real loading path."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "an-inserted-and-edited-heading-survives-an-immediate-reload",
+          "setup": { "fixture": "empty", "selection": [], "context": "global", "breakpoint": "desktop", "state": "base", "locale": "en", "viewport": "desktop-1440", "zoom": "fit" },
+          "steps": [
+            { "door": "workspace.setPanelOpen#toolbar-activity-bar-insert", "args": {}, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "element.insert#elements-tile", "args": { "entry": "section" }, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "element.insert#elements-tile", "args": { "entry": "heading" }, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "text.startEdit#canvas-double-click-text-element", "args": {}, "target": "/Page/Section/Heading", "drop": null, "action": false, "hold": false, "type": " for everyone" },
+            { "door": "text.set#key-enter-in-text-editing", "args": { "target": "/Page/Section/Heading", "content": "New heading for everyone" }, "target": null, "drop": null, "action": true, "hold": false, "type": null }
+          ],
+          "doors": ["text.set#key-enter-in-text-editing"],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "section",
+                    "name": "Section",
+                    "tag": "section",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": { "desktop": { "base": { "padding-top": "56px", "padding-right": "40px", "padding-bottom": "56px", "padding-left": "40px" } } },
+                    "text": null,
+                    "children": [
+                      { "type": "heading", "name": "Heading", "tag": "h2", "attributes": {}, "classes": [], "styles": {}, "text": "New heading for everyone", "children": [] }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": ["/Page/Section/Heading"],
+            "history": { "undoSteps": 3, "undoRestores": true, "redoRestores": true },
+            "render": null,
+            "editor": null,
+            "persistence": { "reload": "immediate", "document": "same", "preferences": null, "selection": "same" },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-selection-change-alone-survives-an-immediate-reload",
+          "setup": { "fixture": "aurora", "selection": [], "context": "global", "breakpoint": "desktop", "state": "base", "locale": "en", "viewport": "desktop-1440", "zoom": "fit" },
+          "steps": [
+            { "door": "selection.select#canvas-click-element-or-page", "args": { "target": "/Page/Hero/Intro" }, "target": "/Page/Hero/Intro", "drop": null, "action": true, "hold": false, "type": null }
+          ],
+          "doors": ["selection.select#canvas-click-element-or-page"],
+          "expect": {
+            "document": [],
+            "selection": ["/Page/Hero/Intro"],
+            "history": { "undoSteps": 0, "undoRestores": true, "redoRestores": true },
+            "render": null,
+            "editor": null,
+            "persistence": { "reload": "immediate", "document": "same", "preferences": null, "selection": "same" },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-deleted-element-stays-deleted-after-an-immediate-reload",
+          "setup": { "fixture": "aurora", "selection": ["/Page/Hero/Intro"], "context": "global", "breakpoint": "desktop", "state": "base", "locale": "en", "viewport": "desktop-1440", "zoom": "fit" },
+          "steps": [
+            { "door": "element.delete#key-delete-in-canvas", "args": {}, "target": null, "drop": null, "action": true, "hold": false, "type": null }
+          ],
+          "doors": ["element.delete#key-delete-in-canvas", "element.delete#key-backspace-in-canvas"],
+          "expect": {
+            "document": [{ "op": "remove", "path": "/Page/Hero/Intro" }],
+            "selection": ["/Page/Hero/Actions"],
+            "history": { "undoSteps": 1, "undoRestores": true, "redoRestores": true },
+            "render": null,
+            "editor": null,
+            "persistence": { "reload": "immediate", "document": "same", "preferences": null, "selection": "same" },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "an-undo-is-saved-like-any-change",
+          "setup": { "fixture": "aurora", "selection": ["/Page/Hero/Intro"], "context": "global", "breakpoint": "desktop", "state": "base", "locale": "en", "viewport": "desktop-1440", "zoom": "fit" },
+          "steps": [
+            { "door": "element.delete#key-delete-in-canvas", "args": {}, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "history.undo#key-ctrl-z-in-global", "args": {}, "target": null, "drop": null, "action": true, "hold": false, "type": null }
+          ],
+          "doors": ["history.undo#key-ctrl-z-in-global", "history.undo#toolbar-top-bar"],
+          "expect": {
+            "document": [],
+            "selection": ["/Page/Hero/Intro"],
+            "history": { "undoSteps": 0, "undoRestores": true, "redoRestores": true },
+            "render": null,
+            "editor": null,
+            "persistence": { "reload": "immediate", "document": "same", "preferences": null, "selection": "same" },
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
     },
     {
       "id": "unsaved-work-guard",

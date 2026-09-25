@@ -1289,6 +1289,10 @@
       "reader": "tools/runner/scenarios.ts"
     },
     {
+      "field": "features:features[].scenarios[].expect.persistence.selection",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
       "field": "features:features[].scenarios[].expect.export",
       "reader": "tools/runner/scenarios.ts"
     },
