@@ -320,6 +320,10 @@ export const propertiesFileSchema = z.strictObject({
       z.strictObject({
         id: kebabId,
         labelKey: i18nKey,
+        // what the header of the section summarises while it is collapsed, in order: properties or composites of
+        // this file, read as the page computes them (src/editor/inspector/sections.ts writes them); empty for a
+        // section the inspector draws no header for
+        summary: z.array(z.union([cssName, kebabId])),
         groups: z.array(z.strictObject({ id: kebabId, labelKey: i18nKey })).min(1),
       }),
     )
@@ -707,7 +711,8 @@ const stepSchema = z.strictObject({
   // Optional: absent is false.
   hold: z.boolean().optional(),
   // The characters the runner types with the real keyboard after the step's door has run; "\n" presses Enter (the
-  // edited text, the link prompt, the rename field). Optional: absent is null.
+  // edited text, the link prompt, the rename field) and U+2028, the line separator, presses Shift+Enter (a line break
+  // typed in a text field). Optional: absent is null.
   type: z.string().nullable().optional(),
   // The button the step presses in the confirmation its command asks (a command with `confirmation` in the manifest,
   // such as File › Open over a page that holds work): "confirm" or "cancel". A step that leaves a confirmation

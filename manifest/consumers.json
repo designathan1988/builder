@@ -205,6 +205,10 @@
       "reader": "src/editor/inspector/sections.ts"
     },
     {
+      "field": "properties:sections[].summary",
+      "reader": "src/editor/inspector/sections.ts"
+    },
+    {
       "field": "properties:sections[].groups",
       "reader": "src/editor/inspector/sections.ts"
     },

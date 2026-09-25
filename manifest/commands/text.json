@@ -188,6 +188,26 @@
             "fields": []
           },
           "args": {}
+        },
+        {
+          "id": "key-enter-in-element-text-field",
+          "kind": "shortcut",
+          "feature": "inspector-panel",
+          "chord": "Enter",
+          "context": "element-text-field",
+          "gesture": null,
+          "labelKey": "command.textEdit.commit",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "target",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
         }
       ]
     },
@@ -213,6 +233,26 @@
           "feature": "text-edit-inline",
           "chord": "Escape",
           "context": "text-editing",
+          "gesture": null,
+          "labelKey": "command.textEdit.cancel",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "key-escape-in-element-text-field",
+          "kind": "shortcut",
+          "feature": "inspector-panel",
+          "chord": "Escape",
+          "context": "element-text-field",
           "gesture": null,
           "labelKey": "command.textEdit.cancel",
           "faceLabelKey": null,

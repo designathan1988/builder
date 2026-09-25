@@ -9,11 +9,12 @@
         "element.toggleLock",
         "element.toggleHidden",
         "text.set",
+        "text.cancelEdit",
         "inspector.toggleSection",
         "workspace.setActiveTab"
       ],
       "dependsOn": [],
-      "spec": null,
+      "spec": "spec/behavior/inspector-panel.md",
       "intent": {
         "title": "Inspector shows the selection's identity and collapsible property sections",
         "steps": [
@@ -29,7 +30,323 @@
           "The element actions menu in the inspector header offers Lock and Hide, which run the same commands as the Layers toggles."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "the-settings-tab-shows-under-the-header-and-stays-for-the-next-selection",
+          "setup": { "fixture": "aurora", "selection": ["/Page/Hero/Intro"], "context": "global", "breakpoint": "desktop", "state": "base", "locale": "en", "viewport": "desktop-1440", "zoom": "fit" },
+          "steps": [
+            { "door": "workspace.setActiveTab#inspector-tab-settings", "args": {}, "target": null, "drop": null, "action": true, "hold": false, "type": null },
+            { "door": "selection.select#canvas-click-element-or-page", "args": { "target": "/Page/Hero/Title" }, "target": "/Page/Hero/Title", "drop": null, "action": false, "hold": false, "type": null }
+          ],
+          "doors": ["workspace.setActiveTab#inspector-tab-settings"],
+          "expect": {
+            "document": [],
+            "selection": ["/Page/Hero/Title"],
+            "history": { "undoSteps": 0, "undoRestores": true, "redoRestores": true },
+            "render": null,
+            "editor": {
+              "regions": [{ "region": "inspector-settings", "measure": "y", "relation": "less-than", "value": 80, "reference": "inspector-header" }],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-text-field-sets-the-text-in-one-undo-step",
+          "setup": { "fixture": "aurora", "selection": ["/Page/Hero/Intro"], "context": "global", "breakpoint": "desktop", "state": "base", "locale": "en", "viewport": "desktop-1440", "zoom": "fit" },
+          "steps": [
+            { "door": "workspace.setActiveTab#inspector-tab-settings", "args": {}, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "text.set#inspector-text", "args": { "target": "/Page/Hero/Intro", "content": "Pour-over coffee, prepared every morning." }, "target": null, "drop": null, "action": true, "hold": false, "type": "Pour-over coffee, prepared every morning.\n" }
+          ],
+          "doors": ["text.set#inspector-text"],
+          "expect": {
+            "document": [{ "op": "set", "path": "/Page/Hero/Intro/@text", "value": "Pour-over coffee, prepared every morning." }],
+            "selection": ["/Page/Hero/Intro"],
+            "history": { "undoSteps": 1, "undoRestores": true, "redoRestores": true },
+            "render": { "computed": [], "geometry": [], "feedback": [{ "key": "status.textEdit.committed", "params": { "name": "Intro" } }] },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-locked-element-keeps-its-text",
+          "setup": { "fixture": "aurora", "selection": ["/Page/Hero/Intro"], "context": "global", "breakpoint": "desktop", "state": "base", "locale": "en", "viewport": "desktop-1440", "zoom": "fit" },
+          "steps": [
+            { "door": "element.toggleLock#menu-element-actions", "args": {}, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "workspace.setActiveTab#inspector-tab-settings", "args": {}, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "text.set#inspector-text", "args": { "target": "/Page/Hero/Intro", "content": "Pour-over coffee." }, "target": null, "drop": null, "action": true, "hold": false, "type": "Pour-over coffee.\n" }
+          ],
+          "doors": ["text.set#inspector-text"],
+          "expect": {
+            "document": [{ "op": "set", "path": "/Page/Hero/Intro/@locked", "value": true }],
+            "selection": ["/Page/Hero/Intro"],
+            "history": { "undoSteps": 1, "undoRestores": true, "redoRestores": true },
+            "render": { "computed": [], "geometry": [], "feedback": [{ "key": "status.locked.editText", "params": { "name": "Intro" } }] },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": [{ "key": "status.locked.editText", "document": "unchanged" }]
+        },
+        {
+          "id": "the-style-tab-brings-back-the-selector-bar-and-the-sections",
+          "setup": { "fixture": "aurora", "selection": ["/Page/Hero/Intro"], "context": "global", "breakpoint": "desktop", "state": "base", "locale": "en", "viewport": "desktop-1440", "zoom": "fit" },
+          "steps": [
+            { "door": "workspace.setActiveTab#inspector-tab-settings", "args": {}, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "selection.select#canvas-click-element-or-page", "args": { "target": "/Page/Hero/Title" }, "target": "/Page/Hero/Title", "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "text.set#inspector-text", "args": { "target": "/Page/Hero/Title", "content": "Coffee, roasted every morning" }, "target": null, "drop": null, "action": false, "hold": false, "type": "Coffee, roasted every morning\n" },
+            { "door": "workspace.setActiveTab#inspector-tab-style", "args": {}, "target": null, "drop": null, "action": true, "hold": false, "type": null }
+          ],
+          "doors": ["workspace.setActiveTab#inspector-tab-style"],
+          "expect": {
+            "document": [{ "op": "set", "path": "/Page/Hero/Title/@text", "value": "Coffee, roasted every morning" }],
+            "selection": ["/Page/Hero/Title"],
+            "history": { "undoSteps": 1, "undoRestores": true, "redoRestores": true },
+            "render": null,
+            "editor": {
+              "regions": [
+                { "region": "inspector-selector-bar", "measure": "y", "relation": "less-than", "value": 48, "reference": "inspector-header" },
+                { "region": "inspector-style", "measure": "y", "relation": "greater-than", "value": 0, "reference": "inspector-selector-bar" }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "collapsed-sections-stay-collapsed-for-another-element",
+          "setup": { "fixture": "aurora", "selection": ["/Page/Hero/Intro"], "context": "global", "breakpoint": "desktop", "state": "base", "locale": "en", "viewport": "desktop-1440", "zoom": "fit" },
+          "steps": [
+            { "door": "inspector.toggleSection#inspector-section-header", "args": { "section": "layout" }, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "inspector.toggleSection#inspector-section-header", "args": { "section": "space" }, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "inspector.toggleSection#inspector-section-header", "args": { "section": "size" }, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "inspector.toggleSection#inspector-section-header", "args": { "section": "position" }, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "inspector.toggleSection#inspector-section-header", "args": { "section": "paint" }, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "inspector.toggleSection#inspector-section-header", "args": { "section": "border" }, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "inspector.toggleSection#inspector-section-header", "args": { "section": "text" }, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "inspector.toggleSection#inspector-section-header", "args": { "section": "effects" }, "target": null, "drop": null, "action": true, "hold": false, "type": null },
+            { "door": "selection.select#canvas-click-element-or-page", "args": { "target": "/Page/Hero" }, "target": "/Page/Hero", "drop": null, "action": false, "hold": false, "type": null }
+          ],
+          "doors": ["inspector.toggleSection#inspector-section-header"],
+          "expect": {
+            "document": [],
+            "selection": ["/Page/Hero"],
+            "history": { "undoSteps": 0, "undoRestores": true, "redoRestores": true },
+            "render": null,
+            "editor": {
+              "regions": [{ "region": "inspector-style", "measure": "height", "relation": "less-than", "value": 600, "reference": null }],
+              "computed": []
+            },
+            "persistence": { "reload": "immediate", "document": null, "preferences": "same" },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-collapsed-section-opens-again",
+          "setup": { "fixture": "aurora", "selection": ["/Page/Hero/Intro"], "context": "global", "breakpoint": "desktop", "state": "base", "locale": "en", "viewport": "desktop-1440", "zoom": "fit" },
+          "steps": [
+            { "door": "inspector.toggleSection#inspector-section-header", "args": { "section": "layout" }, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "inspector.toggleSection#inspector-section-header", "args": { "section": "space" }, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "inspector.toggleSection#inspector-section-header", "args": { "section": "size" }, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "inspector.toggleSection#inspector-section-header", "args": { "section": "position" }, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "inspector.toggleSection#inspector-section-header", "args": { "section": "paint" }, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "inspector.toggleSection#inspector-section-header", "args": { "section": "border" }, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "inspector.toggleSection#inspector-section-header", "args": { "section": "text" }, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "inspector.toggleSection#inspector-section-header", "args": { "section": "effects" }, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "inspector.toggleSection#inspector-section-header", "args": { "section": "text" }, "target": null, "drop": null, "action": true, "hold": false, "type": null }
+          ],
+          "doors": ["inspector.toggleSection#inspector-section-header"],
+          "expect": {
+            "document": [],
+            "selection": ["/Page/Hero/Intro"],
+            "history": { "undoSteps": 0, "undoRestores": true, "redoRestores": true },
+            "render": null,
+            "editor": {
+              "regions": [
+                { "region": "inspector-style", "measure": "height", "relation": "greater-than", "value": 800, "reference": null },
+                { "region": "inspector-style", "measure": "height", "relation": "less-than", "value": 2400, "reference": null }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "lock-from-the-element-actions-menu",
+          "setup": { "fixture": "aurora", "selection": ["/Page/Hero/Intro"], "context": "global", "breakpoint": "desktop", "state": "base", "locale": "en", "viewport": "desktop-1440", "zoom": "fit" },
+          "steps": [
+            { "door": "element.toggleLock#menu-element-actions", "args": {}, "target": null, "drop": null, "action": true, "hold": false, "type": null }
+          ],
+          "doors": ["element.toggleLock#menu-element-actions"],
+          "expect": {
+            "document": [{ "op": "set", "path": "/Page/Hero/Intro/@locked", "value": true }],
+            "selection": ["/Page/Hero/Intro"],
+            "history": { "undoSteps": 1, "undoRestores": true, "redoRestores": true },
+            "render": { "computed": [], "geometry": [], "feedback": [{ "key": "status.locked", "params": { "name": "Intro" } }] },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "hide-from-the-element-actions-menu",
+          "setup": { "fixture": "aurora", "selection": ["/Page/Hero/Intro"], "context": "global", "breakpoint": "desktop", "state": "base", "locale": "en", "viewport": "desktop-1440", "zoom": "fit" },
+          "steps": [
+            { "door": "element.toggleHidden#menu-element-actions", "args": {}, "target": null, "drop": null, "action": true, "hold": false, "type": null }
+          ],
+          "doors": ["element.toggleHidden#menu-element-actions"],
+          "expect": {
+            "document": [{ "op": "set", "path": "/Page/Hero/Intro/@hidden", "value": true }],
+            "selection": ["/Page/Hero/Intro"],
+            "history": { "undoSteps": 1, "undoRestores": true, "redoRestores": true },
+            "render": {
+              "computed": [{ "node": "/Page/Hero/Intro", "property": "display", "value": "none" }],
+              "geometry": [],
+              "feedback": [{ "key": "status.hidden", "params": { "name": "Intro" } }]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "hide-is-refused-inside-a-locked-section",
+          "setup": { "fixture": "aurora", "selection": ["/Page/Hero"], "context": "global", "breakpoint": "desktop", "state": "base", "locale": "en", "viewport": "desktop-1440", "zoom": "fit" },
+          "steps": [
+            { "door": "element.toggleLock#menu-element-actions", "args": {}, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "selection.select#canvas-click-element-or-page", "args": { "target": "/Page/Hero/Intro" }, "target": "/Page/Hero/Intro", "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "element.toggleHidden#menu-element-actions", "args": {}, "target": null, "drop": null, "action": true, "hold": false, "type": null }
+          ],
+          "doors": ["element.toggleHidden#menu-element-actions"],
+          "expect": {
+            "document": [{ "op": "set", "path": "/Page/Hero/@locked", "value": true }],
+            "selection": ["/Page/Hero/Intro"],
+            "history": { "undoSteps": 1, "undoRestores": true, "redoRestores": true },
+            "render": { "computed": [], "geometry": [], "feedback": [{ "key": "status.locked.byAncestor", "params": { "name": "Intro", "ancestor": "Hero" } }] },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": [{ "key": "status.locked.byAncestor", "document": "unchanged" }]
+        },
+        {
+          "id": "lock-is-refused-inside-a-locked-section",
+          "setup": { "fixture": "aurora", "selection": ["/Page/Hero"], "context": "global", "breakpoint": "desktop", "state": "base", "locale": "en", "viewport": "desktop-1440", "zoom": "fit" },
+          "steps": [
+            { "door": "element.toggleLock#menu-element-actions", "args": {}, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "selection.select#canvas-click-element-or-page", "args": { "target": "/Page/Hero/Intro" }, "target": "/Page/Hero/Intro", "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "element.toggleLock#menu-element-actions", "args": {}, "target": null, "drop": null, "action": true, "hold": false, "type": null }
+          ],
+          "doors": ["element.toggleLock#menu-element-actions"],
+          "expect": {
+            "document": [{ "op": "set", "path": "/Page/Hero/@locked", "value": true }],
+            "selection": ["/Page/Hero/Intro"],
+            "history": { "undoSteps": 1, "undoRestores": true, "redoRestores": true },
+            "render": { "computed": [], "geometry": [], "feedback": [{ "key": "status.locked.byAncestor", "params": { "name": "Intro", "ancestor": "Hero" } }] },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": [{ "key": "status.locked.byAncestor", "document": "unchanged" }]
+        },
+        {
+          "id": "enter-keeps-the-typed-text-in-one-undo-step",
+          "setup": { "fixture": "aurora", "selection": ["/Page/Hero/Intro"], "context": "global", "breakpoint": "desktop", "state": "base", "locale": "en", "viewport": "desktop-1440", "zoom": "fit" },
+          "steps": [
+            { "door": "workspace.setActiveTab#inspector-tab-settings", "args": {}, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "text.set#inspector-text", "args": { "target": "/Page/Hero/Intro", "content": "Pour-over coffee, prepared every morning." }, "target": null, "drop": null, "action": false, "hold": false, "type": "Pour-over coffee, prepared every morning." },
+            { "door": "text.set#key-enter-in-element-text-field", "args": { "target": "/Page/Hero/Intro", "content": "Pour-over coffee, prepared every morning." }, "target": null, "drop": null, "action": true, "hold": false, "type": null }
+          ],
+          "doors": ["text.set#key-enter-in-element-text-field"],
+          "expect": {
+            "document": [{ "op": "set", "path": "/Page/Hero/Intro/@text", "value": "Pour-over coffee, prepared every morning." }],
+            "selection": ["/Page/Hero/Intro"],
+            "history": { "undoSteps": 1, "undoRestores": true, "redoRestores": true },
+            "render": { "computed": [], "geometry": [], "feedback": [{ "key": "status.textEdit.committed", "params": { "name": "Intro" } }] },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "enter-is-refused-on-a-locked-text",
+          "setup": { "fixture": "aurora", "selection": ["/Page/Hero/Intro"], "context": "global", "breakpoint": "desktop", "state": "base", "locale": "en", "viewport": "desktop-1440", "zoom": "fit" },
+          "steps": [
+            { "door": "element.toggleLock#menu-element-actions", "args": {}, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "workspace.setActiveTab#inspector-tab-settings", "args": {}, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "text.set#inspector-text", "args": { "target": "/Page/Hero/Intro", "content": "Pour-over coffee." }, "target": null, "drop": null, "action": false, "hold": false, "type": "Pour-over coffee." },
+            { "door": "text.set#key-enter-in-element-text-field", "args": { "target": "/Page/Hero/Intro", "content": "Pour-over coffee." }, "target": null, "drop": null, "action": true, "hold": false, "type": null }
+          ],
+          "doors": ["text.set#key-enter-in-element-text-field"],
+          "expect": {
+            "document": [{ "op": "set", "path": "/Page/Hero/Intro/@locked", "value": true }],
+            "selection": ["/Page/Hero/Intro"],
+            "history": { "undoSteps": 1, "undoRestores": true, "redoRestores": true },
+            "render": { "computed": [], "geometry": [], "feedback": [{ "key": "status.locked.editText", "params": { "name": "Intro" } }] },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": [{ "key": "status.locked.editText", "document": "unchanged" }]
+        },
+        {
+          "id": "escape-puts-the-field-back-to-the-document-text",
+          "setup": { "fixture": "aurora", "selection": ["/Page/Hero/Intro"], "context": "global", "breakpoint": "desktop", "state": "base", "locale": "en", "viewport": "desktop-1440", "zoom": "fit" },
+          "steps": [
+            { "door": "workspace.setActiveTab#inspector-tab-settings", "args": {}, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "text.set#inspector-text", "args": { "target": "/Page/Hero/Intro", "content": "Something else entirely" }, "target": null, "drop": null, "action": false, "hold": false, "type": "Something else entirely" },
+            { "door": "text.cancelEdit#key-escape-in-element-text-field", "args": {}, "target": null, "drop": null, "action": true, "hold": false, "type": null },
+            { "door": "workspace.setActiveTab#inspector-tab-style", "args": {}, "target": null, "drop": null, "action": false, "hold": false, "type": null }
+          ],
+          "doors": ["text.cancelEdit#key-escape-in-element-text-field"],
+          "expect": {
+            "document": [],
+            "selection": ["/Page/Hero/Intro"],
+            "history": { "undoSteps": 0, "undoRestores": true, "redoRestores": true },
+            "render": { "computed": [], "geometry": [], "feedback": [{ "key": "status.textEdit.cancelled", "params": { "name": "Intro" } }] },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "shift-enter-keeps-a-line-break-through-enter",
+          "setup": { "fixture": "aurora", "selection": ["/Page/Hero/Intro"], "context": "global", "breakpoint": "desktop", "state": "base", "locale": "en", "viewport": "desktop-1440", "zoom": "fit" },
+          "steps": [
+            { "door": "workspace.setActiveTab#inspector-tab-settings", "args": {}, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "text.set#inspector-text", "args": { "target": "/Page/Hero/Intro", "content": "One\nTwo\nThree\nFour" }, "target": null, "drop": null, "action": false, "hold": false, "type": "One Two Three Four" },
+            { "door": "text.set#key-enter-in-element-text-field", "args": { "target": "/Page/Hero/Intro", "content": "One\nTwo\nThree\nFour" }, "target": null, "drop": null, "action": true, "hold": false, "type": null }
+          ],
+          "doors": ["text.set#key-enter-in-element-text-field"],
+          "expect": {
+            "document": [{ "op": "set", "path": "/Page/Hero/Intro/@text", "value": "One\nTwo\nThree\nFour" }],
+            "selection": ["/Page/Hero/Intro"],
+            "history": { "undoSteps": 1, "undoRestores": true, "redoRestores": true },
+            "render": {
+              "computed": [],
+              "geometry": [{ "node": "/Page/Hero/Intro", "measure": "height", "relation": "greater-than", "value": 0, "reference": "/Page/Hero/Title" }],
+              "feedback": [{ "key": "status.textEdit.committed", "params": { "name": "Intro" } }]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
     },
     {
       "id": "inspector-number-fields",

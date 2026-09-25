@@ -283,7 +283,7 @@ export const FEATURE_COMMANDS: Readonly<Record<FeatureId, readonly CommandId[]>>
   "multi-tab-guard": ["project.takeOverEditing"],
   "project-save-json": ["project.save"],
   "project-open-json": ["project.open"],
-  "inspector-panel": ["element.toggleLock","element.toggleHidden","text.set","inspector.toggleSection","workspace.setActiveTab"],
+  "inspector-panel": ["element.toggleLock","element.toggleHidden","text.set","text.cancelEdit","inspector.toggleSection","workspace.setActiveTab"],
   "inspector-number-fields": ["style.set","field.step","field.scrub","field.setUnit"],
   "props-display": ["style.set"],
   "props-flex-container": ["style.set","style.setAlignment"],

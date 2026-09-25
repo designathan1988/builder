@@ -3,6 +3,7 @@
     {
       "id": "content",
       "labelKey": "inspector.section.content",
+      "summary": [],
       "groups": [
         {
           "id": "content",
@@ -17,6 +18,7 @@
     {
       "id": "layout",
       "labelKey": "inspector.section.layout",
+      "summary": ["display", "flex-direction"],
       "groups": [
         {
           "id": "display",
@@ -55,6 +57,7 @@
     {
       "id": "space",
       "labelKey": "inspector.section.space",
+      "summary": ["margin", "padding"],
       "groups": [
         {
           "id": "box",
@@ -65,6 +68,7 @@
     {
       "id": "size",
       "labelKey": "inspector.section.size",
+      "summary": ["width", "height"],
       "groups": [
         {
           "id": "size",
@@ -83,6 +87,7 @@
     {
       "id": "position",
       "labelKey": "inspector.section.position",
+      "summary": ["position", "z-index"],
       "groups": [
         {
           "id": "position",
@@ -97,6 +102,7 @@
     {
       "id": "paint",
       "labelKey": "inspector.section.paint",
+      "summary": ["background-color"],
       "groups": [
         {
           "id": "background",
@@ -111,6 +117,7 @@
     {
       "id": "border",
       "labelKey": "inspector.section.border",
+      "summary": ["border-width", "border-style", "border-radius"],
       "groups": [
         {
           "id": "border",
@@ -129,6 +136,7 @@
     {
       "id": "text",
       "labelKey": "inspector.section.text",
+      "summary": ["font-size", "font-weight"],
       "groups": [
         {
           "id": "typography",
@@ -151,6 +159,7 @@
     {
       "id": "effects",
       "labelKey": "inspector.section.effects",
+      "summary": ["opacity", "box-shadow", "filter", "transform", "translate", "rotate", "scale"],
       "groups": [
         {
           "id": "appearance",
@@ -181,6 +190,7 @@
     {
       "id": "interactions",
       "labelKey": "inspector.section.interactions",
+      "summary": [],
       "groups": [
         {
           "id": "interactions",

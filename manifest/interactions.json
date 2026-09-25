@@ -96,6 +96,11 @@
       "inherits": "field"
     },
     {
+      "id": "element-text-field",
+      "labelKey": "keyContext.elementTextField",
+      "inherits": "field"
+    },
+    {
       "id": "guide",
       "labelKey": "keyContext.guide",
       "inherits": null
