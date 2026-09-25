@@ -71,6 +71,9 @@ export const keys = (chord: string): string => chord.split('+').map((k) => KEYS[
 export async function openMenu(page: Page, id: string): Promise<void> {
   const menu = MENUS.find((m) => m.id === id);
   if (menu === undefined) throw new Error(`layout.json has no menu ${id}`);
+  // the menu buttons are drawn with the editor: count them only once it is on screen (counting right after a
+  // navigation raced the first render and read "no button" for a menu that has one)
+  await page.locator('.workbench').waitFor();
   const button = page.locator(`.menu-button[data-menu="${id}"]`);
   if ((await button.count()) > 0) {
     // a menu with more than one button (Zoom: the canvas toolbar and the status bar) opens from the first
