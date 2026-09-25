@@ -18,6 +18,7 @@ import {
   walkPreviousSiblingCommand,
 } from '../core/selection/selection.ts';
 import { insertCommand } from '../core/structure/insert.ts';
+import { moveDownCommand, moveUpCommand } from '../core/structure/move.ts';
 import { deleteCommand } from '../core/structure/remove.ts';
 import { focusActivate, focusFirst, focusLast, focusNext, focusPrevious } from '../editor/focus/focus.ts';
 import { setExpanded } from '../editor/layers/tree.ts';
@@ -148,8 +149,8 @@ export const COMMANDS = {
   'drag.levelUp': NOT_AVAILABLE_YET,
   'drag.levelDown': NOT_AVAILABLE_YET,
   'drag.cancel': NOT_AVAILABLE_YET,
-  'element.moveUp': NOT_AVAILABLE_YET,
-  'element.moveDown': NOT_AVAILABLE_YET,
+  'element.moveUp': moveUpCommand,
+  'element.moveDown': moveDownCommand,
   'element.wrapRow': NOT_AVAILABLE_YET,
   'element.wrapColumn': NOT_AVAILABLE_YET,
   'element.nestIntoPrevious': NOT_AVAILABLE_YET,

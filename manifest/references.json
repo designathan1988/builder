@@ -603,12 +603,12 @@
     {
       "kind": "handler",
       "id": "element.moveUp",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",
       "id": "element.moveDown",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",

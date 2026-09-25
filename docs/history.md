@@ -39,6 +39,10 @@ Decisions by small ambiguity (moved here from PROGRESS.md):
   undoes the latest delete only; the toast has no role=status (the status bar stays the only live region); a
   toolbar or panel-control step of the runner first asserts that the control runDoor clicks is drawn. Integration
   took three rounds: the drawn check first broke the Layers modifier doors, then remove.test.ts lacked `layout`.
+- move-up-down: each selected root swaps with the nearest unselected sibling (up from the first, down from the last),
+  so a block at the edge stays and keeps its order (Pager's rule); nothing moving is refused with
+  status.move.alreadyFirst/alreadyLast and adds no undo step (the page root's message names the page); roots of
+  different parents are refused with status.wrap.needsSameParent (the key the manifest lists); the selection stays.
 
 ## 2026-09-25 — Slice 1: the rest of the foundation and the first usable block of group 02
 
