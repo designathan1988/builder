@@ -41,7 +41,10 @@ export type Outcome<Ui> =
   | { readonly kind: 'undo' }
   | { readonly kind: 'redo' }
   // project.open: another project replaces the document; the selection and the history start empty
-  | { readonly kind: 'load'; readonly document: DocumentJson; readonly message?: Message };
+  | { readonly kind: 'load'; readonly document: DocumentJson; readonly message?: Message }
+  // the person is asked first (a command whose manifest entry has a confirmation): the store holds the dispatch
+  // until the answer, and runs it again with `confirmed` once the person confirms
+  | { readonly kind: 'confirm' };
 
 export interface HandlerContext<Ui> {
   readonly state: StoreState<Ui>;
@@ -54,6 +57,8 @@ export interface HandlerContext<Ui> {
   words(key: MessageId): string;
   // where the canvas draws the nodes of the page it shows, for a handler that acts on what a gesture covers (the marquee)
   readonly layout: Layout;
+  // whether the person confirmed this run, answering the confirmation the command asked (outcome `confirm`)
+  readonly confirmed: boolean;
 }
 
 export interface RegisteredHandler<Id extends CommandId, Ui> {

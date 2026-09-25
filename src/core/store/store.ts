@@ -23,13 +23,26 @@ export interface StoreState<Ui> {
   readonly history: HistoryState;
   // the last message, shown in the status bar (an aria-live region)
   readonly message: Message | null;
+  // a dispatch waiting for the person's answer to its command's confirmation (the manifest's `confirmation`), or null
+  readonly confirmation: PendingConfirmation | null;
   readonly ui: Ui;
+}
+
+// What a confirmation asks and its two answers' labels, from the command's manifest entry, and the dispatch it holds.
+export interface PendingConfirmation {
+  readonly command: CommandId;
+  readonly args: unknown;
+  readonly message: MessageId;
+  readonly confirm: MessageId;
+  readonly cancel: MessageId;
 }
 
 export type DispatchResult =
   | { readonly status: 'done'; readonly changed: boolean }
   | { readonly status: 'refused'; readonly message: Message }
-  | { readonly status: 'not-available-yet' };
+  | { readonly status: 'not-available-yet' }
+  // the command asked the person first: the dispatch waits for `answer`
+  | { readonly status: 'confirm' };
 
 export class InvalidStateError extends Error {
   override name = 'InvalidStateError';
@@ -70,6 +83,10 @@ export interface Store<Ui> {
   // refusal of its availability predicate or of its handler; null when it would run. Nothing changes, as with canRun
   // (a palette tile's creation drag draws the refusal its drop would meet, spec palette-drag-insert).
   refusal<Id extends CommandId>(id: Id, args: CommandArgs[Id]): Message | null;
+  // The person's answer to the confirmation a dispatch is waiting for (state.confirmation): confirmed, the dispatch
+  // runs again, told it is confirmed; cancelled, nothing changes and the status bar says so. Part of that dispatch:
+  // nothing else changes state this way. Nothing happens when no confirmation is waiting.
+  answer(confirmed: boolean): DispatchResult;
   subscribe(listener: () => void): () => void;
   // every change of the document, with its patches, before the state's subscribers hear of it
   subscribeDocument(listener: (change: DocumentChange) => void): () => void;
@@ -136,7 +153,7 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
   };
 
   let state = commit(
-    { document: options.initial.document, selection: options.initial.selection ?? [], history: EMPTY_HISTORY, message: null, ui: options.initial.ui },
+    { document: options.initial.document, selection: options.initial.selection ?? [], history: EMPTY_HISTORY, message: null, confirmation: null, ui: options.initial.ui },
     'the initial state',
   );
   let open: OpenGesture | null = null;
@@ -175,13 +192,14 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
     return { key: `${command.id}|${JSON.stringify(a.target ?? a.targets ?? a.nodes ?? selection)}|${JSON.stringify(a.property ?? null)}`, within };
   };
 
-  // what a handler reads: the state now, the ports and the words of the person's language
-  const handlerContext = (): HandlerContext<Ui> => {
+  // what a handler reads: the state now, the ports, the words of the person's language, and whether the person
+  // confirmed this run
+  const handlerContext = (confirmed = false): HandlerContext<Ui> => {
     const ui = state.ui;
-    return { state, clock, ids, rules, words: (key) => options.words(ui, key), layout: options.layout ?? noLayout };
+    return { state, clock, ids, rules, words: (key) => options.words(ui, key), layout: options.layout ?? noLayout, confirmed };
   };
 
-  const run = <Id extends CommandId>(id: Id, args: CommandArgs[Id], gesture: OpenGesture | null): DispatchResult => {
+  const run = <Id extends CommandId>(id: Id, args: CommandArgs[Id], gesture: OpenGesture | null, confirmed = false): DispatchResult => {
     const entry = table[id];
     const command = commands.get(id);
     if (!command) throw new Error(`unknown command ${id}`);
@@ -198,8 +216,17 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
       publish(commit({ ...state, message: refusal }, id));
       return { status: 'refused', message: refusal };
     }
-    const outcome: Outcome<Ui> = entry.run(handlerContext(), args);
+    const outcome: Outcome<Ui> = entry.run(handlerContext(confirmed), args);
 
+    // the person is asked first: the dispatch waits, with the words of the command's confirmation (manifest)
+    if (outcome.kind === 'confirm') {
+      if (gesture) throw new Error(`${id} cannot ask a confirmation inside a gesture`);
+      const asked = command.confirmation;
+      if (asked === null) throw new Error(`${id} asks a confirmation the manifest does not declare`);
+      const confirmation: PendingConfirmation = { command: id, args, message: asked.messageKey as MessageId, confirm: asked.confirmKey as MessageId, cancel: asked.cancelKey as MessageId };
+      publish(commit({ ...state, confirmation }, id));
+      return { status: 'confirm' };
+    }
     if (outcome.kind === 'refused') {
       publish(commit({ ...state, message: outcome.message }, id));
       return { status: 'refused', message: outcome.message };
@@ -240,6 +267,7 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
       selection,
       history,
       message: outcome.message ?? before.message,
+      confirmation: before.confirmation,
       ui: outcome.ui ?? before.ui,
     };
     const next: StoreState<Ui> = options.followCommand === undefined ? ran : { ...ran, ui: options.followCommand(ran, command) };
@@ -270,6 +298,17 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
     dispatch: (id, args) => {
       if (open) throw new Error('a gesture is open: dispatch through it');
       return run(id, args, null);
+    },
+    answer: (confirmed) => {
+      const waiting = state.confirmation;
+      if (waiting === null) return { status: 'done', changed: false };
+      if (open) throw new Error('a gesture is open: a confirmation waits outside gestures');
+      if (confirmed) {
+        publish(commit({ ...state, confirmation: null }, waiting.command));
+        return run(waiting.command, waiting.args as CommandArgs[typeof waiting.command], null, true);
+      }
+      publish(commit({ ...state, confirmation: null, message: message('status.confirmation.cancelled') }, waiting.command));
+      return { status: 'done', changed: false };
     },
     gesture: () => {
       if (open) throw new Error('a gesture is already open');

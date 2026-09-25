@@ -5,6 +5,7 @@
 import { useContext, type MouseEvent, type ReactNode } from 'react';
 import { COMMANDS, PREDICATES } from '../../app/commands.ts';
 import { isBuilt, type PredicateTable } from '../../core/commands/registry.ts';
+import { projectFileText } from '../../core/project/archive.ts';
 import type { DispatchResult } from '../../core/store/store.ts';
 import type { CommandId, KeyContextId, MessageId, PredicateId } from '../../generated/ids.ts';
 import type { DoorEntry } from '../../manifest/runtime.ts';
@@ -71,27 +72,33 @@ export function useDoor(entry: DoorEntry, args: Readonly<Record<string, unknown>
     if (!built || !available) return;
     const dispatch = store.dispatch as (id: CommandId, args: unknown) => DispatchResult;
     const given = { ...entry.door.args, ...args };
-    // a command that reads a file (File › Open) asks the browser for it, and runs with the file's text
+    // a command that reads a file (File › Open) asks the browser for it, and runs with the file's text as the
+    // command's owner reads it (FILE_TEXT)
     const file = Object.entries(entry.command.args).find(([name, arg]) => arg.type === 'file' && !arg.optional && !(name in given))?.[0];
     if (file === undefined) {
       dispatch(entry.command.id, given);
       return;
     }
-    void chooseFile().then((text) => {
-      if (text !== null) dispatch(entry.command.id, { ...given, [file]: text });
+    void chooseFile().then(async (bytes) => {
+      if (bytes !== null) dispatch(entry.command.id, { ...given, [file]: await (FILE_TEXT[entry.command.id] ?? plainText)(bytes) });
     });
   };
   return { label, face, title, built, available, current, chord, reason, run };
 }
 
-// The browser's file chooser, as a user opens it; the chosen file's text, or null when nothing was chosen.
-function chooseFile(): Promise<string | null> {
+// How a command's owner turns a chosen file into the text its handler reads; a file's own text otherwise. File › Open
+// reads project.json out of an archive (archive.ts).
+const plainText = (bytes: Uint8Array): Promise<string> => Promise.resolve(new TextDecoder().decode(bytes));
+const FILE_TEXT: Partial<Record<CommandId, (bytes: Uint8Array) => Promise<string>>> = { 'project.open': projectFileText };
+
+// The browser's file chooser, as a user opens it; the chosen file's bytes, or null when nothing was chosen.
+function chooseFile(): Promise<Uint8Array | null> {
   return new Promise((resolve) => {
     const input = document.createElement('input');
     input.type = 'file';
     input.addEventListener('change', () => {
       const chosen = input.files?.[0];
-      if (chosen) void chosen.text().then(resolve, () => resolve(null));
+      if (chosen) void chosen.arrayBuffer().then((buffer) => resolve(new Uint8Array(buffer)), () => resolve(null));
       else resolve(null);
     });
     input.addEventListener('cancel', () => resolve(null));

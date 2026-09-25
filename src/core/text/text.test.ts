@@ -18,12 +18,13 @@ const DOC: DocumentJson = {
   pages: [{ id: 'p', name: 'Home', file: 'index.html', tree: node('Page', 'page', 'body', { children: [node('Hero', 'section', 'section', { children: [node('Intro', 'paragraph', 'p', { text: 'Old' })] })] }) }],
 };
 const context: HandlerContext<never> = {
-  state: { document: DOC, selection: [], history: EMPTY_HISTORY, message: null, ui: undefined as never },
+  state: { document: DOC, selection: [], history: EMPTY_HISTORY, message: null, confirmation: null, ui: undefined as never },
   clock: manualClock(),
   ids: sequentialIds('x'),
   rules: RULES,
   words: (key) => key,
   layout: noLayout,
+  confirmed: false,
 };
 
 describe('text.set', () => {

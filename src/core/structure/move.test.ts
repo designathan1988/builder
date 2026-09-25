@@ -34,13 +34,14 @@ const DOC: DocumentJson = {
 
 const contextOf = (selection: string[]) =>
   ({
-    state: { document: DOC, selection: selection as NodeId[], history: EMPTY_HISTORY, message: null, ui: undefined as never },
+    state: { document: DOC, selection: selection as NodeId[], history: EMPTY_HISTORY, message: null, confirmation: null, ui: undefined as never },
     clock: manualClock(),
     ids: sequentialIds('new'),
     rules: RULES,
     words: (key: MessageId) => translate('en', key),
     // moving measures nothing on the canvas
     layout: noLayout,
+    confirmed: false,
   }) satisfies HandlerContext<never>;
 
 function run(direction: 'up' | 'down', selection: string[]) {

@@ -51,7 +51,7 @@ export const FEATURES = {
   'autosave-corruption-recovery': NOT_AVAILABLE_YET,
   'multi-tab-guard': NOT_AVAILABLE_YET,
   'project-save-json': registerFeature('project-save-json'),
-  'project-open-json': NOT_AVAILABLE_YET,
+  'project-open-json': registerFeature('project-open-json'),
   // 04 inspector
   'inspector-panel': NOT_AVAILABLE_YET,
   'inspector-number-fields': NOT_AVAILABLE_YET,

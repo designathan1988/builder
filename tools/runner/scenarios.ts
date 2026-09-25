@@ -40,6 +40,8 @@ interface Step {
   readonly action: boolean;
   readonly hold?: boolean;
   readonly type?: string | null;
+  // the button the step presses in the confirmation its command asks
+  readonly answer?: 'confirm' | 'cancel' | null;
 }
 interface Scenario {
   readonly id: string;
@@ -552,14 +554,32 @@ async function rowInsteadOfCanvas(page: Page, ref: string, document: unknown, no
   return true;
 }
 
-async function runStep(page: Page, step: Step, ref: string, held: { current: Held | null }, action = false) {
+// The file a step's file argument hands the browser's file chooser (schema.ts, stepSchema): a fixture's JSON, the file
+// the steps downloaded last (File › Save project's archive), or a project.json holding the given text.
+async function chosenFile(value: string, downloads: readonly Download[]): Promise<{ name: string; mimeType: string; buffer: Buffer }> {
+  const fixture = /^fixture:(.+)$/.exec(value)?.[1];
+  if (fixture !== undefined) return { name: `${fixture}.json`, mimeType: 'application/json', buffer: fs.readFileSync(path.join('manifest/features/fixtures', `${fixture}.json`)) };
+  if (value === 'download') {
+    const last = downloads.at(-1);
+    if (last === undefined) throw new Error('the step opens the last download, and nothing was downloaded');
+    return { name: last.suggestedFilename(), mimeType: 'application/zip', buffer: fs.readFileSync(await last.path()) };
+  }
+  if (value.startsWith('json:')) return { name: 'project.json', mimeType: 'application/json', buffer: Buffer.from(value.slice('json:'.length), 'utf8') };
+  throw new Error(`file argument ${value}: it is not fixture:<id>, download or json:<text>`);
+}
+
+async function runStep(page: Page, step: Step, ref: string, held: { current: Held | null }, action: boolean, downloads: readonly Download[]) {
   const d = doorData(ref);
   // a key of the text edited in place needs the focus in the edited text, before anything else of the step
   if (d.kind === 'shortcut' && d.context === EDIT_CONTEXT) expect((await focusedContexts(page))[0], `step ${ref}: the focus is in the text edited in place`).toBe(EDIT_CONTEXT);
   const { document } = await port(page);
   const args = resolveArgs(ref, step.args, document);
+  // a file argument is what the step hands the file chooser the door opens, never what a control stands for
+  const fileArg = Object.entries(argTypes(ref)).find(([, a]) => a.type === 'file')?.[0];
+  const fileValue = fileArg === undefined ? undefined : step.args[fileArg];
+  const chooser = typeof fileValue === 'string' ? page.waitForEvent('filechooser') : null;
   // the arguments a drawn control stands for, beyond those its door fixes
-  const own = Object.fromEntries(Object.entries(args).filter(([name]) => !(name in d.args)));
+  const own = Object.fromEntries(Object.entries(args).filter(([name]) => !(name in d.args) && name !== fileArg));
   const target = step.target === null ? null : nodeAt(document, step.target);
 
   if (d.kind === 'canvas-click' && d.target !== 'stage-outside-page' && step.target !== null && (await rowInsteadOfCanvas(page, ref, document, step.target, action))) {
@@ -646,6 +666,15 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
   } else {
     throw new Error(`step ${ref}: the runner cannot run a ${d.kind} door yet`);
   }
+  // the file the door asked for, chosen as a person chooses it
+  if (chooser !== null) await (await chooser).setFiles(await chosenFile(fileValue as string, downloads));
+  // the confirmation the command asks, answered as the step says; none may be left waiting
+  const dialog = page.locator('[data-confirmation-dialog]');
+  if (step.answer === 'confirm' || step.answer === 'cancel') {
+    await expect(dialog, `step ${ref}: a confirmation asks`).toBeVisible();
+    await dialog.locator(`[data-confirmation="${step.answer}"]`).click();
+    await expect(dialog, `step ${ref}: the answer closes the confirmation`).toHaveCount(0);
+  } else await expect(dialog, `step ${ref}: no confirmation waits for an answer the step does not give`).toHaveCount(0);
   // the characters the step types with the real keyboard ("\n" is Enter)
   if (typeof step.type === 'string') await page.keyboard.type(step.type);
 }
@@ -728,7 +757,7 @@ export function registerScenarioTests(): void {
           let beforeAction: unknown = fixture;
           for (const step of s.steps) {
             if (step.action) beforeAction = (await port(page)).document;
-            await runStep(page, step, step.action ? door : step.door, held, step.action);
+            await runStep(page, step, step.action ? door : step.door, held, step.action, downloads);
           }
           // a drag its Escape cancelled is let go where the pointer is; any other drag still held is a scenario's error
           if (held.current?.cancelled === true) {

@@ -69,6 +69,15 @@ export function createEmptyDocument(ids: IdGenerator, names: EmptyProjectNames, 
   };
 }
 
+// Whether a document is the empty project, whatever its names and ids: one page whose root holds no element and
+// carries no attribute, class or style. Replacing it loses nothing (File › Open asks no confirmation over it).
+export function isEmptyProject(doc: DocumentJson): boolean {
+  const [page, ...others] = doc.pages;
+  if (page === undefined || others.length > 0) return false;
+  const root = page.tree;
+  return root.children.length === 0 && Object.keys(root.attributes).length === 0 && root.classes.length === 0 && Object.keys(root.styles).length === 0;
+}
+
 // Every node of a tree, the root first, in document order.
 export function* walk(node: DocNode): Generator<DocNode> {
   yield node;

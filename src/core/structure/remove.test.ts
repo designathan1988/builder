@@ -34,13 +34,14 @@ const DOC: DocumentJson = {
 
 function run(selection: string[]) {
   const context = {
-    state: { document: DOC, selection: selection as NodeId[], history: EMPTY_HISTORY, message: null, ui: undefined as never },
+    state: { document: DOC, selection: selection as NodeId[], history: EMPTY_HISTORY, message: null, confirmation: null, ui: undefined as never },
     clock: manualClock(),
     ids: sequentialIds('new'),
     rules: RULES,
     words: (key: MessageId) => translate('en', key),
     // deleting measures nothing on the canvas
     layout: noLayout,
+    confirmed: false,
   } satisfies HandlerContext<never>;
   return deleteCommand.run(context, {} as never);
 }
@@ -75,7 +76,7 @@ describe('element.delete (src/core/structure/remove.ts)', () => {
 
   it('follows a delete while the last undo step is a delete and the last message is its own', () => {
     const tx = (command: Transaction['command']): Transaction => ({ command, patches: [], inverses: [], selectionBefore: [], selectionAfter: [], at: 0, coalesceKey: null });
-    const state = (history: HistoryState, message: Message | null) => ({ document: DOC, selection: [], history, message, ui: null });
+    const state = (history: HistoryState, message: Message | null) => ({ document: DOC, selection: [], history, message, confirmation: null, ui: null });
     const deleted: Message = { key: 'status.deleted', params: { name: 'Intro' } };
     expect(followsDelete(state({ past: [tx('element.delete')], future: [] }, deleted))).toBe(true);
     expect(followsDelete(state({ past: [tx('element.delete')], future: [] }, { key: 'status.deletedMany', params: { count: 2 } }))).toBe(true);

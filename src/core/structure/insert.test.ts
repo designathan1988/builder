@@ -35,13 +35,14 @@ const DOC: DocumentJson = {
 
 function run(selection: string[], args: { entry: string; parent?: string; index?: number }, locale: 'en' | 'pt-BR' = 'en') {
   const context = {
-    state: { document: DOC, selection: selection as NodeId[], history: EMPTY_HISTORY, message: null, ui: undefined as never },
+    state: { document: DOC, selection: selection as NodeId[], history: EMPTY_HISTORY, message: null, confirmation: null, ui: undefined as never },
     clock: manualClock(),
     ids: sequentialIds('new'),
     rules: RULES,
     words: (key: MessageId) => translate(locale, key),
     // inserting measures nothing on the canvas
     layout: noLayout,
+    confirmed: false,
   } satisfies HandlerContext<never>;
   return insertCommand.run(context, args as never);
 }

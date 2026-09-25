@@ -316,6 +316,46 @@ kbd {
   background: transparent;
 }
 
+/* a command's confirmation (confirmation.tsx): a modal box in the middle of the window over the scrim; the wrapper
+   takes no place in the shell's grid */
+.confirmation {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  display: grid;
+  place-items: center;
+}
+
+.confirmation__scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--color-scrim);
+}
+
+.confirmation__box {
+  position: relative;
+  display: grid;
+  gap: var(--space-4);
+  max-width: 360px;
+  padding: var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-3);
+}
+
+.confirmation__message {
+  margin: 0;
+  color: var(--color-text);
+  font: var(--fw-dialog) var(--fs-dialog) / var(--lh-dialog) var(--font-ui);
+}
+
+.confirmation__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
 /* the context menu: at the pointer in the window (its left and top come from the drawing), over its backdrop; the
    wrapper takes no place in the shell's grid */
 .context-menu {
