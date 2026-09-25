@@ -31,7 +31,7 @@ const FLOWS: Record<string, string> = { before: 'npm run verify:fast && npm run 
 
 const git = (args: readonly string[], input?: string) => spawnSync('git', args, { encoding: 'utf8', ...(input !== undefined ? { input } : {}) });
 
-function reversePatch(s: Scenario): string {
+export function reversePatch(s: Scenario): string {
   const diff = git(['show', '--format=', s.commit, '--', ...s.files]).stdout;
   if (s.hunk === undefined) return diff;
   const lines = diff.split('\n');
