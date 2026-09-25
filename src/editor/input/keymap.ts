@@ -10,6 +10,7 @@ import type { DispatchResult } from '../../core/store/store.ts';
 import { COMMANDS } from '../../app/commands.ts';
 import { isBuilt } from '../../core/commands/registry.ts';
 import { FEATURE_COMMANDS } from '../../generated/commands.ts';
+import { TEXT_EDITING, editArgs } from '../canvas/text-edit.ts';
 import type { EditorStore } from '../store.ts';
 import { openGesture } from './pointer.ts';
 import { shortcutRuns } from './shortcut-rule.ts';
@@ -53,12 +54,23 @@ export function chordHint(command: CommandId, context: KeyContextId = 'global'):
   return null;
 }
 
-// The key context of the element that has focus: a field keeps its keys; a region names its context with
+// An HTML element of any window: the editor's, or the canvas frame's, whose elements are not instances of the
+// editor's HTMLElement.
+function htmlElement(target: EventTarget | null): HTMLElement | null {
+  const view = typeof target === 'object' && target !== null && 'ownerDocument' in target ? (target as Node).ownerDocument?.defaultView : null;
+  return view && target instanceof view.HTMLElement ? target : null;
+}
+
+// The key context of the element that has focus: the text edited in place on the canvas names its own context (the
+// renderer marks it with data-key-context); a field keeps its keys; a region names its context with
 // data-key-context; the page body, where the focus rests after a press on the canvas (its overlay takes no focus),
 // is the canvas's, which inherits the global context; everything else is the global context.
-export function contextOf(target: EventTarget | null): KeyContextId {
-  if (target instanceof HTMLElement) {
+export function contextOf(event: EventTarget | null): KeyContextId {
+  const target = htmlElement(event);
+  if (target) {
     if (target === target.ownerDocument.body) return 'canvas';
+    const own = target.isContentEditable ? target.getAttribute('data-key-context') : null;
+    if (own && (manifest.interactions.keyContexts as readonly { id: string }[]).some((k) => k.id === own)) return own as KeyContextId;
     if (target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)) return 'field';
     const region = target.closest('[data-key-context]');
     const named = region?.getAttribute('data-key-context');
@@ -90,12 +102,14 @@ export function installKeymap(store: EditorStore, target: Window = window): () =
   const onKeyDown = (event: KeyboardEvent) => {
     // during a pointer gesture the keys are the gesture's (pointer.ts)
     const gesture = openGesture();
-    const binding = bindingFor(gesture?.context ?? contextOf(event.target), chordOf(event));
+    const context = gesture?.context ?? contextOf(event.target);
+    const binding = bindingFor(context, chordOf(event));
     if (!binding) return;
     // a bound chord is the editor's whether or not its door runs yet (DESIGN.md "Keyboard model")
     event.preventDefault();
     if (!shortcutRunsNow(binding)) return;
-    const own = gesture ? {} : focusedArgs(event.target, binding.command.id);
+    // a key of the text edited in place acts on the edit: its node and the text it holds (text-edit.ts)
+    const own = gesture ? {} : context === TEXT_EDITING ? editArgs(store.getState(), binding.command) : focusedArgs(event.target, binding.command.id);
     if (own === null) return;
     const dispatch = (gesture?.gesture.dispatch ?? store.dispatch) as (id: CommandId, args: unknown) => DispatchResult;
     dispatch(binding.command.id, { ...own, ...binding.door.args });

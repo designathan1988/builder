@@ -453,12 +453,22 @@ async function withModifier(page: Page, modifier: string | null | undefined, act
   if (key) await page.keyboard.up(key);
 }
 
-// the focused key context and the contexts it inherits (keymap.ts): a field keeps its keys, a region names its
-// context, the page body is the canvas's
+// the key context of the text edited in place on the canvas (interactions.json), which the edited element names
+const EDIT_CONTEXT = 'text-editing';
+
+// the focused key context and the contexts it inherits (keymap.ts): the text edited in place names its own, a field
+// keeps its keys, a region names its context, the page body is the canvas's
 async function focusedContexts(page: Page): Promise<string[]> {
   const named = await page.evaluate(() => {
     const el = document.activeElement;
     if (!el || el === document.body) return 'canvas';
+    // the focus inside the canvas frame: the edited element (marked by the renderer) or the frame's page
+    if (el instanceof HTMLIFrameElement) {
+      const inner = el.contentDocument?.activeElement;
+      const view = el.contentWindow as (Window & typeof globalThis) | null;
+      if (inner && view && inner instanceof view.HTMLElement && inner.isContentEditable) return inner.getAttribute('data-key-context') ?? 'field';
+      return 'canvas';
+    }
     if (el instanceof HTMLElement && (el.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(el.tagName))) return 'field';
     return el.closest('[data-key-context]')?.getAttribute('data-key-context') ?? 'global';
   });
@@ -502,6 +512,8 @@ async function rowInsteadOfCanvas(page: Page, ref: string, document: unknown, no
 
 async function runStep(page: Page, step: Step, ref: string, held: { current: Held | null }, action = false) {
   const d = doorData(ref);
+  // a key of the text edited in place needs the focus in the edited text, before anything else of the step
+  if (d.kind === 'shortcut' && d.context === EDIT_CONTEXT) expect((await focusedContexts(page))[0], `step ${ref}: the focus is in the text edited in place`).toBe(EDIT_CONTEXT);
   const { document } = await port(page);
   const args = resolveArgs(ref, step.args, document);
   // the arguments a drawn control stands for, beyond those its door fixes
@@ -570,7 +582,9 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
       if (key) await page.keyboard.up(key);
     }
   } else if (d.kind === 'shortcut') {
-    if (Object.keys(own).length > 0) {
+    // a key of the text edited in place (the focus there was asserted above) acts on the edit: its arguments (the
+    // node, the text) are what the edit holds, which the document diff checks; no control stands for them
+    if (d.context !== EDIT_CONTEXT && Object.keys(own).length > 0) {
       await focusControlFor(page, ref, own);
       // the control the key acts on lies in the door's key context (a palette tile in the palette's)
       const chain = await focusedContexts(page);

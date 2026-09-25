@@ -2,17 +2,16 @@
 
 At most 60 lines: state, the user's pending decisions, open findings. History and proofs: `docs/history.md`.
 
-## State (2026-09-25, group 02 in progress)
+## State (2026-09-25, brief "a aplicação completa": every feature of groups 01-20)
 
 - Group 01 and the foundation pass (runner, pointer.ts, menu doors, shortcut rule, lint rules: docs/history.md).
-- Group 02 brief (user): helpers in git worktrees `.cache/wt/<feature>`, at most 2 at once with Playwright
-  `--workers=2` (the machine froze with 4 runs of 12 workers); the coordinator integrates one at a time after
-  verify:fast, e2e with the census, e2e:tooth and the status. Done: findings 16 and 17.
+- One e2e suite at a time (E2E_WORKERS=4), no dev server meanwhile; up to 3 helpers in worktrees, never in Chrome.
 - Group 02 passing: select-click, layers-tree, keyboard-tree-walk, palette-click-insert, undo-redo,
   multi-select-click, marquee-select, delete-element, move-up-down, wrap-row-column, drag-reorder-canvas,
-  drag-drop-inside (a container is dragged by its selection label), context-menu, duplicate. Runner paths proven by switching them off:
-  setup selection, canvas click, Tab to a control, modifier click, drag press, marquee, a slot with no free gap.
-- Decisions by small ambiguity: docs/history.md, "Group 02" (the newest entry).
+  drag-drop-inside, context-menu, duplicate, text-edit-inline. Runner paths proven by switching them off: setup
+  selection, canvas click, Tab to a control, modifier click, drag press, marquee, a slot with no free gap.
+- To integrate: feature/palette-drag-insert, feature/drag-level-keys-escape, feature/hand-keyboard-move. Decisions
+  by small ambiguity: docs/history.md, "Group 02" (the newest entry).
 
 ## Conditions the user set
 
@@ -58,3 +57,4 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 30. Declared, not built: wrap refusals requiresParent, interactiveInside, formInForm, singleChild, labelOneControl;
     drop.emptyAimMin (40 px aim of an empty container); the hover label as a hit target (it covered a container's
     marquee corner); DESIGN's "a label hides while the pointer is over it" contradicts the label as a hit target.
+31. Ctrl+A while editing a text does nothing: it is text.selectAll (select-container-children, not built yet).

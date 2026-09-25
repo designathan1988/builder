@@ -18,6 +18,12 @@
 // data-container, and one style element of the editor (data-editor-style), first in the head, gives an empty one the
 // minimum height of the manifest's constant canvas.emptyContainerMinHeight, so it can be seen and pointed at. Its
 // selector weighs nothing (:where), so any min-height the node's own styles set wins.
+//
+// Editor-only too, while a text is edited in place (src/editor/canvas/text-edit.ts): the edited element carries
+// contenteditable="plaintext-only" and data-key-context naming the key context of the edit, is focused with the caret
+// at the end of its text, and takes a line break at the caret when asked; its text is read back from the element (a
+// <br> is "\n"). The marks go when the edit ends, and the element shows again the text the document holds. They are
+// the renderer's state, never the document's, and the page still gets no event handler.
 import type { NodeId } from '../../generated/commands.ts';
 import type { ElementsFile, InteractionsFile, PropertiesFile } from '../../manifest/schema.ts';
 import { walk, type DocNode, type DocumentJson } from '../document/model.ts';
@@ -32,6 +38,10 @@ export const NODE_STYLE_ATTRIBUTE = 'data-node-style';
 // the editor-only marks: an element of a container, and the editor's own style element
 export const CONTAINER_ATTRIBUTE = 'data-container';
 export const EDITOR_STYLE_ATTRIBUTE = 'data-editor-style';
+// the marks of the text edited in place: editable as plain text, in the key context the editor names
+export const EDITABLE_ATTRIBUTE = 'contenteditable';
+export const EDITABLE_VALUE = 'plaintext-only';
+export const KEY_CONTEXT_ATTRIBUTE = 'data-key-context';
 
 export interface RenderModel {
   readonly elements: ReadonlyMap<string, { readonly namespace: 'html' | 'svg'; readonly content: 'children' | 'text' | 'markup' | 'none' }>;
@@ -148,9 +158,18 @@ function shownText(element: Element): string {
   return [...element.childNodes].map((n) => (n.nodeType === TEXT_NODE ? (n.nodeValue ?? '') : n.nodeName === 'BR' ? '\n' : '')).join('');
 }
 
+// Whether nothing but empty text follows a node inside its element.
+function lastContent(node: Node): boolean {
+  let next = node.nextSibling;
+  while (next !== null && next.nodeType === TEXT_NODE && (next.nodeValue ?? '') === '') next = next.nextSibling;
+  return next === null;
+}
+
 export class PageRenderer {
   private readonly elements = new Map<NodeId, Element>();
   private readonly sheets = new Map<NodeId, HTMLStyleElement>();
+  // the text being edited in place: its node and the key context its element names
+  private edit: { readonly node: NodeId; readonly context: string } | null = null;
 
   constructor(
     private readonly target: Document,
@@ -161,6 +180,56 @@ export class PageRenderer {
   // The element that renders a node, or null.
   element(id: NodeId): Element | null {
     return this.elements.get(id) ?? null;
+  }
+
+  // Starts editing a text element in place (the marks, the focus without scrolling, the caret at the end of its
+  // text), or, with null, ends the edit: the element loses the marks and shows the text the document holds.
+  editText(doc: DocumentJson, id: NodeId | null, context: string): void {
+    const tree = doc.pages[this.page]?.tree ?? null;
+    const previous = this.edit;
+    if (previous?.node === id && previous.context === context) return;
+    this.edit = null;
+    const left = previous && tree ? findNode(tree, previous.node) : null;
+    const leftElement = previous ? this.elements.get(previous.node) : undefined;
+    if (left && leftElement) this.dress(leftElement, left, true);
+    if (id === null || !tree) return;
+    const node = findNode(tree, id);
+    const element = this.elements.get(id);
+    if (!node || !element || this.model.elements.get(node.type)?.content !== 'text') return;
+    this.edit = { node: id, context };
+    this.dress(element, node);
+    (element as HTMLElement).focus({ preventScroll: true });
+    const selection = this.target.getSelection();
+    selection?.selectAllChildren(element);
+    selection?.collapseToEnd();
+  }
+
+  // A line break at the caret of the edited text. One at the very end is followed by the <br> a browser needs to
+  // show the new line, which the text read back leaves out.
+  insertLineBreak(): void {
+    const element = this.edit ? this.elements.get(this.edit.node) : undefined;
+    const selection = this.target.getSelection();
+    if (!element || !selection || selection.rangeCount === 0) return;
+    const range = selection.getRangeAt(0);
+    if (!element.contains(range.commonAncestorContainer)) return;
+    range.deleteContents();
+    const lineBreak = this.target.createElement('br');
+    range.insertNode(lineBreak);
+    if (lastContent(lineBreak)) lineBreak.after(this.target.createElement('br'));
+    range.setStartAfter(lineBreak);
+    range.collapse(true);
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }
+
+  // The text the edited element holds now ("\n" for each line break, the browser's last <br> left out), or null when
+  // no text is edited.
+  editedText(): string | null {
+    const element = this.edit ? this.elements.get(this.edit.node) : undefined;
+    if (!element) return null;
+    const text = shownText(element);
+    const last = [...element.childNodes].filter((n) => !(n.nodeType === TEXT_NODE && (n.nodeValue ?? '') === '')).at(-1);
+    return last?.nodeName === 'BR' ? text.slice(0, -1) : text;
   }
 
   // Builds the whole page: once, and when the rendered page itself is replaced.
@@ -248,11 +317,17 @@ export class PageRenderer {
     return element;
   }
 
-  // The node's own attributes, classes and text on its element, writing only what differs.
-  private dress(element: Element, node: DocNode): void {
+  // The node's own attributes, classes and text on its element, writing only what differs. The text of the element
+  // being edited is the edit's until it ends (`rewrite` then writes the document's text whatever the element shows).
+  private dress(element: Element, node: DocNode, rewrite = false): void {
     const wanted = new Map<string, string>([[NODE_ATTRIBUTE, node.id]]);
     // a container below the page root (editor-only: see the top of this file)
     if (element !== this.target.body && this.model.elements.get(node.type)?.content === 'children') wanted.set(CONTAINER_ATTRIBUTE, '');
+    const edited = this.edit?.node === node.id ? this.edit : null;
+    if (edited) {
+      wanted.set(EDITABLE_ATTRIBUTE, EDITABLE_VALUE);
+      wanted.set(KEY_CONTEXT_ATTRIBUTE, edited.context);
+    }
     if (node.classes.length > 0) wanted.set('class', node.classes.join(' '));
     for (const [id, value] of Object.entries(node.attributes)) {
       const name = this.model.attributes.get(id);
@@ -262,9 +337,9 @@ export class PageRenderer {
     }
     for (const attribute of [...element.attributes]) if (!wanted.has(attribute.name)) element.removeAttribute(attribute.name);
     for (const [name, value] of wanted) if (element.getAttribute(name) !== value) element.setAttribute(name, value);
-    if (this.model.elements.get(node.type)?.content !== 'text') return;
+    if (this.model.elements.get(node.type)?.content !== 'text' || edited) return;
     const text = node.text ?? '';
-    if (shownText(element) === text) return;
+    if (!rewrite && shownText(element) === text) return;
     const lines = text.split('\n');
     element.replaceChildren(...lines.flatMap((line, i) => (i === 0 ? [this.target.createTextNode(line)] : [this.target.createElement('br'), this.target.createTextNode(line)])));
   }

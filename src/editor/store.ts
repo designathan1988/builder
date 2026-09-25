@@ -12,6 +12,7 @@ import type { CommandId, ConstantId } from '../generated/ids.ts';
 import { translate } from '../i18n/index.ts';
 import { manifest } from '../manifest/runtime.ts';
 import { pageLayout } from './canvas/coordinates.ts';
+import { endOffSelection, endOnUndoable } from './canvas/text-edit.ts';
 import { revealSelection } from './layers/tree.ts';
 import { browserStorage, loadPreferences, persistPreferences, type PreferenceStorage } from './preferences/preferences.ts';
 import { initialEditorUi, type EditorUi } from './state.ts';
@@ -45,7 +46,9 @@ export function createEditorStore(options: EditorStoreOptions = {}): EditorStore
     layout: pageLayout,
     initial: { document, ui: initialEditorUi(preferences) },
     freeze: import.meta.env.DEV,
-    followSelection: revealSelection,
+    // Layers unfolds what hides a selected node; a text edit ends once its node is not the selection alone
+    followSelection: (state) => endOffSelection({ ...state, ui: revealSelection(state) }),
+    followCommand: endOnUndoable,
   });
   persistPreferences(store, storage);
   return store;

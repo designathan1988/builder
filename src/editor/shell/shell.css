@@ -913,6 +913,17 @@ kbd {
   visibility: hidden;
 }
 
+/* a text edited in place: its outline and label in the text editing mode colour, never the selection's
+   (text-edit-inline, Problems in Pager 2) */
+.chrome__selection.is-editing {
+  outline-color: var(--color-mode-text);
+}
+
+.chrome__label.is-editing {
+  background: var(--color-mode-text);
+  color: var(--color-on-mode-text);
+}
+
 /* the label of the one selected element is a hit target of the canvas (select-click, drag-reorder-canvas): a press on
    it selects that element and arms its drag (pointer.ts); the rest of the chrome takes no pointer event */
 .chrome__label.is-target:not(.is-measuring, .is-hidden) {

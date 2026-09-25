@@ -157,6 +157,16 @@ describe('the store', () => {
     expect(store.getState().message).toEqual({ key: 'refusal.nothingSelected', params: {} });
   });
 
+  it("says a predicate's own refusal when it is one the manifest declares for the command, and refuses any other", () => {
+    const own = registerPredicate<EditorUi>('hasSelection', () => false, () => message('status.delete.root', { name: 'Page' }));
+    const { store } = testStore(TEST_COMMANDS, { ...TEST_PREDICATES, hasSelection: own });
+    expect(store.dispatch('element.delete', {})).toEqual({ status: 'refused', message: { key: 'status.delete.root', params: { name: 'Page' } } });
+    expect(store.getState().message).toEqual({ key: 'status.delete.root', params: { name: 'Page' } });
+    const undeclared = registerPredicate<EditorUi>('hasSelection', () => false, () => message('status.undo.nothing'));
+    const other = testStore(TEST_COMMANDS, { ...TEST_PREDICATES, hasSelection: undeclared });
+    expect(() => other.store.dispatch('element.delete', {})).toThrow(/does not declare/);
+  });
+
   it('records a transaction with its patches, inverses and the selection before and after', () => {
     const s = testStore();
     insertInto(s);

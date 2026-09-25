@@ -66,8 +66,23 @@ Decisions by small ambiguity (moved here from PROGRESS.md):
   id and the first free numbered name ("Intro 2" copies to "Intro 3"); several selected roots each copied after
   their original in one undo step, the copies selected (primary's first), status.duplicatedMany; the page root is
   refused. Not built: status.refused.singleChild, status.locked.edit, renaming HTML ids inside a copy.
+- text-edit-inline: edited inside the iframe (spec: "Editing happens in the zoomed iframe"): the renderer marks the
+  node contenteditable="plaintext-only" (editor-only), frame.tsx installs the keymap on the frame's window, aria-hidden
+  comes off while editing; double-click comes from the dblclick event (Chrome's pointerdown count is 0); an outside
+  press selects in the press's gesture and text.set runs right after it closes (text.set is per-dispatch), one undo
+  step; a predicate may give its own refusal message among the command's declared ones; the edit ends when an
+  undoable command runs (store followCommand) or the selection changes; "\n" is drawn as <br>. Integrated by the
+  brief "a aplicação completa" before its first task, because its files were already staged in the main folder and
+  discarding them was refused; the coordinator added the editing look the spec requires (Problems in Pager 2, DESIGN
+  "Canvas", text): the outline and the label ("Editing text · Intro") in the text editing mode colour, with a browser
+  test and its tooth proof. Ctrl+A while editing is text.selectAll's (select-container-children): it does nothing
+  until that feature is built (finding 31).
 - Playwright runs at most 3 workers (the machine froze with helpers in parallel at the default 12; the test Chrome
-  already draws on the RTX 3060 through ANGLE D3D11, checked).
+  already draws on the RTX 3060 through ANGLE D3D11, checked). Then (brief "a aplicação completa", bcd255e): the
+  worker count comes from E2E_WORKERS, 4 when unset; a value that is not a whole number >= 1 fails the run.
+- The tooth proof prints why each test failed (the first line and the matcher) and counts a failure that only ran
+  out of time on an action or a wait (`locator.click: Timeout 5000ms exceeded.`) as no tooth, like a test timeout: a
+  tooth fails on an assertion (brief "a aplicação completa").
 
 ## 2026-09-25 — Slice 1: the rest of the foundation and the first usable block of group 02
 

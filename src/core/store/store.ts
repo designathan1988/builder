@@ -90,6 +90,9 @@ export interface StoreOptions<Ui> {
   // the editor state that follows a new selection, whichever command or undo step changed it (the editor's owner of
   // that state knows it: Layers unfolds the branches that hide a selected node)
   readonly followSelection?: (state: StoreState<Ui>) => Ui;
+  // the editor state that follows a command that ran, by the command's manifest data (a text edit ends when an
+  // undoable command runs: the document may change under it); it returns the same editor state when nothing follows
+  readonly followCommand?: (state: StoreState<Ui>, command: Command) => Ui;
 }
 
 export function deepFreeze<T>(value: T): T {
@@ -182,7 +185,9 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
     if (!isBuilt(entry)) return { status: 'not-available-yet' };
     const predicate = predicates[command.availability.predicate as keyof PredicateTable<Ui>];
     if (predicate && !predicate.test(state)) {
-      const refusal = message((command.availability.refusalKey ?? 'common.notAvailableYet') as Message['key']);
+      const declared = message((command.availability.refusalKey ?? 'common.notAvailableYet') as Message['key']);
+      const refusal = predicate.refusal?.(state) ?? declared;
+      if (refusal.key !== declared.key && !(command.refusals as readonly string[]).includes(refusal.key)) throw new Error(`${id}: its predicate refuses with ${refusal.key}, which the manifest does not declare for it`);
       publish(commit({ ...state, message: refusal }, id));
       return { status: 'refused', message: refusal };
     }
@@ -223,13 +228,14 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
       history = record(before.history, tx, key !== null && key === previousMergeable ? within : null);
       lastMergeable = key;
     }
-    const next: StoreState<Ui> = {
+    const ran: StoreState<Ui> = {
       document: documentChanged ? applied.document : before.document,
       selection,
       history,
       message: outcome.message ?? before.message,
       ui: outcome.ui ?? before.ui,
     };
+    const next: StoreState<Ui> = options.followCommand === undefined ? ran : { ...ran, ui: options.followCommand(ran, command) };
     const changed = documentChanged || !deepEqual(before.selection, next.selection) || next.ui !== before.ui || next.message !== before.message;
     if (changed) publish(commit(next, id), documentChanged ? applied.applied : []);
     return { status: 'done', changed };

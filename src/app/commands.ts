@@ -22,6 +22,8 @@ import { insertCommand } from '../core/structure/insert.ts';
 import { moveDownCommand, moveToCommand, moveUpCommand } from '../core/structure/move.ts';
 import { deleteCommand } from '../core/structure/remove.ts';
 import { wrapColumnCommand, wrapRowCommand } from '../core/structure/wrap.ts';
+import { setTextCommand } from '../core/text/text.ts';
+import { cancelEdit, insertLineBreak, singleTextSelection, startEdit } from '../editor/canvas/text-edit.ts';
 import { focusActivate, focusFirst, focusLast, focusNext, focusPrevious } from '../editor/focus/focus.ts';
 import { setExpanded } from '../editor/layers/tree.ts';
 import { contextMenuOpen } from '../editor/menus/context-menu.ts';
@@ -185,10 +187,10 @@ export const COMMANDS = {
   'field.step': NOT_AVAILABLE_YET,
   'field.scrub': NOT_AVAILABLE_YET,
   'field.setUnit': NOT_AVAILABLE_YET,
-  'text.startEdit': NOT_AVAILABLE_YET,
-  'text.set': NOT_AVAILABLE_YET,
-  'text.cancelEdit': NOT_AVAILABLE_YET,
-  'text.insertLineBreak': NOT_AVAILABLE_YET,
+  'text.startEdit': startEdit,
+  'text.set': setTextCommand,
+  'text.cancelEdit': cancelEdit,
+  'text.insertLineBreak': insertLineBreak,
   'text.toggleBold': NOT_AVAILABLE_YET,
   'text.toggleItalic': NOT_AVAILABLE_YET,
   'text.editLink': NOT_AVAILABLE_YET,
@@ -253,4 +255,4 @@ export const COMMANDS = {
 } as const satisfies CommandTable<EditorUi>;
 
 // The availability predicates code has registered; a built command's predicate must be here (createStore checks it).
-export const PREDICATES = { always, canUndo, canRedo, hasSelection } as const satisfies PredicateTable<EditorUi>;
+export const PREDICATES = { always, canUndo, canRedo, hasSelection, singleTextSelection } as const satisfies PredicateTable<EditorUi>;

@@ -768,22 +768,22 @@
     {
       "kind": "handler",
       "id": "text.startEdit",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",
       "id": "text.set",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",
       "id": "text.cancelEdit",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",
       "id": "text.insertLineBreak",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",
@@ -1158,7 +1158,7 @@
     {
       "kind": "predicate",
       "id": "singleTextSelection",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "predicate",

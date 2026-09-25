@@ -4,7 +4,8 @@
 // thinner outline of the node the pointer hovers (pointer.ts); the band of a marquee while pointer.ts draws one
 // (spec marquee-select: a 1 px accent border, a 16 % accent fill); and during an element drag (pointer.ts), the drop
 // indicator (the insertion line, the receiver's outline and the drop label), with the dragged selection's outline
-// dashed and its label hidden. The label of the one selected element is the one part of the chrome that takes a
+// dashed and its label hidden. While a text is edited in place, its outline and label ("Editing text · Intro") wear
+// the text editing mode colour instead of the selection's. The label of the one selected element is the one part of the chrome that takes a
 // press: pointer.ts reads it (data-label-for) as a press on that element (spec select-click, "Hit zones"). Where a
 // node is on the screen comes from the
 // coordinates module (nodeBox), measured on every animation frame while there is something to draw, so the chrome
@@ -173,6 +174,9 @@ export function CanvasChrome() {
   const node = useEditorState((s) => (s.selection[0] === undefined ? null : (locate(s.document, s.selection[0])?.node ?? null)));
   const hovered = useSyncExternalStore(hover.subscribe, hover.get);
   const drawnBand = useSyncExternalStore(band.subscribe, band.get);
+  // the text edited in place (text-edit.ts): its outline and label wear the text editing mode, so the edit never looks
+  // like a plain selection (spec text-edit-inline, Problems in Pager 2; DESIGN.md "Canvas", text)
+  const editing = useEditorState((s) => s.ui.textEdit.node !== null && s.selection.length === 1 && s.selection[0] === s.ui.textEdit.node);
   const t = useT();
   const layer = useRef<HTMLDivElement>(null);
   const label = useRef<HTMLDivElement>(null);
@@ -223,7 +227,7 @@ export function CanvasChrome() {
       {shown.hovered ? <div className="chrome__hover" data-chrome="hover" style={at(shown.hovered)} /> : null}
       {drawnBand !== null && shown.band ? <div className="chrome__band" data-chrome="band" style={at(shown.band)} /> : null}
       {shown.selected.map((b, i) => (
-        <div key={i} className={`chrome__selection${dragging ? ' is-source' : ''}`} data-chrome="selection" style={at(b)} />
+        <div key={i} className={`chrome__selection${dragging ? ' is-source' : ''}${editing ? ' is-editing' : ''}`} data-chrome="selection" style={at(b)} />
       ))}
       {dragging ? <DropIndicator view={dragging} /> : null}
       {shown.union && selection.length > 1 ? <div className="chrome__union" data-chrome="union" style={at(shown.union)} /> : null}
@@ -240,14 +244,20 @@ export function CanvasChrome() {
       ) : node !== null ? (
         <div
           ref={label}
-          className={`chrome__label is-target${shown.label ? '' : ' is-measuring'}${dragging ? ' is-hidden' : ''}`}
+          className={`chrome__label is-target${shown.label ? '' : ' is-measuring'}${dragging ? ' is-hidden' : ''}${editing ? ' is-editing' : ''}`}
           data-chrome="label"
           data-label-for={node.id}
           data-placement={shown.label?.placement}
           style={shown.label ? { left: shown.label.box.x, top: shown.label.box.y } : undefined}
         >
-          <span className="chrome__name">{node.name}</span>
-          <small className="chrome__tag">{node.tag ?? ''}</small>
+          {editing ? (
+            <span className="chrome__name">{t('canvas.editingText', { name: node.name })}</span>
+          ) : (
+            <>
+              <span className="chrome__name">{node.name}</span>
+              <small className="chrome__tag">{node.tag ?? ''}</small>
+            </>
+          )}
         </div>
       ) : null}
     </div>

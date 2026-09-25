@@ -79,15 +79,19 @@ export function isBuilt<Id extends CommandId, Ui>(entry: CommandEntry<Id, Ui>): 
   return entry !== NOT_AVAILABLE_YET;
 }
 
-// An availability predicate (a command's availability.predicate in the manifest).
+// An availability predicate (a command's availability.predicate in the manifest). When it fails, the status bar says
+// the command's refusalKey; a predicate that knows the words of its refusal ("{name} has no text to edit.") or which
+// of the command's declared refusals applies says so with `refusal` (the store accepts only the command's
+// refusalKey or one of its manifest refusals).
 export interface RegisteredPredicate<Ui> {
   readonly id: PredicateId;
   test(state: StoreState<Ui>): boolean;
+  refusal?(state: StoreState<Ui>): Message;
 }
 
 // manifest:check reads `registerPredicate('<id>'` to mark the id registered in references.json.
-export function registerPredicate<Ui = never>(id: PredicateId, test: (state: StoreState<Ui>) => boolean): RegisteredPredicate<Ui> {
-  return { id, test };
+export function registerPredicate<Ui = never>(id: PredicateId, test: (state: StoreState<Ui>) => boolean, refusal?: (state: StoreState<Ui>) => Message): RegisteredPredicate<Ui> {
+  return refusal === undefined ? { id, test } : { id, test, refusal };
 }
 
 export type PredicateTable<Ui> = { readonly [Id in PredicateId]?: RegisteredPredicate<Ui> };

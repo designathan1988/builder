@@ -16,6 +16,9 @@
 // they would land, publishes it for the canvas chrome (hysteresis: drag.hysteresis), and the release runs the
 // canvas-drag door of the drawn proposal's zone (beside a sibling, or inside a container) with its parent and index,
 // inside the same gesture.
+//
+// A double-click on a text element starts its edit in place; while a text is edited, a press elsewhere keeps the text
+// once its own door has run (spec text-edit-inline).
 import { locate, type DocumentJson, type NodeId } from '../../core/document/model.ts';
 import type { Gesture } from '../../core/store/store.ts';
 import { selectionRoots } from '../../core/structure/remove.ts';
@@ -24,6 +27,7 @@ import { manifest, type DoorEntry } from '../../manifest/runtime.ts';
 import { canvasFrame, flowAxis, geometryOf, nodeAt, nodeBox, nodesUnder, screenToPage, type Point } from '../canvas/coordinates.ts';
 import { proposeDrop, type DropProposal } from '../drag/drop.ts';
 import type { EditorStore } from '../store.ts';
+import { editArgs, editedNode, isTextElement } from '../canvas/text-edit.ts';
 
 const threshold = manifest.interactions.constants.find((c) => c.id === 'drag.threshold')?.value;
 export const DRAG_THRESHOLD = typeof threshold === 'number' ? threshold : 4;
@@ -69,20 +73,39 @@ export function step(machine: Machine, event: MachineEvent, dragThreshold = DRAG
   return { machine, effect: null };
 }
 
+// What the canvas knows of a press beyond where it lands: whether its node is a text element, and the node whose text
+// is edited in place (text-edit.ts), if any.
+export interface PressFacts {
+  readonly textual: boolean;
+  readonly edited: string | null;
+}
+const NO_FACTS: PressFacts = { textual: false, edited: null };
+
 // The canvas-click doors of the manifest, and whether one's target takes a press: "element-or-page" any node,
-// "element" a node that is not the page root, "stage-outside-page" the stage. The other targets (a text element, an
-// edited element, an interaction's target being picked) arrive with their features.
+// "element" a node that is not the page root, "stage-outside-page" the stage, "text-element" a text element,
+// "outside-edited-element" anywhere but the element whose text is edited (while one is). The other targets (an
+// interaction's target being picked, a form control) arrive with their features.
 const CLICKS = manifest.doors.filter((d) => d.door.kind === 'canvas-click');
-function takes(target: string, press: Press): boolean {
+const OUTSIDE_EDIT = 'outside-edited-element';
+function takes(target: string, press: Press, facts: PressFacts): boolean {
   if (target === 'element-or-page') return press.on === 'node';
   if (target === 'element') return press.on === 'node' && !press.root;
   if (target === 'stage-outside-page') return press.on === 'stage';
+  if (target === 'text-element') return press.on === 'node' && !press.root && facts.textual;
+  if (target === OUTSIDE_EDIT) return facts.edited !== null && !(press.on === 'node' && press.node === facts.edited);
   return false;
 }
 
 export type Button = 'primary' | 'secondary';
-export function clickDoor(press: Press, button: Button, count: number, modifier: string | null): DoorEntry | null {
-  return CLICKS.find((d) => d.door.kind === 'canvas-click' && d.door.button === button && d.door.count === count && d.door.modifier === modifier && takes(d.door.target, press)) ?? null;
+const matches = (d: DoorEntry, button: Button, count: number, modifier: string | null) => d.door.kind === 'canvas-click' && d.door.button === button && d.door.count === count && d.door.modifier === modifier;
+// The door a press runs.
+export function clickDoor(press: Press, button: Button, count: number, modifier: string | null, facts: PressFacts = NO_FACTS): DoorEntry | null {
+  return CLICKS.find((d) => matches(d, button, count, modifier) && d.door.kind === 'canvas-click' && d.door.target !== OUTSIDE_EDIT && takes(d.door.target, press, facts)) ?? null;
+}
+// The door a press outside the edited text runs first, keeping the text (spec text-edit-inline: a click elsewhere
+// keeps it, and selects there): null when no text is edited or the press is on it.
+export function editEndDoor(press: Press, button: Button, count: number, modifier: string | null, facts: PressFacts): DoorEntry | null {
+  return CLICKS.find((d) => matches(d, button, count, modifier) && d.door.kind === 'canvas-click' && d.door.target === OUTSIDE_EDIT && takes(d.door.target, press, facts)) ?? null;
 }
 
 // A door's arguments for a press: its own, and the node it acts on when its adapter acts on the gesture's target.
@@ -229,7 +252,7 @@ export function modifierOf(event: Readonly<Record<(typeof MODIFIERS)[number][0],
 // What a pointer event is on: the label of an element on the canvas chrome (spec select-click, "Hit zones": the
 // selection label and the hover label select or drag the element they name), the page under the overlay, the
 // stage, or neither (the rest of the editor).
-function pressAt(event: PointerEvent, isRoot: (node: string) => boolean): Press | null | 'elsewhere' {
+function pressAt(event: MouseEvent, isRoot: (node: string) => boolean): Press | null | 'elsewhere' {
   const target = event.target instanceof Element ? event.target : null;
   const named = target?.closest('[data-canvas-overlay] [data-label-for]')?.getAttribute('data-label-for') ?? null;
   if (named !== null) return { on: 'node', node: named, root: isRoot(named), label: true };
@@ -252,6 +275,11 @@ export function installPointer(store: EditorStore, target: Window = window): () 
   let pressedAt: { screen: Point; page: Point | null } | null = null;
   // the marquee being drawn: its door and mode
   let marquee: { entry: DoorEntry; mode: string } | null = null;
+  // whether the press just handled leaves the focus where it is: in the text edited in place, which the press
+  // started or landed on (the browser would otherwise move the focus to the editor's page body at the mousedown)
+  let keepFocus = false;
+  // the door that keeps the text a press outside it left, with the edit's arguments, run once the gesture closes
+  let keeping: { entry: DoorEntry; args: Record<string, unknown> } | null = null;
 
   const pagePoint = (at: Point): Point | null => {
     const frame = canvasFrame();
@@ -274,11 +302,27 @@ export function installPointer(store: EditorStore, target: Window = window): () 
     setBand({ x: Math.min(s.x, at.x), y: Math.min(s.y, at.y), width: Math.abs(at.x - s.x), height: Math.abs(at.y - s.y) });
   };
 
+  const factsOf = (press: Press): PressFacts => {
+    const state = store.getState();
+    return { textual: press.on === 'node' && isTextElement(state.document, press.node), edited: editedNode(state) };
+  };
+
   const run = (effect: Effect) => {
     if (effect === 'press' && machine.phase !== 'idle' && buttons !== null) {
+      const press = machine.press;
+      // a press outside the text edited in place keeps that text: the edit's node and text are read now, before the
+      // press's own door (a selection elsewhere) ends the edit, and its door runs once the gesture closes, as a
+      // dispatch of its own (text.set records one transaction per dispatch and never joins a gesture); the press's own
+      // door records nothing, so the press is one undo step, and the status bar ends on the kept text
+      const ending = editEndDoor(press, buttons.button, buttons.count, buttons.modifier, factsOf(press));
+      const endArgs = ending ? editArgs(store.getState(), ending.command) : null;
+      keeping = ending && endArgs ? { entry: ending, args: endArgs } : null;
       open = store.gesture();
-      const entry = clickDoor(machine.press, buttons.button, buttons.count, buttons.modifier);
-      if (entry) open.dispatch(entry.command.id as CommandId, argsFor(entry, machine.press) as never);
+      const entry = clickDoor(press, buttons.button, buttons.count, buttons.modifier, factsOf(press));
+      if (entry) open.dispatch(entry.command.id as CommandId, argsFor(entry, press) as never);
+      // a press that lands on the edited text leaves the focus in it
+      const edited = editedNode(store.getState());
+      keepFocus = edited !== null && press.on === 'node' && press.node === edited;
     } else if (effect === 'drag' && machine.phase === 'dragging' && buttons?.button === 'primary') {
       const press = machine.press;
       const node = press.on === 'node' ? (locate(store.getState().document, press.node as NodeId)?.node ?? null) : null;
@@ -310,6 +354,10 @@ export function installPointer(store: EditorStore, target: Window = window): () 
       if (effect === 'commit' && dropped !== null && door !== null) closing?.dispatch(door.command.id, { ...door.door.args, parent: dropped.parent, index: dropped.index } as never);
       if (effect === 'commit') closing?.commit();
       else closing?.cancel();
+      // the text the press left is kept whether the gesture ends or the browser takes the pointer away
+      const kept = keeping;
+      keeping = null;
+      if (kept) store.dispatch(kept.entry.command.id as CommandId, kept.args as never);
     }
   };
 
@@ -326,8 +374,22 @@ export function installPointer(store: EditorStore, target: Window = window): () 
   };
 
   const isRoot = (node: string) => locate(store.getState().document, node as NodeId)?.parent === null;
+  // A double click is the browser's own (its dblclick, after the second release, by the system's double-click time;
+  // Chrome's pointerdown carries no click count, so each press is a single click): the double-click door of what it
+  // lands on runs as a gesture of its own.
+  const onDoubleClick = (event: MouseEvent) => {
+    if (machine.phase !== 'idle' || open !== null || event.button !== 0) return;
+    const press = pressAt(event, isRoot);
+    if (press === null || press === 'elsewhere') return;
+    const entry = clickDoor(press, 'primary', 2, modifierOf(event), factsOf(press));
+    if (!entry) return;
+    const gesture = store.gesture();
+    gesture.dispatch(entry.command.id as CommandId, argsFor(entry, press) as never);
+    gesture.commit();
+  };
   const onDown = (event: PointerEvent) => {
     lastPress = { x: event.clientX, y: event.clientY };
+    keepFocus = false;
     const press = pressAt(event, isRoot);
     if (press === null || press === 'elsewhere') return;
     if (event.button !== 0 && event.button !== 2) return;
@@ -372,12 +434,16 @@ export function installPointer(store: EditorStore, target: Window = window): () 
     if (event.target instanceof Element && event.target.closest(EDITOR_MENU_AREA)) event.preventDefault();
   };
   // A secondary press there moves no focus: the context menu it opens takes the focus at once, and the press would
-  // otherwise hand it to the page body right after.
+  // otherwise hand it to the page body right after. Nor does a press on the text edited in place: the focus stays in
+  // the text.
   const onMouseDown = (event: MouseEvent) => {
-    if (event.button === 2 && event.target instanceof Element && event.target.closest(EDITOR_MENU_AREA)) event.preventDefault();
+    const keep = keepFocus;
+    keepFocus = false;
+    if (keep || (event.button === 2 && event.target instanceof Element && event.target.closest(EDITOR_MENU_AREA))) event.preventDefault();
   };
 
   target.addEventListener('pointerdown', onDown, true);
+  target.addEventListener('dblclick', onDoubleClick, true);
   target.addEventListener('pointermove', onMove, true);
   target.addEventListener('pointerup', onUp, true);
   target.addEventListener('pointercancel', onCancel, true);
@@ -389,6 +455,7 @@ export function installPointer(store: EditorStore, target: Window = window): () 
   return () => {
     onCancel();
     target.removeEventListener('pointerdown', onDown, true);
+    target.removeEventListener('dblclick', onDoubleClick, true);
     target.removeEventListener('pointermove', onMove, true);
     target.removeEventListener('pointerup', onUp, true);
     target.removeEventListener('pointercancel', onCancel, true);
