@@ -1,0 +1,64 @@
+// A built door that stands for a state says whether it is on, as its door data says it is drawn: a toggle button
+// (pressed) by aria-pressed, a menu item (checked radio or checkbox) by its role and aria-checked, both from the
+// current state the store holds. A door that is no toggle (a close button, a command item) says nothing.
+import { expect, test } from '@playwright/test';
+import { openMenu, runDoor, runs } from './door.ts';
+
+const door = (ref: string) => `[data-door="${ref}"]`;
+
+test.beforeEach(async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/');
+  await page.evaluate(() => window.localStorage.clear());
+  await page.reload();
+  await expect(page.locator('.workbench')).toBeVisible();
+});
+
+test('the toggle buttons of the panels and the workbench say whether they are on, and a close button says nothing', runs('workspace.setPanelOpen#toolbar-activity-bar-insert', 'workspace.setWorkbenchState#toolbar-workbench-strip-maximize'), async ({ page }) => {
+  // a fresh profile: the Explorer and the canvas tools are open, Insert is not, the workbench is folded to its strip
+  await expect(page.locator(door('workspace.setPanelOpen#toolbar-activity-bar-explorer'))).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator(door('workspace.setPanelOpen#toolbar-activity-bar-insert'))).toHaveAttribute('aria-pressed', 'false');
+  await expect(page.locator(door('workspace.setPanelOpen#toolbar-canvas-toolbar-canvas-tools'))).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator(door('workspace.setWorkbenchState#toolbar-workbench-strip-toggle'))).toHaveAttribute('aria-pressed', 'false');
+  await expect(page.locator(door('workspace.setWorkbenchState#toolbar-workbench-strip-maximize'))).toHaveAttribute('aria-pressed', 'false');
+  await expect(page.locator(door('workspace.setPanelOpen#workbench-tab-close'))).not.toHaveAttribute('aria-pressed', /.*/);
+
+  await runDoor(page, 'workspace.setPanelOpen#toolbar-activity-bar-insert');
+  await expect(page.locator(door('workspace.setPanelOpen#toolbar-activity-bar-insert'))).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator(door('workspace.setPanelOpen#toolbar-activity-bar-explorer'))).toHaveAttribute('aria-pressed', 'false');
+
+  await runDoor(page, 'workspace.setWorkbenchState#toolbar-workbench-strip-maximize');
+  await expect(page.locator(door('workspace.setWorkbenchState#toolbar-workbench-strip-maximize'))).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator(door('workspace.setWorkbenchState#toolbar-workbench-strip-toggle'))).toHaveAttribute('aria-pressed', 'true');
+});
+
+test('the Theme and Language items are one choice of a set and say which is chosen', runs('preferences.setTheme#menu-theme-light'), async ({ page }) => {
+  const item = (ref: string) => page.locator(`[role="menuitemradio"]${door(ref)}`);
+  await openMenu(page, 'theme');
+  await expect(item('preferences.setTheme#menu-theme-dark')).toHaveAttribute('aria-checked', 'true');
+  await expect(item('preferences.setTheme#menu-theme-light')).toHaveAttribute('aria-checked', 'false');
+  await expect(item('preferences.setTheme#menu-theme-system')).toHaveAttribute('aria-checked', 'false');
+  await page.keyboard.press('Escape');
+
+  await runDoor(page, 'preferences.setTheme#menu-theme-light');
+  await openMenu(page, 'theme');
+  await expect(item('preferences.setTheme#menu-theme-light')).toHaveAttribute('aria-checked', 'true');
+  await expect(item('preferences.setTheme#menu-theme-dark')).toHaveAttribute('aria-checked', 'false');
+  await page.keyboard.press('Escape');
+
+  await openMenu(page, 'language');
+  await expect(item('preferences.setLanguage#menu-language-en')).toHaveAttribute('aria-checked', 'true');
+  await expect(item('preferences.setLanguage#menu-language-pt-br')).toHaveAttribute('aria-checked', 'false');
+  await page.keyboard.press('Escape');
+
+  // the zoom levels are choices too, and none is chosen while view.zoomTo is not built
+  await openMenu(page, 'zoom');
+  await expect(item('view.zoomTo#menu-zoom-100')).toHaveAttribute('aria-checked', 'false');
+  await expect(page.locator(door('view.zoomFit#menu-zoom'))).toHaveAttribute('role', 'menuitem');
+  await page.keyboard.press('Escape');
+
+  // a command item of the same menu bar is no choice
+  await openMenu(page, 'view');
+  await expect(page.locator(door('workspace.toggleLeftDock#menu-view'))).toHaveAttribute('role', 'menuitem');
+  await expect(page.locator(door('workspace.toggleLeftDock#menu-view'))).not.toHaveAttribute('aria-checked', /.*/);
+});

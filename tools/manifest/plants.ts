@@ -807,6 +807,7 @@ PLANTS.push(
         feature: 'state-styles',
         toolbar: 'canvas-toolbar',
         drawnAs: 'button',
+        pressed: false,
         labelKey: 'styleState.hover',
         faceLabelKey: null,
         icon: 'mouse-pointer-2',

@@ -773,6 +773,14 @@
       "reader": "src/editor/doors/door.tsx"
     },
     {
+      "field": "commands:commands[].entryPoints[].pressed",
+      "reader": "src/editor/doors/door.tsx"
+    },
+    {
+      "field": "commands:commands[].entryPoints[].checked",
+      "reader": "src/editor/doors/menu.tsx"
+    },
+    {
       "field": "commands:commands[].entryPoints[].disabledReasonKey",
       "reader": "src/editor/doors/registry.ts"
     },

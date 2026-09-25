@@ -89,6 +89,8 @@ export function DoorControl({ entry, args = {}, children, expanded, className, l
   const door = useDoor(entry, args, label);
   const { door: d } = entry;
   const drawnAs = d.kind === 'toolbar' || d.kind === 'panel-control' ? d.drawnAs : 'button';
+  // a toggle button says whether its state is on (the door's pressed, manifest data)
+  const pressed = (d.kind === 'toolbar' || d.kind === 'panel-control') && d.pressed;
   const icon = d.icon !== null ? <Icon name={d.icon} size={drawnAs === 'icon-button' ? 'md' : 'sm'} /> : null;
   const common = {
     type: 'button' as const,
@@ -101,7 +103,7 @@ export function DoorControl({ entry, args = {}, children, expanded, className, l
   switch (drawnAs) {
     case 'icon-button':
       return (
-        <button {...common} aria-label={door.label} aria-pressed={isToggle(entry) ? door.current : undefined}>
+        <button {...common} aria-label={door.label} aria-pressed={pressed ? door.current : undefined}>
           {icon}
         </button>
       );
@@ -128,15 +130,10 @@ export function DoorControl({ entry, args = {}, children, expanded, className, l
       );
     default:
       return (
-        <button {...common} aria-label={children !== undefined || door.face !== door.label ? door.label : undefined}>
+        <button {...common} aria-label={children !== undefined || door.face !== door.label ? door.label : undefined} aria-pressed={pressed ? door.current : undefined}>
           {icon}
           {children ?? <span className="door__label">{door.face}</span>}
         </button>
       );
   }
-}
-
-// the doors that switch a state on and off show whether it is on
-function isToggle(entry: DoorEntry): boolean {
-  return entry.command.id === 'workspace.setPanelOpen' || entry.command.id === 'workspace.setWorkbenchState';
 }

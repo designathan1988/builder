@@ -430,6 +430,14 @@ const placementSchema = z.union([
 // layout's expanded or collapsed glyph, by its state, and never its own).
 export const DRAWN_AS = ['icon-button', 'button', 'segment', 'tab', 'item', 'field', 'toggle', 'area', 'disclosure'] as const;
 
+// Whether an icon button or a button is a toggle button: it switches a state on and off and says whether it is on
+// (aria-pressed, from the current state of its built command). A segment and a tab always say it; other controls never.
+const pressedSchema = z.boolean();
+
+// How a menu item says it stands for the current state: one choice of a set (radio: a theme, a language, a zoom level),
+// an option on or off (checkbox), or not at all (null: a command).
+const menuCheckedSchema = z.enum(['radio', 'checkbox']).nullable();
+
 const doorCommon = {
   id: doorId,
   feature: featureId,
@@ -467,9 +475,9 @@ export const menuIdSchema = z.enum([
 
 export const doorSchema = z.discriminatedUnion('kind', [
   z.strictObject({ ...doorCommon, kind: z.literal('shortcut'), chord: z.string().min(1), context: kebabId, gesture: kebabId.nullable() }),
-  z.strictObject({ ...doorCommon, kind: z.literal('menu'), menu: menuIdSchema }),
+  z.strictObject({ ...doorCommon, kind: z.literal('menu'), menu: menuIdSchema, checked: menuCheckedSchema }),
   z.strictObject({ ...doorCommon, kind: z.literal('context-menu') }),
-  z.strictObject({ ...doorCommon, kind: z.literal('toolbar'), drawnAs: z.enum(DRAWN_AS), toolbar: kebabId }),
+  z.strictObject({ ...doorCommon, kind: z.literal('toolbar'), drawnAs: z.enum(DRAWN_AS), pressed: pressedSchema, toolbar: kebabId }),
   z.strictObject({ ...doorCommon, kind: z.literal('quick-panel'), control: kebabId }),
   z.strictObject({
     ...doorCommon,
@@ -503,6 +511,7 @@ export const doorSchema = z.discriminatedUnion('kind', [
     ...doorCommon,
     kind: z.literal('panel-control'),
     drawnAs: z.enum(DRAWN_AS),
+    pressed: pressedSchema,
     panel: kebabId,
     control: kebabId,
     modifier: modifierKeySchema.nullable(),

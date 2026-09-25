@@ -48,7 +48,8 @@ export async function openMenu(page: Page, id: string): Promise<void> {
   if (menu === undefined) throw new Error(`layout.json has no menu ${id}`);
   const button = page.locator(`.menu-button[data-menu="${id}"]`);
   if ((await button.count()) > 0) {
-    await button.click();
+    // a menu with more than one button (Zoom: the canvas toolbar and the status bar) opens from the first
+    await button.first().click();
     return;
   }
   const parent = menu.anchors.find((a) => a.region.startsWith('menu:'));

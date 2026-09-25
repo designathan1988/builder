@@ -12,13 +12,14 @@ import { GLYPHS, menuOf, slotsIn, type Anchor } from './placement.ts';
 function MenuItem({ entry, onDone }: { readonly entry: DoorEntry; readonly onDone: () => void }) {
   const door = useDoor(entry);
   const t = useT();
-  const checkable = entry.command.id === 'preferences.setLanguage' || entry.command.id === 'preferences.setTheme';
-  const icon = checkable ? (door.current ? GLYPHS.checked : null) : entry.door.icon;
+  // how the item says it stands for the current state: the door's checked (radio, checkbox or none), manifest data
+  const checked = entry.door.kind === 'menu' ? entry.door.checked : null;
+  const icon = checked !== null ? (door.current ? GLYPHS.checked : null) : entry.door.icon;
   return (
     <button
       type="button"
-      role={checkable ? 'menuitemradio' : 'menuitem'}
-      aria-checked={checkable ? door.current : undefined}
+      role={checked === 'radio' ? 'menuitemradio' : checked === 'checkbox' ? 'menuitemcheckbox' : 'menuitem'}
+      aria-checked={checked !== null ? door.current : undefined}
       aria-disabled={door.available ? undefined : true}
       className={['menu__item', door.available ? '' : 'is-unavailable'].filter((c) => c !== '').join(' ')}
       data-door={entry.ref}

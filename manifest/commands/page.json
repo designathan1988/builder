@@ -21,6 +21,7 @@
           "id": "inspector-page-properties-button",
           "kind": "panel-control",
           "drawnAs": "icon-button",
+          "pressed": false,
           "feature": "page-properties",
           "panel": "inspector",
           "control": "page-properties-button",
