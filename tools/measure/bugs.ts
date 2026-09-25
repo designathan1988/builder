@@ -1,7 +1,6 @@
 // The regression proofs of the limited validation (docs/testing/README.md, "Proofs"): deliberate bugs, each one point
 // edit in a different area, applied to the clean working tree, validated, then undone with git checkout. Every run
-// starts from the same validated state, the dependency map saved in .cache/impact/map.baseline.json, and is measured
-// by tools/measure/measure.ts.
+// starts from the same validated state (tools/measure/baseline.ts), and is measured by tools/measure/measure.ts.
 //
 //   node tools/measure/bugs.ts --each [--only b1,b3]   each bug alone, validated by npm run check
 //   node tools/measure/bugs.ts --together              every bug at once, validated by the whole suite (npm run e2e)
@@ -9,6 +8,7 @@
 //                                                      validated, then A is fixed
 import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
+import { restoreBaseline } from './baseline.ts';
 import { reversePatch, SCENARIOS } from './scenarios.ts';
 
 interface Bug {
@@ -29,8 +29,6 @@ export const BUGS: readonly Bug[] = [
   { id: 'b5-config', area: 'the build configuration: vite.config.ts no longer injects the product name as the page title', file: 'vite.config.ts', find: 'plugins: [react(), productTitle(), toothPlugin()],', replace: 'plugins: [react(), toothPlugin()],' },
 ];
 
-const BASELINE = '.cache/impact/map.baseline.json';
-const MAP = '.cache/impact/map.json';
 const git = (args: readonly string[], input?: string) => spawnSync('git', args, { encoding: 'utf8', ...(input !== undefined ? { input } : {}) });
 
 function plant(bug: Bug): void {
@@ -54,13 +52,13 @@ if (import.meta.main) {
   if (mode === undefined) throw new Error('usage: node tools/measure/bugs.ts --each [--only b1,b3] | --together | --independence');
   const dirty = git(['status', '--porcelain']).stdout.trim();
   if (dirty !== '') throw new Error(`the proofs need a clean working tree:\n${dirty}`);
-  if (!fs.existsSync(BASELINE)) throw new Error(`${BASELINE} is missing: save the map of a validated tree first`);
+  restoreBaseline();
   const only = process.argv.includes('--only') ? (process.argv[process.argv.indexOf('--only') + 1] ?? '').split(',') : null;
   const chosen = BUGS.filter((b) => only === null || only.some((o) => b.id.startsWith(o.toLowerCase())));
   try {
     if (mode === '--each') {
       for (const bug of chosen) {
-        fs.copyFileSync(BASELINE, MAP);
+        restoreBaseline();
         plant(bug);
         try {
           measure(`bug-${bug.id}`, bug.area, 'npm run check');
@@ -76,7 +74,7 @@ if (import.meta.main) {
       const a = BUGS[0] as Bug;
       const b = SCENARIOS.find((s) => s.id === 's4-scenario-data');
       if (b === undefined) throw new Error('scenario s4 is missing');
-      fs.copyFileSync(BASELINE, MAP);
+      restoreBaseline();
       plant(a);
       measure('independence-1-a-broken', `A: ${a.area}`, 'npm run check');
       const applied = git(['apply', '-R', '-'], reversePatch(b));
@@ -87,6 +85,6 @@ if (import.meta.main) {
     }
   } finally {
     git(['checkout', '--', ...new Set([...BUGS.map((b) => b.file), ...SCENARIOS.flatMap((s) => s.files)])]);
-    fs.copyFileSync(BASELINE, MAP);
+    restoreBaseline();
   }
 }

@@ -1,14 +1,14 @@
 // The change scenarios of the measurement harness (docs/testing/README.md): small real changes taken from the git
 // history, each applied to the clean working tree (the reverse of a commit's hunk or files), validated by one flow,
-// measured by tools/measure/measure.ts, then undone. Every scenario starts from the same validated state: the
-// dependency map saved in .cache/impact/map.baseline.json.
+// measured by tools/measure/measure.ts, then undone. Every scenario starts from the same validated state
+// (tools/measure/baseline.ts).
 //
 //   node tools/measure/scenarios.ts --flow before|after [--only S1,S3]
 //
 // before: what every change cost under the previous rules (npm run verify:fast, then the whole browser suite);
 // after:  npm run check, the limited validation.
 import { spawnSync } from 'node:child_process';
-import fs from 'node:fs';
+import { restoreBaseline } from './baseline.ts';
 
 interface Scenario {
   readonly id: string;
@@ -53,17 +53,15 @@ if (import.meta.main) {
   if (!(flow in FLOWS)) throw new Error('usage: node tools/measure/scenarios.ts --flow before|after [--only S1,S3]');
   const dirty = git(['status', '--porcelain']).stdout.trim();
   if (dirty !== '') throw new Error(`the scenarios need a clean working tree:\n${dirty}`);
-  const baseline = '.cache/impact/map.baseline.json';
-  if (flow === 'after' && !fs.existsSync(baseline)) throw new Error(`${baseline} is missing: save the map of a validated tree first`);
   for (const s of SCENARIOS.filter((x) => only === null || only.some((o) => x.id.startsWith(o.toLowerCase())))) {
-    if (flow === 'after') fs.copyFileSync(baseline, '.cache/impact/map.json');
+    if (flow === 'after') restoreBaseline();
     const patch = reversePatch(s);
     const applied = git(['apply', '-R', '-'], patch);
     if (applied.status !== 0) throw new Error(`${s.id}: the change does not apply: ${applied.stderr}`);
     console.log(`scenario ${s.id}: ${s.what} (reverse of ${s.commit} ${s.files.join(', ')}${s.hunk ? ` hunk ${s.hunk}` : ''})`);
     const r = spawnSync('node', ['tools/measure/measure.ts', '--label', `scenario-${s.id}-${flow}`, '--note', s.what, '--', FLOWS[flow] ?? ''], { stdio: 'inherit', encoding: 'utf8' });
     git(['checkout', '--', ...s.files]);
-    if (flow === 'after') fs.copyFileSync(baseline, '.cache/impact/map.json');
+    if (flow === 'after') restoreBaseline();
     console.log(`scenario ${s.id}: flow exit ${r.status}`);
   }
 }

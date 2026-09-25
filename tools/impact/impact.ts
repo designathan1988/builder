@@ -242,37 +242,51 @@ export function writeMap(map: Omit<ImpactMap, 'version'>): void {
 // imports changed (measured: tests/e2e/door.ts changed, 159 tests selected, none of the runner's).
 export function specsAffected(changedFiles: readonly string[], testDir = 'tests/e2e'): Set<string> {
   const changed = new Set(changedFiles.map((f) => path.resolve(f)));
-  const closure = new Map<string, Set<string>>();
-  const resolveLocal = (from: string, spec: string): string | null => {
+  const affected = new Set<string>();
+  for (const spec of fs.readdirSync(testDir).filter((f) => f.endsWith('.spec.ts'))) {
+    if ([...localImports(path.join(testDir, spec))].some((f) => changed.has(f))) affected.add(spec);
+  }
+  return affected;
+}
+
+// A file and every local module it imports, statically, dynamically or by require, followed through every local file
+// (absolute paths). Packages are left out: they change with the lockfile, which is an input of its own.
+export function localImports(file: string): Set<string> {
+  const start = path.resolve(file);
+  const seen = new Set<string>([start]);
+  const stack = [start];
+  while (stack.length > 0) {
+    const at = stack.pop() ?? '';
+    for (const target of directImports(at)) {
+      if (!seen.has(target)) {
+        seen.add(target);
+        stack.push(target);
+      }
+    }
+  }
+  return seen;
+}
+
+// a module's own local imports, read once per version of the file
+const direct = new Map<string, { readonly stamp: string; readonly targets: readonly string[] }>();
+function directImports(file: string): readonly string[] {
+  if (!/\.(ts|tsx|js|mjs)$/.test(file)) return [];
+  const stat = fs.statSync(file);
+  const stamp = `${stat.mtimeMs}:${stat.size}`;
+  const known = direct.get(file);
+  if (known?.stamp === stamp) return known.targets;
+  const resolveLocal = (spec: string): string | null => {
     if (!spec.startsWith('.')) return null;
-    const base = path.resolve(path.dirname(from), spec);
+    const base = path.resolve(path.dirname(file), spec);
     for (const candidate of [base, `${base}.ts`, `${base}.tsx`, path.join(base, 'index.ts')]) if (fs.existsSync(candidate) && fs.statSync(candidate).isFile()) return candidate;
     return null;
   };
-  const importsOf = (file: string): Set<string> => {
-    const known = closure.get(file);
-    if (known) return known;
-    const seen = new Set<string>([file]);
-    closure.set(file, seen);
-    const stack = [file];
-    while (stack.length > 0) {
-      const at = stack.pop() ?? '';
-      if (!/\.(ts|tsx|js|mjs)$/.test(at)) continue;
-      for (const ref of ts.preProcessFile(fs.readFileSync(at, 'utf8'), true, true).importedFiles) {
-        const target = resolveLocal(at, ref.fileName);
-        if (target !== null && !seen.has(target)) {
-          seen.add(target);
-          stack.push(target);
-        }
-      }
-    }
-    return seen;
-  };
-  const affected = new Set<string>();
-  for (const spec of fs.readdirSync(testDir).filter((f) => f.endsWith('.spec.ts'))) {
-    if ([...importsOf(path.resolve(testDir, spec))].some((f) => changed.has(f))) affected.add(spec);
-  }
-  return affected;
+  const targets = ts
+    .preProcessFile(fs.readFileSync(file, 'utf8'), true, true)
+    .importedFiles.map((ref) => resolveLocal(ref.fileName))
+    .filter((t): t is string => t !== null);
+  direct.set(file, { stamp, targets });
+  return targets;
 }
 
 // Every test of the suite as Playwright lists it (the same id as tests/support/test.ts builds).
