@@ -10,10 +10,9 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 - Group 03 passing: autosave-restore, project-save-json.
 - Group 02 passing: select-click, layers-tree, keyboard-tree-walk, palette-click-insert, undo-redo,
   multi-select-click, marquee-select, delete-element, move-up-down, wrap-row-column, drag-reorder-canvas,
-  drag-drop-inside, context-menu, duplicate, text-edit-inline. Runner paths proven by switching them off: setup
-  selection, canvas click, Tab to a control, modifier click, drag press, marquee, a slot with no free gap.
-- To integrate: feature/palette-drag-insert, feature/drag-level-keys-escape, feature/hand-keyboard-move. Decisions
-  by small ambiguity: docs/history.md, "Group 02" (the newest entry).
+  drag-drop-inside, context-menu, duplicate, text-edit-inline, palette-drag-insert. Runner paths proven off: setup
+  selection, canvas click, Tab, modifier click, drag press, marquee, no free gap, tile drag, held drag, export.
+- To integrate: feature/drag-level-keys-escape (its drag.cancel now on main too), feature/hand-keyboard-move.
 
 ## Conditions the user set
 

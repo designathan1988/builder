@@ -20,7 +20,7 @@ export const FEATURES = {
   'drag-reorder-canvas': registerFeature('drag-reorder-canvas'),
   'drag-drop-inside': registerFeature('drag-drop-inside'),
   'drag-level-keys-escape': NOT_AVAILABLE_YET,
-  'palette-drag-insert': NOT_AVAILABLE_YET,
+  'palette-drag-insert': registerFeature('palette-drag-insert'),
   'layers-drag': NOT_AVAILABLE_YET,
   'move-up-down': registerFeature('move-up-down'),
   'wrap-row-column': registerFeature('wrap-row-column'),

@@ -19,10 +19,20 @@
 //
 // A double-click on a text element starts its edit in place; while a text is edited, a press elsewhere keeps the text
 // once its own door has run (spec text-edit-inline).
+//
+// A primary press on a palette tile (the tile door of the command whose canvas-drag door takes a palette tile as its
+// source) is a gesture too (spec palette-drag-insert, "Trigger"): released below drag.threshold it is the tile's click
+// and runs the tile's door at the release; past the threshold it is a creation drag with no dragged node, which asks
+// the same drop proposal and publishes it for the same drop indicator, and whose release runs the palette-drag door
+// with the tile's entry and the drawn proposal's parent and index, inside the gesture: one undo step. Released where
+// there is no proposal (outside the page), it inserts nothing. A drag cancelled by drag.cancel (drag-session.ts)
+// ends its gesture without committing it.
+import { isFeatureBuilt } from '../../app/features.ts';
+import type { Message } from '../../core/commands/registry.ts';
 import { locate, type DocumentJson, type NodeId } from '../../core/document/model.ts';
 import type { Gesture } from '../../core/store/store.ts';
 import { selectionRoots } from '../../core/structure/remove.ts';
-import type { CommandId, KeyContextId } from '../../generated/ids.ts';
+import type { CommandId, DoorId, FeatureId, KeyContextId } from '../../generated/ids.ts';
 import { manifest, type DoorEntry } from '../../manifest/runtime.ts';
 import { canvasFrame, flowAxis, geometryOf, nodeAt, nodeBox, nodesUnder, screenToPage, type Point } from '../canvas/coordinates.ts';
 import { proposeDrop, type DropProposal } from '../drag/drop.ts';
@@ -38,7 +48,11 @@ export const DRAG_HYSTERESIS = hysteresis;
 // What a press lands on: a node of the page (an element, or the page root where no element is), or the stage
 // around the page.
 // A press on the canvas chrome's label of an element is a press on that element (`label`: never a marquee).
-export type Press = { readonly on: 'node'; readonly node: string; readonly root: boolean; readonly label?: boolean } | { readonly on: 'stage' };
+// A press on a palette tile carries the tile's door and the arguments the tile stands for (its entry).
+export type Press =
+  | { readonly on: 'node'; readonly node: string; readonly root: boolean; readonly label?: boolean }
+  | { readonly on: 'stage' }
+  | { readonly on: 'tile'; readonly entry: DoorEntry; readonly args: Readonly<Record<string, unknown>> };
 
 // The gesture state machine. A press becomes a drag once the pointer has moved drag.threshold screen pixels from
 // where it went down; below that, the release ends a click.
@@ -92,7 +106,8 @@ function takes(target: string, press: Press, facts: PressFacts): boolean {
   if (target === 'element') return press.on === 'node' && !press.root;
   if (target === 'stage-outside-page') return press.on === 'stage';
   if (target === 'text-element') return press.on === 'node' && !press.root && facts.textual;
-  if (target === OUTSIDE_EDIT) return facts.edited !== null && !(press.on === 'node' && press.node === facts.edited);
+  // a press on a palette tile is no press on the canvas: it keeps no text
+  if (target === OUTSIDE_EDIT) return press.on !== 'tile' && facts.edited !== null && !(press.on === 'node' && press.node === facts.edited);
   return false;
 }
 
@@ -195,11 +210,30 @@ const INTO = zoneDoor('inside');
 const dropDoor = (proposal: DropProposal) => (proposal.placement === 'inside' ? INTO : REORDER);
 const DRAG_MODIFIERS = new Set(manifest.interactions.gestures.find((g) => REORDER?.door.kind === 'canvas-drag' && g.id === REORDER.door.gesture)?.modifiers.map((m) => m.key) ?? []);
 
-// The drag in progress, for the canvas chrome: the nodes dragged and the drop proposal drawn now (the one a release
-// commits). Pointer state, not editor state: nothing changes until the release.
+// The creation drag of a palette tile (spec palette-drag-insert): the canvas-drag door whose source is a palette tile,
+// and the tiles it starts from, the doors of the same command drawn as tiles (their clicks insert at the selection).
+// It runs once its feature is registered as built in the feature table (src/app/features.ts); until then a tile's
+// press is the tile's own click.
+const PALETTE_DRAG = manifest.doors.find((d) => d.door.kind === 'canvas-drag' && d.door.source === 'palette-tile') ?? null;
+const paletteDragBuilt = PALETTE_DRAG !== null && isFeatureBuilt(PALETTE_DRAG.door.feature as FeatureId);
+const isTile = (entry: DoorEntry) => paletteDragBuilt && entry.command.id === PALETTE_DRAG?.command.id && entry.door.kind === 'panel-control' && entry.door.control === 'tile';
+// Whether the pointer owner runs the presses of a drawn control (a palette tile): its click then comes from here, and
+// the control's own onClick runs only an activation with no press (assistive technology's, or a key's).
+export function pressedByPointer(entry: DoorEntry): boolean {
+  return isTile(entry);
+}
+
+// The drag in progress, for the canvas chrome: the nodes dragged, or, for a palette tile's creation drag, none and
+// the palette entry it inserts; the drop proposal drawn now (the one a release commits) and, for a creation drag, the
+// refusal its drop would meet there (the command's own, store.refusal: a parent that does not accept the element,
+// spec palette-drag-insert, Problems in Pager 3); and where the pointer is on the screen (the ghost of a creation drag
+// follows it). Pointer state, not editor state: nothing changes until the release.
 export interface DragView {
   readonly dragged: readonly NodeId[];
+  readonly inserting: string | null;
   readonly proposal: DropProposal | null;
+  readonly refusal: Message | null;
+  readonly at: Point;
 }
 let dragView: DragView | null = null;
 const dragListeners = new Set<() => void>();
@@ -262,6 +296,13 @@ function pressAt(event: MouseEvent, isRoot: (node: string) => boolean): Press | 
     return hit === null ? null : { on: 'node', node: hit.node, root: hit.root };
   }
   if (target?.hasAttribute('data-canvas-stage')) return { on: 'stage' };
+  // a palette tile that is available (a tile of a feature not built yet is drawn disabled and takes no press)
+  const control = target?.closest('[data-door]');
+  const entry = manifest.doorByRef.get((control?.getAttribute('data-door') ?? '') as DoorId);
+  if (control && entry && isTile(entry) && control.getAttribute('aria-disabled') !== 'true') {
+    const args: unknown = JSON.parse(control.getAttribute('data-args') ?? '{}');
+    return { on: 'tile', entry, args: args !== null && typeof args === 'object' ? (args as Record<string, unknown>) : {} };
+  }
   return 'elsewhere';
 }
 
@@ -269,8 +310,22 @@ function pressAt(event: MouseEvent, isRoot: (node: string) => boolean): Press | 
 export function installPointer(store: EditorStore, target: Window = window): () => void {
   let machine: Machine = IDLE;
   let buttons: { button: Button; count: number; modifier: string | null } | null = null;
-  // an element drag: what it moves, the proposal drawn and where the pointer was when it was taken (drag.hysteresis)
-  let dragging: { readonly dragged: readonly NodeId[]; proposal: DropProposal | null; takenAt: Point | null } | null = null;
+  // an element drag, or a palette tile's creation drag: what it moves (nothing for a tile), the palette entry it
+  // inserts (a tile's), the proposal drawn, the refusal its drop would meet (a creation drag's), and where the pointer
+  // was when it was taken (drag.hysteresis)
+  let dragging: {
+    readonly dragged: readonly NodeId[];
+    readonly inserting: string | null;
+    proposal: DropProposal | null;
+    refusal: Message | null;
+    takenAt: Point | null;
+  } | null = null;
+  // the press of the gesture, while one is open: a tile's press decides its click or its drop at the release
+  let pressed: Press | null = null;
+  // where the pointer is on the screen, from its last press or move
+  let pointerAt: Point = { x: 0, y: 0 };
+  // the drags cancelled when the gesture opened (drag-session.ts): a newer cancellation ends the gesture
+  let cancelsAtOpen = 0;
   // where the press went down, on the screen and in page pixels (null outside the page)
   let pressedAt: { screen: Point; page: Point | null } | null = null;
   // the marquee being drawn: its door and mode
@@ -318,6 +373,8 @@ export function installPointer(store: EditorStore, target: Window = window): () 
       const endArgs = ending ? editArgs(store.getState(), ending.command) : null;
       keeping = ending && endArgs ? { entry: ending, args: endArgs } : null;
       open = store.gesture();
+      pressed = press;
+      cancelsAtOpen = store.getState().ui.drag.cancels;
       const entry = clickDoor(press, buttons.button, buttons.count, buttons.modifier, factsOf(press));
       if (entry) open.dispatch(entry.command.id as CommandId, argsFor(entry, press) as never);
       // a press that lands on the edited text leaves the focus in it
@@ -325,6 +382,15 @@ export function installPointer(store: EditorStore, target: Window = window): () 
       keepFocus = edited !== null && press.on === 'node' && press.node === edited;
     } else if (effect === 'drag' && machine.phase === 'dragging' && buttons?.button === 'primary') {
       const press = machine.press;
+      if (press.on === 'tile') {
+        // a palette tile's creation drag: nothing is dragged; the tile's entry is inserted where it is dropped. It
+        // starts over the palette, outside the page: no proposal yet
+        const entry = press.args.entry;
+        if (typeof entry !== 'string') return;
+        dragging = { dragged: [], inserting: entry, proposal: null, refusal: null, takenAt: null };
+        setDrag({ dragged: [], inserting: entry, proposal: null, refusal: null, at: pointerAt });
+        return;
+      }
       const node = press.on === 'node' ? (locate(store.getState().document, press.node as NodeId)?.node ?? null) : null;
       // a press on the empty area of the page or of a container with children becomes a marquee; what the press's
       // click did is undone, so the marquee starts from the selection held before the press
@@ -336,22 +402,33 @@ export function installPointer(store: EditorStore, target: Window = window): () 
         const state = store.getState();
         const dragged = selectionRoots(state.document, state.selection).map((at) => at.node.id);
         if (dragged.length > 0) {
-          dragging = { dragged, proposal: null, takenAt: null };
-          setDrag({ dragged, proposal: null });
+          dragging = { dragged, inserting: null, proposal: null, refusal: null, takenAt: null };
+          setDrag({ dragged, inserting: null, proposal: null, refusal: null, at: pointerAt });
         }
       }
     } else if (effect === 'commit' || effect === 'cancel') {
       const closing = open;
       const dropped = dragging?.proposal ?? null;
+      const dragged = dragging !== null;
+      const press = pressed;
       open = null;
       dragging = null;
+      pressed = null;
       setDrag(null);
       marquee = null;
       pressedAt = null;
       setBand(null);
-      // the release commits exactly the proposal drawn last, through the door of its zone, in the gesture's transaction
-      const door = dropped === null ? null : dropDoor(dropped);
-      if (effect === 'commit' && dropped !== null && door !== null) closing?.dispatch(door.command.id, { ...door.door.args, parent: dropped.parent, index: dropped.index } as never);
+      if (effect === 'commit' && press?.on === 'tile') {
+        // a tile released below the threshold is its click (its door, at the selection); past it, the proposal drawn
+        // last receives the tile's entry through the palette's canvas-drag door (its command refuses a parent that
+        // does not accept it); with no proposal drawn (outside the page) nothing is inserted
+        if (!dragged) closing?.dispatch(press.entry.command.id, { ...press.entry.door.args, ...press.args } as never);
+        else if (dropped !== null && PALETTE_DRAG !== null) closing?.dispatch(PALETTE_DRAG.command.id, { ...PALETTE_DRAG.door.args, ...press.args, parent: dropped.parent, index: dropped.index } as never);
+      } else if (effect === 'commit' && dropped !== null) {
+        // the release commits exactly the proposal drawn last, through the door of its zone, in the gesture's transaction
+        const door = dropDoor(dropped);
+        if (door !== null) closing?.dispatch(door.command.id, { ...door.door.args, parent: dropped.parent, index: dropped.index } as never);
+      }
       if (effect === 'commit') closing?.commit();
       else closing?.cancel();
       // the text the press left is kept whether the gesture ends or the browser takes the pointer away
@@ -361,16 +438,22 @@ export function installPointer(store: EditorStore, target: Window = window): () 
     }
   };
 
-  // While an element drag goes on, each pointer position proposes a drop; a new proposal replaces the drawn one only
-  // once the pointer is drag.hysteresis screen pixels from where the drawn one was taken.
-  const over = (at: Point) => {
+  // While a drag goes on, each pointer position proposes a drop; a new proposal replaces the drawn one only once the
+  // pointer is drag.hysteresis screen pixels from where the drawn one was taken. A creation drag proposes a drop only
+  // over the page (the canvas overlay): over the stage around it or over a panel it proposes none (spec
+  // palette-drag-insert, "Hit zones"), and it publishes every move, since its ghost follows the pointer.
+  const over = (at: Point, onPage: boolean) => {
     if (dragging === null) return;
-    const next = proposalAt(store.getState().document, dragging.dragged, at);
-    if (JSON.stringify(next) === JSON.stringify(dragging.proposal)) return;
-    if (dragging.takenAt !== null && Math.hypot(at.x - dragging.takenAt.x, at.y - dragging.takenAt.y) < DRAG_HYSTERESIS) return;
-    dragging.proposal = next;
-    dragging.takenAt = at;
-    setDrag({ dragged: dragging.dragged, proposal: next });
+    const creation = dragging.inserting !== null;
+    const next = creation && !onPage ? null : proposalAt(store.getState().document, dragging.dragged, at);
+    const taken = JSON.stringify(next) !== JSON.stringify(dragging.proposal) && !(dragging.takenAt !== null && Math.hypot(at.x - dragging.takenAt.x, at.y - dragging.takenAt.y) < DRAG_HYSTERESIS);
+    if (taken) {
+      dragging.proposal = next;
+      dragging.takenAt = at;
+      // the refusal the creation drag's drop would meet there: its command's own, asked without running it
+      dragging.refusal = creation && next !== null && PALETTE_DRAG !== null ? store.refusal(PALETTE_DRAG.command.id, { ...PALETTE_DRAG.door.args, entry: dragging.inserting, parent: next.parent, index: next.index } as never) : null;
+    }
+    if (taken || creation) setDrag({ dragged: dragging.dragged, inserting: dragging.inserting, proposal: dragging.proposal, refusal: dragging.refusal, at });
   };
 
   const isRoot = (node: string) => locate(store.getState().document, node as NodeId)?.parent === null;
@@ -393,8 +476,11 @@ export function installPointer(store: EditorStore, target: Window = window): () 
     const press = pressAt(event, isRoot);
     if (press === null || press === 'elsewhere') return;
     if (event.button !== 0 && event.button !== 2) return;
+    // a palette tile takes the primary button only
+    if (press.on === 'tile' && event.button !== 0) return;
     buttons = { button: event.button === 2 ? 'secondary' : 'primary', count: Math.min(Math.max(event.detail, 1), 2), modifier: modifierOf(event) };
     const at = { x: event.clientX, y: event.clientY };
+    pointerAt = at;
     const next = step(machine, { type: 'down', pointer: event.pointerId, at, press });
     if (next.effect === 'press') pressedAt = { screen: at, page: pagePoint(at) };
     machine = next.machine;
@@ -405,12 +491,14 @@ export function installPointer(store: EditorStore, target: Window = window): () 
     setHovered(machine.phase === 'idle' && press !== null && press !== 'elsewhere' && press.on === 'node' ? press.node : null);
     const at = { x: event.clientX, y: event.clientY };
     const next = step(machine, { type: 'move', pointer: event.pointerId, at });
+    if (machine.phase === 'idle' || event.pointerId === machine.pointer) pointerAt = at;
     machine = next.machine;
     run(next.effect);
-    // the gesture's drag in progress, if any: the marquee's band, or an element's drop proposal
+    // the gesture's drag in progress, if any: the marquee's band, or the drop proposal of an element or a tile (over
+    // the page: the canvas overlay is what the pointer is on)
     if (machine.phase === 'dragging' && event.pointerId === machine.pointer) {
       drawMarquee(at);
-      over(at);
+      over(at, press !== null && press !== 'elsewhere' && press.on === 'node');
     }
   };
   const onUp = (event: PointerEvent) => {
@@ -442,6 +530,16 @@ export function installPointer(store: EditorStore, target: Window = window): () 
     if (keep || (event.button === 2 && event.target instanceof Element && event.target.closest(EDITOR_MENU_AREA))) event.preventDefault();
   };
 
+  // drag.cancel (drag-session.ts) records a cancellation in the editor state; one newer than the open gesture ends
+  // it without committing (after the dispatch that recorded it returns), and the release that follows drops nothing
+  const stopListening = store.subscribe(() => {
+    if (open === null || store.getState().ui.drag.cancels === cancelsAtOpen) return;
+    const cancelled = open;
+    queueMicrotask(() => {
+      if (open === cancelled) onCancel();
+    });
+  });
+
   target.addEventListener('pointerdown', onDown, true);
   target.addEventListener('dblclick', onDoubleClick, true);
   target.addEventListener('pointermove', onMove, true);
@@ -453,6 +551,7 @@ export function installPointer(store: EditorStore, target: Window = window): () 
   target.addEventListener('selectstart', onNative, true);
   target.addEventListener('dragstart', onNative, true);
   return () => {
+    stopListening();
     onCancel();
     target.removeEventListener('pointerdown', onDown, true);
     target.removeEventListener('dblclick', onDoubleClick, true);

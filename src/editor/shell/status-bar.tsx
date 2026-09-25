@@ -1,13 +1,16 @@
 // The status bar (DESIGN.md "Dock and status bar"): the last message in an aria-live region, the breadcrumb of the
 // selection, the breakpoint, the element count, the zoom controls and the language, in the order of region
-// status-bar, then the save state (autosave-restore).
+// status-bar, then the save state (autosave-restore). During a palette tile's creation drag the message is the drag's
+// words (palette-drag-insert).
 import { useSyncExternalStore } from 'react';
 import type { MessageId } from '../../generated/ids.ts';
 import { saveState, type SaveState } from '../persistence/autosave.ts';
 import { manifest } from '../../manifest/runtime.ts';
 import { allNodes } from '../../core/document/model.ts';
 import { pluralForm } from '../../i18n/index.ts';
+import { dragWords } from '../canvas/chrome.tsx';
 import { MenuButton } from '../doors/menu.tsx';
+import { drag } from '../input/pointer.ts';
 import { drawnAsOf } from '../doors/placement.ts';
 import { useEditorState } from '../store.ts';
 import { panelName } from '../workspace/panels.ts';
@@ -23,10 +26,15 @@ export function StatusBar() {
   const message = useEditorState((s) => s.message);
   const document = useEditorState((s) => s.document);
   const count = [...allNodes(document)].length;
+  // while a palette tile's creation drag goes on (pointer.ts), the message is the drop's own words, as its label reads
+  // them on the canvas, or, off the page, that releasing cancels (spec palette-drag-insert, Problems in Pager 1 and 2)
+  const dragging = useSyncExternalStore(drag.subscribe, drag.get);
+  const words = dragging !== null && dragging.inserting !== null ? dragWords(document, dragging) : null;
+  const shown = words ?? message;
   return (
     <footer className="status-bar" data-region="status-bar">
       <span className="status-bar__message" role="status" aria-live="polite">
-        {message !== null ? messageText(locale, message) : null}
+        {shown !== null ? messageText(locale, shown) : null}
       </span>
       <Slots
         region="status-bar"

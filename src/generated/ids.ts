@@ -2239,6 +2239,8 @@ export const MESSAGE_IDS = [
   "canvas.handle.shadowBlur",
   "canvas.handle.shadowOffset",
   "canvas.handleHint",
+  "canvas.insertInto",
+  "canvas.insertTarget",
   "canvas.keys.drag",
   "canvas.keys.measure",
   "canvas.keys.pick",

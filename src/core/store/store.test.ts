@@ -140,6 +140,22 @@ describe('the store', () => {
     expect(s.store.getState()).toBe(before);
   });
 
+  it('says why a command would not run now without changing anything', () => {
+    const s = testStore();
+    // not built; its predicate fails (nothing selected: the manifest's refusal key); its handler refuses (the page
+    // root cannot be deleted); it would run
+    expect(s.store.refusal('timeline.stop', {})).toEqual(message('common.notAvailableYet'));
+    expect(s.store.refusal('element.delete', {})).toEqual(message('refusal.nothingSelected'));
+    s.store.dispatch('selection.select', { target: s.root });
+    const selected = s.store.getState();
+    expect(s.store.refusal('element.delete', {})).toEqual(message('status.delete.root'));
+    expect(s.store.getState()).toBe(selected);
+    insertInto(s);
+    const before = s.store.getState();
+    expect(s.store.refusal('element.delete', {})).toBeNull();
+    expect(s.store.getState()).toBe(before);
+  });
+
   it('changes nothing for a command whose entry is NOT_AVAILABLE_YET', () => {
     const { store } = testStore();
     const before = store.getState();

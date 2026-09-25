@@ -1,7 +1,7 @@
 // The runner's tooth proof (npm run e2e:tooth [feature ids]): for each feature that runs (every command it lists is
 // built), its scenario tests are run again against a dev server whose feature is switched off by the tooth plugin
-// (tools/runner/tooth-plugin.ts): its command handlers made no-ops, or, for a feature without commands, the module it
-// names (toothProof). Every one of its tests must fail on an assertion; a feature with a test that still passes, or
+// (tools/runner/tooth-plugin.ts): its command handlers made no-ops (with those of its scenarios' action doors), or,
+// for a feature without commands, the module it names (toothProof). Every one of its tests must fail on an assertion; a feature with a test that still passes, or
 // that only times out, has no tooth, and the run fails. The raw result of each run is printed.
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
@@ -30,8 +30,15 @@ function firstLine(message: string | undefined): string {
 // never compared a result. An expect that ran out of time compared one until then, and is an assertion.
 const actionTimeout = (line: string): boolean => /: Timeout \d+ms exceeded/.test(line) && !/expect\(/.test(line);
 
+// The commands a feature's tooth switches off: its own and, when it has commands, those of the action doors its
+// scenarios prove (a scenario whose action is another command's door, such as the Escape that cancels a palette
+// drag, drag.cancel, proves that door within the feature: its own commands off, it would still pass).
+const toothCommands = (feature: (typeof features)[number]): string[] =>
+  feature.commands.length === 0 ? [] : [...new Set([...feature.commands, ...feature.scenarios.flatMap((s) => s.doors.map((d) => d.split('#')[0] ?? ''))])];
+
 for (const feature of features) {
-  const env = { ...process.env, TOOTH_COMMANDS: feature.commands.join(','), TOOTH_MODULE: feature.commands.length === 0 ? (feature.toothProof ?? '') : '', E2E_PORT: process.env.TOOTH_PORT ?? '5390' };
+  const commands = toothCommands(feature);
+  const env = { ...process.env, TOOTH_COMMANDS: commands.join(','), TOOTH_MODULE: commands.length === 0 ? (feature.toothProof ?? '') : '', E2E_PORT: process.env.TOOTH_PORT ?? '5390' };
   const run = spawnSync(process.execPath, [cli, 'test', 'tests/e2e/scenarios.spec.ts', '--grep', FEATURE_TAG(feature.id), '--reporter=json', '--output', '.cache/pw-tooth'], { env, encoding: 'utf8', maxBuffer: 256 * 1024 * 1024 });
   const report = JSON.parse(run.stdout) as { suites: Listed[] };
   const outcomes: { title: string; status: string; reason: string }[] = [];
@@ -47,7 +54,7 @@ for (const feature of features) {
     for (const inner of s.suites ?? []) walk(inner);
   };
   for (const s of report.suites) walk(s);
-  const off = feature.commands.length > 0 ? `handlers of ${feature.commands.join(', ')} made no-ops, their availability predicates held true` : `module ${feature.toothProof ?? '(none named)'} made a no-op`;
+  const off = commands.length > 0 ? `handlers of ${commands.join(', ')} made no-ops, their availability predicates held true` : `module ${feature.toothProof ?? '(none named)'} made a no-op`;
   console.log(`\n${feature.id}: ${off}`);
   // a tooth is a test that fails on an assertion; one that passes, or times out, proves nothing
   const LABEL: Record<string, string> = {

@@ -86,6 +86,8 @@
   "canvas.handle.shadowBlur": "Shadow blur",
   "canvas.handle.shadowOffset": "Shadow offset",
   "canvas.handleHint": "Drag or type · Shift step 10 · Alt opposite side · Ctrl no snapping",
+  "canvas.insertInto": "Insert {element} · into {parent}",
+  "canvas.insertTarget": "Insert {element} · position {position} of {count} in {parent}",
   "canvas.keys.drag": "↑ one level up · ↓ one level down · Esc cancels",
   "canvas.keys.measure": "Alt — measuring distances",
   "canvas.keys.pick": "Click the target on the canvas or in Layers · Esc cancels",

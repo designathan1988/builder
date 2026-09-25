@@ -92,6 +92,9 @@ const BASE_BREAKPOINT = properties.breakpoints.find((b) => b.base)?.id;
 const BASE_STATE = properties.states.find((s) => s.pseudo === null)?.id;
 const CONTENT = new Map(elements.elements.map((e) => [e.id, e.content]));
 const DRAG_THRESHOLD = interactions.constants.find((c) => c.id === 'drag.threshold')?.value;
+// how far inside a child's edge the runner points to reach its escape band: half the band's floor, in screen pixels
+const ESCAPE_FLOOR = interactions.constants.find((c) => c.id === 'drop.escapeBandFloor')?.value;
+const EDGE_INSET = typeof ESCAPE_FLOOR === 'number' ? ESCAPE_FLOOR / 2 : 3;
 const commandOf = (ref: string) => ref.split('#')[0] ?? '';
 const argTypes = (ref: string) => COMMANDS.find((c) => c.id === commandOf(ref))?.args ?? {};
 
@@ -267,7 +270,7 @@ type CanvasQuery =
   // nearest its top-left corner, where a band starts; the page root is hit wherever no element is
   | { readonly kind: 'node'; readonly id: string; readonly root: boolean; readonly near: 'centre' | 'start' }
   // where a drag is released for a drop before, after or inside the node
-  | { readonly kind: 'drop'; readonly id: string; readonly placement: Drop['placement']; readonly container: boolean; readonly slot: number | null };
+  | { readonly kind: 'drop'; readonly id: string; readonly placement: Drop['placement']; readonly container: boolean; readonly slot: number | null; readonly edgeInset: number };
 
 // A screen point on the canvas, measured in the page as the pointer owner measures it (coordinates.ts): the iframe's
 // content box scaled by its CSS zoom; the point must land on the canvas overlay. Or why there is none.
@@ -277,7 +280,8 @@ type CanvasQuery =
 //    leaf splits in halves; a container keeps an edge band at each end (min(8, 0.25 S) when empty,
 //    min(clamp(0.25 S, 8, 32), 0.4 S) with children) and is "inside" between them, at the slot the step's index
 //    gives: in the free gap between its children there, or, with no gap, over the half of the neighbouring child
-//    that stands for the same slot (after the child before it, before the child after it).
+//    that stands for the same slot (after the child before it, before the child after it), or, with no room there,
+//    just inside the edge of a container child that stands for it (its escape band).
 function canvasPoint(page: Page, query: CanvasQuery): Promise<Point | string> {
   return page.evaluate((q) => {
     const iframe = document.querySelector<HTMLIFrameElement>('.frame__page');
@@ -338,8 +342,17 @@ function canvasPoint(page: Page, query: CanvasQuery): Promise<Point | string> {
         const centre = (e: number[] | undefined) => (e === undefined ? undefined : ((e[0] ?? 0) + (e[1] ?? 0)) / 2);
         const low = Math.max(start + band, slot === 0 ? start + band : (centre(edges[slot - 1]) ?? start + band));
         const high = Math.min(start + size - band, slot >= kids.length ? start + size - band : (centre(edges[slot]) ?? start + size - band));
-        if (high - low < 1) return `no room inside it at slot ${slot}, between its children nor over their halves`;
-        along = (low + high) / 2;
+        // with no room there either: a child that is a container stands for the slot at its own edge, where its
+        // escape band (the innermost of the ladder over whatever lies under the pointer inside it, or its own edge
+        // band) puts the drop before or after it: just inside the leading edge of the child after the slot, or the
+        // trailing edge of the last child (drag-reorder-canvas, "Hit zones": the escape ladder)
+        const next = kids[slot];
+        const last = kids.at(-1);
+        const inset = q.edgeInset / zoom;
+        if (high - low >= 1) along = (low + high) / 2;
+        else if (next?.hasAttribute('data-container') === true && edges[slot] !== undefined) along = (edges[slot]?.[0] ?? 0) + inset;
+        else if (slot >= kids.length && last?.hasAttribute('data-container') === true && edges.at(-1) !== undefined) along = (edges.at(-1)?.[1] ?? 0) - inset;
+        else return `no room inside it at slot ${slot}, between its children, over their halves nor at a container child's edge`;
       }
     }
     const at = row ? screen(along, cross) : screen(cross, along);
@@ -438,7 +451,7 @@ async function controlPoint(page: Page, ref: string, args: Record<string, unknow
 async function canvasDropPoint(page: Page, document: unknown, drop: Drop, index: number | null): Promise<Point> {
   const reference = nodeAt(document, drop.reference);
   await frameElement(page, reference.id, drop.reference);
-  const found = await canvasPoint(page, { kind: 'drop', id: reference.id, placement: drop.placement, container: CONTENT.get(reference.type) === 'children', slot: index });
+  const found = await canvasPoint(page, { kind: 'drop', id: reference.id, placement: drop.placement, container: CONTENT.get(reference.type) === 'children', slot: index, edgeInset: EDGE_INSET });
   if (typeof found === 'string') throw new Error(`drop ${drop.placement} ${drop.reference}: ${found}`);
   return found;
 }
@@ -459,6 +472,14 @@ async function layersDropPoint(page: Page, document: unknown, drop: Drop): Promi
   const container = CONTENT.get(reference.type) === 'children';
   const at = drop.placement === 'inside' ? 0.5 : drop.placement === 'before' ? (container ? 0.125 : 0.25) : container ? 0.875 : 0.75;
   return controlPoint(page, layersRowRef, { target: reference.id }, at);
+}
+
+// The tile a palette drag is pressed on (palette-drag-insert): the door of the same command drawn as a palette tile,
+// whose control stands for the step's entry.
+function paletteTileDoor(ref: string): string {
+  const found = COMMANDS.find((c) => c.id === commandOf(ref))?.entryPoints.find((d) => d.kind === 'panel-control' && d.control === 'tile');
+  if (!found) throw new Error(`step ${ref}: its command has no palette tile to press`);
+  return `${commandOf(ref)}#${found.id}`;
 }
 
 const MODIFIER_KEY: Record<string, string> = { Ctrl: 'Control', Shift: 'Shift', Alt: 'Alt', Meta: 'Meta' };
@@ -508,9 +529,14 @@ async function focusControlFor(page: Page, ref: string, args: Record<string, unk
   expect(await focused(), `${ref}: Tab reaches the control of ${JSON.stringify(args)}`).toBe(true);
 }
 
+// A drag held across steps: its door, and whether the drag's Escape (drag.cancel in the drag key context) ended it in
+// the app while the button stays down; the person lets go of it once the steps are over, and that release must drop
+// nothing (spec drag-level-keys-escape, palette-drag-insert).
 interface Held {
   readonly door: string;
+  readonly cancelled?: boolean;
 }
+const CANCEL_DOOR = shortcutIn('drag.cancel', 'drag');
 
 // A step that only leads to the action (not the door the scenario proves) clicking a node its children cover whole
 // runs its command's door on the node's Layers row instead, as a person would, and the test's annotations say so
@@ -567,7 +593,7 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
       if (step.drop === null) throw new Error(`step ${ref}: a drag names its drop`);
       const from =
         d.source === 'palette-tile'
-          ? await controlPoint(page, 'element.insert#elements-tile', { entry: args.entry })
+          ? await controlPoint(page, paletteTileDoor(ref), { entry: args.entry })
           : d.source === 'layers-row' && target !== null
             ? await controlPoint(page, layersRowRef, { target: target.id })
             : target !== null && step.target !== null && d.source === 'canvas-element'
@@ -608,6 +634,7 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
     }
     if (d.chord === undefined) throw new Error(`shortcut ${ref} has no chord`);
     await page.keyboard.press(keys(d.chord));
+    if (held.current !== null && ref === CANCEL_DOOR) held.current = { ...held.current, cancelled: true };
   } else if (d.kind === 'toolbar' || d.kind === 'menu' || d.kind === 'panel-control' || d.kind === 'context-menu') {
     // a control drawn only in some states (the toast's Undo after a delete, an item of the open context menu) fails the
     // step on an assertion that says it is not drawn, never on the click's timeout. The control is the one runDoor
@@ -702,6 +729,11 @@ export function registerScenarioTests(): void {
           for (const step of s.steps) {
             if (step.action) beforeAction = (await port(page)).document;
             await runStep(page, step, step.action ? door : step.door, held, step.action);
+          }
+          // a drag its Escape cancelled is let go where the pointer is; any other drag still held is a scenario's error
+          if (held.current?.cancelled === true) {
+            await page.mouse.up();
+            held.current = null;
           }
           if (held.current !== null) throw new Error(`the drag of ${held.current.door} is still held after the last step`);
           const after = await port(page);

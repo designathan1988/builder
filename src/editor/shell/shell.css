@@ -967,6 +967,31 @@ kbd {
   outline: 1.5px solid var(--color-canvas-drop);
 }
 
+/* the ghost of a palette tile's creation drag (palette-drag-insert, Problems in Pager 4): the element's icon and name
+   beside the pointer, over every region of the window, never a pointer target */
+.chrome-ghost {
+  position: fixed;
+  z-index: 60;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--color-canvas-drop);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-1);
+  color: var(--color-text);
+  font: var(--fw-label) var(--fs-caption) / var(--lh-body) var(--font-ui);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* off the page, or over a parent that refuses the element: the refusal's colour */
+.chrome-ghost.is-refused {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+
 /* ---------------------------------------------------------------- inspector */
 
 .inspector {

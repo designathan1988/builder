@@ -2,13 +2,14 @@
 // the manifest names, its label from the catalogue, its shortcut as a hint, and disabled with "not available yet"
 // while its command's entry in the command table is NOT_AVAILABLE_YET. Every icon comes from the sprite by a name
 // the manifest gives (a door's icon, a glyph, a panel, an element); no component chooses one.
-import { useContext, type ReactNode } from 'react';
+import { useContext, type MouseEvent, type ReactNode } from 'react';
 import { COMMANDS, PREDICATES } from '../../app/commands.ts';
 import { isBuilt, type PredicateTable } from '../../core/commands/registry.ts';
 import type { DispatchResult } from '../../core/store/store.ts';
 import type { CommandId, KeyContextId, MessageId, PredicateId } from '../../generated/ids.ts';
 import type { DoorEntry } from '../../manifest/runtime.ts';
 import { chordHint } from '../input/keymap.ts';
+import { pressedByPointer } from '../input/pointer.ts';
 import type { EditorUi } from '../state.ts';
 import { useEditorState, useStore } from '../store.ts';
 import { PanelBodies } from '../shell/bodies.ts';
@@ -118,6 +119,7 @@ export interface DoorControlProps {
 export function DoorControl({ entry, args = {}, children, expanded, className, label, ready = true }: DoorControlProps) {
   const door = useDoor(entry, args, label, ready);
   const { door: d } = entry;
+  const pointerRuns = pressedByPointer(entry);
   const drawnAs = d.kind === 'toolbar' || d.kind === 'panel-control' ? d.drawnAs : 'button';
   // a toggle button says whether its state is on (the door's pressed, manifest data)
   const pressed = (d.kind === 'toolbar' || d.kind === 'panel-control') && d.pressed;
@@ -131,7 +133,9 @@ export function DoorControl({ entry, args = {}, children, expanded, className, l
     'data-args': Object.keys(args).length > 0 ? JSON.stringify(args) : undefined,
     title: door.title,
     'aria-disabled': door.available ? undefined : true,
-    onClick: door.run,
+    // a control whose presses the pointer owner runs (a palette tile: a press is its click or its drag, pointer.ts)
+    // runs here only an activation with no press (detail 0: assistive technology's)
+    onClick: pointerRuns ? (event: MouseEvent) => (event.detail === 0 ? door.run() : undefined) : door.run,
   };
   switch (drawnAs) {
     case 'icon-button':

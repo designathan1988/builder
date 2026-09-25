@@ -102,6 +102,13 @@ Decisions by small ambiguity (moved here from PROGRESS.md):
   browser's in src/editor/download.ts). The runner's export terminal reads the browser's real download with its own
   unzip (tools/runner/unzip.ts, checks sizes and CRC-32); proven by switching the delivery off (2 of 2 failed on "a
   file was downloaded") and by planting the selection in project.json (failed on its absent text).
+- palette-drag-insert (helper, WIP branch finished and merged): a press on a tile below drag.threshold is a click
+  (insert at the selection), past it a creation drag over the page only, inserted on release as one gesture; the drop
+  label and the status bar name the element, the parent and the position; refused where the parent refuses; a ghost
+  follows the pointer. It builds drag.cancel (Escape), which feature/drag-level-keys-escape builds too: whichever
+  lands second reconciles. The tooth now also switches off the commands of a feature's scenario action doors
+  (drag.cancel here), so a scenario acting through another command's door still fails. Runner paths proven off:
+  the tile press (4 of 4 failed) and the held drag (the held scenario failed on the document).
 - The tooth proof prints why each test failed (the first line and the matcher) and counts a failure that only ran
   out of time on an action or a wait (`locator.click: Timeout 5000ms exceeded.`) as no tooth, like a test timeout: a
   tooth fails on an assertion (brief "a aplicação completa").

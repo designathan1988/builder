@@ -66,6 +66,10 @@ export interface Store<Ui> {
   // handler does not refuse. Nothing changes: the handler's outcome is read and dropped (handlers are pure). The
   // context menu shows only the commands that apply to the selection (DESIGN.md "Overlays").
   canRun<Id extends CommandId>(id: Id, args: CommandArgs[Id]): boolean;
+  // Why the command would not run now with these arguments: "not available yet" while it is not built, else the
+  // refusal of its availability predicate or of its handler; null when it would run. Nothing changes, as with canRun
+  // (a palette tile's creation drag draws the refusal its drop would meet, spec palette-drag-insert).
+  refusal<Id extends CommandId>(id: Id, args: CommandArgs[Id]): Message | null;
   subscribe(listener: () => void): () => void;
   // every change of the document, with its patches, before the state's subscribers hear of it
   subscribeDocument(listener: (change: DocumentChange) => void): () => void;
@@ -246,17 +250,23 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
     return { status: 'done', changed };
   };
 
+  // why a command would not run now (the predicate's refusal, as run() reads it, or the handler's): nothing changes,
+  // the handler's outcome is read and dropped (handlers are pure)
+  const refusal = <Id extends CommandId>(id: Id, args: CommandArgs[Id]): Message | null => {
+    const entry = table[id];
+    const command = commands.get(id);
+    if (!command) throw new Error(`unknown command ${id}`);
+    if (!isBuilt(entry)) return message('common.notAvailableYet');
+    const predicate = predicates[command.availability.predicate as keyof PredicateTable<Ui>];
+    if (predicate && !predicate.test(state)) return predicate.refusal?.(state) ?? message((command.availability.refusalKey ?? 'common.notAvailableYet') as Message['key']);
+    const outcome = entry.run(handlerContext(), args);
+    return outcome.kind === 'refused' ? outcome.message : null;
+  };
+
   return {
     getState: () => state,
-    canRun: (id, args) => {
-      const entry = table[id];
-      const command = commands.get(id);
-      if (!command) throw new Error(`unknown command ${id}`);
-      if (!isBuilt(entry)) return false;
-      const predicate = predicates[command.availability.predicate as keyof PredicateTable<Ui>];
-      if (predicate && !predicate.test(state)) return false;
-      return entry.run(handlerContext(), args).kind !== 'refused';
-    },
+    canRun: (id, args) => refusal(id, args) === null,
+    refusal,
     dispatch: (id, args) => {
       if (open) throw new Error('a gesture is open: dispatch through it');
       return run(id, args, null);

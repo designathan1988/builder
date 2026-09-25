@@ -86,6 +86,8 @@
   "canvas.handle.shadowBlur": "Desfoque da sombra",
   "canvas.handle.shadowOffset": "Deslocamento da sombra",
   "canvas.handleHint": "Arraste ou digite · Shift passo 10 · Alt lado oposto · Ctrl sem encaixe",
+  "canvas.insertInto": "Inserir {element} · dentro de {parent}",
+  "canvas.insertTarget": "Inserir {element} · posição {position} de {count} em {parent}",
   "canvas.keys.drag": "↑ um nível acima · ↓ um nível abaixo · Esc cancela",
   "canvas.keys.measure": "Alt — medindo distâncias",
   "canvas.keys.pick": "Clique no alvo na tela ou em Camadas · Esc cancela",
