@@ -1266,6 +1266,7 @@
   "status.refused.requiresParent": "Refused. {child} only exists inside {parents}.",
   "status.refused.singleChild": "Refused. {parent} accepts a single {child}.",
   "status.rename.empty": "A name cannot be empty; {name} keeps its name.",
+  "status.rename.root": "The page root cannot be renamed.",
   "status.renamed": "Renamed {old} to {name}.",
   "status.project.saved": "Saved the project as {file}.",
   "status.save.failed": "Save failed",

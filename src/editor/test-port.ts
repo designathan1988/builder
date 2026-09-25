@@ -1,7 +1,7 @@
 // The read-only test port (ARCHITECTURE.md): what the end-to-end tests read of the editor, the document, the
 // selection, the history and the export, each as a copy taken now. It has no other member: it never writes, loads,
-// creates or selects anything, so a test can change the editor only through its doors. It exists in development
-// only (the dev server the tests run), frozen on window.
+// creates or selects anything, so a test can change the editor only through its doors. It is installed in every
+// build (the e2e suite tests the packaged app, playwright.config.ts), frozen on window.
 import type { EditorStore } from './store.ts';
 
 export interface TestPort {
@@ -26,6 +26,5 @@ export function createTestPort(store: EditorStore): TestPort {
 }
 
 export function installTestPort(store: EditorStore): void {
-  if (!import.meta.env.DEV) return;
   Object.defineProperty(window, TEST_PORT_KEY, { value: createTestPort(store), writable: false, configurable: false, enumerable: false });
 }

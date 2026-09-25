@@ -30,9 +30,11 @@ describe('renaming in Layers (src/editor/layers/rename.ts)', () => {
     expect(s.getState().history).toBe(history);
   });
 
-  it('is refused with none or several selected, and for a locked element or one inside it', () => {
+  it('is refused with none or several selected, for the page root, and for a locked element or one inside it', () => {
     const s = aurora();
     expect(s.dispatch('layers.startRename', {})).toEqual({ status: 'refused', message: { key: 'status.needsSingleSelection', params: {} } });
+    s.dispatch('selection.select', { target: 'n-page' });
+    expect(s.dispatch('layers.startRename', {})).toEqual({ status: 'refused', message: { key: 'status.rename.root', params: {} } });
     s.dispatch('selection.select', { target: 'n-intro' });
     s.dispatch('selection.add', { target: 'n-title' });
     expect(s.dispatch('layers.startRename', {})).toEqual({ status: 'refused', message: { key: 'status.needsSingleSelection', params: {} } });

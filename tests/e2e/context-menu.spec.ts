@@ -22,16 +22,6 @@ const ROW = 'selection.select#layers-row';
 const MOVE_UP = 'element.moveUp#context-menu';
 const MOVE_DOWN = 'element.moveDown#context-menu';
 const DELETE = 'element.delete#context-menu';
-const RENAME = 'layers.startRename#context-menu';
-const DUPLICATE = 'element.duplicate#context-menu';
-const WRAP_ROW = 'element.wrapRow#context-menu';
-const WRAP_COLUMN = 'element.wrapColumn#context-menu';
-const UNWRAP = 'element.unwrap#context-menu';
-const NEST = 'element.nestIntoPrevious#context-menu';
-const PROMOTE = 'element.promote#context-menu';
-const TAKE = 'hand.take#context-menu';
-const LOCK = 'element.toggleLock#context-menu';
-const HIDE = 'element.toggleHidden#context-menu';
 
 interface Entry {
   readonly id: string;
@@ -132,15 +122,10 @@ test('the menu shows only the built commands that apply, in the manifest order, 
   await check(MOVE_UP, MOVE_DOWN);
   await clickNode(page, 'n-actions', 'right');
   await check(MOVE_DOWN, MOVE_UP);
-  // the page root, which is selected: Rename applies to it (rename-element declares no refusal of the root), and none
-  // of the built commands that refuse the root is drawn
+  // the page root: nothing built applies to it yet, so no menu is drawn; the root is selected
   await runDoor(page, ROW_MENU, { args: { target: 'n-page' } });
   expect((await read(page)).selection).toEqual(['n-page']);
-  await expect(menu(page)).toBeVisible();
-  const refusingTheRoot = [DUPLICATE, MOVE_UP, MOVE_DOWN, WRAP_ROW, WRAP_COLUMN, UNWRAP, NEST, PROMOTE, TAKE, LOCK, HIDE, DELETE];
-  const onTheRoot = await shown(page);
-  for (const ref of refusingTheRoot) expect(onTheRoot, `${ref} refuses the page root`).not.toContain(ref);
-  await check(DELETE, RENAME);
+  await expect(menu(page)).toHaveCount(0);
 });
 
 test('a secondary click inside the selection keeps it, and Delete removes every selected root in one undo step', runs(OPEN, SELECT, ADD, CANVAS_MENU, DELETE), async ({ page }) => {

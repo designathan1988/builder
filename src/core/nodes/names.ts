@@ -16,6 +16,9 @@ export const renameCommand = registerHandler('element.rename', ({ state }, { tar
   // the field hands the node of its own row and the string it holds; anything else is a defect of the door
   if (!found) throw new Error(`element.rename: the document has no node ${target}`);
   if (typeof name !== 'string') throw new Error('element.rename: the name is not a string');
+  // the page root is no element of the page and carries no element name to change (spec rename-element); its page's
+  // name belongs to the page (pages.rename)
+  if (found.parent === null) return { kind: 'refused', message: message('status.rename.root') };
   const locked = lockRefusal(state.document, target, 'status.locked.rename');
   if (locked !== null) return { kind: 'refused', message: locked };
   const previous = found.node.name;

@@ -1266,6 +1266,7 @@
   "status.refused.requiresParent": "Recusado. {child} só existe dentro de {parents}.",
   "status.refused.singleChild": "Recusado. {parent} aceita um único {child}.",
   "status.rename.empty": "Um nome não pode ficar vazio; {name} mantém o nome.",
+  "status.rename.root": "A raiz da página não pode ser renomeada.",
   "status.renamed": "{old} renomeado para {name}.",
   "status.project.saved": "Projeto salvo como {file}.",
   "status.save.failed": "Falha ao salvar",

@@ -67,10 +67,9 @@ describe('element.rename (src/core/nodes/names.ts)', () => {
     expect(rename(AURORA, 'n-intro', ' Intro ')).toEqual({ kind: 'change' });
   });
 
-  it('renames the page root too', () => {
-    const outcome = rename(AURORA, 'n-page', 'Body');
-    if (outcome.kind !== 'change') throw new Error(`not a change: ${JSON.stringify(outcome)}`);
-    expect(nameOf(applyPatches(AURORA, outcome.patches ?? []).document, 'n-page')).toBe('Body');
+  it('refuses the page root: it carries no element name to change', () => {
+    expect(rename(AURORA, 'n-page', 'Body')).toEqual({ kind: 'refused', message: message('status.rename.root') });
+    expect(nameOf(AURORA, 'n-page')).toBe('Page');
   });
 
   it('refuses a locked element and one inside a locked element, naming the lock', () => {

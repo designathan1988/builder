@@ -26,7 +26,7 @@ const saved = await readSavedWork();
 const restored = restoredWork(saved, MODEL_RULES);
 const store = createEditorStore({ restored });
 startAutosave(store, saved, restored !== null);
-// what the end-to-end tests read, in development only (src/editor/test-port.ts)
+// what the end-to-end tests read, in every build (src/editor/test-port.ts)
 installTestPort(store);
 
 createRoot(container).render(

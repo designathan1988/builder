@@ -12,6 +12,7 @@
         "refusalKey": "status.needsSingleSelection"
       },
       "refusals": [
+        "status.rename.root",
         "status.locked.rename",
         "status.locked.byAncestor"
       ],
@@ -175,6 +176,7 @@
       },
       "refusals": [
         "status.rename.empty",
+        "status.rename.root",
         "status.locked.rename",
         "status.locked.byAncestor"
       ],

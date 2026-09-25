@@ -2,6 +2,34 @@
 
 Handoff notes between sessions. Newest entry first.
 
+## 2026-09-25 — The user's answers, rename-element integrated
+
+The user's answers (the three pending decisions, verbatim in `PROGRESS.md`):
+1. project-open-json › the-empty-project-opens-without-asking: the runner does not compare the page's and the root's
+   ids when the action replaces the whole document (File › Open). The door rule (wip/feature-table) is released after.
+2. drag-level-keys-escape › arrow-up-at-the-top-level-is-refused: its first step drops "before Footer"; the one
+   authorized scenario edit.
+3. Shift/Ctrl+click on the Layers Page row does not add the page to the selection, as on the canvas.
+Workflow: from now on, blocks of features are built, then one full suite; the suite is not re-run with no change
+between runs. Style path first for integration: inspector-number-fields, props-spacing, props-typography,
+color-picker, props-background, props-size-overflow, props-flex-container.
+
+rename-element (from feature/rename-element, e9e014b) integrated with its code:
+- The page root is not renamed: layers.startRename and element.rename refuse it with `status.rename.root` (new key in
+  both locales) before the lock refusal, as delete/duplicate/wrap refuse it with `status.<op>.root`. Reason: the
+  committed test context-menu.spec.ts:126 requires that with the page root selected no context-menu item applies, and
+  "the page's name is the page's" (pages.rename). The helper's unit test that renamed the root was updated with it.
+- The environment: git in this checkout needs `safe.directory` (the folder is owned by the other local account);
+  passed as `GIT_CONFIG_COUNT/KEY_0/VALUE_0` env vars, never written to any config file. A stale dev server owned by
+  that account holds port 5310 and cannot be killed from this session: suites run with `E2E_PORT=5311`.
+- rename-element's 2 rename commands are one Tooth-off run: 4 of 4 tests fail on assertions (log
+  `.cache/logs/tooth-rename-element-070803.log`).
+- A second writer (another coordinator session on the same identity) pushed rename-element and the drag-level
+  scenario to origin/main while this one worked. Its rename-element let the page root be renamed and rewrote the
+  committed tests/e2e/context-menu.spec.ts to match; this session merged origin/main, restored that test byte for
+  byte (4b38208) and kept the root refusal. The drag-level scenario edit (b31f6b4) is the user's authorized one and
+  was kept. Two writers on origin/main need a clear owner per file: coordinate before the next push.
+
 ## 2026-09-25 — Group 02: a coordinator integrating helpers, one feature per commit
 
 Why: the user's group 02 brief (a new helper per feature; up to 3 at once, each in a git worktree `.cache/wt/<feature>`;
@@ -162,8 +190,8 @@ Decisions by small ambiguity (moved here from PROGRESS.md):
   in the node's Layers row (layers.startRename, ui.rename in src/editor/layers/rename.ts); Enter or leaving the field
   keeps it (element.rename, trimmed; empty keeps the old name with status.rename.empty); a locked element refuses.
   pointer.ts: a canvas press first blurs a focused editor field, so its text is kept before the press's selection.
-  The page root can be renamed (its layer name; the title is page-properties'), so its context menu now offers
-  Rename. Runner: a panel-control door with count 2 is double-clicked; a panel field is typed with Backspace, the
+  The page root is refused (status.rename.root): the version that let it be renamed came with an edit to the
+  committed tests/e2e/context-menu.spec.ts and was undone on 2026-09-25 (see the entry above). Runner: a panel-control door with count 2 is double-clicked; a panel field is typed with Backspace, the
   step's text and Enter; a Layers row part with no argument of its own is the row of the step's target. Each proven
   by switching it off, as were leaveField and the lock refusal. Open: Escape does not cancel (finding 31).
 - Coordinator's slip, noted so it does not happen again: the Pager preview server (pager-run) stayed open during

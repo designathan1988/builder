@@ -1,10 +1,11 @@
 // Coordinates under zoom (src/editor/canvas/coordinates.ts), in the installed Chrome at every zoom level of
-// manifest/environment.json. No zoom door is built yet, so the module itself is loaded from the dev server into the
-// app's page, beside a same-origin frame built like the canvas's: a sandboxed iframe without scripts that takes no
-// pointer event, scaled with the standard CSS zoom, under an overlay that receives the pointer. For page points on
-// known elements (near the page's origin, in its middle and at its far corner, with the frame's page scrolled), the
-// real mouse clicks the screen point pageToScreen gives, and the element elementAt finds at the point the overlay
-// received must be the one the page lays out there. screenBox must match the box Chrome painted for the element.
+// manifest/environment.json. No zoom door is built yet, so the module itself is loaded from the served build
+// (/proofs.js, tests/support/proofs.ts) into the app's page, beside a same-origin frame built like the canvas's: a
+// sandboxed iframe without scripts that takes no pointer event, scaled with the standard CSS zoom, under an overlay
+// that receives the pointer. For page points on known elements (near the page's origin, in its middle and at its far
+// corner, with the frame's page scrolled), the real mouse clicks the screen point pageToScreen gives, and the element
+// elementAt finds at the point the overlay received must be the one the page lays out there. screenBox must match the
+// box Chrome painted for the element.
 import fs from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
 
@@ -17,7 +18,7 @@ interface Environment {
 const ENVIRONMENT = JSON.parse(fs.readFileSync('manifest/environment.json', 'utf8')) as Environment;
 const VIEWPORT = ENVIRONMENT.viewports[0];
 
-const MODULE = '/src/editor/canvas/coordinates.ts';
+const MODULE = '/proofs.js';
 // the frame's layout viewport (page CSS pixels) and the page it scrolls over
 const FRAME = { width: 320, height: 180 };
 const PAGE = { width: 1200, height: 2400 };

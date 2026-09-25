@@ -3422,6 +3422,7 @@ export const MESSAGE_IDS = [
   "status.refused.requiresParent",
   "status.refused.singleChild",
   "status.rename.empty",
+  "status.rename.root",
   "status.renamed",
   "status.project.saved",
   "status.save.failed",

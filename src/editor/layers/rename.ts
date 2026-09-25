@@ -9,7 +9,7 @@
 // selection is no longer its node alone (a click elsewhere, a loaded project). A locked element, or one inside a
 // locked element, is not renamed: the status bar says what to unlock (spec lock-element, `lockRefusal`).
 import { message, registerHandler } from '../../core/commands/registry.ts';
-import type { NodeId } from '../../core/document/model.ts';
+import { locate, type NodeId } from '../../core/document/model.ts';
 import { lockRefusal } from '../../core/nodes/flags.ts';
 import { selectedAlone } from '../../core/selection/selection.ts';
 import type { StoreState } from '../../core/store/store.ts';
@@ -34,6 +34,11 @@ export const startRename = registerHandler<'layers.startRename', EditorUi>('laye
   const [only, ...others] = state.selection;
   // the availability predicate (singleSelection) lets no door run with none or several selected
   if (only === undefined || others.length > 0) return { kind: 'refused', message: message('status.needsSingleSelection') };
+  const found = locate(state.document, only);
+  // the page root is no element of the page and carries no element name to change (spec rename-element); its page's
+  // name belongs to the page (pages.rename)
+  if (found === null) throw new Error(`layers.startRename: the document has no node ${only}`);
+  if (found.parent === null) return { kind: 'refused', message: message('status.rename.root') };
   const locked = lockRefusal(state.document, only, 'status.locked.rename');
   if (locked !== null) return { kind: 'refused', message: locked };
   // the row that draws the field is on screen: Layers shown, and every folded branch above the node unfolded
