@@ -178,7 +178,7 @@ Every property field shows the CSS property name in its tooltip (`padding-top`, 
 
 **The Element chip** styles only this element. The export writes those styles as a readable BEM class derived from the element's name, on that element only: an element of class `.card` named "Plano assinatura" gets `.card--plano-assinatura`, and an element with no class gets its own block or element class from its name (`.hero__title`). A numeric suffix is added only when two elements would get the same class (`.card--plano-assinatura-2`); the class is never a hash. Never a `style` attribute and never an `#id` selector, because the export has no inline styles.
 
-**Settings tab**: the text of a text element, the attributes (id, link, alt, form attributes…), custom attributes and the parts editors.
+**Settings tab**: the text of a text element, the attributes (id, link, alt, form attributes…), custom attributes and the parts editors. The **HTML tag** field, after the text, is a one-line text field that keeps a typed tag on Enter or when it loses the focus, and suggests the element's equivalent tags in the browser's list of suggestions under it; an element with no equivalent tag has no such field.
 
 **Interactions tab**: no selector bar. The element's name and tag, Add, then each interaction with its trigger, action, target and options, and **Applies to**: this element, or every element with its class ("Every element with .btn (3)").
 

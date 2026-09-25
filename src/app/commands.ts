@@ -4,6 +4,7 @@
 // type error (src/app/commands.typecheck.ts proves it). The order is the manifest's.
 import { NOT_AVAILABLE_YET, always, type CommandTable, type PredicateTable } from '../core/commands/registry.ts';
 import { setLinkCommand } from '../core/elements/link.ts';
+import { setTagCommand } from '../core/elements/tag.ts';
 import { canRedo, canUndo, redoCommand, undoCommand } from '../core/history/history.ts';
 import { toggleHiddenCommand, toggleLockCommand } from '../core/nodes/flags.ts';
 import { renameCommand } from '../core/nodes/names.ts';
@@ -79,7 +80,7 @@ export const COMMANDS = {
   'components.create': NOT_AVAILABLE_YET,
   'components.insertInstance': NOT_AVAILABLE_YET,
   'components.detach': NOT_AVAILABLE_YET,
-  'element.setTag': NOT_AVAILABLE_YET,
+  'element.setTag': setTagCommand,
   'element.setAttribute': NOT_AVAILABLE_YET,
   'element.setId': NOT_AVAILABLE_YET,
   'element.setClasses': NOT_AVAILABLE_YET,

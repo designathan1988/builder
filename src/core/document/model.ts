@@ -109,6 +109,13 @@ export function locate(doc: DocumentJson, id: NodeId): Location | null {
   return null;
 }
 
+// The node and every ancestor of it, the page root first; empty when the document has no such node.
+export function lineage(doc: DocumentJson, id: NodeId): DocNode[] {
+  const chain: DocNode[] = [];
+  for (let at = locate(doc, id); at !== null; at = at.parent === null ? null : locate(doc, at.parent.id)) chain.unshift(at.node);
+  return chain;
+}
+
 function locateIn(node: DocNode, id: NodeId, parent: DocNode | null, index: number, path: readonly (string | number)[], page: number): Location | null {
   if (node.id === id) return { node, page, parent, index, path };
   for (const [i, child] of node.children.entries()) {

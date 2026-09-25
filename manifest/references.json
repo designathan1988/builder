@@ -158,7 +158,7 @@
     {
       "kind": "handler",
       "id": "element.setTag",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",

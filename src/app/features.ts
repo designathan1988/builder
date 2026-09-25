@@ -81,7 +81,7 @@ export const FEATURES = {
   'inspector-property-search': NOT_AVAILABLE_YET,
   'inspector-advanced-mode': NOT_AVAILABLE_YET,
   'inspector-add-property': NOT_AVAILABLE_YET,
-  'semantic-tag-switch': NOT_AVAILABLE_YET,
+  'semantic-tag-switch': registerFeature('semantic-tag-switch'),
   'quick-panel': NOT_AVAILABLE_YET,
   'multi-select-edit': NOT_AVAILABLE_YET,
   // 05 canvas handles

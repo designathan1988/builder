@@ -19,18 +19,11 @@
 import type { NodeId } from '../../generated/commands.ts';
 import type { MessageId } from '../../generated/ids.ts';
 import { message, registerHandler, type Message, type Outcome } from '../commands/registry.ts';
-import { locate, type DocNode, type DocumentJson, type Location, type Selection } from '../document/model.ts';
+import { lineage, locate, type DocNode, type DocumentJson, type Location, type Selection } from '../document/model.ts';
 
 // The keys a command refuses a node it would change with, when the node carries the lock itself (en.json
 // status.locked.*): "Unlock {name} before deleting it", "… before moving it", and so on.
 export type LockedKey = 'status.locked.delete' | 'status.locked.edit' | 'status.locked.editText' | 'status.locked.insert' | 'status.locked.move' | 'status.locked.rename';
-
-// The node and every ancestor of it, the page root first; empty when the document has no such node.
-function lineage(document: DocumentJson, id: NodeId): DocNode[] {
-  const chain: DocNode[] = [];
-  for (let at = locate(document, id); at !== null; at = at.parent === null ? null : locate(document, at.parent.id)) chain.unshift(at.node);
-  return chain;
-}
 
 // The lock over a node: the outermost locked node among the node itself and its ancestors, or null when nothing locks
 // it. The outermost, because it is the one lock that can be taken off first (inside it, a toggle is refused).

@@ -13,13 +13,14 @@
 //  - Settings: no selector bar; its region starts under the header. The text of the one selected text element (its
 //    field keeps the text with text.set), then the attribute fields that apply to the element's type, in their order;
 //    on the page root, the fields of the page's settings keep what is typed with page.setSetting; on a Link Block or a
-//    link, the Link address keeps it with element.setLink.
-import { Fragment, useEffect, useMemo, useRef, useState, type ComponentType, type ReactNode } from 'react';
+//    link, the Link address keeps it with element.setLink; the HTML tag field keeps a typed tag with element.setTag.
+import { Fragment, useEffect, useId, useMemo, useRef, useState, type ComponentType, type ReactNode } from 'react';
 import type { AttributeId, CommandId, FeatureId, KeyContextId, MessageId, SectionId, StyleTargetId } from '../../generated/ids.ts';
 import type { CommandArgs } from '../../generated/commands.ts';
 import { GENERATED_VALUES } from '../../generated/value-lists.ts';
 import { isFeatureBuilt } from '../../app/features.ts';
 import { locate, type DocNode, type NodeId } from '../../core/document/model.ts';
+import { equivalentTags } from '../../core/elements/tag.ts';
 import { isPageSetting } from '../../core/page/settings.ts';
 import type { DispatchResult } from '../../core/store/store.ts';
 import { elementIcon, manifest, type DoorEntry } from '../../manifest/runtime.ts';
@@ -445,25 +446,43 @@ function TextField({ entry, node, label }: { readonly entry: DoorEntry; readonly
   );
 }
 
-// How an attribute field's text reaches its door's command, or null for a field that keeps no text:
+// How an attribute field's text reaches its door's command, what the field shows and what it suggests, or null for a
+// field that keeps no text:
 //  - a setting of the page (spec page-properties, Problems in Pager 1), on the page root: the field stands for its
 //    setting (the command's argument that takes an attribute, by its manifest type, names it) and its text fills the
 //    command's other argument;
 //  - an attribute whose command takes a text argument of the attribute's own name (element.setLink's href, spec
-//    elements-structure): the field stands for its node (the command's target) and its text fills that argument.
-// A boolean attribute (a toggle) keeps no text.
-function keptTextOf(entry: DoorEntry, attribute: AttributeId, valueType: string, node: DocNode): { readonly args: Readonly<Record<string, string>>; readonly filled: string } | null {
+//    elements-structure; element.setTag's tag, spec semantic-tag-switch): the field stands for its node (the command's
+//    target, when it takes one; element.setTag acts on the selection) and its text fills that argument.
+// The field shows the value the node stores for the attribute (empty while it has none), except the HTML tag, which is
+// the node's own tag, shown with the element's equivalent tags as suggestions (core/elements/tag.ts). A boolean
+// attribute (a toggle) keeps no text.
+interface KeptText {
+  readonly args: Readonly<Record<string, string>>;
+  readonly filled: string;
+  readonly stored: string;
+  readonly suggestions: readonly string[];
+}
+// the value type of the attribute that is an element's HTML tag (elements.json), and a field that suggests nothing
+const TAG_VALUE = 'tag';
+const NO_SUGGESTIONS: readonly string[] = [];
+function keptTextOf(entry: DoorEntry, attribute: AttributeId, valueType: string, node: DocNode): KeptText | null {
   if (valueType === 'boolean') return null;
   const args = Object.entries(entry.command.args);
+  const value = node.attributes[attribute];
+  const stored = value === undefined ? '' : String(value);
   if (isPageSetting(ATTRIBUTES.get(attribute)?.elements, MODEL_RULES.root.type)) {
     const named = args.find(([, arg]) => arg.type === 'attribute')?.[0];
     const filled = args.find(([name]) => name !== named)?.[0];
-    return named === undefined || filled === undefined ? null : { args: { [named]: attribute }, filled };
+    return named === undefined || filled === undefined ? null : { args: { [named]: attribute }, filled, stored, suggestions: NO_SUGGESTIONS };
   }
   const own = args.find(([name, arg]) => name === attribute && arg.type === 'string');
   if (own === undefined) return null;
   const target = args.find(([name, arg]) => name === 'target' && arg.type === 'node');
-  return { args: target === undefined ? {} : { target: node.id }, filled: attribute };
+  const kept = { args: target === undefined ? {} : { target: node.id }, filled: attribute };
+  if (valueType !== TAG_VALUE) return { ...kept, stored, suggestions: NO_SUGGESTIONS };
+  const element = MODEL_RULES.elements.get(node.type);
+  return { ...kept, stored: node.tag ?? '', suggestions: element === undefined ? NO_SUGGESTIONS : equivalentTags(element) };
 }
 
 // An attribute field that keeps its text (keptTextOf): a one-line text field of its door, standing for its arguments,
@@ -472,23 +491,23 @@ function keptTextOf(entry: DoorEntry, attribute: AttributeId, valueType: string,
 // browser submits a form implicitly (no key is handled here): the submission keeps its text, and so does leaving the
 // field (Tab, a click elsewhere) or its going (another selection, another tab), whenever the text differs from the one
 // it last showed or kept; each keeping is one undo step (keepAfterGesture), for the node the field was drawn for. The
-// field shows the value the node stores (empty while it has none): when it is drawn, when that value changes, and
-// after every command that says something (the value kept, or refused while the document keeps its own). A field
-// whose door's feature is not registered as built (the page's description, until page-seo-meta) is not available
-// yet, although the command it shares is built.
-function KeptTextField({ entry, node, attribute, kept, label }: { readonly entry: DoorEntry; readonly node: DocNode; readonly attribute: AttributeId; readonly kept: { readonly args: Readonly<Record<string, string>>; readonly filled: string }; readonly label: string }) {
+// field shows what keptTextOf says the node stores: when it is drawn, when that value changes, and after every command
+// that says something (the value kept, or refused while the document keeps its own). The values it suggests (the
+// element's equivalent tags) are offered under it as the browser offers a list of suggestions for a text field. A
+// field whose door's feature is not registered as built (the page's description, until page-seo-meta) is not
+// available yet, although the command it shares is built.
+function KeptTextField({ entry, node, kept, label }: { readonly entry: DoorEntry; readonly node: DocNode; readonly kept: KeptText; readonly label: string }) {
   const store = useStore();
-  const { filled } = kept;
+  const { filled, stored, suggestions } = kept;
   const json = JSON.stringify(kept.args);
   const args = useMemo(() => JSON.parse(json) as Readonly<Record<string, string>>, [json]);
   const door = useDoor(entry, args, label, isFeatureBuilt(entry.door.feature as FeatureId));
   const form = useRef<HTMLFormElement>(null);
   const field = useRef<HTMLInputElement>(null);
+  const listId = useId();
   // the text the field last showed or kept: the field's own draft, never document state
   const draft = useRef({ shown: '' });
   const said = useEditorState((s) => s.message);
-  const value = node.attributes[attribute];
-  const stored = value === undefined ? '' : String(value);
   const command = entry.command.id;
   const owner = node.id;
   useEffect(() => {
@@ -529,7 +548,14 @@ function KeptTextField({ entry, node, attribute, kept, label }: { readonly entry
   return (
     <form ref={form} className={`field-row${door.available ? '' : ' is-unavailable'}`} data-door={entry.ref} data-args={JSON.stringify(args)} title={door.title}>
       <span className="field-row__label">{label}</span>
-      <input ref={field} className="input" disabled={!door.available} aria-label={label} spellCheck={false} />
+      <input ref={field} className="input" disabled={!door.available} aria-label={label} spellCheck={false} list={suggestions.length > 0 ? listId : undefined} />
+      {suggestions.length > 0 ? (
+        <datalist id={listId}>
+          {suggestions.map((value) => (
+            <option key={value} value={value} />
+          ))}
+        </datalist>
+      ) : null}
     </form>
   );
 }
@@ -568,9 +594,10 @@ function SettingsTab() {
             if (attribute === undefined || (attribute.elements !== 'all' && !attribute.elements.includes(node.type))) return null;
             const label = t(attribute.labelKey as MessageId);
             if ('content' in entry.command.args) return <TextField key={`${entry.ref}@${node.id}`} entry={entry} node={node} label={label} />;
-            // a setting of the page on the page root (core/page/settings.ts), or a link (core/elements/link.ts)
+            // a setting of the page on the page root (core/page/settings.ts), a link (core/elements/link.ts), or the
+            // element's HTML tag (core/elements/tag.ts)
             const kept = keptTextOf(entry, attribute.id as AttributeId, attribute.valueType, node);
-            if (kept !== null) return <KeptTextField key={`${entry.ref}@${node.id}`} entry={entry} node={node} attribute={attribute.id as AttributeId} kept={kept} label={label} />;
+            if (kept !== null) return <KeptTextField key={`${entry.ref}@${node.id}`} entry={entry} node={node} kept={kept} label={label} />;
             return <AttributeField key={entry.ref} entry={entry} label={label} toggle={attribute.valueType === 'boolean'} />;
           })
         )}
