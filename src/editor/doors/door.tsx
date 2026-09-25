@@ -11,7 +11,7 @@ import type { DoorEntry } from '../../manifest/runtime.ts';
 import { chordHint } from '../input/keymap.ts';
 import { pressedByPointer } from '../input/pointer.ts';
 import type { EditorUi } from '../state.ts';
-import { useEditorState, useStore } from '../store.ts';
+import { MODEL_RULES, useEditorState, useStore } from '../store.ts';
 import { PanelBodies } from '../shell/bodies.ts';
 import { useT } from '../text.ts';
 import { opensEmptyPanel } from '../workspace/panels.ts';
@@ -61,7 +61,7 @@ export function useDoor(entry: DoorEntry, args: Readonly<Record<string, unknown>
   const drawsBody = useContext(PanelBodies);
   const built = ready && isDoorBuilt(entry) && !opensEmptyPanel({ ...entry.door.args, ...args }, drawsBody);
   const current = useEditorState((s) => built && isCurrent(entry, s, args));
-  const available = useEditorState((s) => built && ((PREDICATES as PredicateTable<EditorUi>)[entry.command.availability.predicate as PredicateId]?.test(s) ?? true));
+  const available = useEditorState((s) => built && ((PREDICATES as PredicateTable<EditorUi>)[entry.command.availability.predicate as PredicateId]?.test(s, MODEL_RULES) ?? true));
   const label = labelled ?? t(entry.door.labelKey as MessageId);
   const face = labelled === undefined && entry.door.faceLabelKey !== null ? t(entry.door.faceLabelKey as MessageId) : label;
   const chord = chordHint(entry.command.id, keysIn);

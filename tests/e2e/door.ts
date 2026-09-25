@@ -24,6 +24,8 @@ export interface Door {
   // panel-control: the panel and the control it is drawn as
   readonly panel?: string;
   readonly control?: string;
+  // toolbar and panel-control: the drawing (an "area" is part of a larger surface, such as a backdrop)
+  readonly drawnAs?: string;
 }
 interface Menu {
   readonly id: string;
@@ -130,5 +132,7 @@ export async function runDoor(page: Page, ref: string, options: { readonly args?
     if (d.menu === undefined) throw new Error(`menu door ${ref} names no menu`);
     await openMenu(page, d.menu);
   }
-  await control(page, ref, options).click();
+  // a door drawn as an area (the backdrop under a menu) is pressed where nothing drawn over it lies, near its top-left
+  // corner, as a person clicks away from a menu; any other control at its centre
+  await control(page, ref, options).click(d.drawnAs === 'area' ? { position: { x: 4, y: 4 } } : undefined);
 }

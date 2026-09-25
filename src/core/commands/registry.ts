@@ -104,14 +104,19 @@ export function isRegistered<Id extends FeatureId>(entry: FeatureEntry<Id>): ent
 // the command's refusalKey; a predicate that knows the words of its refusal ("{name} has no text to edit.") or which
 // of the command's declared refusals applies says so with `refusal` (the store accepts only the command's
 // refusalKey or one of its manifest refusals).
+// It reads the state and the model's rules (what an element type may hold: a container, a leaf).
 export interface RegisteredPredicate<Ui> {
   readonly id: PredicateId;
-  test(state: StoreState<Ui>): boolean;
-  refusal?(state: StoreState<Ui>): Message;
+  test(state: StoreState<Ui>, rules: ModelRules): boolean;
+  refusal?(state: StoreState<Ui>, rules: ModelRules): Message;
 }
 
 // manifest:check reads `registerPredicate('<id>'` to mark the id registered in references.json.
-export function registerPredicate<Ui = never>(id: PredicateId, test: (state: StoreState<Ui>) => boolean, refusal?: (state: StoreState<Ui>) => Message): RegisteredPredicate<Ui> {
+export function registerPredicate<Ui = never>(
+  id: PredicateId,
+  test: (state: StoreState<Ui>, rules: ModelRules) => boolean,
+  refusal?: (state: StoreState<Ui>, rules: ModelRules) => Message,
+): RegisteredPredicate<Ui> {
   return refusal === undefined ? { id, test } : { id, test, refusal };
 }
 

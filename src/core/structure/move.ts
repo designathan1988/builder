@@ -15,12 +15,18 @@
 // press that moves nothing: the first (last) place says "Already at the start (end) of <parent>" and adds no history
 // entry. The status bar names the one moved node with its new position among its siblings, or counts several
 // (spec, Problems 1). The selection stays as it is.
-import { message, registerHandler, type Outcome } from '../commands/registry.ts';
+import type { NodeId } from '../../generated/commands.ts';
+import { message, registerHandler, registerPredicate, type Outcome } from '../commands/registry.ts';
 import { locate, walk, type DocNode, type DocumentJson, type Selection } from '../document/model.ts';
+import type { ModelRules } from '../document/validate.ts';
 import { applyPatches, type Patch } from '../history/transaction.ts';
 import { selectionRoots } from './remove.ts';
 
-export const moveToCommand = registerHandler('element.moveTo', ({ state, rules }, { parent, index }): Outcome<never> => {
+export const moveToCommand = registerHandler('element.moveTo', ({ state, rules }, { parent, index }): Outcome<never> => moveSelectionTo(state, rules, parent, index));
+
+// The move element.moveTo makes, which every command that moves the selection into a parent at an index makes too
+// (nest-into-previous, promote-out): one rule for the index, the refusals and the status.
+function moveSelectionTo(state: { readonly document: DocumentJson; readonly selection: Selection }, rules: ModelRules, parent: NodeId, index: number): Outcome<never> {
   const moved = selectionRoots(state.document, state.selection);
   // every door moves what is selected (its adapter acts on the selection's roots), never the page itself
   if (moved.length === 0) throw new Error('element.moveTo: nothing is selected');
@@ -57,14 +63,50 @@ export const moveToCommand = registerHandler('element.moveTo', ({ state, rules }
 
   const count = target.node.children.length + moved.length;
   const first = moved[0];
-  // one node: moved among its siblings, or into another parent (spec drag-drop-inside)
+  // one node: moved among its siblings or out to an ancestor ("to position … in"), or into another parent (spec
+  // drag-drop-inside, "into"); the ancestors are its parent's chain up to the page root
+  const outward = new Set<string>();
+  for (let up = first?.parent ?? null; up !== null; up = locate(state.document, up.id)?.parent ?? null) outward.add(up.id);
   const said =
     moved.length !== 1 || !first
       ? message('status.movedMany', { count: moved.length, parent: receiver.node.name })
-      : first.parent?.id === parent
+      : outward.has(parent)
         ? message('status.moved', { name: first.node.name, position: start + 1, count, parent: receiver.node.name })
         : message('status.movedInto', { name: first.node.name, receiver: receiver.node.name, position: start + 1, count });
   return { kind: 'change', patches, selection: roots, message: said };
+}
+
+// element.nestIntoPrevious (spec nest-into-previous): the one selected element goes into its previous sibling, a
+// container, as its last child, through the move above (its refusals and its "Moved … into" status). Available only
+// when there is such a sibling (canNestIntoPrevious, Problems in Pager 1): otherwise the door is disabled and the key
+// says there is no previous element that can hold it.
+function previousContainer(state: { readonly document: DocumentJson; readonly selection: Selection }, rules: ModelRules): DocNode | null {
+  const [only, ...others] = state.selection;
+  if (only === undefined || others.length > 0) return null;
+  const at = locate(state.document, only);
+  const previous = at?.parent?.children[at.index - 1];
+  return previous !== undefined && rules.elements.get(previous.type)?.content === 'children' ? previous : null;
+}
+
+export const canNestIntoPrevious = registerPredicate('canNestIntoPrevious', (state, rules) => previousContainer(state, rules) !== null);
+
+export const nestIntoPreviousCommand = registerHandler('element.nestIntoPrevious', ({ state, rules }): Outcome<never> => {
+  const receiver = previousContainer(state, rules);
+  // the availability predicate (canNestIntoPrevious) keeps anything else from reaching here
+  if (receiver === null) throw new Error('element.nestIntoPrevious: the selection has no previous container');
+  return moveSelectionTo(state, rules, receiver.id, receiver.children.length);
+});
+
+// element.promote (spec promote-out): the one selected element leaves its parent and lands right after it, in its
+// grandparent, through the move above; a direct child of the page root cannot go higher (status.promote.topLevel).
+export const promoteCommand = registerHandler('element.promote', ({ state, rules }): Outcome<never> => {
+  const [only] = state.selection;
+  const at = only === undefined ? null : locate(state.document, only);
+  // the availability predicate (singleSelection) keeps anything else from reaching here
+  if (at === null) throw new Error('element.promote: the selection is not one node of the document');
+  const parent = at.parent === null ? null : locate(state.document, at.parent.id);
+  if (parent === null || parent.parent === null) return { kind: 'refused', message: message('status.promote.topLevel') };
+  return moveSelectionTo(state, rules, parent.parent.id, parent.index + 1);
 });
 
 type Direction = 'up' | 'down';

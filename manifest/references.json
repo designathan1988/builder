@@ -623,12 +623,12 @@
     {
       "kind": "handler",
       "id": "element.nestIntoPrevious",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",
       "id": "element.promote",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",
@@ -1093,7 +1093,7 @@
     {
       "kind": "predicate",
       "id": "singleSelection",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "predicate",
@@ -1138,7 +1138,7 @@
     {
       "kind": "predicate",
       "id": "canNestIntoPrevious",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "predicate",

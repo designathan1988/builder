@@ -191,9 +191,9 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
     if (gesture && command.history.undoable && command.history.transaction === 'per-dispatch') throw new Error(`${id} records one transaction per dispatch: it cannot run inside a gesture`);
     if (!isBuilt(entry)) return { status: 'not-available-yet' };
     const predicate = predicates[command.availability.predicate as keyof PredicateTable<Ui>];
-    if (predicate && !predicate.test(state)) {
+    if (predicate && !predicate.test(state, rules)) {
       const declared = message((command.availability.refusalKey ?? 'common.notAvailableYet') as Message['key']);
-      const refusal = predicate.refusal?.(state) ?? declared;
+      const refusal = predicate.refusal?.(state, rules) ?? declared;
       if (refusal.key !== declared.key && !(command.refusals as readonly string[]).includes(refusal.key)) throw new Error(`${id}: its predicate refuses with ${refusal.key}, which the manifest does not declare for it`);
       publish(commit({ ...state, message: refusal }, id));
       return { status: 'refused', message: refusal };
@@ -258,7 +258,7 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
     if (!command) throw new Error(`unknown command ${id}`);
     if (!isBuilt(entry)) return message('common.notAvailableYet');
     const predicate = predicates[command.availability.predicate as keyof PredicateTable<Ui>];
-    if (predicate && !predicate.test(state)) return predicate.refusal?.(state) ?? message((command.availability.refusalKey ?? 'common.notAvailableYet') as Message['key']);
+    if (predicate && !predicate.test(state, rules)) return predicate.refusal?.(state, rules) ?? message((command.availability.refusalKey ?? 'common.notAvailableYet') as Message['key']);
     const outcome = entry.run(handlerContext(), args);
     return outcome.kind === 'refused' ? outcome.message : null;
   };

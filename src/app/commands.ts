@@ -9,6 +9,7 @@ import {
   addCommand,
   clearSelectionCommand,
   hasSelection,
+  singleSelection,
   marqueeCommand,
   selectCommand,
   toggleCommand,
@@ -19,7 +20,7 @@ import {
 } from '../core/selection/selection.ts';
 import { duplicateCommand } from '../core/structure/duplicate.ts';
 import { insertCommand } from '../core/structure/insert.ts';
-import { moveDownCommand, moveToCommand, moveUpCommand } from '../core/structure/move.ts';
+import { canNestIntoPrevious, moveDownCommand, moveToCommand, moveUpCommand, nestIntoPreviousCommand, promoteCommand } from '../core/structure/move.ts';
 import { deleteCommand } from '../core/structure/remove.ts';
 import { canUnwrap, unwrapCommand, wrapColumnCommand, wrapRowCommand } from '../core/structure/wrap.ts';
 import { setTextCommand } from '../core/text/text.ts';
@@ -159,8 +160,8 @@ export const COMMANDS = {
   'element.moveDown': moveDownCommand,
   'element.wrapRow': wrapRowCommand,
   'element.wrapColumn': wrapColumnCommand,
-  'element.nestIntoPrevious': NOT_AVAILABLE_YET,
-  'element.promote': NOT_AVAILABLE_YET,
+  'element.nestIntoPrevious': nestIntoPreviousCommand,
+  'element.promote': promoteCommand,
   'element.duplicate': duplicateCommand,
   'element.delete': deleteCommand,
   'element.unwrap': unwrapCommand,
@@ -256,4 +257,4 @@ export const COMMANDS = {
 } as const satisfies CommandTable<EditorUi>;
 
 // The availability predicates code has registered; a built command's predicate must be here (createStore checks it).
-export const PREDICATES = { always, canUndo, canRedo, hasSelection, singleTextSelection, canUnwrap } as const satisfies PredicateTable<EditorUi>;
+export const PREDICATES = { always, canUndo, canRedo, hasSelection, singleSelection, singleTextSelection, canUnwrap, canNestIntoPrevious } as const satisfies PredicateTable<EditorUi>;
