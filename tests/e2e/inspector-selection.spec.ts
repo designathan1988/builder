@@ -2,7 +2,7 @@
 // bar names the one selected element (its name and exported tag), counts several, and says "Nothing selected" only
 // when the selection the test port reads is empty.
 import fs from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
 import { openMenu, runs } from './door.ts';
 

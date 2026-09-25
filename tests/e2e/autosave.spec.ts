@@ -4,7 +4,7 @@
 // IndexedDB write is still waiting when the page unloads, so only a write finished before the unload (the journal)
 // can keep the change. The document is read through the read-only test port after the reload.
 import fs from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
 import { openMenu, runs } from './door.ts';
 
 const FIXTURE = 'manifest/features/fixtures/aurora.json';

@@ -1,7 +1,7 @@
 // The commands foundation part 1 builds, run through their doors with the real mouse and keyboard. Each test asserts
 // an end artifact: the geometry of the window's regions, a computed style, or the stored preferences after an
 // immediate reload.
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
 import { runDoor, runs } from './door.ts';
 

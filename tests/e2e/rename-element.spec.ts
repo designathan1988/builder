@@ -7,7 +7,7 @@
 // bar says what to unlock, no field is drawn and the context menu offers no Rename. The document, the selection and
 // the history are read through the read-only test port.
 import fs from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
 import { control, runDoor, runs } from './door.ts';
 

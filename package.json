@@ -14,6 +14,7 @@
     "typecheck": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.node.json --noEmit",
     "lint": "eslint . --max-warnings 0",
     "unit": "vitest run",
+    "check": "node tools/impact/check.ts",
     "e2e": "playwright test",
     "e2e:diagnose": "playwright test --last-failed --trace on",
     "e2e:tooth": "node tools/runner/tooth.ts",

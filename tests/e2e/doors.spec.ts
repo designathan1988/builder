@@ -3,7 +3,7 @@
 // name, in English and in Brazilian Portuguese.
 import fs from 'node:fs';
 import path from 'node:path';
-import { expect, test } from '@playwright/test';
+import { expect, test } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
 
 interface Door {

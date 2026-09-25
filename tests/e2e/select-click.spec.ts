@@ -4,7 +4,7 @@
 // the outlines are measured against the element's box inside the frame, mapped to the screen through the frame's CSS
 // zoom.
 import fs from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
 import { control, openMenu, runDoor, runs } from './door.ts';
 

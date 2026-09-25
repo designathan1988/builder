@@ -3,7 +3,7 @@
 // focus.activate) and by ui.dismiss (Escape); a press outside an open menu lands on the backdrop, the door
 // ui.dismiss#overlay-backdrop. A press on the menu's own background keeps it open, and a submenu shows while the
 // pointer is over its item.
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
 import { openMenu, runs } from './door.ts';
 

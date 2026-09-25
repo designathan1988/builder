@@ -3,7 +3,7 @@
 // menu, keyword buttons). Read from the manifest and checked on every field the inspector draws in Chrome.
 import fs from 'node:fs';
 import path from 'node:path';
-import { expect, test } from '@playwright/test';
+import { expect, test } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
 
 const DRAWN = new Map<string, string>();

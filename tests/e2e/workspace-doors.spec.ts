@@ -2,7 +2,7 @@
 // the real mouse and keyboard (door.ts). Each test asserts an end artifact, the geometry of the window's regions, a
 // computed style or the stored preferences after an immediate reload, so it fails when the door's command does
 // nothing or does something else.
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
 import { runDoor, runs } from './door.ts';
 

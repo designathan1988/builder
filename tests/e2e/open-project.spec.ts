@@ -3,7 +3,7 @@
 // styles. A file that is not a project document, or one of a newer format, is refused with the reason and the canvas
 // keeps what it had. This is how the scenarios load their fixtures (manifest/features/fixtures/).
 import fs from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
 import { openMenu, runs } from './door.ts';
 

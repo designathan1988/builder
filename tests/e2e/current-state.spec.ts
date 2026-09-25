@@ -3,7 +3,7 @@
 // the other doors of its command in the same place (the dock's tabs, the breakpoint tabs, the view segments) nor
 // as a row beside the other rows of the sidebar. The built commands are the registered handlers of references.json.
 import fs from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
 
 const BUILT = (JSON.parse(fs.readFileSync('manifest/references.json', 'utf8')) as { references: { kind: string; id: string; status: string }[] }).references

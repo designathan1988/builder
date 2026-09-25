@@ -6,7 +6,7 @@
 // mapped to the screen through the frame's content box and CSS zoom; the selection is read through the read-only
 // test port.
 import fs from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
 import { openMenu, runs } from './door.ts';
 

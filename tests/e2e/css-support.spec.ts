@@ -3,7 +3,7 @@
 // refuses leaves the lists through manifest/css-exclusions.json, with this test as its evidence.
 import fs from 'node:fs';
 import path from 'node:path';
-import { expect, test } from '@playwright/test';
+import { expect, test } from '../support/test.ts';
 import { GENERATED_VALUES } from '../../src/generated/value-lists.ts';
 
 interface Subset {

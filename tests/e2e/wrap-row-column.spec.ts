@@ -5,7 +5,7 @@
 // document, the selection and the history are read through the read-only test port, the wrapper's style inside the
 // frame, the message in the status bar.
 import fs from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
 import { openMenu, runDoor, runs } from './door.ts';
 

@@ -3,7 +3,7 @@
 // clicked; a container with children, and the page root, keep their own height. Nothing of it enters the document
 // JSON nor the node's own markup (no inline style, no class): the renderer marks it in the frame only.
 import fs from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
 import { openMenu, runs } from './door.ts';
 
 const FIXTURE = 'manifest/features/fixtures/aurora.json';

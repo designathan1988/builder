@@ -2,7 +2,7 @@
 // page frame already has the width that fits the stage; it never shows an unfitted frame (at zoom 1) that fits a frame
 // later. A layout read right after the editor appears (history-doors.spec.ts, the region snapshots) depends on it:
 // with the fit measured after the first paint, those reads raced the fit and failed under load.
-import { expect, test } from '@playwright/test';
+import { expect, test } from '../support/test.ts';
 
 test('the page frame has its fitted width from the first painted frame on', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });

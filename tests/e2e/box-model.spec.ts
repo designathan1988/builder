@@ -4,7 +4,7 @@
 // between the box's edge and the box inside it. Checked on the geometry Chrome lays out.
 import fs from 'node:fs';
 import path from 'node:path';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
 
 const SIDES = ['top', 'right', 'bottom', 'left'] as const;

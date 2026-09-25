@@ -7,7 +7,7 @@
 // read through the read-only test port.
 import fs from 'node:fs';
 import path from 'node:path';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
 import { control, openMenu, runDoor, runs } from './door.ts';
 

@@ -9,7 +9,7 @@
 // name, follows the pointer at drag.ghostOffset (Problems in Pager 4). The document, the selection and the history
 // are read through the read-only test port; the drawing is measured against the elements' boxes inside the frame.
 import fs from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
 import { control, openMenu, runDoor, runs } from './door.ts';
 

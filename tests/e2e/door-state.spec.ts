@@ -1,7 +1,7 @@
 // A built door that stands for a state says whether it is on, as its door data says it is drawn: a toggle button
 // (pressed) by aria-pressed, a menu item (checked radio or checkbox) by its role and aria-checked, both from the
 // current state the store holds. A door that is no toggle (a close button, a command item) says nothing.
-import { expect, test } from '@playwright/test';
+import { expect, test } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
 import { openMenu, runDoor, runs } from './door.ts';
 

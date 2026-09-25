@@ -6,7 +6,7 @@
 // dock's tab. The document, the selection and the history
 // are read through the read-only test port; the page through the frame; the editor's regions by their geometry.
 import fs from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
 import { isFeatureBuilt } from '../../src/app/features.ts';
 import { control, openMenu, runDoor, runs } from './door.ts';

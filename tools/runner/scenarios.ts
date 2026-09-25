@@ -18,7 +18,7 @@
 // them to fail on an assertion.
 import fs from 'node:fs';
 import path from 'node:path';
-import { expect, test, type Download, type Page } from '@playwright/test';
+import { expect, test, type Download, type Page } from '../../tests/support/test.ts';
 import { isFeatureBuilt } from '../../src/app/features.ts';
 import { shortcutRuns } from '../../src/editor/input/shortcut-rule.ts';
 import { FEATURE_COMMANDS } from '../../src/generated/commands.ts';

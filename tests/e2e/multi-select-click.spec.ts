@@ -4,7 +4,7 @@
 // adds nothing (the door's target is an element). The selection is read through the read-only test port; the
 // outlines are measured against the elements' boxes inside the frame, mapped to the screen through its CSS zoom.
 import fs from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
 import { openMenu, runs } from './door.ts';
 

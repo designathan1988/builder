@@ -1,7 +1,7 @@
 // The pointer owner (src/editor/input/pointer.ts): a press on the canvas opens one gesture, and while it is open the
 // keys belong to the gesture (the drag key context), so a global key's door does not run beside it and nothing
 // breaks; after the release the keys are the editor's again.
-import { expect, test } from '@playwright/test';
+import { expect, test } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
 
 test.beforeEach(async ({ page }) => {

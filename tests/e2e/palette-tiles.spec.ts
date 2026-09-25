@@ -2,7 +2,7 @@
 // of palette-click-insert (Container, Section, Heading, Paragraph) insert; a tile whose entry a later feature brings
 // is drawn disabled with "not available yet", and neither a click nor Enter or Space on it inserts anything.
 import fs from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
 import { isFeatureBuilt } from '../../src/app/features.ts';
 import type { FeatureId } from '../../src/generated/ids.ts';

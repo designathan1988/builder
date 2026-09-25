@@ -6,7 +6,7 @@
 // a property before the change). No command that changes the document is built yet, so this test proves the renderer
 // on its own.
 import fs from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
 
 // the manifest files the renderer is built from, as the runner reads them (manifest/runtime.ts loads the same JSON)
 const MANIFEST = {

@@ -17,7 +17,7 @@
 import { execFile } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
 import { shortcutRuns } from '../../src/editor/input/shortcut-rule.ts';
 import { isFeatureBuilt } from '../../src/app/features.ts';
 import { FEATURE_COMMANDS } from '../../src/generated/commands.ts';
@@ -52,7 +52,10 @@ interface Listed {
 async function annotated(): Promise<Map<string, Set<string>>> {
   const cli = path.join('node_modules', '@playwright', 'test', 'cli.js');
   const listed = await new Promise<string>((resolve, reject) =>
-    execFile(process.execPath, [cli, 'test', '--list', '--reporter=json'], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }, (error, stdout) => (error ? reject(error) : resolve(stdout))),
+    // every test of the suite, also when this run is a limited validation (its selection must not narrow the list)
+    execFile(process.execPath, [cli, 'test', '--list', '--reporter=json'], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, env: { ...process.env, E2E_SELECTION: '' } }, (error, stdout) =>
+      error ? reject(error) : resolve(stdout),
+    ),
   );
   const report = JSON.parse(listed) as { suites: Listed[] };
   const found = new Map<string, Set<string>>();
@@ -73,7 +76,7 @@ test('every feature registered as built has scenarios that can all run', () => {
   console.log(`census: ${FEATURES.filter(registered).length} features registered as built, each with scenarios that can all run`);
 });
 
-test('every working command is proven by a browser test, and no door looks usable without a command', async ({ browser }, testInfo) => {
+test('every working command is proven by a browser test, and no door looks usable without a command', async ({ browser, impact }, testInfo) => {
   // it visits every state a built door leads to, each from a fresh profile: a new browser context
   test.setTimeout(120_000);
   // Playwright's list of the suite, read while the states are visited
@@ -151,8 +154,11 @@ test('every working command is proven by a browser test, and no door looks usabl
   // one path: a fresh browser context, the path's doors run in order, then the state it reaches read
   const visit = async (path: readonly string[]) => {
     const context = await browser.newContext({ ...(baseURL !== undefined ? { baseURL } : {}), viewport: { width: 1440, height: 900 } });
+    let collectCoverage: () => Promise<void> = async () => {};
     try {
       const page = await context.newPage();
+      // what this state's page executes is part of what the census depends on (tests/support/test.ts)
+      collectCoverage = await impact.track(page);
       await page.goto('/');
       await expect(page.locator('.workbench')).toBeVisible();
       // a door drawn once per item (a Layers row, an Insert tile) is run on its first item
@@ -168,6 +174,7 @@ test('every working command is proven by a browser test, and no door looks usabl
         queue.push([...path, ref]);
       }
     } finally {
+      await collectCoverage();
       await context.close();
     }
   };

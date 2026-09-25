@@ -9,7 +9,7 @@
 // history are read through the read-only test port; the page through the frame; the saved project through the
 // runner's unzip.
 import fs from 'node:fs';
-import { expect, test, type Download, type Page } from '@playwright/test';
+import { expect, test, type Download, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
 import { unzip } from '../../tools/runner/unzip.ts';
 import { control, runDoor, runs } from './door.ts';

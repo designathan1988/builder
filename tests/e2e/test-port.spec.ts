@@ -2,7 +2,7 @@
 // and exposes nothing that writes. Its members are exactly those four readers, it is frozen and cannot be replaced, a
 // read is a copy (changing it changes nothing), and calling every member with arguments leaves the editor as it was.
 import fs from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
 import { openMenu, runs } from './door.ts';
 

@@ -6,7 +6,7 @@
 // The document, the selection and the history are read through the read-only test port; the drawing is measured
 // against the elements' boxes inside the frame, mapped to the screen through its CSS zoom.
 import fs from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
 import { openMenu, runs } from './door.ts';
 

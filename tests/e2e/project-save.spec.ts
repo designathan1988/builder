@@ -3,7 +3,7 @@
 // time carries; project.json is exactly the document the test port reads. The archives are the browser's downloads,
 // read by the runner's own unzip (tools/runner/unzip.ts).
 import fs from 'node:fs';
-import { expect, test, type Download, type Page } from '@playwright/test';
+import { expect, test, type Download, type Page } from '../support/test.ts';
 import { unzip } from '../../tools/runner/unzip.ts';
 import { openMenu, runDoor, runs } from './door.ts';
 
