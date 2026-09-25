@@ -5,7 +5,7 @@
 // committed. In development and tests every committed state is deep-frozen.
 // The editor state (Ui) is opaque here: the editor's handlers own it.
 import type { CommandArgs } from '../../generated/commands.ts';
-import type { CommandId, ConstantId } from '../../generated/ids.ts';
+import type { CommandId, ConstantId, MessageId } from '../../generated/ids.ts';
 import type { Command } from '../../manifest/schema.ts';
 import { isBuilt, message, type CommandTable, type HandlerContext, type Message, type Outcome, type PredicateTable } from '../commands/registry.ts';
 import type { DocumentJson, Selection } from '../document/model.ts';
@@ -75,6 +75,8 @@ export interface StoreOptions<Ui> {
   readonly rules: ModelRules;
   readonly clock: Clock;
   readonly ids: IdGenerator;
+  // a catalogue text in the language the editor state holds (the core never reads the editor state itself)
+  readonly words: (ui: Ui, key: MessageId) => string;
   readonly initial: { readonly document: DocumentJson; readonly selection?: Selection; readonly ui: Ui };
   // deep-freeze every committed state (development and tests)
   readonly freeze: boolean;
@@ -171,7 +173,8 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
       publish(commit({ ...state, message: refusal }, id));
       return { status: 'refused', message: refusal };
     }
-    const context: HandlerContext<Ui> = { state, clock, ids, rules };
+    const ui = state.ui;
+    const context: HandlerContext<Ui> = { state, clock, ids, rules, words: (key) => options.words(ui, key) };
     const outcome: Outcome<Ui> = entry.run(context, args);
 
     if (outcome.kind === 'refused') {

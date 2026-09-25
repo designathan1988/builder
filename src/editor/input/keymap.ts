@@ -3,7 +3,7 @@
 // interactions.json names (text editing, menus, the palette, dialogs and fields inherit nothing, so they keep their
 // own keys). A bound chord's browser default is prevented, whether or not its door runs yet (DESIGN.md "Keyboard
 // model"); a door runs when shortcut-rule.ts says so (DESIGN.md "Build order").
-import type { CommandId, KeyContextId } from '../../generated/ids.ts';
+import type { CommandId, DoorId, KeyContextId } from '../../generated/ids.ts';
 import { normaliseChord } from '../../manifest/chord.ts';
 import { keyContextChain, manifest, type DoorEntry } from '../../manifest/runtime.ts';
 import type { DispatchResult } from '../../core/store/store.ts';
@@ -68,6 +68,19 @@ export function shortcutRunsNow(entry: DoorEntry): boolean {
   return shortcutRuns({ command: entry.command.id, introducedBy: entry.command.introducedBy, feature: entry.door.feature }, (command) => isBuilt(COMMANDS[command as CommandId]), FEATURE_COMMANDS);
 }
 
+// What a shortcut acts on when the focus is on a control of the same command drawn once per item (a palette tile):
+// the arguments that control stands for (its data-args, written by the door's drawing), or null when that control is
+// not available (a tile whose entry a later feature brings), so the key does nothing, as a click would. Any other
+// focus adds nothing.
+export function focusedArgs(target: EventTarget | null, command: CommandId): Readonly<Record<string, unknown>> | null {
+  const control = target instanceof Element ? target.closest('[data-door]') : null;
+  const ref = control?.getAttribute('data-door');
+  if (!control || !ref || manifest.doorByRef.get(ref as DoorId)?.command.id !== command) return {};
+  if (control.getAttribute('aria-disabled') === 'true') return null;
+  const args: unknown = JSON.parse(control.getAttribute('data-args') ?? '{}');
+  return args !== null && typeof args === 'object' ? (args as Record<string, unknown>) : {};
+}
+
 export function installKeymap(store: EditorStore, target: Window = window): () => void {
   const onKeyDown = (event: KeyboardEvent) => {
     // during a pointer gesture the keys are the gesture's (pointer.ts)
@@ -77,8 +90,10 @@ export function installKeymap(store: EditorStore, target: Window = window): () =
     // a bound chord is the editor's whether or not its door runs yet (DESIGN.md "Keyboard model")
     event.preventDefault();
     if (!shortcutRunsNow(binding)) return;
+    const own = gesture ? {} : focusedArgs(event.target, binding.command.id);
+    if (own === null) return;
     const dispatch = (gesture?.gesture.dispatch ?? store.dispatch) as (id: CommandId, args: unknown) => DispatchResult;
-    dispatch(binding.command.id, binding.door.args);
+    dispatch(binding.command.id, { ...own, ...binding.door.args });
   };
   target.addEventListener('keydown', onKeyDown);
   return () => target.removeEventListener('keydown', onKeyDown);

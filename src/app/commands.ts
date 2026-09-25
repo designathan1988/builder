@@ -14,6 +14,7 @@ import {
   walkParentCommand,
   walkPreviousSiblingCommand,
 } from '../core/selection/selection.ts';
+import { insertCommand } from '../core/structure/insert.ts';
 import { focusActivate, focusFirst, focusLast, focusNext, focusPrevious } from '../editor/focus/focus.ts';
 import { setExpanded } from '../editor/layers/tree.ts';
 import { dismiss } from '../editor/menus/overlays.ts';
@@ -138,7 +139,7 @@ export const COMMANDS = {
   'selection.selectAllInContainer': NOT_AVAILABLE_YET,
   'selection.marquee': NOT_AVAILABLE_YET,
   'contextMenu.open': NOT_AVAILABLE_YET,
-  'element.insert': NOT_AVAILABLE_YET,
+  'element.insert': insertCommand,
   'element.moveTo': NOT_AVAILABLE_YET,
   'drag.levelUp': NOT_AVAILABLE_YET,
   'drag.levelDown': NOT_AVAILABLE_YET,

@@ -3,9 +3,9 @@
 // per page, node or palette entry; a section's actions are the region's controls before its first item.
 import { useEffect, useRef, type CSSProperties, type MouseEvent } from 'react';
 import { walk, type DocNode } from '../../core/document/model.ts';
-import type { MessageId, RegionId } from '../../generated/ids.ts';
+import type { FeatureId, MessageId, RegionId } from '../../generated/ids.ts';
 import { manifest, type DoorEntry } from '../../manifest/runtime.ts';
-import { DoorControl, Icon, useDoor } from '../doors/door.tsx';
+import { DoorControl, Icon, isFeatureBuilt, useDoor } from '../doors/door.tsx';
 import { GLYPHS, doorSlots } from '../doors/placement.ts';
 import { isExpanded } from '../layers/tree.ts';
 import { useEditorState } from '../store.ts';
@@ -196,9 +196,10 @@ function Insert() {
               <span className="door__label">{t(g.labelKey as MessageId)}</span>
               <span className="palette-group__count">{g.entries.length}</span>
             </DoorControl>
-            <div className="tiles">
+            {/* the tiles are the palette's key context: Enter and Space insert the focused tile's entry */}
+            <div className="tiles" data-key-context="palette">
               {g.entries.map((e) => (
-                <DoorControl key={e.id} entry={INSERT_TILE} args={{ entry: e.id }} className="tile" label={t(e.labelKey as MessageId)}>
+                <DoorControl key={e.id} entry={INSERT_TILE} args={{ entry: e.id }} className="tile" label={t(e.labelKey as MessageId)} ready={isFeatureBuilt(e.feature as FeatureId)}>
                   <Icon name={ELEMENT_ICON.get(e.element) ?? GLYPHS.folder} />
                   <span className="tile__label">{t(e.labelKey as MessageId)}</span>
                 </DoorControl>

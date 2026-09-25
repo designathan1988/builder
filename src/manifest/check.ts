@@ -1938,7 +1938,7 @@ export function checkManifest(input: ManifestInput): CheckResult {
   for (const r of p.references.references) referencesByKind[r.kind] = (referencesByKind[r.kind] ?? 0) + 1;
   // ---- fixture, document-path, step, door-coverage, tooth-proof: every scenario can be run as written
   function checkScenarioData(): void {
-    const modelRules = rulesFromManifest(p.elements, p.properties);
+    const modelRules = rulesFromManifest(p.elements, p.properties, p.html);
     const rootLabel = p.elements.elements.find((e) => e.id === modelRules.root.type)?.labelKey ?? '';
     // fixture: every fixture file is a project document the model accepts
     const fixtureDocs = new Map<string, unknown>();

@@ -448,9 +448,10 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
     }
   } else if (d.kind === 'shortcut') {
     if (Object.keys(own).length > 0) {
+      await focusControlFor(page, ref, own);
+      // the control the key acts on lies in the door's key context (a palette tile in the palette's)
       const chain = await focusedContexts(page);
       if (d.context !== undefined && !chain.includes(d.context)) throw new Error(`step ${ref}: the focus is in ${chain[0] ?? 'nothing'}, the door waits in ${d.context}`);
-      await focusControlFor(page, ref, own);
     }
     if (d.chord === undefined) throw new Error(`shortcut ${ref} has no chord`);
     await page.keyboard.press(keys(d.chord));
@@ -512,7 +513,12 @@ export function registerScenarioTests(): void {
         test(`${feature.id} › ${s.id} › ${door}`, { tag: FEATURE_TAG(feature.id), annotation: [{ type: 'feature', description: feature.id }, ...doorsRun(s, door).map((d) => ({ type: 'door', description: d }))] }, async ({ page }) => {
           const fixture = await setUp(page, s);
           const held = { current: null as Held | null };
-          for (const step of s.steps) await runStep(page, step, step.action ? door : step.door, held);
+          // the document just before the (last) action step: a refused action leaves it as it was
+          let beforeAction: unknown = fixture;
+          for (const step of s.steps) {
+            if (step.action) beforeAction = (await port(page)).document;
+            await runStep(page, step, step.action ? door : step.door, held);
+          }
           if (held.current !== null) throw new Error(`the drag of ${held.current.door} is still held after the last step`);
           const after = await port(page);
           await expectCanvasDraws(page, 'after the steps');
@@ -563,7 +569,7 @@ export function registerScenarioTests(): void {
           for (const refusal of s.refusals) {
             const params = render?.feedback.find((f) => f.key === refusal.key)?.params ?? {};
             await expect(page.getByRole('status'), 'refusal').toHaveText(await text(page, s.setup.locale, refusal.key, params));
-            expect(matchDocument(after.document, fixture), 'refused: document unchanged').toEqual([]);
+            expect(matchDocument(after.document, beforeAction), 'refused: the refused step leaves the document unchanged').toEqual([]);
           }
 
           // undo and redo restore the document through their doors

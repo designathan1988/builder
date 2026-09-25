@@ -6,7 +6,8 @@ import { useContext, type ReactNode } from 'react';
 import { COMMANDS, PREDICATES } from '../../app/commands.ts';
 import { isBuilt, type PredicateTable } from '../../core/commands/registry.ts';
 import type { DispatchResult } from '../../core/store/store.ts';
-import type { CommandId, MessageId, PredicateId } from '../../generated/ids.ts';
+import { FEATURE_COMMANDS } from '../../generated/commands.ts';
+import type { CommandId, FeatureId, MessageId, PredicateId } from '../../generated/ids.ts';
 import type { DoorEntry } from '../../manifest/runtime.ts';
 import { chordHint } from '../input/keymap.ts';
 import type { EditorUi } from '../state.ts';
@@ -29,6 +30,12 @@ export function isDoorBuilt(entry: DoorEntry): boolean {
   return isBuilt(COMMANDS[entry.command.id]);
 }
 
+// Whether a feature is built: every command it lists is (FEATURE_COMMANDS). A control that stands for an item a later
+// feature brings (a palette entry of elements-structure) is not available yet until that feature is built.
+export function isFeatureBuilt(feature: FeatureId): boolean {
+  return FEATURE_COMMANDS[feature].every((command) => isBuilt(COMMANDS[command]));
+}
+
 export interface DoorState {
   // the accessible name and the tooltip's text
   readonly label: string;
@@ -49,13 +56,14 @@ export interface DoorState {
 // What every control of a door needs: its label, its tooltip (with the shortcut, or why it is disabled), whether its
 // command is built, whether it stands for the current state, and running it through the store. A control that
 // stands for one property, attribute or palette entry is labelled by it (the door's own label names the command
-// with placeholders: "Set {property} to {value}"), so the caller passes that label.
-export function useDoor(entry: DoorEntry, args: Readonly<Record<string, unknown>> = {}, labelled?: string): DoorState {
+// with placeholders: "Set {property} to {value}"), so the caller passes that label. A control whose item a later
+// feature brings (`ready` false: a palette entry of a feature not built yet) is not available yet either.
+export function useDoor(entry: DoorEntry, args: Readonly<Record<string, unknown>> = {}, labelled?: string, ready = true): DoorState {
   const t = useT();
   const store = useStore();
   // a door whose only effect is to open a panel the shell draws no body for is not available yet, like an unbuilt command
   const drawsBody = useContext(PanelBodies);
-  const built = isDoorBuilt(entry) && !opensEmptyPanel({ ...entry.door.args, ...args }, drawsBody);
+  const built = ready && isDoorBuilt(entry) && !opensEmptyPanel({ ...entry.door.args, ...args }, drawsBody);
   const current = useEditorState((s) => built && isCurrent(entry, s, args));
   const available = useEditorState((s) => built && ((PREDICATES as PredicateTable<EditorUi>)[entry.command.availability.predicate as PredicateId]?.test(s) ?? true));
   const label = labelled ?? t(entry.door.labelKey as MessageId);
@@ -107,11 +115,13 @@ export interface DoorControlProps {
   readonly className?: string;
   // the label of what the control stands for (a palette entry), instead of the door's own
   readonly label?: string;
+  // false while what the control stands for arrives with a feature not built yet (a palette entry's feature)
+  readonly ready?: boolean;
 }
 
 // A toolbar or panel control, drawn as its door's drawnAs says.
-export function DoorControl({ entry, args = {}, children, expanded, className, label }: DoorControlProps) {
-  const door = useDoor(entry, args, label);
+export function DoorControl({ entry, args = {}, children, expanded, className, label, ready = true }: DoorControlProps) {
+  const door = useDoor(entry, args, label, ready);
   const { door: d } = entry;
   const drawnAs = d.kind === 'toolbar' || d.kind === 'panel-control' ? d.drawnAs : 'button';
   // a toggle button says whether its state is on (the door's pressed, manifest data)

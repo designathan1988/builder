@@ -4,7 +4,7 @@ import { sequentialIds } from '../ports/ids.ts';
 import { createEmptyDocument, type DocNode, type DocumentJson } from './model.ts';
 import { rulesFromManifest, validateDocument } from './validate.ts';
 
-const rules = rulesFromManifest(manifest.elements, manifest.properties);
+const rules = rulesFromManifest(manifest.elements, manifest.properties, manifest.html);
 
 function project(children: DocNode[] = []): DocumentJson {
   const doc = createEmptyDocument(sequentialIds('p'), { page: 'Home', root: 'Page' }, rules.root);

@@ -8,6 +8,7 @@ import {
   commandsFileSchema,
   elementsFileSchema,
   environmentSchema,
+  generatedHtmlSchema,
   interactionsFileSchema,
   layoutFileSchema,
   propertiesFileSchema,
@@ -16,6 +17,7 @@ import {
   type Door,
   type ElementsFile,
   type Environment,
+  type GeneratedHtml,
   type InteractionsFile,
   type LayoutFile,
   type PropertiesFile,
@@ -23,6 +25,8 @@ import {
 
 const commandModules = import.meta.glob<unknown>('../../manifest/commands/*.json', { eager: true, import: 'default' });
 const singleModules = import.meta.glob<unknown>('../../manifest/{checks,elements,environment,interactions,layout,properties}.json', { eager: true, import: 'default' });
+// the HTML content model, generated from the HTML data (npm run gen)
+const htmlModules = import.meta.glob<unknown>('../../manifest/generated/html-elements.json', { eager: true, import: 'default' });
 
 function single(name: string): unknown {
   const found = singleModules[`../../manifest/${name}.json`];
@@ -43,6 +47,7 @@ export interface Manifest {
   readonly interactions: InteractionsFile;
   readonly layout: LayoutFile;
   readonly checks: ChecksFile;
+  readonly html: GeneratedHtml;
   // every command, in the order of the command files (sorted by file name) and of each file
   readonly commands: readonly (Command & { readonly id: CommandId })[];
   readonly commandById: ReadonlyMap<CommandId, Command & { readonly id: CommandId }>;
@@ -63,6 +68,7 @@ function load(): Manifest {
     interactions: interactionsFileSchema.parse(single('interactions')),
     layout: layoutFileSchema.parse(single('layout')),
     checks: checksFileSchema.parse(single('checks')),
+    html: generatedHtmlSchema.parse(htmlModules['../../manifest/generated/html-elements.json']),
     commands,
     commandById: new Map(commands.map((c) => [c.id, c])),
     doors,

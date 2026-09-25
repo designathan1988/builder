@@ -28,7 +28,7 @@ export function createEditorStore(options: EditorStoreOptions = {}): EditorStore
   const storage = options.storage ?? browserStorage;
   const ids = options.ids ?? randomIds;
   const preferences = loadPreferences(storage);
-  const rules = rulesFromManifest(manifest.elements, manifest.properties);
+  const rules = rulesFromManifest(manifest.elements, manifest.properties, manifest.html);
   const rootLabel = manifest.elements.elements.find((e) => e.id === rules.root.type)?.labelKey ?? 'element.page.label';
   // the empty project's names are the words of the person who creates it
   const document = createEmptyDocument(ids, { page: translate(preferences.locale, 'pages.defaultHome'), root: translate(preferences.locale, rootLabel as 'element.page.label') }, rules.root);
@@ -40,6 +40,7 @@ export function createEditorStore(options: EditorStoreOptions = {}): EditorStore
     rules,
     clock: options.clock ?? systemClock,
     ids,
+    words: (ui, key) => translate(ui.preferences.locale, key),
     initial: { document, ui: initialEditorUi(preferences) },
     freeze: import.meta.env.DEV,
     followSelection: revealSelection,

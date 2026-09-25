@@ -1,7 +1,8 @@
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
 import { COMMANDS, PREDICATES } from '../../app/commands.ts';
-import type { CommandId, ConstantId } from '../../generated/ids.ts';
+import type { CommandId, ConstantId, MessageId } from '../../generated/ids.ts';
+import { translate } from '../../i18n/index.ts';
 import { manifest } from '../../manifest/runtime.ts';
 import { NOT_AVAILABLE_YET, isBuilt, message, registerHandler, registerPredicate, type CommandTable, type PredicateTable } from '../commands/registry.ts';
 import { createEmptyDocument, locate, type DocNode, type DocumentJson, type Selection } from '../document/model.ts';
@@ -78,9 +79,10 @@ const TEST_PREDICATES = {
   positionedSelection: registerPredicate('positionedSelection', (state) => state.selection.length > 0),
 } satisfies PredicateTable<EditorUi>;
 
-const RULES = rulesFromManifest(manifest.elements, manifest.properties);
+const RULES = rulesFromManifest(manifest.elements, manifest.properties, manifest.html);
 const MANIFEST_COMMANDS = new Map(manifest.commands.map((c) => [c.id as CommandId, c]));
 const CONSTANTS = new Map(manifest.interactions.constants.map((c) => [c.id as ConstantId, c.value]));
+const WORDS = (ui: EditorUi, key: MessageId) => translate(ui.preferences.locale, key);
 
 interface TestStore {
   readonly store: Store<EditorUi>;
@@ -105,6 +107,7 @@ function testStore(table: CommandTable<EditorUi> = TEST_COMMANDS, predicates: Pr
     rules: RULES,
     clock,
     ids,
+    words: WORDS,
     initial: { document, ui: initialEditorUi(INITIAL_PREFERENCES) },
     freeze: true,
   });
@@ -339,6 +342,7 @@ describe('the store', () => {
         rules: RULES,
         clock: manualClock(),
         ids,
+        words: WORDS,
         initial: { document: emptyDocument(ids), ui: initialEditorUi(INITIAL_PREFERENCES) },
         freeze: true,
       }),

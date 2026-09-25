@@ -44,8 +44,11 @@ export interface HandlerContext<Ui> {
   readonly state: StoreState<Ui>;
   readonly clock: Clock;
   readonly ids: IdGenerator;
-  // the model a document must satisfy (validate.ts), for a handler that reads a whole document (File › Open)
+  // the model a document must satisfy (validate.ts), for a handler that reads a whole document (File › Open) or
+  // creates an element (element.insert)
   readonly rules: ModelRules;
+  // a catalogue text in the language the person reads the editor in: the words a new node is named and filled with
+  words(key: MessageId): string;
 }
 
 export interface RegisteredHandler<Id extends CommandId, Ui> {
