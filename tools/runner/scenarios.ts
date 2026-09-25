@@ -558,8 +558,11 @@ export function registerScenarioTests(): void {
             }
           }
 
+          // a refusal names its key; the words it fills in ("No next sibling in {parent}.") are those of the feedback
+          // of the same key
           for (const refusal of s.refusals) {
-            await expect(page.getByRole('status'), 'refusal').toHaveText(await text(page, s.setup.locale, refusal.key, {}));
+            const params = render?.feedback.find((f) => f.key === refusal.key)?.params ?? {};
+            await expect(page.getByRole('status'), 'refusal').toHaveText(await text(page, s.setup.locale, refusal.key, params));
             expect(matchDocument(after.document, fixture), 'refused: document unchanged').toEqual([]);
           }
 

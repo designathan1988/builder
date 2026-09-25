@@ -14,7 +14,9 @@ log path, is `docs/history.md` (not read at the start of a conversation).
 - Now: group 02 brief (user, 2026-09-25): a coordinator opens up to 3 helpers at once, each in a git worktree
   `.cache/wt/<feature>` (branch feature/<feature>, node_modules junction, own E2E_PORT/TOOTH_PORT), and integrates
   one at a time after verify:fast, e2e with the census, e2e:tooth and the status. Done: findings 16 and 17.
-- Group 02 passing: select-click (runner paths "setup selection" and "canvas click" proven), layers-tree.
+- Group 02 passing: select-click (runner paths "setup selection" and "canvas click" proven), layers-tree,
+  keyboard-tree-walk (with the editor-only 40 px minimum height of an empty container, canvas.emptyContainerMinHeight,
+  that its setup needs; the runner's refusal check takes the message's names from the scenario's expected message).
 - Decisions (small ambiguity): the brief's order wins over select-click's dependsOn; the tooth switch also holds the
   feature's predicates true (a refusal made by a predicate goes with its feature); a drawn door follows its command
   (selection.select#layers-row, selection.clear#menu-edit work, each tested); selecting inside a folded branch
@@ -54,3 +56,5 @@ log path, is `docs/history.md` (not read at the start of a conversation).
 20. Layers' folded branches are not cleared when File › Open loads another project (a same-id node starts folded).
 21. coordinates.spec.ts:181 takes 18–20 s in the full e2e (4.9 s alone), near the 30 s limit; it timed out once
     while helpers ran Chrome (.cache/logs/e2e-layers-tree-012944.log); the rerun passed.
+22. keyboard-tree-walk spec: walking to an off-screen element scrolls it into view; no scenario, not built; the
+    frame's scroll needs an owner (frame-owner rule). Walking at the page root is refused naming the page.

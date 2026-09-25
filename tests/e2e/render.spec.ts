@@ -63,9 +63,9 @@ async function mount(page: Page): Promise<void> {
     async ({ doc, patches }) => {
       const render = (await import(/* @vite-ignore */ '/src/core/render/render.ts' as string)) as {
         PageRenderer: new (target: Document, model: unknown) => { mount(d: unknown): void; apply(b: unknown, a: unknown, p: unknown): void };
-        renderModelFromManifest(elements: unknown, properties: unknown): unknown;
+        renderModelFromManifest(elements: unknown, properties: unknown, interactions: unknown): unknown;
       };
-      const runtime = (await import(/* @vite-ignore */ '/src/manifest/runtime.ts' as string)) as { manifest: { elements: unknown; properties: unknown } };
+      const runtime = (await import(/* @vite-ignore */ '/src/manifest/runtime.ts' as string)) as { manifest: { elements: unknown; properties: unknown; interactions: unknown } };
       const history = (await import(/* @vite-ignore */ '/src/core/history/transaction.ts' as string)) as { applyPatches(d: unknown, p: unknown): { document: unknown } };
       const frame = document.createElement('iframe');
       frame.id = 'render-proof';
@@ -77,7 +77,7 @@ async function mount(page: Page): Promise<void> {
       await loaded;
       const target = frame.contentDocument;
       if (!target) throw new Error('the frame has no document');
-      const renderer = new render.PageRenderer(target, render.renderModelFromManifest(runtime.manifest.elements, runtime.manifest.properties));
+      const renderer = new render.PageRenderer(target, render.renderModelFromManifest(runtime.manifest.elements, runtime.manifest.properties, runtime.manifest.interactions));
       renderer.mount(doc);
       const after = history.applyPatches(doc, patches).document;
       (window as ProofWindow).renderProof = { frame, apply: () => renderer.apply(doc, after, patches) };

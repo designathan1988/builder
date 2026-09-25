@@ -5,7 +5,15 @@
 import { NOT_AVAILABLE_YET, always, type CommandTable, type PredicateTable } from '../core/commands/registry.ts';
 import { canRedo, canUndo, redoCommand, undoCommand } from '../core/history/history.ts';
 import { openProject } from '../core/project/archive.ts';
-import { clearSelectionCommand, hasSelection, selectCommand } from '../core/selection/selection.ts';
+import {
+  clearSelectionCommand,
+  hasSelection,
+  selectCommand,
+  walkFirstChildCommand,
+  walkNextSiblingCommand,
+  walkParentCommand,
+  walkPreviousSiblingCommand,
+} from '../core/selection/selection.ts';
 import { focusActivate, focusFirst, focusLast, focusNext, focusPrevious } from '../editor/focus/focus.ts';
 import { setExpanded } from '../editor/layers/tree.ts';
 import { dismiss } from '../editor/menus/overlays.ts';
@@ -123,10 +131,10 @@ export const COMMANDS = {
   'selection.clear': clearSelectionCommand,
   'selection.add': NOT_AVAILABLE_YET,
   'selection.toggle': NOT_AVAILABLE_YET,
-  'selection.walkNextSibling': NOT_AVAILABLE_YET,
-  'selection.walkPreviousSibling': NOT_AVAILABLE_YET,
-  'selection.walkParent': NOT_AVAILABLE_YET,
-  'selection.walkFirstChild': NOT_AVAILABLE_YET,
+  'selection.walkNextSibling': walkNextSiblingCommand,
+  'selection.walkPreviousSibling': walkPreviousSiblingCommand,
+  'selection.walkParent': walkParentCommand,
+  'selection.walkFirstChild': walkFirstChildCommand,
   'selection.selectAllInContainer': NOT_AVAILABLE_YET,
   'selection.marquee': NOT_AVAILABLE_YET,
   'contextMenu.open': NOT_AVAILABLE_YET,

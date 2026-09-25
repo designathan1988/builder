@@ -13,8 +13,13 @@
 // recipe's stored value is written as the recipe's declarations. A markup element (embed) renders empty until its
 // feature sanitizes the markup. The renderer adds no event handler to the page and writes no event attribute: the
 // page only renders, and every pointer input arrives on the canvas overlay.
+//
+// Editor-only, never in the document nor in an export: every element of a container below the page root carries
+// data-container, and one style element of the editor (data-editor-style), first in the head, gives an empty one the
+// minimum height of the manifest's constant canvas.emptyContainerMinHeight, so it can be seen and pointed at. Its
+// selector weighs nothing (:where), so any min-height the node's own styles set wins.
 import type { NodeId } from '../../generated/commands.ts';
-import type { ElementsFile, PropertiesFile } from '../../manifest/schema.ts';
+import type { ElementsFile, InteractionsFile, PropertiesFile } from '../../manifest/schema.ts';
 import { walk, type DocNode, type DocumentJson } from '../document/model.ts';
 import { applyPatches, deepEqual, type Patch } from '../history/transaction.ts';
 
@@ -24,6 +29,9 @@ const TEXT_NODE = 3;
 export const NODE_ATTRIBUTE = 'data-node';
 // a node's style element in the head: its own attribute, so [data-node] finds only elements of the page
 export const NODE_STYLE_ATTRIBUTE = 'data-node-style';
+// the editor-only marks: an element of a container, and the editor's own style element
+export const CONTAINER_ATTRIBUTE = 'data-container';
+export const EDITOR_STYLE_ATTRIBUTE = 'data-editor-style';
 
 export interface RenderModel {
   readonly elements: ReadonlyMap<string, { readonly namespace: 'html' | 'svg'; readonly content: 'children' | 'text' | 'markup' | 'none' }>;
@@ -35,16 +43,26 @@ export interface RenderModel {
   readonly states: ReadonlyMap<string, string | null>;
   // recipe id → its declarations; a null value is the stored value
   readonly recipes: ReadonlyMap<string, readonly { readonly property: string; readonly value: string | null }[]>;
+  // the editor-only minimum height of an empty container, in CSS px (canvas.emptyContainerMinHeight)
+  readonly emptyContainerMinHeight: number;
 }
 
-export function renderModelFromManifest(elements: ElementsFile, properties: PropertiesFile): RenderModel {
+export function renderModelFromManifest(elements: ElementsFile, properties: PropertiesFile, interactions: InteractionsFile): RenderModel {
+  const minHeight = interactions.constants.find((c) => c.id === 'canvas.emptyContainerMinHeight')?.value;
+  if (typeof minHeight !== 'number') throw new Error('the manifest has no number canvas.emptyContainerMinHeight');
   return {
     elements: new Map(elements.elements.map((e) => [e.id, { namespace: e.namespace, content: e.content }])),
     attributes: new Map(elements.attributes.map((a) => [a.id, a.html])),
     breakpoints: properties.breakpoints.map((b) => ({ id: b.id, width: b.width, base: b.base })),
     states: new Map(properties.states.map((s) => [s.id, s.pseudo])),
     recipes: new Map(properties.recipes.map((r) => [r.id, r.declarations])),
+    emptyContainerMinHeight: minHeight,
   };
+}
+
+// The editor's own CSS in the page: an empty container keeps a visible minimum height.
+export function editorCss(model: RenderModel): string {
+  return `:where([${CONTAINER_ATTRIBUTE}]:empty) { min-height: ${model.emptyContainerMinHeight}px; }`;
 }
 
 // The selector of a node's element: its id quoted as a CSS string.
@@ -148,9 +166,14 @@ export class PageRenderer {
   // Builds the whole page: once, and when the rendered page itself is replaced.
   mount(doc: DocumentJson): void {
     // the style elements of every node, also those a previous renderer of this document left
-    for (const sheet of [...this.target.head.querySelectorAll(`style[${NODE_STYLE_ATTRIBUTE}]`)]) sheet.remove();
+    for (const sheet of [...this.target.head.querySelectorAll(`style[${NODE_STYLE_ATTRIBUTE}], style[${EDITOR_STYLE_ATTRIBUTE}]`)]) sheet.remove();
     this.sheets.clear();
     this.elements.clear();
+    // the editor's style element, first, so every node's rules come after it
+    const editor = this.target.createElement('style');
+    editor.setAttribute(EDITOR_STYLE_ATTRIBUTE, '');
+    editor.textContent = editorCss(this.model);
+    this.target.head.prepend(editor);
     const body = this.target.body;
     body.replaceChildren();
     const tree = doc.pages[this.page]?.tree ?? null;
@@ -228,6 +251,8 @@ export class PageRenderer {
   // The node's own attributes, classes and text on its element, writing only what differs.
   private dress(element: Element, node: DocNode): void {
     const wanted = new Map<string, string>([[NODE_ATTRIBUTE, node.id]]);
+    // a container below the page root (editor-only: see the top of this file)
+    if (element !== this.target.body && this.model.elements.get(node.type)?.content === 'children') wanted.set(CONTAINER_ATTRIBUTE, '');
     if (node.classes.length > 0) wanted.set('class', node.classes.join(' '));
     for (const [id, value] of Object.entries(node.attributes)) {
       const name = this.model.attributes.get(id);

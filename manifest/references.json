@@ -543,22 +543,22 @@
     {
       "kind": "handler",
       "id": "selection.walkNextSibling",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",
       "id": "selection.walkPreviousSibling",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",
       "id": "selection.walkParent",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",
       "id": "selection.walkFirstChild",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",

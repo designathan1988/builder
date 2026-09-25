@@ -9,7 +9,7 @@ import type { DocNode, DocumentJson } from '../document/model.ts';
 import { applyPatches, type Patch } from '../history/transaction.ts';
 import { NODE_ATTRIBUTE, NODE_STYLE_ATTRIBUTE, PageRenderer, nodeCss, renderModelFromManifest, type RenderModel } from './render.ts';
 
-const model = renderModelFromManifest(manifest.elements, manifest.properties);
+const model = renderModelFromManifest(manifest.elements, manifest.properties, manifest.interactions);
 const node = (id: string, type: string, tag: string | null, fields: Partial<DocNode> = {}): DocNode => ({ id: id as NodeId, type: type as DocNode['type'], name: id, tag, attributes: {}, classes: [], styles: {}, text: null, children: [], ...fields });
 const attributes = (a: Record<string, string | number | boolean>) => a as DocNode['attributes'];
 const styles = (s: Record<string, Record<string, Record<string, string>>>) => s as DocNode['styles'];

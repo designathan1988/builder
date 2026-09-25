@@ -10,7 +10,7 @@ import { useStore } from '../store.ts';
 import { CanvasChrome } from './chrome.tsx';
 import { registerFrame } from './coordinates.ts';
 
-const MODEL = renderModelFromManifest(manifest.elements, manifest.properties);
+const MODEL = renderModelFromManifest(manifest.elements, manifest.properties, manifest.interactions);
 // an empty page the renderer fills: no script, no style of the editor
 const PAGE = '<!doctype html><html><head><meta charset="utf-8"></head><body></body></html>';
 
