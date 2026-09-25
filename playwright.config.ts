@@ -18,6 +18,9 @@ export default defineConfig({
   // Never discover tests in the reference projects, the Pager copy or the browser tool's scratch files.
   testIgnore: [under('reference'), under('.cache'), under('.playwright-mcp')],
   fullyParallel: true,
+  // at most 3 browsers per run: the default (half the cores, 12 here) with helpers running in parallel froze the
+  // machine; the test Chrome already draws on the GPU (ANGLE D3D11), the load was the number of browsers
+  workers: 3,
   forbidOnly: !!process.env.CI,
   retries: 0,
   // the list of results, then each feature's status derived from its scenario tests (tools/runner/status.ts)
