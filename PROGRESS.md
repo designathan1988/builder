@@ -12,11 +12,8 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 - Group 02 passing: select-click, layers-tree, keyboard-tree-walk, palette-click-insert, undo-redo,
   multi-select-click, marquee-select, delete-element, move-up-down, wrap-row-column, drag-reorder-canvas,
   drag-drop-inside, context-menu, duplicate, text-edit-inline, palette-drag-insert, unwrap, nest-into-previous,
-  promote-out, hide-element. Runner paths proven off: setup selection, canvas click, Tab, modifier click, drag press, marquee,
-  no free gap, tile drag, held drag, export.
-- To integrate: feature/drag-level-keys-escape (its drag.cancel now on main too), feature/hand-keyboard-move.
-- User's conditions: a runner path with no test of its own (drag, held drag, dwell, typing) is proven by its first
-  feature switching it off; finding 11's parts are fixed before the feature that needs each (named there).
+  promote-out, hide-element. To integrate: feature/hand-keyboard-move. Conditions: a runner path is proven by its
+  first feature switching it off; finding 11's parts are fixed before the feature that needs each.
 
 ## Pending decisions of the user
 
@@ -26,6 +23,10 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
   root of the empty project, whose ids are generated at start, but an opened file brings its own (p-home, n-page),
   and the runner compares those ids. Proposal: the diff names the opened ids (a page-level path, finding 1), or the
   runner compares the page's and the root's ids only when the action does not replace the document.
+- Contested scenario drag-level-keys-escape › arrow-up-at-the-top-level-is-refused: its first drop "after Plans" can
+  never be the first drawn (Plans' bottom edge is its list's and last item's; the innermost wins, a drag-reorder-canvas
+  decision), so ArrowUp climbs instead of being refused. Proposal: its first step drops "before Footer" (same parent
+  and index, same expectations). Code on branch feature/drag-level-keys-escape (3 of 4 scenarios pass).
 
 ## Open findings
 
@@ -37,9 +38,8 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 12. Under load, e2e timed out a few times ('stable' File menu button, coordinates.spec.ts:181); reruns passed. 13.
     Insert's density labels overflow and overlap ("Two columns": 69 px text in a 50 px button). 14. sidebar.tsx
     writes the argument name "target" (the manifest's adapter.selection) and builds data-args apart.
-15. shell.tsx keeps the fit zoom in useState; it moves to the store with the zoom commands.
-18. A menu item run with Enter or a click (focus.activate) closes the menu through onDone, not a dismissal, so the
-    focus still falls to the page body; the backdrop's focus return (ui.dismiss#overlay-backdrop) has no test.
+15. shell.tsx keeps the fit zoom in useState (moves with the zoom commands). 18. A menu item run with Enter or a
+    click closes the menu through onDone, so the focus falls to the page body; the backdrop's focus return is untested.
 19. Canvas chrome not built yet: label hidden under the pointer, size chip, quick panel, label as a hit target;
     `selection.select` throws on a node the document lacks. 20. Layers' folds survive File › Open of another project.
 22. Not built, no scenario: walking or inserting onto an off-screen element does not scroll it into view (the
