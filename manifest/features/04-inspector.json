@@ -483,8 +483,10 @@
         "style.setSpacing",
         "inspector.toggleSpacingLink"
       ],
-      "dependsOn": [],
-      "spec": null,
+      "dependsOn": [
+        "inspector-number-fields"
+      ],
+      "spec": "spec/behavior/props-spacing.md",
       "intent": {
         "title": "Margin and padding with the box model editor",
         "steps": [
@@ -501,7 +503,1303 @@
           "Computed margin and padding in the iframe match the document JSON."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "the-padding-top-field-writes-its-own-longhand",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "style.setSpacing#inspector-padding-top-box-model",
+              "args": {
+                "box": "padding",
+                "sides": "top",
+                "value": "32px"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "32\n"
+            }
+          ],
+          "doors": [
+            "style.setSpacing#inspector-padding-top-box-model"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/padding-top",
+                "value": "32px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero",
+                  "property": "padding-top",
+                  "value": "32px"
+                },
+                {
+                  "node": "/Page/Hero",
+                  "property": "padding-bottom",
+                  "value": "56px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.spacing.set",
+                  "params": {
+                    "property": "Padding top",
+                    "name": "Hero",
+                    "value": "32px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-padding-right-field-writes-its-own-longhand",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "style.setSpacing#inspector-padding-right-box-model",
+              "args": {
+                "box": "padding",
+                "sides": "right",
+                "value": "32px"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "32\n"
+            }
+          ],
+          "doors": [
+            "style.setSpacing#inspector-padding-right-box-model"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/padding-right",
+                "value": "32px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero",
+                  "property": "padding-right",
+                  "value": "32px"
+                },
+                {
+                  "node": "/Page/Hero",
+                  "property": "padding-left",
+                  "value": "40px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.spacing.set",
+                  "params": {
+                    "property": "Padding right",
+                    "name": "Hero",
+                    "value": "32px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-padding-bottom-field-writes-its-own-longhand",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "style.setSpacing#inspector-padding-bottom-box-model",
+              "args": {
+                "box": "padding",
+                "sides": "bottom",
+                "value": "32px"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "32\n"
+            }
+          ],
+          "doors": [
+            "style.setSpacing#inspector-padding-bottom-box-model"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/padding-bottom",
+                "value": "32px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero",
+                  "property": "padding-bottom",
+                  "value": "32px"
+                },
+                {
+                  "node": "/Page/Hero",
+                  "property": "padding-top",
+                  "value": "56px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.spacing.set",
+                  "params": {
+                    "property": "Padding bottom",
+                    "name": "Hero",
+                    "value": "32px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-padding-left-field-writes-its-own-longhand",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "style.setSpacing#inspector-padding-left-box-model",
+              "args": {
+                "box": "padding",
+                "sides": "left",
+                "value": "32px"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "32\n"
+            }
+          ],
+          "doors": [
+            "style.setSpacing#inspector-padding-left-box-model"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/padding-left",
+                "value": "32px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero",
+                  "property": "padding-left",
+                  "value": "32px"
+                },
+                {
+                  "node": "/Page/Hero",
+                  "property": "padding-right",
+                  "value": "40px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.spacing.set",
+                  "params": {
+                    "property": "Padding left",
+                    "name": "Hero",
+                    "value": "32px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-margin-top-field-writes-its-own-longhand",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "style.setSpacing#inspector-margin-top-box-model",
+              "args": {
+                "box": "margin",
+                "sides": "top",
+                "value": "24px"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "24\n"
+            }
+          ],
+          "doors": [
+            "style.setSpacing#inspector-margin-top-box-model"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/margin-top",
+                "value": "24px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero",
+                  "property": "margin-top",
+                  "value": "24px"
+                },
+                {
+                  "node": "/Page/Hero",
+                  "property": "margin-bottom",
+                  "value": "0px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.spacing.set",
+                  "params": {
+                    "property": "Margin top",
+                    "name": "Hero",
+                    "value": "24px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-margin-right-field-writes-its-own-longhand",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "style.setSpacing#inspector-margin-right-box-model",
+              "args": {
+                "box": "margin",
+                "sides": "right",
+                "value": "24px"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "24\n"
+            }
+          ],
+          "doors": [
+            "style.setSpacing#inspector-margin-right-box-model"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/margin-right",
+                "value": "24px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero",
+                  "property": "margin-right",
+                  "value": "24px"
+                },
+                {
+                  "node": "/Page/Hero",
+                  "property": "margin-left",
+                  "value": "0px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.spacing.set",
+                  "params": {
+                    "property": "Margin right",
+                    "name": "Hero",
+                    "value": "24px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-margin-bottom-field-writes-its-own-longhand",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "style.setSpacing#inspector-margin-bottom-box-model",
+              "args": {
+                "box": "margin",
+                "sides": "bottom",
+                "value": "24px"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "24\n"
+            }
+          ],
+          "doors": [
+            "style.setSpacing#inspector-margin-bottom-box-model"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/margin-bottom",
+                "value": "24px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero",
+                  "property": "margin-bottom",
+                  "value": "24px"
+                },
+                {
+                  "node": "/Page/Hero",
+                  "property": "margin-top",
+                  "value": "0px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.spacing.set",
+                  "params": {
+                    "property": "Margin bottom",
+                    "name": "Hero",
+                    "value": "24px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-margin-left-field-writes-its-own-longhand",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "style.setSpacing#inspector-margin-left-box-model",
+              "args": {
+                "box": "margin",
+                "sides": "left",
+                "value": "24px"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "24\n"
+            }
+          ],
+          "doors": [
+            "style.setSpacing#inspector-margin-left-box-model"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/margin-left",
+                "value": "24px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero",
+                  "property": "margin-left",
+                  "value": "24px"
+                },
+                {
+                  "node": "/Page/Hero",
+                  "property": "margin-right",
+                  "value": "0px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.spacing.set",
+                  "params": {
+                    "property": "Margin left",
+                    "name": "Hero",
+                    "value": "24px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-linked-padding-writes-the-four-sides-in-one-undo-step",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "inspector.toggleSpacingLink#inspector-spacing-link",
+              "args": {
+                "box": "padding"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.setSpacing#inspector-padding-box-model",
+              "args": {
+                "box": "padding",
+                "sides": "all",
+                "value": "32px"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "32\n"
+            }
+          ],
+          "doors": [
+            "style.setSpacing#inspector-padding-box-model"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/padding-top",
+                "value": "32px"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/padding-right",
+                "value": "32px"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/padding-bottom",
+                "value": "32px"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/padding-left",
+                "value": "32px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero",
+                  "property": "padding-top",
+                  "value": "32px"
+                },
+                {
+                  "node": "/Page/Hero",
+                  "property": "padding-right",
+                  "value": "32px"
+                },
+                {
+                  "node": "/Page/Hero",
+                  "property": "padding-bottom",
+                  "value": "32px"
+                },
+                {
+                  "node": "/Page/Hero",
+                  "property": "padding-left",
+                  "value": "32px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.spacing.set",
+                  "params": {
+                    "property": "Padding",
+                    "name": "Hero",
+                    "value": "32px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-linked-margin-writes-the-four-sides-in-one-undo-step",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "inspector.toggleSpacingLink#inspector-spacing-link",
+              "args": {
+                "box": "margin"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.setSpacing#inspector-margin-box-model",
+              "args": {
+                "box": "margin",
+                "sides": "all",
+                "value": "16px"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "16\n"
+            }
+          ],
+          "doors": [
+            "style.setSpacing#inspector-margin-box-model"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/margin-top",
+                "value": "16px"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/margin-right",
+                "value": "16px"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/margin-bottom",
+                "value": "16px"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/margin-left",
+                "value": "16px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero",
+                  "property": "margin-top",
+                  "value": "16px"
+                },
+                {
+                  "node": "/Page/Hero",
+                  "property": "margin-right",
+                  "value": "16px"
+                },
+                {
+                  "node": "/Page/Hero",
+                  "property": "margin-bottom",
+                  "value": "16px"
+                },
+                {
+                  "node": "/Page/Hero",
+                  "property": "margin-left",
+                  "value": "16px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.spacing.set",
+                  "params": {
+                    "property": "Margin",
+                    "name": "Hero",
+                    "value": "16px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-link-changes-how-the-box-is-edited-and-writes-nothing",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "inspector.toggleSpacingLink#inspector-spacing-link",
+              "args": {
+                "box": "padding"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "inspector.toggleSpacingLink#inspector-spacing-link"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero",
+                  "property": "padding-left",
+                  "value": "40px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.spacing.linked",
+                  "params": {
+                    "box": "Padding"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-negative-margin-is-accepted",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "style.setSpacing#inspector-margin-left-box-model",
+              "args": {
+                "box": "margin",
+                "sides": "left",
+                "value": "-16px"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "-16\n"
+            }
+          ],
+          "doors": [
+            "style.setSpacing#inspector-margin-left-box-model"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/margin-left",
+                "value": "-16px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero",
+                  "property": "margin-left",
+                  "value": "-16px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.spacing.set",
+                  "params": {
+                    "property": "Margin left",
+                    "name": "Hero",
+                    "value": "-16px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-typed-unit-is-kept",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "style.setSpacing#inspector-padding-top-box-model",
+              "args": {
+                "box": "padding",
+                "sides": "top",
+                "value": "2rem"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "2rem\n"
+            }
+          ],
+          "doors": [
+            "style.setSpacing#inspector-padding-top-box-model"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/padding-top",
+                "value": "2rem"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero",
+                  "property": "padding-top",
+                  "value": "32px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.spacing.set",
+                  "params": {
+                    "property": "Padding top",
+                    "name": "Hero",
+                    "value": "2rem"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-negative-padding-is-refused",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "style.setSpacing#inspector-padding-left-box-model",
+              "args": {
+                "box": "padding",
+                "sides": "left",
+                "value": "-8px"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "-8\n"
+            }
+          ],
+          "doors": [
+            "style.setSpacing#inspector-padding-left-box-model"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.value.negativePadding",
+                  "params": {}
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": [
+            {
+              "key": "status.value.negativePadding",
+              "document": "unchanged"
+            }
+          ]
+        },
+        {
+          "id": "text-that-is-not-a-length-is-refused",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "style.setSpacing#inspector-padding-top-box-model",
+              "args": {
+                "box": "padding",
+                "sides": "top",
+                "value": "abc"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "abc\n"
+            }
+          ],
+          "doors": [
+            "style.setSpacing#inspector-padding-top-box-model"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.value.invalid",
+                  "params": {
+                    "property": "Padding top",
+                    "value": "abc"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": [
+            {
+              "key": "status.value.invalid",
+              "document": "unchanged"
+            }
+          ]
+        },
+        {
+          "id": "a-locked-element-keeps-its-spacing",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "element.toggleLock#layers-row-lock",
+              "args": {
+                "target": "/Page/Hero"
+              },
+              "target": "/Page/Hero",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.setSpacing#inspector-padding-top-box-model",
+              "args": {
+                "box": "padding",
+                "sides": "top",
+                "value": "32px"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "32\n"
+            }
+          ],
+          "doors": [
+            "style.setSpacing#inspector-padding-top-box-model"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@locked",
+                "value": true
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.locked.edit",
+                  "params": {
+                    "name": "Hero"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": [
+            {
+              "key": "status.locked.edit",
+              "document": "unchanged"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "props-size-overflow",
