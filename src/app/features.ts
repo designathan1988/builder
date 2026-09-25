@@ -96,8 +96,8 @@ export const FEATURES = {
   'export-bem-css': NOT_AVAILABLE_YET,
   // 07 elements
   'elements-structure': registerFeature('elements-structure'),
-  'elements-text': NOT_AVAILABLE_YET,
-  'elements-lists': NOT_AVAILABLE_YET,
+  'elements-text': registerFeature('elements-text'),
+  'elements-lists': registerFeature('elements-lists'),
   'nesting-grammar': NOT_AVAILABLE_YET,
   'nesting-grammar-structure': NOT_AVAILABLE_YET,
   'elements-tables': NOT_AVAILABLE_YET,

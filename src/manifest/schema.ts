@@ -66,7 +66,9 @@ export const elementSchema = z.strictObject({
   palette: z.boolean(),
   // how the editor edits what is inside: element children, rich text, verbatim markup, or nothing
   content: z.enum(['children', 'text', 'markup', 'none']),
-  naturalChild: camelId.nullable(),
+  // what a new element is created holding, so it is never empty: one element type, or several in order (a definition
+  // list's term and description)
+  naturalChild: z.union([camelId, z.array(camelId).min(1)]).nullable(),
   // longhand property → value
   defaultStyles: z.record(cssName, z.string()),
   defaultTextKey: i18nKey.nullable(),

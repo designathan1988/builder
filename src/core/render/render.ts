@@ -489,6 +489,12 @@ export class PageRenderer {
       const name = this.model.attributes.get(id);
       // never an event attribute: the page has no handler of its own
       if (name === null || name === undefined || name.startsWith('on') || value === false) continue;
+      // a link opened in a new tab (newTab, written target): a new browsing context that cannot reach the page back
+      if (name === 'target' && value === true) {
+        wanted.set('target', '_blank');
+        wanted.set('rel', 'noopener noreferrer');
+        continue;
+      }
       (root && isPageSetting(this.model.appliesTo.get(id), node.type) ? page : wanted).set(name, value === true ? '' : String(value));
     }
     writeAttributes(element, wanted);

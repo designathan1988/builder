@@ -19,6 +19,9 @@ export interface ElementRules {
   readonly labelKey: MessageId;
   readonly defaultStyles: Readonly<Record<string, string>>;
   readonly defaultTextKey: MessageId | null;
+  // the elements a new one is created holding, in order, so it is never empty (a blockquote's paragraph, a list's item,
+  // a definition list's term and description); empty for none
+  readonly naturalChildren: readonly string[];
 }
 
 // What an attribute's value is (elements.json): its value type, the keywords a keyword attribute takes one of, its
@@ -62,7 +65,7 @@ export function rulesFromManifest(elements: ElementsFile, properties: Properties
     elements: new Map(
       elements.elements.map((e) => [
         e.id,
-        { tags: [e.tag, ...e.alternativeTags], content: e.content, labelKey: e.labelKey as MessageId, defaultStyles: e.defaultStyles, defaultTextKey: e.defaultTextKey as MessageId | null },
+        { tags: [e.tag, ...e.alternativeTags], content: e.content, labelKey: e.labelKey as MessageId, defaultStyles: e.defaultStyles, defaultTextKey: e.defaultTextKey as MessageId | null, naturalChildren: [e.naturalChild ?? []].flat() },
       ]),
     ),
     attributes: new Map(elements.attributes.map((a) => [a.id, a.elements])),

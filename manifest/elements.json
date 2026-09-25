@@ -374,7 +374,10 @@
       "icon": "book-open-text",
       "palette": true,
       "content": "children",
-      "naturalChild": "term",
+      "naturalChild": [
+        "term",
+        "description"
+      ],
       "defaultStyles": {},
       "defaultTextKey": null
     },

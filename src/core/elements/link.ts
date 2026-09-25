@@ -18,12 +18,13 @@ import { isSafeHref } from '../text/inline.ts';
 
 // the attribute that holds a link (elements.json: its command is element.setLink, its value an address)
 const LINK = 'href';
+// the attribute that opens the link in a new tab (elements.json newTab, a boolean)
+const NEW_TAB = 'newTab';
 
 export const setLinkCommand = registerHandler('element.setLink', ({ state, rules }, { target, href, newTab, page, anchor }) => {
   // a door hands the address its field holds, for the node it stands for or the one selected element; anything else
   // is a defect of the door
-  if (newTab !== undefined || page !== undefined || anchor !== undefined) throw new Error('element.setLink: a new tab, a page and an anchor arrive with elements-text and link-picker');
-  if (typeof href !== 'string') throw new Error('element.setLink: the address is not a string');
+  if (page !== undefined || anchor !== undefined) throw new Error('element.setLink: a page and an anchor arrive with link-picker');
   const id = target ?? (state.selection.length === 1 ? state.selection[0] : undefined);
   if (id === undefined) throw new Error('element.setLink: no node given and not one element selected');
   const found = locate(state.document, id);
@@ -33,6 +34,16 @@ export const setLinkCommand = registerHandler('element.setLink', ({ state, rules
 
   const locked = lockRefusal(state.document, found.node.id, 'status.locked.edit');
   if (locked !== null) return { kind: 'refused', message: locked };
+  // Open in a new tab (elements-text): the attribute newTab, true or absent; the renderer and the export write it as
+  // target="_blank" with rel="noopener noreferrer"
+  if (typeof newTab === 'boolean') {
+    const tabPath = [...found.path, 'attributes', NEW_TAB];
+    const on = found.node.attributes[NEW_TAB] === true;
+    const said = message(newTab ? 'status.link.newTab' : 'status.link.sameTab', { name: found.node.name });
+    if (on === newTab) return { kind: 'change', message: said };
+    return { kind: 'change', patches: [newTab ? { op: 'add', path: tabPath, value: true } : { op: 'remove', path: tabPath }], message: said };
+  }
+  if (typeof href !== 'string') throw new Error('element.setLink: the address is not a string');
   const path = [...found.path, 'attributes', LINK];
   const stored = found.node.attributes[LINK];
   const typed = href.trim();

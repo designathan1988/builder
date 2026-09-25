@@ -8,6 +8,8 @@
 // new element is named by its type in the person's language, with a number when a node already has that name, holds
 // its default text and styles (elements.json), and becomes the selection.
 import type { NodeId } from '../../generated/commands.ts';
+import type { ElementType, MessageId } from '../../generated/ids.ts';
+import type { IdGenerator } from '../ports/ids.ts';
 import { message, registerHandler, type Outcome } from '../commands/registry.ts';
 import { allNodes, locate, type DocNode, type DocumentJson, type Location, type Selection, type Styles } from '../document/model.ts';
 import type { ModelRules } from '../document/validate.ts';
@@ -22,6 +24,31 @@ export function uniqueName(document: DocumentJson, base: string): string {
   let n = 2;
   while (taken.has(`${base} ${n}`)) n += 1;
   return `${base} ${n}`;
+}
+
+// The children a new element of a type is created holding (elements.json naturalChild): one element of each natural
+// child type, in order, each holding its own natural children, so a blockquote starts with a paragraph, a list with an
+// item and a definition list with a term and a description; none for a type without one. Each is named and filled
+// like a new element of its type.
+function naturalChildren(type: string, document: DocumentJson, rules: ModelRules, ids: IdGenerator, words: (key: MessageId) => string): DocNode[] {
+  return (rules.elements.get(type as ElementType)?.naturalChildren ?? []).flatMap((childType): DocNode[] => {
+    const child = rules.elements.get(childType as ElementType);
+    if (child === undefined) return [];
+    const holdsText = child.content === 'text' || child.content === 'markup';
+    return [
+    {
+      id: ids.next(),
+      type: childType as ElementType,
+      name: uniqueName(document, words(child.labelKey)),
+      tag: child.tags[0] ?? null,
+      attributes: {},
+      classes: [],
+      styles: Object.keys(child.defaultStyles).length > 0 ? ({ [rules.base.breakpoint]: { [rules.base.state]: child.defaultStyles } } as Styles) : {},
+      text: holdsText ? (child.defaultTextKey === null ? '' : words(child.defaultTextKey)) : null,
+      children: naturalChildren(childType, document, rules, ids, words),
+    },
+    ];
+  });
 }
 
 // Where the new element goes: the parent and the index among its children; null when the parent given is no node.
@@ -70,7 +97,7 @@ export const insertCommand = registerHandler('element.insert', ({ state, ids, ru
     classes: [],
     styles,
     text: holdsText ? (element.defaultTextKey === null ? '' : words(element.defaultTextKey)) : null,
-    children: [],
+    children: naturalChildren(item.element, state.document, rules, ids, words),
   };
   // interactive content never goes into a Link Block, nor into an element inside one (content-model.ts; spec
   // elements-structure, Problems in Pager 5): the same refusal for every door that inserts (a tile's click, Enter or

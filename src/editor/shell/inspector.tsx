@@ -560,6 +560,30 @@ function KeptTextField({ entry, node, kept, label }: { readonly entry: DoorEntry
   );
 }
 
+// The command argument a boolean attribute's toggle fills: the argument of the attribute's own name that takes a
+// boolean (element.setLink's newTab), or null when the command takes none.
+function toggleArgOf(entry: DoorEntry, attribute: AttributeId): string | null {
+  const own = Object.entries(entry.command.args).find(([name, arg]) => name === attribute && arg.type === 'boolean');
+  return own === undefined ? null : own[0];
+}
+
+// A boolean attribute of the Settings tab (Open in a new tab): a checkbox standing for its node, checked while the node
+// stores the attribute; a click runs the door's command with the other state, one undo step.
+function ToggleField({ entry, node, attribute, label }: { readonly entry: DoorEntry; readonly node: DocNode; readonly attribute: AttributeId; readonly label: string }) {
+  const store = useStore();
+  const target = 'target' in entry.command.args ? node.id : undefined;
+  const args = useMemo(() => (target === undefined ? {} : { target }), [target]);
+  const door = useDoor(entry, args, label, isFeatureBuilt(entry.door.feature as FeatureId));
+  const on = node.attributes[attribute] === true;
+  const flip = () => (store.dispatch as (id: CommandId, args: unknown) => DispatchResult)(entry.command.id, { ...args, [attribute]: !on });
+  return (
+    <div className={`field-row${door.available ? '' : ' is-unavailable'}`} data-door={entry.ref} data-args={JSON.stringify(args)} title={door.title}>
+      <span className="field-row__label">{label}</span>
+      <input type="checkbox" checked={on} disabled={!door.available} aria-label={label} onChange={flip} />
+    </div>
+  );
+}
+
 // An attribute field of the Settings tab whose command, or whose door's feature, arrives later (Open in a new tab
 // shares element.setLink with the Link address and comes with elements-text): drawn disabled, "not available yet".
 function AttributeField({ entry, label, toggle }: { readonly entry: DoorEntry; readonly label: string; readonly toggle: boolean }) {
@@ -598,6 +622,8 @@ function SettingsTab() {
             // element's HTML tag (core/elements/tag.ts)
             const kept = keptTextOf(entry, attribute.id as AttributeId, attribute.valueType, node);
             if (kept !== null) return <KeptTextField key={`${entry.ref}@${node.id}`} entry={entry} node={node} kept={kept} label={label} />;
+            if (attribute.valueType === 'boolean' && toggleArgOf(entry, attribute.id as AttributeId) !== null)
+              return <ToggleField key={`${entry.ref}@${node.id}`} entry={entry} node={node} attribute={attribute.id as AttributeId} label={label} />;
             return <AttributeField key={entry.ref} entry={entry} label={label} toggle={attribute.valueType === 'boolean'} />;
           })
         )}

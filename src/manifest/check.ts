@@ -685,7 +685,7 @@ export function checkManifest(input: ManifestInput): CheckResult {
     report('unknown-reference', 'environment.json', 'locales.default', `default locale "${p.environment.locales.default}" is not an available locale`);
   }
   for (const [i, e] of p.elements.elements.entries()) {
-    if (e.naturalChild !== null) ref(elementById.has(e.naturalChild), 'elements.json', `elements[${i}].naturalChild`, `unknown element type "${e.naturalChild}"`);
+    for (const child of [e.naturalChild ?? []].flat()) ref(elementById.has(child), 'elements.json', `elements[${i}].naturalChild`, `unknown element type "${child}"`);
     if (e.tag === null && e.content !== 'markup') report('schema', 'elements.json', `elements[${i}].tag`, 'only an element whose content is "markup" may have no tag');
     for (const name of Object.keys(e.defaultStyles)) {
       if (!isShorthand(name)) ref(propertyById.has(name), 'elements.json', `elements[${i}].defaultStyles.${name}`, `"${name}" is not an edited property of properties.json`);
@@ -1593,10 +1593,10 @@ export function checkManifest(input: ManifestInput): CheckResult {
     if (e.namespace === 'svg' && e.tag !== null && html[e.tag]) report('html-model', 'elements.json', `${path}.namespace`, `<${e.tag}> is an HTML element, not an SVG one`);
     if (meta?.void && e.content !== 'none') report('html-model', 'elements.json', `${path}.content`, `<${e.tag}> is void, so its content is "none"`);
     if (meta?.textOnly && e.content === 'children') report('html-model', 'elements.json', `${path}.content`, `<${e.tag}> holds text only`);
-    if (e.naturalChild !== null) {
-      const child = elementById.get(e.naturalChild);
+    for (const naturalChild of [e.naturalChild ?? []].flat()) {
+      const child = elementById.get(naturalChild);
       const reason = child ? refusal(e, child) : null;
-      if (reason !== null) report('html-model', 'elements.json', `${path}.naturalChild`, `${e.naturalChild} cannot be a child of ${e.id}: ${reason}`);
+      if (reason !== null) report('html-model', 'elements.json', `${path}.naturalChild`, `${naturalChild} cannot be a child of ${e.id}: ${reason}`);
     }
   }
   const enumOf = (tag: string | null, attribute: string) => (tag !== null ? html[tag]?.attributes[attribute]?.enum ?? null : null);
