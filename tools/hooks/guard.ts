@@ -43,18 +43,19 @@ export function commandWords(command: string): string {
   return kept.join('\n').replace(/'[^']*'|"(?:\\.|[^"\\])*"/g, "''");
 }
 
-// Whether a git push in the command updates main: a refspec whose destination is main, or no refspec while on main.
-export function pushesMain(words: string, branch: string): boolean {
+// Whether a git push in the command updates main: a refspec whose destination is main, HEAD while on main, or no
+// refspec while the branch pushes to main (its push destination, which a branch of another name can have).
+export function pushesMain(words: string, branch: { readonly current: string; readonly pushesTo: string }): boolean {
   for (const m of words.matchAll(/\bgit\s+push\b([^;&|\n]*)/g)) {
     const args = (m[1] ?? '').trim().split(/\s+/).filter((a) => a !== '' && !a.startsWith('-'));
     // the first argument is the remote, the rest are refspecs
     const refspecs = args.slice(1);
-    if (refspecs.length === 0 ? branch === 'main' : refspecs.some((r) => /^(\+?)(.*:)?(refs\/heads\/)?main$/.test(r) || (r === 'HEAD' && branch === 'main'))) return true;
+    if (refspecs.length === 0 ? branch.pushesTo === 'main' : refspecs.some((r) => /^(\+?)(.*:)?(refs\/heads\/)?main$/.test(r) || (r === 'HEAD' && branch.current === 'main'))) return true;
   }
   return false;
 }
 
-export function bashVerdict(command: string, state: State, branch: () => string): string | null {
+export function bashVerdict(command: string, state: State, branch: () => { readonly current: string; readonly pushesTo: string }): string | null {
   const words = commandWords(command);
   const commits = /\bgit\s+commit\b/.test(words);
   const pushes = /\bgit\s+push\b/.test(words);
@@ -106,7 +107,12 @@ if (import.meta.main) {
   } else if (mode === 'bash') {
     const command = input.tool_input?.command ?? '';
     if (!/\bgit\s+(commit|push)\b/.test(commandWords(command))) process.exit(0);
-    const reason = bashVerdict(command, await currentState(), () => git('rev-parse', '--abbrev-ref', 'HEAD'));
+    const reason = bashVerdict(command, await currentState(), () => {
+      const current = git('rev-parse', '--abbrev-ref', 'HEAD');
+      // where a push with no refspec goes (push.default and the upstream decide it); the branch itself when unset
+      const destination = git('rev-parse', '--abbrev-ref', '--symbolic-full-name', '@{push}');
+      return { current, pushesTo: destination === '' ? current : destination.replace(/^[^/]+\//, '') };
+    });
     if (reason !== null) process.stdout.write(JSON.stringify({ hookSpecificOutput: { hookEventName: 'PreToolUse', permissionDecision: 'deny', permissionDecisionReason: reason } }));
   } else throw new Error('usage: node tools/hooks/guard.ts stop|bash (the hook input on stdin)');
 }

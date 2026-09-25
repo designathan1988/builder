@@ -23,25 +23,29 @@ describe('the commands a turn runs', () => {
     expect(commandWords("git commit -F - <<'EOF'\nthen git push origin main\nEOF\ngit status")).not.toMatch(/push/);
     expect(commandWords("git commit -F - <<'EOF'\nbody\nEOF\ngit push")).toMatch(/git push/);
   });
+  const on = (current: string, pushesTo = current) => ({ current, pushesTo });
   it('knows a push that updates main', () => {
-    expect(pushesMain('git push', 'main')).toBe(true);
-    expect(pushesMain('git push', 'integration')).toBe(false);
-    expect(pushesMain('git push -u origin main', 'integration')).toBe(true);
-    expect(pushesMain('git push origin integration:main', 'integration')).toBe(true);
-    expect(pushesMain('git push origin feature/main-menu', 'main')).toBe(false);
-    expect(pushesMain('git fetch && git push origin test-strategy', 'test-strategy')).toBe(false);
+    expect(pushesMain('git push', on('main'))).toBe(true);
+    expect(pushesMain('git push', on('integration'))).toBe(false);
+    // a branch of another name whose push goes to main
+    expect(pushesMain('git push', on('integration', 'main'))).toBe(true);
+    expect(pushesMain('git push -u origin main', on('integration'))).toBe(true);
+    expect(pushesMain('git push origin integration:main', on('integration'))).toBe(true);
+    expect(pushesMain('git push origin HEAD', on('main', 'x'))).toBe(true);
+    expect(pushesMain('git push origin feature/main-menu', on('main'))).toBe(false);
+    expect(pushesMain('git fetch && git push origin test-strategy', on('test-strategy', 'main'))).toBe(false);
   });
   it('lets a commit take only a tree npm run check validated', () => {
-    expect(bashVerdict('git add -A && git commit -m x', state({ checked: 'old' }), () => 'main')).toMatch(/npm run check/);
-    expect(bashVerdict('git add -A && git commit -m x', state(), () => 'main')).toBeNull();
+    expect(bashVerdict('git add -A && git commit -m x', state({ checked: 'old' }), () => on('main'))).toMatch(/npm run check/);
+    expect(bashVerdict('git add -A && git commit -m x', state(), () => on('main'))).toBeNull();
   });
   it('lets a push to main take only a commit the whole suite and verify:fast passed on', () => {
-    expect(bashVerdict('git push origin main', state(), () => 'integration')).toBeNull();
-    expect(bashVerdict('git push origin main', state({ e2e: { tree: 'h', passed: false, at } }), () => 'integration')).toMatch(/npm run e2e passing/);
-    expect(bashVerdict('git push origin main', state({ verify: { tree: 'older', passed: true, at } }), () => 'integration')).toMatch(/verify:fast passing/);
-    expect(bashVerdict('git push origin feature/x', state({ e2e: undefined }), () => 'feature/x')).toBeNull();
+    expect(bashVerdict('git push origin main', state(), () => on('integration'))).toBeNull();
+    expect(bashVerdict('git push origin main', state({ e2e: { tree: 'h', passed: false, at } }), () => on('integration'))).toMatch(/npm run e2e passing/);
+    expect(bashVerdict('git push origin main', state({ verify: { tree: 'older', passed: true, at } }), () => on('integration'))).toMatch(/verify:fast passing/);
+    expect(bashVerdict('git push origin feature/x', state({ e2e: undefined }), () => on('feature/x'))).toBeNull();
   });
   it('lets through a command that neither commits nor pushes', () => {
-    expect(bashVerdict('npm run check', state({ checked: 'old', e2e: undefined }), () => 'main')).toBeNull();
+    expect(bashVerdict('npm run check', state({ checked: 'old', e2e: undefined }), () => on('main'))).toBeNull();
   });
 });
