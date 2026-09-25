@@ -1,0 +1,47 @@
+// The validation cycle's guard (tools/hooks/guard.ts): what it lets an agent do, and what it sends back.
+import { describe, expect, it } from 'vitest';
+import { bashVerdict, commandWords, pushesMain, stopVerdict, type State } from './guard.ts';
+
+const at = '2026-09-25T00:00:00.000Z';
+const state = (over: Partial<State> = {}): State => ({ working: 'w', head: 'h', checked: 'w', e2e: { tree: 'h', passed: true, at }, verify: { tree: 'h', passed: true, at }, ...over });
+
+describe('the end of a turn', () => {
+  it('sends the agent back once when a change was not validated by npm run check', () => {
+    expect(stopVerdict(state({ checked: 'old' }), true, null)).toMatch(/npm run check/);
+    // once per state of the working tree
+    expect(stopVerdict(state({ checked: 'old' }), true, 'w')).toBeNull();
+  });
+  it('lets a validated or clean tree end the turn', () => {
+    expect(stopVerdict(state(), true, null)).toBeNull();
+    expect(stopVerdict(state({ checked: null }), false, null)).toBeNull();
+  });
+});
+
+describe('the commands a turn runs', () => {
+  it('reads a push or a commit only where the shell runs one, not in a message', () => {
+    expect(commandWords("git commit -m 'then git push origin main'")).not.toMatch(/push/);
+    expect(commandWords("git commit -F - <<'EOF'\nthen git push origin main\nEOF\ngit status")).not.toMatch(/push/);
+    expect(commandWords("git commit -F - <<'EOF'\nbody\nEOF\ngit push")).toMatch(/git push/);
+  });
+  it('knows a push that updates main', () => {
+    expect(pushesMain('git push', 'main')).toBe(true);
+    expect(pushesMain('git push', 'integration')).toBe(false);
+    expect(pushesMain('git push -u origin main', 'integration')).toBe(true);
+    expect(pushesMain('git push origin integration:main', 'integration')).toBe(true);
+    expect(pushesMain('git push origin feature/main-menu', 'main')).toBe(false);
+    expect(pushesMain('git fetch && git push origin test-strategy', 'test-strategy')).toBe(false);
+  });
+  it('lets a commit take only a tree npm run check validated', () => {
+    expect(bashVerdict('git add -A && git commit -m x', state({ checked: 'old' }), () => 'main')).toMatch(/npm run check/);
+    expect(bashVerdict('git add -A && git commit -m x', state(), () => 'main')).toBeNull();
+  });
+  it('lets a push to main take only a commit the whole suite and verify:fast passed on', () => {
+    expect(bashVerdict('git push origin main', state(), () => 'integration')).toBeNull();
+    expect(bashVerdict('git push origin main', state({ e2e: { tree: 'h', passed: false, at } }), () => 'integration')).toMatch(/npm run e2e passing/);
+    expect(bashVerdict('git push origin main', state({ verify: { tree: 'older', passed: true, at } }), () => 'integration')).toMatch(/verify:fast passing/);
+    expect(bashVerdict('git push origin feature/x', state({ e2e: undefined }), () => 'feature/x')).toBeNull();
+  });
+  it('lets through a command that neither commits nor pushes', () => {
+    expect(bashVerdict('npm run check', state({ checked: 'old', e2e: undefined }), () => 'main')).toBeNull();
+  });
+});

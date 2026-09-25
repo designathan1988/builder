@@ -74,19 +74,30 @@ export const git = (args: readonly string[], env: NodeJS.ProcessEnv = process.en
 // A commit object holding the working tree as it is now, untracked files included, kept alive by a ref of this
 // checkout so that a later check can diff against it.
 export function snapshotTree(): string {
+  const commit = git(['commit-tree', workingTree(), '-p', 'HEAD', '-m', 'impact snapshot']);
+  git(['update-ref', `refs/impact/${hash(process.cwd())}`, commit]);
+  return commit;
+}
+
+// The git tree of the working tree as it is now, untracked files included (ignored files left out), written through
+// an index of its own so the checkout's index is never touched.
+export function workingTree(): string {
   const index = path.join('.cache', 'impact', `index-${process.pid}`);
   fs.mkdirSync(path.dirname(index), { recursive: true });
   const env = { ...process.env, GIT_INDEX_FILE: index };
   try {
     git(['read-tree', 'HEAD'], env);
     git(['add', '-A', '.'], env);
-    const tree = git(['write-tree'], env);
-    const commit = git(['commit-tree', tree, '-p', 'HEAD', '-m', 'impact snapshot'], env);
-    git(['update-ref', `refs/impact/${hash(process.cwd())}`, commit]);
-    return commit;
+    return git(['write-tree'], env);
   } finally {
     fs.rmSync(index, { force: true });
   }
+}
+
+// The tree a commit holds, or null when the commit is gone.
+export function treeOf(commit: string): string | null {
+  const r = spawnSync('git', ['rev-parse', '--verify', '--quiet', `${commit}^{tree}`], { encoding: 'utf8' });
+  return r.status === 0 ? r.stdout.trim() : null;
 }
 
 const fileHash = (file: string): string => (fs.existsSync(file) ? hash(fs.readFileSync(file, 'utf8')) : 'absent');

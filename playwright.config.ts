@@ -39,8 +39,9 @@ export default defineConfig({
   // every run records what each test depends on and updates the dependency map (docs/testing/README.md)
   globalSetup: './tests/support/global-setup.ts',
   globalTeardown: './tests/support/global-teardown.ts',
-  // the list of results, then each feature's status derived from its scenario tests (tools/runner/status.ts)
-  reporter: [['list'], ['./tools/runner/status.ts']],
+  // the list of results, then each feature's status derived from its scenario tests (tools/runner/status.ts), then
+  // the checkpoint record of a whole run with its final status (tools/impact/checkpoint.ts)
+  reporter: [['list'], ['./tools/runner/status.ts'], ['./tools/impact/checkpoint.ts']],
   // a failure shows in seconds: every action and every expect waits at most 5 s, a navigation 15 s
   expect: { timeout: 5_000 },
   use: {
