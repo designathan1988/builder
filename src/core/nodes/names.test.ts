@@ -14,13 +14,16 @@ import { sequentialIds } from '../ports/ids.ts';
 import { noLayout } from '../ports/layout.ts';
 import { toggleLockCommand } from './flags.ts';
 import { renameCommand } from './names.ts';
+import { deepFreeze } from '../store/store.ts';
 
 const RULES = rulesFromManifest(manifest.elements, manifest.properties, manifest.html);
-const AURORA = fixture as DocumentJson;
+// a frozen document, as the store commits it: a change in place throws
+const AURORA = deepFreeze(structuredClone(fixture) as DocumentJson);
 
 const context = (document: DocumentJson) =>
   ({
-    state: { document, selection: [], history: EMPTY_HISTORY, message: null, ui: undefined as never },
+    // every document a handler reads is frozen, as the store commits it: a change in place throws
+    state: { document: deepFreeze(document), selection: [], history: EMPTY_HISTORY, message: null, ui: undefined as never },
     clock: manualClock(),
     ids: sequentialIds('new'),
     rules: RULES,

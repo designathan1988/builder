@@ -77,11 +77,21 @@ function screenBox(page: Page, id: string): Promise<Box> {
     return { x: left + r.left * zoom, y: top + r.top * zoom, width: r.width * zoom, height: r.height * zoom };
   }, id);
 }
+// two animation frames: the canvas chrome draws what it measures on its next frame, so a check that something is
+// not drawn waits until it would have been
+const nextFrames = (page: Page) => page.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
 const centre = (b: Box): Point => ({ x: b.x + b.width / 2, y: b.y + b.height / 2 });
 const close = (a: number, b: number) => Math.abs(a - b) <= 1;
+// the box of the one element a selector finds, or null when it finds none or several, read in one task of the page:
+// counting first and then asking the box raced the chrome's next frame, whose removed element left the read waiting
 async function boxOf(page: Page, selector: string): Promise<Box | null> {
-  const found = page.locator(selector);
-  return (await found.count()) === 1 ? found.boundingBox() : null;
+  const boxes = await page.locator(selector).evaluateAll((els) =>
+    els.map((el) => {
+      const r = el.getBoundingClientRect();
+      return { x: r.x, y: r.y, width: r.width, height: r.height };
+    }),
+  );
+  return boxes.length === 1 ? (boxes[0] ?? null) : null;
 }
 
 // the centre of a tile on the screen
@@ -187,6 +197,7 @@ test('while a tile is dragged over the page: the line where it lands, the label 
   const start = await startTileDrag(page, 'paragraph');
   await expectGhostAt(page, start, 'paragraph', 'Paragraph');
   await expect(page.getByRole('status')).toHaveText('Outside the page — release to cancel.');
+  await nextFrames(page);
   await expect(page.locator('[data-chrome="drop"]')).toHaveCount(0);
 
   // over the upper half of Intro: before it, so the line lies in the gap between Title and Intro, across Hero

@@ -92,11 +92,21 @@ function textBoxes(page: Page): Promise<Box[]> {
   });
 }
 
+// two animation frames: the canvas chrome draws what it measures on its next frame, so a check that something is
+// not drawn waits until it would have been
+const nextFrames = (page: Page) => page.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
 const centre = (b: Box) => ({ x: b.x + b.width / 2, y: b.y + b.height / 2 });
 const overlaps = (a: Box, b: Box) => a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
+// the box of the one element a selector finds, or null when it finds none or several, read in one task of the page:
+// counting first and then asking the box raced the chrome's next frame, whose removed element left the read waiting
 async function boxOf(page: Page, selector: string): Promise<Box | null> {
-  const found = page.locator(selector);
-  return (await found.count()) === 1 ? found.boundingBox() : null;
+  const boxes = await page.locator(selector).evaluateAll((els) =>
+    els.map((el) => {
+      const r = el.getBoundingClientRect();
+      return { x: r.x, y: r.y, width: r.width, height: r.height };
+    }),
+  );
+  return boxes.length === 1 ? (boxes[0] ?? null) : null;
 }
 const close = (a: number, b: number) => Math.abs(a - b) <= 1;
 
@@ -215,6 +225,7 @@ test('a press that moves less than drag.threshold only selects: no drag is drawn
   // held: the element is selected, its outline is the selection's, and nothing of a drag is drawn
   expect((await port(page)).selection).toEqual(['n-title']);
   await expect.poll(() => page.locator('[data-chrome="selection"]').evaluate((el) => getComputedStyle(el).outlineStyle)).toBe('solid');
+  await nextFrames(page);
   await expect(page.locator('[data-chrome="drop"]')).toHaveCount(0);
   await page.mouse.up();
   const after = await port(page);

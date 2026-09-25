@@ -16,15 +16,28 @@ const reasonOf = (ref: string) => REASON[ref.split('#')[0] ?? ''] ?? '';
 const INSERT_PANEL = 'workspace.setPanelOpen#toolbar-activity-bar-insert';
 const TILE = 'element.insert#elements-tile';
 
-// what a door could change: the window's regions and the stored preferences
+// what a door could change: the document, the selection and the history (what Undo and Redo change, read through
+// the read-only test port), the window's regions and the stored preferences
 const snapshot = (page: Page) =>
-  page.evaluate(() => ({
-    regions: [...document.querySelectorAll('[data-region]')].map((el) => {
-      const r = el.getBoundingClientRect();
-      return `${el.getAttribute('data-region')} ${r.x} ${r.y} ${r.width} ${r.height}`;
-    }),
-    stored: window.localStorage.getItem('preferences'),
-  }));
+  page.evaluate(() => {
+    const p = (window as unknown as Record<string, { document: () => unknown; selection: () => unknown; history: () => unknown }>).__builderTestPort;
+    if (!p) throw new Error('the test port is missing');
+    return {
+      document: p.document(),
+      selection: p.selection(),
+      history: p.history(),
+      regions: [...document.querySelectorAll('[data-region]')].map((el) => {
+        const r = el.getBoundingClientRect();
+        return `${el.getAttribute('data-region')} ${r.x} ${r.y} ${r.width} ${r.height}`;
+      }),
+      // the columns of the window, which carry no region of their own
+      columns: ['.sidebar', '.centre', '.inspector', '.workbench'].map((selector) => {
+        const r = document.querySelector(selector)?.getBoundingClientRect();
+        return r === undefined ? `${selector} absent` : `${selector} ${r.x} ${r.y} ${r.width} ${r.height}`;
+      }),
+      stored: window.localStorage.getItem('preferences'),
+    };
+  });
 
 interface Tree {
   readonly id: string;

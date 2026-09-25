@@ -77,9 +77,20 @@ test('a main action that is not available yet is not drawn in the accent colour,
     return { accent, background: getComputedStyle(el).backgroundColor };
   });
   expect(colours.background).not.toBe(colours.accent);
+  // what a click that reached a command would change: a download, the export the test port reads, the status bar,
+  // the document and the history
+  const state = () =>
+    page.evaluate(() => {
+      const p = (window as unknown as Record<string, { document: () => unknown; history: () => unknown; export: () => unknown }>).__builderTestPort;
+      if (!p) throw new Error('the test port is missing');
+      return { document: p.document(), history: p.history(), export: p.export(), status: document.querySelector('[role="status"]')?.textContent ?? null };
+    });
+  const before = await state();
+  expect(before.export).toBeNull();
   const downloads: string[] = [];
   page.on('download', (d) => downloads.push(d.suggestedFilename()));
   await exportButton.click({ force: true });
   await page.waitForTimeout(300);
   expect(downloads).toEqual([]);
+  expect(await state()).toEqual(before);
 });

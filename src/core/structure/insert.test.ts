@@ -13,6 +13,7 @@ import { manualClock } from '../ports/clock.ts';
 import { sequentialIds } from '../ports/ids.ts';
 import { noLayout } from '../ports/layout.ts';
 import { insertCommand, uniqueName } from './insert.ts';
+import { deepFreeze } from '../store/store.ts';
 
 const RULES = rulesFromManifest(manifest.elements, manifest.properties, manifest.html);
 const node = (id: string, type: string, tag: string, fields: Partial<DocNode> = {}): DocNode => ({ id: id as NodeId, type: type as DocNode['type'], name: id, tag, attributes: {}, classes: [], styles: {}, text: null, children: [], ...fields });
@@ -53,6 +54,9 @@ const applied = (outcome: ReturnType<typeof run>) => {
   if (outcome.kind !== 'change') throw new Error(`not a change: ${JSON.stringify(outcome)}`);
   return applyPatches(DOC, outcome.patches ?? []).document;
 };
+
+// every handler runs on a frozen document, as the store commits it: a change in place throws
+deepFreeze(DOC);
 
 describe('element.insert (src/core/structure/insert.ts)', () => {
   it('with nothing selected, appends to the page root and selects the new element, with its default styles', () => {

@@ -20,6 +20,7 @@ import { deleteCommand } from '../structure/remove.ts';
 import { unwrapCommand, wrapColumnCommand, wrapRowCommand } from '../structure/wrap.ts';
 import { setTextCommand } from '../text/text.ts';
 import { firstLockRefusal, lockOver, lockRefusal, toggleHiddenCommand, toggleLockCommand } from './flags.ts';
+import { deepFreeze } from '../store/store.ts';
 
 const RULES = rulesFromManifest(manifest.elements, manifest.properties, manifest.html);
 const node = (id: string, type: string, tag: string, fields: Partial<DocNode> = {}): DocNode => ({ id: id as NodeId, type: type as DocNode['type'], name: id, tag, attributes: {}, classes: [], styles: {}, text: null, children: [], ...fields });
@@ -37,7 +38,8 @@ const DOC: DocumentJson = {
   ],
 };
 
-const state = (document: DocumentJson, selection: string[]) => ({ document, selection: selection as NodeId[], history: EMPTY_HISTORY, message: null, ui: undefined as never });
+// every document a handler reads is frozen, as the store commits it: a change in place throws
+const state = (document: DocumentJson, selection: string[]) => ({ document: deepFreeze(document), selection: selection as NodeId[], history: EMPTY_HISTORY, message: null, ui: undefined as never });
 function run(document: DocumentJson, selection: string[], target?: string) {
   const context = {
     state: state(document, selection),
@@ -60,6 +62,9 @@ const flag = (document: DocumentJson, id: string) => {
   const found = locate(document, id as NodeId)?.node;
   return found === undefined ? 'missing' : 'hidden' in found ? found.hidden : 'absent';
 };
+
+// every handler runs on a frozen document, as the store commits it: a change in place throws
+deepFreeze(DOC);
 
 describe('element.toggleHidden (src/core/nodes/flags.ts)', () => {
   it('hides the node a door names, leaves the selection as it is and says so; undo takes the flag away', () => {
@@ -103,7 +108,7 @@ describe('element.toggleHidden (src/core/nodes/flags.ts)', () => {
 });
 
 // lock-element on the scenarios' fixture: the flag, and every built command that would change a locked node
-const AURORA = fixture as DocumentJson;
+const AURORA = deepFreeze(structuredClone(fixture) as DocumentJson);
 const contextOf = (document: DocumentJson, selection: string[]) =>
   ({
     state: state(document, selection),

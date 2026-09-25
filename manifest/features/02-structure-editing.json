@@ -5915,6 +5915,15 @@
               "action": true,
               "hold": false,
               "type": null
+            },
+            {
+              "door": "selection.clear#key-escape-in-canvas",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
             }
           ],
           "doors": [
@@ -5923,9 +5932,7 @@
           ],
           "expect": {
             "document": [],
-            "selection": [
-              "/Page/Hero/Intro"
-            ],
+            "selection": [],
             "history": {
               "undoSteps": 0,
               "undoRestores": true,
@@ -5942,7 +5949,12 @@
                   "reference": "/Page/Hero/Title"
                 }
               ],
-              "feedback": []
+              "feedback": [
+                {
+                  "key": "status.selection.cleared",
+                  "params": {}
+                }
+              ]
             },
             "editor": null,
             "persistence": null,
@@ -9080,29 +9092,98 @@
               "action": true,
               "hold": false,
               "type": null
+            },
+            {
+              "door": "hand.aimPrevious#key-shift-arrow-down-in-hand",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.moveTo#key-enter-in-hand",
+              "args": {
+                "parent": "/Page/Hero",
+                "index": 0
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
             }
           ],
           "doors": [
             "hand.take#key-m-in-canvas"
           ],
           "expect": {
-            "document": [],
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@children",
+                "value": [
+                  {
+                    "type": "paragraph",
+                    "name": "Intro",
+                    "tag": "p",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Fresh coffee, roasted every week.",
+                    "children": []
+                  },
+                  {
+                    "type": "heading",
+                    "name": "Title",
+                    "tag": "h1",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Welcome to Aurora",
+                    "children": []
+                  },
+                  {
+                    "type": "div",
+                    "name": "Actions",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
             "selection": [
               "/Page/Hero/Intro"
             ],
             "history": {
-              "undoSteps": 0,
+              "undoSteps": 1,
               "undoRestores": true,
               "redoRestores": true
             },
             "render": {
               "computed": [],
-              "geometry": [],
+              "geometry": [
+                {
+                  "node": "/Page/Hero/Intro",
+                  "measure": "y",
+                  "relation": "less-than",
+                  "value": 0,
+                  "reference": "/Page/Hero/Title"
+                }
+              ],
               "feedback": [
                 {
-                  "key": "status.hand.holding",
+                  "key": "status.moved",
                   "params": {
-                    "name": "Intro"
+                    "name": "Intro",
+                    "position": 1,
+                    "count": 3,
+                    "parent": "Hero"
                   }
                 }
               ]
@@ -9280,6 +9361,15 @@
               "action": true,
               "hold": false,
               "type": null
+            },
+            {
+              "door": "selection.walkNextSibling#key-arrow-right-in-canvas",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
             }
           ],
           "doors": [
@@ -9288,7 +9378,7 @@
           "expect": {
             "document": [],
             "selection": [
-              "/Page/Hero/Intro"
+              "/Page/Hero/Actions"
             ],
             "history": {
               "undoSteps": 0,
@@ -9300,8 +9390,10 @@
               "geometry": [],
               "feedback": [
                 {
-                  "key": "status.hand.dropped",
-                  "params": {}
+                  "key": "status.selected",
+                  "params": {
+                    "name": "Actions"
+                  }
                 }
               ]
             },
@@ -9422,6 +9514,15 @@
               "action": true,
               "hold": false,
               "type": null
+            },
+            {
+              "door": "text.cancelEdit#key-escape-in-text-editing",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
             }
           ],
           "doors": [
@@ -9443,8 +9544,10 @@
               "geometry": [],
               "feedback": [
                 {
-                  "key": "status.textEdit.editing",
-                  "params": {}
+                  "key": "status.textEdit.cancelled",
+                  "params": {
+                    "name": "Intro"
+                  }
                 }
               ]
             },
@@ -9634,6 +9737,15 @@
               "action": true,
               "hold": false,
               "type": null
+            },
+            {
+              "door": "text.startEdit#key-enter-in-canvas",
+              "args": {},
+              "target": "/Page/Hero/Intro",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
             }
           ],
           "doors": [
@@ -9654,10 +9766,8 @@
               "geometry": [],
               "feedback": [
                 {
-                  "key": "status.textEdit.cancelled",
-                  "params": {
-                    "name": "Intro"
-                  }
+                  "key": "status.textEdit.editing",
+                  "params": {}
                 }
               ]
             },

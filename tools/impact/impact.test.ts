@@ -127,6 +127,18 @@ describe('the choice of the tests a change can affect', () => {
     expect([...decide(input({ map: used, build: build({}, analyzeCss('.a { color: red } .x .a { margin: 0 }')) })).selected.keys()]).toEqual([ids[0]]);
     // a new rule no element can escape
     expect(decide(input({ map: used, build: build({}, analyzeCss('.a { color: red } button { margin: 0 }')) })).selected.size).toBe(2);
+    // the same rules in another order: the cascade between them may differ
+    const two = analyzeCss('.a { color: red } .b { color: blue }');
+    const ordered = map([test(ids[0] ?? '', { css: two.map((r) => r.key) }), test(ids[1] ?? '', { keys: ['f2'], classes: ['z'] })], { cssKeys: two.map((r) => r.key) });
+    expect(decide(input({ map: ordered, build: build({}, two) })).selected.size).toBe(0);
+    const swapped = decide(input({ map: ordered, build: build({}, analyzeCss('.b { color: blue } .a { color: red }')) }));
+    expect([...swapped.selected]).toEqual([[ids[0], 'the order of the CSS rules it used changed']]);
+  });
+  it('runs a test whose last record is incomplete, or whose build the map no longer holds', () => {
+    const incomplete = map([test(ids[0] ?? '', { complete: false }), test(ids[1] ?? '', { keys: ['f2'] })]);
+    expect([...decide(input({ map: incomplete })).selected]).toEqual([[ids[0], 'its last record is incomplete']]);
+    const orphan = map([test(ids[0] ?? '', { build: 'gone' }), test(ids[1] ?? '', { keys: ['f2'] })]);
+    expect([...decide(input({ map: orphan })).selected]).toEqual([[ids[0], 'the build it ran against is not in the map']]);
   });
   it('keeps a failure open, without running it, until something it depends on changes', () => {
     const failed = map([test(ids[0] ?? '', { status: 'failed', error: 'boom' }), test(ids[1] ?? '', { keys: ['f2'] })]);

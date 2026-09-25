@@ -18,6 +18,9 @@ interface Point {
   readonly y: number;
 }
 
+// two animation frames: the canvas chrome draws what it measures on its next frame, so a check that something is
+// not drawn waits until it would have been
+const nextFrames = (page: Page) => page.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
 const selection = (page: Page) => page.evaluate(() => (window as unknown as Record<string, { selection: () => string[] }>).__builderTestPort?.selection());
 
 async function openAurora(page: Page) {
@@ -149,6 +152,7 @@ test('with Ctrl held at the press, the band toggles what it takes in the selecti
 
 test('a press on a leaf and a drag is never a marquee: no band is drawn and the click\'s selection stays', runs('project.open#menu-file', 'selection.select#canvas-click-element-or-page'), async ({ page }) => {
   await pressAndMove(page, { x: 720, y: 153 }, { x: 20, y: 20 });
+  await nextFrames(page);
   await expect(page.locator('[data-chrome="band"]')).toHaveCount(0);
   await release(page);
   expect(await selection(page)).toEqual(['n-intro']);

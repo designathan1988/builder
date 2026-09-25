@@ -14,9 +14,10 @@ import { InvalidStateError, createStore, type Store } from './store.ts';
 import { INITIAL_PREFERENCES } from '../../editor/preferences/preferences.ts';
 import { initialEditorUi, type EditorUi } from '../../editor/state.ts';
 
-// The store under test: the real command table with test handlers in place of a few commands the core does not
-// build yet, so the manifest's availability and history declarations of those commands (undoable, coalescing,
-// per-gesture) are what these tests exercise.
+// The store under test: the real command table with small test handlers in place of a few commands, each one kind of
+// history declaration of the manifest (undoable, coalescing, per-gesture, not undoable), so these tests exercise the
+// store's own rules apart from what the real handlers do (their own tests: src/core/structure/*.test.ts, on frozen
+// documents; the real handlers under the store's frozen states: src/editor/canvas/text-edit.test.ts).
 // element.insert (per gesture): a Container under the parent (the first page's root by default), selected
 const insert = registerHandler('element.insert', ({ state, ids }, args) => {
   const parentId = args.parent ?? state.document.pages[0]?.tree.id ?? '';
@@ -129,7 +130,9 @@ describe('the store', () => {
 
   it('says whether a command would run now without changing anything', () => {
     const s = testStore();
-    // not built, its predicate fails (nothing selected), its handler refuses (the page root cannot be deleted)
+    // not built (timeline.stop: NOT_AVAILABLE_YET), its predicate fails (nothing selected), its handler refuses (the
+    // page root cannot be deleted)
+    expect(s.store.canRun('timeline.stop', {})).toBe(false);
     expect(s.store.canRun('element.duplicate', {})).toBe(false);
     expect(s.store.canRun('element.delete', {})).toBe(false);
     s.store.dispatch('selection.select', { target: s.root });

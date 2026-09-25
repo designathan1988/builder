@@ -12,6 +12,7 @@ import { manualClock } from '../ports/clock.ts';
 import { sequentialIds } from '../ports/ids.ts';
 import { noLayout } from '../ports/layout.ts';
 import { moveDownCommand, moveToCommand, moveUpCommand } from './move.ts';
+import { deepFreeze } from '../store/store.ts';
 
 const RULES = rulesFromManifest(manifest.elements, manifest.properties, manifest.html);
 const node = (id: string, type: string, tag: string, fields: Partial<DocNode> = {}): DocNode => ({ id: id as NodeId, type: type as DocNode['type'], name: id, tag, attributes: {}, classes: [], styles: {}, text: null, children: [], ...fields });
@@ -52,12 +53,16 @@ function moveTo(selection: string[], parent: string, index: number) {
 }
 const childrenOf = (doc: DocumentJson, id: string): string[] => {
   const find = (n: DocNode): DocNode | undefined => (n.id === id ? n : n.children.map(find).find((x) => x !== undefined));
-  return find(doc.pages[0]?.tree as DocNode)?.children.map((c) => c.name) ?? [];
+  // ids, not names: a move keeps the moved node itself, never a copy with a new id (here each id is the node's name)
+  return find(doc.pages[0]?.tree as DocNode)?.children.map((c) => c.id) ?? [];
 };
 const applied = (outcome: ReturnType<typeof moveTo>) => {
   if (outcome.kind !== 'change') throw new Error(`not a change: ${JSON.stringify(outcome)}`);
   return applyPatches(DOC, outcome.patches ?? []).document;
 };
+
+// every handler runs on a frozen document, as the store commits it: a change in place throws
+deepFreeze(DOC);
 
 describe('element.moveTo (src/core/structure/move.ts)', () => {
   it('moves the selected node before a sibling, the index counting the siblings without it, and keeps it selected', () => {
@@ -101,7 +106,8 @@ describe('element.moveTo (src/core/structure/move.ts)', () => {
   });
 });
 
-const outline = (n: DocNode): string => (n.children.length === 0 ? n.name : `${n.name}(${n.children.map(outline).join(' ')})`);
+// by ids (here each id is the node's name): a move keeps the nodes themselves
+const outline = (n: DocNode): string => (n.children.length === 0 ? n.id : `${n.id}(${n.children.map(outline).join(' ')})`);
 const after = (direction: 'up' | 'down', selection: string[]) => {
   const outcome = run(direction, selection);
   if (outcome.kind !== 'change') throw new Error(`not a change: ${JSON.stringify(outcome)}`);

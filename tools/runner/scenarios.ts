@@ -59,7 +59,7 @@ interface Scenario {
     } | null;
     editor: { regions: { region: string; measure: Measure; relation: Relation; value: number; reference: string | null }[]; computed: { region: string; property: string; value: string }[] } | null;
     persistence: { document: 'same' | null; preferences: 'same' | null; selection?: 'same' | null } | null;
-    // the files inside the archive the steps downloaded last: each holds every `present` text and no `absent` one
+    // the files inside the archive the action step handed out: each holds every `present` text and no `absent` one
     export: { files: { path: string; present: string[]; absent: string[] }[] } | null;
   };
   readonly refusals: { key: string }[];
@@ -240,6 +240,21 @@ const port = (page: Page) =>
     if (!p) throw new Error('the test port is missing');
     return { document: p.document(), selection: p.selection(), history: p.history() };
   });
+
+// The preferences the editor applies, read from what it draws: its language (the document element's lang), its theme
+// (data-theme, absent while it follows the system) and the inspector sections it draws collapsed. Comparing these
+// before and after a reload proves the editor restores its preferences; comparing the stored text with itself would
+// not (the editor writes the preferences only when a command changes them).
+const SECTION_TOGGLE = 'inspector.toggleSection';
+const appliedPreferences = (page: Page) =>
+  page.evaluate(
+    (toggle) => ({
+      locale: document.documentElement.lang,
+      theme: document.documentElement.dataset.theme ?? 'system',
+      collapsed: [...document.querySelectorAll(`[data-door^="${toggle}#"][aria-expanded="false"]`)].map((el) => (JSON.parse(el.getAttribute('data-args') ?? '{}') as { section?: string }).section ?? ''),
+    }),
+    SECTION_TOGGLE,
+  );
 
 const compare = (actual: number, relation: Relation, expected: number) =>
   relation === 'equals' ? Math.abs(actual - expected) <= 0.5 : relation === 'less-than' ? actual < expected : actual > expected;
@@ -835,8 +850,11 @@ export function registerScenarioTests(): void {
           // each refusal is checked right after its refused step (refusalCheck), against the document just before it
           const refusalsAt = s.refusals.map((refusal) => ({ refusal, ...refusalCheck(s, refusal.key) }));
           const before = new Map<number, unknown>();
+          // the downloads the steps before the action made: the export terminal reads the archive the action hands out
+          let downloadsBeforeAction = 0;
           for (const [index, step] of s.steps.entries()) {
             if (refusalsAt.some((r) => r.unchangedFrom === index)) before.set(index, (await port(page)).document);
+            if (step.action) downloadsBeforeAction = downloads.length;
             await runStep(page, step, step.action ? door : step.door, held, step.action);
             // a refusal names its key; the words it fills in ("No next sibling in {parent}.") are those of the feedback
             // of the same key
@@ -902,12 +920,12 @@ export function registerScenarioTests(): void {
             }
           }
 
-          // the files inside the archive the steps downloaded last (File › Save project, the export), read as any unzip
-          // tool reads them
+          // the files inside the archive the action step handed out (File › Save project, the export), read as any unzip
+          // tool reads them: the first download after the action began, never one a step before it made
           const exported = s.expect.export;
           if (exported !== null) {
-            await expect.poll(() => downloads.length, 'a file was downloaded').toBeGreaterThan(0);
-            const saved = await (downloads.at(-1) as Download).path();
+            await expect.poll(() => downloads.length, 'the action downloaded a file').toBeGreaterThan(downloadsBeforeAction);
+            const saved = await (downloads[downloadsBeforeAction] as Download).path();
             const files = unzip(fs.readFileSync(saved));
             for (const f of exported.files) {
               const data = files.get(f.path);
@@ -929,10 +947,20 @@ export function registerScenarioTests(): void {
           const persistence = s.expect.persistence;
           if (persistence) {
             const stored = await page.evaluate(() => window.localStorage.getItem('preferences'));
+            const applied = await appliedPreferences(page);
+            if (persistence.preferences === 'same') {
+              // what is stored is what the editor shows: its language and its theme
+              const kept = JSON.parse(stored ?? 'null') as { locale?: string; theme?: string } | null;
+              expect({ locale: kept?.locale, theme: kept?.theme }, 'the stored preferences are those the editor shows').toEqual({ locale: applied.locale, theme: applied.theme });
+            }
             await page.reload();
             await expect(page.locator('.workbench')).toBeVisible();
             if (persistence.document === 'same') expect(matchDocument((await port(page)).document, after.document), 'document after reload').toEqual([]);
-            if (persistence.preferences === 'same') expect(await page.evaluate(() => window.localStorage.getItem('preferences')), 'preferences after reload').toBe(stored);
+            if (persistence.preferences === 'same') {
+              expect(await page.evaluate(() => window.localStorage.getItem('preferences')), 'preferences after reload').toBe(stored);
+              // the reloaded editor applies them: the same language, theme and collapsed sections as before the reload
+              await expect.poll(() => appliedPreferences(page), { message: 'the editor applies after the reload the preferences it had before' }).toEqual(applied);
+            }
             if (persistence.selection === 'same') expect((await port(page)).selection, 'selection after reload').toEqual(after.selection);
           }
         });

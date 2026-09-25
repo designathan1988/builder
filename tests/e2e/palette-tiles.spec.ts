@@ -66,6 +66,12 @@ test('the tiles of palette-click-insert insert; a tile of a later feature is not
   const after = (await documentOf(page)) as { document: { pages: { tree: { children: { name: string; type: string }[] } }[] }; history: unknown };
   expect(after.document.pages[0]?.tree.children.map((c) => `${c.type} ${c.name}`)).toEqual(['paragraph Paragraph', 'paragraph Paragraph 2']);
   expect(after.history).toEqual({ undoSteps: 2, redoSteps: 0 });
+
+  // a click on an available tile inserts its entry after the selected element
+  await control(page, TILE, { args: { entry: 'heading' } }).click();
+  const clicked = (await documentOf(page)) as typeof after;
+  expect(clicked.document.pages[0]?.tree.children.map((c) => `${c.type} ${c.name}`)).toEqual(['paragraph Paragraph', 'paragraph Paragraph 2', 'heading Heading']);
+  expect(clicked.history).toEqual({ undoSteps: 3, redoSteps: 0 });
 });
 
 // The feature table (src/app/features.ts) decides every tile: a tile is enabled exactly when its entry's feature is

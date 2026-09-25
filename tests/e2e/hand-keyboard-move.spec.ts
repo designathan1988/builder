@@ -79,9 +79,16 @@ async function clickNode(page: Page, id: string) {
   await page.mouse.click(b.x + b.width / 2, b.y + b.height / 2);
 }
 
+// the box of the one element a selector finds, or null when it finds none or several, read in one task of the page:
+// counting first and then asking the box raced the chrome's next frame, whose removed element left the read waiting
 async function boxOf(page: Page, selector: string): Promise<Box | null> {
-  const found = page.locator(selector);
-  return (await found.count()) === 1 ? found.boundingBox() : null;
+  const boxes = await page.locator(selector).evaluateAll((els) =>
+    els.map((el) => {
+      const r = el.getBoundingClientRect();
+      return { x: r.x, y: r.y, width: r.width, height: r.height };
+    }),
+  );
+  return boxes.length === 1 ? (boxes[0] ?? null) : null;
 }
 const close = (a: number, b: number) => Math.abs(a - b) <= 1;
 const status = (page: Page) => page.getByRole('status');

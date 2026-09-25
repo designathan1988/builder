@@ -30,6 +30,15 @@ const read = (page: Page) =>
     return { tree, selection: p.selection().map((id) => names.get(id) ?? id), undoSteps: p.history().undoSteps };
   });
 
+// the ids of the children of the node of that name: a wrapper holds the very nodes it wraps, with their ids
+const childIds = (page: Page, name: string) =>
+  page.evaluate((wanted) => {
+    const p = (window as unknown as Record<string, { document: () => { pages: { tree: Tree }[] } }>).__builderTestPort;
+    const find = (n: Tree): Tree | undefined => (n.name === wanted ? n : n.children.map(find).find((x) => x !== undefined));
+    const node = p ? find(p.document().pages[0]?.tree as Tree) : undefined;
+    return node ? node.children.map((c) => c.id) : null;
+  }, name);
+
 // the computed display and flex-direction of the element drawn for the node of that name inside the frame
 const flexOf = (page: Page, name: string) =>
   page.evaluate((wanted) => {
@@ -84,6 +93,7 @@ test(
     await clickNode(page, 'n-intro');
     await runDoor(page, 'element.wrapRow#menu-arrange');
     expect(await read(page)).toEqual({ tree: `Page(Hero(Title Row(Intro) Actions) ${REST})`, selection: ['Row'], undoSteps: 1 });
+    expect(await childIds(page, 'Row'), 'the Row holds Intro itself, with its id').toEqual(['n-intro']);
     await expect(status).toHaveText('Wrapped Intro in Row (display: flex; flex-direction: row).');
     await expect.poll(() => flexOf(page, 'Row')).toBe('flex row');
 
@@ -92,6 +102,7 @@ test(
 
     await runDoor(page, 'element.wrapColumn#menu-arrange');
     expect(await read(page)).toEqual({ tree: `Page(Hero(Title Column(Intro) Actions) ${REST})`, selection: ['Column'], undoSteps: 1 });
+    expect(await childIds(page, 'Column'), 'the Column holds Intro itself, with its id').toEqual(['n-intro']);
     await expect(status).toHaveText('Wrapped Intro in Column (display: flex; flex-direction: column).');
     await expect.poll(() => flexOf(page, 'Column')).toBe('flex column');
   },
@@ -107,6 +118,8 @@ test(
     await runDoor(page, 'element.wrapColumn#key-c-in-canvas');
     const after = `Page(${HERO} Plans(Grid(CardA(CardATitle) Column(CardB(CardBTitle)) CardC) Perks(PerkOne(PerkOneText) PerkTwo(PerkTwoText))) Footer(Note))`;
     expect(await read(page)).toEqual({ tree: after, selection: ['Column'], undoSteps: 1 });
+    expect(await childIds(page, 'Column'), 'the Column holds CardB itself, with its id').toEqual(['n-card-b']);
+    expect(await childIds(page, 'CardB'), 'CardB keeps its title, with its id').toEqual(['n-card-b-title']);
     await expect(page.getByRole('status')).toHaveText('Wrapped CardB in Column (display: flex; flex-direction: column).');
     await expect.poll(() => flexOf(page, 'Column')).toBe('flex column');
     await runDoor(page, 'history.undo#toolbar-top-bar');
@@ -124,6 +137,7 @@ test(
     await clickNode(page, 'n-title', 'Shift');
     await runDoor(page, 'element.wrapRow#key-r-in-canvas');
     expect(await read(page)).toEqual({ tree: `Page(Hero(Row(Title Actions) Intro) ${REST})`, selection: ['Row'], undoSteps: 1 });
+    expect(await childIds(page, 'Row'), 'the Row holds Title and Actions themselves, with their ids').toEqual(['n-title', 'n-actions']);
     await expect(status).toHaveText('Wrapped 2 elements in Row (display: flex; flex-direction: row).');
     await expect.poll(() => flexOf(page, 'Row')).toBe('flex row');
 
