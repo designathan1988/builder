@@ -16,7 +16,7 @@
     "e2e:tooth": "node tools/runner/tooth.ts",
     "gen": "node tools/gen/generate.ts",
     "gen:check": "node tools/gen/check.ts",
-    "verify:fast": "npm run gen:check && npm run typecheck && npm run lint && npm run unit && npm run manifest:check",
+    "verify:fast": "npm run gen:check && node tools/verify/parallel.ts",
     "manifest:check": "node tools/manifest/check.ts",
     "manifest:map": "node tools/manifest/map-features.ts",
     "design:shots": "node tools/design/shots.ts"
