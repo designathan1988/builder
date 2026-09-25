@@ -1,10 +1,19 @@
-// The renderer (src/core/render/render.ts) in the installed Chrome: the app's own modules, loaded from the dev
-// server, build a small document into a fresh same-origin iframe and then apply a change's patches to it. The end
-// artifacts are what Chrome lays out in the frame: the computed style of the changed nodes (also at a breakpoint
-// other than the base, with the frame at that width), their geometry and their text, and the elements of the nodes
-// the change did not replace are the same objects as before (each is marked with a property before the change).
-// No command that changes the document is built yet, so this test proves the renderer on its own.
+// The renderer (src/core/render/render.ts) in the installed Chrome: the app's own modules, loaded from the served
+// build (/proofs.js, tests/support/proofs.ts), build a small document into a fresh same-origin iframe and then apply
+// a change's patches to it. The end artifacts are what Chrome lays out in the frame: the computed style of the
+// changed nodes (also at a breakpoint other than the base, with the frame at that width), their geometry and their
+// text, and the elements of the nodes the change did not replace are the same objects as before (each is marked with
+// a property before the change). No command that changes the document is built yet, so this test proves the renderer
+// on its own.
+import fs from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
+
+// the manifest files the renderer is built from, as the runner reads them (manifest/runtime.ts loads the same JSON)
+const MANIFEST = {
+  elements: JSON.parse(fs.readFileSync('manifest/elements.json', 'utf8')),
+  properties: JSON.parse(fs.readFileSync('manifest/properties.json', 'utf8')),
+  interactions: JSON.parse(fs.readFileSync('manifest/interactions.json', 'utf8')),
+};
 
 // what the test reads of the modules it loads in the page (typed here: the tests project does not compile src)
 interface Proof {
@@ -56,17 +65,16 @@ const PATCHES = [
 ];
 const IDS = ['root', 'hero', 'box', 'title', 'footer', 'note'];
 
-// Loads the renderer and the manifest from the dev server, mounts DOC into a new same-origin iframe (sandboxed
-// without scripts, as the canvas frame is) and keeps a function that applies PATCHES.
+// Loads the renderer and the manifest from the served build (/proofs.js, tests/support/proofs.ts), mounts DOC into a
+// new same-origin iframe (sandboxed without scripts, as the canvas frame is) and keeps a function that applies PATCHES.
 async function mount(page: Page): Promise<void> {
   await page.evaluate(
-    async ({ doc, patches }) => {
-      const render = (await import(/* @vite-ignore */ '/src/core/render/render.ts' as string)) as {
+    async ({ doc, patches, manifest }) => {
+      const render = (await import(/* @vite-ignore */ '/proofs.js' as string)) as {
         PageRenderer: new (target: Document, model: unknown) => { mount(d: unknown): void; apply(b: unknown, a: unknown, p: unknown): void };
         renderModelFromManifest(elements: unknown, properties: unknown, interactions: unknown): unknown;
+        applyPatches(d: unknown, p: unknown): { document: unknown };
       };
-      const runtime = (await import(/* @vite-ignore */ '/src/manifest/runtime.ts' as string)) as { manifest: { elements: unknown; properties: unknown; interactions: unknown } };
-      const history = (await import(/* @vite-ignore */ '/src/core/history/transaction.ts' as string)) as { applyPatches(d: unknown, p: unknown): { document: unknown } };
       const frame = document.createElement('iframe');
       frame.id = 'render-proof';
       frame.setAttribute('sandbox', 'allow-same-origin');
@@ -77,12 +85,12 @@ async function mount(page: Page): Promise<void> {
       await loaded;
       const target = frame.contentDocument;
       if (!target) throw new Error('the frame has no document');
-      const renderer = new render.PageRenderer(target, render.renderModelFromManifest(runtime.manifest.elements, runtime.manifest.properties, runtime.manifest.interactions));
+      const renderer = new render.PageRenderer(target, render.renderModelFromManifest(manifest.elements, manifest.properties, manifest.interactions));
       renderer.mount(doc);
-      const after = history.applyPatches(doc, patches).document;
+      const after = render.applyPatches(doc, patches).document;
       (window as ProofWindow).renderProof = { frame, apply: () => renderer.apply(doc, after, patches) };
     },
-    { doc: DOC, patches: PATCHES },
+    { doc: DOC, patches: PATCHES, manifest: MANIFEST },
   );
 }
 

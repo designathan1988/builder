@@ -20,13 +20,16 @@ function productTitle(): Plugin {
   };
 }
 
-export default defineConfig(({ command }) => ({
-  // toothPlugin() is null unless the scenario runner's tooth proof starts this server (tools/runner/tooth.ts)
-  plugins: [react(), productTitle(), toothPlugin()],
-  // reference/ holds other projects with their own HTML entries; keep Vite away from them.
-  optimizeDeps: { entries: ['index.html'] },
-  server:
-    command === 'serve'
-      ? { port: readPort(), strictPort: true, watch: { ignored: ['**/reference/**', '**/.cache/**', '**/.playwright-mcp/**'] } }
-      : {},
-}));
+export default defineConfig(({ command }) => {
+  // PORT is required by the servers, dev and preview (vite preview reports the serve command too), never by a build
+  const port = command === 'build' ? null : readPort();
+  return {
+    // toothPlugin() is null unless the scenario runner's tooth proof starts this server (tools/runner/tooth.ts)
+    plugins: [react(), productTitle(), toothPlugin()],
+    // reference/ holds other projects with their own HTML entries; keep Vite away from them.
+    optimizeDeps: { entries: ['index.html'] },
+    server: port === null ? {} : { port, strictPort: true, watch: { ignored: ['**/reference/**', '**/.cache/**', '**/.playwright-mcp/**'] } },
+    // the e2e suite serves the build (playwright.config.ts) from `vite preview`, on the same PORT
+    preview: port === null ? {} : { port, strictPort: true },
+  };
+});

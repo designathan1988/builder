@@ -221,14 +221,15 @@ function localeAfter(s: Scenario, action: string, last = s.steps.length - 1): st
   return s.setup.locale;
 }
 
-// a message's text, as the app's own i18n runtime writes it (src/i18n/index.ts, served by the dev server)
+// a message's text, as the app's own i18n runtime writes it (src/i18n/index.ts, re-exported by the served build's
+// /proofs.js: tests/support/proofs.ts)
 const text = (page: Page, locale: string, key: string, params: Record<string, string | number>) =>
   page.evaluate(
     async ([module, l, k, p]) => {
-      const i18n = (await import(module)) as { translate: (locale: string, key: string, params: unknown) => string };
+      const i18n = (await import(/* @vite-ignore */ module)) as { translate: (locale: string, key: string, params: unknown) => string };
       return i18n.translate(l, k, p);
     },
-    ['/src/i18n/index.ts', locale, key, params] as const,
+    ['/proofs.js', locale, key, params] as const,
   );
 
 // what the read-only test port reads (src/editor/test-port.ts)

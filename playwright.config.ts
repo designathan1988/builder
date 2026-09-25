@@ -2,7 +2,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from '@playwright/test';
 
-// The e2e run starts its own dev server on this port so it never talks to a stale or foreign server.
+// The e2e run builds the app once and serves the build on this port (a static `vite preview`, much faster per
+// test than the dev server); it never talks to a stale or foreign server.
 const port = process.env.E2E_PORT ?? '5310';
 const baseURL = `http://localhost:${port}`;
 
@@ -43,11 +44,14 @@ export default defineConfig({
     navigationTimeout: 15_000,
   },
   webServer: {
-    command: 'npm run dev',
+    // the app under test is the build, served statically (the same tests, no per-module dev transforms per request);
+    // tests/support/proofs.ts is built beside it for the browser-side proofs
+    command: 'npm run build && npm run build:proofs && npm run preview',
     url: baseURL,
-    // the tooth proof (tools/runner/tooth.ts) switches a feature off in the server it starts
+    // the tooth proof (tools/runner/tooth.ts) switches a feature off in the build it makes here (tooth-plugin.ts)
     env: { PORT: port, TOOTH_COMMANDS: process.env.TOOTH_COMMANDS ?? '', TOOTH_MODULE: process.env.TOOTH_MODULE ?? '' },
     reuseExistingServer: false,
-    timeout: 60_000,
+    // the build runs first: a cold one takes about a minute
+    timeout: 240_000,
   },
 });
