@@ -53,9 +53,8 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 26. marquee: Escape during a band should cancel it (needs drag.cancel, not built); hidden and locked nodes are not
     left out (the model has no flags yet; status.selection.skipped unused); a lost pointer restores it, untested.
 27. delete and move up/down do not refuse a locked element yet (status.locked.*): lock-element must add the check.
-28. Arrange › Move up/down stay enabled at an edge (refused with a message): the manifest's predicate is only
-    hasSelection, while DESIGN.md disables a menu item that cannot apply now.
+28. Arrange › Move up/down stay enabled at an edge (refused): the predicate is only hasSelection (DESIGN: disabled).
 29. The runner selects a node with no point of its own by a descendant plus ArrowUp; adding one with Shift needs its
     Layers row and then focus.canvas#key-escape-in-layers-tree (not built; multi-select-actions needs it). The census
     reads the test list, so it sees the canvas click named, not the substitute door run (both have their own tests).
-30. Wrap refusals declared but not built: requiresParent, interactiveInside, formInForm, singleChild, labelOneControl.
+30. Declared, not built: wrap refusals requiresParent, interactiveInside, formInForm, singleChild, labelOneControl.
