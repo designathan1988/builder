@@ -4,6 +4,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { expect, test } from '@playwright/test';
+import { openEditor } from '../support/editor.ts';
 
 const DRAWN = new Map<string, string>();
 for (const file of fs.readdirSync('manifest/commands')) {
@@ -13,9 +14,7 @@ for (const file of fs.readdirSync('manifest/commands')) {
 
 test('every inspector field on screen is a button exactly when its door is drawn as one', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/');
-  await page.evaluate(() => window.localStorage.clear());
-  await page.reload();
+  await openEditor(page);
   const rows = await page.locator('.inspector .field-row[data-door]').evaluateAll((els) =>
     els.map((el) => ({ ref: el.getAttribute('data-door') ?? '', button: el.querySelector(':scope > button.door--button') !== null })),
   );

@@ -3,6 +3,7 @@
 // computed style or the stored preferences after an immediate reload, so it fails when the door's command does
 // nothing or does something else.
 import { expect, test, type Page } from '@playwright/test';
+import { openEditor } from '../support/editor.ts';
 import { runDoor, runs } from './door.ts';
 
 const box = async (page: Page, selector: string) => {
@@ -15,9 +16,7 @@ const storedPreferences = (page: Page) => page.evaluate(() => JSON.parse(window.
 
 test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/');
-  await page.evaluate(() => window.localStorage.clear());
-  await page.reload();
+  await openEditor(page);
   await expect(page.locator('.workbench')).toBeVisible();
 });
 

@@ -2,12 +2,11 @@
 // keys belong to the gesture (the drag key context), so a global key's door does not run beside it and nothing
 // breaks; after the release the keys are the editor's again.
 import { expect, test } from '@playwright/test';
+import { openEditor } from '../support/editor.ts';
 
 test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/');
-  await page.evaluate(() => window.localStorage.clear());
-  await page.reload();
+  await openEditor(page);
   await expect(page.locator('.workbench')).toBeVisible();
 });
 

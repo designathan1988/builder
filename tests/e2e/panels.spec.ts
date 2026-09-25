@@ -5,6 +5,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
+import { openEditor } from '../support/editor.ts';
 
 const EMPTY = ['checks', 'shortcuts'];
 const BUILT = ['explorer', 'elements', 'variables', 'layers', 'inspector', 'workbench', 'timeline', 'canvas-tools'];
@@ -37,9 +38,7 @@ async function control(page: Page, door: (typeof panelDoors)[number]) {
 
 test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/');
-  await page.evaluate(() => window.localStorage.clear());
-  await page.reload();
+  await openEditor(page);
 });
 
 test('a door that only opens a panel without its content is disabled with "not available yet" and changes nothing', async ({ page }) => {

@@ -4,6 +4,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { expect, test } from '@playwright/test';
+import { openEditor } from '../support/editor.ts';
 
 interface Door {
   id: string;
@@ -19,9 +20,7 @@ const catalogue = (locale: string) => JSON.parse(fs.readFileSync(`src/i18n/local
 
 test('a door with a face label shows its face text and keeps its label as its accessible name, in English and Portuguese', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/');
-  await page.evaluate(() => window.localStorage.clear());
-  await page.reload();
+  await openEditor(page);
   // the inspector's selector bar draws Apply a class: the check cannot pass on nothing
   await expect(page.locator('[data-door="classes.apply#inspector-class-add"]')).toHaveCount(1);
   for (const locale of ['en', 'pt-BR']) {

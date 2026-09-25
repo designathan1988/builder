@@ -8,6 +8,7 @@
 // the history are read through the read-only test port.
 import fs from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
+import { openEditor } from '../support/editor.ts';
 import { control, runDoor, runs } from './door.ts';
 
 const FIXTURE = 'manifest/features/fixtures/aurora.json';
@@ -85,9 +86,7 @@ async function expectFieldReady(page: Page, id: string, name: string) {
 
 test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/');
-  await page.evaluate(() => window.localStorage.clear());
-  await page.reload();
+  await openEditor(page);
   await expect(page.locator('.workbench')).toBeVisible();
   // File › Open with the browser's file chooser, as a person opens a project
   const chooser = page.waitForEvent('filechooser');

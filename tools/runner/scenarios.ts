@@ -25,6 +25,7 @@ import { FEATURE_COMMANDS } from '../../src/generated/commands.ts';
 import type { FeatureId } from '../../src/generated/ids.ts';
 import { EMPTY_FIXTURE, applyDiff, matchDocument, resolveNode, type DiffOp } from '../../src/manifest/scenario.ts';
 import { control, door as doorData, keys, modifiedControl, openMenu, runDoor, type Door } from '../../tests/e2e/door.ts';
+import { openEditor } from '../../tests/support/editor.ts';
 import { unzip } from './unzip.ts';
 
 type Measure = 'x' | 'y' | 'width' | 'height';
@@ -761,9 +762,7 @@ async function setUp(page: Page, s: Scenario): Promise<unknown> {
   const viewport = environment.viewports.find((v) => v.id === s.setup.viewport);
   if (!viewport) throw new Error(`no viewport ${s.setup.viewport}`);
   await page.setViewportSize({ width: viewport.width, height: viewport.height });
-  await page.goto('/');
-  await page.evaluate(() => window.localStorage.clear());
-  await page.reload();
+  await openEditor(page);
   await expect(page.locator('.workbench')).toBeVisible();
   if (s.setup.locale !== environment.locales.default) await runDoor(page, settingDoor('preferences.setLanguage', 'locale', s.setup.locale));
   // the editor shows the setup's language, whether a door switched it or it is the default

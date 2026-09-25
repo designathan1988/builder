@@ -4,6 +4,7 @@
 // disabled with its reason and a key reports it in the status bar, changing nothing. (The toast's Undo is tested in
 // delete-element.spec.ts; the command bar's arrives with command-bar.)
 import { expect, test, type Page } from '@playwright/test';
+import { openEditor } from '../support/editor.ts';
 import { control, openMenu, runDoor, runs } from './door.ts';
 
 const DRAWN = ['history.undo#toolbar-top-bar', 'history.undo#menu-edit', 'history.redo#toolbar-top-bar', 'history.redo#menu-edit'];
@@ -46,9 +47,7 @@ const read = (page: Page) =>
 
 test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/');
-  await page.evaluate(() => window.localStorage.clear());
-  await page.reload();
+  await openEditor(page);
   await expect(page.locator('.workbench')).toBeVisible();
 });
 

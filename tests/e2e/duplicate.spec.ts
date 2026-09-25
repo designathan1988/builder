@@ -6,6 +6,7 @@
 // port; the page through the frame.
 import fs from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
+import { openEditor } from '../support/editor.ts';
 import { openMenu, runDoor, runs } from './door.ts';
 
 const FIXTURE = 'manifest/features/fixtures/aurora.json';
@@ -72,9 +73,7 @@ const top = (page: Page, id: string) =>
 
 test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/');
-  await page.evaluate(() => window.localStorage.clear());
-  await page.reload();
+  await openEditor(page);
   await expect(page.locator('.workbench')).toBeVisible();
   await openAurora(page);
 });

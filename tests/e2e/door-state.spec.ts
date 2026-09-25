@@ -2,15 +2,14 @@
 // (pressed) by aria-pressed, a menu item (checked radio or checkbox) by its role and aria-checked, both from the
 // current state the store holds. A door that is no toggle (a close button, a command item) says nothing.
 import { expect, test } from '@playwright/test';
+import { openEditor } from '../support/editor.ts';
 import { openMenu, runDoor, runs } from './door.ts';
 
 const door = (ref: string) => `[data-door="${ref}"]`;
 
 test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/');
-  await page.evaluate(() => window.localStorage.clear());
-  await page.reload();
+  await openEditor(page);
   await expect(page.locator('.workbench')).toBeVisible();
 });
 

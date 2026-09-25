@@ -5,6 +5,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
+import { openEditor } from '../support/editor.ts';
 
 const SIDES = ['top', 'right', 'bottom', 'left'] as const;
 
@@ -39,9 +40,7 @@ const box = async (page: Page, selector: string) => {
 
 test('each box of the box model holds the next, and each side field sits on its side', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/');
-  await page.evaluate(() => window.localStorage.clear());
-  await page.reload();
+  await openEditor(page);
   expect(BOXES.length).toBe(COMPOSITES.length);
   expect(BOXES.length).toBeGreaterThan(1);
 

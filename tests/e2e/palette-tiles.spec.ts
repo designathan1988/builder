@@ -3,6 +3,7 @@
 // is drawn disabled with "not available yet", and neither a click nor Enter or Space on it inserts anything.
 import fs from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
+import { openEditor } from '../support/editor.ts';
 import { isFeatureBuilt } from '../../src/app/features.ts';
 import type { FeatureId } from '../../src/generated/ids.ts';
 import { control, runDoor, runs } from './door.ts';
@@ -37,9 +38,7 @@ async function tabTo(page: Page, entry: string) {
 
 test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/');
-  await page.evaluate(() => window.localStorage.clear());
-  await page.reload();
+  await openEditor(page);
   await expect(page.locator('.workbench')).toBeVisible();
 });
 

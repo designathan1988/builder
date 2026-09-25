@@ -7,6 +7,7 @@
 // against the elements' boxes inside the frame, mapped to the screen through its CSS zoom.
 import fs from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
+import { openEditor } from '../support/editor.ts';
 import { openMenu, runs } from './door.ts';
 
 const FIXTURE = 'manifest/features/fixtures/aurora.json';
@@ -99,9 +100,7 @@ const DOORS = ['project.open#menu-file', 'selection.select#canvas-click-element-
 
 test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/');
-  await page.evaluate(() => window.localStorage.clear());
-  await page.reload();
+  await openEditor(page);
   await expect(page.locator('.workbench')).toBeVisible();
   await openAurora(page);
 });
