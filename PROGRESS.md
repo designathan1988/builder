@@ -2,6 +2,26 @@
 
 Handoff notes between sessions. Newest entry first.
 
+## 2026-09-25 — Handoff: end of the builder/auditor run, one conversation per slice from here
+
+Why: the user ended the two-session method (builder plus continuous auditor) because it was too slow. From now on each slice of work is one conversation; the protections stay in the repository (manifest:check, gen:check, lint, the door census, the scenario runner, the tooth proof) and in CLAUDE.md, which no longer mentions the auditor.
+
+Committed on main (all pushed):
+- Foundation part 2, 715c1af: the canvas iframe and renderer, coordinates under CSS zoom (25 to 400), File › Open (`project.open`), the read-only test port, the scenario runner (`tools/runner/`, `npm run e2e:tooth`). Group 01 passes through the runner, with teeth. See entry 16 below.
+- 941b099: the user's decision on Open finding 10 (View › Timeline shows a folded dock's panel first, takes the tab out only while it shows). Done; nothing pending from it.
+- Not built from part 2: c and d, the pointer owner (`src/editor/input/pointer.ts`, still "planned" in ARCHITECTURE.md) with its gesture state machines, and the undo transaction a door opens per gesture. Decision recorded in entry 16: they come with group 02's first gesture features.
+
+On branch `wip/part2` (f889bc2, pushed, one "WIP:" commit on top of 941b099):
+- `tools/gen/types.ts` writes `FEATURE_COMMANDS` (the commands each feature lists) into `src/generated/commands.ts`. Nothing uses it yet. It was meant for the Insert tiles: a palette entry names its own feature, so a tile would be enabled only when its entry is an `element` kind and every command of its feature is built.
+- To resume: `git checkout main && git merge --ff-only wip/part2` (or cherry-pick f889bc2), run `npm run gen` and stage `src/generated/commands.ts` before `npm run verify:fast` (gen:check compares with the index).
+
+Where group 02 stands (nothing of it is built):
+- The first feature in file order is palette-click-insert, but 4 of its 5 scenarios start with a selection (`setup.selection`, for example `/Page/Hero/Actions`). The test port never writes, so the runner can only set that selection through a door of `selection.select`, and the one that fits is the canvas click of select-click, which needs `pointer.ts`. Planned order: select-click first (`selection.select`, `selection.clear`, `pointer.ts`, the runner's setup selection through the canvas click), then palette-click-insert. Building `selection.select` and `selection.clear` enables all of their doors (Layers row, breadcrumb, Edit › Clear selection, Escape, …), and the census then requires a browser test for each door it finds enabled.
+- palette-click-insert, planned: `src/core/structure/insert.ts` (the handler: nothing selected → last child of the root; an unlocked container → its last child; a leaf → right after it; `parent`/`index` arguments override; names unique across the page; default text and names in the UI language; selection = the new node; message `status.placed`), an owner module for the HTML content model built from `manifest/generated/html-elements.json`, giving refusals such as `status.refused.onlyAccepts` (check.ts should reuse it), the tile's arguments on the door (`data-args`) so the palette's Enter and Space act on the focused tile.
+- The runner (`tools/runner/scenarios.ts`) still throws on a setup with a selection, a context other than global, a breakpoint other than desktop, a state other than base, a zoom other than fit, and on steps with target, drop or hold. Extend it as each feature needs.
+
+Open findings at the handoff: the list below. For 2, 3, 4 and 8 the auditor's last view (not a user decision) was to close them: 2, keep display flow and the justify-* keywords offered, because browsers act on them; 3 is stale, since workspace-doors.spec and history-doors.spec plus the census now cover it; 4 rested on the auditor's own wrong a92d782 report; 8, keep "false" on unbuilt toggles, because an unbuilt feature's state is off. No BLOCKING was open when the run ended; the auditor had not yet answered on 715c1af and 941b099.
+
 ## 2026-09-24 — Run: scenario contract, visual pass, foundation part 2, group 02
 
 Why: part 1 is verified by the auditor at 380745b. This run goes by checkpoints in one session: each step committed, pushed and reviewed as it lands. The auditor writes the scenarios and fixtures of groups 01 and 02 under `manifest/features/` in the same folder and branch; the builder never edits them and commits only its own files with `git commit --only`.

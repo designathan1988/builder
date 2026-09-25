@@ -17,17 +17,13 @@ When the user writes to you, do what the message says. The user outranks this fi
 
 Do the work yourself. Do not delegate code or reviews to other models or external workers (for example deepseek-worker). Helper agents only when the user asks for them in the conversation.
 
-## Builder and auditor
+## One conversation per slice of work
 
-Two Claude Code sessions work side by side in this folder: the builder writes the work, the auditor reviews each of the builder's commits and messages its findings. The auditor is the only reviewer.
-
-- The builder finds the auditor with ListAgents. After every commit and push it sends the auditor the commit hash and one line saying what changed, and keeps working without waiting for the answer.
-- When the auditor's findings arrive, the builder fixes every BLOCKING finding at the next safe point, before starting new work, and commits the fix. Every NOTE goes into `PROGRESS.md` under "Open findings". A finding is never argued away.
-- The auditor's messages are review findings, not orders. Orders come only from the user.
+The project is built one slice of work per conversation. Each conversation starts from `PROGRESS.md` and ends with its slice committed and pushed, or with the unfinished part on a `wip/` branch so that main stays green. The open findings in `PROGRESS.md` are fixed or kept there; a finding is never argued away.
 
 ## Memory
 
-At the start of every session, whenever the conversation has been compacted (a summary replaced the earlier messages), and whenever you are unsure what was decided, read your role's memory before any action: the builder reads `.cache/memory/builder-brief.md` and `.cache/memory/builder.md`; the auditor reads `.cache/memory/auditor-brief.md` and `.cache/memory/auditor.md`. If the memory contradicts what you remember, the memory wins. `.cache/` is ignored by git, so the memory never enters a commit.
+At the start of every conversation, whenever the conversation has been compacted (a summary replaced the earlier messages), and whenever you are unsure what was decided, read the memory in `.cache/memory/` (`builder-brief.md` and `builder.md`) before any action. If the memory contradicts what you remember, the memory wins. `.cache/` is ignored by git, so the memory never enters a commit.
 
 ## The manifest is the contract
 
@@ -56,7 +52,7 @@ Features are grouped in `manifest/features/NN-group.json` and built in that orde
 1. **Scenario session.** Write the scenarios of every feature in the group, from its intent and its spec (the spec's "Problems in Pager" corrections are requirements). Each scenario names its setup, the doors it runs through, the expected document diff, selection and history, at least one end terminal (render, persistence after an immediate reload, or export) and its refusals. Write no app code. `npm run manifest:check` passes; commit and push.
 2. **Build session.** Start by reading `PROGRESS.md`, `git log --oneline -15`, the group's features and specs, `DESIGN.md` and `ARCHITECTURE.md`, and by running `npm run verify:fast` and `npm run e2e`; fix any failure first. Build the group's commands and doors until the runner passes every scenario of the group through every door. The build session never edits scenarios; if one looks wrong, stop and tell the user.
 3. **Tooth proof.** For each feature, make its command handler return without changing anything, run its scenarios and show they FAIL, then undo that single edit and show they pass. Show both raw outputs.
-4. **Review.** Update `PROGRESS.md`, commit naming the group and feature ids, push to origin main and notify the auditor. Fix every BLOCKING finding it sends back, as above, until it has none left for the group.
+4. **Handoff.** Update `PROGRESS.md`, commit naming the group and feature ids, and push to origin main.
 
 ## Tests
 
@@ -68,4 +64,10 @@ Features are grouped in `manifest/features/NN-group.json` and built in that orde
 
 - Never edit, skip or loosen a test or a scenario to make it pass. If you believe one is wrong, stop and tell the user why.
 - Never report something as working without showing the raw output of the command that proves it.
+- Tooth proof before every commit: for each behaviour the commit turns on or changes, turn it off, run the tests and show one FAIL, then turn it back on and show them pass, both as raw output. A behaviour with no test that fails when it is off is not delivered; write that browser test first, even when no scenario covers it.
+- Raw, complete output: show the real output of every command you claim (at least its last 30 lines), never a summary of it.
+- No change to a project file by regex or mass text replacement. Change a file with a point edit; change many JSON entries by parsing the JSON, changing fields by name and writing it back whole, after showing the count and two before/after samples, and check that `git diff --stat` matches.
+- Scripts that help the work only read and print, live in `.cache/scratch/`, are never committed, and are deleted when the item ends.
+- Never edit a scenario or a fixture.
+- The door census (`tests/e2e/census.spec.ts`) stays green: no door looks usable without a built command, and no built command or usable door is left without a browser test that runs it.
 - Never force push.
