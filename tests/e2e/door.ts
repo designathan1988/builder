@@ -25,11 +25,19 @@ const MENUS = (JSON.parse(fs.readFileSync('manifest/layout.json', 'utf8')) as { 
 const EN = JSON.parse(fs.readFileSync('src/i18n/locales/en.json', 'utf8')) as Record<string, string>;
 
 export const DOOR_ANNOTATION = 'door';
+// a door the test runs and finds it cannot run yet (its command is built, but what it acts on cannot exist yet)
+export const UNAVAILABLE_ANNOTATION = 'door-unavailable';
 
 // the details of a test that runs these doors
 export function runs(...refs: string[]): TestDetails {
   for (const ref of refs) if (!DOORS.has(ref)) throw new Error(`the manifest has no door ${ref}`);
   return { annotation: refs.map((ref) => ({ type: DOOR_ANNOTATION, description: ref })) };
+}
+
+// the details of a test that runs these doors and shows each cannot run yet
+export function runsUnavailable(...refs: string[]): TestDetails {
+  for (const ref of refs) if (!DOORS.has(ref)) throw new Error(`the manifest has no door ${ref}`);
+  return { annotation: refs.map((ref) => ({ type: UNAVAILABLE_ANNOTATION, description: ref })) };
 }
 
 function door(ref: string): Door {
