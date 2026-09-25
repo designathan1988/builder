@@ -16,12 +16,19 @@
 // they would land, publishes it for the canvas chrome (hysteresis: drag.hysteresis), and the release runs the
 // canvas-drag door of the drawn proposal's zone (beside a sibling, or inside a container) with its parent and index,
 // inside the same gesture.
+//
+// The keys of a drag (spec drag-level-keys-escape) run through the gesture too (keymap.ts, drag key context): each press
+// is a live drag of the drag session (src/editor/drag/drag-session.ts), which gets the proposal the pointer makes; the
+// proposal drawn, and dropped on release, is the one of the level the session holds, redrawn as soon as the level
+// changes. Escape cancels the drag: its drawing goes at once, no drag starts from a press still under the threshold,
+// and the release drops nothing (what the press itself did, selecting the element, stays).
 import { locate, type DocumentJson, type NodeId } from '../../core/document/model.ts';
 import type { Gesture } from '../../core/store/store.ts';
 import { selectionRoots } from '../../core/structure/remove.ts';
 import type { CommandId, KeyContextId } from '../../generated/ids.ts';
 import { manifest, type DoorEntry } from '../../manifest/runtime.ts';
 import { canvasFrame, flowAxis, geometryOf, nodeAt, nodeBox, nodesUnder, screenToPage, type Point } from '../canvas/coordinates.ts';
+import { drawnProposal, isCancelled, liveDrag } from '../drag/drag-session.ts';
 import { proposeDrop, type DropProposal } from '../drag/drop.ts';
 import type { EditorStore } from '../store.ts';
 
@@ -163,10 +170,12 @@ const dropDoor = (proposal: DropProposal) => (proposal.placement === 'inside' ? 
 const DRAG_MODIFIERS = new Set(manifest.interactions.gestures.find((g) => REORDER?.door.kind === 'canvas-drag' && g.id === REORDER.door.gesture)?.modifiers.map((m) => m.key) ?? []);
 
 // The drag in progress, for the canvas chrome: the nodes dragged and the drop proposal drawn now (the one a release
-// commits). Pointer state, not editor state: nothing changes until the release.
+// commits) with the receiver levels it climbed (the drag session's level keys). Pointer state, not editor state:
+// nothing changes until the release.
 export interface DragView {
   readonly dragged: readonly NodeId[];
   readonly proposal: DropProposal | null;
+  readonly levels: number;
 }
 let dragView: DragView | null = null;
 const dragListeners = new Set<() => void>();
@@ -236,8 +245,11 @@ function pressAt(event: PointerEvent, isRoot: (node: string) => boolean): Press 
 export function installPointer(store: EditorStore, target: Window = window): () => void {
   let machine: Machine = IDLE;
   let buttons: { button: Button; count: number; modifier: string | null } | null = null;
-  // an element drag: what it moves, the proposal drawn and where the pointer was when it was taken (drag.hysteresis)
-  let dragging: { readonly dragged: readonly NodeId[]; proposal: DropProposal | null; takenAt: Point | null } | null = null;
+  // an element drag: what it moves, the pointer's own proposal (level 0) and where the pointer was when it was taken
+  // (drag.hysteresis), and the proposal drawn at the drag session's level, the one the release drops
+  let dragging: { readonly dragged: readonly NodeId[]; base: DropProposal | null; takenAt: Point | null; drawn: DropProposal | null; levels: number } | null = null;
+  // the live drag of the drag session the press started
+  let pressDrag = 0;
   // where the press went down, on the screen and in page pixels (null outside the page)
   let pressedAt: { screen: Point; page: Point | null } | null = null;
   // the marquee being drawn: its door and mode
@@ -267,30 +279,37 @@ export function installPointer(store: EditorStore, target: Window = window): () 
   const run = (effect: Effect) => {
     if (effect === 'press' && machine.phase !== 'idle' && buttons !== null) {
       open = store.gesture();
+      pressDrag = liveDrag.begin();
       const entry = clickDoor(machine.press, buttons.button, buttons.count, buttons.modifier);
       if (entry) open.dispatch(entry.command.id as CommandId, argsFor(entry, machine.press) as never);
-    } else if (effect === 'drag' && machine.phase === 'dragging' && buttons?.button === 'primary') {
+    } else if (effect === 'drag' && machine.phase === 'dragging' && buttons?.button === 'primary' && !isCancelled(store.getState().ui.drag, pressDrag)) {
+      // a press whose drag Escape cancelled under the threshold starts none
       const press = machine.press;
       const node = press.on === 'node' ? (locate(store.getState().document, press.node as NodeId)?.node ?? null) : null;
       // a press on the empty area of the page or of a container with children becomes a marquee; what the press's
       // click did is undone, so the marquee starts from the selection held before the press
       const mode = MARQUEE === null ? null : marqueeMode(MARQUEE, press, buttons.modifier, node);
       const plain = buttons.modifier === null || DRAG_MODIFIERS.has(buttons.modifier as never);
-      if (MARQUEE !== null && mode !== null) marquee = { entry: MARQUEE, mode };
-      else if (ELEMENT_DRAGS.length > 0 && press.on === 'node' && !press.root && plain) {
+      // a marquee is no drag of elements: the drag session's keys do not act on it
+      if (MARQUEE !== null && mode !== null) {
+        marquee = { entry: MARQUEE, mode };
+        liveDrag.end();
+      } else if (ELEMENT_DRAGS.length > 0 && press.on === 'node' && !press.root && plain) {
         // any other press on an element drags the selection's roots, which the press has just made that element
         const state = store.getState();
         const dragged = selectionRoots(state.document, state.selection).map((at) => at.node.id);
         if (dragged.length > 0) {
-          dragging = { dragged, proposal: null, takenAt: null };
-          setDrag({ dragged, proposal: null });
+          dragging = { dragged, base: null, takenAt: null, drawn: null, levels: 0 };
+          liveDrag.propose(dragged, null);
+          setDrag({ dragged, proposal: null, levels: 0 });
         }
       }
     } else if (effect === 'commit' || effect === 'cancel') {
       const closing = open;
-      const dropped = dragging?.proposal ?? null;
+      const dropped = dragging?.drawn ?? null;
       open = null;
       dragging = null;
+      liveDrag.end();
       setDrag(null);
       marquee = null;
       pressedAt = null;
@@ -303,16 +322,39 @@ export function installPointer(store: EditorStore, target: Window = window): () 
     }
   };
 
-  // While an element drag goes on, each pointer position proposes a drop; a new proposal replaces the drawn one only
-  // once the pointer is drag.hysteresis screen pixels from where the drawn one was taken.
+  // The proposal drawn: the pointer's own at the drag session's level.
+  const redraw = () => {
+    const live = liveDrag.get();
+    if (dragging === null || live === null) return;
+    const state = store.getState();
+    const { proposal, level } = drawnProposal(state.ui.drag, live, state.document);
+    if (level === dragging.levels && JSON.stringify(proposal) === JSON.stringify(dragging.drawn)) return;
+    dragging.drawn = proposal;
+    dragging.levels = level;
+    setDrag({ dragged: dragging.dragged, proposal, levels: level });
+  };
+
+  // While an element drag goes on, each pointer position proposes a drop; a new proposal replaces the pointer's own
+  // only once the pointer is drag.hysteresis screen pixels from where that one was taken.
   const over = (at: Point) => {
     if (dragging === null) return;
     const next = proposalAt(store.getState().document, dragging.dragged, at);
-    if (JSON.stringify(next) === JSON.stringify(dragging.proposal)) return;
+    if (JSON.stringify(next) === JSON.stringify(dragging.base)) return;
     if (dragging.takenAt !== null && Math.hypot(at.x - dragging.takenAt.x, at.y - dragging.takenAt.y) < DRAG_HYSTERESIS) return;
-    dragging.proposal = next;
+    dragging.base = next;
     dragging.takenAt = at;
-    setDrag({ dragged: dragging.dragged, proposal: next });
+    liveDrag.propose(dragging.dragged, next);
+    redraw();
+  };
+
+  // A level key redraws the drag at once, without a pointer move; Escape leaves it (drag-session.ts).
+  const onState = () => {
+    if (dragging === null) return;
+    if (isCancelled(store.getState().ui.drag, pressDrag)) {
+      dragging = null;
+      liveDrag.end();
+      setDrag(null);
+    } else redraw();
   };
 
   const isRoot = (node: string) => locate(store.getState().document, node as NodeId)?.parent === null;
@@ -364,8 +406,10 @@ export function installPointer(store: EditorStore, target: Window = window): () 
   target.addEventListener('blur', onCancel);
   target.addEventListener('selectstart', onNative, true);
   target.addEventListener('dragstart', onNative, true);
+  const unsubscribe = store.subscribe(onState);
   return () => {
     onCancel();
+    unsubscribe();
     target.removeEventListener('pointerdown', onDown, true);
     target.removeEventListener('pointermove', onMove, true);
     target.removeEventListener('pointerup', onUp, true);

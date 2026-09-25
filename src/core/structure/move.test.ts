@@ -82,6 +82,12 @@ describe('element.moveTo (src/core/structure/move.ts)', () => {
     expect(childrenOf(doc, 'Hero')).toEqual(['Intro', 'Note']);
   });
 
+  it('a node moved out to an ancestor of its parent is moved to a position there, not into it', () => {
+    const out = moveTo(['Title'], 'Page', 1);
+    expect(childrenOf(applied(out), 'Page')).toEqual(['Hero', 'Title', 'Perks']);
+    expect(out.kind === 'change' && out.message).toEqual({ key: 'status.moved', params: { name: 'Title', position: 2, count: 3, parent: 'Page' } });
+  });
+
   it('a move to where the node already is changes nothing', () => {
     expect(deepEqual(applied(moveTo(['Intro'], 'Hero', 1)), DOC)).toBe(true);
   });

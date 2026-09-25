@@ -588,17 +588,17 @@
     {
       "kind": "handler",
       "id": "drag.levelUp",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",
       "id": "drag.levelDown",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",
       "id": "drag.cancel",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",

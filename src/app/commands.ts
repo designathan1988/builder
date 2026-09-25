@@ -21,6 +21,7 @@ import { insertCommand } from '../core/structure/insert.ts';
 import { moveDownCommand, moveToCommand, moveUpCommand } from '../core/structure/move.ts';
 import { deleteCommand } from '../core/structure/remove.ts';
 import { wrapColumnCommand, wrapRowCommand } from '../core/structure/wrap.ts';
+import { cancel as cancelDrag, levelDown, levelUp } from '../editor/drag/drag-session.ts';
 import { focusActivate, focusFirst, focusLast, focusNext, focusPrevious } from '../editor/focus/focus.ts';
 import { setExpanded } from '../editor/layers/tree.ts';
 import { dismiss } from '../editor/menus/overlays.ts';
@@ -147,9 +148,9 @@ export const COMMANDS = {
   'contextMenu.open': NOT_AVAILABLE_YET,
   'element.insert': insertCommand,
   'element.moveTo': moveToCommand,
-  'drag.levelUp': NOT_AVAILABLE_YET,
-  'drag.levelDown': NOT_AVAILABLE_YET,
-  'drag.cancel': NOT_AVAILABLE_YET,
+  'drag.levelUp': levelUp,
+  'drag.levelDown': levelDown,
+  'drag.cancel': cancelDrag,
   'element.moveUp': moveUpCommand,
   'element.moveDown': moveDownCommand,
   'element.wrapRow': wrapRowCommand,

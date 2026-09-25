@@ -96,8 +96,9 @@ interface DropLayout {
 
 // The drop indicator of the drag in progress (spec drag-reorder-canvas, "Visual feedback", and Problems in Pager 3):
 // the insertion line where the dragged nodes will land, the receiving parent's outline, and the label naming the
-// receiver and the position ("Drop in Hero · position 1 of 3", DESIGN.md "Canvas", drag), placed by the label rule
-// next to the line, never at the receiver's far corner.
+// receiver and the position ("Drop in Hero · position 1 of 3", DESIGN.md "Canvas", drag), with the receiver levels the
+// level keys climbed ("· ↑1", spec drag-level-keys-escape, Problems in Pager 3), placed by the label rule next to the
+// line, never at the receiver's far corner.
 function DropIndicator({ view }: { readonly view: DragView }) {
   const document = useEditorState((s) => s.document);
   const t = useT();
@@ -157,7 +158,11 @@ function DropIndicator({ view }: { readonly view: DragView }) {
         style={layout?.label ? { left: layout.label.box.x, top: layout.label.box.y } : undefined}
       >
         <span className="chrome__name">
-          {proposal.refused ? t('status.refused.intoItself') : t('canvas.dropTarget', { parent: receiver.name, position: proposal.index + 1, count: siblings.length + view.dragged.length })}
+          {proposal.refused
+            ? t('status.refused.intoItself')
+            : view.levels > 0
+              ? t('canvas.dropTargetLevel', { parent: receiver.name, position: proposal.index + 1, count: siblings.length + view.dragged.length, levels: view.levels })
+              : t('canvas.dropTarget', { parent: receiver.name, position: proposal.index + 1, count: siblings.length + view.dragged.length })}
         </span>
       </div>
     </div>

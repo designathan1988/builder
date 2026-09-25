@@ -3,7 +3,7 @@
 // the parent's children without the moved nodes, so it is the position the first moved node ends at (spec
 // drag-reorder-canvas, "Result in the document": the dragged node is removed from its parent and inserted at the
 // proposal's parent and index). The moved nodes stay selected; the status bar says "Moved … to position" among its
-// siblings and "Moved … into" another parent (spec drag-drop-inside). A parent inside a moved node (the node itself
+// siblings or out in an ancestor of its parent, and "Moved … into" any other parent (spec drag-drop-inside). A parent inside a moved node (the node itself
 // included), a parent that holds no children and a parent the content model does not let hold a moved node refuse
 // the move, in that order, and nothing changes. A
 // move that leaves every node where it was changes nothing and records no history (the store drops it).
@@ -57,11 +57,16 @@ export const moveToCommand = registerHandler('element.moveTo', ({ state, rules }
 
   const count = target.node.children.length + moved.length;
   const first = moved[0];
-  // one node: moved among its siblings, or into another parent (spec drag-drop-inside)
+  // one node: moved among its siblings or out to an ancestor of its parent ("to position … in", as a drop a level
+  // key climbed, drag-level-keys-escape), or into another parent (spec drag-drop-inside)
+  const outward = (from: DocNode | null): boolean => {
+    for (let at = from; at !== null; at = locate(state.document, at.id)?.parent ?? null) if (at.id === parent) return true;
+    return false;
+  };
   const said =
     moved.length !== 1 || !first
       ? message('status.movedMany', { count: moved.length, parent: receiver.node.name })
-      : first.parent?.id === parent
+      : outward(first.parent)
         ? message('status.moved', { name: first.node.name, position: start + 1, count, parent: receiver.node.name })
         : message('status.movedInto', { name: first.node.name, receiver: receiver.node.name, position: start + 1, count });
   return { kind: 'change', patches, selection: roots, message: said };
