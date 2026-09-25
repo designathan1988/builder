@@ -9,8 +9,10 @@
         "page.openProperties",
         "page.setSetting"
       ],
-      "dependsOn": [],
-      "spec": null,
+      "dependsOn": [
+        "inspector-panel"
+      ],
+      "spec": "spec/behavior/page-properties.md",
       "intent": {
         "title": "Page properties: title, language, direction and page styles",
         "steps": [
@@ -24,7 +26,469 @@
           "Page background, colour and font are stored on the Page root styles and computed in the iframe."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "page-properties-selects-the-page-root-and-shows-its-settings",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "page.openProperties#inspector-page-properties-button",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "page.openProperties#inspector-page-properties-button"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.selected",
+                  "params": {
+                    "name": "Page"
+                  }
+                }
+              ]
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "inspector-settings",
+                  "measure": "height",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-page-title-is-kept-in-one-undo-step-and-survives-a-reload",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "page.openProperties#inspector-page-properties-button",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "page.setSetting#inspector-page-title",
+              "args": {
+                "setting": "pageTitle",
+                "value": "Landing"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "Landing\n"
+            }
+          ],
+          "doors": [
+            "page.setSetting#inspector-page-title"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@attributes/pageTitle",
+                "value": "Landing"
+              }
+            ],
+            "selection": [
+              "/Page"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.page.settingSet",
+                  "params": {
+                    "setting": "Page title",
+                    "value": "Landing"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-page-language-is-kept-and-survives-a-reload",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "page.openProperties#inspector-page-properties-button",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "page.setSetting#inspector-page-language",
+              "args": {
+                "setting": "pageLanguage",
+                "value": "pt-BR"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "pt-BR\n"
+            }
+          ],
+          "doors": [
+            "page.setSetting#inspector-page-language"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@attributes/pageLanguage",
+                "value": "pt-BR"
+              }
+            ],
+            "selection": [
+              "/Page"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.page.settingSet",
+                  "params": {
+                    "setting": "Page language",
+                    "value": "pt-BR"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-right-to-left-page-is-drawn-right-to-left-on-the-canvas",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "page.openProperties#inspector-page-properties-button",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "page.setSetting#inspector-page-direction",
+              "args": {
+                "setting": "pageDirection",
+                "value": "rtl"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "rtl\n"
+            }
+          ],
+          "doors": [
+            "page.setSetting#inspector-page-direction"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@attributes/pageDirection",
+                "value": "rtl"
+              }
+            ],
+            "selection": [
+              "/Page"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page",
+                  "property": "direction",
+                  "value": "rtl"
+                },
+                {
+                  "node": "/Page/Hero/Title",
+                  "property": "direction",
+                  "value": "rtl"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.page.settingSet",
+                  "params": {
+                    "setting": "Text direction",
+                    "value": "rtl"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-language-that-is-not-a-language-tag-is-refused",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "page.openProperties#inspector-page-properties-button",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "page.setSetting#inspector-page-language",
+              "args": {
+                "setting": "pageLanguage",
+                "value": "english!"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "english!\n"
+            }
+          ],
+          "doors": [
+            "page.setSetting#inspector-page-language"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.page.settingInvalid",
+                  "params": {
+                    "setting": "Page language",
+                    "value": "english!"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": [
+            {
+              "key": "status.page.settingInvalid",
+              "document": "unchanged"
+            }
+          ]
+        },
+        {
+          "id": "a-direction-other-than-ltr-rtl-or-auto-is-refused",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "page.openProperties#inspector-page-properties-button",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "page.setSetting#inspector-page-direction",
+              "args": {
+                "setting": "pageDirection",
+                "value": "sideways"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "sideways\n"
+            }
+          ],
+          "doors": [
+            "page.setSetting#inspector-page-direction"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.page.settingInvalid",
+                  "params": {
+                    "setting": "Text direction",
+                    "value": "sideways"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": [
+            {
+              "key": "status.page.settingInvalid",
+              "document": "unchanged"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "export-zip",

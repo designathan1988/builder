@@ -1224,6 +1224,8 @@
   "status.open.invalidArchive": "This file is not a valid project archive: {reason}",
   "status.open.newerVersion": "This project uses format version {version}, which this app cannot read.",
   "status.open.opened": "Opened the project.",
+  "status.page.settingInvalid": "{setting} cannot be {value}.",
+  "status.page.settingSet": "{setting}: {value}.",
   "status.pages.homeUndeletable": "The home page cannot be deleted.",
   "status.pages.nameTaken": "A page named {name} already exists in this folder.",
   "status.panel.closed": "{panel} panel closed.",
