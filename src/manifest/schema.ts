@@ -704,8 +704,7 @@ export const scenarioSchema = z.strictObject({
     viewport: kebabId,
     // "fit": the canvas as it opens, the frame fitted to the stage; a number: the canvas zoom in percent, one of
     // environment.zoomLevels, which the runner sets through View › Zoom before the steps, so only once the feature
-    // zoom-keyboard-buttons is built (manifest:check rule zoom). 100 is accepted for one commit while the scenarios
-    // move to "fit".
+    // zoom-keyboard-buttons is built (manifest:check rule zoom).
     zoom: z.union([z.literal('fit'), z.number().int().positive()]),
   }),
   // run in order after the fixture is loaded; exactly one is the action step

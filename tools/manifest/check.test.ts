@@ -404,6 +404,8 @@ describe('manifest:check', () => {
       }).map((p) => p.rule);
     expect(at('fit', false)).toEqual([]);
     expect(at(50, false)).toEqual(['zoom']);
+    // no level is let through before the zoom doors exist, 100 included
+    expect(at(100, false)).toEqual(['zoom']);
     expect(at(50, true)).toEqual([]);
     expect(at(75, true)).toEqual(['unknown-reference']);
   });

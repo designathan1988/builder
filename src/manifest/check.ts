@@ -1623,15 +1623,13 @@ export function checkManifest(input: ManifestInput): CheckResult {
   }
 
   // ---- zoom: a scenario starts at a canvas zoom level only once the zoom doors exist (zoom-keyboard-buttons built:
-  // every command of it registered); before that it starts with the canvas as it opens ("fit"). 100 is accepted for
-  // one commit while the scenarios move to "fit" (TRANSITIONAL_ZOOM).
-  const TRANSITIONAL_ZOOM = 100;
+  // every command of it registered); before that it starts with the canvas as it opens ("fit").
   const zoomFeature = features.find((f) => f.feature.id === 'zoom-keyboard-buttons');
   const registeredHandlers = new Set(input.registered.handler);
   const zoomBuilt = zoomFeature !== undefined && zoomFeature.feature.commands.every((c) => registeredHandlers.has(c));
   for (const f of features) {
     f.feature.scenarios.forEach((s, si) => {
-      if (s.setup.zoom === 'fit' || s.setup.zoom === TRANSITIONAL_ZOOM || zoomBuilt) return;
+      if (s.setup.zoom === 'fit' || zoomBuilt) return;
       report('zoom', f.file, `${f.path}.scenarios[${si}].setup.zoom`, `scenario ${s.id} starts at zoom ${s.setup.zoom}, but zoom-keyboard-buttons is not built: start with the canvas as it opens ("fit")`);
     });
   }
