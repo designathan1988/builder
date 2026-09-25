@@ -5,6 +5,7 @@
 import { NOT_AVAILABLE_YET, always, type CommandTable, type PredicateTable } from '../core/commands/registry.ts';
 import { canRedo, canUndo, redoCommand, undoCommand } from '../core/history/history.ts';
 import { toggleHiddenCommand, toggleLockCommand } from '../core/nodes/flags.ts';
+import { renameCommand } from '../core/nodes/names.ts';
 import { openProject, saveProject } from '../core/project/archive.ts';
 import {
   addCommand,
@@ -30,6 +31,7 @@ import { setTextCommand } from '../core/text/text.ts';
 import { cancelEdit, insertLineBreak, selectAllText, singleTextSelection, startEdit } from '../editor/canvas/text-edit.ts';
 import { cancelDrag } from '../editor/drag/drag-session.ts';
 import { focusActivate, focusFirst, focusLast, focusNext, focusPrevious } from '../editor/focus/focus.ts';
+import { startRename } from '../editor/layers/rename.ts';
 import { setExpanded } from '../editor/layers/tree.ts';
 import { contextMenuOpen } from '../editor/menus/context-menu.ts';
 import { dismiss } from '../editor/menus/overlays.ts';
@@ -132,8 +134,8 @@ export const COMMANDS = {
   'canvas.setEditMode': NOT_AVAILABLE_YET,
   'history.undo': undoCommand,
   'history.redo': redoCommand,
-  'layers.startRename': NOT_AVAILABLE_YET,
-  'element.rename': NOT_AVAILABLE_YET,
+  'layers.startRename': startRename,
+  'element.rename': renameCommand,
   'element.toggleLock': toggleLockCommand,
   'element.toggleHidden': toggleHiddenCommand,
   'element.setLayerColor': NOT_AVAILABLE_YET,

@@ -448,12 +448,12 @@
     {
       "kind": "handler",
       "id": "layers.startRename",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",
       "id": "element.rename",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",

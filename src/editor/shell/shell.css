@@ -561,6 +561,25 @@ kbd {
   flex: none;
 }
 
+/* a row's name while its node is renamed (spec rename-element): a field in the name's place, as wide as the row lets it */
+.row__rename {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+}
+
+.row__name-field {
+  flex: 1;
+  min-width: 0;
+  height: calc(var(--size-row) - var(--space-2));
+  padding: 0 var(--space-2);
+  border: 1px solid var(--color-focus);
+  border-radius: var(--radius-xs);
+  background: var(--color-surface-sunken);
+  color: var(--color-text);
+}
+
 .row__meta {
   margin-left: auto;
   padding-left: var(--space-3);

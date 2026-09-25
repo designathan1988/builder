@@ -115,7 +115,8 @@ export function modifiedControl(ref: string): { readonly drawn: string; readonly
 
 // runs a door as a user does: a shortcut by its keys, a menu item from its menu, a panel control's door with a key
 // held by a click on its control with that key held, one pressed with the secondary button by a secondary click on
-// its control, any other control by a click
+// its control, a panel control its door counts two clicks for (a Layers row's name) by a double-click, any other
+// control by a click
 export async function runDoor(page: Page, ref: string, options: { readonly args?: Readonly<Record<string, unknown>>; readonly any?: boolean } = {}): Promise<void> {
   const d = door(ref);
   const modified = modifiedControl(ref);
@@ -132,7 +133,9 @@ export async function runDoor(page: Page, ref: string, options: { readonly args?
     if (d.menu === undefined) throw new Error(`menu door ${ref} names no menu`);
     await openMenu(page, d.menu);
   }
-  // a door drawn as an area (the backdrop under a menu) is pressed where nothing drawn over it lies, near its top-left
-  // corner, as a person clicks away from a menu; any other control at its centre
-  await control(page, ref, options).click(d.drawnAs === 'area' ? { position: { x: 4, y: 4 } } : undefined);
+  // a door drawn as an area (the backdrop under a menu, a Layers row's name) is pressed where nothing drawn over it
+  // lies, near its top-left corner, as a person clicks away from a menu; any other control at its centre
+  const at = d.drawnAs === 'area' ? { position: { x: 4, y: 4 } } : undefined;
+  if (d.kind === 'panel-control' && d.count === 2) await control(page, ref, options).dblclick(at);
+  else await control(page, ref, options).click(at);
 }

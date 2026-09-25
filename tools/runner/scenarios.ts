@@ -706,27 +706,43 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
     if (d.chord === undefined) throw new Error(`shortcut ${ref} has no chord`);
     await page.keyboard.press(keys(d.chord));
     if (held.current !== null && ref === CANCEL_DOOR) held.current = { ...held.current, cancelled: true };
-  } else if (d.kind === 'toolbar' || d.kind === 'menu' || d.kind === 'panel-control' || d.kind === 'context-menu') {
-    // a control drawn only in some states (the toast's Undo after a delete, an item of the open context menu) fails the
-    // step on an assertion that says it is not drawn, never on the click's timeout. The control is the one runDoor
-    // clicks: a panel control's door with a key held (a Layers row's Shift+click) or pressed with the secondary button
-    // (its secondary click) is its plain control clicked that way (modifiedControl).
-    const clicked = modifiedControl(ref)?.drawn ?? ref;
-    if (d.kind === 'toolbar' || d.kind === 'panel-control' || d.kind === 'context-menu') await expect(control(page, clicked, { args: own }), `step ${ref}: its control is drawn`).toBeVisible();
-    await runDoor(page, ref, { args: own });
-  } else if (d.kind === 'inspector-field') {
-    // An inspector field is drawn once, for the selection, so its control is the door's only one: its arguments are
-    // what it acts on (the selection, by its adapter) and what the step types, which the document diff checks. A field
-    // the inspector does not show (a tab not chosen) fails the step on an assertion. The runner clicks the field's
-    // editable element (an input, a text area, an editable element; the control itself when it is one), selects what
-    // it holds with Control+A (a field keeps its own keys), and the step's `type` follows below ("\n" is Enter).
+  } else if (d.kind === 'inspector-field' || (d.kind === 'panel-control' && d.drawnAs === 'field')) {
+    // A field. An inspector field is drawn once, for the selection, so its control is the door's only one: its
+    // arguments are what it acts on (the selection, by its adapter) and what the step types, which the document diff
+    // checks. A panel field is drawn once per node (a Layers row's name field, while its node is renamed): its control
+    // is the one that stands for the step's node arguments. A field not shown (a tab not chosen, a node not renamed)
+    // fails the step on an assertion. The runner clicks the field's editable element (an input, a text area, an
+    // editable element; the control itself when it is one) and selects what it holds with Control+A (a field keeps its
+    // own keys). An inspector field then takes the step's `type` below ("\n" is Enter); a panel field takes the step's
+    // one argument that names no node (the text its door's command keeps), typed in place of what it held and kept
+    // with Enter.
     if (step.hold === true || step.drop !== null) throw new Error(`step ${ref}: a field neither drops nor holds`);
-    const field = control(page, ref);
+    const types = argTypes(ref);
+    const text = d.kind === 'panel-control' ? Object.entries(own).filter(([name]) => types[name]?.type !== 'node') : null;
+    const value = text?.[0]?.[1];
+    if (text !== null && (text.length !== 1 || typeof value !== 'string' || typeof step.type === 'string')) throw new Error(`step ${ref}: a panel field takes one text argument typed into it and no \`type\`, not ${JSON.stringify(Object.fromEntries(text))}`);
+    const field = text === null ? control(page, ref) : control(page, ref, { args: Object.fromEntries(Object.entries(own).filter(([name]) => types[name]?.type === 'node')) });
     await expect(field, `step ${ref}: its control is drawn`).toBeVisible();
     const editable = field.locator('input, textarea, [contenteditable="true"], [contenteditable="plaintext-only"]');
     const typedInto = (await editable.count()) > 0 ? editable.first() : field;
     await typedInto.click();
     await page.keyboard.press('Control+A');
+    if (typeof value === 'string') {
+      await page.keyboard.press('Backspace');
+      if (value !== '') await page.keyboard.type(value);
+      await page.keyboard.press('Enter');
+    }
+  } else if (d.kind === 'toolbar' || d.kind === 'menu' || d.kind === 'panel-control' || d.kind === 'context-menu') {
+    // a control drawn only in some states (the toast's Undo after a delete, an item of the open context menu) fails the
+    // step on an assertion that says it is not drawn, never on the click's timeout. The control is the one runDoor
+    // clicks: a panel control's door with a key held (a Layers row's Shift+click) or pressed with the secondary button
+    // (its secondary click) is its plain control clicked that way (modifiedControl). A Layers row's part whose step
+    // names no argument for it (a row's name, whose double-click renames the selection the first click made) is the
+    // part of the row of the step's target: sidebar.tsx writes each part's row node as `target`.
+    const clicked = modifiedControl(ref)?.drawn ?? ref;
+    const standsFor = d.kind === 'panel-control' && d.panel === 'layers' && Object.keys(own).length === 0 && target !== null ? { target: target.id } : own;
+    if (d.kind === 'toolbar' || d.kind === 'panel-control' || d.kind === 'context-menu') await expect(control(page, clicked, { args: standsFor }), `step ${ref}: its control is drawn`).toBeVisible();
+    await runDoor(page, ref, { args: standsFor });
   } else {
     throw new Error(`step ${ref}: the runner cannot run a ${d.kind} door yet`);
   }

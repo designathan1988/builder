@@ -12,6 +12,7 @@
 import { message, registerHandler, registerPredicate } from '../../core/commands/registry.ts';
 import { locate, type DocNode, type DocumentJson, type NodeId } from '../../core/document/model.ts';
 import { lockRefusal } from '../../core/nodes/flags.ts';
+import { selectedAlone } from '../../core/selection/selection.ts';
 import type { StoreState } from '../../core/store/store.ts';
 import type { KeyContextId } from '../../generated/ids.ts';
 import { manifest } from '../../manifest/runtime.ts';
@@ -104,7 +105,7 @@ export const selectAllText = registerHandler<'text.selectAll', EditorUi>('text.s
 export function endOffSelection(state: StoreState<EditorUi>): EditorUi {
   const node = state.ui.textEdit.node;
   if (node === null) return state.ui;
-  return state.selection.length === 1 && state.selection[0] === node && locate(state.document, node) !== null ? state.ui : ended(state.ui);
+  return selectedAlone(state.document, state.selection, node) ? state.ui : ended(state.ui);
 }
 
 // The editor state after a command ran: an undoable command (text.set keeping the text among them) ends the edit.

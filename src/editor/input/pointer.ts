@@ -470,6 +470,15 @@ export function installPointer(store: EditorStore, target: Window = window): () 
     gesture.dispatch(entry.command.id as CommandId, argsFor(entry, press) as never);
     gesture.commit();
   };
+  // A press the pointer owner takes first takes the focus from a field of the editor (a Layers row's name being
+  // renamed, spec rename-element: leaving the field keeps its name): the field keeps what it holds as it loses the
+  // focus, before the press opens its gesture and runs its door, which would otherwise end the field's work first (a
+  // selection elsewhere ends a rename) or find a gesture open. The text edited in place on the page is no field of the
+  // editor: the frame holds that focus, and a press outside it keeps the text through its own door.
+  const leaveField = () => {
+    const focused = target.document.activeElement;
+    if (focused instanceof HTMLElement && (focused.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(focused.tagName))) focused.blur();
+  };
   const onDown = (event: PointerEvent) => {
     lastPress = { x: event.clientX, y: event.clientY };
     keepFocus = false;
@@ -478,6 +487,7 @@ export function installPointer(store: EditorStore, target: Window = window): () 
     if (event.button !== 0 && event.button !== 2) return;
     // a palette tile takes the primary button only
     if (press.on === 'tile' && event.button !== 0) return;
+    leaveField();
     buttons = { button: event.button === 2 ? 'secondary' : 'primary', count: Math.min(Math.max(event.detail, 1), 2), modifier: modifierOf(event) };
     const at = { x: event.clientX, y: event.clientY };
     pointerAt = at;

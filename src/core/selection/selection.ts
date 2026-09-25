@@ -2,7 +2,7 @@
 // store beside the document, never in it: selecting changes no document and records no history, and undo and redo
 // restore the selection that belonged to the document state they go back to (history.ts).
 import { message, registerHandler, registerPredicate, type Outcome } from '../commands/registry.ts';
-import { locate, type DocNode, type Location } from '../document/model.ts';
+import { locate, type DocNode, type DocumentJson, type Location, type NodeId, type Selection } from '../document/model.ts';
 import { lockOver } from '../nodes/flags.ts';
 import type { StoreState } from '../store/store.ts';
 import type { Rect } from '../../generated/commands.ts';
@@ -12,6 +12,10 @@ export const hasSelection = registerPredicate('hasSelection', (state) => state.s
 
 // the availability of a command that acts on one element (element.promote, hand.take): exactly one node is selected
 export const singleSelection = registerPredicate('singleSelection', (state) => state.selection.length === 1);
+
+// Whether a node of the document is the selection alone: an edit in place (a text on the canvas, a name in Layers)
+// lasts only while its node is.
+export const selectedAlone = (document: DocumentJson, selection: Selection, id: NodeId): boolean => selection.length === 1 && selection[0] === id && locate(document, id) !== null;
 
 // selection.select: the node alone becomes the selection; the status bar names it. Every door gives a node of the
 // document (a canvas click, a Layers row), so a node the document lacks is a defect of the door.
