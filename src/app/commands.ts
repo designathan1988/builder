@@ -35,7 +35,8 @@ import { contextMenuOpen } from '../editor/menus/context-menu.ts';
 import { dismiss } from '../editor/menus/overlays.ts';
 import { setLanguage, setTheme } from '../editor/preferences/preferences.ts';
 import type { EditorUi } from '../editor/state.ts';
-import { setWorkbenchState } from '../editor/workspace/layout.ts';
+import { toggleSection } from '../editor/inspector/sections.ts';
+import { setActiveTab, setWorkbenchState } from '../editor/workspace/layout.ts';
 import { collapseDocks, setPanelOpen, toggleInspector, toggleLeftDock } from '../editor/workspace/panels.ts';
 
 // the hand's commands, for the editor state that holds the hand
@@ -240,7 +241,7 @@ export const COMMANDS = {
   'workspace.toggleDeveloperTools': NOT_AVAILABLE_YET,
   'workspace.reset': NOT_AVAILABLE_YET,
   'workspace.setWorkbenchState': setWorkbenchState,
-  'workspace.setActiveTab': NOT_AVAILABLE_YET,
+  'workspace.setActiveTab': setActiveTab,
   'workspace.resizeSplitter': NOT_AVAILABLE_YET,
   'workspace.movePanel': NOT_AVAILABLE_YET,
   'quickPanel.setOffset': NOT_AVAILABLE_YET,
@@ -255,7 +256,7 @@ export const COMMANDS = {
   'layers.expandOrFocusChild': NOT_AVAILABLE_YET,
   'layers.collapseOrFocusParent': NOT_AVAILABLE_YET,
   'layers.setRowDetails': NOT_AVAILABLE_YET,
-  'inspector.toggleSection': NOT_AVAILABLE_YET,
+  'inspector.toggleSection': toggleSection,
   'inspector.setMode': NOT_AVAILABLE_YET,
   'inspector.reveal': NOT_AVAILABLE_YET,
   'codePanel.copyPane': NOT_AVAILABLE_YET,

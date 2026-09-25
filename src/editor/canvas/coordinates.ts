@@ -163,6 +163,17 @@ export function contentBoxes(iframe: HTMLIFrameElement): { x: number; y: number;
   return boxes;
 }
 
+// The CSS computed values of a node's element on the canvas's page, read through the typed object model
+// (computedStyleMap: `auto` stays `auto`, a length is in px), so they are the values in force whatever sets them (the
+// node's own styles, the browser's defaults); null when the canvas draws no element of the node. The inspector's
+// collapsed sections summarise them (src/editor/inspector/sections.ts).
+export function computedValues(id: string, properties: readonly string[]): Readonly<Record<string, string>> | null {
+  const element = current?.contentDocument?.querySelector(nodeSelector(id as NodeId));
+  if (!element) return null;
+  const map = element.computedStyleMap();
+  return Object.fromEntries(properties.map((property) => [property, map.get(property)?.toString() ?? '']));
+}
+
 // The canvas's iframe, for the pointer owner and the canvas overlays.
 let current: HTMLIFrameElement | null = null;
 

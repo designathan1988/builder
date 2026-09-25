@@ -75,10 +75,15 @@ export const startEdit = registerHandler<'text.startEdit', EditorUi>('text.start
   return { kind: 'change', ui: withEdit(state.ui, { ...state.ui.textEdit, node: node.id }), message: message('status.textEdit.editing') };
 });
 
-// Escape: the element goes back to the text the document holds; nothing is recorded
+// Escape: the text goes back to what the document holds, and nothing is recorded: the element edited in place ends its
+// edit; with none, the inspector's text field of the one selected text element (spec inspector-panel) is told so by
+// the message, after which it shows the document's text again (src/editor/shell/inspector.tsx)
 export const cancelEdit = registerHandler<'text.cancelEdit', EditorUi>('text.cancelEdit', ({ state }) => {
   const node = state.ui.textEdit.node;
-  if (node === null) return { kind: 'change' };
+  if (node === null) {
+    const field = singleText(state);
+    return field === null ? { kind: 'change' } : { kind: 'change', message: message('status.textEdit.cancelled', { name: field.name }) };
+  }
   return { kind: 'change', ui: ended(state.ui), message: message('status.textEdit.cancelled', { name: locate(state.document, node)?.node.name ?? '' }) };
 });
 

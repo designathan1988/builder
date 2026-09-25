@@ -209,6 +209,7 @@ The keymap is the shortcut doors of the manifest; there is no other list. Key co
 - Undo **Ctrl+Z**, redo **Ctrl+Shift+Z** or **Ctrl+Y**; copy, cut, paste; **Ctrl+Alt+C / V** copy and paste style.
 - On the canvas: arrows walk the tree, **Enter** edits text, **F2** renames, **Delete** deletes, **Alt+↑ / ↓** move, **Alt+→** nests, **P** promotes, **R / C** wrap in a row or a column, **M** takes into the hand, **Esc** clears the selection.
 - With something in the hand, the canvas's keys are the hand's: **↓ / →** aim at the next position, **Shift+↓ / →** at the previous one, **↑** climbs a receiver level, **←** descends, **Enter** places, **Esc** drops. The canvas draws the aim as a drag's drop indicator.
+- In the inspector's text field (its own context, which inherits the field's): **Enter** keeps the text, **Shift+Enter** breaks the line, **Esc** puts back the text the document holds.
 - Held keys have one meaning per gesture: **Shift** steps by 10 (or constrains), **Alt** measures or acts on the opposite side (resizes from the centre), **Ctrl** suspends snapping, **Space** pans.
 - **F6 / Shift+F6** move focus between regions; every control is reachable with Tab and shows the focus ring (`--color-focus`).
 

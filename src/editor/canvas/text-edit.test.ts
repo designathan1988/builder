@@ -143,3 +143,24 @@ describe('inline text editing', () => {
     expect(isTextElement(AURORA, 'missing')).toBe(false);
   });
 });
+
+describe("Escape in the inspector's text field (spec inspector-panel)", () => {
+  it('says the text of the one selected text element is kept unchanged, recording nothing, when nothing is edited in place', () => {
+    const store = editorStore();
+    store.dispatch('selection.select', { target: 'n-intro' });
+    const before = store.getState();
+    expect(store.dispatch('text.cancelEdit', {}).status).toBe('done');
+    expect(store.getState().message).toEqual({ key: 'status.textEdit.cancelled', params: { name: 'Intro' } });
+    expect(store.getState().document).toBe(before.document);
+    expect(store.getState().history).toBe(before.history);
+    expect(store.getState().ui.textEdit).toBe(before.ui.textEdit);
+  });
+
+  it('says nothing without one selected text element', () => {
+    const store = editorStore();
+    store.dispatch('selection.select', { target: 'n-hero' });
+    const before = store.getState();
+    store.dispatch('text.cancelEdit', {});
+    expect(store.getState().message).toBe(before.message);
+  });
+});

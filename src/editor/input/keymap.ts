@@ -6,7 +6,7 @@
 // (core/structure/hand.ts) the canvas's keys are the hand context's, and they act at the hand's aim.
 import type { CommandId, DoorId, KeyContextId } from '../../generated/ids.ts';
 import { normaliseChord } from '../../manifest/chord.ts';
-import { keyContextChain, manifest, type DoorEntry } from '../../manifest/runtime.ts';
+import { commandOf, keyContextChain, manifest, type DoorEntry } from '../../manifest/runtime.ts';
 import type { DispatchResult } from '../../core/store/store.ts';
 import { COMMANDS } from '../../app/commands.ts';
 import { isBuilt } from '../../core/commands/registry.ts';
@@ -64,16 +64,18 @@ function htmlElement(target: EventTarget | null): HTMLElement | null {
 }
 
 // The key context of the element that has focus: the text edited in place on the canvas names its own context (the
-// renderer marks it with data-key-context); a field keeps its keys; a region names its context with
+// renderer marks it with data-key-context), and so may a field (the inspector's text field names
+// element-text-field, which inherits the field's); any other field keeps its keys; a region names its context with
 // data-key-context; the page body, where the focus rests after a press on the canvas (its overlay takes no focus),
 // is the canvas's, which inherits the global context; everything else is the global context.
 export function contextOf(event: EventTarget | null): KeyContextId {
   const target = htmlElement(event);
   if (target) {
     if (target === target.ownerDocument.body) return 'canvas';
-    const own = target.isContentEditable ? target.getAttribute('data-key-context') : null;
+    const field = target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName);
+    const own = field ? target.getAttribute('data-key-context') : null;
     if (own && (manifest.interactions.keyContexts as readonly { id: string }[]).some((k) => k.id === own)) return own as KeyContextId;
-    if (target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)) return 'field';
+    if (field) return 'field';
     const region = target.closest('[data-key-context]');
     const named = region?.getAttribute('data-key-context');
     if (named && (manifest.interactions.keyContexts as readonly { id: string }[]).some((k) => k.id === named)) return named as KeyContextId;
@@ -89,15 +91,18 @@ export function shortcutRunsNow(entry: DoorEntry): boolean {
 
 // What a shortcut acts on when the focus is on a control of the same command drawn once per item (a palette tile):
 // the arguments that control stands for (its data-args, written by the door's drawing), or null when that control is
-// not available (a tile whose entry a later feature brings), so the key does nothing, as a click would. Any other
-// focus adds nothing.
+// not available (a tile whose entry a later feature brings), so the key does nothing, as a click would. A text field
+// of such a control (the inspector's text field, which stands for its node) adds the text it holds as the command's
+// `content`, when the command takes one (Enter keeps what was typed). Any other focus adds nothing.
 export function focusedArgs(target: EventTarget | null, command: CommandId): Readonly<Record<string, unknown>> | null {
   const control = target instanceof Element ? target.closest('[data-door]') : null;
   const ref = control?.getAttribute('data-door');
   if (!control || !ref || manifest.doorByRef.get(ref as DoorId)?.command.id !== command) return {};
   if (control.getAttribute('aria-disabled') === 'true') return null;
   const args: unknown = JSON.parse(control.getAttribute('data-args') ?? '{}');
-  return args !== null && typeof args === 'object' ? (args as Record<string, unknown>) : {};
+  const own = args !== null && typeof args === 'object' ? (args as Record<string, unknown>) : {};
+  const typed = target instanceof HTMLTextAreaElement || target instanceof HTMLInputElement ? target.value : null;
+  return typed !== null && 'content' in commandOf(command).args ? { ...own, content: typed } : own;
 }
 
 // the key context of the keyboard's hand (interactions.json), which replaces the canvas's while it holds an element

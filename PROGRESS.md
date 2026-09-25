@@ -7,14 +7,14 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 - Group 01 and the foundation pass. One e2e suite at a time (E2E_WORKERS=4), no dev server meanwhile; helpers: 3.
 - First task: the feature table runs the runner, the census and the Insert tiles; every door gated by its feature
   (branch wip/feature-table) waits for project-open-json, whose File › Open loads every fixture.
-- Group 03 passing: autosave-restore, project-save-json, ui-language. Waiting for the user: project-open-json (below; code on
-  branch wip/project-open-json, 4 of 5 scenarios pass).
+- Group 03 passing: autosave-restore, project-save-json, ui-language; waiting for the user: project-open-json
+  (below; branch wip/project-open-json, 4 of 5 pass). Group 04 passing: inspector-panel. Scenarios written, code
+  next: page-properties, export-zip (group 06).
 - Group 02 passing: select-click, layers-tree, keyboard-tree-walk, palette-click-insert, undo-redo,
   multi-select-click, marquee-select, delete-element, move-up-down, wrap-row-column, drag-reorder-canvas,
   drag-drop-inside, context-menu, duplicate, text-edit-inline, palette-drag-insert, unwrap, nest-into-previous,
   promote-out, hide-element, select-container-children, hand-keyboard-move, lock-element. Conditions: a runner path is proven by its
   first feature switching it off; finding 11's parts are fixed before the feature that needs each.
-
 ## Pending decisions of the user
 
 - Shift/Ctrl+click on the Page row in Layers adds the page root to the selection (the canvas door's target
@@ -49,11 +49,12 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
     have no data-door of their own; the census counts them only through scenarios.
 26. marquee: Escape during a band should cancel it (drag.cancel is built now); hidden and locked nodes are not left
     out (status.selection.skipped unused); a lost pointer restores it, untested. 27. M (hand.take) does not refuse
-    a locked element yet; text.set's refusal of one has no browser test until inspector-panel's scenario lands. 28. Arrange › Move up/down enabled at an edge.
+    a locked element yet. 28. Arrange › Move up/down enabled at an edge.
 29. The runner selects a node with no point of its own by a descendant plus ArrowUp; adding one with Shift needs its
-    Layers row and then focus.canvas#key-escape-in-layers-tree (not built; multi-select-actions needs it). The census
-    reads the test list, so it sees the canvas click named, not the substitute door run (both have their own tests).
+    Layers row and focus.canvas#key-escape-in-layers-tree (not built; multi-select-actions needs it); the census sees
+    the canvas click named, not the substitute door run (both have their own tests).
 30. Declared, not built: wrap refusals requiresParent, interactiveInside, formInForm, singleChild, labelOneControl;
     drop.emptyAimMin (40 px aim of an empty container); the hover label as a hit target (it covered a container's
     marquee corner); DESIGN's "a label hides while the pointer is over it" contradicts the label as a hit target.
 31. Escape does not cancel a rename in Layers: no door of the manifest runs it (rename-element needs one).
+32. With nothing selected the inspector still draws its sections under the hints (current-state.spec.ts needs them).

@@ -993,7 +993,7 @@
     {
       "kind": "handler",
       "id": "workspace.setActiveTab",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",
@@ -1068,7 +1068,7 @@
     {
       "kind": "handler",
       "id": "inspector.toggleSection",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",

@@ -53,7 +53,7 @@ export const FEATURES = {
   'project-save-json': registerFeature('project-save-json'),
   'project-open-json': NOT_AVAILABLE_YET,
   // 04 inspector
-  'inspector-panel': NOT_AVAILABLE_YET,
+  'inspector-panel': registerFeature('inspector-panel'),
   'inspector-number-fields': NOT_AVAILABLE_YET,
   'props-display': NOT_AVAILABLE_YET,
   'props-flex-container': NOT_AVAILABLE_YET,

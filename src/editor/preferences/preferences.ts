@@ -1,6 +1,8 @@
 // Preferences (ARCHITECTURE.md): the UI language and the theme, chosen with preferences.setLanguage and
-// preferences.setTheme, stored and restored after a reload (features ui-language and theme-switch).
-import { DEFAULT_LOCALE, LOCALES, type Locale } from '../../generated/ids.ts';
+// preferences.setTheme, and the inspector's collapsed sections (inspector.toggleSection, whose owner,
+// src/editor/inspector/sections.ts, says what they mean), stored and restored after a reload (features ui-language,
+// theme-switch and inspector-panel).
+import { DEFAULT_LOCALE, LOCALES, SECTION_IDS, type Locale, type SectionId } from '../../generated/ids.ts';
 import type { CommandArgs } from '../../generated/commands.ts';
 import { registerHandler } from '../../core/commands/registry.ts';
 import { commandOf, manifest } from '../../manifest/runtime.ts';
@@ -35,9 +37,11 @@ const isTheme = (value: unknown): value is Theme => typeof value === 'string' &&
 export interface Preferences {
   readonly locale: Locale;
   readonly theme: Theme;
+  // the inspector's collapsed sections, in the sections' order (properties.json); absent while every section is open
+  readonly collapsedSections?: readonly SectionId[] | undefined;
 }
 
-// a fresh profile: the default UI language and the default theme of environment.json
+// a fresh profile: the default UI language and the default theme of environment.json, every section open
 const DEFAULT_THEME = manifest.environment.theme.default;
 if (!isTheme(DEFAULT_THEME)) throw new Error(`environment.json: the default theme "${DEFAULT_THEME}" is not a theme of preferences.setTheme`);
 export const INITIAL_PREFERENCES: Preferences = { locale: DEFAULT_LOCALE, theme: DEFAULT_THEME };
@@ -75,7 +79,10 @@ export function loadPreferences(storage: PreferenceStorage): Preferences {
     const stored = JSON.parse(text) as Record<string, unknown>;
     const locale = (LOCALES as readonly unknown[]).includes(stored.locale) ? (stored.locale as Locale) : INITIAL_PREFERENCES.locale;
     const theme = isTheme(stored.theme) ? stored.theme : INITIAL_PREFERENCES.theme;
-    return { locale, theme };
+    // the sections of properties.json the list names, in their order; anything else is left out
+    const listed: readonly unknown[] = Array.isArray(stored.collapsedSections) ? (stored.collapsedSections as unknown[]) : [];
+    const collapsedSections = SECTION_IDS.filter((s) => listed.includes(s));
+    return collapsedSections.length > 0 ? { locale, theme, collapsedSections } : { locale, theme };
   } catch {
     return INITIAL_PREFERENCES;
   }

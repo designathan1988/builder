@@ -4,7 +4,8 @@
 // with ArrowUp from inside it or through its Layers row, the breakpoint, the style state, the zoom),
 // every step through its door with the real mouse and keyboard (a click on the node it targets, a drag released
 // where its drop says or held across the next steps, a marquee drawn from its target's empty area to its drop's node,
-// the characters it types), then the end terminals the scenario
+// the characters it types; an inspector field clicked, what it holds selected, then typed into), then the end
+// terminals the scenario
 // names: the document diff, the selection and the history read through the read-only test port, computed style and
 // geometry inside the frame, the feedback in the status bar, the editor's regions, storage after an immediate
 // reload, and the refusals. After the setup and after the steps the canvas must draw the document the port reads;
@@ -534,9 +535,15 @@ const EDIT_CONTEXT = 'text-editing';
 const HAND_CONTEXT = 'hand';
 // the key context of the canvas (interactions.json), which the frame's page and the page body name
 const CANVAS_CONTEXT = 'canvas';
+// the key context of the inspector's text field (interactions.json), which the field names: its keys (Enter, Escape)
+// act on what the field holds (spec inspector-panel)
+const FIELD_TEXT_CONTEXT = 'element-text-field';
+// what a step's `type` writes for Shift+Enter (schema.ts stepSchema): U+2028, the line separator
+const LINE_BREAK = ' ';
 
-// the focused key context and the contexts it inherits (keymap.ts): the text edited in place names its own, a field
-// keeps its keys, a region names its context, the page body is the canvas's
+// the focused key context and the contexts it inherits (keymap.ts): the text edited in place names its own, and so may
+// a field (the inspector's text field), any other field keeps its keys, a region names its context, the page body is
+// the canvas's
 async function focusedContexts(page: Page): Promise<string[]> {
   const named = await page.evaluate(() => {
     const el = document.activeElement;
@@ -548,7 +555,7 @@ async function focusedContexts(page: Page): Promise<string[]> {
       if (inner && view && inner instanceof view.HTMLElement && inner.isContentEditable) return inner.getAttribute('data-key-context') ?? 'field';
       return 'canvas';
     }
-    if (el instanceof HTMLElement && (el.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(el.tagName))) return 'field';
+    if (el instanceof HTMLElement && (el.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(el.tagName))) return el.getAttribute('data-key-context') ?? 'field';
     return el.closest('[data-key-context]')?.getAttribute('data-key-context') ?? 'global';
   });
   const chain: string[] = [];
@@ -598,6 +605,8 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
   const d = doorData(ref);
   // a key of the text edited in place needs the focus in the edited text, before anything else of the step
   if (d.kind === 'shortcut' && d.context === EDIT_CONTEXT) expect((await focusedContexts(page))[0], `step ${ref}: the focus is in the text edited in place`).toBe(EDIT_CONTEXT);
+  // a key of the inspector's text field needs the focus in that field, which a step before it typed into
+  if (d.kind === 'shortcut' && d.context === FIELD_TEXT_CONTEXT) expect((await focusedContexts(page))[0], `step ${ref}: the focus is in the text field`).toBe(FIELD_TEXT_CONTEXT);
   // a key of the hand needs the focus on the canvas and an element in the hand, whose aim the canvas draws as a drop
   if (d.kind === 'shortcut' && d.context === HAND_CONTEXT) {
     expect((await focusedContexts(page))[0], `step ${ref}: the focus is on the canvas`).toBe('canvas');
@@ -686,8 +695,9 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
     // a key of the text edited in place (the focus there was asserted above) acts on the edit: its arguments (the
     // node, the text) are what the edit holds, which the document diff checks; no control stands for them. A key of
     // the hand (asserted above too) acts at the hand's aim: its arguments (Enter: element.moveTo's parent and index)
-    // are where the steps before it aimed, which the document diff checks as well
-    if (d.context !== EDIT_CONTEXT && d.context !== HAND_CONTEXT && Object.keys(own).length > 0) {
+    // are where the steps before it aimed, which the document diff checks as well. A key of the inspector's text field
+    // (asserted above) acts on the field: its arguments (the node, the text) are what the field holds
+    if (d.context !== EDIT_CONTEXT && d.context !== HAND_CONTEXT && d.context !== FIELD_TEXT_CONTEXT && Object.keys(own).length > 0) {
       await focusControlFor(page, ref, own);
       // the control the key acts on lies in the door's key context (a palette tile in the palette's)
       const chain = await focusedContexts(page);
@@ -704,11 +714,30 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
     const clicked = modifiedControl(ref)?.drawn ?? ref;
     if (d.kind === 'toolbar' || d.kind === 'panel-control' || d.kind === 'context-menu') await expect(control(page, clicked, { args: own }), `step ${ref}: its control is drawn`).toBeVisible();
     await runDoor(page, ref, { args: own });
+  } else if (d.kind === 'inspector-field') {
+    // An inspector field is drawn once, for the selection, so its control is the door's only one: its arguments are
+    // what it acts on (the selection, by its adapter) and what the step types, which the document diff checks. A field
+    // the inspector does not show (a tab not chosen) fails the step on an assertion. The runner clicks the field's
+    // editable element (an input, a text area, an editable element; the control itself when it is one), selects what
+    // it holds with Control+A (a field keeps its own keys), and the step's `type` follows below ("\n" is Enter).
+    if (step.hold === true || step.drop !== null) throw new Error(`step ${ref}: a field neither drops nor holds`);
+    const field = control(page, ref);
+    await expect(field, `step ${ref}: its control is drawn`).toBeVisible();
+    const editable = field.locator('input, textarea, [contenteditable="true"], [contenteditable="plaintext-only"]');
+    const typedInto = (await editable.count()) > 0 ? editable.first() : field;
+    await typedInto.click();
+    await page.keyboard.press('Control+A');
   } else {
     throw new Error(`step ${ref}: the runner cannot run a ${d.kind} door yet`);
   }
-  // the characters the step types with the real keyboard ("\n" is Enter)
-  if (typeof step.type === 'string') await page.keyboard.type(step.type);
+  // the characters the step types with the real keyboard ("\n" is Enter); U+2028, the line separator, is Shift+Enter,
+  // the line break a person types in a text field
+  if (typeof step.type === 'string') {
+    for (const [i, part] of step.type.split(LINE_BREAK).entries()) {
+      if (i > 0) await page.keyboard.press('Shift+Enter');
+      if (part !== '') await page.keyboard.type(part);
+    }
+  }
 }
 
 async function setUp(page: Page, s: Scenario): Promise<unknown> {
@@ -838,8 +867,11 @@ export function registerScenarioTests(): void {
 
           const editor = s.expect.editor;
           if (editor) {
+            // a region the editor does not draw (a tab not chosen) fails on an assertion, never on a thrown error
             const regionBox = async (id: string) => {
-              const box = await page.locator(`[data-region="${id}"]`).first().boundingBox();
+              const region = page.locator(`[data-region="${id}"]`).first();
+              await expect(region, `region ${id} is drawn`).toBeVisible();
+              const box = await region.boundingBox();
               if (box === null) throw new Error(`region ${id} is not laid out`);
               return box;
             };

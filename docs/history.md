@@ -141,6 +141,21 @@ Decisions by small ambiguity (moved here from PROGRESS.md):
   step names an element, pressed while a Layers control holds the focus, first clicks that element on the canvas
   (allowed only when it is the selection alone). Browser tests with every lock check off: 7 of 10 failed; with the
   root check off, its test failed.
+- page-properties and export-zip (group 06): spec and scenarios written by the coordinator from Pager's source and a
+  run of Pager (Page properties only selects the root there; no control sets title, language or direction).
+  Decisions: the settings are the page element's attributes (elements.json pageTitle, pageLanguage, pageDirection)
+  written by page.setSetting from the Settings tab; a value that is not a language tag, or a direction other than
+  ltr/rtl/auto, is refused with the new status.page.settingInvalid; the export is site.zip (index.html +
+  css/styles.css), with lang/dir/title only from the settings (else no lang/dir and the page's name as title).
+- inspector-panel (helper, group 04): Style/Settings/Interactions tabs, collapsed sections kept in the preferences
+  with a summary on the header, the element's text in the Settings tab (Enter keeps it, Shift+Enter is the text
+  area's own line break, Escape puts it back: text.cancelEdit, with no edit in place, answers with its message and
+  the field shows the document's text again), Element actions › Lock and Hide. Contract committed first (46cb97f).
+  Runner: inspector-field steps (click the editable element, Control+A, type), keys of the element-text-field
+  context act on what the field holds, U+2028 in `type` presses Shift+Enter; each proven by switching it off (7,
+  3 and 1 scenarios failed). Escape's field case off: its scenario and its browser test failed.
+- Coordinator's slip, noted so it does not happen again: the Pager preview server (pager-run) stayed open during
+  four suites of this stretch (e2e at 06:15, 06:22, 06:28, the tooth at 06:31); every server is stopped first now.
 
 ## 2026-09-25 — Slice 1: the rest of the foundation and the first usable block of group 02
 
