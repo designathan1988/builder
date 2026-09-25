@@ -1,5 +1,5 @@
 // How a test runs a door of the manifest with the real mouse and keyboard, and how it names the doors it runs: one
-// annotation "door" per door (tests/e2e/census.spec.ts reads them to find a door no test runs).
+// annotation "door" per door, so that a census of the tests can find a door no test runs.
 import fs from 'node:fs';
 import path from 'node:path';
 import type { Page, TestDetails } from '@playwright/test';

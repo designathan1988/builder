@@ -15,10 +15,15 @@ const CLOSE = doorSlots('dock-strip').find((d) => d.command.id === 'workspace.se
 // it are not available yet (bodies.ts). Timeline, Checks, Keyboard shortcuts and Document arrive with their features.
 export const DOCK_TABS: BodyTable = {};
 
+// the tab's panel, named after its tab
 function DockBody({ tab }: { readonly tab: Panel }) {
   const t = useT();
   const Body = DOCK_TABS[tab];
-  return Body ? <Body /> : <div className="dock-body dock-body--empty">{t('common.notAvailableYet')}</div>;
+  return (
+    <div className={`dock-body${Body ? '' : ' dock-body--empty'}`} role="tabpanel" aria-label={t(panelName(tab))}>
+      {Body ? <Body /> : t('common.notAvailableYet')}
+    </div>
+  );
 }
 
 export function Dock() {

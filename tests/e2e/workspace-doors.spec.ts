@@ -100,16 +100,28 @@ for (const ref of ['workspace.setPanelOpen#menu-view-canvas-tools', 'workspace.s
   });
 }
 
-test('the dock strip closes the active tab, and closing the last one leaves an empty strip', runs('workspace.setPanelOpen#workbench-tab-close'), async ({ page }) => {
+test('the dock strip closes the tab it shows and shows the next one; closing the last tab hides the workbench', runs('workspace.setWorkbenchState#toolbar-workbench-strip-toggle', 'workspace.setPanelOpen#workbench-tab-close'), async ({ page }) => {
+  const tabs = () => page.locator('[data-region="tab-strip"] [role="tab"]').evaluateAll((els) => els.map((el) => el.textContent));
+  const shown = () => page.getByRole('tabpanel').getAttribute('aria-label');
+  // with no tab left, a shown and a hidden workbench take the same room; the show/hide toggle says which it is
+  const toggle = page.locator('[data-door="workspace.setWorkbenchState#toolbar-workbench-strip-toggle"]');
+  const canvas = await box(page, '.centre');
+  await runDoor(page, 'workspace.setWorkbenchState#toolbar-workbench-strip-toggle');
+  expect(await tabs()).toEqual(['Timeline', 'Checks']);
+  expect(await shown()).toBe('Timeline');
+  await expect(toggle).toHaveAttribute('aria-pressed', 'true');
   const two = await region(page, 'tab-strip');
-  await runDoor(page, 'workspace.setPanelOpen#workbench-tab-close');
-  const one = await region(page, 'tab-strip');
-  expect(one.width).toBeLessThan(two.width - 20);
-  expect(one.width).toBeGreaterThan(20);
 
   await runDoor(page, 'workspace.setPanelOpen#workbench-tab-close');
-  expect((await region(page, 'tab-strip')).width).toBeLessThan(one.width - 20);
-  await expect(page.locator('[data-door="workspace.setPanelOpen#workbench-tab-close"]')).toHaveCount(0);
+  expect(await tabs()).toEqual(['Checks']);
+  expect(await shown()).toBe('Checks');
+  expect((await region(page, 'tab-strip')).width).toBeLessThan(two.width - 20);
+
+  await runDoor(page, 'workspace.setPanelOpen#workbench-tab-close');
+  expect(await tabs()).toEqual([]);
+  await expect(page.getByRole('tabpanel')).toHaveCount(0);
+  expect(await box(page, '.centre')).toEqual(canvas);
+  await expect(toggle).toHaveAttribute('aria-pressed', 'false');
 });
 
 test('the dock strip shows the workbench under the canvas and hides it again', runs('workspace.setWorkbenchState#toolbar-workbench-strip-toggle'), async ({ page }) => {
