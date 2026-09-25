@@ -96,4 +96,47 @@ describe('the content model (src/core/elements/content-model.ts)', () => {
     expect(model.refusal('tr', 'div')).toEqual(['td', 'th']);
     expect(model.refusal('section', 'div')).toBeNull();
   });
+
+  it('interactive content: links, buttons and form controls, the conditional ones by their attributes', () => {
+    const none = new Map<string, string | number | true>();
+    for (const tag of ['a', 'button', 'input', 'select', 'textarea', 'label', 'details', 'iframe']) expect(model.isInteractive(tag, none), tag).toBe(true);
+    for (const tag of ['div', 'section', 'p', 'img', 'video', 'audio', 'span']) expect(model.isInteractive(tag, none), tag).toBe(false);
+    expect(model.isInteractive('input', new Map([['type', 'hidden']]))).toBe(false);
+    expect(model.isInteractive('video', new Map<string, string | number | true>([['controls', true]]))).toBe(true);
+    expect(model.isInteractive('img', new Map([['usemap', '#m']]))).toBe(true);
+    expect(['a', 'button', 'div', 'section', 'label'].filter((tag) => model.excludesInteractive(tag))).toEqual(['a', 'button']);
+  });
+});
+
+describe('element.insert into a Link Block (spec elements-structure, Problems in Pager 5)', () => {
+  // a Link Block holding a container, and a section beside it
+  const LINKED: DocumentJson = {
+    version: 1,
+    pages: [
+      {
+        id: 'p',
+        name: 'Home',
+        file: 'index.html',
+        tree: node('Page', 'page', 'body', { children: [node('Card', 'linkBlock', 'a', { children: [node('Inside', 'div', 'div')] }), node('Band', 'section', 'section')] }),
+      },
+    ],
+  };
+  const insert = (selection: string[], args: { entry: string; parent?: string; index?: number }) =>
+    insertCommand.run(
+      { state: { document: LINKED, selection: selection as NodeId[], history: EMPTY_HISTORY, message: null, ui: undefined as never }, clock: manualClock(), ids: sequentialIds('new'), rules: RULES, words: (key: MessageId) => translate('en', key), layout: noLayout },
+      args as never,
+    );
+  const refused = { kind: 'refused', message: { key: 'status.refused.interactiveInside', params: { parent: 'Card' } } };
+
+  it('refuses a Link Block into a Link Block, and into an element inside one, naming the Link Block', () => {
+    expect(insert(['Card'], { entry: 'link-block' })).toEqual(refused);
+    expect(insert(['Inside'], { entry: 'link-block' })).toEqual(refused);
+    expect(insert([], { entry: 'link-block', parent: 'Inside', index: 0 })).toEqual(refused);
+  });
+
+  it('takes an element that is not interactive, and a Link Block elsewhere', () => {
+    expect(insert(['Card'], { entry: 'container' }).kind).toBe('change');
+    expect(insert(['Inside'], { entry: 'paragraph' }).kind).toBe('change');
+    expect(insert(['Band'], { entry: 'link-block' }).kind).toBe('change');
+  });
 });

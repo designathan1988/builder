@@ -143,3 +143,39 @@ describe('element.moveUp and element.moveDown (src/core/structure/move.ts)', () 
     expect(run('down', ['Perks', 'Title'])).toEqual({ kind: 'refused', message: { key: 'status.wrap.needsSameParent', params: {} } });
   });
 });
+
+describe('element.moveTo into a Link Block (spec elements-structure, Problems in Pager 5)', () => {
+  // a Link Block holding a container; beside it another Link Block, and a section holding a Link Block
+  const LINKED: DocumentJson = {
+    version: 1,
+    pages: [
+      {
+        id: 'p',
+        name: 'Home',
+        file: 'index.html',
+        tree: node('Page', 'page', 'body', {
+          children: [
+            node('Card', 'linkBlock', 'a', { children: [node('Inside', 'div', 'div')] }),
+            node('Other', 'linkBlock', 'a'),
+            node('Band', 'section', 'section', { children: [node('Nested', 'linkBlock', 'a')] }),
+            node('Plain', 'div', 'div'),
+          ],
+        }),
+      },
+    ],
+  };
+  const move = (selection: string[], parent: string, index: number) =>
+    moveToCommand.run({ ...contextOf(selection), state: { ...contextOf(selection).state, document: LINKED } }, { parent: parent as NodeId, index });
+  const refused = { kind: 'refused', message: { key: 'status.refused.interactiveInside', params: { parent: 'Card' } } };
+
+  it('refuses a Link Block moved into a Link Block or into an element inside one, and a node holding one', () => {
+    expect(move(['Other'], 'Card', 0)).toEqual(refused);
+    expect(move(['Other'], 'Inside', 0)).toEqual(refused);
+    expect(move(['Band'], 'Card', 1)).toEqual(refused);
+  });
+
+  it('moves an element that holds nothing interactive into it', () => {
+    expect(move(['Plain'], 'Card', 1).kind).toBe('change');
+    expect(move(['Other'], 'Band', 0).kind).toBe('change');
+  });
+});

@@ -3,6 +3,7 @@
 // CommandId (src/generated/ids.ts), so a missing or an extra entry, or a handler under another command's key, is a
 // type error (src/app/commands.typecheck.ts proves it). The order is the manifest's.
 import { NOT_AVAILABLE_YET, always, type CommandTable, type PredicateTable } from '../core/commands/registry.ts';
+import { setLinkCommand } from '../core/elements/link.ts';
 import { canRedo, canUndo, redoCommand, undoCommand } from '../core/history/history.ts';
 import { toggleHiddenCommand, toggleLockCommand } from '../core/nodes/flags.ts';
 import { renameCommand } from '../core/nodes/names.ts';
@@ -82,7 +83,7 @@ export const COMMANDS = {
   'element.setAttribute': NOT_AVAILABLE_YET,
   'element.setId': NOT_AVAILABLE_YET,
   'element.setClasses': NOT_AVAILABLE_YET,
-  'element.setLink': NOT_AVAILABLE_YET,
+  'element.setLink': setLinkCommand,
   'element.setInputType': NOT_AVAILABLE_YET,
   'element.setLabelTarget': NOT_AVAILABLE_YET,
   'element.setCustomAttribute': NOT_AVAILABLE_YET,

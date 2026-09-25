@@ -57,7 +57,7 @@ export interface CommandArgs {
   "element.setAttribute": { readonly attribute: AttributeId; readonly value: JsonValue };
   "element.setId": { readonly id: string };
   "element.setClasses": { readonly classes: JsonValue };
-  "element.setLink": { readonly href?: string; readonly newTab?: boolean; readonly page?: string; readonly anchor?: NodeId };
+  "element.setLink": { readonly target?: NodeId; readonly href?: string; readonly newTab?: boolean; readonly page?: string; readonly anchor?: NodeId };
   "element.setInputType": { readonly type: "text" | "email" | "password" | "number" | "tel" | "url" | "search" | "date" | "time" | "color" | "range" | "checkbox" | "radio" | "file" };
   "element.setLabelTarget": { readonly control: NodeId };
   "element.setCustomAttribute": { readonly name: string; readonly value: string };

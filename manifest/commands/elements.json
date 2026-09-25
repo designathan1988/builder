@@ -1104,6 +1104,11 @@
       "owner": "src/core/elements/link.ts",
       "introducedBy": "elements-structure",
       "args": {
+        "target": {
+          "type": "node",
+          "values": [],
+          "optional": true
+        },
         "href": {
           "type": "string",
           "values": [],
@@ -1131,7 +1136,8 @@
       },
       "refusals": [
         "status.url.unsafe",
-        "status.locked.edit"
+        "status.locked.edit",
+        "status.locked.byAncestor"
       ],
       "confirmation": null,
       "history": {

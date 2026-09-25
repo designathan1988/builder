@@ -5,8 +5,10 @@
 // proposal's parent and index). The moved nodes stay selected; the status bar says "Moved … to position" among its
 // siblings and "Moved … into" another parent (spec drag-drop-inside). A moved node that is locked or inside a locked
 // element, a locked parent or one inside a locked element (spec lock-element, src/core/nodes/flags.ts), a parent
-// inside a moved node (the node itself included), a parent that holds no children and a parent the content model
-// does not let hold a moved node refuse the move, in that order, and nothing changes. A
+// inside a moved node (the node itself included), a parent that holds no children, a parent the content model
+// does not let hold a moved node and a Link Block (or an element inside one) for an interactive element, moved or
+// inside a moved node (spec elements-structure, Problems in Pager 5), refuse the move, in that order, and nothing
+// changes. A
 // move that leaves every node where it was changes nothing and records no history (the store drops it).
 //
 // element.moveUp and element.moveDown (ARCHITECTURE.md, Command owners; spec move-up-down): the selection's roots
@@ -20,6 +22,7 @@ import type { NodeId } from '../../generated/commands.ts';
 import { message, registerHandler, registerPredicate, type Outcome } from '../commands/registry.ts';
 import { locate, walk, type DocNode, type DocumentJson, type Selection } from '../document/model.ts';
 import type { ModelRules } from '../document/validate.ts';
+import { interactiveInsideRefusal } from '../elements/content-model.ts';
 import { applyPatches, type Patch } from '../history/transaction.ts';
 import { firstLockRefusal, lockRefusal } from '../nodes/flags.ts';
 import { selectionRoots } from './remove.ts';
@@ -48,6 +51,10 @@ export function moveSelectionTo(state: { readonly document: DocumentJson; readon
     const only = receiver.node.tag !== null && at.node.tag !== null ? rules.contentModel.refusal(receiver.node.tag, at.node.tag) : null;
     if (only !== null) return { kind: 'refused', message: message('status.refused.onlyAccepts', { parent: `<${receiver.node.tag ?? ''}>`, children: only.map((t) => `<${t}>`).join(', ') }) };
   }
+  // an interactive element, moved itself or inside a moved node, never goes into a Link Block nor into an element
+  // inside one (content-model.ts; spec elements-structure, Problems in Pager 5)
+  const inside = interactiveInsideRefusal(state.document, rules, parent, moved.map((at) => at.node));
+  if (inside !== null) return { kind: 'refused', message: inside };
 
   // each moved node leaves its place, found again in the document the earlier removals left
   const patches: Patch[] = [];

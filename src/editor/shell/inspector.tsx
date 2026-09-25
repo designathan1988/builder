@@ -12,7 +12,8 @@
 //    features, so each shows "not available yet".
 //  - Settings: no selector bar; its region starts under the header. The text of the one selected text element (its
 //    field keeps the text with text.set), then the attribute fields that apply to the element's type, in their order;
-//    on the page root, the fields of the page's settings keep what is typed with page.setSetting.
+//    on the page root, the fields of the page's settings keep what is typed with page.setSetting; on a Link Block or a
+//    link, the Link address keeps it with element.setLink.
 import { Fragment, useEffect, useMemo, useRef, useState, type ComponentType, type ReactNode } from 'react';
 import type { AttributeId, CommandId, FeatureId, KeyContextId, MessageId, SectionId, StyleTargetId } from '../../generated/ids.ts';
 import type { CommandArgs } from '../../generated/commands.ts';
@@ -444,22 +445,42 @@ function TextField({ entry, node, label }: { readonly entry: DoorEntry; readonly
   );
 }
 
-// A setting of the page (spec page-properties, Problems in Pager 1), drawn for its door on the page root: a one-line
-// text field that stands for its setting (the command's argument that takes an attribute, by its manifest type, names
-// it) and whose text fills the command's other argument. Typing changes only the field, which keeps its keys (the
+// How an attribute field's text reaches its door's command, or null for a field that keeps no text:
+//  - a setting of the page (spec page-properties, Problems in Pager 1), on the page root: the field stands for its
+//    setting (the command's argument that takes an attribute, by its manifest type, names it) and its text fills the
+//    command's other argument;
+//  - an attribute whose command takes a text argument of the attribute's own name (element.setLink's href, spec
+//    elements-structure): the field stands for its node (the command's target) and its text fills that argument.
+// A boolean attribute (a toggle) keeps no text.
+function keptTextOf(entry: DoorEntry, attribute: AttributeId, valueType: string, node: DocNode): { readonly args: Readonly<Record<string, string>>; readonly filled: string } | null {
+  if (valueType === 'boolean') return null;
+  const args = Object.entries(entry.command.args);
+  if (isPageSetting(ATTRIBUTES.get(attribute)?.elements, MODEL_RULES.root.type)) {
+    const named = args.find(([, arg]) => arg.type === 'attribute')?.[0];
+    const filled = args.find(([name]) => name !== named)?.[0];
+    return named === undefined || filled === undefined ? null : { args: { [named]: attribute }, filled };
+  }
+  const own = args.find(([name, arg]) => name === attribute && arg.type === 'string');
+  if (own === undefined) return null;
+  const target = args.find(([name, arg]) => name === 'target' && arg.type === 'node');
+  return { args: target === undefined ? {} : { target: node.id }, filled: attribute };
+}
+
+// An attribute field that keeps its text (keptTextOf): a one-line text field of its door, standing for its arguments,
+// whose text fills the command's argument named for it. Typing changes only the field, which keeps its keys (the
 // field key context binds no Enter). The field is the one field of a form of its own, so Enter submits it, as the
 // browser submits a form implicitly (no key is handled here): the submission keeps its text, and so does leaving the
 // field (Tab, a click elsewhere) or its going (another selection, another tab), whenever the text differs from the one
-// it last showed or kept; each keeping is one undo step (keepAfterGesture). The field shows the value the page root
-// stores (empty while it has none): when it is drawn, when that value changes, and after every command that says
-// something (the value kept, or refused while the document keeps its own). A field whose door's feature is not
-// registered as built (the page's description, until page-seo-meta) is not available yet, although the command it
-// shares is built.
-function SettingField({ entry, node, attribute, label }: { readonly entry: DoorEntry; readonly node: DocNode; readonly attribute: AttributeId; readonly label: string }) {
+// it last showed or kept; each keeping is one undo step (keepAfterGesture), for the node the field was drawn for. The
+// field shows the value the node stores (empty while it has none): when it is drawn, when that value changes, and
+// after every command that says something (the value kept, or refused while the document keeps its own). A field
+// whose door's feature is not registered as built (the page's description, until page-seo-meta) is not available
+// yet, although the command it shares is built.
+function KeptTextField({ entry, node, attribute, kept, label }: { readonly entry: DoorEntry; readonly node: DocNode; readonly attribute: AttributeId; readonly kept: { readonly args: Readonly<Record<string, string>>; readonly filled: string }; readonly label: string }) {
   const store = useStore();
-  const named = Object.entries(entry.command.args).find(([, arg]) => arg.type === 'attribute')?.[0];
-  const filled = Object.keys(entry.command.args).find((name) => name !== named);
-  const args = useMemo(() => (named === undefined ? {} : { [named]: attribute }), [named, attribute]);
+  const { filled } = kept;
+  const json = JSON.stringify(kept.args);
+  const args = useMemo(() => JSON.parse(json) as Readonly<Record<string, string>>, [json]);
   const door = useDoor(entry, args, label, isFeatureBuilt(entry.door.feature as FeatureId));
   const form = useRef<HTMLFormElement>(null);
   const field = useRef<HTMLInputElement>(null);
@@ -469,6 +490,7 @@ function SettingField({ entry, node, attribute, label }: { readonly entry: DoorE
   const value = node.attributes[attribute];
   const stored = value === undefined ? '' : String(value);
   const command = entry.command.id;
+  const owner = node.id;
   useEffect(() => {
     const element = field.current;
     if (element === null) return;
@@ -479,12 +501,16 @@ function SettingField({ entry, node, attribute, label }: { readonly entry: DoorE
     const row = form.current;
     const element = field.current;
     const typing = draft.current;
-    if (row === null || element === null || filled === undefined) return;
+    if (row === null || element === null) return;
     const keep = () => {
       const text = element.value;
       if (text === typing.shown) return;
       typing.shown = text;
-      keepAfterGesture(() => (store.dispatch as (id: CommandId, args: unknown) => DispatchResult)(command, { ...args, [filled]: text }));
+      keepAfterGesture(() => {
+        // nothing is kept for a node the document no longer holds
+        if (locate(store.getState().document, owner) === null) return;
+        (store.dispatch as (id: CommandId, args: unknown) => DispatchResult)(command, { ...args, [filled]: text });
+      });
     };
     // the form's submission never leaves the editor
     const submit = (event: Event) => {
@@ -499,7 +525,7 @@ function SettingField({ entry, node, attribute, label }: { readonly entry: DoorE
       // the field goes (another selection, another tab) with a text not kept yet: it is kept
       keep();
     };
-  }, [store, command, args, filled]);
+  }, [store, command, args, filled, owner]);
   return (
     <form ref={form} className={`field-row${door.available ? '' : ' is-unavailable'}`} data-door={entry.ref} data-args={JSON.stringify(args)} title={door.title}>
       <span className="field-row__label">{label}</span>
@@ -508,9 +534,10 @@ function SettingField({ entry, node, attribute, label }: { readonly entry: DoorE
   );
 }
 
-// An attribute field of the Settings tab whose command arrives with its feature: drawn disabled, "not available yet".
+// An attribute field of the Settings tab whose command, or whose door's feature, arrives later (Open in a new tab
+// shares element.setLink with the Link address and comes with elements-text): drawn disabled, "not available yet".
 function AttributeField({ entry, label, toggle }: { readonly entry: DoorEntry; readonly label: string; readonly toggle: boolean }) {
-  const door = useDoor(entry, {}, label);
+  const door = useDoor(entry, {}, label, isFeatureBuilt(entry.door.feature as FeatureId));
   return (
     <div className={`field-row${door.available ? '' : ' is-unavailable'}`} data-door={entry.ref} title={door.title}>
       <span className="field-row__label">{label}</span>
@@ -541,8 +568,9 @@ function SettingsTab() {
             if (attribute === undefined || (attribute.elements !== 'all' && !attribute.elements.includes(node.type))) return null;
             const label = t(attribute.labelKey as MessageId);
             if ('content' in entry.command.args) return <TextField key={`${entry.ref}@${node.id}`} entry={entry} node={node} label={label} />;
-            // a setting of the page, on the page root (core/page/settings.ts)
-            if (isPageSetting(attribute.elements, MODEL_RULES.root.type)) return <SettingField key={`${entry.ref}@${node.id}`} entry={entry} node={node} attribute={attribute.id as AttributeId} label={label} />;
+            // a setting of the page on the page root (core/page/settings.ts), or a link (core/elements/link.ts)
+            const kept = keptTextOf(entry, attribute.id as AttributeId, attribute.valueType, node);
+            if (kept !== null) return <KeptTextField key={`${entry.ref}@${node.id}`} entry={entry} node={node} attribute={attribute.id as AttributeId} kept={kept} label={label} />;
             return <AttributeField key={entry.ref} entry={entry} label={label} toggle={attribute.valueType === 'boolean'} />;
           })
         )}

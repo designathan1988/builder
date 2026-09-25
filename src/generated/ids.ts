@@ -3379,6 +3379,7 @@ export const MESSAGE_IDS = [
   "status.js.invalidAt",
   "status.layout.notFlex",
   "status.link.asking",
+  "status.link.removed",
   "status.link.set",
   "status.link.unsafe",
   "status.lock.root",
