@@ -1,42 +1,24 @@
 // The bottom dock (DESIGN.md "Dock and status bar"): its strip with a tab for each open dock panel (the tab-strip
 // component, the panel's icon from layout.json panels), show or hide, maximize, close the tab; its body when open.
-import type { MessageId } from '../../generated/ids.ts';
-import { manifest } from '../../manifest/runtime.ts';
 import { DoorControl, Icon } from '../doors/door.tsx';
 import { doorSlots } from '../doors/placement.ts';
 import { useEditorState } from '../store.ts';
 import { useT } from '../text.ts';
-import { PANELS, hasContent, panelName, type Panel } from '../workspace/panels.ts';
+import { PANELS, panelName, type Panel } from '../workspace/panels.ts';
+import type { BodyTable } from './bodies.ts';
 import { Slots } from './slots.tsx';
 
 const TAB = doorSlots('tab-strip')[0];
 const CLOSE = doorSlots('dock-strip').find((d) => d.command.id === 'workspace.setPanelOpen');
 
+// The body of each dock tab the editor draws; a tab without one says "not available yet" and the doors that only open
+// it are not available yet (bodies.ts). Timeline, Checks, Keyboard shortcuts and Document arrive with their features.
+export const DOCK_TABS: BodyTable = {};
+
 function DockBody({ tab }: { readonly tab: Panel }) {
   const t = useT();
-  // a panel without its content says so (panels.ts PANEL_CONTENT)
-  if (!hasContent(tab)) return <div className="dock-body dock-body--empty">{t('common.notAvailableYet')}</div>;
-  if (tab === 'timeline') {
-    return (
-      <div className="dock-body dock-body--timeline" data-region="dock-timeline" data-key-context="timeline">
-        <Slots region="dock-timeline" />
-      </div>
-    );
-  }
-  if (tab === 'checks') {
-    return (
-      <div className="dock-body" data-region="dock-checks">
-        {manifest.checks.categories.map((c) => (
-          <div key={c.id} className="checks-category">
-            <span className="checks-category__name">{t(c.labelKey as MessageId)}</span>
-            <span className="checks-category__none">{t('checks.none')}</span>
-          </div>
-        ))}
-      </div>
-    );
-  }
-  // the Keyboard shortcuts and Document tabs show their content when their features are built
-  return <div className="dock-body dock-body--empty">{t('common.notAvailableYet')}</div>;
+  const Body = DOCK_TABS[tab];
+  return Body ? <Body /> : <div className="dock-body dock-body--empty">{t('common.notAvailableYet')}</div>;
 }
 
 export function Dock() {

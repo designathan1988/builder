@@ -1185,24 +1185,10 @@ kbd {
   color: var(--color-text-subtle);
 }
 
-/* a sidebar view whose content is not built yet says so under its headings */
+/* a sidebar view the editor draws no body for says so under its title */
 .view__empty {
   margin: 0;
   padding: var(--space-3) var(--space-6);
-  color: var(--color-text-subtle);
-}
-
-.checks-category {
-  display: flex;
-  gap: var(--space-4);
-  width: 100%;
-}
-
-.checks-category__name {
-  font-weight: var(--weight-semibold);
-}
-
-.checks-category__none {
   color: var(--color-text-subtle);
 }
 

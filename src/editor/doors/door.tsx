@@ -2,7 +2,7 @@
 // the manifest names, its label from the catalogue, its shortcut as a hint, and disabled with "not available yet"
 // while its command's entry in the command table is NOT_AVAILABLE_YET. Every icon comes from the sprite by a name
 // the manifest gives (a door's icon, a glyph, a panel, an element); no component chooses one.
-import type { ReactNode } from 'react';
+import { useContext, type ReactNode } from 'react';
 import { COMMANDS, PREDICATES } from '../../app/commands.ts';
 import { isBuilt, type PredicateTable } from '../../core/commands/registry.ts';
 import type { DispatchResult } from '../../core/store/store.ts';
@@ -11,6 +11,7 @@ import type { DoorEntry } from '../../manifest/runtime.ts';
 import { chordHint } from '../input/keymap.ts';
 import type { EditorUi } from '../state.ts';
 import { useEditorState, useStore } from '../store.ts';
+import { PanelBodies } from '../shell/bodies.ts';
 import { useT } from '../text.ts';
 import { opensEmptyPanel } from '../workspace/panels.ts';
 import { isCurrent } from './current.ts';
@@ -52,8 +53,9 @@ export interface DoorState {
 export function useDoor(entry: DoorEntry, args: Readonly<Record<string, unknown>> = {}, labelled?: string): DoorState {
   const t = useT();
   const store = useStore();
-  // a door whose only effect is to open a panel without its content is not available yet, like an unbuilt command
-  const built = isDoorBuilt(entry) && !opensEmptyPanel({ ...entry.door.args, ...args });
+  // a door whose only effect is to open a panel the shell draws no body for is not available yet, like an unbuilt command
+  const drawsBody = useContext(PanelBodies);
+  const built = isDoorBuilt(entry) && !opensEmptyPanel({ ...entry.door.args, ...args }, drawsBody);
   const current = useEditorState((s) => built && isCurrent(entry, s, args));
   const available = useEditorState((s) => built && ((PREDICATES as PredicateTable<EditorUi>)[entry.command.availability.predicate as PredicateId]?.test(s) ?? true));
   const label = labelled ?? t(entry.door.labelKey as MessageId);

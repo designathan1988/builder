@@ -6,13 +6,17 @@ import { installKeymap } from '../input/keymap.ts';
 import { useEditorState, useStore } from '../store.ts';
 import { isPanelOpen } from '../workspace/panels.ts';
 import { useT } from '../text.ts';
+import { PanelBodies, bodiesDrawn } from './bodies.ts';
 import { CanvasColumn } from './canvas.tsx';
-import { Dock } from './dock.tsx';
+import { DOCK_TABS, Dock } from './dock.tsx';
 import { Inspector } from './inspector.tsx';
-import { ActivityBar, Sidebar } from './sidebar.tsx';
+import { ActivityBar, SIDEBAR_VIEWS, Sidebar } from './sidebar.tsx';
 import { StatusBar } from './status-bar.tsx';
 import { TopBar } from './top-bar.tsx';
 import { FitZoom, ReportFitZoom } from './slots.tsx';
+
+// which panels the shell draws a body for, from the tables it draws them from (bodies.ts)
+const drawsBody = bodiesDrawn(SIDEBAR_VIEWS, DOCK_TABS);
 
 function usePreferencesOnDocument(): void {
   const theme = useEditorState((s) => s.ui.preferences.theme);
@@ -39,20 +43,22 @@ export function Shell() {
   useEffect(() => installKeymap(store), [store]);
   const classes = ['shell', sidebar ? '' : 'shell--no-sidebar', inspector ? '' : 'shell--no-inspector', `shell--dock-${dock}`].filter((c) => c !== '').join(' ');
   return (
-    <FitZoom.Provider value={zoom}>
-      <ReportFitZoom.Provider value={setZoom}>
-        <div className={classes} aria-label={t('editor.label')} data-key-context="global">
-          <TopBar />
-          <ActivityBar />
-          {sidebar ? <Sidebar /> : null}
-          <div className="workbench">
-            <CanvasColumn />
-            <Dock />
+    <PanelBodies.Provider value={drawsBody}>
+      <FitZoom.Provider value={zoom}>
+        <ReportFitZoom.Provider value={setZoom}>
+          <div className={classes} aria-label={t('editor.label')} data-key-context="global">
+            <TopBar />
+            <ActivityBar />
+            {sidebar ? <Sidebar /> : null}
+            <div className="workbench">
+              <CanvasColumn />
+              <Dock />
+            </div>
+            <Inspector />
+            <StatusBar />
           </div>
-          <Inspector />
-          <StatusBar />
-        </div>
-      </ReportFitZoom.Provider>
-    </FitZoom.Provider>
+        </ReportFitZoom.Provider>
+      </FitZoom.Provider>
+    </PanelBodies.Provider>
   );
 }

@@ -1,6 +1,7 @@
-// The activity bar and the sidebar (DESIGN.md "Regions"): Explorer (Pages, Files, Layers), Insert (the element grid
-// of elements.json's palette) and Styles (classes and variables). Rows and tiles are the doors of their regions,
-// one per page, node or palette entry; a section's actions are the region's controls before its first item.
+// The activity bar and the sidebar (DESIGN.md "Regions"): Explorer (Pages, Files, Layers) and Insert (the element grid
+// of elements.json's palette); Styles (classes and variables) comes with its features. Rows and tiles are the doors of
+// their regions, one per page, node or palette entry; a section's actions are the region's controls before its first
+// item.
 import type { CSSProperties } from 'react';
 import type { DocNode } from '../../core/document/model.ts';
 import type { MessageId, RegionId } from '../../generated/ids.ts';
@@ -8,8 +9,9 @@ import { manifest, type DoorEntry } from '../../manifest/runtime.ts';
 import { DoorControl, Icon, useDoor } from '../doors/door.tsx';
 import { GLYPHS, doorSlots } from '../doors/placement.ts';
 import { useEditorState } from '../store.ts';
-import { hasContent, isPanelOpen, panelName } from '../workspace/panels.ts';
+import { isPanelOpen, panelName, type Panel } from '../workspace/panels.ts';
 import { useT } from '../text.ts';
+import type { BodyTable } from './bodies.ts';
 import { Slots } from './slots.tsx';
 
 const ELEMENT_ICON = new Map(manifest.elements.elements.map((e) => [e.id, e.icon]));
@@ -174,21 +176,22 @@ function Insert() {
   );
 }
 
-function Styles() {
+// The body of each sidebar view the editor draws; a view without one says "not available yet" and the doors that
+// only open it are not available yet (bodies.ts). Styles (classes and variables) arrives with its features.
+export const SIDEBAR_VIEWS: BodyTable = { explorer: Explorer, elements: Insert };
+
+function EmptyView({ panel }: { readonly panel: Panel }) {
   const t = useT();
   return (
-    <section className="view" aria-label={t('activity.styles')} data-region="styles">
-      <div className="view__title">{t('activity.styles')}</div>
-      <div className="section-title">
-        <span className="section-title__text">{t('styles.classes')}</span>
-      </div>
-      <SectionTitle title={t(panelName('variables'))} region="styles" />
-      {hasContent('variables') ? null : <p className="view__empty">{t('common.notAvailableYet')}</p>}
+    <section className="view" aria-label={t(panelName(panel))}>
+      <div className="view__title">{t(panelName(panel))}</div>
+      <p className="view__empty">{t('common.notAvailableYet')}</p>
     </section>
   );
 }
 
 export function Sidebar() {
   const view = useEditorState((s) => s.ui.panels.sidebarView);
-  return <aside className="sidebar">{view === 'explorer' ? <Explorer /> : view === 'elements' ? <Insert /> : <Styles />}</aside>;
+  const View = SIDEBAR_VIEWS[view];
+  return <aside className="sidebar">{View ? <View /> : <EmptyView panel={view} />}</aside>;
 }
