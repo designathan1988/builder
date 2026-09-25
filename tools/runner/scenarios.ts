@@ -250,7 +250,8 @@ type CanvasQuery =
 //  - A drop, by the zones of the drag specs (drag-reorder-canvas, drag-drop-inside): along the parent's flow axis a
 //    leaf splits in halves; a container keeps an edge band at each end (min(8, 0.25 S) when empty,
 //    min(clamp(0.25 S, 8, 32), 0.4 S) with children) and is "inside" between them, at the slot the step's index
-//    gives, never over a child.
+//    gives: in the free gap between its children there, or, with no gap, over the half of the neighbouring child
+//    that stands for the same slot (after the child before it, before the child after it).
 function canvasPoint(page: Page, query: CanvasQuery): Promise<Point | string> {
   return page.evaluate((q) => {
     const iframe = document.querySelector<HTMLIFrameElement>('.frame__page');
@@ -303,8 +304,17 @@ function canvasPoint(page: Page, query: CanvasQuery): Promise<Point | string> {
       });
       const from = slot === 0 ? start + band : (edges[slot - 1]?.[1] ?? start + band);
       const to = slot >= kids.length ? start + size - band : (edges[slot]?.[0] ?? start + size - band);
-      if (to - from < 1) return `no room inside it between its children at slot ${slot}`;
-      along = (from + to) / 2;
+      if (to - from >= 1) along = (from + to) / 2;
+      else {
+        // no free gap at the slot: the spec's other way to it (drag-drop-inside, "Hit zones"): over a child, its
+        // halves are before or after it, so the slot is also the second half of the child before it or the first
+        // half of the child after it, between the container's own bands
+        const centre = (e: number[] | undefined) => (e === undefined ? undefined : ((e[0] ?? 0) + (e[1] ?? 0)) / 2);
+        const low = Math.max(start + band, slot === 0 ? start + band : (centre(edges[slot - 1]) ?? start + band));
+        const high = Math.min(start + size - band, slot >= kids.length ? start + size - band : (centre(edges[slot]) ?? start + size - band));
+        if (high - low < 1) return `no room inside it at slot ${slot}, between its children nor over their halves`;
+        along = (low + high) / 2;
+      }
     }
     const at = row ? screen(along, cross) : screen(cross, along);
     return onOverlay(at) ? at : 'the drop point is not on the canvas';
@@ -325,6 +335,28 @@ function ranInstead(listed: string, ran: string) {
   const at = annotations.findIndex((a) => a.type === 'door' && a.description === listed);
   if (at >= 0) annotations.splice(at, 1, { type: 'door', description: ran });
   else ranAlso(ran);
+}
+
+// Where an element's drag is pressed: a point of its own, unless every point of its own is the marquee's (a container
+// with children, whose empty area the marquee door's zone "page-or-container" takes, spec marquee-select); then its
+// name label on the canvas, which shows once the element is selected: clicked first when it is not, as a person
+// would (spec select-click, "Hit zones": the element's selection label selects or drags the element it names).
+const MARQUEE_DOOR = COMMANDS.flatMap((c) => c.entryPoints).find((d) => d.kind === 'canvas-drag' && d.source === 'empty-area');
+async function elementDragPoint(page: Page, document: unknown, nodePath: string): Promise<Point> {
+  const node = nodeAt(document, nodePath);
+  const own = await nodePoint(page, node.id, isRoot(document, nodePath), nodePath);
+  const marqueeArea = MARQUEE_DOOR?.zone === 'page-or-container' && CONTENT.get(node.type) === 'children' && node.children.length > 0;
+  if (!marqueeArea) return own;
+  const { selection } = await port(page);
+  if (selection.length !== 1 || selection[0] !== node.id) {
+    await withModifier(page, doorData(SELECT_DOOR).modifier, () => page.mouse.click(own.x, own.y));
+    ranAlso(SELECT_DOOR);
+  }
+  const label = page.locator(`[data-chrome="label"][data-label-for="${node.id}"]`);
+  await expect(label, `${nodePath}: its label shows on the canvas once it is selected`).toBeVisible({ timeout: 5000 });
+  const box = await label.boundingBox();
+  if (box === null) throw new Error(`${nodePath}: its label is not laid out`);
+  return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
 }
 
 // the nearest node inside a node its children cover whole that has a point of its own on the canvas (depth first, in
@@ -485,7 +517,7 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
           : d.source === 'layers-row' && target !== null
             ? await controlPoint(page, layersRowRef, { target: target.id })
             : target !== null && step.target !== null && d.source === 'canvas-element'
-              ? await nodePoint(page, target.id, isRoot(document, step.target), step.target)
+              ? await elementDragPoint(page, document, step.target)
               : target !== null && step.target !== null && d.source === 'empty-area'
                 ? await nodePoint(page, target.id, isRoot(document, step.target), step.target, 'start')
                 : null;

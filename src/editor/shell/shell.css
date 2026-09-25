@@ -893,6 +893,59 @@ kbd {
   font: var(--fw-caption) var(--fs-caption) / var(--lh-body) var(--font-mono);
 }
 
+/* while a drag goes on: the dragged element keeps a dashed outline only, and its label hides (drag-reorder-canvas,
+   Problems in Pager 1) */
+.chrome__selection.is-source {
+  outline-style: dashed;
+}
+
+.chrome__label.is-hidden {
+  visibility: hidden;
+}
+
+/* the label of the one selected element is a hit target of the canvas (select-click, drag-reorder-canvas): a press on
+   it selects that element and arms its drag (pointer.ts); the rest of the chrome takes no pointer event */
+.chrome__label.is-target:not(.is-measuring, .is-hidden) {
+  pointer-events: auto;
+  cursor: grab;
+}
+
+/* the drop indicator: the receiving parent's outline, and the insertion line across it at the gap */
+.chrome__drop {
+  position: absolute;
+  inset: 0;
+}
+
+.chrome__receiver,
+.chrome__drop-line {
+  position: absolute;
+}
+
+.chrome__receiver {
+  outline: 1px solid var(--color-canvas-drop);
+}
+
+/* into a container with no other child: its outline alone, dashed, no line (drag-drop-inside) */
+.chrome__receiver.is-into {
+  outline: 1.5px dashed var(--color-canvas-drop);
+}
+
+/* over the dragged element's own subtree: refused, in the danger colour (drag-drop-inside, Problems in Pager 1) */
+.chrome__receiver.is-refused {
+  outline: 1.5px solid var(--color-danger);
+}
+
+.chrome__label.is-refused {
+  background: var(--color-surface-raised);
+  color: var(--color-danger);
+  outline: 1px solid var(--color-danger);
+}
+
+.chrome__drop-line {
+  border-radius: var(--radius-pill);
+  outline: 1.5px solid var(--color-canvas-drop);
+}
+
 /* ---------------------------------------------------------------- inspector */
 
 .inspector {

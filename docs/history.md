@@ -50,6 +50,13 @@ Decisions by small ambiguity (moved here from PROGRESS.md):
   status.refused.onlyAccepts. The runner reaches a setup node with no point of its own (CardB covered by its h3) by
   clicking its nearest descendant with a point and pressing ArrowUp per level (spec select-click.md:41); the Layers
   row was tried first but leaves the focus in the panel (Escape to the canvas is not built).
+- drag-reorder-canvas + drag-drop-inside (one commit: building element.moveTo makes drag-drop-inside runnable): the
+  innermost container wins where edges coincide; the escape band never under 6 screen px for a container at least 12
+  CSS px (constants drop.escapeBandFloor/Extent); container bands in CSS px, escape band in screen px; the drop label
+  is canvas.dropTarget ("Drop in X · position N of M"); a refused drop goes through the inside door so the handler
+  refuses it; a press on an EMPTY container drags it; a container with children is dragged by its selection label
+  (spec select-click.md:16, drag-reorder-canvas.md:7), its empty area staying the marquee's; the runner presses the
+  label when a source has no own drag point, and reaches a slot with no free gap by the child's half (spec).
 
 ## 2026-09-25 — Slice 1: the rest of the foundation and the first usable block of group 02
 

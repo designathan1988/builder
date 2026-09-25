@@ -18,7 +18,7 @@ import {
   walkPreviousSiblingCommand,
 } from '../core/selection/selection.ts';
 import { insertCommand } from '../core/structure/insert.ts';
-import { moveDownCommand, moveUpCommand } from '../core/structure/move.ts';
+import { moveDownCommand, moveToCommand, moveUpCommand } from '../core/structure/move.ts';
 import { deleteCommand } from '../core/structure/remove.ts';
 import { wrapColumnCommand, wrapRowCommand } from '../core/structure/wrap.ts';
 import { focusActivate, focusFirst, focusLast, focusNext, focusPrevious } from '../editor/focus/focus.ts';
@@ -146,7 +146,7 @@ export const COMMANDS = {
   'selection.marquee': marqueeCommand,
   'contextMenu.open': NOT_AVAILABLE_YET,
   'element.insert': insertCommand,
-  'element.moveTo': NOT_AVAILABLE_YET,
+  'element.moveTo': moveToCommand,
   'drag.levelUp': NOT_AVAILABLE_YET,
   'drag.levelDown': NOT_AVAILABLE_YET,
   'drag.cancel': NOT_AVAILABLE_YET,

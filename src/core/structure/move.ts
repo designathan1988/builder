@@ -1,3 +1,13 @@
+// element.moveTo (ARCHITECTURE.md, Command owners): moves the selection's roots (the selected nodes without those an
+// ancestor of which is selected too, remove.ts) to one parent at one index, in document order. The index counts
+// the parent's children without the moved nodes, so it is the position the first moved node ends at (spec
+// drag-reorder-canvas, "Result in the document": the dragged node is removed from its parent and inserted at the
+// proposal's parent and index). The moved nodes stay selected; the status bar says "Moved … to position" among its
+// siblings and "Moved … into" another parent (spec drag-drop-inside). A parent inside a moved node (the node itself
+// included), a parent that holds no children and a parent the content model does not let hold a moved node refuse
+// the move, in that order, and nothing changes. A
+// move that leaves every node where it was changes nothing and records no history (the store drops it).
+//
 // element.moveUp and element.moveDown (ARCHITECTURE.md, Command owners; spec move-up-down): the selection's roots
 // (the doors' adapter.selection "roots-same-parent") swap places with their previous (up) or next (down) sibling that
 // is not selected, in one transaction; the relative order of the selected nodes is kept and they never leave their
@@ -6,9 +16,56 @@
 // entry. The status bar names the one moved node with its new position among its siblings, or counts several
 // (spec, Problems 1). The selection stays as it is.
 import { message, registerHandler, type Outcome } from '../commands/registry.ts';
-import type { DocNode, DocumentJson, Selection } from '../document/model.ts';
-import type { Patch } from '../history/transaction.ts';
+import { locate, walk, type DocNode, type DocumentJson, type Selection } from '../document/model.ts';
+import { applyPatches, type Patch } from '../history/transaction.ts';
 import { selectionRoots } from './remove.ts';
+
+export const moveToCommand = registerHandler('element.moveTo', ({ state, rules }, { parent, index }): Outcome<never> => {
+  const moved = selectionRoots(state.document, state.selection);
+  // every door moves what is selected (its adapter acts on the selection's roots), never the page itself
+  if (moved.length === 0) throw new Error('element.moveTo: nothing is selected');
+  const receiver = locate(state.document, parent);
+  if (!receiver) throw new Error(`element.moveTo: the document has no node ${parent}`);
+  for (const at of moved) if (!at.parent) throw new Error(`element.moveTo: ${at.node.id} is a page, it cannot move`);
+  const roots = moved.map((at) => at.node.id);
+
+  // a parent inside a moved node first: a moved leaf itself is refused as that, not as a leaf
+  for (const at of moved) for (const inner of walk(at.node)) if (inner.id === parent) return { kind: 'refused', message: message('status.refused.intoItself') };
+  if (rules.elements.get(receiver.node.type)?.content !== 'children') return { kind: 'refused', message: message('status.refused.noChildren', { parent: receiver.node.name }) };
+  for (const at of moved) {
+    const only = receiver.node.tag !== null && at.node.tag !== null ? rules.contentModel.refusal(receiver.node.tag, at.node.tag) : null;
+    if (only !== null) return { kind: 'refused', message: message('status.refused.onlyAccepts', { parent: `<${receiver.node.tag ?? ''}>`, children: only.map((t) => `<${t}>`).join(', ') }) };
+  }
+
+  // each moved node leaves its place, found again in the document the earlier removals left
+  const patches: Patch[] = [];
+  let document = state.document;
+  for (const at of moved) {
+    const now = locate(document, at.node.id);
+    if (!now) continue;
+    const patch: Patch = { op: 'remove', path: now.path };
+    patches.push(patch);
+    document = applyPatches(document, [patch]).document;
+  }
+  // then they arrive, in selection order, from the index on
+  const target = locate(document, parent);
+  if (!target) throw new Error(`element.moveTo: ${parent} is gone once the moved nodes left`);
+  const start = Math.max(0, Math.min(index, target.node.children.length));
+  for (const [i, at] of moved.entries()) {
+    patches.push({ op: 'add', path: [...target.path, 'children', start + i], value: at.node });
+  }
+
+  const count = target.node.children.length + moved.length;
+  const first = moved[0];
+  // one node: moved among its siblings, or into another parent (spec drag-drop-inside)
+  const said =
+    moved.length !== 1 || !first
+      ? message('status.movedMany', { count: moved.length, parent: receiver.node.name })
+      : first.parent?.id === parent
+        ? message('status.moved', { name: first.node.name, position: start + 1, count, parent: receiver.node.name })
+        : message('status.movedInto', { name: first.node.name, receiver: receiver.node.name, position: start + 1, count });
+  return { kind: 'change', patches, selection: roots, message: said };
+});
 
 type Direction = 'up' | 'down';
 

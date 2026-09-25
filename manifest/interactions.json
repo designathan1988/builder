@@ -207,6 +207,20 @@
       "note": "Slop added to the escape ladder band."
     },
     {
+      "id": "drop.escapeBandFloor",
+      "value": 6,
+      "unit": "screen-px",
+      "source": "spec/behavior/drag-reorder-canvas.md",
+      "note": "The escape ladder band is never narrower than this on a container at least drop.escapeBandFloorExtent long (Problems in Pager 4), before the slop."
+    },
+    {
+      "id": "drop.escapeBandFloorExtent",
+      "value": 12,
+      "unit": "css-px",
+      "source": "spec/behavior/drag-reorder-canvas.md",
+      "note": "The height (or width, along its parent's flow) of the page element, in its own CSS pixels, from which the escape ladder band keeps at least drop.escapeBandFloor screen pixels."
+    },
+    {
       "id": "drop.emptyAimMin",
       "value": 40,
       "unit": "screen-px",

@@ -90,6 +90,33 @@ export function nodeAt(iframe: HTMLIFrameElement, point: Point): { readonly node
   return node === null ? null : { node, root: owner === body };
 }
 
+// Every node under a screen point, the deepest first, the page root last (a drag looks past the dragged element to
+// what lies under it); empty outside the frame's viewport.
+export function nodesUnder(iframe: HTMLIFrameElement, point: Point): string[] {
+  const g = geometryOf(iframe);
+  const doc = iframe.contentDocument;
+  if (!g || !doc) return [];
+  const f = screenToFrame(point, g);
+  if (f.x < 0 || f.y < 0 || f.x >= doc.documentElement.clientWidth || f.y >= doc.documentElement.clientHeight) return [];
+  const nodes: string[] = [];
+  for (const element of doc.elementsFromPoint(f.x, f.y)) {
+    const owner = element.closest(`[${NODE_ATTRIBUTE}]`) ?? doc.body;
+    const node = owner?.getAttribute(NODE_ATTRIBUTE) ?? null;
+    if (node !== null && !nodes.includes(node)) nodes.push(node);
+  }
+  return nodes;
+}
+
+// The axis a node lays its children along: "x" for a flex row, "y" for a column and for block, grid and inline flow
+// (spec drag-reorder-canvas, "Hit zones": vertical for block and column flex, horizontal for row flex).
+export function flowAxis(iframe: HTMLIFrameElement, id: string): 'x' | 'y' {
+  const element = iframe.contentDocument?.querySelector(nodeSelector(id as NodeId));
+  const view = iframe.contentWindow;
+  if (!element || !view) return 'y';
+  const style = view.getComputedStyle(element);
+  return style.display.includes('flex') && !style.flexDirection.startsWith('column') ? 'x' : 'y';
+}
+
 // The screen box of a node's element, or null when the page does not draw it.
 export function nodeBox(iframe: HTMLIFrameElement, id: string): { x: number; y: number; width: number; height: number } | null {
   const element = iframe.contentDocument?.querySelector(nodeSelector(id as NodeId));

@@ -1856,6 +1856,8 @@ export const CONSTANT_IDS = [
   "drop.escapeBandMax",
   "drop.escapeBandInset",
   "drop.escapeBandSlop",
+  "drop.escapeBandFloor",
+  "drop.escapeBandFloorExtent",
   "drop.emptyAimMin",
   "canvas.emptyContainerMinHeight",
   "drop.autoscrollZone",

@@ -8,21 +8,33 @@
 // and modifier), and the gesture's doors run through one transaction the pointer owner opens with store.gesture()
 // when the press starts and commits when it ends, or cancels when the browser takes the pointer away: a whole
 // gesture is one undo step, and no handler ever opens a transaction (lint rule builder/gesture-owner). A drag pressed
-// on the empty area of the page or of a container is the marquee (spec marquee-select), whose band it publishes for
-// the canvas chrome.
-import { locate } from '../../core/document/model.ts';
+// on the empty area of the page or of a container with children is the marquee (spec marquee-select), whose band it
+// publishes for the canvas chrome.
+//
+// A primary press on any other element (a leaf, an empty container) that turns into a drag drags the selection's
+// roots (the press has just selected the element): each move asks the drop proposal (src/editor/drag/drop.ts) where
+// they would land, publishes it for the canvas chrome (hysteresis: drag.hysteresis), and the release runs the
+// canvas-drag door of the drawn proposal's zone (beside a sibling, or inside a container) with its parent and index,
+// inside the same gesture.
+import { locate, type DocumentJson, type NodeId } from '../../core/document/model.ts';
 import type { Gesture } from '../../core/store/store.ts';
+import { selectionRoots } from '../../core/structure/remove.ts';
 import type { CommandId, KeyContextId } from '../../generated/ids.ts';
 import { manifest, type DoorEntry } from '../../manifest/runtime.ts';
-import { canvasFrame, geometryOf, nodeAt, screenToPage, type Point } from '../canvas/coordinates.ts';
+import { canvasFrame, flowAxis, geometryOf, nodeAt, nodeBox, nodesUnder, screenToPage, type Point } from '../canvas/coordinates.ts';
+import { proposeDrop, type DropProposal } from '../drag/drop.ts';
 import type { EditorStore } from '../store.ts';
 
 const threshold = manifest.interactions.constants.find((c) => c.id === 'drag.threshold')?.value;
 export const DRAG_THRESHOLD = typeof threshold === 'number' ? threshold : 4;
+const hysteresis = manifest.interactions.constants.find((c) => c.id === 'drag.hysteresis')?.value;
+if (typeof hysteresis !== 'number') throw new Error('interactions.json has no number drag.hysteresis');
+export const DRAG_HYSTERESIS = hysteresis;
 
 // What a press lands on: a node of the page (an element, or the page root where no element is), or the stage
 // around the page.
-export type Press = { readonly on: 'node'; readonly node: string; readonly root: boolean } | { readonly on: 'stage' };
+// A press on the canvas chrome's label of an element is a press on that element (`label`: never a marquee).
+export type Press = { readonly on: 'node'; readonly node: string; readonly root: boolean; readonly label?: boolean } | { readonly on: 'stage' };
 
 // The gesture state machine. A press becomes a drag once the pointer has moved drag.threshold screen pixels from
 // where it went down; below that, the release ends a click.
@@ -80,16 +92,17 @@ function argsFor(entry: DoorEntry, press: Press): Record<string, unknown> {
 
 // The marquee (spec marquee-select): the canvas-drag door whose source is the empty area, and whether a press may
 // start it. Its zone "page-or-container" takes a press on the page root or on a container's own area (not on a
-// child); a press on a leaf is that element's drag, never a marquee. The mode is the one its gesture's modifier
+// child); a press on a leaf, or on an empty container (whose marquee could take nothing, having no descendants), is
+// that element's drag, never a marquee (specs drag-reorder-canvas, drag-drop-inside). The mode is the one its gesture's modifier
 // (interactions.json gestures) names, read at the press: a modifier's meaning starts with the mode it stands for
 // ("add-to-selection"), and with no modifier the mode is the one no modifier names; a modifier the gesture does not
 // know starts no marquee.
 const MARQUEE = manifest.doors.find((d) => d.door.kind === 'canvas-drag' && d.door.source === 'empty-area') ?? null;
 const CONTAINERS = new Set(manifest.elements.elements.filter((e) => e.content === 'children').map((e) => e.id));
-function marqueeMode(entry: DoorEntry, press: Press, modifier: string | null, type: string | null): string | null {
+function marqueeMode(entry: DoorEntry, press: Press, modifier: string | null, node: { readonly type: string; readonly children: readonly unknown[] } | null): string | null {
   const door = entry.door;
-  if (door.kind !== 'canvas-drag' || door.zone !== 'page-or-container' || press.on !== 'node') return null;
-  if (!press.root && (type === null || !CONTAINERS.has(type))) return null;
+  if (door.kind !== 'canvas-drag' || door.zone !== 'page-or-container' || press.on !== 'node' || press.label === true) return null;
+  if (!press.root && (node === null || !CONTAINERS.has(node.type) || node.children.length === 0)) return null;
   const gesture = manifest.interactions.gestures.find((g) => g.id === door.gesture);
   const modes = entry.command.args.mode?.values ?? [];
   const names = (mode: string, meaning: string) => meaning.startsWith(`${mode}-`);
@@ -138,6 +151,50 @@ function setHovered(node: string | null) {
   for (const listener of [...hoverListeners]) listener();
 }
 
+// The canvas-drag doors a press on an element starts (specs drag-reorder-canvas, drag-drop-inside): the door of the
+// zone a drop proposal falls in, found by its data: "before-after" beside a sibling, "inside" into a container (a
+// refused proposal, over the dragged nodes' own subtree, is one inside them). The gesture's own modifiers
+// (interactions.json) are the only keys a drag press may hold: an element drag holds none.
+const ELEMENT_DRAGS = manifest.doors.filter((d) => d.door.kind === 'canvas-drag' && d.door.source === 'canvas-element');
+const zoneDoor = (zone: string) => ELEMENT_DRAGS.find((d) => d.door.kind === 'canvas-drag' && d.door.zone === zone) ?? null;
+const REORDER = zoneDoor('before-after');
+const INTO = zoneDoor('inside');
+const dropDoor = (proposal: DropProposal) => (proposal.placement === 'inside' ? INTO : REORDER);
+const DRAG_MODIFIERS = new Set(manifest.interactions.gestures.find((g) => REORDER?.door.kind === 'canvas-drag' && g.id === REORDER.door.gesture)?.modifiers.map((m) => m.key) ?? []);
+
+// The drag in progress, for the canvas chrome: the nodes dragged and the drop proposal drawn now (the one a release
+// commits). Pointer state, not editor state: nothing changes until the release.
+export interface DragView {
+  readonly dragged: readonly NodeId[];
+  readonly proposal: DropProposal | null;
+}
+let dragView: DragView | null = null;
+const dragListeners = new Set<() => void>();
+export const drag = {
+  get: (): DragView | null => dragView,
+  subscribe(listener: () => void): () => void {
+    dragListeners.add(listener);
+    return () => dragListeners.delete(listener);
+  },
+};
+function setDrag(next: DragView | null) {
+  if (next === dragView) return;
+  dragView = next;
+  for (const listener of [...dragListeners]) listener();
+}
+
+// The proposal a pointer position makes now, measured on the page through the coordinates module.
+function proposalAt(document: DocumentJson, dragged: readonly NodeId[], at: Point): DropProposal | null {
+  const frame = canvasFrame();
+  const g = frame ? geometryOf(frame) : null;
+  if (!frame || !g) return null;
+  return proposeDrop(document, (type) => CONTAINERS.has(type), dragged, nodesUnder(frame, at), at, {
+    zoom: g.zoom,
+    box: (id) => nodeBox(frame, id),
+    axis: (id) => flowAxis(frame, id),
+  });
+}
+
 // While a gesture is open the keys belong to it: they are read in the drag key context and their doors run through
 // the gesture's transaction (keymap.ts).
 let open: Gesture | null = null;
@@ -159,9 +216,13 @@ export function modifierOf(event: Readonly<Record<(typeof MODIFIERS)[number][0],
   return held.length === 1 ? (held[0] ?? null) : held.length === 0 ? null : 'several';
 }
 
-// What a pointer event is on: the page under the overlay, the stage, or neither (the rest of the editor).
-function pressAt(event: PointerEvent): Press | null | 'elsewhere' {
+// What a pointer event is on: the label of an element on the canvas chrome (spec select-click, "Hit zones": the
+// selection label and the hover label select or drag the element they name), the page under the overlay, the
+// stage, or neither (the rest of the editor).
+function pressAt(event: PointerEvent, isRoot: (node: string) => boolean): Press | null | 'elsewhere' {
   const target = event.target instanceof Element ? event.target : null;
+  const named = target?.closest('[data-canvas-overlay] [data-label-for]')?.getAttribute('data-label-for') ?? null;
+  if (named !== null) return { on: 'node', node: named, root: isRoot(named), label: true };
   if (target?.closest('[data-canvas-overlay]')) {
     const frame = canvasFrame();
     const hit = frame ? nodeAt(frame, { x: event.clientX, y: event.clientY }) : null;
@@ -175,6 +236,8 @@ function pressAt(event: PointerEvent): Press | null | 'elsewhere' {
 export function installPointer(store: EditorStore, target: Window = window): () => void {
   let machine: Machine = IDLE;
   let buttons: { button: Button; count: number; modifier: string | null } | null = null;
+  // an element drag: what it moves, the proposal drawn and where the pointer was when it was taken (drag.hysteresis)
+  let dragging: { readonly dragged: readonly NodeId[]; proposal: DropProposal | null; takenAt: Point | null } | null = null;
   // where the press went down, on the screen and in page pixels (null outside the page)
   let pressedAt: { screen: Point; page: Point | null } | null = null;
   // the marquee being drawn: its door and mode
@@ -206,28 +269,55 @@ export function installPointer(store: EditorStore, target: Window = window): () 
       open = store.gesture();
       const entry = clickDoor(machine.press, buttons.button, buttons.count, buttons.modifier);
       if (entry) open.dispatch(entry.command.id as CommandId, argsFor(entry, machine.press) as never);
-    } else if (effect === 'drag' && machine.phase === 'dragging' && buttons?.button === 'primary' && MARQUEE !== null) {
-      // a press on the empty area of the page or of a container becomes a marquee; what the press's click did is
-      // undone, so the marquee starts from the selection held before the press
+    } else if (effect === 'drag' && machine.phase === 'dragging' && buttons?.button === 'primary') {
       const press = machine.press;
-      const type = press.on === 'node' ? (locate(store.getState().document, press.node)?.node.type ?? null) : null;
-      const mode = marqueeMode(MARQUEE, press, buttons.modifier, type);
-      if (mode !== null) marquee = { entry: MARQUEE, mode };
+      const node = press.on === 'node' ? (locate(store.getState().document, press.node as NodeId)?.node ?? null) : null;
+      // a press on the empty area of the page or of a container with children becomes a marquee; what the press's
+      // click did is undone, so the marquee starts from the selection held before the press
+      const mode = MARQUEE === null ? null : marqueeMode(MARQUEE, press, buttons.modifier, node);
+      const plain = buttons.modifier === null || DRAG_MODIFIERS.has(buttons.modifier as never);
+      if (MARQUEE !== null && mode !== null) marquee = { entry: MARQUEE, mode };
+      else if (ELEMENT_DRAGS.length > 0 && press.on === 'node' && !press.root && plain) {
+        // any other press on an element drags the selection's roots, which the press has just made that element
+        const state = store.getState();
+        const dragged = selectionRoots(state.document, state.selection).map((at) => at.node.id);
+        if (dragged.length > 0) {
+          dragging = { dragged, proposal: null, takenAt: null };
+          setDrag({ dragged, proposal: null });
+        }
+      }
     } else if (effect === 'commit' || effect === 'cancel') {
       const closing = open;
+      const dropped = dragging?.proposal ?? null;
       open = null;
+      dragging = null;
+      setDrag(null);
       marquee = null;
       pressedAt = null;
       setBand(null);
+      // the release commits exactly the proposal drawn last, through the door of its zone, in the gesture's transaction
+      const door = dropped === null ? null : dropDoor(dropped);
+      if (effect === 'commit' && dropped !== null && door !== null) closing?.dispatch(door.command.id, { ...door.door.args, parent: dropped.parent, index: dropped.index } as never);
       if (effect === 'commit') closing?.commit();
       else closing?.cancel();
     }
-    // 'drag' of an element, a palette tile or a Layers row: those drag doors arrive with the drag features; the
-    // gesture stays one transaction
   };
 
+  // While an element drag goes on, each pointer position proposes a drop; a new proposal replaces the drawn one only
+  // once the pointer is drag.hysteresis screen pixels from where the drawn one was taken.
+  const over = (at: Point) => {
+    if (dragging === null) return;
+    const next = proposalAt(store.getState().document, dragging.dragged, at);
+    if (JSON.stringify(next) === JSON.stringify(dragging.proposal)) return;
+    if (dragging.takenAt !== null && Math.hypot(at.x - dragging.takenAt.x, at.y - dragging.takenAt.y) < DRAG_HYSTERESIS) return;
+    dragging.proposal = next;
+    dragging.takenAt = at;
+    setDrag({ dragged: dragging.dragged, proposal: next });
+  };
+
+  const isRoot = (node: string) => locate(store.getState().document, node as NodeId)?.parent === null;
   const onDown = (event: PointerEvent) => {
-    const press = pressAt(event);
+    const press = pressAt(event, isRoot);
     if (press === null || press === 'elsewhere') return;
     if (event.button !== 0 && event.button !== 2) return;
     buttons = { button: event.button === 2 ? 'secondary' : 'primary', count: Math.min(Math.max(event.detail, 1), 2), modifier: modifierOf(event) };
@@ -238,13 +328,17 @@ export function installPointer(store: EditorStore, target: Window = window): () 
     run(next.effect);
   };
   const onMove = (event: PointerEvent) => {
-    const press = pressAt(event);
+    const press = pressAt(event, isRoot);
     setHovered(machine.phase === 'idle' && press !== null && press !== 'elsewhere' && press.on === 'node' ? press.node : null);
     const at = { x: event.clientX, y: event.clientY };
     const next = step(machine, { type: 'move', pointer: event.pointerId, at });
     machine = next.machine;
     run(next.effect);
-    if (machine.phase === 'dragging' && event.pointerId === machine.pointer) drawMarquee(at);
+    // the gesture's drag in progress, if any: the marquee's band, or an element's drop proposal
+    if (machine.phase === 'dragging' && event.pointerId === machine.pointer) {
+      drawMarquee(at);
+      over(at);
+    }
   };
   const onUp = (event: PointerEvent) => {
     const next = step(machine, { type: 'up', pointer: event.pointerId });
@@ -257,12 +351,19 @@ export function installPointer(store: EditorStore, target: Window = window): () 
     run(next.effect);
     setHovered(null);
   };
+  // While a press on the canvas is held, the browser neither selects the editor's text nor starts its own drag and
+  // drop of it: a native drag would take the pointer away (pointercancel) and end the gesture.
+  const onNative = (event: Event) => {
+    if (machine.phase !== 'idle') event.preventDefault();
+  };
 
   target.addEventListener('pointerdown', onDown, true);
   target.addEventListener('pointermove', onMove, true);
   target.addEventListener('pointerup', onUp, true);
   target.addEventListener('pointercancel', onCancel, true);
   target.addEventListener('blur', onCancel);
+  target.addEventListener('selectstart', onNative, true);
+  target.addEventListener('dragstart', onNative, true);
   return () => {
     onCancel();
     target.removeEventListener('pointerdown', onDown, true);
@@ -270,5 +371,7 @@ export function installPointer(store: EditorStore, target: Window = window): () 
     target.removeEventListener('pointerup', onUp, true);
     target.removeEventListener('pointercancel', onCancel, true);
     target.removeEventListener('blur', onCancel);
+    target.removeEventListener('selectstart', onNative, true);
+    target.removeEventListener('dragstart', onNative, true);
   };
 }

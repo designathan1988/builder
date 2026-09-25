@@ -5,13 +5,13 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 ## State (2026-09-25, group 02 in progress)
 
 - Group 01 and the foundation pass (runner, pointer.ts, menu doors, shortcut rule, lint rules: docs/history.md).
-- Group 02 brief (user): a coordinator opens up to 3 helpers at once, each in a git worktree `.cache/wt/<feature>`
-  (branch feature/<feature>, node_modules junction, own E2E_PORT/TOOTH_PORT), and integrates one at a time after
+- Group 02 brief (user): helpers in git worktrees `.cache/wt/<feature>`, at most 2 at once with Playwright
+  `--workers=2` (the machine froze with 4 runs of 12 workers); the coordinator integrates one at a time after
   verify:fast, e2e with the census, e2e:tooth and the status. Done: findings 16 and 17.
 - Group 02 passing: select-click, layers-tree, keyboard-tree-walk, palette-click-insert, undo-redo,
-  multi-select-click, marquee-select, delete-element (with the toast and its Undo), move-up-down, wrap-row-column. Also built: the editor-only 40 px minimum height of an empty container, a
-  layout port for the core (src/core/ports/layout.ts). Runner paths proven by switching them off: setup selection,
-  canvas click, focusing the control a shortcut acts on (Tab), modifier click, drag press, marquee.
+  multi-select-click, marquee-select, delete-element, move-up-down, wrap-row-column, drag-reorder-canvas,
+  drag-drop-inside (a container is dragged by its selection label). Runner paths proven by switching them off:
+  setup selection, canvas click, Tab to a control, modifier click, drag press, marquee, a slot with no free gap.
 - Decisions by small ambiguity: docs/history.md, "Group 02" (the newest entry).
 
 ## Conditions the user set
@@ -57,4 +57,6 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 29. The runner selects a node with no point of its own by a descendant plus ArrowUp; adding one with Shift needs its
     Layers row and then focus.canvas#key-escape-in-layers-tree (not built; multi-select-actions needs it). The census
     reads the test list, so it sees the canvas click named, not the substitute door run (both have their own tests).
-30. Declared, not built: wrap refusals requiresParent, interactiveInside, formInForm, singleChild, labelOneControl.
+30. Declared, not built: wrap refusals requiresParent, interactiveInside, formInForm, singleChild, labelOneControl;
+    drop.emptyAimMin (40 px aim of an empty container); the hover label as a hit target (it covered a container's
+    marquee corner); DESIGN's "a label hides while the pointer is over it" contradicts the label as a hit target.

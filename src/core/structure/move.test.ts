@@ -7,11 +7,11 @@ import type { HandlerContext } from '../commands/registry.ts';
 import type { DocNode, DocumentJson } from '../document/model.ts';
 import { rulesFromManifest } from '../document/validate.ts';
 import { EMPTY_HISTORY } from '../history/history.ts';
-import { applyPatches } from '../history/transaction.ts';
+import { applyPatches, deepEqual } from '../history/transaction.ts';
 import { manualClock } from '../ports/clock.ts';
 import { sequentialIds } from '../ports/ids.ts';
 import { noLayout } from '../ports/layout.ts';
-import { moveDownCommand, moveUpCommand } from './move.ts';
+import { moveDownCommand, moveToCommand, moveUpCommand } from './move.ts';
 
 const RULES = rulesFromManifest(manifest.elements, manifest.properties, manifest.html);
 const node = (id: string, type: string, tag: string, fields: Partial<DocNode> = {}): DocNode => ({ id: id as NodeId, type: type as DocNode['type'], name: id, tag, attributes: {}, classes: [], styles: {}, text: null, children: [], ...fields });
@@ -32,18 +32,69 @@ const DOC: DocumentJson = {
   ],
 };
 
-function run(direction: 'up' | 'down', selection: string[]) {
-  const context = {
+const contextOf = (selection: string[]) =>
+  ({
     state: { document: DOC, selection: selection as NodeId[], history: EMPTY_HISTORY, message: null, ui: undefined as never },
     clock: manualClock(),
     ids: sequentialIds('new'),
     rules: RULES,
     words: (key: MessageId) => translate('en', key),
-    // moving among siblings measures nothing on the canvas
+    // moving measures nothing on the canvas
     layout: noLayout,
-  } satisfies HandlerContext<never>;
+  }) satisfies HandlerContext<never>;
+
+function run(direction: 'up' | 'down', selection: string[]) {
+  const context = contextOf(selection);
   return direction === 'up' ? moveUpCommand.run(context, {} as never) : moveDownCommand.run(context, {} as never);
 }
+function moveTo(selection: string[], parent: string, index: number) {
+  return moveToCommand.run(contextOf(selection), { parent: parent as NodeId, index });
+}
+const childrenOf = (doc: DocumentJson, id: string): string[] => {
+  const find = (n: DocNode): DocNode | undefined => (n.id === id ? n : n.children.map(find).find((x) => x !== undefined));
+  return find(doc.pages[0]?.tree as DocNode)?.children.map((c) => c.name) ?? [];
+};
+const applied = (outcome: ReturnType<typeof moveTo>) => {
+  if (outcome.kind !== 'change') throw new Error(`not a change: ${JSON.stringify(outcome)}`);
+  return applyPatches(DOC, outcome.patches ?? []).document;
+};
+
+describe('element.moveTo (src/core/structure/move.ts)', () => {
+  it('moves the selected node before a sibling, the index counting the siblings without it, and keeps it selected', () => {
+    const outcome = moveTo(['Intro'], 'Hero', 0);
+    expect(childrenOf(applied(outcome), 'Hero')).toEqual(['Intro', 'Title', 'Actions', 'Note']);
+    expect(outcome.kind === 'change' && outcome.selection).toEqual(['Intro']);
+    expect(outcome.kind === 'change' && outcome.message).toEqual({ key: 'status.moved', params: { name: 'Intro', position: 1, count: 4, parent: 'Hero' } });
+  });
+
+  it('moves after the last sibling', () => {
+    const outcome = moveTo(['Title'], 'Hero', 3);
+    expect(childrenOf(applied(outcome), 'Hero')).toEqual(['Intro', 'Actions', 'Note', 'Title']);
+    expect(outcome.kind === 'change' && outcome.message).toEqual({ key: 'status.moved', params: { name: 'Title', position: 4, count: 4, parent: 'Hero' } });
+  });
+
+  it('moves into another parent, and several roots in document order', () => {
+    const into = moveTo(['Title'], 'Actions', 0);
+    expect(childrenOf(applied(into), 'Actions')).toEqual(['Title']);
+    expect(into.kind === 'change' && into.message).toEqual({ key: 'status.movedInto', params: { name: 'Title', receiver: 'Actions', position: 1, count: 1 } });
+    const doc = applied(moveTo(['Actions', 'Title'], 'Page', 1));
+    expect(childrenOf(doc, 'Page')).toEqual(['Hero', 'Title', 'Actions', 'Perks']);
+    expect(childrenOf(doc, 'Hero')).toEqual(['Intro', 'Note']);
+  });
+
+  it('a move to where the node already is changes nothing', () => {
+    expect(deepEqual(applied(moveTo(['Intro'], 'Hero', 1)), DOC)).toBe(true);
+  });
+
+  it('refuses a leaf parent, a parent inside the moved node and one the content model refuses', () => {
+    expect(moveTo(['Intro'], 'Title', 0)).toEqual({ kind: 'refused', message: { key: 'status.refused.noChildren', params: { parent: 'Title' } } });
+    expect(moveTo(['Hero'], 'Actions', 0)).toEqual({ kind: 'refused', message: { key: 'status.refused.intoItself', params: {} } });
+    // a leaf into itself is refused as into itself, not as a leaf
+    expect(moveTo(['Intro'], 'Intro', 0)).toEqual({ kind: 'refused', message: { key: 'status.refused.intoItself', params: {} } });
+    expect(moveTo(['Intro'], 'Perks', 0)).toMatchObject({ kind: 'refused', message: { key: 'status.refused.onlyAccepts' } });
+  });
+});
+
 const outline = (n: DocNode): string => (n.children.length === 0 ? n.name : `${n.name}(${n.children.map(outline).join(' ')})`);
 const after = (direction: 'up' | 'down', selection: string[]) => {
   const outcome = run(direction, selection);
