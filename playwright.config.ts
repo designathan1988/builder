@@ -13,10 +13,14 @@ export default defineConfig({
   retries: 0,
   // the list of results, then each feature's status derived from its scenario tests (tools/runner/status.ts)
   reporter: [['list'], ['./tools/runner/status.ts']],
+  // a failure shows in seconds: every action and every expect waits at most 5 s, a navigation 15 s
+  expect: { timeout: 5_000 },
   use: {
     baseURL,
     channel: 'chrome',
     trace: 'retain-on-failure',
+    actionTimeout: 5_000,
+    navigationTimeout: 15_000,
   },
   webServer: {
     command: 'npm run dev',
