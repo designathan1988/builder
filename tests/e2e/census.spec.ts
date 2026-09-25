@@ -12,7 +12,7 @@ import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { expect, test } from '@playwright/test';
-import { DOOR_ANNOTATION, UNAVAILABLE_ANNOTATION } from './door.ts';
+import { DOOR_ANNOTATION, UNAVAILABLE_ANNOTATION, runDoor } from './door.ts';
 
 interface Command {
   readonly id: string;
@@ -43,20 +43,25 @@ function annotated(): Map<string, Set<string>> {
 }
 
 test('every working command is proven by a browser test, and no door looks usable without a command', async ({ page }) => {
+  // it visits every state a built door leads to, each from a fresh profile
+  test.setTimeout(240_000);
   const tests = annotated();
   const runsDoor = tests.get(DOOR_ANNOTATION) ?? new Set<string>();
   const runsUnavailable = tests.get(UNAVAILABLE_ANNOTATION) ?? new Set<string>();
 
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/');
-  await page.evaluate(() => window.localStorage.clear());
-  await page.reload();
-  await expect(page.locator('.workbench')).toBeVisible();
+  const fresh = async () => {
+    await page.goto('/');
+    await page.evaluate(() => window.localStorage.clear());
+    await page.reload();
+    await expect(page.locator('.workbench')).toBeVisible();
+  };
 
   // every door drawn on screen, and whether a user can use it: a control that is not disabled; a door drawn as a
-  // container (a field row, a label) counts by the controls it holds that are not doors of their own
+  // container (a field row, a label) counts by the controls it holds that are not doors of their own. `drawn` keeps,
+  // over every state the census reaches, whether a door was ever drawn enabled.
   const drawn = new Map<string, boolean>();
-  const read = async () => {
+  const read = async (state: Map<string, boolean>) => {
     const seen = await page.evaluate(() => {
       const CONTROL = 'button, input, select, textarea, [role^="menuitem"], [role="treeitem"], [role="tab"], [tabindex]';
       const usable = (el: Element) => el.getAttribute('aria-disabled') !== 'true' && !el.matches(':disabled');
@@ -65,23 +70,55 @@ test('every working command is proven by a browser test, and no door looks usabl
         return { ref: el.getAttribute('data-door') ?? '', control: controls.length > 0, enabled: controls.some(usable) };
       });
     });
-    for (const d of seen) if (d.control) drawn.set(d.ref, (drawn.get(d.ref) ?? false) || d.enabled);
+    for (const d of seen) {
+      if (!d.control) continue;
+      state.set(d.ref, (state.get(d.ref) ?? false) || d.enabled);
+      drawn.set(d.ref, (drawn.get(d.ref) ?? false) || d.enabled);
+    }
   };
-  await read();
-  const buttons = page.locator('.menu-button[data-menu]');
-  for (let m = 0; m < (await buttons.count()); m += 1) {
+  // one state: the screen, then every menu and submenu opened in turn
+  const readState = async () => {
+    const state = new Map<string, boolean>();
+    await read(state);
+    const buttons = page.locator('.menu-button[data-menu]');
+    for (let m = 0; m < (await buttons.count()); m += 1) {
+      await page.keyboard.press('Escape');
+      // a menu button of a region the state hides (the canvas toolbar under a maximised dock) is not there to open
+      if (!(await buttons.nth(m).isVisible())) continue;
+      await buttons.nth(m).click();
+      await read(state);
+      const subs = page.locator('.menu__sub > [aria-haspopup="menu"]');
+      for (let s = 0; s < (await subs.count()); s += 1) {
+        await subs.nth(s).hover();
+        await read(state);
+      }
+    }
     await page.keyboard.press('Escape');
-    await buttons.nth(m).click();
-    await read();
-    const subs = page.locator('.menu__sub > [aria-haspopup="menu"]');
-    for (let s = 0; s < (await subs.count()); s += 1) {
-      await subs.nth(s).hover();
-      await read();
+    return state;
+  };
+  const commandOf = (ref: string) => ref.split('#')[0] ?? '';
+
+  // Every place a built door can open: from a fresh profile, each door of a built command that is drawn enabled (and
+  // each shortcut of one) is run once, from the first state it was seen in, and the state it leads to is read the same
+  // way; a door first seen in such a state is run from there in turn.
+  const shortcuts = COMMANDS.filter((c) => BUILT.has(c.id)).flatMap((c) => c.entryPoints.filter((d) => d.kind === 'shortcut').map((d) => `${c.id}#${d.id}`));
+  const explored = new Set<string>();
+  const queue: string[][] = [[]];
+  let states = 0;
+  for (let path = queue.shift(); path !== undefined; path = queue.shift()) {
+    await fresh();
+    for (const ref of path) await runDoor(page, ref);
+    const state = await readState();
+    states += 1;
+    const next = [...[...state].filter(([ref, enabled]) => enabled && BUILT.has(commandOf(ref))).map(([ref]) => ref), ...(path.length === 0 ? shortcuts : [])];
+    for (const ref of next) {
+      if (explored.has(ref)) continue;
+      explored.add(ref);
+      queue.push([...path, ref]);
     }
   }
-  await page.keyboard.press('Escape');
-  const commandOf = (ref: string) => ref.split('#')[0] ?? '';
   expect(drawn.size).toBeGreaterThan(200);
+  expect(states).toBeGreaterThan(20);
 
   // a door drawn enabled has a built command behind it
   expect([...drawn].filter(([ref, enabled]) => enabled && !BUILT.has(commandOf(ref))).map(([ref]) => ref), 'enabled on screen without a built command').toEqual([]);
@@ -104,5 +141,5 @@ test('every working command is proven by a browser test, and no door looks usabl
     for (const r of reachable) if (!runsDoor.has(r)) missing.push(`${r}: usable, and no browser test runs it`);
   }
   expect(missing, 'built commands and usable doors without a browser test').toEqual([]);
-  console.log(`census: ${BUILT.size} built commands, ${drawn.size} doors drawn (${[...drawn.values()].filter(Boolean).length} enabled), ${runsDoor.size} doors run by tests, ${runsUnavailable.size} shown unavailable; built undoable commands: ${UNDOABLE_BUILT ? 'yes' : 'none'}`);
+  console.log(`census: ${BUILT.size} built commands, ${states} states visited, ${drawn.size} doors drawn (${[...drawn.values()].filter(Boolean).length} enabled), ${runsDoor.size} doors run by tests, ${runsUnavailable.size} shown unavailable; built undoable commands: ${UNDOABLE_BUILT ? 'yes' : 'none'}`);
 });
