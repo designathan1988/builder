@@ -1,6 +1,7 @@
 import { defineConfig, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import { PRODUCT_NAME } from './src/config/product.ts';
+import { toothPlugin } from './tools/runner/tooth-plugin.ts';
 
 function readPort(): number {
   const raw = process.env.PORT;
@@ -20,7 +21,8 @@ function productTitle(): Plugin {
 }
 
 export default defineConfig(({ command }) => ({
-  plugins: [react(), productTitle()],
+  // toothPlugin() is null unless the scenario runner's tooth proof starts this server (tools/runner/tooth.ts)
+  plugins: [react(), productTitle(), toothPlugin()],
   // reference/ holds other projects with their own HTML entries; keep Vite away from them.
   optimizeDeps: { entries: ['index.html'] },
   server:

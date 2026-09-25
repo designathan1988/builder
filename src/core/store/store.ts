@@ -40,6 +40,14 @@ export class InvalidStateError extends Error {
   }
 }
 
+// A change of the document, for the renderer: the patches that turn `before` into `after`, in order (a
+// transaction's patches, its inverses on undo, a cancelled gesture's inverses; a loaded project replaces the pages).
+export interface DocumentChange {
+  readonly before: DocumentJson;
+  readonly after: DocumentJson;
+  readonly patches: readonly Patch[];
+}
+
 // One pointer gesture: everything dispatched through it is applied at once (the canvas follows the pointer) and
 // becomes one transaction and one history entry at commit; cancel restores the state from before the gesture.
 export interface Gesture {
@@ -53,6 +61,8 @@ export interface Store<Ui> {
   dispatch<Id extends CommandId>(id: Id, args: CommandArgs[Id]): DispatchResult;
   gesture(): Gesture;
   subscribe(listener: () => void): () => void;
+  // every change of the document, with its patches, before the state's subscribers hear of it
+  subscribeDocument(listener: (change: DocumentChange) => void): () => void;
 }
 
 export interface StoreOptions<Ui> {
@@ -88,6 +98,7 @@ interface OpenGesture {
 export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
   const { table, predicates, commands, rules, clock, ids } = options;
   const listeners = new Set<() => void>();
+  const documentListeners = new Set<(change: DocumentChange) => void>();
 
   // every built command names a registered availability predicate
   for (const [id, command] of commands) {
@@ -111,8 +122,13 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
   // so a burst merges only when no other command came in between (spec absolute-nudge)
   let lastMergeable: string | null = null;
 
-  const publish = (next: StoreState<Ui>) => {
+  const publish = (next: StoreState<Ui>, patches: readonly Patch[] = []) => {
+    const before = state;
     state = next;
+    if (next.document !== before.document) {
+      const change: DocumentChange = { before: before.document, after: next.document, patches };
+      for (const listener of [...documentListeners]) listener(change);
+    }
     for (const listener of [...listeners]) listener();
   };
 
@@ -142,7 +158,7 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
       publish(commit({ ...state, message: refusal }, id));
       return { status: 'refused', message: refusal };
     }
-    const context: HandlerContext<Ui> = { state, clock, ids };
+    const context: HandlerContext<Ui> = { state, clock, ids, rules };
     const outcome: Outcome<Ui> = entry.run(context, args);
 
     if (outcome.kind === 'refused') {
@@ -151,9 +167,16 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
     }
     if (outcome.kind === 'undo' || outcome.kind === 'redo') {
       if (gesture) throw new Error(`${id} cannot run inside a gesture`);
+      const tx = outcome.kind === 'undo' ? state.history.past.at(-1) : state.history.future.at(-1);
       const restored: Restorable | null = (outcome.kind === 'undo' ? undo : redo)(state);
-      if (restored === null) return { status: 'done', changed: false };
-      publish(commit({ ...state, ...restored, message: outcome.kind === 'undo' ? UNDONE : REDONE }, id));
+      if (restored === null || tx === undefined) return { status: 'done', changed: false };
+      publish(commit({ ...state, ...restored, message: outcome.kind === 'undo' ? UNDONE : REDONE }, id), outcome.kind === 'undo' ? tx.inverses : tx.patches);
+      return { status: 'done', changed: true };
+    }
+    if (outcome.kind === 'load') {
+      if (gesture) throw new Error(`${id} cannot run inside a gesture`);
+      const loaded = commit({ ...state, document: outcome.document, selection: [], history: EMPTY_HISTORY, message: outcome.message ?? state.message }, id);
+      publish(loaded, [{ op: 'replace', path: ['pages'], value: outcome.document.pages }]);
       return { status: 'done', changed: true };
     }
 
@@ -181,7 +204,7 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
       ui: outcome.ui ?? before.ui,
     };
     const changed = documentChanged || !deepEqual(before.selection, next.selection) || next.ui !== before.ui || next.message !== before.message;
-    if (changed) publish(commit(next, id));
+    if (changed) publish(commit(next, id), documentChanged ? applied.applied : []);
     return { status: 'done', changed };
   };
 
@@ -215,13 +238,17 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
         cancel: () => {
           close();
           const before = current.before as StoreState<Ui>;
-          if (state !== before) publish(commit({ ...state, document: before.document, selection: before.selection, history: before.history }, 'a cancelled gesture'));
+          if (state !== before) publish(commit({ ...state, document: before.document, selection: before.selection, history: before.history }, 'a cancelled gesture'), current.inverses);
         },
       };
     },
     subscribe: (listener) => {
       listeners.add(listener);
       return () => listeners.delete(listener);
+    },
+    subscribeDocument: (listener) => {
+      documentListeners.add(listener);
+      return () => documentListeners.delete(listener);
     },
   };
 }

@@ -226,7 +226,13 @@
       "labelKey": "command.openProject",
       "owner": "src/core/project/archive.ts",
       "introducedBy": "project-open-json",
-      "args": {},
+      "args": {
+        "file": {
+          "type": "file",
+          "values": [],
+          "optional": false
+        }
+      },
       "availability": {
         "predicate": "always",
         "refusalKey": null

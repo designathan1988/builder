@@ -1,9 +1,10 @@
 // The centre column (DESIGN.md "Regions" and "Canvas"): the file tabs, the canvas toolbar with the Canvas / Split /
-// Code switch, the rulers, and the frame with its breakpoint tabs along the cascade from the base breakpoint. The
-// frame is empty here: the page's iframe arrives with the canvas (foundation part 2).
+// Code switch, the rulers, and the frame with its breakpoint tabs along the cascade from the base breakpoint, and the
+// page's iframe (src/editor/canvas/frame.tsx) at the zoom that fits the frame to the stage.
 import { useContext, useEffect, useRef, useState, type CSSProperties } from 'react';
 import type { MessageId } from '../../generated/ids.ts';
 import { manifest, type DoorEntry } from '../../manifest/runtime.ts';
+import { CanvasFrame } from '../canvas/frame.tsx';
 import { DoorControl, Icon } from '../doors/door.tsx';
 import { MenuButton } from '../doors/menu.tsx';
 import { doorSlots, slotsIn } from '../doors/placement.ts';
@@ -157,7 +158,7 @@ export function CanvasColumn() {
           <div className="stage" ref={stage}>
             <div className="frame" style={{ width: (BASE?.width ?? 0) * zoom }}>
               <BreakpointTabs />
-              <div className="frame__view" />
+              <CanvasFrame width={BASE?.width ?? 0} zoom={zoom} />
             </div>
           </div>
         </div>

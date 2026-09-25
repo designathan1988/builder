@@ -39,16 +39,17 @@ Each module below exists by the end of part 1; until a module lands, its line is
 | The shell regions | `src/editor/shell/shell.tsx` | The window grid and every region of DESIGN.md, one file each under `src/editor/shell/`: top bar (`top-bar.tsx`), activity bar and sidebar views (`sidebar.tsx`), file tabs, canvas toolbar, canvas frame with breakpoint tabs and rulers (`canvas.tsx`), inspector (`inspector.tsx`), dock (`dock.tsx`), status bar (`status-bar.tsx`); `slots.tsx` draws a region's slots in order; `shell.css` styles them from the tokens only. | Drawing a control a door does not declare. |
 | Panel bodies | `src/editor/shell/bodies.ts` | Whether a panel has its content: the shell draws a body for it. Read from the tables the bodies are drawn from (`SIDEBAR_VIEWS` in `sidebar.tsx`, `DOCK_TABS` in `dock.tsx`; a section follows its view; the inspector column, the canvas tools and the workbench are the shell's own frame) and handed to the doors by `shell.tsx` (`PanelBodies`): a door whose only effect is to open a panel without a body is not available yet, and the panel says so. | A status of a panel written by hand; a body drawn from outside its table. |
 
-## Concepts of foundation part 2 (planned)
+## Concepts of foundation part 2
 
-| Concept | Owner (planned) | Responsibility |
+| Concept | Owner | Responsibility |
 |---|---|---|
-| Canvas iframe | `src/editor/canvas/frame.tsx` | planned: the iframe that shows the rendered page, scaled with CSS `zoom`. |
-| Renderer | `src/core/render/render.ts` | planned: the document JSON to the HTML and CSS of the page, the one writer of CSS text from stored values. |
-| Coordinates under zoom | `src/editor/canvas/coordinates.ts` | planned: page, frame and screen coordinates at any zoom. |
-| Pointer input | `src/editor/input/pointer.ts` | planned: the one owner of pointer gestures, which run the canvas and drag doors as one transaction per gesture. |
-| Test suite from the manifest | `tools/runner/scenarios.ts` | planned: one Playwright test per scenario and door, through real input, reading the read-only test port. |
-| Read-only test port | `src/editor/test-port.ts` | planned: what tests read: the document, the selection, the history and the export. It never writes, loads, creates or selects anything. |
+| Canvas iframe | `src/editor/canvas/frame.tsx` | A same-origin iframe (srcdoc, sandbox without scripts) that only renders: no event handler, no pointer event (`pointer-events: none`); an overlay above it receives every pointer input. Scaled with the standard CSS `zoom`; the renderer mounts the document into it once and then applies each change the store publishes (`subscribeDocument`). |
+| Renderer | `src/core/render/render.ts` | The document JSON to the HTML and CSS of the page, the one writer of CSS text from stored values: every element carries `data-node`, every node's rules sit in its own `style[data-node-style]`, breakpoints are max-width media queries, states pseudo-classes. It applies a change's patches to the elements they touch and keeps every other element as it is; it never re-renders the whole page for a change. |
+| Coordinates under zoom | `src/editor/canvas/coordinates.ts` | Page, frame and screen coordinates at any zoom (the frame's `currentCSSZoom`, its border and padding, the page's scroll); the element under a screen point; an element's box on the screen. |
+| Project file | `src/core/project/archive.ts` | File › Open (`project.open`): reads a project document (the fixtures' format) through the browser's file chooser (`useDoor` asks for a command's required `file` argument), refuses one the model rejects or of a newer version, and replaces the document (outcome `load`: selection and history start empty). |
+| Pointer input | `src/editor/input/pointer.ts` | planned, with the first gesture features of group 02: the one owner of pointer gestures on the overlay, which run the canvas and drag doors as one transaction per gesture (`store.gesture()`, opened by the door). |
+| Scenario runner | `tools/runner/scenarios.ts` | One Playwright test per scenario and per door (`tests/e2e/scenarios.spec.ts`), for every feature whose commands and scenario doors are built: fixture through File › Open, steps through doors with the real mouse and keyboard, end terminals read through the test port, the frame and the editor. `status.ts` prints each feature's derived status; `tooth.ts` (`npm run e2e:tooth`) reruns each feature with its handlers, or its `toothProof` module, made no-ops by `tooth-plugin.ts` (a Vite plugin active only then) and requires every test to fail. |
+| Read-only test port | `src/editor/test-port.ts` | What tests read, in development only (`window.__builderTestPort`, frozen): copies of the document and the selection, the history's undo and redo steps, and the export (null until project-export). It never writes, loads, creates or selects anything. |
 
 ## Command owners
 
@@ -87,7 +88,7 @@ Every command of the manifest and the module that owns it. "part 1" modules exis
 | `src/core/page/grid.ts` | `grid.toggleColumns`, `grid.toggleRows`, `grid.toggleDots`, `grid.setSettings` | planned |
 | `src/core/page/guides.ts` | `guides.create`, `guides.move`, `guides.delete`, `guides.toggleLock` | planned |
 | `src/core/page/settings.ts` | `page.setSetting` | planned |
-| `src/core/project/archive.ts` | `project.save`, `project.open` | planned |
+| `src/core/project/archive.ts` | `project.save`, `project.open` | part 2: `project.open` (a project document); `project.save` planned |
 | `src/core/project/pages.ts` | `pages.add`, `pages.rename`, `pages.duplicate`, `pages.delete`, `pages.switch` | planned |
 | `src/core/project/project.ts` | `project.newBlankPage` | planned |
 | `src/core/project/recovery.ts` | `project.restoreVersion` | planned |

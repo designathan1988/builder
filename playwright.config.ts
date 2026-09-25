@@ -11,7 +11,8 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: 0,
-  reporter: [['list']],
+  // the list of results, then each feature's status derived from its scenario tests (tools/runner/status.ts)
+  reporter: [['list'], ['./tools/runner/status.ts']],
   use: {
     baseURL,
     channel: 'chrome',
@@ -20,7 +21,8 @@ export default defineConfig({
   webServer: {
     command: 'npm run dev',
     url: baseURL,
-    env: { PORT: port },
+    // the tooth proof (tools/runner/tooth.ts) switches a feature off in the server it starts
+    env: { PORT: port, TOOTH_COMMANDS: process.env.TOOTH_COMMANDS ?? '', TOOTH_MODULE: process.env.TOOTH_MODULE ?? '' },
     reuseExistingServer: false,
     timeout: 60_000,
   },

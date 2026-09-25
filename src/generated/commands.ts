@@ -117,7 +117,7 @@ export interface CommandArgs {
   "project.restoreVersion": { readonly version: string };
   "project.takeOverEditing": Record<string, never>;
   "project.save": Record<string, never>;
-  "project.open": Record<string, never>;
+  "project.open": { readonly file: string };
   "project.openFolder": Record<string, never>;
   "project.importHtml": Record<string, never>;
   "project.export": Record<string, never>;

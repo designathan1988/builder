@@ -503,7 +503,7 @@
     {
       "kind": "handler",
       "id": "project.open",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",

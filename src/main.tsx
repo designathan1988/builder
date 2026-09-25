@@ -5,6 +5,7 @@ import './editor/shell/shell.css';
 import sprite from './ui/icons.svg?raw';
 import { App } from './editor/App.tsx';
 import { createEditorStore } from './editor/store.ts';
+import { installTestPort } from './editor/test-port.ts';
 
 const container = document.getElementById('root');
 if (!container) {
@@ -19,6 +20,8 @@ icons.innerHTML = sprite;
 document.body.prepend(icons);
 
 const store = createEditorStore();
+// what the end-to-end tests read, in development only (src/editor/test-port.ts)
+installTestPort(store);
 
 createRoot(container).render(
   <StrictMode>

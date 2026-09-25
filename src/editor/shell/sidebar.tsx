@@ -93,7 +93,13 @@ function LayersRow({ node, depth }: { readonly node: DocNode; readonly depth: nu
         data-door={LAYERS_SELECT.ref}
         onClick={door.run}
       >
-        {node.children.length > 0 ? <DoorControl entry={LAYERS_CARET} args={{ target: node.id }} expanded /> : <span className="row__caret-space" />}
+        {node.children.length > 0 ? (
+          <DoorControl entry={LAYERS_CARET} args={{ target: node.id }} expanded>
+            {null}
+          </DoorControl>
+        ) : (
+          <span className="row__caret-space" />
+        )}
         <Icon name={ELEMENT_ICON.get(node.type) ?? GLYPHS.folder} size="sm" />
         <span className="row__name">{node.name}</span>
         <span className="row__meta">{node.tag}</span>

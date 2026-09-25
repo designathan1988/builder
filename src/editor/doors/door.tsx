@@ -66,16 +66,41 @@ export function useDoor(entry: DoorEntry, args: Readonly<Record<string, unknown>
   const run = () => {
     if (!built || !available) return;
     const dispatch = store.dispatch as (id: CommandId, args: unknown) => DispatchResult;
-    dispatch(entry.command.id, { ...entry.door.args, ...args });
+    const given = { ...entry.door.args, ...args };
+    // a command that reads a file (File › Open) asks the browser for it, and runs with the file's text
+    const file = Object.entries(entry.command.args).find(([name, arg]) => arg.type === 'file' && !arg.optional && !(name in given))?.[0];
+    if (file === undefined) {
+      dispatch(entry.command.id, given);
+      return;
+    }
+    void chooseFile().then((text) => {
+      if (text !== null) dispatch(entry.command.id, { ...given, [file]: text });
+    });
   };
   return { label, face, title, built, available, current, chord, reason, run };
+}
+
+// The browser's file chooser, as a user opens it; the chosen file's text, or null when nothing was chosen.
+function chooseFile(): Promise<string | null> {
+  return new Promise((resolve) => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.addEventListener('change', () => {
+      const chosen = input.files?.[0];
+      if (chosen) void chosen.text().then(resolve, () => resolve(null));
+      else resolve(null);
+    });
+    input.addEventListener('cancel', () => resolve(null));
+    input.click();
+  });
 }
 
 export interface DoorControlProps {
   readonly entry: DoorEntry;
   // arguments the context adds (the panel a close button belongs to, the page a row stands for)
   readonly args?: Readonly<Record<string, unknown>>;
-  // the content of an item, a tab or a disclosure (a row's name, a tab's width); the label otherwise
+  // the content of an item, a tab or a disclosure (a row's name, a tab's width); the label when absent; null for a
+  // disclosure drawn as its caret alone
   readonly children?: ReactNode;
   // a disclosure's state
   readonly expanded?: boolean;
@@ -122,10 +147,11 @@ export function DoorControl({ entry, args = {}, children, expanded, className, l
         </button>
       );
     case 'disclosure':
+      // children null: the caret alone (a tree row's), named by its label
       return (
-        <button {...common} aria-expanded={expanded ?? true}>
+        <button {...common} aria-expanded={expanded ?? true} aria-label={children === null ? door.label : undefined}>
           <Icon name={expanded === false ? GLYPHS.collapsed : GLYPHS.expanded} size="xs" />
-          {children ?? <span className="door__label">{door.label}</span>}
+          {children === undefined ? <span className="door__label">{door.face}</span> : children}
         </button>
       );
     default:

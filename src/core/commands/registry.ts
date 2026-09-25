@@ -5,7 +5,8 @@
 // "not available yet", and dispatching it changes nothing.
 import type { CommandArgs } from '../../generated/commands.ts';
 import type { CommandId, MessageId, PredicateId } from '../../generated/ids.ts';
-import type { Selection } from '../document/model.ts';
+import type { DocumentJson, Selection } from '../document/model.ts';
+import type { ModelRules } from '../document/validate.ts';
 import type { Patch } from '../history/transaction.ts';
 import type { Clock } from '../ports/clock.ts';
 import type { IdGenerator } from '../ports/ids.ts';
@@ -35,12 +36,16 @@ export type Outcome<Ui> =
   | { readonly kind: 'refused'; readonly message: Message }
   // history.undo and history.redo: the store walks its history
   | { readonly kind: 'undo' }
-  | { readonly kind: 'redo' };
+  | { readonly kind: 'redo' }
+  // project.open: another project replaces the document; the selection and the history start empty
+  | { readonly kind: 'load'; readonly document: DocumentJson; readonly message?: Message };
 
 export interface HandlerContext<Ui> {
   readonly state: StoreState<Ui>;
   readonly clock: Clock;
   readonly ids: IdGenerator;
+  // the model a document must satisfy (validate.ts), for a handler that reads a whole document (File › Open)
+  readonly rules: ModelRules;
 }
 
 export interface RegisteredHandler<Id extends CommandId, Ui> {

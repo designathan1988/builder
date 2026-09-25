@@ -4,6 +4,7 @@
 // type error (src/app/commands.typecheck.ts proves it). The order is the manifest's.
 import { NOT_AVAILABLE_YET, always, type CommandTable, type PredicateTable } from '../core/commands/registry.ts';
 import { canRedo, canUndo, redoCommand, undoCommand } from '../core/history/history.ts';
+import { openProject } from '../core/project/archive.ts';
 import { setLanguage, setTheme } from '../editor/preferences/preferences.ts';
 import type { EditorUi } from '../editor/state.ts';
 import { setWorkbenchState } from '../editor/workspace/layout.ts';
@@ -110,7 +111,7 @@ export const COMMANDS = {
   'project.restoreVersion': NOT_AVAILABLE_YET,
   'project.takeOverEditing': NOT_AVAILABLE_YET,
   'project.save': NOT_AVAILABLE_YET,
-  'project.open': NOT_AVAILABLE_YET,
+  'project.open': openProject,
   'project.openFolder': NOT_AVAILABLE_YET,
   'project.importHtml': NOT_AVAILABLE_YET,
   'project.export': NOT_AVAILABLE_YET,
