@@ -17,16 +17,10 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
   first feature switching it off; finding 11's parts are fixed before the feature that needs each.
 ## Pending decisions of the user
 
-- Shift/Ctrl+click on the Page row in Layers adds the page root to the selection (the canvas door's target
-  "element" excludes it; the row doors have no such limit; Pager never adds it). Should the row doors exclude it?
-- Contested scenario project-open-json › the-empty-project-opens-without-asking: its diff keeps the page and the
-  root of the empty project, whose ids are generated at start, but an opened file brings its own (p-home, n-page),
-  and the runner compares those ids. Proposal: the diff names the opened ids (a page-level path, finding 1), or the
-  runner compares the page's and the root's ids only when the action does not replace the document.
-- Contested scenario drag-level-keys-escape › arrow-up-at-the-top-level-is-refused: its first drop "after Plans" can
-  never be the first drawn (Plans' bottom edge is its list's and last item's; the innermost wins, a drag-reorder-canvas
-  decision), so ArrowUp climbs instead of being refused. Proposal: its first step drops "before Footer" (same parent
-  and index, same expectations). Code on branch feature/drag-level-keys-escape (3 of 4 scenarios pass).
+- None. Decided 2026-09-25 (queued for helpers, the style path integrates first): the runner ignores the page's and
+  root's ids when the action replaces the document (project-open-json, then the door rule of wip/feature-table); the
+  refused ArrowUp scenario drops before Footer (b31f6b4; branch feature/drag-level-keys-escape to merge main, 6
+  conflicts); Shift/Ctrl+click on the Page row in Layers does not add the page root, as on the canvas.
 
 ## Open findings
 
