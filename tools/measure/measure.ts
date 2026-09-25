@@ -6,7 +6,7 @@
 // It records the wall time; the machine's CPU (average and the highest one-second window, from os.cpus()); the
 // memory in use; and, for the command's own process tree only (every process whose parent chain reaches the command),
 // the CPU-seconds by kind of process, the most processes alive at once, their peak memory, and the processes still
-// alive after the command ended (orphans, which it then ends). The command's whole output goes to .cache/logs/, and
+// alive after the command ended (orphans, reported only: it never ends a process). The whole output goes to .cache/logs/, and
 // one JSON line per run is appended to .cache/measure/results.jsonl. The tests the command ran are read from the
 // runners' own summary lines (Playwright, Vitest) and from the limited validation's selection line.
 import { spawn, spawnSync } from 'node:child_process';
@@ -21,6 +21,7 @@ interface Proc {
   readonly name: string;
   readonly cpu: number; // seconds of user plus kernel time so far
   readonly memory: number; // bytes, working set
+  readonly created: number; // ms since the epoch; 0 when the system does not say
   readonly command: string;
 }
 
@@ -44,7 +45,7 @@ function startProcessSampler(onSnapshot: (procs: Proc[]) => void): () => void {
     const script = [
       '$ErrorActionPreference = "SilentlyContinue"',
       'while ($true) {',
-      '  $rows = Get-CimInstance Win32_Process | ForEach-Object { "{0}`t{1}`t{2}`t{3}`t{4}`t{5}" -f $_.ProcessId, $_.ParentProcessId, $_.Name, ($_.KernelModeTime + $_.UserModeTime), $_.WorkingSetSize, (($_.CommandLine -replace "`t", " ") -replace "`r|`n", " ") }',
+      '  $rows = Get-CimInstance Win32_Process | ForEach-Object { $created = if ($_.CreationDate) { [int64]($_.CreationDate.ToUniversalTime() - [datetime]"1970-01-01").TotalMilliseconds } else { 0 }; "{0}`t{1}`t{2}`t{3}`t{4}`t{5}`t{6}" -f $_.ProcessId, $_.ParentProcessId, $_.Name, ($_.KernelModeTime + $_.UserModeTime), $_.WorkingSetSize, $created, (($_.CommandLine -replace "`t", " ") -replace "`r|`n", " ") }',
       '  [Console]::Out.WriteLine(($rows -join [char]1))',
       '  [Console]::Out.Flush()',
       '  Start-Sleep -Milliseconds 1000',
@@ -61,9 +62,9 @@ function startProcessSampler(onSnapshot: (procs: Proc[]) => void): () => void {
         if (line !== '') {
           onSnapshot(
             line.split('\u0001').flatMap((row) => {
-              const [pid, ppid, name, cpu, memory, ...command] = row.split('\t');
+              const [pid, ppid, name, cpu, memory, created, ...command] = row.split('\t');
               if (pid === undefined || ppid === undefined) return [];
-              return [{ pid: Number(pid), ppid: Number(ppid), name: name ?? '', cpu: Number(cpu ?? 0) / 1e7, memory: Number(memory ?? 0), command: command.join(' ') }];
+              return [{ pid: Number(pid), ppid: Number(ppid), name: name ?? '', cpu: Number(cpu ?? 0) / 1e7, memory: Number(memory ?? 0), created: Number(created ?? 0), command: command.join(' ') }];
             }),
           );
         }
@@ -73,11 +74,12 @@ function startProcessSampler(onSnapshot: (procs: Proc[]) => void): () => void {
     return () => child.kill();
   }
   const timer = setInterval(() => {
-    const out = spawnSync('ps', ['-eo', 'pid=,ppid=,comm=,times=,rss=,args='], { encoding: 'utf8' }).stdout;
+    const out = spawnSync('ps', ['-eo', 'pid=,ppid=,comm=,times=,rss=,etimes=,args='], { encoding: 'utf8' }).stdout;
+    const now = Date.now();
     onSnapshot(
       out.split('\n').flatMap((line) => {
-        const m = /^\s*(\d+)\s+(\d+)\s+(\S+)\s+(\d+)\s+(\d+)\s+(.*)$/.exec(line);
-        return m ? [{ pid: Number(m[1]), ppid: Number(m[2]), name: m[3] ?? '', cpu: Number(m[4]), memory: Number(m[5]) * 1024, command: m[6] ?? '' }] : [];
+        const m = /^\s*(\d+)\s+(\d+)\s+(\S+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(.*)$/.exec(line);
+        return m ? [{ pid: Number(m[1]), ppid: Number(m[2]), name: m[3] ?? '', cpu: Number(m[4]), memory: Number(m[5]) * 1024, created: now - Number(m[6]) * 1000, command: m[7] ?? '' }] : [];
       }),
     );
   }, 1000);
@@ -138,8 +140,10 @@ const logPath = path.join('.cache', 'logs', `measure-${label}-${stamp}.log`);
 const log = fs.createWriteStream(logPath);
 
 const lastSeen = new Map<number, Proc>();
-const parents = new Map<number, number>(); // pid -> ppid, kept after the process ends
+// every process seen, by pid, kept after it ends: a parent chain is followed through it
+const known = new Map<number, Proc>();
 let rootPid = -1;
+let rootStarted = Number.POSITIVE_INFINITY;
 let maxAlive = 0;
 let peakTreeMemory = 0;
 let peakMachineCpu = 0;
@@ -147,13 +151,18 @@ let peakMachineMemory = 0;
 let latest: Proc[] = [];
 let window = cpuTimes();
 
+// A process belongs to the command's tree only if it was created after the command started and every parent on its
+// chain up to the command was created before its child. Process ids are reused: a process whose parent died long
+// ago names a parent id that a newer process may carry now, and following ids alone once took system processes
+// (wininit, services, lsass, the user's shell) for the command's own.
 const descends = (pid: number): boolean => {
-  let at = pid;
-  for (let hop = 0; hop < 64 && at > 0; hop += 1) {
-    if (at === rootPid) return true;
-    const up = parents.get(at);
-    if (up === undefined || up === at) return false;
-    at = up;
+  let at = known.get(pid);
+  for (let hop = 0; hop < 64 && at !== undefined; hop += 1) {
+    if (at.created === 0 || at.created < rootStarted - 1000) return false;
+    if (at.ppid === rootPid) return true;
+    const parent = known.get(at.ppid);
+    if (parent === undefined || parent.pid === at.pid || parent.created > at.created) return false;
+    at = parent;
   }
   return false;
 };
@@ -165,8 +174,12 @@ const stopSampler = startProcessSampler((procs) => {
   window = now;
   peakMachineCpu = Math.max(peakMachineCpu, busy * 100);
   peakMachineMemory = Math.max(peakMachineMemory, os.totalmem() - os.freemem());
+  for (const p of procs) {
+    const seen = known.get(p.pid);
+    // a reused id is a new process: keep the newest record
+    if (seen === undefined || seen.created !== p.created) known.set(p.pid, p);
+  }
   if (rootPid < 0) return;
-  for (const p of procs) if (!parents.has(p.pid)) parents.set(p.pid, p.ppid);
   const tree = procs.filter((p) => p.pid !== rootPid && descends(p.pid));
   for (const p of tree) lastSeen.set(p.pid, p);
   maxAlive = Math.max(maxAlive, tree.length);
@@ -179,6 +192,7 @@ const memoryBefore = os.totalmem() - os.freemem();
 peakMachineCpu = 0;
 const cpuBefore = cpuTimes();
 const started = Date.now();
+rootStarted = started;
 const child = spawn(command, { shell: true, env: { ...process.env, FORCE_COLOR: '0' } });
 rootPid = child.pid ?? -1;
 child.stdout.on('data', (chunk: Buffer) => log.write(chunk));
@@ -188,13 +202,10 @@ const wall = (Date.now() - started) / 1000;
 const cpuAfter = cpuTimes();
 await new Promise<void>((resolve) => log.end(resolve));
 
-// processes of the tree still alive shortly after the command ended are orphans; the harness ends them
+// processes of the tree still alive shortly after the command ended are orphans: reported, never ended here (a
+// measuring tool does not end processes)
 await new Promise((r) => setTimeout(r, 3000));
 const orphans = latest.filter((p) => p.pid !== rootPid && descends(p.pid));
-for (const o of orphans) {
-  if (process.platform === 'win32') spawnSync('taskkill', ['/PID', String(o.pid), '/T', '/F']);
-  else spawnSync('kill', ['-9', String(o.pid)]);
-}
 stopSampler();
 
 const machineCpu = 100 * (1 - (cpuAfter.idle - cpuBefore.idle) / Math.max(1, cpuAfter.total - cpuBefore.total));
