@@ -59,16 +59,13 @@ function offered(entry: DoorEntry, target: Target): readonly string[] {
   return [...new Set([...generated, ...presets])];
 }
 
-// an editor's action (add, remove, reset, reverse, distribute) is a button, not a value
-const ACTION = /(^|-)(add|remove|reset|reverse|distribute)(-|$)/;
-
 // A field's controls, disabled while its door is (not available yet, or its predicate does not hold).
 function FieldInput({ entry, target, label, available }: { readonly entry: DoorEntry; readonly target: Target; readonly label: string; readonly available: boolean }) {
   const d = entry.door;
   const off = available ? '' : ' is-unavailable';
   const ariaDisabled = available ? undefined : true;
-  // a button that writes one fixed value (Spread writes space-between), or an editor's action
-  if (typeof d.args.value === 'string' || (d.kind === 'inspector-field' && ACTION.test(d.control))) {
+  // a field the door draws as a button (its drawnAs): an editor's action, or one fixed value (Spread writes space-between)
+  if (d.kind === 'inspector-field' && d.drawnAs === 'button') {
     return (
       <button type="button" className={`door door--button${off}`} aria-disabled={ariaDisabled} aria-label={label}>
         <span className="door__label">{typeof d.args.value === 'string' ? d.args.value : label}</span>

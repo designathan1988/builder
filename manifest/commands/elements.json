@@ -40,6 +40,7 @@
         {
           "id": "inspector-tag",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "semantic-tag-switch",
           "property": null,
           "composite": null,
@@ -123,6 +124,7 @@
         {
           "id": "inspector-title",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-attributes",
           "property": null,
           "composite": null,
@@ -148,6 +150,7 @@
         {
           "id": "inspector-src",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-media-images",
           "property": null,
           "composite": null,
@@ -173,6 +176,7 @@
         {
           "id": "inspector-alt",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-media-images",
           "property": null,
           "composite": null,
@@ -198,6 +202,7 @@
         {
           "id": "inspector-srcset",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-media-images",
           "property": null,
           "composite": null,
@@ -223,6 +228,7 @@
         {
           "id": "inspector-media",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-media-images",
           "property": null,
           "composite": null,
@@ -248,6 +254,7 @@
         {
           "id": "inspector-placeholder",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-form-inputs",
           "property": null,
           "composite": null,
@@ -273,6 +280,7 @@
         {
           "id": "inspector-value",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-form-inputs",
           "property": null,
           "composite": null,
@@ -298,6 +306,7 @@
         {
           "id": "inspector-name",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-form-inputs",
           "property": null,
           "composite": null,
@@ -323,6 +332,7 @@
         {
           "id": "inspector-required",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-form-inputs",
           "property": null,
           "composite": null,
@@ -348,6 +358,7 @@
         {
           "id": "inspector-pattern",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-form-inputs",
           "property": null,
           "composite": null,
@@ -373,6 +384,7 @@
         {
           "id": "inspector-min",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-form-inputs",
           "property": null,
           "composite": null,
@@ -398,6 +410,7 @@
         {
           "id": "inspector-max",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-form-inputs",
           "property": null,
           "composite": null,
@@ -423,6 +436,7 @@
         {
           "id": "inspector-step",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-form-inputs",
           "property": null,
           "composite": null,
@@ -448,6 +462,7 @@
         {
           "id": "inspector-autocomplete",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-form-inputs",
           "property": null,
           "composite": null,
@@ -473,6 +488,7 @@
         {
           "id": "inspector-disabled",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-form-inputs",
           "property": null,
           "composite": null,
@@ -498,6 +514,7 @@
         {
           "id": "inspector-readonly",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-form-inputs",
           "property": null,
           "composite": null,
@@ -523,6 +540,7 @@
         {
           "id": "inspector-checked",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-form-inputs",
           "property": null,
           "composite": null,
@@ -548,6 +566,7 @@
         {
           "id": "inspector-action",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-form-structure",
           "property": null,
           "composite": null,
@@ -573,6 +592,7 @@
         {
           "id": "inspector-method",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-form-structure",
           "property": null,
           "composite": null,
@@ -598,6 +618,7 @@
         {
           "id": "inspector-button-type",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-form-structure",
           "property": null,
           "composite": null,
@@ -623,6 +644,7 @@
         {
           "id": "inspector-rows",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-form-controls",
           "property": null,
           "composite": null,
@@ -648,6 +670,7 @@
         {
           "id": "inspector-group-label",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-form-controls",
           "property": null,
           "composite": null,
@@ -673,6 +696,7 @@
         {
           "id": "inspector-selected",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-form-controls",
           "property": null,
           "composite": null,
@@ -698,6 +722,7 @@
         {
           "id": "inspector-poster",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-media-embeds",
           "property": null,
           "composite": null,
@@ -723,6 +748,7 @@
         {
           "id": "inspector-controls",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-media-embeds",
           "property": null,
           "composite": null,
@@ -748,6 +774,7 @@
         {
           "id": "inspector-autoplay",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-media-embeds",
           "property": null,
           "composite": null,
@@ -773,6 +800,7 @@
         {
           "id": "inspector-loop",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-media-embeds",
           "property": null,
           "composite": null,
@@ -798,6 +826,7 @@
         {
           "id": "inspector-muted",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-media-embeds",
           "property": null,
           "composite": null,
@@ -823,6 +852,7 @@
         {
           "id": "inspector-track-kind",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-media-embeds",
           "property": null,
           "composite": null,
@@ -848,6 +878,7 @@
         {
           "id": "inspector-canvas-width",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-media-embeds",
           "property": null,
           "composite": null,
@@ -873,6 +904,7 @@
         {
           "id": "inspector-canvas-height",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-media-embeds",
           "property": null,
           "composite": null,
@@ -898,6 +930,7 @@
         {
           "id": "inspector-open",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-interactive",
           "property": null,
           "composite": null,
@@ -983,6 +1016,7 @@
         {
           "id": "inspector-id",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-attributes",
           "property": null,
           "composite": null,
@@ -1039,6 +1073,7 @@
         {
           "id": "inspector-classes",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-attributes",
           "property": null,
           "composite": null,
@@ -1110,6 +1145,7 @@
         {
           "id": "inspector-href",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-structure",
           "property": null,
           "composite": null,
@@ -1135,6 +1171,7 @@
         {
           "id": "inspector-new-tab",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-text",
           "property": null,
           "composite": null,
@@ -1335,6 +1372,7 @@
         {
           "id": "inspector-input-type",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-form-inputs-rules",
           "property": null,
           "composite": null,
@@ -1390,6 +1428,7 @@
         {
           "id": "inspector-label-for",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-form-inputs-rules",
           "property": null,
           "composite": null,
@@ -1591,6 +1630,7 @@
         {
           "id": "inspector-svg-markup",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-svg-shapes",
           "property": null,
           "composite": null,
@@ -1646,6 +1686,7 @@
         {
           "id": "inspector-embed-markup",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "embed-html",
           "property": null,
           "composite": null,

@@ -164,6 +164,7 @@
         {
           "id": "inspector-text",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "inspector-panel",
           "property": null,
           "composite": null,

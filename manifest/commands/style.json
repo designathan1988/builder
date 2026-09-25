@@ -38,6 +38,7 @@
         {
           "id": "inspector-display",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-display",
           "property": "display",
           "composite": null,
@@ -70,6 +71,7 @@
         {
           "id": "inspector-flex-direction",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-flex-container",
           "property": "flex-direction",
           "composite": null,
@@ -102,6 +104,7 @@
         {
           "id": "inspector-flex-wrap",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-flex-container",
           "property": "flex-wrap",
           "composite": null,
@@ -134,6 +137,7 @@
         {
           "id": "inspector-justify-content",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-flex-container",
           "property": "justify-content",
           "composite": null,
@@ -166,6 +170,7 @@
         {
           "id": "inspector-align-items",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-flex-container",
           "property": "align-items",
           "composite": null,
@@ -198,6 +203,7 @@
         {
           "id": "inspector-align-content",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-flex-container",
           "property": "align-content",
           "composite": null,
@@ -230,6 +236,7 @@
         {
           "id": "inspector-gap",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-flex-container",
           "property": null,
           "composite": "gap",
@@ -263,6 +270,7 @@
         {
           "id": "inspector-row-gap",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-flex-container",
           "property": "row-gap",
           "composite": null,
@@ -295,6 +303,7 @@
         {
           "id": "inspector-column-gap",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-flex-container",
           "property": "column-gap",
           "composite": null,
@@ -327,6 +336,7 @@
         {
           "id": "inspector-grid-template-columns",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-grid-container",
           "property": "grid-template-columns",
           "composite": null,
@@ -359,6 +369,7 @@
         {
           "id": "inspector-grid-template-rows",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-grid-container",
           "property": "grid-template-rows",
           "composite": null,
@@ -391,6 +402,7 @@
         {
           "id": "inspector-grid-auto-flow",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-grid-container",
           "property": "grid-auto-flow",
           "composite": null,
@@ -423,6 +435,7 @@
         {
           "id": "inspector-justify-items",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-grid-container",
           "property": "justify-items",
           "composite": null,
@@ -455,6 +468,7 @@
         {
           "id": "inspector-grid-template-areas",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-grid-container",
           "property": "grid-template-areas",
           "composite": null,
@@ -487,6 +501,7 @@
         {
           "id": "inspector-flex-grow",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-layout-item",
           "property": "flex-grow",
           "composite": null,
@@ -514,6 +529,7 @@
         {
           "id": "inspector-flex-shrink",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-layout-item",
           "property": "flex-shrink",
           "composite": null,
@@ -541,6 +557,7 @@
         {
           "id": "inspector-flex-basis",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-layout-item",
           "property": "flex-basis",
           "composite": null,
@@ -573,6 +590,7 @@
         {
           "id": "inspector-align-self",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-layout-item",
           "property": "align-self",
           "composite": null,
@@ -605,6 +623,7 @@
         {
           "id": "inspector-justify-self",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-layout-item",
           "property": "justify-self",
           "composite": null,
@@ -637,6 +656,7 @@
         {
           "id": "inspector-order",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-layout-item",
           "property": "order",
           "composite": null,
@@ -664,6 +684,7 @@
         {
           "id": "inspector-grid-column",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-layout-item",
           "property": null,
           "composite": "grid-column",
@@ -692,6 +713,7 @@
         {
           "id": "inspector-grid-row",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-layout-item",
           "property": null,
           "composite": "grid-row",
@@ -720,6 +742,7 @@
         {
           "id": "inspector-columns",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-more",
           "property": null,
           "composite": "columns",
@@ -753,6 +776,7 @@
         {
           "id": "inspector-column-span",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-more",
           "property": "column-span",
           "composite": null,
@@ -785,6 +809,7 @@
         {
           "id": "inspector-column-fill",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-more",
           "property": "column-fill",
           "composite": null,
@@ -817,6 +842,7 @@
         {
           "id": "inspector-column-rule-width",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-more",
           "property": "column-rule-width",
           "composite": null,
@@ -849,6 +875,7 @@
         {
           "id": "inspector-column-rule-style",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-more",
           "property": "column-rule-style",
           "composite": null,
@@ -881,6 +908,7 @@
         {
           "id": "inspector-column-rule-color",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-more",
           "property": "column-rule-color",
           "composite": null,
@@ -908,6 +936,7 @@
         {
           "id": "inspector-break-before",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-more",
           "property": "break-before",
           "composite": null,
@@ -940,6 +969,7 @@
         {
           "id": "inspector-break-after",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-more",
           "property": "break-after",
           "composite": null,
@@ -972,6 +1002,7 @@
         {
           "id": "inspector-break-inside",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-more",
           "property": "break-inside",
           "composite": null,
@@ -1004,6 +1035,7 @@
         {
           "id": "inspector-scroll-behavior",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-more",
           "property": "scroll-behavior",
           "composite": null,
@@ -1036,6 +1068,7 @@
         {
           "id": "inspector-scroll-snap-type",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-more",
           "property": "scroll-snap-type",
           "composite": null,
@@ -1068,6 +1101,7 @@
         {
           "id": "inspector-scroll-snap-align",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-more",
           "property": "scroll-snap-align",
           "composite": null,
@@ -1100,6 +1134,7 @@
         {
           "id": "inspector-border-collapse",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-element-specific",
           "property": "border-collapse",
           "composite": null,
@@ -1132,6 +1167,7 @@
         {
           "id": "inspector-border-spacing",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-element-specific",
           "property": "border-spacing",
           "composite": null,
@@ -1164,6 +1200,7 @@
         {
           "id": "inspector-table-layout",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-element-specific",
           "property": "table-layout",
           "composite": null,
@@ -1196,6 +1233,7 @@
         {
           "id": "inspector-caption-side",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-element-specific",
           "property": "caption-side",
           "composite": null,
@@ -1228,6 +1266,7 @@
         {
           "id": "inspector-empty-cells",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-element-specific",
           "property": "empty-cells",
           "composite": null,
@@ -1260,6 +1299,7 @@
         {
           "id": "inspector-contain",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-more",
           "property": "contain",
           "composite": null,
@@ -1292,6 +1332,7 @@
         {
           "id": "inspector-content-visibility",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-more",
           "property": "content-visibility",
           "composite": null,
@@ -1324,6 +1365,7 @@
         {
           "id": "inspector-counter-reset",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-more",
           "property": "counter-reset",
           "composite": null,
@@ -1356,6 +1398,7 @@
         {
           "id": "inspector-counter-increment",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-more",
           "property": "counter-increment",
           "composite": null,
@@ -1388,6 +1431,7 @@
         {
           "id": "inspector-width",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "inspector-number-fields",
           "property": "width",
           "composite": null,
@@ -1420,6 +1464,7 @@
         {
           "id": "inspector-height",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "inspector-number-fields",
           "property": "height",
           "composite": null,
@@ -1452,6 +1497,7 @@
         {
           "id": "inspector-min-width",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-size-overflow",
           "property": "min-width",
           "composite": null,
@@ -1484,6 +1530,7 @@
         {
           "id": "inspector-max-width",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-size-overflow",
           "property": "max-width",
           "composite": null,
@@ -1516,6 +1563,7 @@
         {
           "id": "inspector-min-height",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-size-overflow",
           "property": "min-height",
           "composite": null,
@@ -1548,6 +1596,7 @@
         {
           "id": "inspector-max-height",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-size-overflow",
           "property": "max-height",
           "composite": null,
@@ -1580,6 +1629,7 @@
         {
           "id": "inspector-box-sizing",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-size-overflow",
           "property": "box-sizing",
           "composite": null,
@@ -1612,6 +1662,7 @@
         {
           "id": "inspector-aspect-ratio",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-size-overflow",
           "property": "aspect-ratio",
           "composite": null,
@@ -1644,6 +1695,7 @@
         {
           "id": "inspector-overflow",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-size-overflow",
           "property": null,
           "composite": "overflow",
@@ -1677,6 +1729,7 @@
         {
           "id": "inspector-overflow-x",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-size-overflow",
           "property": "overflow-x",
           "composite": null,
@@ -1709,6 +1762,7 @@
         {
           "id": "inspector-overflow-y",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-size-overflow",
           "property": "overflow-y",
           "composite": null,
@@ -1741,6 +1795,7 @@
         {
           "id": "inspector-resize",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-element-specific",
           "property": "resize",
           "composite": null,
@@ -1773,6 +1828,7 @@
         {
           "id": "inspector-object-fit",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-element-specific",
           "property": "object-fit",
           "composite": null,
@@ -1805,6 +1861,7 @@
         {
           "id": "inspector-object-position",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-element-specific",
           "property": "object-position",
           "composite": null,
@@ -1837,6 +1894,7 @@
         {
           "id": "inspector-top",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-position",
           "property": "top",
           "composite": null,
@@ -1869,6 +1927,7 @@
         {
           "id": "inspector-right",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-position",
           "property": "right",
           "composite": null,
@@ -1901,6 +1960,7 @@
         {
           "id": "inspector-bottom",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-position",
           "property": "bottom",
           "composite": null,
@@ -1933,6 +1993,7 @@
         {
           "id": "inspector-left",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-position",
           "property": "left",
           "composite": null,
@@ -1965,6 +2026,7 @@
         {
           "id": "inspector-z-index",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-position",
           "property": "z-index",
           "composite": null,
@@ -1997,6 +2059,7 @@
         {
           "id": "inspector-float",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-position",
           "property": "float",
           "composite": null,
@@ -2029,6 +2092,7 @@
         {
           "id": "inspector-clear",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-position",
           "property": "clear",
           "composite": null,
@@ -2061,6 +2125,7 @@
         {
           "id": "inspector-background-color",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "color-picker",
           "property": "background-color",
           "composite": null,
@@ -2088,6 +2153,7 @@
         {
           "id": "inspector-background-size",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-background",
           "property": "background-size",
           "composite": null,
@@ -2120,6 +2186,7 @@
         {
           "id": "inspector-background-position",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-background",
           "property": null,
           "composite": "background-position",
@@ -2153,6 +2220,7 @@
         {
           "id": "inspector-background-repeat",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-background",
           "property": "background-repeat",
           "composite": null,
@@ -2185,6 +2253,7 @@
         {
           "id": "inspector-background-attachment",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-background",
           "property": "background-attachment",
           "composite": null,
@@ -2217,6 +2286,7 @@
         {
           "id": "inspector-background-origin",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-background",
           "property": "background-origin",
           "composite": null,
@@ -2249,6 +2319,7 @@
         {
           "id": "inspector-background-clip",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-background",
           "property": "background-clip",
           "composite": null,
@@ -2281,6 +2352,7 @@
         {
           "id": "inspector-background-blend-mode",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-background",
           "property": "background-blend-mode",
           "composite": null,
@@ -2313,6 +2385,7 @@
         {
           "id": "inspector-fill",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-svg-shapes",
           "property": "fill",
           "composite": null,
@@ -2345,6 +2418,7 @@
         {
           "id": "inspector-stroke",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-svg-shapes",
           "property": "stroke",
           "composite": null,
@@ -2377,6 +2451,7 @@
         {
           "id": "inspector-stroke-width",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "elements-svg-shapes",
           "property": "stroke-width",
           "composite": null,
@@ -2409,6 +2484,7 @@
         {
           "id": "inspector-outline",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-border-outline",
           "property": null,
           "composite": "outline",
@@ -2443,6 +2519,7 @@
         {
           "id": "inspector-outline-offset",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-border-outline",
           "property": "outline-offset",
           "composite": null,
@@ -2475,6 +2552,7 @@
         {
           "id": "inspector-color",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "color-picker",
           "property": "color",
           "composite": null,
@@ -2502,6 +2580,7 @@
         {
           "id": "inspector-font-family",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-typography",
           "property": "font-family",
           "composite": null,
@@ -2534,6 +2613,7 @@
         {
           "id": "inspector-font-size",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-typography",
           "property": "font-size",
           "composite": null,
@@ -2566,6 +2646,7 @@
         {
           "id": "inspector-font-weight",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-typography",
           "property": "font-weight",
           "composite": null,
@@ -2598,6 +2679,7 @@
         {
           "id": "inspector-font-style",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-typography",
           "property": "font-style",
           "composite": null,
@@ -2630,6 +2712,7 @@
         {
           "id": "inspector-line-height",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-typography",
           "property": "line-height",
           "composite": null,
@@ -2662,6 +2745,7 @@
         {
           "id": "inspector-letter-spacing",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-typography",
           "property": "letter-spacing",
           "composite": null,
@@ -2694,6 +2778,7 @@
         {
           "id": "inspector-word-spacing",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-typography",
           "property": "word-spacing",
           "composite": null,
@@ -2726,6 +2811,7 @@
         {
           "id": "inspector-text-align",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-typography",
           "property": "text-align",
           "composite": null,
@@ -2758,6 +2844,7 @@
         {
           "id": "inspector-text-decoration",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-typography",
           "property": null,
           "composite": "text-decoration",
@@ -2793,6 +2880,7 @@
         {
           "id": "inspector-text-transform",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-typography",
           "property": "text-transform",
           "composite": null,
@@ -2825,6 +2913,7 @@
         {
           "id": "inspector-text-indent",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-typography",
           "property": "text-indent",
           "composite": null,
@@ -2857,6 +2946,7 @@
         {
           "id": "inspector-text-overflow",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-typography",
           "property": "text-overflow",
           "composite": null,
@@ -2889,6 +2979,7 @@
         {
           "id": "inspector-white-space",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-typography",
           "property": null,
           "composite": "white-space",
@@ -2922,6 +3013,7 @@
         {
           "id": "inspector-word-break",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-typography",
           "property": "word-break",
           "composite": null,
@@ -2954,6 +3046,7 @@
         {
           "id": "inspector-vertical-align",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-typography",
           "property": "vertical-align",
           "composite": null,
@@ -2986,6 +3079,7 @@
         {
           "id": "inspector-font-stretch",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-typography-advanced",
           "property": "font-stretch",
           "composite": null,
@@ -3018,6 +3112,7 @@
         {
           "id": "inspector-font-variant",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-typography-advanced",
           "property": null,
           "composite": "font-variant",
@@ -3055,6 +3150,7 @@
         {
           "id": "inspector-font-feature-settings",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-typography-advanced",
           "property": "font-feature-settings",
           "composite": null,
@@ -3087,6 +3183,7 @@
         {
           "id": "inspector-overflow-wrap",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-typography-advanced",
           "property": "overflow-wrap",
           "composite": null,
@@ -3119,6 +3216,7 @@
         {
           "id": "inspector-hyphens",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-typography-advanced",
           "property": "hyphens",
           "composite": null,
@@ -3151,6 +3249,7 @@
         {
           "id": "inspector-line-clamp",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-typography-advanced",
           "property": null,
           "composite": null,
@@ -3182,6 +3281,7 @@
         {
           "id": "inspector-direction",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-typography-advanced",
           "property": "direction",
           "composite": null,
@@ -3214,6 +3314,7 @@
         {
           "id": "inspector-writing-mode",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-typography-advanced",
           "property": "writing-mode",
           "composite": null,
@@ -3246,6 +3347,7 @@
         {
           "id": "inspector-text-orientation",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-typography-advanced",
           "property": "text-orientation",
           "composite": null,
@@ -3278,6 +3380,7 @@
         {
           "id": "inspector-list-style-type",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-element-specific",
           "property": "list-style-type",
           "composite": null,
@@ -3310,6 +3413,7 @@
         {
           "id": "inspector-list-style-position",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-element-specific",
           "property": "list-style-position",
           "composite": null,
@@ -3342,6 +3446,7 @@
         {
           "id": "inspector-list-style-image",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-element-specific",
           "property": "list-style-image",
           "composite": null,
@@ -3374,6 +3479,7 @@
         {
           "id": "inspector-accent-color",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-element-specific",
           "property": "accent-color",
           "composite": null,
@@ -3406,6 +3512,7 @@
         {
           "id": "inspector-caret-color",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-element-specific",
           "property": "caret-color",
           "composite": null,
@@ -3438,6 +3545,7 @@
         {
           "id": "inspector-appearance",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-element-specific",
           "property": "appearance",
           "composite": null,
@@ -3470,6 +3578,7 @@
         {
           "id": "inspector-opacity",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-effects-basic",
           "property": "opacity",
           "composite": null,
@@ -3497,6 +3606,7 @@
         {
           "id": "inspector-visibility",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-effects-basic",
           "property": "visibility",
           "composite": null,
@@ -3529,6 +3639,7 @@
         {
           "id": "inspector-mix-blend-mode",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-effects-basic",
           "property": "mix-blend-mode",
           "composite": null,
@@ -3561,6 +3672,7 @@
         {
           "id": "inspector-isolation",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-effects-basic",
           "property": "isolation",
           "composite": null,
@@ -3593,6 +3705,7 @@
         {
           "id": "inspector-cursor",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-effects-basic",
           "property": "cursor",
           "composite": null,
@@ -3625,6 +3738,7 @@
         {
           "id": "inspector-pointer-events",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-effects-basic",
           "property": "pointer-events",
           "composite": null,
@@ -3657,6 +3771,7 @@
         {
           "id": "inspector-user-select",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-effects-basic",
           "property": null,
           "composite": null,
@@ -3690,6 +3805,7 @@
         {
           "id": "inspector-will-change",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-transition",
           "property": "will-change",
           "composite": null,
@@ -3722,6 +3838,7 @@
         {
           "id": "inspector-backdrop-filter",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-filters-clip",
           "property": "backdrop-filter",
           "composite": null,
@@ -3754,6 +3871,7 @@
         {
           "id": "inspector-clip-path",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-filters-clip",
           "property": "clip-path",
           "composite": null,
@@ -3786,6 +3904,7 @@
         {
           "id": "inspector-mask-image",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-filters-clip",
           "property": "mask-image",
           "composite": null,
@@ -3818,6 +3937,7 @@
         {
           "id": "inspector-transform-origin",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-transforms",
           "property": "transform-origin",
           "composite": null,
@@ -3850,6 +3970,7 @@
         {
           "id": "inspector-perspective",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-transforms",
           "property": "perspective",
           "composite": null,
@@ -3882,6 +4003,7 @@
         {
           "id": "inspector-perspective-origin",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-transforms",
           "property": "perspective-origin",
           "composite": null,
@@ -3914,6 +4036,7 @@
         {
           "id": "inspector-transform-style",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-transforms",
           "property": "transform-style",
           "composite": null,
@@ -3946,6 +4069,7 @@
         {
           "id": "inspector-backface-visibility",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-transforms",
           "property": "backface-visibility",
           "composite": null,
@@ -3978,6 +4102,7 @@
         {
           "id": "inspector-transform-box",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-transforms",
           "property": "transform-box",
           "composite": null,
@@ -4010,6 +4135,7 @@
         {
           "id": "inspector-transition",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-transition",
           "property": null,
           "composite": "transition",
@@ -4046,6 +4172,7 @@
         {
           "id": "inspector-align-items-stretch-button",
           "kind": "inspector-field",
+          "drawnAs": "button",
           "feature": "props-flex-container",
           "property": "align-items",
           "composite": null,
@@ -4076,6 +4203,7 @@
         {
           "id": "inspector-justify-content-spread-button",
           "kind": "inspector-field",
+          "drawnAs": "button",
           "feature": "props-flex-container",
           "property": "justify-content",
           "composite": null,
@@ -4106,6 +4234,7 @@
         {
           "id": "inspector-grid-template-columns-add-track",
           "kind": "inspector-field",
+          "drawnAs": "button",
           "feature": "props-grid-container",
           "property": "grid-template-columns",
           "composite": null,
@@ -4539,6 +4668,7 @@
         {
           "id": "inspector-translate-x",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-transforms",
           "property": "translate",
           "composite": null,
@@ -4571,6 +4701,7 @@
         {
           "id": "inspector-translate-y",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-transforms",
           "property": "translate",
           "composite": null,
@@ -4603,6 +4734,7 @@
         {
           "id": "inspector-rotate",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-transforms",
           "property": "rotate",
           "composite": null,
@@ -4635,6 +4767,7 @@
         {
           "id": "inspector-scale",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-transforms",
           "property": "scale",
           "composite": null,
@@ -4823,6 +4956,7 @@
         {
           "id": "inspector-padding-box-model",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-spacing",
           "property": null,
           "composite": "padding",
@@ -4858,6 +4992,7 @@
         {
           "id": "inspector-padding-top-box-model",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-spacing",
           "property": "padding-top",
           "composite": null,
@@ -4890,6 +5025,7 @@
         {
           "id": "inspector-padding-right-box-model",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-spacing",
           "property": "padding-right",
           "composite": null,
@@ -4922,6 +5058,7 @@
         {
           "id": "inspector-padding-bottom-box-model",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-spacing",
           "property": "padding-bottom",
           "composite": null,
@@ -4954,6 +5091,7 @@
         {
           "id": "inspector-padding-left-box-model",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-spacing",
           "property": "padding-left",
           "composite": null,
@@ -4986,6 +5124,7 @@
         {
           "id": "inspector-margin-box-model",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-spacing",
           "property": null,
           "composite": "margin",
@@ -5021,6 +5160,7 @@
         {
           "id": "inspector-margin-top-box-model",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-spacing",
           "property": "margin-top",
           "composite": null,
@@ -5053,6 +5193,7 @@
         {
           "id": "inspector-margin-right-box-model",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-spacing",
           "property": "margin-right",
           "composite": null,
@@ -5085,6 +5226,7 @@
         {
           "id": "inspector-margin-bottom-box-model",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-spacing",
           "property": "margin-bottom",
           "composite": null,
@@ -5117,6 +5259,7 @@
         {
           "id": "inspector-margin-left-box-model",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-spacing",
           "property": "margin-left",
           "composite": null,
@@ -5443,6 +5586,7 @@
         {
           "id": "inspector-border-border-editor",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-border-outline",
           "property": null,
           "composite": "border",
@@ -5486,6 +5630,7 @@
         {
           "id": "inspector-border-width-border-editor",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-border-outline",
           "property": null,
           "composite": "border-width",
@@ -5521,6 +5666,7 @@
         {
           "id": "inspector-border-style-border-editor",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-border-outline",
           "property": null,
           "composite": "border-style",
@@ -5556,6 +5702,7 @@
         {
           "id": "inspector-border-color-border-editor",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-border-outline",
           "property": null,
           "composite": "border-color",
@@ -5586,6 +5733,7 @@
         {
           "id": "inspector-border-top-border-editor",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-border-outline",
           "property": null,
           "composite": "border-top",
@@ -5620,6 +5768,7 @@
         {
           "id": "inspector-border-top-width-border-editor",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-border-outline",
           "property": "border-top-width",
           "composite": null,
@@ -5652,6 +5801,7 @@
         {
           "id": "inspector-border-right-border-editor",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-border-outline",
           "property": null,
           "composite": "border-right",
@@ -5686,6 +5836,7 @@
         {
           "id": "inspector-border-right-width-border-editor",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-border-outline",
           "property": "border-right-width",
           "composite": null,
@@ -5718,6 +5869,7 @@
         {
           "id": "inspector-border-bottom-border-editor",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-border-outline",
           "property": null,
           "composite": "border-bottom",
@@ -5752,6 +5904,7 @@
         {
           "id": "inspector-border-bottom-width-border-editor",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-border-outline",
           "property": "border-bottom-width",
           "composite": null,
@@ -5784,6 +5937,7 @@
         {
           "id": "inspector-border-left-border-editor",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-border-outline",
           "property": null,
           "composite": "border-left",
@@ -5818,6 +5972,7 @@
         {
           "id": "inspector-border-left-width-border-editor",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-border-outline",
           "property": "border-left-width",
           "composite": null,
@@ -6036,6 +6191,7 @@
         {
           "id": "inspector-border-radius-radius-editor",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-border-outline",
           "property": null,
           "composite": "border-radius",
@@ -6071,6 +6227,7 @@
         {
           "id": "inspector-border-top-left-radius-radius-editor",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-border-outline",
           "property": "border-top-left-radius",
           "composite": null,
@@ -6103,6 +6260,7 @@
         {
           "id": "inspector-border-top-right-radius-radius-editor",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-border-outline",
           "property": "border-top-right-radius",
           "composite": null,
@@ -6135,6 +6293,7 @@
         {
           "id": "inspector-border-bottom-right-radius-radius-editor",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-border-outline",
           "property": "border-bottom-right-radius",
           "composite": null,
@@ -6167,6 +6326,7 @@
         {
           "id": "inspector-border-bottom-left-radius-radius-editor",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-border-outline",
           "property": "border-bottom-left-radius",
           "composite": null,
@@ -6276,6 +6436,7 @@
         {
           "id": "inspector-background-image",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-background",
           "property": "background-image",
           "composite": null,
@@ -6308,6 +6469,7 @@
         {
           "id": "inspector-background-image-gradient-add",
           "kind": "inspector-field",
+          "drawnAs": "button",
           "feature": "gradient-editor",
           "property": null,
           "composite": "background",
@@ -6347,6 +6509,7 @@
         {
           "id": "inspector-background-image-gradient-type",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "gradient-editor",
           "property": "background-image",
           "composite": null,
@@ -6379,6 +6542,7 @@
         {
           "id": "inspector-background-image-gradient-bar",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "gradient-editor",
           "property": "background-image",
           "composite": null,
@@ -6411,6 +6575,7 @@
         {
           "id": "inspector-background-image-gradient-stop-colour",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "gradient-editor",
           "property": "background-image",
           "composite": null,
@@ -6443,6 +6608,7 @@
         {
           "id": "inspector-background-image-gradient-stop-position",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "gradient-editor",
           "property": "background-image",
           "composite": null,
@@ -6475,6 +6641,7 @@
         {
           "id": "inspector-background-image-gradient-angle",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "gradient-editor",
           "property": "background-image",
           "composite": null,
@@ -6507,6 +6674,7 @@
         {
           "id": "inspector-background-image-gradient-reverse",
           "kind": "inspector-field",
+          "drawnAs": "button",
           "feature": "gradient-editor",
           "property": "background-image",
           "composite": null,
@@ -6539,6 +6707,7 @@
         {
           "id": "inspector-background-image-gradient-distribute",
           "kind": "inspector-field",
+          "drawnAs": "button",
           "feature": "gradient-editor",
           "property": "background-image",
           "composite": null,
@@ -6571,6 +6740,7 @@
         {
           "id": "inspector-background-image-gradient-add-stop",
           "kind": "inspector-field",
+          "drawnAs": "button",
           "feature": "gradient-editor",
           "property": "background-image",
           "composite": null,
@@ -6603,6 +6773,7 @@
         {
           "id": "inspector-background-image-gradient-remove-stop",
           "kind": "inspector-field",
+          "drawnAs": "button",
           "feature": "gradient-editor",
           "property": "background-image",
           "composite": null,
@@ -6635,6 +6806,7 @@
         {
           "id": "inspector-background-image-gradient-reset",
           "kind": "inspector-field",
+          "drawnAs": "button",
           "feature": "gradient-editor",
           "property": null,
           "composite": "background",
@@ -6859,6 +7031,7 @@
         {
           "id": "inspector-box-shadow-shadow-add",
           "kind": "inspector-field",
+          "drawnAs": "button",
           "feature": "shadow-editor",
           "property": "box-shadow",
           "composite": null,
@@ -6888,6 +7061,7 @@
         {
           "id": "inspector-box-shadow-shadow-x",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "shadow-editor",
           "property": "box-shadow",
           "composite": null,
@@ -6919,6 +7093,7 @@
         {
           "id": "inspector-box-shadow-shadow-y",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "shadow-editor",
           "property": "box-shadow",
           "composite": null,
@@ -6950,6 +7125,7 @@
         {
           "id": "inspector-box-shadow-shadow-blur",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "shadow-editor",
           "property": "box-shadow",
           "composite": null,
@@ -6981,6 +7157,7 @@
         {
           "id": "inspector-box-shadow-shadow-spread",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "shadow-editor",
           "property": "box-shadow",
           "composite": null,
@@ -7012,6 +7189,7 @@
         {
           "id": "inspector-box-shadow-shadow-inset",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "shadow-editor",
           "property": "box-shadow",
           "composite": null,
@@ -7043,6 +7221,7 @@
         {
           "id": "inspector-box-shadow-shadow-colour",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "shadow-editor",
           "property": "box-shadow",
           "composite": null,
@@ -7074,6 +7253,7 @@
         {
           "id": "inspector-box-shadow-shadow-visibility",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "shadow-editor",
           "property": "box-shadow",
           "composite": null,
@@ -7105,6 +7285,7 @@
         {
           "id": "inspector-box-shadow-shadow-remove",
           "kind": "inspector-field",
+          "drawnAs": "button",
           "feature": "shadow-editor",
           "property": "box-shadow",
           "composite": null,
@@ -7134,6 +7315,7 @@
         {
           "id": "inspector-box-shadow-shadow-reset",
           "kind": "inspector-field",
+          "drawnAs": "button",
           "feature": "shadow-editor",
           "property": "box-shadow",
           "composite": null,
@@ -7163,6 +7345,7 @@
         {
           "id": "inspector-text-shadow-shadow-add",
           "kind": "inspector-field",
+          "drawnAs": "button",
           "feature": "shadow-editor",
           "property": "text-shadow",
           "composite": null,
@@ -7192,6 +7375,7 @@
         {
           "id": "inspector-text-shadow-shadow-x",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "shadow-editor",
           "property": "text-shadow",
           "composite": null,
@@ -7223,6 +7407,7 @@
         {
           "id": "inspector-text-shadow-shadow-y",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "shadow-editor",
           "property": "text-shadow",
           "composite": null,
@@ -7254,6 +7439,7 @@
         {
           "id": "inspector-text-shadow-shadow-blur",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "shadow-editor",
           "property": "text-shadow",
           "composite": null,
@@ -7285,6 +7471,7 @@
         {
           "id": "inspector-text-shadow-shadow-colour",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "shadow-editor",
           "property": "text-shadow",
           "composite": null,
@@ -7316,6 +7503,7 @@
         {
           "id": "inspector-text-shadow-shadow-visibility",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "shadow-editor",
           "property": "text-shadow",
           "composite": null,
@@ -7347,6 +7535,7 @@
         {
           "id": "inspector-text-shadow-shadow-remove",
           "kind": "inspector-field",
+          "drawnAs": "button",
           "feature": "shadow-editor",
           "property": "text-shadow",
           "composite": null,
@@ -7376,6 +7565,7 @@
         {
           "id": "inspector-text-shadow-shadow-reset",
           "kind": "inspector-field",
+          "drawnAs": "button",
           "feature": "shadow-editor",
           "property": "text-shadow",
           "composite": null,
@@ -7660,6 +7850,7 @@
         {
           "id": "inspector-filter-filter-blur",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-filters-clip",
           "property": "filter",
           "composite": null,
@@ -7692,6 +7883,7 @@
         {
           "id": "inspector-filter-filter-brightness",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-filters-clip",
           "property": "filter",
           "composite": null,
@@ -7724,6 +7916,7 @@
         {
           "id": "inspector-filter-filter-contrast",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-filters-clip",
           "property": "filter",
           "composite": null,
@@ -7756,6 +7949,7 @@
         {
           "id": "inspector-filter-filter-saturate",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-filters-clip",
           "property": "filter",
           "composite": null,
@@ -7788,6 +7982,7 @@
         {
           "id": "inspector-filter-filter-hue-rotate",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-filters-clip",
           "property": "filter",
           "composite": null,
@@ -7820,6 +8015,7 @@
         {
           "id": "inspector-filter-filter-grayscale",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-filters-clip",
           "property": "filter",
           "composite": null,
@@ -7852,6 +8048,7 @@
         {
           "id": "inspector-filter-filter-invert",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-filters-clip",
           "property": "filter",
           "composite": null,
@@ -7884,6 +8081,7 @@
         {
           "id": "inspector-filter-filter-sepia",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-filters-clip",
           "property": "filter",
           "composite": null,
@@ -7916,6 +8114,7 @@
         {
           "id": "inspector-filter-filter-remove",
           "kind": "inspector-field",
+          "drawnAs": "button",
           "feature": "props-filters-clip",
           "property": "filter",
           "composite": null,
@@ -8023,6 +8222,7 @@
         {
           "id": "inspector-transform-transform-skew-x",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-transforms",
           "property": "transform",
           "composite": null,
@@ -8083,6 +8283,7 @@
         {
           "id": "inspector-transform-transform-skew-y",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-transforms",
           "property": "transform",
           "composite": null,

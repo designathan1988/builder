@@ -102,6 +102,7 @@
         {
           "id": "inspector-page-title",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "page-properties",
           "property": null,
           "composite": null,
@@ -127,6 +128,7 @@
         {
           "id": "inspector-page-language",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "page-properties",
           "property": null,
           "composite": null,
@@ -152,6 +154,7 @@
         {
           "id": "inspector-page-direction",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "page-properties",
           "property": null,
           "composite": null,
@@ -177,6 +180,7 @@
         {
           "id": "inspector-page-description",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "page-seo-meta",
           "property": null,
           "composite": null,
@@ -202,6 +206,7 @@
         {
           "id": "inspector-page-canonical",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "page-seo-meta",
           "property": null,
           "composite": null,
@@ -227,6 +232,7 @@
         {
           "id": "inspector-page-og-title",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "page-seo-meta",
           "property": null,
           "composite": null,
@@ -252,6 +258,7 @@
         {
           "id": "inspector-page-og-image",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "page-seo-meta",
           "property": null,
           "composite": null,
@@ -277,6 +284,7 @@
         {
           "id": "inspector-page-favicon",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "page-seo-meta",
           "property": null,
           "composite": null,
@@ -302,6 +310,7 @@
         {
           "id": "inspector-page-scripts",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "code-panel-edit-js",
           "property": null,
           "composite": null,

@@ -38,6 +38,7 @@
         {
           "id": "inspector-position",
           "kind": "inspector-field",
+          "drawnAs": "field",
           "feature": "props-position",
           "property": "position",
           "composite": null,
