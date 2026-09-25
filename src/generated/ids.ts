@@ -3440,6 +3440,7 @@ export const MESSAGE_IDS = [
   "status.spacing.linked",
   "status.spacing.set",
   "status.spacing.unlinked",
+  "status.style.set",
   "status.svg.invalid",
   "status.table.lastColumn",
   "status.table.lastRow",

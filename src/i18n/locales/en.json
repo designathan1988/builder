@@ -1284,6 +1284,7 @@
   "status.spacing.linked": "{box}: the four sides now change together.",
   "status.spacing.set": "{property} of {name}: {value}.",
   "status.spacing.unlinked": "{box}: each side now changes on its own.",
+  "status.style.set": "{property} of {name}: {value}.",
   "status.svg.invalid": "This is not SVG markup: {reason}",
   "status.table.lastColumn": "A table keeps at least one column.",
   "status.table.lastRow": "A table body keeps at least one row.",
