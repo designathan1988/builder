@@ -7,7 +7,7 @@ import type { NodeId } from '../../generated/commands.ts';
 import { manifest } from '../../manifest/runtime.ts';
 import type { DocNode, DocumentJson } from '../document/model.ts';
 import { applyPatches, type Patch } from '../history/transaction.ts';
-import { NODE_ATTRIBUTE, NODE_STYLE_ATTRIBUTE, PageRenderer, nodeCss, renderModelFromManifest, type RenderModel } from './render.ts';
+import { HIDDEN_ATTRIBUTE, NODE_ATTRIBUTE, NODE_STYLE_ATTRIBUTE, PageRenderer, editorCss, nodeCss, renderModelFromManifest, type RenderModel } from './render.ts';
 
 const model = renderModelFromManifest(manifest.elements, manifest.properties, manifest.interactions);
 const node = (id: string, type: string, tag: string | null, fields: Partial<DocNode> = {}): DocNode => ({ id: id as NodeId, type: type as DocNode['type'], name: id, tag, attributes: {}, classes: [], styles: {}, text: null, children: [], ...fields });
@@ -277,6 +277,20 @@ describe('the renderer (src/core/render/render.ts)', () => {
       expect(page.querySelector('[data-node="hero"]')).toBeNull();
       expect(hero).not.toBeNull();
     });
+  });
+
+  it('marks a hidden node’s element for the editor’s style, which draws it with display none, and unmarks it when shown', () => {
+    const hide: Patch[] = [{ op: 'add', path: at('children', 0, 'children', 1, 'hidden'), value: true }];
+    const { target, after } = check(doc, hide);
+    expect(target.querySelector('[data-node="intro"]')?.getAttribute(HIDDEN_ATTRIBUTE)).toBe('');
+    expect(target.querySelectorAll(`[${HIDDEN_ATTRIBUTE}]`).length).toBe(1);
+    expect(editorCss(model)).toContain(`[${HIDDEN_ATTRIBUTE}] { display: none !important; }`);
+    expect(target.head.querySelector('style[data-editor-style]')?.textContent).toBe(editorCss(model));
+    const { target: shown } = check(after, [{ op: 'remove', path: at('children', 0, 'children', 1, 'hidden') }]);
+    expect(shown.querySelectorAll(`[${HIDDEN_ATTRIBUTE}]`).length).toBe(0);
+    // a hidden container carries the mark alone: its subtree goes with it
+    const { target: section } = check(doc, [{ op: 'add', path: at('children', 0, 'hidden'), value: true }]);
+    expect([...section.querySelectorAll(`[${HIDDEN_ATTRIBUTE}]`)].map((e) => e.getAttribute('data-node'))).toEqual(['hero']);
   });
 
   it('a mount removes the style elements an earlier renderer of the same document left', () => {

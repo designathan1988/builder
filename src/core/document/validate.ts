@@ -131,6 +131,11 @@ function validateNode(
   if (!root && node.type === rules.root.type) bad(`${at}/type`, `only a page's root is a ${rules.root.type} element`);
   if (typeof node.name !== 'string' || node.name.trim() === '') bad(`${at}/name`, 'an element has a name');
   if (!element.tags.includes(node.tag)) bad(`${at}/tag`, `<${String(node.tag)}> is not a tag of ${node.type} (${element.tags.map(String).join(', ')})`);
+  // the hidden flag (model.ts): true, or absent while the element shows; a page's root always shows
+  if ('hidden' in node) {
+    if (node.hidden !== true) bad(`${at}/hidden`, 'hidden is true, or absent while the element shows');
+    else if (root) bad(`${at}/hidden`, 'a page’s root is never hidden');
+  }
 
   if (!isRecord(node.attributes)) bad(`${at}/attributes`, 'attributes is an object');
   else {

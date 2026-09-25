@@ -115,6 +115,12 @@ Decisions by small ambiguity (moved here from PROGRESS.md):
   chooses one): reading the page's current language instead left a scenario without a tooth (it passed with the
   handler off), so the expected language comes from the scenario's own data. A unit test proves both catalogues share
   keys and placeholders (planted "{nome}" failed it).
+- hide-element (helper; the coordinator added the chrome part the helper could not touch): src/core/nodes/flags.ts
+  owns the node flags (`hidden: true`, validated; a hidden page root refused, new refusal status.hide.root); the
+  renderer marks a hidden node's element data-hidden (display: none !important, editor-only); a Layers row's Hide and
+  Lock are transparent until the pointer is on the row (they stay reachable by keyboard); a hidden selected node is
+  outlined dashed on its nearest shown ancestor with a "hidden" flag on its label. Not built: refusing to hide inside
+  a locked ancestor (lock-element), the marquee skipping hidden nodes (finding 26), hidden nodes in the export.
 - The tooth proof prints why each test failed (the first line and the matcher) and counts a failure that only ran
   out of time on an action or a wait (`locator.click: Timeout 5000ms exceeded.`) as no tooth, like a test timeout: a
   tooth fails on an assertion (brief "a aplicação completa").

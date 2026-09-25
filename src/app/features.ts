@@ -40,7 +40,7 @@ export const FEATURES = {
   'multi-select-actions': NOT_AVAILABLE_YET,
   'select-container-children': NOT_AVAILABLE_YET,
   'lock-element': NOT_AVAILABLE_YET,
-  'hide-element': NOT_AVAILABLE_YET,
+  'hide-element': registerFeature('hide-element'),
   // 03 app and persistence
   'app-menu': NOT_AVAILABLE_YET,
   'ui-language': registerFeature('ui-language'),

@@ -463,7 +463,7 @@
     {
       "kind": "handler",
       "id": "element.toggleHidden",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",

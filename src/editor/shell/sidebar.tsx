@@ -90,7 +90,7 @@ function PageRow({ page }: { readonly page: { readonly id: string; readonly name
 // the context menu on it (spec context-menu); a click on a control
 // of its own (the caret, Hide, Lock) runs that control's door alone. The primary selection's row
 // is scrolled into view, at the nearest edge and without animation, whichever surface selected it (spec layers-tree,
-// Problems in Pager 1).
+// Problems in Pager 1). A hidden node's row is dimmed, and its Hide stays shown, pressed (spec hide-element).
 function LayersRow({ node, depth }: { readonly node: DocNode; readonly depth: number }) {
   const door = useDoor(LAYERS_SELECT, { target: node.id });
   const selected = useEditorState((s) => s.selection.includes(node.id));
@@ -131,7 +131,7 @@ function LayersRow({ node, depth }: { readonly node: DocNode; readonly depth: nu
         aria-disabled={door.built ? undefined : true}
         aria-level={depth + 1}
         tabIndex={-1}
-        className={`row row--tree${selected ? ' is-selected' : ''}`}
+        className={`row row--tree${selected ? ' is-selected' : ''}${node.hidden === true ? ' row--hidden' : ''}`}
         style={{ '--depth': depth } as CSSProperties}
         title={door.title}
         data-door={LAYERS_SELECT.ref}

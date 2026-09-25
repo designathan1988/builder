@@ -22,7 +22,7 @@
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties } from 'react';
 import { createPortal } from 'react-dom';
 import { message, type Message } from '../../core/commands/registry.ts';
-import { locate, type DocumentJson } from '../../core/document/model.ts';
+import { locate, type DocNode, type DocumentJson, type NodeId } from '../../core/document/model.ts';
 import type { MessageId } from '../../generated/ids.ts';
 import { elementIcon, manifest } from '../../manifest/runtime.ts';
 import { Icon } from '../doors/door.tsx';
@@ -226,8 +226,24 @@ function Ghost({ entry, at, refused }: { readonly entry: string; readonly at: { 
   );
 }
 
+// Where a selected node is drawn: itself, or, when it or an ancestor is hidden (spec hide-element, Problems in Pager
+// 1), the nearest ancestor that is shown, with the node marked hidden. As one text, so the store's selector returns
+// the same value while nothing changes.
+function drawnTargets(document: DocumentJson, selection: readonly NodeId[]): string {
+  return JSON.stringify(
+    selection.map((id) => {
+      const chain: DocNode[] = [];
+      for (let at = locate(document, id); at !== null; at = at.parent === null ? null : locate(document, at.parent.id)) chain.push(at.node);
+      const outermost = chain.map((n) => n.hidden === true).lastIndexOf(true);
+      return outermost < 0 ? { id, hidden: false } : { id: chain[outermost + 1]?.id ?? id, hidden: true };
+    }),
+  );
+}
+
 export function CanvasChrome() {
   const selection = useEditorState((s) => s.selection);
+  const targetsText = useEditorState((s) => drawnTargets(s.document, s.selection));
+  const targets = useMemo(() => JSON.parse(targetsText) as { id: NodeId; hidden: boolean }[], [targetsText]);
   // the drag in progress (pointer.ts): the drop indicator is drawn, the selection's label hides and its outline turns
   // into the dashed outline of the source (Problems in Pager 1)
   const dragging = useSyncExternalStore(drag.subscribe, drag.get);
@@ -257,7 +273,7 @@ export function CanvasChrome() {
       const origin = layer.current?.getBoundingClientRect();
       if (iframe && origin) {
         const local = (b: Box | null): Box | null => (b === null ? null : { x: b.x - origin.x, y: b.y - origin.y, width: b.width, height: b.height });
-        const selected = selection.map((id) => local(nodeBox(iframe, id))).filter((b): b is Box => b !== null);
+        const selected = targets.map((target) => local(nodeBox(iframe, target.id))).filter((b): b is Box => b !== null);
         const union = selection.length > 1 ? unionOf(selected) : null;
         // the label belongs to the one selected node, or to the union of several
         const first = union ?? selected[0];
@@ -279,7 +295,7 @@ export function CanvasChrome() {
     };
     request = requestAnimationFrame(measure);
     return () => cancelAnimationFrame(request);
-  }, [selection, hovered, node, drawnBand]);
+  }, [selection, targets, hovered, node, drawnBand]);
 
   const at = (b: Box): CSSProperties => ({ left: b.x, top: b.y, width: b.width, height: b.height });
   const shown = selection.length === 0 && hovered === null && drawnBand === null ? EMPTY : layout;
@@ -288,7 +304,12 @@ export function CanvasChrome() {
       {shown.hovered ? <div className="chrome__hover" data-chrome="hover" style={at(shown.hovered)} /> : null}
       {drawnBand !== null && shown.band ? <div className="chrome__band" data-chrome="band" style={at(shown.band)} /> : null}
       {shown.selected.map((b, i) => (
-        <div key={i} className={`chrome__selection${dragging && dragging.dragged.length > 0 ? ' is-source' : ''}${editing ? ' is-editing' : ''}`} data-chrome="selection" style={at(b)} />
+        <div
+          key={i}
+          className={`chrome__selection${dragging && dragging.dragged.length > 0 ? ' is-source' : ''}${editing ? ' is-editing' : ''}${targets[i]?.hidden === true ? ' is-hidden-node' : ''}`}
+          data-chrome="selection"
+          style={at(b)}
+        />
       ))}
       {dragging ? <DropIndicator view={dragging} /> : null}
       {dragging?.inserting != null ? <Ghost entry={dragging.inserting} at={dragging.at} refused={dragging.proposal === null || dragging.refusal !== null} /> : null}
@@ -318,6 +339,7 @@ export function CanvasChrome() {
             <>
               <span className="chrome__name">{node.name}</span>
               <small className="chrome__tag">{node.tag ?? ''}</small>
+              {targets[0]?.hidden === true ? <small className="chrome__flag">{t('canvas.hiddenFlag')}</small> : null}
             </>
           )}
         </div>

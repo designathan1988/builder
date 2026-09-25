@@ -560,20 +560,45 @@ kbd {
   color: var(--color-text-subtle);
 }
 
+/* Hide and Lock appear on the row under the pointer (DESIGN.md "Component regions", layers-row 8 and 9), so a selected
+   row keeps its whole name. Until then they are transparent, never out of the layout: the pointer that comes to press
+   one shows it, and the keyboard reaches it, which shows it too. */
 .row__actions {
-  display: none;
+  display: inline-flex;
   position: absolute;
   right: var(--space-1);
   top: 0;
-  background: var(--color-surface-hover);
+}
+
+.row__actions > .door {
+  opacity: 0;
 }
 
 .row:hover .row__actions {
-  display: inline-flex;
+  background: var(--color-surface-hover);
+}
+
+.row:hover .row__actions > .door,
+.row__actions > .door:focus-visible {
+  opacity: 1;
 }
 
 .row:hover .row__meta {
   visibility: hidden;
+}
+
+/* a hidden node's row (spec hide-element): dimmed, its Hide pressed and shown in place of the tag */
+.row--hidden > .icon,
+.row--hidden > .row__name {
+  color: var(--color-text-subtle);
+}
+
+.row--hidden .row__meta {
+  visibility: hidden;
+}
+
+.row--hidden .row__actions > .door[aria-pressed='true'] {
+  opacity: 1;
 }
 
 .row__actions .door--icon-button,
@@ -911,6 +936,20 @@ kbd {
 
 .chrome__label.is-hidden {
   visibility: hidden;
+}
+
+/* a hidden selected element (hide-element, Problems in Pager 1): its dashed outline on its nearest shown ancestor, and
+   a "hidden" flag on its label */
+.chrome__selection.is-hidden-node {
+  outline-style: dashed;
+}
+
+.chrome__flag {
+  padding: 0 var(--space-1);
+  border-radius: var(--radius-sm);
+  background: var(--color-on-accent);
+  color: var(--color-accent);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-body) var(--font-ui);
 }
 
 /* a text edited in place: its outline and label in the text editing mode colour, never the selection's

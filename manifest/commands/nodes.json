@@ -347,7 +347,8 @@
         "refusalKey": "refusal.nothingSelected"
       },
       "refusals": [
-        "status.locked.byAncestor"
+        "status.locked.byAncestor",
+        "status.hide.root"
       ],
       "confirmation": null,
       "history": {

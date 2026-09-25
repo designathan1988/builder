@@ -17,7 +17,10 @@
 // Editor-only, never in the document nor in an export: every element of a container below the page root carries
 // data-container, and one style element of the editor (data-editor-style), first in the head, gives an empty one the
 // minimum height of the manifest's constant canvas.emptyContainerMinHeight, so it can be seen and pointed at. Its
-// selector weighs nothing (:where), so any min-height the node's own styles set wins.
+// selector weighs nothing (:where), so any min-height the node's own styles set wins. The element of a hidden node
+// (its hidden flag, spec hide-element) carries data-hidden, which the same style element draws with display: none,
+// important so that no display of the node's own rules shows it; showing it again removes the mark, and the element
+// takes back the layout its own rules give it.
 //
 // Editor-only too, while a text is edited in place (src/editor/canvas/text-edit.ts): the edited element carries
 // contenteditable="plaintext-only" and data-key-context naming the key context of the edit, is focused with the caret
@@ -35,8 +38,9 @@ const TEXT_NODE = 3;
 export const NODE_ATTRIBUTE = 'data-node';
 // a node's style element in the head: its own attribute, so [data-node] finds only elements of the page
 export const NODE_STYLE_ATTRIBUTE = 'data-node-style';
-// the editor-only marks: an element of a container, and the editor's own style element
+// the editor-only marks: an element of a container, a hidden node's element, and the editor's own style element
 export const CONTAINER_ATTRIBUTE = 'data-container';
+export const HIDDEN_ATTRIBUTE = 'data-hidden';
 export const EDITOR_STYLE_ATTRIBUTE = 'data-editor-style';
 // the marks of the text edited in place: editable as plain text, in the key context the editor names
 export const EDITABLE_ATTRIBUTE = 'contenteditable';
@@ -70,9 +74,10 @@ export function renderModelFromManifest(elements: ElementsFile, properties: Prop
   };
 }
 
-// The editor's own CSS in the page: an empty container keeps a visible minimum height.
+// The editor's own CSS in the page: an empty container keeps a visible minimum height; a hidden node's element is
+// not drawn, whatever its own rules say.
 export function editorCss(model: RenderModel): string {
-  return `:where([${CONTAINER_ATTRIBUTE}]:empty) { min-height: ${model.emptyContainerMinHeight}px; }`;
+  return `:where([${CONTAINER_ATTRIBUTE}]:empty) { min-height: ${model.emptyContainerMinHeight}px; }\n[${HIDDEN_ATTRIBUTE}] { display: none !important; }`;
 }
 
 // The selector of a node's element: its id quoted as a CSS string.
@@ -323,6 +328,8 @@ export class PageRenderer {
     const wanted = new Map<string, string>([[NODE_ATTRIBUTE, node.id]]);
     // a container below the page root (editor-only: see the top of this file)
     if (element !== this.target.body && this.model.elements.get(node.type)?.content === 'children') wanted.set(CONTAINER_ATTRIBUTE, '');
+    // a hidden node (editor-only: see the top of this file)
+    if (node.hidden === true) wanted.set(HIDDEN_ATTRIBUTE, '');
     const edited = this.edit?.node === node.id ? this.edit : null;
     if (edited) {
       wanted.set(EDITABLE_ATTRIBUTE, EDITABLE_VALUE);

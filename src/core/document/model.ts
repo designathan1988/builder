@@ -29,6 +29,9 @@ export interface DocNode {
   // the text of a text element or the markup of a markup element; null for the others
   readonly text: string | null;
   readonly children: readonly DocNode[];
+  // hidden on the canvas with its whole subtree, still in the document and in Layers (element.toggleHidden, spec
+  // hide-element): true, absent while the element shows. A page's root is never hidden.
+  readonly hidden?: true;
 }
 
 export interface Page {

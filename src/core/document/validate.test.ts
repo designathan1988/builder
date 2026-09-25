@@ -56,6 +56,16 @@ describe('validateDocument', () => {
     expect(paths(project([div('a', { text: 'no' })]))).toEqual(['/pages/0/tree/children/0/text']);
   });
 
+  it('accepts the hidden flag as true below the root, and refuses any other value and a hidden page root', () => {
+    expect(paths(project([div('a', { hidden: true, children: [div('b', { hidden: true })] })]))).toEqual([]);
+    expect(paths(project([div('a', { hidden: false } as unknown as Partial<DocNode>)]))).toEqual(['/pages/0/tree/children/0/hidden']);
+    expect(paths(project([div('a', { hidden: 'yes' } as unknown as Partial<DocNode>)]))).toEqual(['/pages/0/tree/children/0/hidden']);
+    const doc = project();
+    const page = doc.pages[0];
+    if (!page) throw new Error('no page');
+    expect(paths({ ...doc, pages: [{ ...page, tree: { ...page.tree, hidden: true } }] })).toEqual(['/pages/0/tree/hidden']);
+  });
+
   it('refuses a selection that names a missing node or one node twice', () => {
     expect(paths(project([div('a')]), ['a', 'zz', 'a'])).toEqual(['/selection/1', '/selection/2']);
   });
