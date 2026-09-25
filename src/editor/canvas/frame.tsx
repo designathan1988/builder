@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import { PageRenderer, renderModelFromManifest } from '../../core/render/render.ts';
 import { manifest } from '../../manifest/runtime.ts';
 import { useStore } from '../store.ts';
+import { CanvasChrome } from './chrome.tsx';
 import { registerFrame } from './coordinates.ts';
 
 const MODEL = renderModelFromManifest(manifest.elements, manifest.properties);
@@ -56,7 +57,9 @@ export function CanvasFrame({ width, zoom }: { readonly width: number; readonly 
   return (
     <div className="frame__view" ref={view}>
       <iframe ref={iframe} className="frame__page" srcDoc={PAGE} sandbox="allow-same-origin" tabIndex={-1} aria-hidden style={{ width, height: zoom > 0 ? height / zoom : 0, zoom }} />
-      <div className="frame__overlay" data-canvas-overlay />
+      <div className="frame__overlay" data-canvas-overlay>
+        <CanvasChrome />
+      </div>
     </div>
   );
 }

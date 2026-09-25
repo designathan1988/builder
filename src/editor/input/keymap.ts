@@ -49,9 +49,11 @@ export function chordHint(command: CommandId): string | null {
 }
 
 // The key context of the element that has focus: a field keeps its keys; a region names its context with
-// data-key-context; everything else is the global context.
+// data-key-context; the page body, where the focus rests after a press on the canvas (its overlay takes no focus),
+// is the canvas's, which inherits the global context; everything else is the global context.
 export function contextOf(target: EventTarget | null): KeyContextId {
   if (target instanceof HTMLElement) {
+    if (target === target.ownerDocument.body) return 'canvas';
     if (target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)) return 'field';
     const region = target.closest('[data-key-context]');
     const named = region?.getAttribute('data-key-context');

@@ -523,12 +523,12 @@
     {
       "kind": "handler",
       "id": "selection.select",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",
       "id": "selection.clear",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",
@@ -1103,7 +1103,7 @@
     {
       "kind": "predicate",
       "id": "hasSelection",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "predicate",

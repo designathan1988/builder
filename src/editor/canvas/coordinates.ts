@@ -95,6 +95,32 @@ export function nodeBox(iframe: HTMLIFrameElement, id: string): { x: number; y: 
   return element ? screenBox(iframe, element) : null;
 }
 
+// The page's content on the screen, which a canvas label must never cover (DESIGN.md "Label rule"): the box of
+// every run of text and of every replaced element (an image, a video, an embedded frame, a form control).
+const REPLACED = 'img, picture, video, audio, canvas, svg, iframe, embed, object, input, textarea, select, button, progress, meter';
+export function contentBoxes(iframe: HTMLIFrameElement): { x: number; y: number; width: number; height: number }[] {
+  const doc = iframe.contentDocument;
+  const g = geometryOf(iframe);
+  if (!doc || !g) return [];
+  const toScreen = (r: DOMRect) => {
+    const topLeft = frameToScreen({ x: r.left, y: r.top }, g);
+    return { x: topLeft.x, y: topLeft.y, width: r.width * g.zoom, height: r.height * g.zoom };
+  };
+  const boxes: { x: number; y: number; width: number; height: number }[] = [];
+  const walker = doc.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT);
+  const range = doc.createRange();
+  for (let text = walker.nextNode(); text !== null; text = walker.nextNode()) {
+    if ((text.textContent ?? '').trim() === '') continue;
+    range.selectNodeContents(text);
+    for (const r of range.getClientRects()) if (r.width > 0 && r.height > 0) boxes.push(toScreen(r));
+  }
+  for (const element of doc.body.querySelectorAll(REPLACED)) {
+    const r = element.getBoundingClientRect();
+    if (r.width > 0 && r.height > 0) boxes.push(toScreen(r));
+  }
+  return boxes;
+}
+
 // The canvas's iframe, for the pointer owner and the canvas overlays.
 let current: HTMLIFrameElement | null = null;
 

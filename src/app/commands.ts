@@ -5,6 +5,7 @@
 import { NOT_AVAILABLE_YET, always, type CommandTable, type PredicateTable } from '../core/commands/registry.ts';
 import { canRedo, canUndo, redoCommand, undoCommand } from '../core/history/history.ts';
 import { openProject } from '../core/project/archive.ts';
+import { clearSelectionCommand, hasSelection, selectCommand } from '../core/selection/selection.ts';
 import { focusActivate, focusFirst, focusLast, focusNext, focusPrevious } from '../editor/focus/focus.ts';
 import { dismiss } from '../editor/menus/overlays.ts';
 import { setLanguage, setTheme } from '../editor/preferences/preferences.ts';
@@ -117,8 +118,8 @@ export const COMMANDS = {
   'project.openFolder': NOT_AVAILABLE_YET,
   'project.importHtml': NOT_AVAILABLE_YET,
   'project.export': NOT_AVAILABLE_YET,
-  'selection.select': NOT_AVAILABLE_YET,
-  'selection.clear': NOT_AVAILABLE_YET,
+  'selection.select': selectCommand,
+  'selection.clear': clearSelectionCommand,
   'selection.add': NOT_AVAILABLE_YET,
   'selection.toggle': NOT_AVAILABLE_YET,
   'selection.walkNextSibling': NOT_AVAILABLE_YET,
@@ -234,4 +235,4 @@ export const COMMANDS = {
 } as const satisfies CommandTable<EditorUi>;
 
 // The availability predicates code has registered; a built command's predicate must be here (createStore checks it).
-export const PREDICATES = { always, canUndo, canRedo } as const satisfies PredicateTable<EditorUi>;
+export const PREDICATES = { always, canUndo, canRedo, hasSelection } as const satisfies PredicateTable<EditorUi>;

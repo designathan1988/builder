@@ -27,7 +27,7 @@ for (const feature of features) {
     for (const inner of s.suites ?? []) walk(inner);
   };
   for (const s of report.suites) walk(s);
-  const off = feature.commands.length > 0 ? `handlers of ${feature.commands.join(', ')} made no-ops` : `module ${feature.toothProof ?? '(none named)'} made a no-op`;
+  const off = feature.commands.length > 0 ? `handlers of ${feature.commands.join(', ')} made no-ops, their availability predicates held true` : `module ${feature.toothProof ?? '(none named)'} made a no-op`;
   console.log(`\n${feature.id}: ${off}`);
   // a tooth is a test that fails on an assertion; one that passes, or times out, proves nothing
   const LABEL: Record<string, string> = { passed: 'PASSED (no tooth)', timedOut: 'TIMED OUT (no tooth: a test fails on an assertion, never on time)' };
