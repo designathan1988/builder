@@ -5183,8 +5183,10 @@
       "commands": [
         "element.setTag"
       ],
-      "dependsOn": [],
-      "spec": null,
+      "dependsOn": [
+        "inspector-panel"
+      ],
+      "spec": "spec/behavior/semantic-tag-switch.md",
       "intent": {
         "title": "Switch an element between equivalent semantic tags",
         "steps": [
@@ -5199,7 +5201,1047 @@
           "Each switch is one undo step."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "a-section-becomes-an-article-keeping-its-children-name-and-styles",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setTag#inspector-tag",
+              "args": {
+                "tag": "article"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "article\n"
+            }
+          ],
+          "doors": [
+            "element.setTag#inspector-tag"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@tag",
+                "value": "article"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero",
+                  "property": "padding-top",
+                  "value": "56px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.tag.set",
+                  "params": {
+                    "name": "Hero",
+                    "tag": "<article>"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-section-switched-to-header-then-to-div-is-one-undo-step-each",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setTag#inspector-tag",
+              "args": {
+                "tag": "header"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "header\n"
+            },
+            {
+              "door": "element.setTag#inspector-tag",
+              "args": {
+                "tag": "div"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "div\n"
+            }
+          ],
+          "doors": [
+            "element.setTag#inspector-tag"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@tag",
+                "value": "div"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero",
+                  "property": "padding-left",
+                  "value": "40px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.tag.set",
+                  "params": {
+                    "name": "Hero",
+                    "tag": "<div>"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-heading-goes-from-h1-to-h4-and-is-drawn-at-the-h4-size",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setTag#inspector-tag",
+              "args": {
+                "tag": "h4"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "h4\n"
+            }
+          ],
+          "doors": [
+            "element.setTag#inspector-tag"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Title/@tag",
+                "value": "h4"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Title",
+                  "property": "font-size",
+                  "value": "16px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.tag.set",
+                  "params": {
+                    "name": "Title",
+                    "tag": "<h4>"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-tag-typed-in-capitals-is-kept-in-lower-case",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Plans/Grid/CardA/CardATitle"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setTag#inspector-tag",
+              "args": {
+                "tag": "h2"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "H2\n"
+            }
+          ],
+          "doors": [
+            "element.setTag#inspector-tag"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/CardA/CardATitle/@tag",
+                "value": "h2"
+              }
+            ],
+            "selection": [
+              "/Page/Plans/Grid/CardA/CardATitle"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.tag.set",
+                  "params": {
+                    "name": "CardATitle",
+                    "tag": "<h2>"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-paragraph-becomes-preformatted-text-in-a-monospace-font",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setTag#inspector-tag",
+              "args": {
+                "tag": "pre"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "pre\n"
+            }
+          ],
+          "doors": [
+            "element.setTag#inspector-tag"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Intro/@tag",
+                "value": "pre"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Intro",
+                  "property": "font-family",
+                  "value": "monospace"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.tag.set",
+                  "params": {
+                    "name": "Intro",
+                    "tag": "<pre>"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-paragraph-becomes-a-span-drawn-inline",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setTag#inspector-tag",
+              "args": {
+                "tag": "span"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "span\n"
+            }
+          ],
+          "doors": [
+            "element.setTag#inspector-tag"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Intro/@tag",
+                "value": "span"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Intro",
+                  "property": "display",
+                  "value": "inline"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.tag.set",
+                  "params": {
+                    "name": "Intro",
+                    "tag": "<span>"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-tag-that-is-not-equivalent-is-refused",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setTag#inspector-tag",
+              "args": {
+                "tag": "p"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "p\n"
+            }
+          ],
+          "doors": [
+            "element.setTag#inspector-tag"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.tag.notEquivalent",
+                  "params": {
+                    "tag": "<p>",
+                    "name": "Hero"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": [
+            {
+              "key": "status.tag.notEquivalent",
+              "document": "unchanged"
+            }
+          ]
+        },
+        {
+          "id": "a-heading-cannot-take-a-paragraph-tag",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setTag#inspector-tag",
+              "args": {
+                "tag": "p"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "p\n"
+            }
+          ],
+          "doors": [
+            "element.setTag#inspector-tag"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.tag.notEquivalent",
+                  "params": {
+                    "tag": "<p>",
+                    "name": "Title"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": [
+            {
+              "key": "status.tag.notEquivalent",
+              "document": "unchanged"
+            }
+          ]
+        },
+        {
+          "id": "a-footer-inside-a-header-is-refused",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setTag#inspector-tag",
+              "args": {
+                "tag": "header"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "header\n"
+            },
+            {
+              "door": "selection.select#canvas-click-element-or-page",
+              "args": {
+                "target": "/Page/Hero/Actions"
+              },
+              "target": "/Page/Hero/Actions",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setTag#inspector-tag",
+              "args": {
+                "tag": "footer"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "footer\n"
+            }
+          ],
+          "doors": [
+            "element.setTag#inspector-tag"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@tag",
+                "value": "header"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Actions"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.refused.notInside",
+                  "params": {
+                    "child": "<footer>",
+                    "ancestor": "<header>"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": [
+            {
+              "key": "status.refused.notInside",
+              "document": "unchanged"
+            }
+          ]
+        },
+        {
+          "id": "a-container-holding-a-footer-cannot-become-a-header",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Actions"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setTag#inspector-tag",
+              "args": {
+                "tag": "footer"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "footer\n"
+            },
+            {
+              "door": "selection.select#canvas-click-element-or-page",
+              "args": {
+                "target": "/Page/Hero"
+              },
+              "target": "/Page/Hero",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setTag#inspector-tag",
+              "args": {
+                "tag": "header"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "header\n"
+            }
+          ],
+          "doors": [
+            "element.setTag#inspector-tag"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Actions/@tag",
+                "value": "footer"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.refused.notInside",
+                  "params": {
+                    "child": "<footer>",
+                    "ancestor": "<header>"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": [
+            {
+              "key": "status.refused.notInside",
+              "document": "unchanged"
+            }
+          ]
+        },
+        {
+          "id": "a-locked-element-keeps-its-tag",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "element.toggleLock#menu-element-actions",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setTag#inspector-tag",
+              "args": {
+                "tag": "article"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "article\n"
+            }
+          ],
+          "doors": [
+            "element.setTag#inspector-tag"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@locked",
+                "value": true
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.locked.edit",
+                  "params": {
+                    "name": "Hero"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": [
+            {
+              "key": "status.locked.edit",
+              "document": "unchanged"
+            }
+          ]
+        },
+        {
+          "id": "an-element-inside-a-locked-element-keeps-its-tag",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "element.toggleLock#menu-element-actions",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "selection.select#canvas-click-element-or-page",
+              "args": {
+                "target": "/Page/Hero/Title"
+              },
+              "target": "/Page/Hero/Title",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setTag#inspector-tag",
+              "args": {
+                "tag": "h4"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "h4\n"
+            }
+          ],
+          "doors": [
+            "element.setTag#inspector-tag"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@locked",
+                "value": true
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.locked.byAncestor",
+                  "params": {
+                    "name": "Title",
+                    "ancestor": "Hero"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": [
+            {
+              "key": "status.locked.byAncestor",
+              "document": "unchanged"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "quick-panel",

@@ -26,7 +26,9 @@
         "status.refused.singleChild",
         "status.refused.labelOneControl",
         "status.refused.noChildren",
-        "status.locked.edit"
+        "status.refused.notInside",
+        "status.locked.edit",
+        "status.locked.byAncestor"
       ],
       "confirmation": null,
       "history": {
