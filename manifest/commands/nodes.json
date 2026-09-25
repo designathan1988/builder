@@ -12,7 +12,8 @@
         "refusalKey": "status.needsSingleSelection"
       },
       "refusals": [
-        "status.locked.rename"
+        "status.locked.rename",
+        "status.locked.byAncestor"
       ],
       "confirmation": null,
       "history": {
@@ -49,6 +50,7 @@
           "control": "row-name",
           "modifier": null,
           "gesture": null,
+          "count": 2,
           "labelKey": "layers.renameByDoubleClick",
           "faceLabelKey": null,
           "icon": null,
@@ -172,7 +174,9 @@
         "refusalKey": null
       },
       "refusals": [
-        "status.locked.rename"
+        "status.rename.empty",
+        "status.locked.rename",
+        "status.locked.byAncestor"
       ],
       "confirmation": null,
       "history": {

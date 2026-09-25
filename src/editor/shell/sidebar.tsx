@@ -1,7 +1,7 @@
 // The activity bar and the sidebar (DESIGN.md "Regions"): Explorer (Pages, Files, Layers), Insert (the element grid
 // of elements.json's palette) and Styles (classes and variables). Rows and tiles are the doors of their regions, one
 // per page, node or palette entry; a section's actions are the region's controls before its first item.
-import { useEffect, useRef, type CSSProperties, type MouseEvent } from 'react';
+import { useEffect, useRef, type CSSProperties, type FormEvent, type MouseEvent } from 'react';
 import { isFeatureBuilt } from '../../app/features.ts';
 import { walk, type DocNode } from '../../core/document/model.ts';
 import type { DispatchResult } from '../../core/store/store.ts';
@@ -10,6 +10,7 @@ import { elementIcon, manifest, type DoorEntry } from '../../manifest/runtime.ts
 import { DoorControl, Icon, useDoor } from '../doors/door.tsx';
 import { GLYPHS, doorSlots } from '../doors/placement.ts';
 import { modifierOf } from '../input/pointer.ts';
+import { renamedNode } from '../layers/rename.ts';
 import { isExpanded } from '../layers/tree.ts';
 import { useEditorState, useStore } from '../store.ts';
 import { isPanelOpen, panelName, type Panel } from '../workspace/panels.ts';
@@ -44,6 +45,11 @@ const LAYERS_MODIFIED = doorSlots('layers-row').filter((d) => d.door.kind === 'p
 const LAYERS_SECONDARY = requireDoor('layers-row', (d) => d.door.kind === 'panel-control' && d.door.button === 'secondary');
 const LAYERS_CARET = requireDoor('layers-row', (d) => drawnAs(d) === 'disclosure');
 const LAYERS_BUTTONS = doorSlots('layers-row').filter((d) => drawnAs(d) === 'icon-button');
+// the row's name: the control a number of clicks runs (its double-click renames the row's node in place, spec
+// rename-element), and the field that takes the name's place while the node is renamed
+const LAYERS_NAME = requireDoor('layers-row', (d) => d.door.kind === 'panel-control' && d.door.count !== undefined);
+const NAME_CLICKS = LAYERS_NAME.door.kind === 'panel-control' ? LAYERS_NAME.door.count : undefined;
+const LAYERS_NAME_FIELD = requireDoor('layers-row', (d) => drawnAs(d) === 'field');
 // an element tile: the item whose command takes a palette entry (a component tile takes a component)
 const INSERT_TILE = requireDoor('insert', (d) => drawnAs(d) === 'item' && Object.values(d.command.args).some((a) => a.type === 'palette-entry'));
 const INSERT_GROUP = requireDoor('insert', (d) => drawnAs(d) === 'disclosure');
@@ -85,40 +91,90 @@ function PageRow({ page }: { readonly page: { readonly id: string; readonly name
   );
 }
 
+// A row's name while its node is renamed (spec rename-element, layers/rename.ts): a field holding the name, which
+// takes the focus with the whole name selected once it is drawn (after a menu that started the rename has given its
+// own focus back), so typing replaces it. Enter (the form's submit) or leaving the field keeps what it holds, once:
+// element.rename ends the rename, and the field that leaves the page then keeps nothing more.
+function NameField({ node }: { readonly node: DocNode }) {
+  const field = useDoor(LAYERS_NAME_FIELD, { target: node.id });
+  const store = useStore();
+  const input = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    input.current?.focus();
+    input.current?.select();
+  }, []);
+  const keep = (name: string) => {
+    if (!field.built || renamedNode(store.getState().ui) !== node.id) return;
+    (store.dispatch as (id: CommandId, args: unknown) => DispatchResult)(LAYERS_NAME_FIELD.command.id as CommandId, { ...LAYERS_NAME_FIELD.door.args, target: node.id, name });
+  };
+  const submit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    keep(input.current?.value ?? node.name);
+  };
+  return (
+    <form className="row__rename" onSubmit={submit}>
+      <input
+        ref={input}
+        className="row__name-field"
+        type="text"
+        defaultValue={node.name}
+        aria-label={field.label}
+        title={field.title}
+        spellCheck={false}
+        autoComplete="off"
+        data-door={LAYERS_NAME_FIELD.ref}
+        data-args={JSON.stringify({ target: node.id })}
+        onBlur={(event) => keep(event.currentTarget.value)}
+      />
+    </form>
+  );
+}
+
 // A node's row, then, while its branch is unfolded, its children's rows. A click on the row selects its node, a
 // Shift+click adds it to the selection and a Ctrl+click toggles it (spec multi-select-click), a secondary click opens
 // the context menu on it (spec context-menu); a click on a control
-// of its own (the caret, Hide, Lock) runs that control's door alone. The primary selection's row
+// of its own (the caret, Hide, Lock) runs that control's door alone. Its name is part of the row: a click on it selects
+// as the row's does, and the click its door counts (the second of a double-click) renames the node the first click
+// selected (spec rename-element); while the node is renamed, the name field takes the name's place. The primary
+// selection's row
 // is scrolled into view, at the nearest edge and without animation, whichever surface selected it (spec layers-tree,
 // Problems in Pager 1). A hidden node's row is dimmed, and its Hide stays shown, pressed (spec hide-element); a
 // locked node's row keeps its Lock shown, pressed (spec lock-element).
 function LayersRow({ node, depth }: { readonly node: DocNode; readonly depth: number }) {
   const door = useDoor(LAYERS_SELECT, { target: node.id });
+  const rename = useDoor(LAYERS_NAME);
   const selected = useEditorState((s) => s.selection.includes(node.id));
   const primary = useEditorState((s) => s.selection[0] === node.id);
   const expanded = useEditorState((s) => isExpanded(s.ui, node.id));
+  const renaming = useEditorState((s) => renamedNode(s.ui) === node.id);
   const row = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (primary) row.current?.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'instant' });
   }, [primary]);
   const store = useStore();
   const branch = node.children.length > 0;
-  // a click with no key held runs the row's own door; with a key held, the door of that key (none for another key)
+  // a click with no key held runs the row's own door (the rename on its name's counted click); with a key held, the
+  // door of that key (none for another key)
   const select = (event: MouseEvent<HTMLDivElement>) => {
-    if (!(event.target instanceof Element && event.target.closest('[data-door]') === event.currentTarget)) return;
+    const on = event.target instanceof Element ? event.target.closest('[data-door]') : null;
+    const onName = on !== null && on !== event.currentTarget && on.getAttribute('data-door') === LAYERS_NAME.ref;
+    if (on !== event.currentTarget && !onName) return;
     const held = modifierOf(event);
     if (held === null) {
-      door.run();
+      if (onName && event.detail === NAME_CLICKS) rename.run();
+      else door.run();
       return;
     }
     const entry = LAYERS_MODIFIED.find((d) => d.door.kind === 'panel-control' && d.door.modifier === held);
     if (entry) (store.dispatch as (id: CommandId, args: unknown) => DispatchResult)(entry.command.id as CommandId, { ...entry.door.args, target: node.id });
   };
   // a secondary click anywhere on the row runs the row's secondary door (the context menu) instead of the browser's
-  // own menu; the keyboard's menu key is no door, so a contextmenu event it sends is left to the browser
+  // own menu, except in the name field, whose text keeps the browser's; the keyboard's menu key is no door, so a
+  // contextmenu event it sends is left to the browser
   const secondary = useDoor(LAYERS_SECONDARY, { target: node.id });
   const openMenu = (event: MouseEvent<HTMLDivElement>) => {
     if (event.button !== 2) return;
+    if (event.target instanceof Element && event.target.closest('[data-door]')?.getAttribute('data-door') === LAYERS_NAME_FIELD.ref) return;
     event.preventDefault();
     secondary.run();
   };
@@ -148,7 +204,20 @@ function LayersRow({ node, depth }: { readonly node: DocNode; readonly depth: nu
           <span className="row__caret-space" />
         )}
         <Icon name={elementIcon(node.type) ?? GLYPHS.folder} size="sm" />
-        <span className="row__name">{node.name}</span>
+        {renaming ? (
+          <NameField node={node} />
+        ) : (
+          <span
+            className="row__name"
+            data-door={LAYERS_NAME.ref}
+            data-args={JSON.stringify({ target: node.id })}
+            tabIndex={-1}
+            aria-disabled={rename.built ? undefined : true}
+            title={rename.built ? rename.label : rename.title}
+          >
+            {node.name}
+          </span>
+        )}
         <span className="row__meta">{node.tag}</span>
         <span className="row__actions">
           {LAYERS_BUTTONS.map((b) => (

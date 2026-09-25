@@ -541,6 +541,9 @@ export const doorSchema = z.discriminatedUnion('kind', [
     // click (the context menu). Such a door is drawn by the control of the same panel and control that the primary
     // button runs with no key held (a row is one control whatever button presses it); absent: a click.
     button: z.literal('secondary').optional(),
+    // the clicks that run the door when it is not one: 2 for a Layers row's name, whose double-click renames it in
+    // place; absent: a single click
+    count: z.literal(2).optional(),
   }),
   z.strictObject({ ...doorCommon, kind: z.literal('panel-drag'), source: kebabId, zone: kebabId, gesture: kebabId }),
 ]);

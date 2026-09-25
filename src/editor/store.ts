@@ -14,6 +14,7 @@ import { manifest } from '../manifest/runtime.ts';
 import { pageLayout } from './canvas/coordinates.ts';
 import { browserDownloads } from './download.ts';
 import { endOffSelection, endOnUndoable } from './canvas/text-edit.ts';
+import { endRenameOffSelection, endRenameOnUndoable } from './layers/rename.ts';
 import { revealSelection } from './layers/tree.ts';
 import { browserStorage, loadPreferences, persistPreferences, type PreferenceStorage } from './preferences/preferences.ts';
 import { initialEditorUi, type EditorUi } from './state.ts';
@@ -54,9 +55,13 @@ export function createEditorStore(options: EditorStoreOptions = {}): EditorStore
     downloads: browserDownloads,
     initial: { document, selection: options.restored?.selection ?? [], ui: initialEditorUi(preferences) },
     freeze: import.meta.env.DEV,
-    // Layers unfolds what hides a selected node; a text edit ends once its node is not the selection alone
-    followSelection: (state) => endOffSelection({ ...state, ui: revealSelection(state) }),
-    followCommand: endOnUndoable,
+    // Layers unfolds what hides a selected node; a text edit and a rename end once their node is not the selection
+    // alone, and when an undoable command runs
+    followSelection: (state) => {
+      const revealed = { ...state, ui: revealSelection(state) };
+      return endRenameOffSelection({ ...revealed, ui: endOffSelection(revealed) });
+    },
+    followCommand: (state, command) => endRenameOnUndoable({ ...state, ui: endOnUndoable(state, command) }, command),
   });
   persistPreferences(store, storage);
   return store;
