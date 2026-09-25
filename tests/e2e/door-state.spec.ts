@@ -62,3 +62,25 @@ test('the Theme and Language items are one choice of a set and say which is chos
   await expect(page.locator(door('workspace.toggleLeftDock#menu-view'))).toHaveAttribute('role', 'menuitem');
   await expect(page.locator(door('workspace.toggleLeftDock#menu-view'))).not.toHaveAttribute('aria-checked', /.*/);
 });
+
+// A control that cannot run never looks like one that can (brief "a aplicação completa": no enabled-looking control
+// that does nothing): the top bar's main action, Export project (ZIP), wears the accent only while it can run; not
+// available yet, it is drawn like every other unavailable control, and a click on it exports nothing.
+test('a main action that is not available yet is not drawn in the accent colour, and a click on it does nothing', async ({ page }) => {
+  const exportButton = page.locator(door('project.export#toolbar-top-bar-export'));
+  await expect(exportButton).toHaveAttribute('aria-disabled', 'true');
+  const colours = await exportButton.evaluate((el) => {
+    const probe = document.createElement('span');
+    probe.style.color = 'var(--color-accent)';
+    el.parentElement?.append(probe);
+    const accent = getComputedStyle(probe).color;
+    probe.remove();
+    return { accent, background: getComputedStyle(el).backgroundColor };
+  });
+  expect(colours.background).not.toBe(colours.accent);
+  const downloads: string[] = [];
+  page.on('download', (d) => downloads.push(d.suggestedFilename()));
+  await exportButton.click({ force: true });
+  await page.waitForTimeout(300);
+  expect(downloads).toEqual([]);
+});

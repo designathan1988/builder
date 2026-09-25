@@ -56,5 +56,4 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 30. Declared, not built: wrap refusals requiresParent, interactiveInside, formInForm, singleChild, labelOneControl;
     drop.emptyAimMin (40 px aim of an empty container); the hover label as a hit target (it covered a container's
     marquee corner); DESIGN's "a label hides while the pointer is over it" contradicts the label as a hit target.
-31. Ctrl+A leaves out hidden siblings only; locked ones join when lock-element lands. 32. The top bar's
-    "Export project (ZIP)" wears the accent colour while "not available yet" (`.door--primary` is never dimmed).
+31. Ctrl+A leaves out hidden siblings only; locked ones join when lock-element lands.

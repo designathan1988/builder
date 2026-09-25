@@ -163,6 +163,14 @@ kbd {
   font-weight: var(--weight-semibold);
 }
 
+/* a main action that cannot run ("not available yet", or its predicate does not hold) never wears the accent: it
+   looks like every other control that cannot be used */
+.door--primary.is-unavailable {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  color: var(--color-text-subtle);
+}
+
 .door--disclosure {
   justify-content: flex-start;
   padding: 0 var(--space-2);
