@@ -392,7 +392,7 @@
       "dependsOn": [
         "project-save-json"
       ],
-      "spec": null,
+      "spec": "spec/behavior/project-open-json.md",
       "intent": {
         "title": "Open a project archive",
         "steps": [
@@ -408,7 +408,112 @@
           "After opening, the undo history is empty and the project is autosaved."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "open-the-saved-archive-after-confirming",
+          "setup": { "fixture": "aurora", "selection": ["/Page/Hero/Intro"], "context": "global", "breakpoint": "desktop", "state": "base", "locale": "en", "viewport": "desktop-1440", "zoom": "fit" },
+          "steps": [
+            { "door": "project.save#menu-file", "args": {}, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "element.delete#key-delete-in-canvas", "args": {}, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "project.open#menu-file", "args": { "file": "download" }, "target": null, "drop": null, "action": true, "hold": false, "type": null, "answer": "confirm" }
+          ],
+          "doors": ["project.open#menu-file"],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": { "undoSteps": 0, "undoRestores": true, "redoRestores": true },
+            "render": { "computed": [], "geometry": [], "feedback": [{ "key": "status.open.opened", "params": {} }] },
+            "editor": null,
+            "persistence": { "reload": "immediate", "document": "same", "preferences": null },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "cancel-keeps-the-current-project",
+          "setup": { "fixture": "aurora", "selection": ["/Page/Hero/Intro"], "context": "global", "breakpoint": "desktop", "state": "base", "locale": "en", "viewport": "desktop-1440", "zoom": "fit" },
+          "steps": [
+            { "door": "project.save#menu-file", "args": {}, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "element.delete#key-delete-in-canvas", "args": {}, "target": null, "drop": null, "action": false, "hold": false, "type": null },
+            { "door": "project.open#menu-file", "args": { "file": "download" }, "target": null, "drop": null, "action": true, "hold": false, "type": null, "answer": "cancel" }
+          ],
+          "doors": ["project.open#menu-file"],
+          "expect": {
+            "document": [{ "op": "remove", "path": "/Page/Hero/Intro" }],
+            "selection": ["/Page/Hero/Actions"],
+            "history": { "undoSteps": 1, "undoRestores": true, "redoRestores": true },
+            "render": { "computed": [], "geometry": [], "feedback": [{ "key": "status.confirmation.cancelled", "params": {} }] },
+            "editor": null,
+            "persistence": { "reload": "immediate", "document": "same", "preferences": null },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-empty-project-opens-without-asking",
+          "setup": { "fixture": "empty", "selection": [], "context": "global", "breakpoint": "desktop", "state": "base", "locale": "en", "viewport": "desktop-1440", "zoom": "fit" },
+          "steps": [
+            {
+              "door": "project.open#menu-file",
+              "args": { "file": "json:{\"version\":1,\"pages\":[{\"id\":\"p-home\",\"name\":\"Home\",\"file\":\"index.html\",\"tree\":{\"id\":\"n-page\",\"type\":\"page\",\"name\":\"Page\",\"tag\":\"body\",\"attributes\":{},\"classes\":[],\"styles\":{},\"text\":null,\"children\":[{\"id\":\"n-hello\",\"type\":\"paragraph\",\"name\":\"Hello\",\"tag\":\"p\",\"attributes\":{},\"classes\":[],\"styles\":{},\"text\":\"Opened from a file.\",\"children\":[]}]}}]}" },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": ["project.open#menu-file"],
+          "expect": {
+            "document": [
+              { "op": "set", "path": "/Page/@children", "value": [{ "type": "paragraph", "name": "Hello", "tag": "p", "attributes": {}, "classes": [], "styles": {}, "text": "Opened from a file.", "children": [] }] }
+            ],
+            "selection": [],
+            "history": { "undoSteps": 0, "undoRestores": true, "redoRestores": true },
+            "render": { "computed": [], "geometry": [], "feedback": [{ "key": "status.open.opened", "params": {} }] },
+            "editor": null,
+            "persistence": { "reload": "immediate", "document": "same", "preferences": null },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-file-that-is-not-a-project-is-refused",
+          "setup": { "fixture": "aurora", "selection": ["/Page/Hero/Intro"], "context": "global", "breakpoint": "desktop", "state": "base", "locale": "en", "viewport": "desktop-1440", "zoom": "fit" },
+          "steps": [
+            { "door": "project.open#menu-file", "args": { "file": "json:[\"not\", \"a\", \"project\"]" }, "target": null, "drop": null, "action": true, "hold": false, "type": null }
+          ],
+          "doors": ["project.open#menu-file"],
+          "expect": {
+            "document": [],
+            "selection": ["/Page/Hero/Intro"],
+            "history": { "undoSteps": 0, "undoRestores": true, "redoRestores": true },
+            "render": { "computed": [], "geometry": [], "feedback": [{ "key": "status.open.invalidArchive", "params": { "reason": "it is not a project document" } }] },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": [{ "key": "status.open.invalidArchive", "document": "unchanged" }]
+        },
+        {
+          "id": "a-newer-format-version-is-refused",
+          "setup": { "fixture": "aurora", "selection": ["/Page/Hero/Intro"], "context": "global", "breakpoint": "desktop", "state": "base", "locale": "en", "viewport": "desktop-1440", "zoom": "fit" },
+          "steps": [
+            { "door": "project.open#menu-file", "args": { "file": "json:{\"version\":2,\"pages\":[]}" }, "target": null, "drop": null, "action": true, "hold": false, "type": null }
+          ],
+          "doors": ["project.open#menu-file"],
+          "expect": {
+            "document": [],
+            "selection": ["/Page/Hero/Intro"],
+            "history": { "undoSteps": 0, "undoRestores": true, "redoRestores": true },
+            "render": { "computed": [], "geometry": [], "feedback": [{ "key": "status.open.newerVersion", "params": { "version": 2 } }] },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": [{ "key": "status.open.newerVersion", "document": "unchanged" }]
+        }
+      ]
     }
   ]
 }

@@ -709,6 +709,12 @@ const stepSchema = z.strictObject({
   // The characters the runner types with the real keyboard after the step's door has run; "\n" presses Enter (the
   // edited text, the link prompt, the rename field). Optional: absent is null.
   type: z.string().nullable().optional(),
+  // The button the step presses in the confirmation its command asks (a command with `confirmation` in the manifest,
+  // such as File › Open over a page that holds work): "confirm" or "cancel". A step that leaves a confirmation
+  // unanswered fails. Optional: absent is null.
+  // A `file` argument names what the runner hands the browser's file chooser: "fixture:<id>" the fixture's JSON,
+  // "download" the file an earlier step downloaded last, "json:<text>" a project.json holding that text.
+  answer: z.enum(['confirm', 'cancel']).nullable().optional(),
 });
 
 // A measure of a region of the editor (layout.json): measure(region) compared, by relation, with

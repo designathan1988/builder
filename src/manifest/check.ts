@@ -2012,8 +2012,13 @@ export function checkManifest(input: ManifestInput): CheckResult {
         case 'string':
         case 'color':
         case 'path':
-        case 'file':
           return text !== null ? null : 'is a string';
+        // what the runner hands the file chooser (schema.ts stepSchema): a fixture, the last download, or JSON text
+        case 'file': {
+          const fixture = text === null ? null : /^fixture:([a-z0-9-]+)$/.exec(text);
+          if (fixture) return p.fixtures.has(fixture[1] ?? '') ? null : `names no fixture of manifest/features/fixtures/`;
+          return text === 'download' || (text !== null && text.startsWith('json:') && text.length > 5) ? null : 'is "fixture:<id>", "download" or "json:<text>"';
+        }
         case 'number':
           return num !== null ? null : 'is a number';
         case 'integer':
