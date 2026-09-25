@@ -6,7 +6,7 @@ Files that drive the work:
 - `manifest/`: the single contract. It declares the test environment, every element type, every edited CSS property, every interaction constant, every command with its doors (entry points), and every feature in dependency order with its scenarios. The schema is `src/manifest/schema.ts`; `npm run manifest:check` validates it. A feature may point to a behavior spec in `spec/behavior/`.
 - `DESIGN.md`: the interface. Layout, panels, where every door is placed, design tokens.
 - `ARCHITECTURE.md`: the modules and the single owner of every concept. It confirms the `owner` of each command.
-- `PROGRESS.md`: your handoff notes between sessions.
+- `PROGRESS.md`: at most 60 lines: the current state, the user's pending decisions and the open findings. Everything past goes to `docs/history.md`, which is not read at the start of a conversation.
 
 Reference material in `reference/` is read-only. Never write anything inside it.
 - `reference/Pager` shows what the app must be able to do. It is not a model for layout or code. To run it, copy it to `.cache/pager-run` and run the copy.
@@ -19,7 +19,7 @@ Do the work yourself. Do not delegate code or reviews to other models or externa
 
 ## One conversation per slice of work
 
-The project is built one slice of work per conversation. Each conversation starts from `PROGRESS.md` and ends with its slice committed and pushed, or with the unfinished part on a `wip/` branch so that main stays green. The open findings in `PROGRESS.md` are fixed or kept there; a finding is never argued away.
+The project is built one slice of work per conversation. At its start, read only this file, `PROGRESS.md` and what the slice's feature uses (its entry in the manifest, its scenarios, its spec), and of `DESIGN.md` and `ARCHITECTURE.md` only the sections it touches. Each conversation starts from `PROGRESS.md` and ends with its slice committed and pushed, or with the unfinished part on a `wip/` branch so that main stays green. The open findings in `PROGRESS.md` are fixed or kept there; a finding is never argued away.
 
 ## Memory
 
@@ -57,7 +57,7 @@ When the conversation is compacted, the summary preserves: the current item of t
 Features are grouped in `manifest/features/NN-group.json` and built in that order. Each group takes two sessions.
 
 1. **Scenario session.** Write the scenarios of every feature in the group, from its intent and its spec (the spec's "Problems in Pager" corrections are requirements). Each scenario names its setup, the doors it runs through, the expected document diff, selection and history, at least one end terminal (render, persistence after an immediate reload, or export) and its refusals. Write no app code. `npm run manifest:check` passes; commit and push.
-2. **Build session.** Start by reading `PROGRESS.md`, `git log --oneline -15`, the group's features and specs, `DESIGN.md` and `ARCHITECTURE.md`, and by running `npm run verify:fast` and `npm run e2e`; fix any failure first. Build the group's commands and doors until the runner passes every scenario of the group through every door. The build session never edits scenarios; if one looks wrong, stop and tell the user.
+2. **Build session.** Start by reading `PROGRESS.md`, `git log --oneline -15`, the feature's manifest entry, scenarios and spec, and the sections of `DESIGN.md` and `ARCHITECTURE.md` it touches, and by running `npm run verify:fast` and `npm run e2e`; fix any failure first. Build the group's commands and doors until the runner passes every scenario of the group through every door. The build session never edits scenarios; if one looks wrong, stop and tell the user.
 3. **Tooth proof.** For each feature, make its command handler return without changing anything, run its scenarios and show they FAIL, then undo that single edit and show they pass. Show both raw outputs.
 4. **Handoff.** Update `PROGRESS.md`, commit naming the group and feature ids, and push to origin main.
 
@@ -72,7 +72,8 @@ Features are grouped in `manifest/features/NN-group.json` and built in that orde
 - Never edit, skip or loosen a test or a scenario to make it pass. If you believe one is wrong, stop and tell the user why.
 - Never report something as working without showing the raw output of the command that proves it.
 - Tooth proof before every commit: for each behaviour the commit turns on or changes, turn it off, run the tests and show one FAIL, then turn it back on and show them pass, both as raw output. A behaviour with no test that fails when it is off is not delivered; write that browser test first, even when no scenario covers it.
-- Raw, complete output: show the real output of every command you claim (at least its last 30 lines), never a summary of it.
+- Command output: the complete output of every command you claim goes to a file in `.cache/logs/` named after the command and the time; in the chat, only the exit code, the names of the tests that failed and the last 10 lines. The final report gives the path of each log. The proof stays complete, in the file; never a summary in its place.
+- Never run two suites at the same time, nor the e2e in the background while `npm run verify:fast` runs.
 - No change to a project file by regex or mass text replacement. Change a file with a point edit; change many JSON entries by parsing the JSON, changing fields by name and writing it back whole, after showing the count and two before/after samples, and check that `git diff --stat` matches.
 - Scripts that help the work only read and print, live in `.cache/scratch/`, are never committed, and are deleted when the item ends.
 - Never edit a scenario or a fixture.
