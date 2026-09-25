@@ -3,7 +3,7 @@
 // useEditorState and change it only through dispatch; no document, selection or editor state lives in useState.
 import { createContext, useContext, useSyncExternalStore } from 'react';
 import { COMMANDS, PREDICATES } from '../app/commands.ts';
-import { createEmptyDocument } from '../core/document/model.ts';
+import { createEmptyDocument, type DocumentJson, type Selection } from '../core/document/model.ts';
 import { rulesFromManifest } from '../core/document/validate.ts';
 import { systemClock, type Clock } from '../core/ports/clock.ts';
 import { randomIds, type IdGenerator } from '../core/ports/ids.ts';
@@ -24,16 +24,22 @@ export interface EditorStoreOptions {
   readonly storage?: PreferenceStorage;
   readonly clock?: Clock;
   readonly ids?: IdGenerator;
+  // the work autosave restored (src/editor/persistence/autosave.ts), or none: the empty project
+  readonly restored?: { readonly document: DocumentJson; readonly selection: Selection } | null;
 }
+
+// the model every document must satisfy, from the manifest
+export const MODEL_RULES = rulesFromManifest(manifest.elements, manifest.properties, manifest.html);
 
 export function createEditorStore(options: EditorStoreOptions = {}): EditorStore {
   const storage = options.storage ?? browserStorage;
   const ids = options.ids ?? randomIds;
   const preferences = loadPreferences(storage);
-  const rules = rulesFromManifest(manifest.elements, manifest.properties, manifest.html);
+  const rules = MODEL_RULES;
   const rootLabel = manifest.elements.elements.find((e) => e.id === rules.root.type)?.labelKey ?? 'element.page.label';
-  // the empty project's names are the words of the person who creates it
-  const document = createEmptyDocument(ids, { page: translate(preferences.locale, 'pages.defaultHome'), root: translate(preferences.locale, rootLabel as 'element.page.label') }, rules.root);
+  // the restored work, else the empty project, whose names are the words of the person who creates it
+  const document =
+    options.restored?.document ?? createEmptyDocument(ids, { page: translate(preferences.locale, 'pages.defaultHome'), root: translate(preferences.locale, rootLabel as 'element.page.label') }, rules.root);
   const store = createStore<EditorUi>({
     table: COMMANDS,
     predicates: PREDICATES,
@@ -44,7 +50,7 @@ export function createEditorStore(options: EditorStoreOptions = {}): EditorStore
     ids,
     words: (ui, key) => translate(ui.preferences.locale, key),
     layout: pageLayout,
-    initial: { document, ui: initialEditorUi(preferences) },
+    initial: { document, selection: options.restored?.selection ?? [], ui: initialEditorUi(preferences) },
     freeze: import.meta.env.DEV,
     // Layers unfolds what hides a selected node; a text edit ends once its node is not the selection alone
     followSelection: (state) => endOffSelection({ ...state, ui: revealSelection(state) }),

@@ -55,7 +55,7 @@ interface Scenario {
       feedback: { key: string; params: Record<string, string | number> }[];
     } | null;
     editor: { regions: { region: string; measure: Measure; relation: Relation; value: number; reference: string | null }[]; computed: { region: string; property: string; value: string }[] } | null;
-    persistence: { document: 'same' | null; preferences: 'same' | null } | null;
+    persistence: { document: 'same' | null; preferences: 'same' | null; selection?: 'same' | null } | null;
     export: unknown;
   };
   readonly refusals: { key: string }[];
@@ -766,6 +766,7 @@ export function registerScenarioTests(): void {
             await expect(page.locator('.workbench')).toBeVisible();
             if (persistence.document === 'same') expect(matchDocument((await port(page)).document, after.document), 'document after reload').toEqual([]);
             if (persistence.preferences === 'same') expect(await page.evaluate(() => window.localStorage.getItem('preferences')), 'preferences after reload').toBe(stored);
+            if (persistence.selection === 'same') expect((await port(page)).selection, 'selection after reload').toEqual(after.selection);
           }
           if (s.expect.export !== null) throw new Error('the export terminal needs project-export');
         });

@@ -89,6 +89,13 @@ Decisions by small ambiguity (moved here from PROGRESS.md):
   the inspector's selector bar names the selection. (2) project-save-json and project-open-json, built first as the
   dependency. (3) every door (drawn, shortcut, canvas gesture, context menu) enabled only when its feature is
   registered; parked on branch wip/feature-table until then.
+- autosave-restore (first of the dependency chain of the feature table's step 3): one record (format version,
+  document, selection) written at every committed change to a localStorage journal first (a synchronous write, so an
+  immediate reload keeps the change even while IndexedDB is slow: tests/e2e/autosave.spec.ts holds IndexedDB busy)
+  and then to IndexedDB `work`/`projects`/`current`; at start the newer of the two is restored through archive.ts's
+  `readProject` (the one reader of a project document) before the editor is drawn; a record the model refuses is
+  kept and never overwritten (autosave-corruption-recovery will offer the way out). The scenarios' new optional
+  terminal persistence.selection was proven by switching the selection's saving off (6 of 6 failed on it).
 - The tooth proof prints why each test failed (the first line and the matcher) and counts a failure that only ran
   out of time on an action or a wait (`locator.click: Timeout 5000ms exceeded.`) as no tooth, like a test timeout: a
   tooth fails on an assertion (brief "a aplicação completa").

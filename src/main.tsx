@@ -4,7 +4,8 @@ import './ui/tokens.css';
 import './editor/shell/shell.css';
 import sprite from './ui/icons.svg?raw';
 import { App } from './editor/App.tsx';
-import { createEditorStore } from './editor/store.ts';
+import { readSavedWork, restoredWork, startAutosave } from './editor/persistence/autosave.ts';
+import { MODEL_RULES, createEditorStore } from './editor/store.ts';
 import { installTestPort } from './editor/test-port.ts';
 
 const container = document.getElementById('root');
@@ -19,7 +20,12 @@ icons.hidden = true;
 icons.innerHTML = sprite;
 document.body.prepend(icons);
 
-const store = createEditorStore();
+// the work kept from the last session (autosave-restore), restored before anything is drawn; then every change is
+// written again
+const saved = await readSavedWork();
+const restored = restoredWork(saved, MODEL_RULES);
+const store = createEditorStore({ restored });
+startAutosave(store, saved, restored !== null);
 // what the end-to-end tests read, in development only (src/editor/test-port.ts)
 installTestPort(store);
 

@@ -1,7 +1,9 @@
 // The status bar (DESIGN.md "Dock and status bar"): the last message in an aria-live region, the breadcrumb of the
 // selection, the breakpoint, the element count, the zoom controls and the language, in the order of region
-// status-bar. The save state appears with the save feature.
+// status-bar, then the save state (autosave-restore).
+import { useSyncExternalStore } from 'react';
 import type { MessageId } from '../../generated/ids.ts';
+import { saveState, type SaveState } from '../persistence/autosave.ts';
 import { manifest } from '../../manifest/runtime.ts';
 import { allNodes } from '../../core/document/model.ts';
 import { pluralForm } from '../../i18n/index.ts';
@@ -59,6 +61,19 @@ export function StatusBar() {
           return undefined;
         }}
       />
+      <SaveStateLabel />
     </footer>
+  );
+}
+
+// The save state, last in the bar (autosave: Not saved, Saving…, Saved, Save failed). A read-only display.
+const SAVE_STATE_KEYS: Readonly<Record<SaveState, MessageId>> = { notSaved: 'status.save.notSaved', saving: 'status.save.saving', saved: 'status.save.saved', failed: 'status.save.failed' };
+function SaveStateLabel() {
+  const t = useT();
+  const current = useSyncExternalStore(saveState.subscribe, saveState.get);
+  return (
+    <span className={`status-bar__item status-bar__save is-${current}`} data-save-state={current}>
+      {t(SAVE_STATE_KEYS[current])}
+    </span>
   );
 }
