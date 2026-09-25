@@ -242,7 +242,9 @@
       "palette": true,
       "content": "children",
       "naturalChild": null,
-      "defaultStyles": {},
+      "defaultStyles": {
+        "display": "block"
+      },
       "defaultTextKey": null
     },
     {
