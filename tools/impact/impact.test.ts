@@ -1,7 +1,19 @@
 // The limited validation's rules (docs/testing/README.md): what a test depends on, and when a change reaches it.
 import { describe, expect, it } from 'vitest';
 import { analyzeCss, analyzeScript } from './analyze.ts';
-import { decide, type BuildEntry, type BuiltApp, type ImpactMap, type SelectionInput, type TestEntry } from './impact.ts';
+import { decide, specsAffected, type BuildEntry, type BuiltApp, type ImpactMap, type SelectionInput, type TestEntry } from './impact.ts';
+
+describe('the spec files a test-side change reaches', () => {
+  it('follows every local import, also to the tests the scenario runner declares outside the spec file', () => {
+    // Playwright's --only-changed left the 163 scenario tests out when tests/e2e/door.ts changed
+    const doorChange = specsAffected(['tests/e2e/door.ts']);
+    expect(doorChange.has('scenarios.spec.ts')).toBe(true);
+    expect(doorChange.has('menus.spec.ts')).toBe(true);
+    expect(specsAffected(['tools/runner/unzip.ts']).has('scenarios.spec.ts')).toBe(true);
+    expect([...specsAffected(['tests/e2e/smoke.spec.ts'])]).toEqual(['smoke.spec.ts']);
+    expect(specsAffected(['docs/testing/README.md']).size).toBe(0);
+  });
+});
 
 const SCRIPT = `//#region src/a.ts
 function outer() { const inner = () => 1; return inner() + 1; }
@@ -97,7 +109,8 @@ describe('the choice of the tests a change can affect', () => {
     expect(decide(input({ build: build({ assets: 'B' }) })).selected.size).toBe(2);
   });
   it('runs a test whose own code or an imported module changed, a new test, and one that opens pages it does not record', () => {
-    expect([...decide(input({ testSide: new Set([ids[0] ?? '']) })).selected.keys()]).toEqual([ids[0]]);
+    expect(decide(input({ testSide: new Set(['a.spec.ts']) })).selected.size).toBe(2);
+    expect(decide(input({ testSide: new Set(['b.spec.ts']) })).selected.size).toBe(0);
     expect([...decide(input({ tests: [...ids, '["a.spec.ts","three"]'] })).selected.keys()]).toEqual(['["a.spec.ts","three"]']);
     expect(decide(input({ unmappedFiles: new Set(['a.spec.ts']) })).selected.size).toBe(2);
   });

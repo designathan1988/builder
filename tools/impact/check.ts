@@ -10,7 +10,7 @@ import { spawn, spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { chromium } from '@playwright/test';
-import { decide, environmentHash, environmentParts, git, listTests, readBuild, readMap, scenarioPrint, snapshotTree, writeMap, type Decision } from './impact.ts';
+import { decide, environmentHash, environmentParts, git, listTests, readBuild, readMap, scenarioPrint, snapshotTree, specsAffected, writeMap, type Decision } from './impact.ts';
 
 const started = Date.now();
 const elapsed = () => `${((Date.now() - started) / 1000).toFixed(1)} s`;
@@ -64,7 +64,7 @@ const staticRuns = Promise.all(
 
 // 3. the browser tests the change can affect
 const tests = listTests();
-const testSide = snapshotKnown && map ? new Set(listTests(map.snapshot)) : new Set<string>();
+const testSide = specsAffected(changed);
 const unmappedFiles = new Set(
   fs
     .readdirSync('tests/e2e')
