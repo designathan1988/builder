@@ -919,6 +919,38 @@ PLANTS.push(
     },
   },
   {
+    id: 'switch-not-pressed',
+    rule: 'pressed',
+    description: 'the Rulers switch of Guides & Grids (drawn as a toggle) does not say whether it is on',
+    apply: (m) => {
+      door(m, 'view.toggleRulers', 'guides-grids-rulers').pressed = false;
+    },
+  },
+  {
+    id: 'pressed-on-a-tab',
+    rule: 'pressed',
+    description: 'the Desktop breakpoint tab says pressed, though a tab says its state by being a tab',
+    apply: (m) => {
+      door(m, 'view.setBreakpoint', 'toolbar-breakpoint-tabs-desktop').pressed = true;
+    },
+  },
+  {
+    id: 'pressed-disagrees',
+    rule: 'pressed',
+    description: 'the column grid button of the canvas tools says it is no toggle, while its Guides & Grids switch says it is',
+    apply: (m) => {
+      door(m, 'grid.toggleColumns', 'canvas-tools-column-grid').pressed = false;
+    },
+  },
+  {
+    id: 'inspector-field-drawn-as-tab',
+    rule: 'schema',
+    description: 'the Spread button of the inspector is drawn as a tab, which the inspector does not draw',
+    apply: (m) => {
+      door(m, 'style.set', 'inspector-justify-content-spread-button').drawnAs = 'tab';
+    },
+  },
+  {
     id: 'zoom-before-zoom-doors',
     rule: 'zoom',
     description: 'a scenario of delete-element starts at a canvas zoom of 50 % although zoom-keyboard-buttons is not built',

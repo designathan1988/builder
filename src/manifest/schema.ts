@@ -488,8 +488,9 @@ export const doorSchema = z.discriminatedUnion('kind', [
     ...doorCommon,
     kind: z.literal('inspector-field'),
     // how the field is drawn: a field (its property's control of properties.json: keyword buttons, a menu, a value
-    // field…) or a button (an editor's action such as Add a shadow, or a fixed value such as Spread)
-    drawnAs: z.enum(DRAWN_AS),
+    // field…) or a button (an editor's action such as Add a shadow, or a fixed value such as Spread); nothing else,
+    // since the inspector draws nothing else
+    drawnAs: z.enum(['field', 'button']),
     // exactly one of property, composite, recipe and attribute
     property: cssName.nullable(),
     composite: kebabId.nullable(),

@@ -108,6 +108,7 @@ export const RULES = [
   'door-coverage',
   'tooth-proof',
   'zoom',
+  'pressed',
 ] as const;
 
 export type RuleId = (typeof RULES)[number];
@@ -1879,6 +1880,22 @@ export function checkManifest(input: ManifestInput): CheckResult {
     if (door.icon !== null) continue;
     if (door.kind === 'toolbar') report('icon-required', file, `${path}.icon`, `${doorRef} is a toolbar door without an icon: every toolbar door names its icon`);
     else if (drawnAs === 'icon-button') report('icon-required', file, `${path}.icon`, `${doorRef} is drawn as an icon button but names no icon`);
+  }
+
+  // ---- pressed: an on/off switch (drawn as a toggle) always says whether it is on; only a toggle, an icon button or a
+  // button can say it (a segment and a tab say their state by being drawn so, a field or an item never does); and the
+  // doors of one command with the same arguments that can say it agree, since they stand for the same state
+  const PRESSABLE: readonly string[] = ['toggle', 'icon-button', 'button'];
+  const pressedBy = new Map<string, { pressed: boolean; ref: string }>();
+  for (const { file, path, door, ref: doorRef, command } of doors) {
+    if (door.kind !== 'toolbar' && door.kind !== 'panel-control') continue;
+    if (door.drawnAs === 'toggle' && !door.pressed) report('pressed', file, `${path}.pressed`, `${doorRef} is an on/off switch (drawn as a toggle): it says whether it is on, so pressed is true`);
+    if (door.pressed && !PRESSABLE.includes(door.drawnAs)) report('pressed', file, `${path}.pressed`, `${doorRef} is drawn as a ${door.drawnAs}: only a toggle, an icon button or a button says pressed`);
+    if (!PRESSABLE.includes(door.drawnAs)) continue;
+    const key = `${command.id} ${JSON.stringify(door.args)}`;
+    const other = pressedBy.get(key);
+    if (other === undefined) pressedBy.set(key, { pressed: door.pressed, ref: doorRef });
+    else if (other.pressed !== door.pressed) report('pressed', file, `${path}.pressed`, `${doorRef} says pressed ${door.pressed} and ${other.ref} says ${other.pressed}: doors of one command with the same arguments stand for the same state`);
   }
 
   // ---- panel: layout.json declares every panel of workspace.setPanelOpen and nothing else, with its place; the
