@@ -96,6 +96,12 @@ Decisions by small ambiguity (moved here from PROGRESS.md):
   `readProject` (the one reader of a project document) before the editor is drawn; a record the model refuses is
   kept and never overwritten (autosave-corruption-recovery will offer the way out). The scenarios' new optional
   terminal persistence.selection was proven by switching the selection's saving off (6 of 6 failed on it).
+- project-save-json: project.zip (own writer src/core/project/zip.ts: stored entries, CRC-32, UTF-8 names, the clock's
+  time as the entries' DOS time in UTC) holding project.json = the document pretty-printed; a handler hands the file
+  in its `change` outcome (`download`) and the store gives it to the download port (src/core/ports/download.ts; the
+  browser's in src/editor/download.ts). The runner's export terminal reads the browser's real download with its own
+  unzip (tools/runner/unzip.ts, checks sizes and CRC-32); proven by switching the delivery off (2 of 2 failed on "a
+  file was downloaded") and by planting the selection in project.json (failed on its absent text).
 - The tooth proof prints why each test failed (the first line and the matcher) and counts a failure that only ran
   out of time on an action or a wait (`locator.click: Timeout 5000ms exceeded.`) as no tooth, like a test timeout: a
   tooth fails on an assertion (brief "a aplicação completa").

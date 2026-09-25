@@ -13,6 +13,7 @@ import { validateDocument, type Invalid, type ModelRules } from '../document/val
 import { EMPTY_HISTORY, REDONE, UNDONE, record, redo, undo, type HistoryState, type Restorable } from '../history/history.ts';
 import { applyPatches, deepEqual, type Patch, type Transaction } from '../history/transaction.ts';
 import type { Clock } from '../ports/clock.ts';
+import type { Downloads } from '../ports/download.ts';
 import type { IdGenerator } from '../ports/ids.ts';
 import { noLayout, type Layout } from '../ports/layout.ts';
 
@@ -84,6 +85,8 @@ export interface StoreOptions<Ui> {
   readonly words: (ui: Ui, key: MessageId) => string;
   // where the canvas draws the page's nodes (the editor's canvas); none drawn when absent
   readonly layout?: Layout;
+  // where a file a command hands out goes (the browser's downloads in the editor); nowhere when absent
+  readonly downloads?: Downloads;
   readonly initial: { readonly document: DocumentJson; readonly selection?: Selection; readonly ui: Ui };
   // deep-freeze every committed state (development and tests)
   readonly freeze: boolean;
@@ -238,6 +241,8 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
     const next: StoreState<Ui> = options.followCommand === undefined ? ran : { ...ran, ui: options.followCommand(ran, command) };
     const changed = documentChanged || !deepEqual(before.selection, next.selection) || next.ui !== before.ui || next.message !== before.message;
     if (changed) publish(commit(next, id), documentChanged ? applied.applied : []);
+    // the file the command hands out, once its state is committed
+    if (outcome.download !== undefined) options.downloads?.deliver(outcome.download);
     return { status: 'done', changed };
   };
 

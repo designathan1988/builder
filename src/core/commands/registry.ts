@@ -9,6 +9,7 @@ import type { DocumentJson, Selection } from '../document/model.ts';
 import type { ModelRules } from '../document/validate.ts';
 import type { Patch } from '../history/transaction.ts';
 import type { Clock } from '../ports/clock.ts';
+import type { DownloadFile } from '../ports/download.ts';
 import type { IdGenerator } from '../ports/ids.ts';
 import type { Layout } from '../ports/layout.ts';
 import type { StoreState } from '../store/store.ts';
@@ -31,8 +32,9 @@ export function message(key: MessageId, params: Readonly<Record<string, MessageP
 
 // What a handler asks of the store. A handler never changes state itself.
 export type Outcome<Ui> =
-  // patches to the document (one transaction), the selection after them, the editor state after them, a message
-  | { readonly kind: 'change'; readonly patches?: readonly Patch[]; readonly selection?: Selection; readonly ui?: Ui; readonly message?: Message }
+  // patches to the document (one transaction), the selection after them, the editor state after them, a message,
+  // and a file for the person (the store hands it to the download port once the command has run)
+  | { readonly kind: 'change'; readonly patches?: readonly Patch[]; readonly selection?: Selection; readonly ui?: Ui; readonly message?: Message; readonly download?: DownloadFile }
   // the command cannot run now: nothing changes and the status bar says why
   | { readonly kind: 'refused'; readonly message: Message }
   // history.undo and history.redo: the store walks its history

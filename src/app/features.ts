@@ -50,7 +50,7 @@ export const FEATURES = {
   'new-blank-page': NOT_AVAILABLE_YET,
   'autosave-corruption-recovery': NOT_AVAILABLE_YET,
   'multi-tab-guard': NOT_AVAILABLE_YET,
-  'project-save-json': NOT_AVAILABLE_YET,
+  'project-save-json': registerFeature('project-save-json'),
   'project-open-json': NOT_AVAILABLE_YET,
   // 04 inspector
   'inspector-panel': NOT_AVAILABLE_YET,

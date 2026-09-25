@@ -17,13 +17,14 @@
 // them to fail on an assertion.
 import fs from 'node:fs';
 import path from 'node:path';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Download, type Page } from '@playwright/test';
 import { isFeatureBuilt } from '../../src/app/features.ts';
 import { shortcutRuns } from '../../src/editor/input/shortcut-rule.ts';
 import { FEATURE_COMMANDS } from '../../src/generated/commands.ts';
 import type { FeatureId } from '../../src/generated/ids.ts';
 import { EMPTY_FIXTURE, applyDiff, matchDocument, resolveNode, type DiffOp } from '../../src/manifest/scenario.ts';
 import { control, door as doorData, keys, modifiedControl, openMenu, runDoor, type Door } from '../../tests/e2e/door.ts';
+import { unzip } from './unzip.ts';
 
 type Measure = 'x' | 'y' | 'width' | 'height';
 type Relation = 'equals' | 'less-than' | 'greater-than';
@@ -56,7 +57,8 @@ interface Scenario {
     } | null;
     editor: { regions: { region: string; measure: Measure; relation: Relation; value: number; reference: string | null }[]; computed: { region: string; property: string; value: string }[] } | null;
     persistence: { document: 'same' | null; preferences: 'same' | null; selection?: 'same' | null } | null;
-    export: unknown;
+    // the files inside the archive the steps downloaded last: each holds every `present` text and no `absent` one
+    export: { files: { path: string; present: string[]; absent: string[] }[] } | null;
   };
   readonly refusals: { key: string }[];
 }
@@ -690,6 +692,9 @@ export function registerScenarioTests(): void {
     for (const s of feature.scenarios) {
       for (const door of s.doors) {
         test(`${feature.id} › ${s.id} › ${door}`, { tag: FEATURE_TAG(feature.id), annotation: [{ type: 'feature', description: feature.id }, ...doorsRun(s, door).map((d) => ({ type: 'door', description: d }))] }, async ({ page }) => {
+          // every file the editor hands out during the test, as the browser downloads it (the export terminal)
+          const downloads: Download[] = [];
+          page.on('download', (d) => downloads.push(d));
           const fixture = await setUp(page, s);
           const held = { current: null as Held | null };
           // the document just before the (last) action step: a refused action leaves it as it was
@@ -743,6 +748,22 @@ export function registerScenarioTests(): void {
             }
           }
 
+          // the files inside the archive the steps downloaded last (File › Save project, the export), read as any unzip
+          // tool reads them
+          const exported = s.expect.export;
+          if (exported !== null) {
+            await expect.poll(() => downloads.length, 'a file was downloaded').toBeGreaterThan(0);
+            const saved = await (downloads.at(-1) as Download).path();
+            const files = unzip(fs.readFileSync(saved));
+            for (const f of exported.files) {
+              const data = files.get(f.path);
+              expect(data === undefined ? null : f.path, `the archive holds ${f.path} (it holds ${[...files.keys()].join(', ')})`).toBe(f.path);
+              const text = (data as Buffer).toString('utf8');
+              for (const p of f.present) expect(text, `${f.path} holds ${p}`).toContain(p);
+              for (const a of f.absent) expect(text, `${f.path} does not hold ${a}`).not.toContain(a);
+            }
+          }
+
           // a refusal names its key; the words it fills in ("No next sibling in {parent}.") are those of the feedback
           // of the same key
           for (const refusal of s.refusals) {
@@ -768,7 +789,6 @@ export function registerScenarioTests(): void {
             if (persistence.preferences === 'same') expect(await page.evaluate(() => window.localStorage.getItem('preferences')), 'preferences after reload').toBe(stored);
             if (persistence.selection === 'same') expect((await port(page)).selection, 'selection after reload').toEqual(after.selection);
           }
-          if (s.expect.export !== null) throw new Error('the export terminal needs project-export');
         });
       }
     }

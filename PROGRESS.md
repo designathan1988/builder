@@ -7,7 +7,7 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 - Group 01 and the foundation pass. One e2e suite at a time (E2E_WORKERS=4), no dev server meanwhile; helpers: 3.
 - First task: the feature table (src/app/features.ts) runs the runner, the census and the Insert tiles; next,
   project-save-json and project-open-json (File › Open loads every fixture), then every door gated by its feature.
-- Group 03 passing: autosave-restore.
+- Group 03 passing: autosave-restore, project-save-json.
 - Group 02 passing: select-click, layers-tree, keyboard-tree-walk, palette-click-insert, undo-redo,
   multi-select-click, marquee-select, delete-element, move-up-down, wrap-row-column, drag-reorder-canvas,
   drag-drop-inside, context-menu, duplicate, text-edit-inline. Runner paths proven by switching them off: setup
@@ -35,8 +35,8 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 11. The renderer: newTab renders `target=""`; a line break in textarea/option becomes `<br>`; a `}` in a style value
     could break out of its node's rules (tied to features above).
 12. Under load, e2e timed out a few times ('stable' File menu button, coordinates.spec.ts:181); reruns passed.
-13. Insert's density labels overflow and overlap ("Two columns": 69 px text in a 50 px button).
-14. sidebar.tsx writes the argument name "target" (the manifest's adapter.selection) and builds data-args apart.
+13. Insert's density labels overflow and overlap ("Two columns": 69 px text in a 50 px button). 14. sidebar.tsx
+    writes the argument name "target" (the manifest's adapter.selection) and builds data-args apart.
 15. shell.tsx keeps the fit zoom in useState; it moves to the store with the zoom commands.
 18. A menu item run with Enter or a click (focus.activate) closes the menu through onDone, not a dismissal, so the
     focus still falls to the page body; the backdrop's focus return (ui.dismiss#overlay-backdrop) has no test.
@@ -58,3 +58,4 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
     drop.emptyAimMin (40 px aim of an empty container); the hover label as a hit target (it covered a container's
     marquee corner); DESIGN's "a label hides while the pointer is over it" contradicts the label as a hit target.
 31. Ctrl+A while editing a text does nothing: it is text.selectAll (select-container-children, not built yet).
+32. The top bar's "Export project (ZIP)" is drawn in the accent colour while "not available yet": it looks usable.
