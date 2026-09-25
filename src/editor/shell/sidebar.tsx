@@ -91,6 +91,7 @@ function LayersRow({ node, depth }: { readonly node: DocNode; readonly depth: nu
         style={{ '--depth': depth } as CSSProperties}
         title={door.title}
         data-door={LAYERS_SELECT.ref}
+        data-args={JSON.stringify({ target: node.id })}
         onClick={door.run}
       >
         {node.children.length > 0 ? (

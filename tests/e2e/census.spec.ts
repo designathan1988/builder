@@ -107,7 +107,8 @@ test('every working command is proven by a browser test, and no door looks usabl
   let states = 0;
   for (let path = queue.shift(); path !== undefined; path = queue.shift()) {
     await fresh();
-    for (const ref of path) await runDoor(page, ref);
+    // a door drawn once per item (a Layers row, an Insert tile) is run on its first item
+    for (const ref of path) await runDoor(page, ref, { any: true });
     const state = await readState();
     states += 1;
     const next = [...[...state].filter(([ref, enabled]) => enabled && BUILT.has(commandOf(ref))).map(([ref]) => ref), ...(path.length === 0 ? shortcuts : [])];

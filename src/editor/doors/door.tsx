@@ -121,6 +121,9 @@ export function DoorControl({ entry, args = {}, children, expanded, className, l
     type: 'button' as const,
     className: ['door', `door--${drawnAs}`, door.current ? 'is-current' : '', door.available ? '' : 'is-unavailable', className ?? ''].filter((c) => c !== '').join(' '),
     'data-door': entry.ref,
+    // what this control stands for when its door is drawn once per item (a node's row, a palette entry's tile): the
+    // keys a shortcut of the same command acts on while it has the focus
+    'data-args': Object.keys(args).length > 0 ? JSON.stringify(args) : undefined,
     title: door.title,
     'aria-disabled': door.available ? undefined : true,
     onClick: door.run,

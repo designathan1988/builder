@@ -1,8 +1,8 @@
 // The runner's tooth proof (npm run e2e:tooth [feature ids]): for each feature that runs (every command it lists is
 // built), its scenario tests are run again against a dev server whose feature is switched off by the tooth plugin
 // (tools/runner/tooth-plugin.ts): its command handlers made no-ops, or, for a feature without commands, the module it
-// names (toothProof). Every one of its tests must fail; a feature with a test that still passes has no tooth, and the
-// run fails. The raw result of each run is printed.
+// names (toothProof). Every one of its tests must fail on an assertion; a feature with a test that still passes, or
+// that only times out, has no tooth, and the run fails. The raw result of each run is printed.
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { FEATURES, FEATURE_TAG, runnable } from './scenarios.ts';
@@ -29,10 +29,12 @@ for (const feature of features) {
   for (const s of report.suites) walk(s);
   const off = feature.commands.length > 0 ? `handlers of ${feature.commands.join(', ')} made no-ops` : `module ${feature.toothProof ?? '(none named)'} made a no-op`;
   console.log(`\n${feature.id}: ${off}`);
-  for (const o of outcomes) console.log(`  ${o.status === 'passed' ? 'PASSED (no tooth)' : o.status}  ${o.title}`);
-  const passed = outcomes.filter((o) => o.status === 'passed').length;
-  if (outcomes.length === 0 || passed > 0) toothless += 1;
-  console.log(`  ${outcomes.length - passed} of ${outcomes.length} tests fail with the feature switched off: ${outcomes.length > 0 && passed === 0 ? 'it has teeth' : 'NO TOOTH'}`);
+  // a tooth is a test that fails on an assertion; one that passes, or times out, proves nothing
+  const LABEL: Record<string, string> = { passed: 'PASSED (no tooth)', timedOut: 'TIMED OUT (no tooth: a test fails on an assertion, never on time)' };
+  for (const o of outcomes) console.log(`  ${LABEL[o.status] ?? o.status}  ${o.title}`);
+  const failed = outcomes.filter((o) => o.status === 'failed').length;
+  if (outcomes.length === 0 || failed < outcomes.length) toothless += 1;
+  console.log(`  ${failed} of ${outcomes.length} tests fail with the feature switched off: ${outcomes.length > 0 && failed === outcomes.length ? 'it has teeth' : 'NO TOOTH'}`);
 }
 console.log(`\ntooth proof: ${features.length} features, ${toothless} without teeth`);
 process.exit(toothless === 0 && features.length > 0 ? 0 : 1);

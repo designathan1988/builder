@@ -2,13 +2,24 @@
 // annotation "door" per door, so that a census of the tests can find a door no test runs.
 import fs from 'node:fs';
 import path from 'node:path';
-import type { Page, TestDetails } from '@playwright/test';
+import type { Locator, Page, TestDetails } from '@playwright/test';
 
-interface Door {
+export interface Door {
   readonly id: string;
   readonly kind: string;
+  readonly args: Readonly<Record<string, unknown>>;
   readonly menu?: string;
   readonly chord?: string;
+  readonly context?: string;
+  // canvas-click: what is clicked, with which button, how many times and which key held
+  readonly target?: string;
+  readonly button?: string;
+  readonly count?: number;
+  readonly modifier?: string | null;
+  // canvas-drag and layers-drag: what is pressed and where it is released
+  readonly source?: string;
+  readonly zone?: string;
+  readonly gesture?: string | null;
 }
 interface Menu {
   readonly id: string;
@@ -40,7 +51,7 @@ export function runsUnavailable(...refs: string[]): TestDetails {
   return { annotation: refs.map((ref) => ({ type: UNAVAILABLE_ANNOTATION, description: ref })) };
 }
 
-function door(ref: string): Door {
+export function door(ref: string): Door {
   const found = DOORS.get(ref);
   if (found === undefined) throw new Error(`the manifest has no door ${ref}`);
   return found;
@@ -48,7 +59,7 @@ function door(ref: string): Door {
 
 // a chord of the manifest ("Ctrl+Alt+B", "Ctrl+\") as Playwright's keyboard writes it
 const KEYS: Record<string, string> = { Ctrl: 'Control', '\\': 'Backslash' };
-const keys = (chord: string): string => chord.split('+').map((k) => KEYS[k] ?? (k.length === 1 ? k.toLowerCase() : k)).join('+');
+export const keys = (chord: string): string => chord.split('+').map((k) => KEYS[k] ?? (k.length === 1 ? k.toLowerCase() : k)).join('+');
 
 // opens a menu from its button, or from the menu it is a submenu of (English UI)
 export async function openMenu(page: Page, id: string): Promise<void> {
@@ -67,8 +78,19 @@ export async function openMenu(page: Page, id: string): Promise<void> {
   await page.getByRole('menuitem', { name, exact: true }).hover();
 }
 
+// The control of a door drawn once per item it stands for (a Layers row per node, an Insert tile per palette entry):
+// the one whose arguments (data-args, written by the door's drawing) hold every argument given. Without arguments,
+// the door's only control, or with `any` the first of them.
+export function control(page: Page, ref: string, options: { readonly args?: Readonly<Record<string, unknown>>; readonly any?: boolean } = {}): Locator {
+  // a CSS string of any text: quoted with ', its backslashes and quotes escaped
+  const css = (text: string) => `'${text.replaceAll('\\', '\\\\').replaceAll("'", "\\'")}'`;
+  const given = Object.entries(options.args ?? {}).map(([name, value]) => `[data-args*=${css(`${JSON.stringify(name)}:${JSON.stringify(value)}`)}]`);
+  const all = page.locator(`[data-door="${ref}"]${given.join('')}`);
+  return options.any === true ? all.first() : all;
+}
+
 // runs a door as a user does: a shortcut by its keys, a menu item from its menu, any other control by a click
-export async function runDoor(page: Page, ref: string): Promise<void> {
+export async function runDoor(page: Page, ref: string, options: { readonly args?: Readonly<Record<string, unknown>>; readonly any?: boolean } = {}): Promise<void> {
   const d = door(ref);
   if (d.kind === 'shortcut') {
     if (d.chord === undefined) throw new Error(`shortcut ${ref} has no chord`);
@@ -79,5 +101,5 @@ export async function runDoor(page: Page, ref: string): Promise<void> {
     if (d.menu === undefined) throw new Error(`menu door ${ref} names no menu`);
     await openMenu(page, d.menu);
   }
-  await page.locator(`[data-door="${ref}"]`).click();
+  await control(page, ref, options).click();
 }
