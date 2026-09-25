@@ -35,7 +35,7 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 9. inspector-fields.spec.ts checks the drawing follows the data, so wrong `drawnAs` data passes.
 11. The renderer: newTab renders `target=""` (fix before elements-structure: `_blank` + `rel="noopener"`); a line
     break in textarea/option becomes `<br>` (elements-form-structure); a `}` in a style value (inspector-number-fields).
-12. Flaky, never retried (docs/testing/README.md): multi-select-click:90, coordinates:181, a 'stable' File menu.
+12. Flaky under 4 suites at once, no failure log yet (docs/testing/README.md): coordinates:181, a 'stable' File menu.
 13. Insert's density labels overflow and overlap ("Two columns": 69 px text in a 50 px button).
 14. sidebar.tsx writes the argument name "target" (the manifest's adapter.selection) and builds data-args apart.
 15. shell.tsx keeps the fit zoom in useState (moves with the zoom commands).

@@ -190,13 +190,23 @@ Coupling, measured from the validated map of 335 tests:
 
 Flaky tests, never retried:
 
-- `multi-select-click.spec.ts:90`, "the outline is on the title alone". It failed once in the whole suite (S5 at
-  `59fb00e`) and once in 60 repeats with 8 workers and recording on. It passed 40 of 40 without recording, then 80 of
-  80 and 200 of 200 with recording on. The expectation that timed out compares the outline with a box measured before
-  the clicks. The cause was not found in three attempts; the next step is the failing run's `error-context.md` when it
-  recurs.
-- Older, from `PROGRESS.md` finding 12: `coordinates.spec.ts:181` and a "stable" File menu button timed out under load,
-  and reruns passed.
+- **Fixed in `75b719f`:** `multi-select-click.spec.ts`, "the outline is on the title alone". It failed 2 times in
+  about 716 runs. The failure said `Timeout 5000ms exceeded while waiting on the predicate` with no
+  Expected/Received, and Playwright prints that only when no call of the poll's predicate returned. The cause was in
+  the test's helper, which counted the outlines and then asked each one's box. The count saw an outline that the
+  chrome removed on its next frame, and the box of the removed outline waited out the whole poll.
+
+  The test now reads the outlines and the elements in one task of the page. Its claims are stricter:
+  - every element has exactly one outline;
+  - nothing else is outlined;
+  - "the page does not move on a click" is now its own check.
+
+  Planted app bugs make it fail on its assertions: an outline 3 px off, a solid union, a page that moves, and a union
+  left for one element.
+- **From `PROGRESS.md` finding 12:** `coordinates.spec.ts:181` and a "stable" File menu button timed out in builder
+  sessions that ran four suites of 12 workers at once, and reruns passed. There is no failure log. Neither has failed
+  in the whole-suite runs of this work, and the coordinates test takes 1.9 s. Each one needs its failure log before it
+  can be changed.
 
 ## Measurement harness
 
