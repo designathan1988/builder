@@ -32,7 +32,7 @@ export function Dock() {
         <div className="dock-strip__tabs" role="tablist" data-region="tab-strip" data-key-context="tab-strip">
           {TAB
             ? tabs.map((tab) => (
-                <DoorControl key={tab} entry={TAB} args={{ group: 'workbench', panel: tab }} className={tab === active ? 'is-active' : ''}>
+                <DoorControl key={tab} entry={TAB} args={{ group: 'workbench', panel: tab }}>
                   <Icon name={PANELS[tab].icon} size="sm" />
                   <span className="door__label">{t(panelName(tab))}</span>
                 </DoorControl>

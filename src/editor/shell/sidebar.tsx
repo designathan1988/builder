@@ -59,10 +59,10 @@ function SectionTitle({ title, region }: { readonly title: string; readonly regi
   );
 }
 
+// the current page's row is marked by its door's own current state (pages.switch), none before that command exists
 function PageRow({ page }: { readonly page: { readonly id: string; readonly name: string; readonly file: string } }) {
-  const current = useEditorState((s) => s.document.pages[0]?.id === page.id);
   return (
-    <div className={`row${current ? ' is-active' : ''}`}>
+    <div className="row">
       <DoorControl entry={PAGE_ROW} args={{ page: page.id }} className="row__main">
         <Icon name={ELEMENT_ICON.get('page') ?? GLYPHS.folder} size="sm" />
         <span className="row__name">{page.name}</span>

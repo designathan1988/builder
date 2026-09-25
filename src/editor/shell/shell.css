@@ -479,7 +479,7 @@ kbd {
   background: var(--color-surface-hover);
 }
 
-.row.is-active {
+.row:has(> .door.is-current) {
   background: var(--color-surface-selected);
   box-shadow: inset var(--space-1) 0 0 var(--color-accent);
 }
@@ -1149,7 +1149,7 @@ kbd {
   border: 0;
 }
 
-.dock-strip__tabs .door.is-active {
+.dock-strip__tabs .door.is-current {
   background: var(--color-surface-selected);
   color: var(--color-text);
   font-weight: var(--weight-semibold);
