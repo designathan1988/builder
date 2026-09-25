@@ -127,6 +127,19 @@ describe('the store', () => {
     expect(Object.isFrozen(state.document.pages[0]?.tree)).toBe(true);
   });
 
+  it('says whether a command would run now without changing anything', () => {
+    const s = testStore();
+    // not built, its predicate fails (nothing selected), its handler refuses (the page root cannot be deleted)
+    expect(s.store.canRun('element.duplicate', {})).toBe(false);
+    expect(s.store.canRun('element.delete', {})).toBe(false);
+    s.store.dispatch('selection.select', { target: s.root });
+    expect(s.store.canRun('element.delete', {})).toBe(false);
+    insertInto(s);
+    const before = s.store.getState();
+    expect(s.store.canRun('element.delete', {})).toBe(true);
+    expect(s.store.getState()).toBe(before);
+  });
+
   it('changes nothing for a command whose entry is NOT_AVAILABLE_YET', () => {
     const { store } = testStore();
     const before = store.getState();

@@ -40,6 +40,8 @@ const LAYERS_HEADER = requireDoor('explorer-layers', (d) => drawnAs(d) === 'disc
 const LAYERS_SELECT = requireDoor('layers-row', (d) => d.door.kind === 'panel-control' && d.door.gesture === 'layers-row-click' && d.door.modifier === null);
 // the row's other clicks: the doors of the same gesture with a key held (Shift+click adds, Ctrl+click toggles)
 const LAYERS_MODIFIED = doorSlots('layers-row').filter((d) => d.door.kind === 'panel-control' && d.door.gesture === 'layers-row-click' && d.door.modifier !== null);
+// the row pressed with the secondary button: the door whose button is the secondary one (the context menu)
+const LAYERS_SECONDARY = requireDoor('layers-row', (d) => d.door.kind === 'panel-control' && d.door.button === 'secondary');
 const LAYERS_CARET = requireDoor('layers-row', (d) => drawnAs(d) === 'disclosure');
 const LAYERS_BUTTONS = doorSlots('layers-row').filter((d) => drawnAs(d) === 'icon-button');
 // an element tile: the item whose command takes a palette entry (a component tile takes a component)
@@ -84,7 +86,8 @@ function PageRow({ page }: { readonly page: { readonly id: string; readonly name
 }
 
 // A node's row, then, while its branch is unfolded, its children's rows. A click on the row selects its node, a
-// Shift+click adds it to the selection and a Ctrl+click toggles it (spec multi-select-click); a click on a control
+// Shift+click adds it to the selection and a Ctrl+click toggles it (spec multi-select-click), a secondary click opens
+// the context menu on it (spec context-menu); a click on a control
 // of its own (the caret, Hide, Lock) runs that control's door alone. The primary selection's row
 // is scrolled into view, at the nearest edge and without animation, whichever surface selected it (spec layers-tree,
 // Problems in Pager 1).
@@ -110,6 +113,14 @@ function LayersRow({ node, depth }: { readonly node: DocNode; readonly depth: nu
     const entry = LAYERS_MODIFIED.find((d) => d.door.kind === 'panel-control' && d.door.modifier === held);
     if (entry) (store.dispatch as (id: CommandId, args: unknown) => DispatchResult)(entry.command.id as CommandId, { ...entry.door.args, target: node.id });
   };
+  // a secondary click anywhere on the row runs the row's secondary door (the context menu) instead of the browser's
+  // own menu; the keyboard's menu key is no door, so a contextmenu event it sends is left to the browser
+  const secondary = useDoor(LAYERS_SECONDARY, { target: node.id });
+  const openMenu = (event: MouseEvent<HTMLDivElement>) => {
+    if (event.button !== 2) return;
+    event.preventDefault();
+    secondary.run();
+  };
   return (
     <>
       <div
@@ -126,6 +137,7 @@ function LayersRow({ node, depth }: { readonly node: DocNode; readonly depth: nu
         data-door={LAYERS_SELECT.ref}
         data-args={JSON.stringify({ target: node.id })}
         onClick={select}
+        onContextMenu={openMenu}
       >
         {branch ? (
           <DoorControl entry={LAYERS_CARET} args={{ target: node.id }} expanded={expanded}>

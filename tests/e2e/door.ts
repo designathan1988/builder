@@ -94,25 +94,31 @@ export function control(page: Page, ref: string, options: { readonly args?: Read
 }
 
 // A panel control's door with a key held (a Layers row's Shift+click) is drawn by the control of the same gesture
-// with no key held: the door of the same panel, control and gesture whose modifier is null.
-export function modifiedControl(ref: string): { readonly drawn: string; readonly key: 'Shift' | 'Control' | 'Alt' | 'Meta' } | null {
+// with no key held: the door of the same panel, control and gesture whose modifier is null. A panel control's door
+// pressed with the secondary button (a Layers row's secondary click, its `button`) is drawn by the control of the same
+// panel and control that the primary button runs with no key held.
+export function modifiedControl(ref: string): { readonly drawn: string; readonly key: 'Shift' | 'Control' | 'Alt' | 'Meta' | null; readonly button: 'left' | 'right' } | null {
   const d = door(ref);
-  if (d.kind !== 'panel-control' || d.modifier === null || d.modifier === undefined) return null;
-  const drawn = [...DOORS].find(([, o]) => o.kind === 'panel-control' && o.panel === d.panel && o.control === d.control && o.gesture === d.gesture && (o.modifier ?? null) === null)?.[0];
+  const secondary = d.button === 'secondary';
+  if (d.kind !== 'panel-control' || ((d.modifier === null || d.modifier === undefined) && !secondary)) return null;
+  const drawn = [...DOORS].find(
+    ([, o]) => o.kind === 'panel-control' && o.panel === d.panel && o.control === d.control && (secondary || o.gesture === d.gesture) && (o.modifier ?? null) === null && o.button === undefined,
+  )?.[0];
   if (drawn === undefined) throw new Error(`${ref}: no control of ${d.panel ?? ''} ${d.control ?? ''} is drawn for its gesture with no key held`);
   const KEY = { Shift: 'Shift', Ctrl: 'Control', Alt: 'Alt', Meta: 'Meta' } as const;
-  const key = KEY[d.modifier as keyof typeof KEY] as (typeof KEY)[keyof typeof KEY] | undefined;
-  if (key === undefined) throw new Error(`${ref}: unknown modifier ${d.modifier}`);
-  return { drawn, key };
+  const key = d.modifier === null || d.modifier === undefined ? null : (KEY[d.modifier as keyof typeof KEY] as (typeof KEY)[keyof typeof KEY] | undefined);
+  if (key === undefined) throw new Error(`${ref}: unknown modifier ${String(d.modifier)}`);
+  return { drawn, key, button: secondary ? 'right' : 'left' };
 }
 
 // runs a door as a user does: a shortcut by its keys, a menu item from its menu, a panel control's door with a key
-// held by a click on its control with that key held, any other control by a click
+// held by a click on its control with that key held, one pressed with the secondary button by a secondary click on
+// its control, any other control by a click
 export async function runDoor(page: Page, ref: string, options: { readonly args?: Readonly<Record<string, unknown>>; readonly any?: boolean } = {}): Promise<void> {
   const d = door(ref);
   const modified = modifiedControl(ref);
   if (modified !== null) {
-    await control(page, modified.drawn, options).click({ modifiers: [modified.key] });
+    await control(page, modified.drawn, options).click({ modifiers: modified.key === null ? [] : [modified.key], button: modified.button });
     return;
   }
   if (d.kind === 'shortcut') {

@@ -57,6 +57,13 @@ Decisions by small ambiguity (moved here from PROGRESS.md):
   refuses it; a press on an EMPTY container drags it; a container with children is dragged by its selection label
   (spec select-click.md:16, drag-reorder-canvas.md:7), its empty area staying the marquee's; the runner presses the
   label when a source has no own drag point, and reaches a slot with no free gap by the child's half (spec).
+- context-menu: shows only the commands that would run now (store.canRun), in manifest order, and no menu at all when
+  none applies (DESIGN.md, not the spec's "shown disabled"); a right-click inside the selection keeps it, outside
+  selects that node; running an item dispatches ui.dismiss; the Layers row's secondary door is drawn by the row
+  itself (manifest: control "row", button "secondary", schema field added); a step before the action whose canvas
+  click hits a node with no point of its own runs the same command's Layers row door instead (annotated).
+- Playwright runs at most 3 workers (the machine froze with helpers in parallel at the default 12; the test Chrome
+  already draws on the RTX 3060 through ANGLE D3D11, checked).
 
 ## 2026-09-25 — Slice 1: the rest of the foundation and the first usable block of group 02
 

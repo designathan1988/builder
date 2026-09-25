@@ -2490,6 +2490,7 @@ export const MESSAGE_IDS = [
   "common.disabledTitle",
   "common.notAvailableYet",
   "common.withShortcut",
+  "contextMenu.label",
   "dialog.cancel",
   "dialog.delete",
   "dialog.deleteFiles.message",

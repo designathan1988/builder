@@ -7,7 +7,7 @@ import { COMMANDS, PREDICATES } from '../../app/commands.ts';
 import { isBuilt, type PredicateTable } from '../../core/commands/registry.ts';
 import type { DispatchResult } from '../../core/store/store.ts';
 import { FEATURE_COMMANDS } from '../../generated/commands.ts';
-import type { CommandId, FeatureId, MessageId, PredicateId } from '../../generated/ids.ts';
+import type { CommandId, FeatureId, KeyContextId, MessageId, PredicateId } from '../../generated/ids.ts';
 import type { DoorEntry } from '../../manifest/runtime.ts';
 import { chordHint } from '../input/keymap.ts';
 import type { EditorUi } from '../state.ts';
@@ -57,8 +57,9 @@ export interface DoorState {
 // command is built, whether it stands for the current state, and running it through the store. A control that
 // stands for one property, attribute or palette entry is labelled by it (the door's own label names the command
 // with placeholders: "Set {property} to {value}"), so the caller passes that label. A control whose item a later
-// feature brings (`ready` false: a palette entry of a feature not built yet) is not available yet either.
-export function useDoor(entry: DoorEntry, args: Readonly<Record<string, unknown>> = {}, labelled?: string, ready = true): DoorState {
+// feature brings (`ready` false: a palette entry of a feature not built yet) is not available yet either. The shortcut
+// shown is the command's key in the context the control acts in (`keysIn`: the canvas's for the context menu).
+export function useDoor(entry: DoorEntry, args: Readonly<Record<string, unknown>> = {}, labelled?: string, ready = true, keysIn: KeyContextId = 'global'): DoorState {
   const t = useT();
   const store = useStore();
   // a door whose only effect is to open a panel the shell draws no body for is not available yet, like an unbuilt command
@@ -68,7 +69,7 @@ export function useDoor(entry: DoorEntry, args: Readonly<Record<string, unknown>
   const available = useEditorState((s) => built && ((PREDICATES as PredicateTable<EditorUi>)[entry.command.availability.predicate as PredicateId]?.test(s) ?? true));
   const label = labelled ?? t(entry.door.labelKey as MessageId);
   const face = labelled === undefined && entry.door.faceLabelKey !== null ? t(entry.door.faceLabelKey as MessageId) : label;
-  const chord = chordHint(entry.command.id);
+  const chord = chordHint(entry.command.id, keysIn);
   const reason: MessageId | null = !built ? 'common.notAvailableYet' : available ? null : (entry.door.disabledReasonKey as MessageId);
   const title = reason !== null ? t('common.disabledTitle', { label, reason: { key: reason } }) : chord !== null ? t('common.withShortcut', { label, shortcut: chord }) : label;
   const run = () => {

@@ -2,6 +2,7 @@
 // bar and the sidebar, the centre column, the inspector, the dock and the status bar. The sidebar, the inspector and
 // the dock are shown or hidden by the workspace state; the theme and the language follow the preferences.
 import { useEffect, useState } from 'react';
+import { ContextMenu } from '../doors/menu.tsx';
 import { installKeymap } from '../input/keymap.ts';
 import { installPointer } from '../input/pointer.ts';
 import { installFocus } from '../focus/focus.ts';
@@ -62,6 +63,7 @@ export function Shell() {
             <Inspector />
             <StatusBar />
             <Toast />
+            <ContextMenu />
           </div>
         </ReportFitZoom.Provider>
       </FitZoom.Provider>

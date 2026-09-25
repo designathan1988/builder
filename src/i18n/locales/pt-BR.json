@@ -337,6 +337,7 @@
   "common.disabledTitle": "{label} — {reason}",
   "common.notAvailableYet": "ainda não disponível",
   "common.withShortcut": "{label} ({shortcut})",
+  "contextMenu.label": "Menu do elemento",
   "dialog.cancel": "Cancelar",
   "dialog.delete": "Excluir",
   "dialog.deleteFiles.message": "Excluir {name} e tudo o que ele contém?",

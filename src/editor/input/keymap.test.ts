@@ -38,4 +38,11 @@ describe('the keymap', () => {
     expect(chordHint('workspace.collapseDocks')).toBe('Ctrl+\\');
     expect(chordHint('preferences.setTheme')).toBeNull();
   });
+
+  it('shows the shortcut of the context a control acts in, or of a context it inherits', () => {
+    expect(chordHint('element.moveUp')).toBeNull();
+    expect(chordHint('element.moveUp', 'canvas')).toBe('Alt+ArrowUp');
+    expect(chordHint('element.delete', 'canvas')).toBe('Delete');
+    expect(chordHint('history.undo', 'canvas')).toBe('Ctrl+Z');
+  });
 });

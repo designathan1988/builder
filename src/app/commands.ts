@@ -23,6 +23,7 @@ import { deleteCommand } from '../core/structure/remove.ts';
 import { wrapColumnCommand, wrapRowCommand } from '../core/structure/wrap.ts';
 import { focusActivate, focusFirst, focusLast, focusNext, focusPrevious } from '../editor/focus/focus.ts';
 import { setExpanded } from '../editor/layers/tree.ts';
+import { contextMenuOpen } from '../editor/menus/context-menu.ts';
 import { dismiss } from '../editor/menus/overlays.ts';
 import { setLanguage, setTheme } from '../editor/preferences/preferences.ts';
 import type { EditorUi } from '../editor/state.ts';
@@ -144,7 +145,7 @@ export const COMMANDS = {
   'selection.walkFirstChild': walkFirstChildCommand,
   'selection.selectAllInContainer': NOT_AVAILABLE_YET,
   'selection.marquee': marqueeCommand,
-  'contextMenu.open': NOT_AVAILABLE_YET,
+  'contextMenu.open': contextMenuOpen,
   'element.insert': insertCommand,
   'element.moveTo': moveToCommand,
   'drag.levelUp': NOT_AVAILABLE_YET,

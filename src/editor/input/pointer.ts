@@ -151,6 +151,16 @@ function setHovered(node: string | null) {
   for (const listener of [...hoverListeners]) listener();
 }
 
+// Where the last press went down on the screen, whatever it pressed (the canvas, a Layers row): the context menu opens
+// there (spec context-menu: "a menu at the pointer"). Pointer state: it changes no command.
+let lastPress: Point | null = null;
+export const pressPoint = (): Point | null => lastPress;
+
+// The browser's own menu never opens where the editor's opens (spec context-menu, Problems in Pager 5): on the canvas
+// (the overlay and the stage) and over the editor's context menu and its backdrop, which a secondary press on the
+// canvas draws before the browser asks for its menu at the release.
+const EDITOR_MENU_AREA ='[data-canvas-overlay], [data-canvas-stage], [data-context-menu]';
+
 // The canvas-drag doors a press on an element starts (specs drag-reorder-canvas, drag-drop-inside): the door of the
 // zone a drop proposal falls in, found by its data: "before-after" beside a sibling, "inside" into a container (a
 // refused proposal, over the dragged nodes' own subtree, is one inside them). The gesture's own modifiers
@@ -317,6 +327,7 @@ export function installPointer(store: EditorStore, target: Window = window): () 
 
   const isRoot = (node: string) => locate(store.getState().document, node as NodeId)?.parent === null;
   const onDown = (event: PointerEvent) => {
+    lastPress = { x: event.clientX, y: event.clientY };
     const press = pressAt(event, isRoot);
     if (press === null || press === 'elsewhere') return;
     if (event.button !== 0 && event.button !== 2) return;
@@ -357,10 +368,21 @@ export function installPointer(store: EditorStore, target: Window = window): () 
     if (machine.phase !== 'idle') event.preventDefault();
   };
 
+  const onContextMenu = (event: MouseEvent) => {
+    if (event.target instanceof Element && event.target.closest(EDITOR_MENU_AREA)) event.preventDefault();
+  };
+  // A secondary press there moves no focus: the context menu it opens takes the focus at once, and the press would
+  // otherwise hand it to the page body right after.
+  const onMouseDown = (event: MouseEvent) => {
+    if (event.button === 2 && event.target instanceof Element && event.target.closest(EDITOR_MENU_AREA)) event.preventDefault();
+  };
+
   target.addEventListener('pointerdown', onDown, true);
   target.addEventListener('pointermove', onMove, true);
   target.addEventListener('pointerup', onUp, true);
   target.addEventListener('pointercancel', onCancel, true);
+  target.addEventListener('contextmenu', onContextMenu, true);
+  target.addEventListener('mousedown', onMouseDown, true);
   target.addEventListener('blur', onCancel);
   target.addEventListener('selectstart', onNative, true);
   target.addEventListener('dragstart', onNative, true);
@@ -370,6 +392,8 @@ export function installPointer(store: EditorStore, target: Window = window): () 
     target.removeEventListener('pointermove', onMove, true);
     target.removeEventListener('pointerup', onUp, true);
     target.removeEventListener('pointercancel', onCancel, true);
+    target.removeEventListener('contextmenu', onContextMenu, true);
+    target.removeEventListener('mousedown', onMouseDown, true);
     target.removeEventListener('blur', onCancel);
     target.removeEventListener('selectstart', onNative, true);
     target.removeEventListener('dragstart', onNative, true);

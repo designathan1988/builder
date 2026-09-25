@@ -10,7 +10,7 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
   verify:fast, e2e with the census, e2e:tooth and the status. Done: findings 16 and 17.
 - Group 02 passing: select-click, layers-tree, keyboard-tree-walk, palette-click-insert, undo-redo,
   multi-select-click, marquee-select, delete-element, move-up-down, wrap-row-column, drag-reorder-canvas,
-  drag-drop-inside (a container is dragged by its selection label). Runner paths proven by switching them off:
+  drag-drop-inside (a container is dragged by its selection label), context-menu. Runner paths proven by switching them off:
   setup selection, canvas click, Tab to a control, modifier click, drag press, marquee, a slot with no free gap.
 - Decisions by small ambiguity: docs/history.md, "Group 02" (the newest entry).
 

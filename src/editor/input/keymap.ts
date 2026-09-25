@@ -42,10 +42,15 @@ export function bindingFor(context: KeyContextId, chord: string): DoorEntry | nu
   return null;
 }
 
-// The chord shown next to a command's label: its first shortcut in the global context.
-export function chordHint(command: CommandId): string | null {
-  const door = shortcuts.find((d) => d.command.id === command && d.door.kind === 'shortcut' && d.door.context === 'global');
-  return door && door.door.kind === 'shortcut' ? door.door.chord : null;
+// The chord shown next to a command's label: its first shortcut in the context the control acts in, else in a context
+// that one inherits; the global context by default. The context menu acts on the canvas's selection, so its items
+// show the canvas's keys (Alt+ArrowUp for Move up; spec context-menu, Problems in Pager 2).
+export function chordHint(command: CommandId, context: KeyContextId = 'global'): string | null {
+  for (const c of keyContextChain(context)) {
+    const door = shortcuts.find((d) => d.command.id === command && d.door.kind === 'shortcut' && d.door.context === c);
+    if (door && door.door.kind === 'shortcut') return door.door.chord;
+  }
+  return null;
 }
 
 // The key context of the element that has focus: a field keeps its keys; a region names its context with

@@ -61,6 +61,10 @@ export interface Store<Ui> {
   getState(): StoreState<Ui>;
   dispatch<Id extends CommandId>(id: Id, args: CommandArgs[Id]): DispatchResult;
   gesture(): Gesture;
+  // Whether the command would run now with these arguments: it is built, its availability predicate holds and its
+  // handler does not refuse. Nothing changes: the handler's outcome is read and dropped (handlers are pure). The
+  // context menu shows only the commands that apply to the selection (DESIGN.md "Overlays").
+  canRun<Id extends CommandId>(id: Id, args: CommandArgs[Id]): boolean;
   subscribe(listener: () => void): () => void;
   // every change of the document, with its patches, before the state's subscribers hear of it
   subscribeDocument(listener: (change: DocumentChange) => void): () => void;
@@ -161,6 +165,12 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
     return { key: `${command.id}|${JSON.stringify(a.target ?? a.targets ?? a.nodes ?? selection)}|${JSON.stringify(a.property ?? null)}`, within };
   };
 
+  // what a handler reads: the state now, the ports and the words of the person's language
+  const handlerContext = (): HandlerContext<Ui> => {
+    const ui = state.ui;
+    return { state, clock, ids, rules, words: (key) => options.words(ui, key), layout: options.layout ?? noLayout };
+  };
+
   const run = <Id extends CommandId>(id: Id, args: CommandArgs[Id], gesture: OpenGesture | null): DispatchResult => {
     const entry = table[id];
     const command = commands.get(id);
@@ -176,9 +186,7 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
       publish(commit({ ...state, message: refusal }, id));
       return { status: 'refused', message: refusal };
     }
-    const ui = state.ui;
-    const context: HandlerContext<Ui> = { state, clock, ids, rules, words: (key) => options.words(ui, key), layout: options.layout ?? noLayout };
-    const outcome: Outcome<Ui> = entry.run(context, args);
+    const outcome: Outcome<Ui> = entry.run(handlerContext(), args);
 
     if (outcome.kind === 'refused') {
       publish(commit({ ...state, message: outcome.message }, id));
@@ -229,6 +237,15 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
 
   return {
     getState: () => state,
+    canRun: (id, args) => {
+      const entry = table[id];
+      const command = commands.get(id);
+      if (!command) throw new Error(`unknown command ${id}`);
+      if (!isBuilt(entry)) return false;
+      const predicate = predicates[command.availability.predicate as keyof PredicateTable<Ui>];
+      if (predicate && !predicate.test(state)) return false;
+      return entry.run(handlerContext(), args).kind !== 'refused';
+    },
     dispatch: (id, args) => {
       if (open) throw new Error('a gesture is open: dispatch through it');
       return run(id, args, null);

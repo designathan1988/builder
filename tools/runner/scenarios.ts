@@ -111,6 +111,16 @@ function layersRowClick(command: string, modifier: string | null): string {
   return `${command}#${found.id}`;
 }
 const ADD_ROW_DOOR = layersRowClick('selection.add', doorData(ADD_DOOR).modifier ?? null);
+// The door of a canvas click's command on a node's Layers row, pressed with the same button and the same key: how a
+// person reaches a node its children cover whole, which has no point of its own on the canvas (spec select-click,
+// "Nested elements": the Layers panel). Null when the command has none.
+function layersRowDoorOf(ref: string): string | null {
+  const d = doorData(ref);
+  const found = COMMANDS.find((c) => c.id === commandOf(ref))?.entryPoints.find(
+    (o) => o.kind === 'panel-control' && o.panel === 'layers' && (o.modifier ?? null) === (d.modifier ?? null) && (o.button === 'secondary') === (d.button === 'secondary'),
+  );
+  return found ? `${commandOf(ref)}#${found.id}` : null;
+}
 // a command's shortcut in a key context
 function shortcutIn(command: string, context: string): string {
   const found = COMMANDS.find((c) => c.id === command)?.entryPoints.find((d) => d.kind === 'shortcut' && d.context === context);
@@ -476,7 +486,21 @@ interface Held {
   readonly door: string;
 }
 
-async function runStep(page: Page, step: Step, ref: string, held: { current: Held | null }) {
+// A step that only leads to the action (not the door the scenario proves) clicking a node its children cover whole
+// runs its command's door on the node's Layers row instead, as a person would, and the test's annotations say so
+// (ranInstead); the action step's own door is never replaced.
+async function rowInsteadOfCanvas(page: Page, ref: string, document: unknown, nodePath: string, action: boolean): Promise<boolean> {
+  const node = nodeAt(document, nodePath);
+  await frameElement(page, node.id, nodePath);
+  const at = await canvasPoint(page, { kind: 'node', id: node.id, root: isRoot(document, nodePath), near: 'centre' });
+  const row = layersRowDoorOf(ref);
+  if (action || at !== NO_OWN_POINT || row === null) return false;
+  await runDoor(page, row, { args: { target: node.id } });
+  ranInstead(ref, row);
+  return true;
+}
+
+async function runStep(page: Page, step: Step, ref: string, held: { current: Held | null }, action = false) {
   const d = doorData(ref);
   const { document } = await port(page);
   const args = resolveArgs(ref, step.args, document);
@@ -484,7 +508,9 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
   const own = Object.fromEntries(Object.entries(args).filter(([name]) => !(name in d.args)));
   const target = step.target === null ? null : nodeAt(document, step.target);
 
-  if (d.kind === 'canvas-click') {
+  if (d.kind === 'canvas-click' && d.target !== 'stage-outside-page' && step.target !== null && (await rowInsteadOfCanvas(page, ref, document, step.target, action))) {
+    // reached through the node's Layers row
+  } else if (d.kind === 'canvas-click') {
     if (step.hold === true || step.drop !== null) throw new Error(`step ${ref}: a click neither drops nor holds`);
     const at =
       d.target === 'stage-outside-page'
@@ -553,11 +579,12 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
     if (d.chord === undefined) throw new Error(`shortcut ${ref} has no chord`);
     await page.keyboard.press(keys(d.chord));
   } else if (d.kind === 'toolbar' || d.kind === 'menu' || d.kind === 'panel-control' || d.kind === 'context-menu') {
-    // a control drawn only in some states (the toast's Undo after a delete) fails the step on an assertion that says
-    // it is not drawn, never on the click's timeout. The control is the one runDoor clicks: a panel control's door with
-    // a key held (a Layers row's Shift+click) is its plain control clicked with that key (modifiedControl).
+    // a control drawn only in some states (the toast's Undo after a delete, an item of the open context menu) fails the
+    // step on an assertion that says it is not drawn, never on the click's timeout. The control is the one runDoor
+    // clicks: a panel control's door with a key held (a Layers row's Shift+click) or pressed with the secondary button
+    // (its secondary click) is its plain control clicked that way (modifiedControl).
     const clicked = modifiedControl(ref)?.drawn ?? ref;
-    if (d.kind === 'toolbar' || d.kind === 'panel-control') await expect(control(page, clicked, { args: own }), `step ${ref}: its control is drawn`).toBeVisible();
+    if (d.kind === 'toolbar' || d.kind === 'panel-control' || d.kind === 'context-menu') await expect(control(page, clicked, { args: own }), `step ${ref}: its control is drawn`).toBeVisible();
     await runDoor(page, ref, { args: own });
   } else {
     throw new Error(`step ${ref}: the runner cannot run a ${d.kind} door yet`);
@@ -641,7 +668,7 @@ export function registerScenarioTests(): void {
           let beforeAction: unknown = fixture;
           for (const step of s.steps) {
             if (step.action) beforeAction = (await port(page)).document;
-            await runStep(page, step, step.action ? door : step.door, held);
+            await runStep(page, step, step.action ? door : step.door, held, step.action);
           }
           if (held.current !== null) throw new Error(`the drag of ${held.current.door} is still held after the last step`);
           const after = await port(page);

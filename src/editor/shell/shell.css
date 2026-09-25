@@ -316,6 +316,16 @@ kbd {
   background: transparent;
 }
 
+/* the context menu: at the pointer in the window (its left and top come from the drawing), over its backdrop; the
+   wrapper takes no place in the shell's grid */
+.context-menu {
+  display: contents;
+}
+
+.context-menu > .menu {
+  position: fixed;
+}
+
 /* a submenu shows while the pointer is over its item or the focus is in it, or once its item is clicked */
 .menu__sub > .menu {
   top: 0;
