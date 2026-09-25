@@ -2,6 +2,7 @@
 // an end artifact: the geometry of the window's regions, a computed style, or the stored preferences after an
 // immediate reload.
 import { expect, test, type Page } from '@playwright/test';
+import { runDoor, runs } from './door.ts';
 
 const box = async (page: Page, selector: string) => {
   const found = await page.locator(selector).boundingBox();
@@ -19,7 +20,7 @@ test.beforeEach(async ({ page }) => {
   await expect(page.locator('.workbench')).toBeVisible();
 });
 
-test('Ctrl+B and Ctrl+Alt+B give the sidebar and the inspector columns to the canvas, and take them back', async ({ page }) => {
+test('Ctrl+B and Ctrl+Alt+B give the sidebar and the inspector columns to the canvas, and take them back', runs('workspace.toggleLeftDock#key-ctrl-b-in-global', 'workspace.toggleInspector#key-ctrl-alt-b-in-global'), async ({ page }) => {
   const start = await box(page, '.workbench');
   const sidebar = await box(page, '.sidebar');
   const inspector = await box(page, '.inspector');
@@ -38,10 +39,9 @@ test('Ctrl+B and Ctrl+Alt+B give the sidebar and the inspector columns to the ca
   expect(await box(page, '.workbench')).toEqual(start);
 });
 
-test('Ctrl+\\ collapses every dock and the second Ctrl+\\ puts back exactly what was open', async ({ page }) => {
+test('Ctrl+\\ collapses every dock and the second Ctrl+\\ puts back exactly what was open', runs('workspace.toggleInspector#menu-view', 'workspace.collapseDocks#key-ctrl-backslash-in-global'), async ({ page }) => {
   // hide the inspector first: the restore must not bring it back
-  await page.getByRole('button', { name: 'View', exact: true }).click();
-  await page.getByRole('menuitem', { name: /^Toggle inspector/ }).click();
+  await runDoor(page, 'workspace.toggleInspector#menu-view');
   const before = await box(page, '.workbench');
 
   await page.keyboard.press('Control+Backslash');
@@ -55,31 +55,24 @@ test('Ctrl+\\ collapses every dock and the second Ctrl+\\ puts back exactly what
   expect(await box(page, '.workbench')).toEqual(before);
 });
 
-test('View › Workbench opens the dock under the canvas and closes it again', async ({ page }) => {
+test('View › Workbench opens the dock under the canvas and closes it again', runs('workspace.setPanelOpen#menu-view-workbench'), async ({ page }) => {
   const canvas = await box(page, '.centre');
-  await page.getByRole('button', { name: 'View', exact: true }).click();
-  await page.getByRole('menuitem', { name: 'Workbench', exact: true }).click();
+  await runDoor(page, 'workspace.setPanelOpen#menu-view-workbench');
   const shorter = await box(page, '.centre');
   expect(shorter.height).toBeLessThan(canvas.height);
   const dock = await box(page, '.dock');
   expect(dock.y).toBeGreaterThanOrEqual(shorter.y + shorter.height - 1);
 
-  await page.getByRole('button', { name: 'View', exact: true }).click();
-  await page.getByRole('menuitem', { name: 'Workbench', exact: true }).click();
+  await runDoor(page, 'workspace.setPanelOpen#menu-view-workbench');
   expect(await box(page, '.centre')).toEqual(canvas);
 });
 
-test('a fresh profile opens in Dark whatever the system says; Light survives an immediate reload; System follows the system', async ({ page }) => {
+test('a fresh profile opens in Dark whatever the system says; Light survives an immediate reload; System follows the system', runs('preferences.setTheme#menu-theme-light', 'preferences.setTheme#menu-theme-system'), async ({ page }) => {
   const background = () => page.locator('body').evaluate((el) => getComputedStyle(el).backgroundColor);
-  const chooseTheme = async (name: string) => {
-    await page.getByRole('button', { name: 'View', exact: true }).click();
-    await page.getByRole('menuitem', { name: 'Theme', exact: true }).hover();
-    await page.getByRole('menuitemradio', { name, exact: true }).click();
-  };
   // the system asks for light; a fresh profile is still dark (environment.json theme.default)
   await page.emulateMedia({ colorScheme: 'light' });
   const dark = await background();
-  await chooseTheme('Light');
+  await runDoor(page, 'preferences.setTheme#menu-theme-light');
   const light = await background();
   expect(light).not.toBe(dark);
 
@@ -87,15 +80,14 @@ test('a fresh profile opens in Dark whatever the system says; Light survives an 
   expect(await background()).toBe(light);
   expect(await storedPreferences(page)).toEqual({ locale: 'en', theme: 'light' });
 
-  await chooseTheme('System');
+  await runDoor(page, 'preferences.setTheme#menu-theme-system');
   expect(await background()).toBe(light);
   await page.emulateMedia({ colorScheme: 'dark' });
   expect(await background()).toBe(dark);
 });
 
-test('the language menu of the status bar switches the editor to Portuguese and keeps it after reload', async ({ page }) => {
-  await page.getByRole('button', { name: 'Language', exact: true }).click();
-  await page.getByRole('menuitemradio', { name: 'Português (Brasil)', exact: true }).click();
+test('the language menu of the status bar switches the editor to Portuguese and keeps it after reload', runs('preferences.setLanguage#menu-language-pt-br'), async ({ page }) => {
+  await runDoor(page, 'preferences.setLanguage#menu-language-pt-br');
   await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR');
 
   await page.reload();

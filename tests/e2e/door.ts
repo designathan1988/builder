@@ -1,0 +1,74 @@
+// How a test runs a door of the manifest with the real mouse and keyboard, and how it names the doors it runs: one
+// annotation "door" per door (tests/e2e/census.spec.ts reads them to find a door no test runs).
+import fs from 'node:fs';
+import path from 'node:path';
+import type { Page, TestDetails } from '@playwright/test';
+
+interface Door {
+  readonly id: string;
+  readonly kind: string;
+  readonly menu?: string;
+  readonly chord?: string;
+}
+interface Menu {
+  readonly id: string;
+  readonly labelKey: string;
+  readonly anchors: readonly { readonly region: string }[];
+}
+
+export const DOORS = new Map<string, Door>();
+for (const file of fs.readdirSync('manifest/commands')) {
+  const { commands } = JSON.parse(fs.readFileSync(path.join('manifest/commands', file), 'utf8')) as { commands: { id: string; entryPoints: Door[] }[] };
+  for (const c of commands) for (const d of c.entryPoints) DOORS.set(`${c.id}#${d.id}`, d);
+}
+const MENUS = (JSON.parse(fs.readFileSync('manifest/layout.json', 'utf8')) as { menus: Menu[] }).menus;
+const EN = JSON.parse(fs.readFileSync('src/i18n/locales/en.json', 'utf8')) as Record<string, string>;
+
+export const DOOR_ANNOTATION = 'door';
+
+// the details of a test that runs these doors
+export function runs(...refs: string[]): TestDetails {
+  for (const ref of refs) if (!DOORS.has(ref)) throw new Error(`the manifest has no door ${ref}`);
+  return { annotation: refs.map((ref) => ({ type: DOOR_ANNOTATION, description: ref })) };
+}
+
+function door(ref: string): Door {
+  const found = DOORS.get(ref);
+  if (found === undefined) throw new Error(`the manifest has no door ${ref}`);
+  return found;
+}
+
+// a chord of the manifest ("Ctrl+Alt+B", "Ctrl+\") as Playwright's keyboard writes it
+const KEYS: Record<string, string> = { Ctrl: 'Control', '\\': 'Backslash' };
+const keys = (chord: string): string => chord.split('+').map((k) => KEYS[k] ?? (k.length === 1 ? k.toLowerCase() : k)).join('+');
+
+// opens a menu from its button, or from the menu it is a submenu of (English UI)
+export async function openMenu(page: Page, id: string): Promise<void> {
+  const menu = MENUS.find((m) => m.id === id);
+  if (menu === undefined) throw new Error(`layout.json has no menu ${id}`);
+  const button = page.locator(`.menu-button[data-menu="${id}"]`);
+  if ((await button.count()) > 0) {
+    await button.click();
+    return;
+  }
+  const parent = menu.anchors.find((a) => a.region.startsWith('menu:'));
+  const name = EN[menu.labelKey];
+  if (parent === undefined || name === undefined) throw new Error(`menu ${id} has no button and is no submenu`);
+  await openMenu(page, parent.region.slice('menu:'.length));
+  await page.getByRole('menuitem', { name, exact: true }).hover();
+}
+
+// runs a door as a user does: a shortcut by its keys, a menu item from its menu, any other control by a click
+export async function runDoor(page: Page, ref: string): Promise<void> {
+  const d = door(ref);
+  if (d.kind === 'shortcut') {
+    if (d.chord === undefined) throw new Error(`shortcut ${ref} has no chord`);
+    await page.keyboard.press(keys(d.chord));
+    return;
+  }
+  if (d.kind === 'menu') {
+    if (d.menu === undefined) throw new Error(`menu door ${ref} names no menu`);
+    await openMenu(page, d.menu);
+  }
+  await page.locator(`[data-door="${ref}"]`).click();
+}
