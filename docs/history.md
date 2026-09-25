@@ -2,6 +2,38 @@
 
 Handoff notes between sessions. Newest entry first.
 
+## 2026-09-25 — Group 02: a coordinator integrating helpers, one feature per commit
+
+Why: the user's group 02 brief (a new helper per feature; up to 3 at once, each in a git worktree `.cache/wt/<feature>`;
+the coordinator integrates one at a time after verify:fast, e2e with the census, e2e:tooth and the status). Logs of
+every check are in `.cache/logs/` and named in each commit message.
+
+Decisions by small ambiguity (moved here from PROGRESS.md):
+- The brief's order wins over select-click's dependsOn palette-click-insert.
+- The tooth switch also holds the feature's availability predicates true: a refusal a predicate makes goes with its
+  feature (select-click's Escape with nothing selected).
+- A drawn door follows its command: selection.select#layers-row and selection.clear#menu-edit work with select-click,
+  each with a browser test the census asked for.
+- layers-tree: selecting inside a folded branch unfolds it (its scenario asks it; the spec put it elsewhere).
+- An empty container 0 px tall blocked keyboard-tree-walk's setup; not contested: the manifest's
+  canvas.emptyContainerMinHeight decides it; the renderer marks containers with data-container and one editor style
+  :where([data-container]:empty) gives the minimum height, never in the document.
+- The runner's refusal check takes the message's names from the expected feedback of the same key, and compares the
+  document with the one just before the refused step (a-new-command-after-undo-empties-redo changes it before).
+- palette-click-insert: new names unique in the whole document; nothing selected inserts at the root of the first
+  page; a tile of an unbuilt feature is disabled (same rule as shortcuts); a tile click is a plain onClick until
+  palette-drag-insert moves tile presses into pointer.ts; a focused tile's Enter/Space inserts it (keymap reads the
+  focused control's data-args); the runner checks the focused context after focusing the control.
+- multi-select-click: the selection keeps selection order and the primary is the first (the scenarios' order); the
+  count label uses canvas.selectedCount; two scenarios fail their tooth in setup, on an assertion (two nodes are
+  selected only through this feature's Shift door); a Layers click with an unbound or doubled modifier does nothing.
+- marquee-select: a layout port (src/core/ports/layout.ts) tells the core where each node is drawn; rect is the press
+  point plus a signed width and height in page px; only descendants of the deepest node under the press take part;
+  touching includes edges; 0/1/many give status.selection.cleared / status.selected / status.selection.count; on
+  every move the gesture goes back to the selection held before the press (a Shift/Ctrl press's add/toggle is undone
+  once it becomes a marquee); the runner presses a marquee near its target's top-left corner; the stage outside the
+  page starts no marquee.
+
 ## 2026-09-25 — Slice 1: the rest of the foundation and the first usable block of group 02
 
 Why: the user's slice 1 brief. It finishes the two pieces part 2 left half done (the runner for everything group 02's scenarios use; pointer.ts with its gesture machines and the transaction the door opens) and delivers select-click, palette-click-insert with undo-redo, layers-tree and delete-element. The scenarios under `manifest/features/` are the contract and are not edited in this slice.

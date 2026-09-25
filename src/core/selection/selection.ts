@@ -4,6 +4,7 @@
 import { message, registerHandler, registerPredicate, type Outcome } from '../commands/registry.ts';
 import { locate, type DocNode, type Location } from '../document/model.ts';
 import type { StoreState } from '../store/store.ts';
+import type { Rect } from '../../generated/commands.ts';
 
 // selection.clear's availability: something is selected (refused with "Select an element first." otherwise)
 export const hasSelection = registerPredicate('hasSelection', (state) => state.selection.length > 0);
@@ -18,6 +19,56 @@ export const selectCommand = registerHandler('selection.select', ({ state }, { t
 
 // selection.clear: nothing is selected any more
 export const clearSelectionCommand = registerHandler('selection.clear', () => ({ kind: 'change', selection: [], message: message('status.selection.cleared') }));
+
+// selection.marquee (spec marquee-select): the band a drag draws from the empty area of the page or of a container
+// selects what it covers, with the corrections of the spec's "Problems in Pager": the band starts at its press point
+// (rect x, y; its width and height run from there to the pointer and are negative when the pointer went left or up),
+// and only the descendants of the deepest node drawn under that point take part, so a band pressed in a container's
+// empty area stays in that container and no node that contains the start point is ever taken. A leaf is taken when the
+// band touches it (edges included, so a band as thin as a line takes what it crosses), a container when the band holds
+// it entirely, and a taken node takes its descendants' place. The mode says what becomes of the selection the gesture
+// started from: replaced, added to (the selection first, then what the band took in document order) or toggled. The
+// boxes come from the layout port; the band is in page pixels too. No document changes and no history is recorded.
+type Box = Rect;
+const holdsPoint = (b: Box, p: { readonly x: number; readonly y: number }) => p.x >= b.x && p.x <= b.x + b.width && p.y >= b.y && p.y <= b.y + b.height;
+const touches = (a: Box, b: Box) => a.x <= b.x + b.width && b.x <= a.x + a.width && a.y <= b.y + b.height && b.y <= a.y + a.height;
+const holds = (a: Box, b: Box) => b.x >= a.x && b.y >= a.y && b.x + b.width <= a.x + a.width && b.y + b.height <= a.y + a.height;
+
+export const marqueeCommand = registerHandler('selection.marquee', ({ state, layout, rules }, { rect, mode }) => {
+  // the page the canvas shows: the one whose root it draws
+  const page = state.document.pages.find((p) => layout.box(p.tree.id) !== null);
+  if (!page) return { kind: 'change' };
+  const start = { x: rect.x, y: rect.y };
+  const band: Box = { x: Math.min(rect.x, rect.x + rect.width), y: Math.min(rect.y, rect.y + rect.height), width: Math.abs(rect.width), height: Math.abs(rect.height) };
+  // the deepest node under the start point (a later sibling is drawn over an earlier one); the page root holds every point
+  let scope: DocNode = page.tree;
+  for (;;) {
+    const inner: DocNode | undefined = [...scope.children].reverse().find((child) => {
+      const box = layout.box(child.id);
+      return box !== null && holdsPoint(box, start);
+    });
+    if (!inner) break;
+    scope = inner;
+  }
+  const taken: DocNode[] = [];
+  const visit = (node: DocNode) => {
+    const box = layout.box(node.id);
+    const container = rules.elements.get(node.type)?.content === 'children';
+    if (box !== null && (container ? holds(band, box) : touches(band, box))) taken.push(node);
+    else node.children.forEach(visit);
+  };
+  scope.children.forEach(visit);
+  const took = taken.map((n) => n.id);
+  const base = state.selection;
+  const selection =
+    mode === 'replace'
+      ? took
+      : mode === 'add'
+        ? [...base, ...took.filter((id) => !base.includes(id))]
+        : [...base.filter((id) => !took.includes(id)), ...took.filter((id) => !base.includes(id))];
+  // the status bar names a single node, counts several and says when none is left, as for a click
+  return several(state, selection);
+});
 
 // A selection of several nodes (spec multi-select-click): the nodes in the order they were selected, the primary
 // first. The status bar names a single node, counts several, and says when none is left.

@@ -9,18 +9,10 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
   (branch feature/<feature>, node_modules junction, own E2E_PORT/TOOTH_PORT), and integrates one at a time after
   verify:fast, e2e with the census, e2e:tooth and the status. Done: findings 16 and 17.
 - Group 02 passing: select-click, layers-tree, keyboard-tree-walk, palette-click-insert, undo-redo,
-  multi-select-click. Also built: the editor-only 40 px minimum height of an empty container; runner paths proven by
-  switching them off: setup selection, canvas click, focusing the control a shortcut acts on (Tab), modifier click.
-- multi-select-click: the selection keeps selection order, the primary is the first (the scenarios' order); the
-  count label uses canvas.selectedCount; two scenarios fail their tooth in setup (two nodes are selected only through
-  this feature's Shift door), on an assertion; a Layers click with an unbound or doubled modifier does nothing.
-- Decisions (small ambiguity): the brief's order wins over select-click's dependsOn; the tooth switch also holds the
-  feature's predicates true; a drawn door follows its command (selection.select#layers-row, selection.clear#menu-edit,
-  each tested); selecting inside a folded branch unfolds it (layers-tree's scenario asks it); the runner's refusal
-  check takes the message's names from the expected feedback of the same key and compares the document with the one
-  just before the refused step; new names are unique in the whole document; an insert with nothing selected goes to
-  the root of the first page; a palette tile of an unbuilt feature is disabled (same rule as shortcuts); a tile
-  click is a plain onClick until palette-drag-insert moves tile presses into pointer.ts.
+  multi-select-click, marquee-select. Also built: the editor-only 40 px minimum height of an empty container, a
+  layout port for the core (src/core/ports/layout.ts). Runner paths proven by switching them off: setup selection,
+  canvas click, focusing the control a shortcut acts on (Tab), modifier click, drag press, marquee.
+- Decisions by small ambiguity: docs/history.md, "Group 02" (the newest entry).
 
 ## Conditions the user set
 
@@ -58,3 +50,5 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 23. `src/manifest/check.ts` keeps its own htmlRefusal, a second content model beside src/core/elements/content-model.ts.
 24. Escape on a focused palette tile is bound to focus.canvas (not built), so it does nothing yet.
 25. A Layers row's Shift/Ctrl doors have no data-door of their own; the census counts them only through scenarios.
+26. marquee: Escape during a band should cancel it (needs drag.cancel, not built); hidden and locked nodes are not
+    left out (the model has no flags yet; status.selection.skipped unused); a lost pointer restores it, untested.

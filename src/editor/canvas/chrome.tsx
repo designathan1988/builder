@@ -1,7 +1,8 @@
 // The canvas chrome (ARCHITECTURE.md): what the editor draws over the page, on the canvas overlay: the outline of
 // every selected node and the primary's label (its name and its exported tag, so the page root reads "body"); with
-// several selected, the dashed outline of their union and one label counting them ("3 elements selected"); and
-// the thinner outline of the node the pointer hovers (pointer.ts). Where a node is on the screen comes from the
+// several selected, the dashed outline of their union and one label counting them ("3 elements selected"); the
+// thinner outline of the node the pointer hovers (pointer.ts); and the band of a marquee while pointer.ts draws one
+// (spec marquee-select: a 1 px accent border, a 16 % accent fill). Where a node is on the screen comes from the
 // coordinates module (nodeBox), measured on every animation frame while there is something to draw, so the chrome
 // follows scrolling, zoom and layout; the page itself is never touched (only the renderer writes it). The chrome
 // takes no pointer event.
@@ -10,7 +11,7 @@
 // free, otherwise inside the element's top-left corner when that corner is free, otherwise below the element.
 import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from 'react';
 import { locate } from '../../core/document/model.ts';
-import { hover } from '../input/pointer.ts';
+import { band, hover } from '../input/pointer.ts';
 import { useEditorState } from '../store.ts';
 import { useT } from '../text.ts';
 import { canvasFrame, contentBoxes, nodeBox } from './coordinates.ts';
@@ -28,8 +29,10 @@ interface Layout {
   readonly union: Box | null;
   readonly hovered: Box | null;
   readonly label: { readonly box: Box; readonly placement: Placement } | null;
+  // the marquee's band while one is drawn (pointer.ts)
+  readonly band: Box | null;
 }
-const EMPTY: Layout = { selected: [], union: null, hovered: null, label: null };
+const EMPTY: Layout = { selected: [], union: null, hovered: null, label: null, band: null };
 
 // the smallest box around every box given; null for none
 export function unionOf(boxes: readonly Box[]): Box | null {
@@ -61,6 +64,7 @@ export function CanvasChrome() {
   // the primary selected node, read as the store holds it (a node object is replaced only when it changes)
   const node = useEditorState((s) => (s.selection[0] === undefined ? null : (locate(s.document, s.selection[0])?.node ?? null)));
   const hovered = useSyncExternalStore(hover.subscribe, hover.get);
+  const drawnBand = useSyncExternalStore(band.subscribe, band.get);
   const t = useT();
   const layer = useRef<HTMLDivElement>(null);
   const label = useRef<HTMLDivElement>(null);
@@ -68,8 +72,8 @@ export function CanvasChrome() {
 
   useEffect(() => {
     let request = 0;
-    // nothing selected and nothing hovered: nothing to measure, and the last layout is dropped
-    if (selection.length === 0 && hovered === null) {
+    // nothing selected, hovered or banded: nothing to measure, and the last layout is dropped
+    if (selection.length === 0 && hovered === null && drawnBand === null) {
       request = requestAnimationFrame(() => setLayout(EMPTY));
       return () => cancelAnimationFrame(request);
     }
@@ -95,20 +99,21 @@ export function CanvasChrome() {
         }
         placedFor = key;
         const hoveredBox = hovered !== null && !selection.includes(hovered as (typeof selection)[number]) ? local(nodeBox(iframe, hovered)) : null;
-        const next: Layout = { selected, union, hovered: hoveredBox, label: placed };
+        const next: Layout = { selected, union, hovered: hoveredBox, label: placed, band: local(drawnBand) };
         setLayout((before) => (same(before, next) ? before : next));
       }
       request = requestAnimationFrame(measure);
     };
     request = requestAnimationFrame(measure);
     return () => cancelAnimationFrame(request);
-  }, [selection, hovered, node]);
+  }, [selection, hovered, node, drawnBand]);
 
   const at = (b: Box): CSSProperties => ({ left: b.x, top: b.y, width: b.width, height: b.height });
-  const shown = selection.length === 0 && hovered === null ? EMPTY : layout;
+  const shown = selection.length === 0 && hovered === null && drawnBand === null ? EMPTY : layout;
   return (
     <div className="chrome" ref={layer} data-canvas-chrome>
       {shown.hovered ? <div className="chrome__hover" data-chrome="hover" style={at(shown.hovered)} /> : null}
+      {drawnBand !== null && shown.band ? <div className="chrome__band" data-chrome="band" style={at(shown.band)} /> : null}
       {shown.selected.map((b, i) => (
         <div key={i} className="chrome__selection" data-chrome="selection" style={at(b)} />
       ))}

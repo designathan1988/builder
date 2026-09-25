@@ -14,6 +14,7 @@ import { EMPTY_HISTORY, REDONE, UNDONE, record, redo, undo, type HistoryState, t
 import { applyPatches, deepEqual, type Patch, type Transaction } from '../history/transaction.ts';
 import type { Clock } from '../ports/clock.ts';
 import type { IdGenerator } from '../ports/ids.ts';
+import { noLayout, type Layout } from '../ports/layout.ts';
 
 export interface StoreState<Ui> {
   readonly document: DocumentJson;
@@ -77,6 +78,8 @@ export interface StoreOptions<Ui> {
   readonly ids: IdGenerator;
   // a catalogue text in the language the editor state holds (the core never reads the editor state itself)
   readonly words: (ui: Ui, key: MessageId) => string;
+  // where the canvas draws the page's nodes (the editor's canvas); none drawn when absent
+  readonly layout?: Layout;
   readonly initial: { readonly document: DocumentJson; readonly selection?: Selection; readonly ui: Ui };
   // deep-freeze every committed state (development and tests)
   readonly freeze: boolean;
@@ -174,7 +177,7 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
       return { status: 'refused', message: refusal };
     }
     const ui = state.ui;
-    const context: HandlerContext<Ui> = { state, clock, ids, rules, words: (key) => options.words(ui, key) };
+    const context: HandlerContext<Ui> = { state, clock, ids, rules, words: (key) => options.words(ui, key), layout: options.layout ?? noLayout };
     const outcome: Outcome<Ui> = entry.run(context, args);
 
     if (outcome.kind === 'refused') {

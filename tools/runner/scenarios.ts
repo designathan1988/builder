@@ -2,7 +2,8 @@
 // per scenario and per door of its `doors`, on the installed Chrome: the fixture loaded through File › Open, the setup
 // through doors (the language, the selection clicked on the canvas, the breakpoint, the style state, the zoom),
 // every step through its door with the real mouse and keyboard (a click on the node it targets, a drag released
-// where its drop says or held across the next steps, the characters it types), then the end terminals the scenario
+// where its drop says or held across the next steps, a marquee drawn from its target's empty area to its drop's node,
+// the characters it types), then the end terminals the scenario
 // names: the document diff, the selection and the history read through the read-only test port, computed style and
 // geometry inside the frame, the feedback in the status bar, the editor's regions, storage after an immediate
 // reload, and the refusals. After the setup and after the steps the canvas must draw the document the port reads;
@@ -217,14 +218,16 @@ interface Point {
   readonly y: number;
 }
 type CanvasQuery =
-  // a point that hits the node itself (not one of its children); the page root is hit wherever no element is
-  | { readonly kind: 'node'; readonly id: string; readonly root: boolean }
+  // a point that hits the node itself (not one of its children), nearest its centre or, for the press of a marquee,
+  // nearest its top-left corner, where a band starts; the page root is hit wherever no element is
+  | { readonly kind: 'node'; readonly id: string; readonly root: boolean; readonly near: 'centre' | 'start' }
   // where a drag is released for a drop before, after or inside the node
   | { readonly kind: 'drop'; readonly id: string; readonly placement: Drop['placement']; readonly container: boolean; readonly slot: number | null };
 
 // A screen point on the canvas, measured in the page as the pointer owner measures it (coordinates.ts): the iframe's
 // content box scaled by its CSS zoom; the point must land on the canvas overlay. Or why there is none.
-//  - A node: the centre when it hits the node, else the point nearest the centre on a grid over its visible box.
+//  - A node: the centre when it hits the node, else the point nearest the centre on a grid over its visible box (for
+//    the press of a marquee, the point of that grid nearest the box's top-left corner).
 //  - A drop, by the zones of the drag specs (drag-reorder-canvas, drag-drop-inside): along the parent's flow axis a
 //    leaf splits in halves; a container keeps an edge band at each end (min(8, 0.25 S) when empty,
 //    min(clamp(0.25 S, 8, 32), 0.4 S) with children) and is "inside" between them, at the slot the step's index
@@ -251,7 +254,7 @@ function canvasPoint(page: Page, query: CanvasQuery): Promise<Point | string> {
       if (x1 - x0 < 1 || y1 - y0 < 1) return 'it is outside the visible page';
       const along = (a: number, b: number) => [0.5, 0.35, 0.65, 0.2, 0.8, 0.05, 0.95].map((f) => a + f * (b - a)).concat([a + 1.5, b - 1.5]);
       const points = along(x0, x1).flatMap((x) => along(y0, y1).map((y) => ({ x, y })));
-      const [cx, cy] = [(x0 + x1) / 2, (y0 + y1) / 2];
+      const [cx, cy] = q.near === 'start' ? [x0, y0] : [(x0 + x1) / 2, (y0 + y1) / 2];
       points.sort((p, o) => Math.hypot(p.x - cx, p.y - cy) - Math.hypot(o.x - cx, o.y - cy));
       for (const p of points) {
         const hit = doc.elementFromPoint(p.x, p.y);
@@ -289,9 +292,9 @@ function canvasPoint(page: Page, query: CanvasQuery): Promise<Point | string> {
   }, query);
 }
 
-async function nodePoint(page: Page, id: string, root: boolean, nodePath: string): Promise<Point> {
+async function nodePoint(page: Page, id: string, root: boolean, nodePath: string, near: 'centre' | 'start' = 'centre'): Promise<Point> {
   await frameElement(page, id, nodePath);
-  const found = await canvasPoint(page, { kind: 'node', id, root });
+  const found = await canvasPoint(page, { kind: 'node', id, root, near });
   if (typeof found === 'string') throw new Error(`${nodePath}: ${found}`);
   return found;
 }
@@ -332,6 +335,13 @@ async function canvasDropPoint(page: Page, document: unknown, drop: Drop, index:
   const found = await canvasPoint(page, { kind: 'drop', id: reference.id, placement: drop.placement, container: CONTENT.get(reference.type) === 'children', slot: index });
   if (typeof found === 'string') throw new Error(`drop ${drop.placement} ${drop.reference}: ${found}`);
   return found;
+}
+
+// Where a marquee's band ends (a drag from the empty area): inside its reference, on the point nearest the
+// reference's centre that hits it rather than a child, so the band runs from the press to there.
+async function marqueeEndPoint(page: Page, document: unknown, drop: Drop): Promise<Point> {
+  if (drop.placement !== 'inside') throw new Error(`a marquee ends inside a node, not ${drop.placement} ${drop.reference}`);
+  return nodePoint(page, nodeAt(document, drop.reference).id, isRoot(document, drop.reference), drop.reference);
 }
 
 // The Layers row of a node and where on it a drop lands (layers-drag): a container row is "inside" in its middle
@@ -426,11 +436,18 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
           ? await controlPoint(page, 'element.insert#elements-tile', { entry: args.entry })
           : d.source === 'layers-row' && target !== null
             ? await controlPoint(page, layersRowRef, { target: target.id })
-            : target !== null && step.target !== null && (d.source === 'canvas-element' || d.source === 'empty-area')
+            : target !== null && step.target !== null && d.source === 'canvas-element'
               ? await nodePoint(page, target.id, isRoot(document, step.target), step.target)
-              : null;
+              : target !== null && step.target !== null && d.source === 'empty-area'
+                ? await nodePoint(page, target.id, isRoot(document, step.target), step.target, 'start')
+                : null;
       if (from === null) throw new Error(`step ${ref}: the runner cannot press a ${d.source ?? ''} source`);
-      const to = d.kind === 'layers-drag' ? await layersDropPoint(page, document, step.drop) : await canvasDropPoint(page, document, step.drop, typeof step.args.index === 'number' ? step.args.index : null);
+      const to =
+        d.kind === 'layers-drag'
+          ? await layersDropPoint(page, document, step.drop)
+          : d.source === 'empty-area'
+            ? await marqueeEndPoint(page, document, step.drop)
+            : await canvasDropPoint(page, document, step.drop, typeof step.args.index === 'number' ? step.args.index : null);
       // a gesture's modifier stands for the mode the step asks (the marquee's Shift adds to the selection)
       const gesture = interactions.gestures.find((g) => g.id === d.gesture);
       const mode = typeof step.args.mode === 'string' ? step.args.mode : null;

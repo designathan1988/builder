@@ -7,11 +7,14 @@
 // the manifest's drag.threshold. The door of the press is found by its data (a canvas click's target, button, count
 // and modifier), and the gesture's doors run through one transaction the pointer owner opens with store.gesture()
 // when the press starts and commits when it ends, or cancels when the browser takes the pointer away: a whole
-// gesture is one undo step, and no handler ever opens a transaction (lint rule builder/gesture-owner).
+// gesture is one undo step, and no handler ever opens a transaction (lint rule builder/gesture-owner). A drag pressed
+// on the empty area of the page or of a container is the marquee (spec marquee-select), whose band it publishes for
+// the canvas chrome.
+import { locate } from '../../core/document/model.ts';
 import type { Gesture } from '../../core/store/store.ts';
 import type { CommandId, KeyContextId } from '../../generated/ids.ts';
 import { manifest, type DoorEntry } from '../../manifest/runtime.ts';
-import { canvasFrame, nodeAt, type Point } from '../canvas/coordinates.ts';
+import { canvasFrame, geometryOf, nodeAt, screenToPage, type Point } from '../canvas/coordinates.ts';
 import type { EditorStore } from '../store.ts';
 
 const threshold = manifest.interactions.constants.find((c) => c.id === 'drag.threshold')?.value;
@@ -75,6 +78,49 @@ function argsFor(entry: DoorEntry, press: Press): Record<string, unknown> {
   return entry.door.adapter.selection === 'target' && press.on === 'node' ? { ...entry.door.args, target: press.node } : { ...entry.door.args };
 }
 
+// The marquee (spec marquee-select): the canvas-drag door whose source is the empty area, and whether a press may
+// start it. Its zone "page-or-container" takes a press on the page root or on a container's own area (not on a
+// child); a press on a leaf is that element's drag, never a marquee. The mode is the one its gesture's modifier
+// (interactions.json gestures) names, read at the press: a modifier's meaning starts with the mode it stands for
+// ("add-to-selection"), and with no modifier the mode is the one no modifier names; a modifier the gesture does not
+// know starts no marquee.
+const MARQUEE = manifest.doors.find((d) => d.door.kind === 'canvas-drag' && d.door.source === 'empty-area') ?? null;
+const CONTAINERS = new Set(manifest.elements.elements.filter((e) => e.content === 'children').map((e) => e.id));
+function marqueeMode(entry: DoorEntry, press: Press, modifier: string | null, type: string | null): string | null {
+  const door = entry.door;
+  if (door.kind !== 'canvas-drag' || door.zone !== 'page-or-container' || press.on !== 'node') return null;
+  if (!press.root && (type === null || !CONTAINERS.has(type))) return null;
+  const gesture = manifest.interactions.gestures.find((g) => g.id === door.gesture);
+  const modes = entry.command.args.mode?.values ?? [];
+  const names = (mode: string, meaning: string) => meaning.startsWith(`${mode}-`);
+  if (modifier === null) return modes.find((mode) => !(gesture?.modifiers ?? []).some((m) => names(mode, m.meaning))) ?? null;
+  const meaning = gesture?.modifiers.find((m) => m.key === modifier)?.meaning;
+  return meaning === undefined ? null : (modes.find((mode) => names(mode, meaning)) ?? null);
+}
+
+// The band of the marquee being drawn, in screen pixels, for the canvas chrome; null when no marquee is drawn.
+// Pointer state, like the hovered node: the selection it makes goes through the store.
+export interface Band {
+  readonly x: number;
+  readonly y: number;
+  readonly width: number;
+  readonly height: number;
+}
+let drawnBand: Band | null = null;
+const bandListeners = new Set<() => void>();
+export const band = {
+  get: (): Band | null => drawnBand,
+  subscribe(listener: () => void): () => void {
+    bandListeners.add(listener);
+    return () => bandListeners.delete(listener);
+  },
+};
+function setBand(next: Band | null) {
+  if (next === drawnBand) return;
+  drawnBand = next;
+  for (const listener of [...bandListeners]) listener();
+}
+
 // The node the pointer hovers on the canvas, for the canvas chrome: set by pointer moves over the page, null
 // elsewhere. Pointer state, not editor state: it changes no command.
 let hovered: string | null = null;
@@ -129,19 +175,55 @@ function pressAt(event: PointerEvent): Press | null | 'elsewhere' {
 export function installPointer(store: EditorStore, target: Window = window): () => void {
   let machine: Machine = IDLE;
   let buttons: { button: Button; count: number; modifier: string | null } | null = null;
+  // where the press went down, on the screen and in page pixels (null outside the page)
+  let pressedAt: { screen: Point; page: Point | null } | null = null;
+  // the marquee being drawn: its door and mode
+  let marquee: { entry: DoorEntry; mode: string } | null = null;
+
+  const pagePoint = (at: Point): Point | null => {
+    const frame = canvasFrame();
+    const g = frame ? geometryOf(frame) : null;
+    return g ? screenToPage(at, g) : null;
+  };
+
+  // The marquee follows the pointer: every move selects anew from the selection the gesture started from, so the
+  // gesture is cancelled (back to that selection) and opened again with the band from the press to the pointer.
+  const drawMarquee = (at: Point) => {
+    if (marquee === null || pressedAt === null || pressedAt.page === null) return;
+    const to = pagePoint(at);
+    if (to === null) return;
+    const from = pressedAt.page;
+    open?.cancel();
+    open = store.gesture();
+    const rect = { x: from.x, y: from.y, width: to.x - from.x, height: to.y - from.y };
+    open.dispatch(marquee.entry.command.id as CommandId, { ...marquee.entry.door.args, rect, mode: marquee.mode } as never);
+    const s = pressedAt.screen;
+    setBand({ x: Math.min(s.x, at.x), y: Math.min(s.y, at.y), width: Math.abs(at.x - s.x), height: Math.abs(at.y - s.y) });
+  };
 
   const run = (effect: Effect) => {
     if (effect === 'press' && machine.phase !== 'idle' && buttons !== null) {
       open = store.gesture();
       const entry = clickDoor(machine.press, buttons.button, buttons.count, buttons.modifier);
       if (entry) open.dispatch(entry.command.id as CommandId, argsFor(entry, machine.press) as never);
+    } else if (effect === 'drag' && machine.phase === 'dragging' && buttons?.button === 'primary' && MARQUEE !== null) {
+      // a press on the empty area of the page or of a container becomes a marquee; what the press's click did is
+      // undone, so the marquee starts from the selection held before the press
+      const press = machine.press;
+      const type = press.on === 'node' ? (locate(store.getState().document, press.node)?.node.type ?? null) : null;
+      const mode = marqueeMode(MARQUEE, press, buttons.modifier, type);
+      if (mode !== null) marquee = { entry: MARQUEE, mode };
     } else if (effect === 'commit' || effect === 'cancel') {
       const closing = open;
       open = null;
+      marquee = null;
+      pressedAt = null;
+      setBand(null);
       if (effect === 'commit') closing?.commit();
       else closing?.cancel();
     }
-    // 'drag': the drag doors of a press's source arrive with the drag features; the gesture stays one transaction
+    // 'drag' of an element, a palette tile or a Layers row: those drag doors arrive with the drag features; the
+    // gesture stays one transaction
   };
 
   const onDown = (event: PointerEvent) => {
@@ -149,16 +231,20 @@ export function installPointer(store: EditorStore, target: Window = window): () 
     if (press === null || press === 'elsewhere') return;
     if (event.button !== 0 && event.button !== 2) return;
     buttons = { button: event.button === 2 ? 'secondary' : 'primary', count: Math.min(Math.max(event.detail, 1), 2), modifier: modifierOf(event) };
-    const next = step(machine, { type: 'down', pointer: event.pointerId, at: { x: event.clientX, y: event.clientY }, press });
+    const at = { x: event.clientX, y: event.clientY };
+    const next = step(machine, { type: 'down', pointer: event.pointerId, at, press });
+    if (next.effect === 'press') pressedAt = { screen: at, page: pagePoint(at) };
     machine = next.machine;
     run(next.effect);
   };
   const onMove = (event: PointerEvent) => {
     const press = pressAt(event);
     setHovered(machine.phase === 'idle' && press !== null && press !== 'elsewhere' && press.on === 'node' ? press.node : null);
-    const next = step(machine, { type: 'move', pointer: event.pointerId, at: { x: event.clientX, y: event.clientY } });
+    const at = { x: event.clientX, y: event.clientY };
+    const next = step(machine, { type: 'move', pointer: event.pointerId, at });
     machine = next.machine;
     run(next.effect);
+    if (machine.phase === 'dragging' && event.pointerId === machine.pointer) drawMarquee(at);
   };
   const onUp = (event: PointerEvent) => {
     const next = step(machine, { type: 'up', pointer: event.pointerId });

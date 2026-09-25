@@ -10,6 +10,7 @@ import type { ModelRules } from '../document/validate.ts';
 import type { Patch } from '../history/transaction.ts';
 import type { Clock } from '../ports/clock.ts';
 import type { IdGenerator } from '../ports/ids.ts';
+import type { Layout } from '../ports/layout.ts';
 import type { StoreState } from '../store/store.ts';
 
 export const NOT_AVAILABLE_YET = Object.freeze({ notAvailableYet: true as const });
@@ -49,6 +50,8 @@ export interface HandlerContext<Ui> {
   readonly rules: ModelRules;
   // a catalogue text in the language the person reads the editor in: the words a new node is named and filled with
   words(key: MessageId): string;
+  // where the canvas draws the nodes of the page it shows, for a handler that acts on what a gesture covers (the marquee)
+  readonly layout: Layout;
 }
 
 export interface RegisteredHandler<Id extends CommandId, Ui> {

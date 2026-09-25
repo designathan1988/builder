@@ -863,6 +863,14 @@ kbd {
   outline: 1px solid var(--color-canvas-hover);
 }
 
+/* the marquee's band (spec marquee-select): a 1 px accent border and a 16 % accent fill */
+.chrome__band {
+  position: absolute;
+  box-sizing: border-box;
+  border: 1px solid var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 16%, transparent);
+}
+
 .chrome__label {
   position: absolute;
   display: inline-flex;

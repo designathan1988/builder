@@ -11,6 +11,7 @@ import { EMPTY_HISTORY } from '../history/history.ts';
 import { applyPatches } from '../history/transaction.ts';
 import { manualClock } from '../ports/clock.ts';
 import { sequentialIds } from '../ports/ids.ts';
+import { noLayout } from '../ports/layout.ts';
 import { insertCommand, uniqueName } from './insert.ts';
 
 const RULES = rulesFromManifest(manifest.elements, manifest.properties, manifest.html);
@@ -39,6 +40,8 @@ function run(selection: string[], args: { entry: string; parent?: string; index?
     ids: sequentialIds('new'),
     rules: RULES,
     words: (key: MessageId) => translate(locale, key),
+    // inserting measures nothing on the canvas
+    layout: noLayout,
   } satisfies HandlerContext<never>;
   return insertCommand.run(context, args as never);
 }

@@ -3,6 +3,7 @@
 // CSS pixels from its visible top-left) and the screen (the editor window's client pixels). The iframe is scaled with
 // the standard CSS zoom, so one page pixel is `zoom` screen pixels; its layout keeps the breakpoint's width.
 import { NODE_ATTRIBUTE, nodeSelector } from '../../core/render/render.ts';
+import type { Layout } from '../../core/ports/layout.ts';
 import type { NodeId } from '../../generated/commands.ts';
 
 export interface Point {
@@ -94,6 +95,20 @@ export function nodeBox(iframe: HTMLIFrameElement, id: string): { x: number; y: 
   const element = iframe.contentDocument?.querySelector(nodeSelector(id as NodeId));
   return element ? screenBox(iframe, element) : null;
 }
+
+// The layout port of the core (src/core/ports/layout.ts), measured on the canvas's page: a node's box in page pixels,
+// or null when the canvas does not draw it (no frame, or no element of that node).
+export const pageLayout: Layout = {
+  box(id) {
+    const iframe = current;
+    const g = iframe ? geometryOf(iframe) : null;
+    const element = iframe?.contentDocument?.querySelector(nodeSelector(id));
+    if (!g || !element) return null;
+    const r = element.getBoundingClientRect();
+    const topLeft = frameToPage({ x: r.left, y: r.top }, g);
+    return { x: topLeft.x, y: topLeft.y, width: r.width, height: r.height };
+  },
+};
 
 // The page's content on the screen, which a canvas label must never cover (DESIGN.md "Label rule"): the box of
 // every run of text and of every replaced element (an image, a video, an embedded frame, a form control).
