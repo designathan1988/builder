@@ -12,7 +12,7 @@
 //   other files of the build; the scenario data of a runner test is compared scenario by scenario.
 // Anything it cannot show widens the run, up to the whole suite. A failed test stays in the map, reported as open,
 // and runs again as soon as anything it depends on changes.
-import { spawnSync } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -276,11 +276,22 @@ export function specsAffected(changedFiles: readonly string[], testDir = 'tests/
 }
 
 // Every test of the suite as Playwright lists it (the same id as tests/support/test.ts builds).
-export function listTests(): string[] {
-  const args = ['playwright', 'test', '--list', '--reporter=json'];
-  const r = spawnSync(`npx ${args.join(' ')}`, { encoding: 'utf8', shell: true, maxBuffer: 256 * 1024 * 1024, env: { ...process.env, E2E_SELECTION: '' } });
+export async function listTestsAsync(): Promise<string[]> {
+  const stdout = await new Promise<string>((resolve, reject) => {
+    const child = spawn(process.execPath, ['node_modules/@playwright/test/cli.js', 'test', '--list', '--reporter=json'], { env: { ...process.env, E2E_SELECTION: '' } });
+    let out = '';
+    let err = '';
+    child.stdout.on('data', (c: Buffer) => (out += c.toString()));
+    child.stderr.on('data', (c: Buffer) => (err += c.toString()));
+    child.on('close', (code) => (code === 0 ? resolve(out) : reject(new Error(`playwright --list failed: ${err || out}`))));
+  });
+  return parseListing(stdout);
+}
+
+function parseListing(output: string): string[] {
+  const r = { stdout: output };
   const start = r.stdout.indexOf('{');
-  if (start < 0) throw new Error(`playwright --list failed: ${r.stderr || r.stdout}`);
+  if (start < 0) throw new Error(`playwright --list printed no report: ${output.slice(0, 200)}`);
   interface Suite {
     readonly title: string;
     readonly specs?: readonly { readonly title: string }[];

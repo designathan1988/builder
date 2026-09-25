@@ -57,7 +57,7 @@ export default defineConfig({
     // the app under test is the build, served statically (the same tests, no per-module dev transforms per request);
     // tests/support/proofs.ts is built beside it for the browser-side proofs
     // (the limited validation builds first, to compare the build with the map, and says so with E2E_PREBUILT)
-    command: process.env.E2E_PREBUILT === '1' ? 'npm run preview' : 'npm run build && npm run build:proofs && npm run preview',
+    command: process.env.E2E_PREBUILT === '1' ? `"${process.execPath}" node_modules/vite/bin/vite.js preview` : 'npm run build && npm run build:proofs && npm run preview',
     url: baseURL,
     // the tooth proof (tools/runner/tooth.ts) switches a feature off in the build it makes here (tooth-plugin.ts)
     // E2E_BUILD: the e2e build is not minified, for the coverage the limited validation reads (vite.config.ts)

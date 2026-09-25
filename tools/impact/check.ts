@@ -10,24 +10,40 @@ import { spawn, spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { chromium } from '@playwright/test';
-import { decide, environmentHash, environmentParts, git, listTests, readBuild, readMap, scenarioPrint, snapshotTree, specsAffected, writeMap, type Decision } from './impact.ts';
+import { decide, environmentHash, environmentParts, git, listTestsAsync, readBuild, readMap, scenarioPrint, snapshotTree, specsAffected, writeMap, type Decision } from './impact.ts';
 
 const started = Date.now();
 const elapsed = () => `${((Date.now() - started) / 1000).toFixed(1)} s`;
-const run = (command: string, env: NodeJS.ProcessEnv = {}) => spawnSync(command, { shell: true, encoding: 'utf8', env: { ...process.env, ...env }, maxBuffer: 256 * 1024 * 1024 });
+const phase = (what: string) => console.log(`check: [${elapsed()}] ${what}`);
 const title = (id: string) => (JSON.parse(id) as string[]).join(' › ');
+const exec = (command: string, env: NodeJS.ProcessEnv = {}) =>
+  new Promise<{ code: number; output: string }>((resolve) => {
+    const child = spawn(command, { shell: true, env: { ...process.env, FORCE_COLOR: '0', ...env } });
+    let output = '';
+    child.stdout.on('data', (c: Buffer) => (output += c.toString()));
+    child.stderr.on('data', (c: Buffer) => (output += c.toString()));
+    child.on('close', (c) => resolve({ code: c ?? 1, output }));
+  });
 
-// 1. the build the tests will run against, and what it is made of
-const build = run('npm run build && npm run build:proofs', { E2E_BUILD: '1' });
-if (build.status !== 0) {
-  process.stdout.write(build.stdout + build.stderr);
+// 1. at the same time: the build the tests will run against (then what it is made of), the suite's list of tests,
+// and the browser's version
+const VITE = `"${process.execPath}" node_modules/vite/bin/vite.js`;
+const building = exec(`${VITE} build --logLevel warn && ${VITE} build --config vite.proofs.config.ts --logLevel warn`, { E2E_BUILD: '1' });
+const listing = listTestsAsync();
+const version = chromium.launch({ channel: 'chrome' }).then(async (b) => {
+  const v = b.version();
+  await b.close();
+  return v;
+});
+const build = await building;
+if (build.code !== 0) {
+  process.stdout.write(build.output);
   console.log('check: the e2e build failed');
   process.exit(1);
 }
 const app = readBuild();
-const browser = await chromium.launch({ channel: 'chrome' });
-const parts = environmentParts(browser.version());
-await browser.close();
+phase('built and analysed');
+const parts = environmentParts(await version);
 const environment = environmentHash(parts);
 const map = readMap();
 const snapshot = snapshotTree();
@@ -49,21 +65,12 @@ else {
 }
 if (!snapshotKnown || changed.some((f) => /^(manifest\/|src\/manifest\/|tools\/manifest\/|spec\/)/.test(f))) statics.push({ name: 'manifest:check', command: 'npm run manifest:check' });
 if (!snapshotKnown || changed.some((f) => /^(manifest\/|tools\/gen\/|design\/|src\/generated\/|src\/ui\/)/.test(f))) statics.push({ name: 'gen:check', command: 'npm run gen:check' });
-const staticRuns = Promise.all(
-  statics.map(
-    (s) =>
-      new Promise<{ name: string; code: number; output: string }>((resolve) => {
-        const child = spawn(s.command, { shell: true, env: { ...process.env, FORCE_COLOR: '0' } });
-        let output = '';
-        child.stdout.on('data', (c: Buffer) => (output += c.toString()));
-        child.stderr.on('data', (c: Buffer) => (output += c.toString()));
-        child.on('close', (c) => resolve({ name: s.name, code: c ?? 1, output }));
-      }),
-  ),
-);
+// they run while the browser tests do
+const staticRuns = Promise.all(statics.map(async (s) => ({ name: s.name, ...(await exec(s.command)) })));
 
 // 3. the browser tests the change can affect
-const tests = listTests();
+const tests = await listing;
+phase('listed the suite');
 const testSide = specsAffected(changed);
 const unmappedFiles = new Set(
   fs
@@ -95,20 +102,16 @@ if (process.argv.includes('--dry-run')) {
   await staticRuns;
   process.exit(0);
 }
-const staticResults = await staticRuns;
-for (const r of staticResults) {
-  if (r.code !== 0) process.stdout.write(r.output);
-  console.log(`check: ${r.name} exit ${r.code}`);
-}
+phase('decided');
 
-// 4. run them; the teardown records them in the map and moves its snapshot here
+// 4. run them, while the static checks finish; the teardown records them in the map and moves its snapshot here
 let browserCode = 0;
 if (decision.selected.size > 0) {
   const selectionFile = path.join('.cache', 'impact', `selection-${process.pid}.json`);
   fs.mkdirSync(path.dirname(selectionFile), { recursive: true });
   fs.writeFileSync(selectionFile, JSON.stringify([...decision.selected.keys()]));
   browserCode = await new Promise<number>((resolve) => {
-    const child = spawn('npx playwright test', {
+    const child = spawn(`"${process.execPath}" node_modules/@playwright/test/cli.js test`, {
       shell: true,
       stdio: 'inherit',
       env: { ...process.env, E2E_SELECTION: selectionFile, E2E_PREBUILT: '1', E2E_CHECK: '1', E2E_SNAPSHOT: snapshot, E2E_RUN_ID: `check-${process.pid}` },
@@ -116,9 +119,16 @@ if (decision.selected.size > 0) {
     child.on('close', (c) => resolve(c ?? 1));
   });
   fs.rmSync(selectionFile, { force: true });
+  phase('browser tests done');
 } else if (map !== null) {
   // nothing to run: every test keeps its result, and the validated tree is this one
   writeMap({ ...map, snapshot });
+}
+const staticResults = await staticRuns;
+phase('static checks done');
+for (const r of staticResults) {
+  if (r.code !== 0) process.stdout.write(r.output);
+  console.log(`check: ${r.name} exit ${r.code}`);
 }
 const failedStatics = staticResults.filter((r) => r.code !== 0).map((r) => r.name);
 const ok = failedStatics.length === 0 && browserCode === 0;
