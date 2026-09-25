@@ -1186,6 +1186,7 @@
   "status.gap.notContainer": "Gaps se aplicam a contêineres flex e grid.",
   "status.grid.invalid": "{field} precisa ser um número positivo.",
   "status.guides.locked": "Desbloqueie a guia antes de movê-la.",
+  "status.hand.aim": "{receiver} vai receber. Posição {position} de {count}. Nível {level} de {levels}.",
   "status.hand.dropped": "Solto. Nada mudou.",
   "status.hand.hidden": "Mostre {name} antes de movê-lo.",
   "status.hand.holding": "Segurando {name}. Setas miram, Enter coloca, Esc solta.",

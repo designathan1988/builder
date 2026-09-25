@@ -1186,6 +1186,7 @@
   "status.gap.notContainer": "Gaps apply to flex and grid containers.",
   "status.grid.invalid": "{field} must be a positive number.",
   "status.guides.locked": "Unlock the guide before moving it.",
+  "status.hand.aim": "{receiver} will receive. Position {position} of {count}. Level {level} of {levels}.",
   "status.hand.dropped": "Dropped. Nothing changed.",
   "status.hand.hidden": "Show {name} before moving it.",
   "status.hand.holding": "Holding {name}. Arrows aim, Enter places, Esc drops.",

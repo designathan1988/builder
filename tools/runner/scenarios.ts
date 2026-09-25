@@ -506,6 +506,9 @@ async function withModifier(page: Page, modifier: string | null | undefined, act
 
 // the key context of the text edited in place on the canvas (interactions.json), which the edited element names
 const EDIT_CONTEXT = 'text-editing';
+// the key context of the keyboard's hand (interactions.json): while it holds an element, the canvas's keys are its
+// own (keymap.ts), and the canvas draws its aim as a drop (spec hand-keyboard-move)
+const HAND_CONTEXT = 'hand';
 
 // the focused key context and the contexts it inherits (keymap.ts): the text edited in place names its own, a field
 // keeps its keys, a region names its context, the page body is the canvas's
@@ -570,6 +573,11 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
   const d = doorData(ref);
   // a key of the text edited in place needs the focus in the edited text, before anything else of the step
   if (d.kind === 'shortcut' && d.context === EDIT_CONTEXT) expect((await focusedContexts(page))[0], `step ${ref}: the focus is in the text edited in place`).toBe(EDIT_CONTEXT);
+  // a key of the hand needs the focus on the canvas and an element in the hand, whose aim the canvas draws as a drop
+  if (d.kind === 'shortcut' && d.context === HAND_CONTEXT) {
+    expect((await focusedContexts(page))[0], `step ${ref}: the focus is on the canvas`).toBe('canvas');
+    await expect(page.locator('[data-chrome="drop"]'), `step ${ref}: the hand holds an element (the canvas draws its aim)`).toHaveCount(1);
+  }
   const { document } = await port(page);
   const args = resolveArgs(ref, step.args, document);
   // the arguments a drawn control stands for, beyond those its door fixes
@@ -639,8 +647,10 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
     }
   } else if (d.kind === 'shortcut') {
     // a key of the text edited in place (the focus there was asserted above) acts on the edit: its arguments (the
-    // node, the text) are what the edit holds, which the document diff checks; no control stands for them
-    if (d.context !== EDIT_CONTEXT && Object.keys(own).length > 0) {
+    // node, the text) are what the edit holds, which the document diff checks; no control stands for them. A key of
+    // the hand (asserted above too) acts at the hand's aim: its arguments (Enter: element.moveTo's parent and index)
+    // are where the steps before it aimed, which the document diff checks as well
+    if (d.context !== EDIT_CONTEXT && d.context !== HAND_CONTEXT && Object.keys(own).length > 0) {
       await focusControlFor(page, ref, own);
       // the control the key acts on lies in the door's key context (a palette tile in the palette's)
       const chain = await focusedContexts(page);

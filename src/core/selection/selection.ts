@@ -9,7 +9,7 @@ import type { Rect } from '../../generated/commands.ts';
 // selection.clear's availability: something is selected (refused with "Select an element first." otherwise)
 export const hasSelection = registerPredicate('hasSelection', (state) => state.selection.length > 0);
 
-// the availability of a command that acts on one element (element.promote): exactly one node is selected
+// the availability of a command that acts on one element (element.promote, hand.take): exactly one node is selected
 export const singleSelection = registerPredicate('singleSelection', (state) => state.selection.length === 1);
 
 // selection.select: the node alone becomes the selection; the status bar names it. Every door gives a node of the

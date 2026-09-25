@@ -3339,6 +3339,7 @@ export const MESSAGE_IDS = [
   "status.gap.notContainer",
   "status.grid.invalid",
   "status.guides.locked",
+  "status.hand.aim",
   "status.hand.dropped",
   "status.hand.hidden",
   "status.hand.holding",

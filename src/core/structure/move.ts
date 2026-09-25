@@ -26,7 +26,7 @@ export const moveToCommand = registerHandler('element.moveTo', ({ state, rules }
 
 // The move element.moveTo makes, which every command that moves the selection into a parent at an index makes too
 // (nest-into-previous, promote-out): one rule for the index, the refusals and the status.
-function moveSelectionTo(state: { readonly document: DocumentJson; readonly selection: Selection }, rules: ModelRules, parent: NodeId, index: number): Outcome<never> {
+export function moveSelectionTo(state: { readonly document: DocumentJson; readonly selection: Selection }, rules: ModelRules, parent: NodeId, index: number): Outcome<never> {
   const moved = selectionRoots(state.document, state.selection);
   // every door moves what is selected (its adapter acts on the selection's roots), never the page itself
   if (moved.length === 0) throw new Error('element.moveTo: nothing is selected');

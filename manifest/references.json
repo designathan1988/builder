@@ -653,32 +653,32 @@
     {
       "kind": "handler",
       "id": "hand.take",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",
       "id": "hand.aimNext",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",
       "id": "hand.aimPrevious",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",
       "id": "hand.climb",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",
       "id": "hand.descend",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",
       "id": "hand.drop",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",

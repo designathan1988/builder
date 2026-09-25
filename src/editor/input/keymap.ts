@@ -2,13 +2,15 @@
 // of the manifest in their key contexts; there is no other key table. A context inherits the bindings of the contexts
 // interactions.json names (text editing, menus, the palette, dialogs and fields inherit nothing, so they keep their
 // own keys). A bound chord's browser default is prevented, whether or not its door runs yet (DESIGN.md "Keyboard
-// model"); a door runs when shortcut-rule.ts says so (DESIGN.md "Build order").
+// model"); a door runs when shortcut-rule.ts says so (DESIGN.md "Build order"). While the hand holds an element
+// (core/structure/hand.ts) the canvas's keys are the hand context's, and they act at the hand's aim.
 import type { CommandId, DoorId, KeyContextId } from '../../generated/ids.ts';
 import { normaliseChord } from '../../manifest/chord.ts';
 import { keyContextChain, manifest, type DoorEntry } from '../../manifest/runtime.ts';
 import type { DispatchResult } from '../../core/store/store.ts';
 import { COMMANDS } from '../../app/commands.ts';
 import { isBuilt } from '../../core/commands/registry.ts';
+import { aimArgs, heldHand } from '../../core/structure/hand.ts';
 import { FEATURE_COMMANDS } from '../../generated/commands.ts';
 import { TEXT_EDITING, editArgs } from '../canvas/text-edit.ts';
 import type { EditorStore } from '../store.ts';
@@ -98,18 +100,31 @@ export function focusedArgs(target: EventTarget | null, command: CommandId): Rea
   return args !== null && typeof args === 'object' ? (args as Record<string, unknown>) : {};
 }
 
+// the key context of the keyboard's hand (interactions.json), which replaces the canvas's while it holds an element
+const HAND: KeyContextId = 'hand';
+
 export function installKeymap(store: EditorStore, target: Window = window): () => void {
   const onKeyDown = (event: KeyboardEvent) => {
     // during a pointer gesture the keys are the gesture's (pointer.ts)
     const gesture = openGesture();
-    const context = gesture?.context ?? contextOf(event.target);
+    const focused = contextOf(event.target);
+    // while the hand holds an element, the canvas's keys are the hand's (spec hand-keyboard-move, "Trigger")
+    const hand = gesture === null && focused === 'canvas' ? heldHand(store.getState()) : null;
+    const context = gesture?.context ?? (hand !== null ? HAND : focused);
     const binding = bindingFor(context, chordOf(event));
     if (!binding) return;
     // a bound chord is the editor's whether or not its door runs yet (DESIGN.md "Keyboard model")
     event.preventDefault();
     if (!shortcutRunsNow(binding)) return;
-    // a key of the text edited in place acts on the edit: its node and the text it holds (text-edit.ts)
-    const own = gesture ? {} : context === TEXT_EDITING ? editArgs(store.getState(), binding.command) : focusedArgs(event.target, binding.command.id);
+    // a key of the text edited in place acts on the edit: its node and the text it holds (text-edit.ts); a key of the
+    // hand acts at its aim (hand.ts)
+    const own = gesture
+      ? {}
+      : hand !== null
+        ? aimArgs(hand, Object.keys(binding.command.args))
+        : context === TEXT_EDITING
+          ? editArgs(store.getState(), binding.command)
+          : focusedArgs(event.target, binding.command.id);
     if (own === null) return;
     const dispatch = (gesture?.gesture.dispatch ?? store.dispatch) as (id: CommandId, args: unknown) => DispatchResult;
     dispatch(binding.command.id, { ...own, ...binding.door.args });

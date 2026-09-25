@@ -30,7 +30,7 @@ export const FEATURES = {
   duplicate: registerFeature('duplicate'),
   'clipboard-copy-paste': NOT_AVAILABLE_YET,
   'keyboard-tree-walk': registerFeature('keyboard-tree-walk'),
-  'hand-keyboard-move': NOT_AVAILABLE_YET,
+  'hand-keyboard-move': registerFeature('hand-keyboard-move'),
   'text-edit-inline': registerFeature('text-edit-inline'),
   'text-inline-formatting': NOT_AVAILABLE_YET,
   'rename-element': NOT_AVAILABLE_YET,

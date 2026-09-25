@@ -121,6 +121,13 @@ Decisions by small ambiguity (moved here from PROGRESS.md):
   Lock are transparent until the pointer is on the row (they stay reachable by keyboard); a hidden selected node is
   outlined dashed on its nearest shown ancestor with a "hidden" flag on its label. Not built: refusing to hide inside
   a locked ancestor (lock-element), the marquee skipping hidden nodes (finding 26), hidden nodes in the export.
+- hand-keyboard-move (helper, WIP branch finished): src/core/structure/hand.ts; M takes the one selected element
+  into the hand, the arrows aim among slots and levels (each aim checked by moveSelectionTo, now exported), Enter
+  drops through element.moveTo (one undo step), Escape drops the hand; the aim is drawn with the drag's drop
+  indicator and announced ("Hero will receive. Position 2 of 3. Level 1 of 2."); the hand ends on any edit, undo or
+  new selection. The coordinator fixed one helper test that clicked the Layers eye with nothing selected (the eye
+  needs a selection: element.toggleHidden's hasSelection). Runner path proven: a hand key takes its arguments from
+  the aim, not from a control (7 of 10 failed with it off).
 - The tooth proof prints why each test failed (the first line and the matcher) and counts a failure that only ran
   out of time on an action or a wait (`locator.click: Timeout 5000ms exceeded.`) as no tooth, like a test timeout: a
   tooth fails on an assertion (brief "a aplicação completa").

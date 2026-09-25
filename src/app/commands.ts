@@ -10,10 +10,10 @@ import {
   addCommand,
   clearSelectionCommand,
   hasSelection,
-  singleSelection,
   marqueeCommand,
   selectAllInContainerCommand,
   selectCommand,
+  singleSelection,
   toggleCommand,
   walkFirstChildCommand,
   walkNextSiblingCommand,
@@ -21,6 +21,7 @@ import {
   walkPreviousSiblingCommand,
 } from '../core/selection/selection.ts';
 import { duplicateCommand } from '../core/structure/duplicate.ts';
+import { handCommands } from '../core/structure/hand.ts';
 import { insertCommand } from '../core/structure/insert.ts';
 import { canNestIntoPrevious, moveDownCommand, moveToCommand, moveUpCommand, nestIntoPreviousCommand, promoteCommand } from '../core/structure/move.ts';
 import { deleteCommand } from '../core/structure/remove.ts';
@@ -36,6 +37,9 @@ import { setLanguage, setTheme } from '../editor/preferences/preferences.ts';
 import type { EditorUi } from '../editor/state.ts';
 import { setWorkbenchState } from '../editor/workspace/layout.ts';
 import { collapseDocks, setPanelOpen, toggleInspector, toggleLeftDock } from '../editor/workspace/panels.ts';
+
+// the hand's commands, for the editor state that holds the hand
+const HAND = handCommands<EditorUi>();
 
 export const COMMANDS = {
   'animation.create': NOT_AVAILABLE_YET,
@@ -168,12 +172,12 @@ export const COMMANDS = {
   'element.delete': deleteCommand,
   'element.unwrap': unwrapCommand,
   'element.createNaturalChild': NOT_AVAILABLE_YET,
-  'hand.take': NOT_AVAILABLE_YET,
-  'hand.aimNext': NOT_AVAILABLE_YET,
-  'hand.aimPrevious': NOT_AVAILABLE_YET,
-  'hand.climb': NOT_AVAILABLE_YET,
-  'hand.descend': NOT_AVAILABLE_YET,
-  'hand.drop': NOT_AVAILABLE_YET,
+  'hand.take': HAND.take,
+  'hand.aimNext': HAND.aimNext,
+  'hand.aimPrevious': HAND.aimPrevious,
+  'hand.climb': HAND.climb,
+  'hand.descend': HAND.descend,
+  'hand.drop': HAND.drop,
   'style.set': NOT_AVAILABLE_YET,
   'style.setSpacing': NOT_AVAILABLE_YET,
   'inspector.toggleSpacingLink': NOT_AVAILABLE_YET,

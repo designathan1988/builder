@@ -8,8 +8,10 @@
 // same indicator, its label reading "Insert Paragraph · position 2 of 4 in Hero" (Problems in Pager 1), and, where
 // the element's command would refuse it, the refused indicator with that refusal and no line (Problems in Pager 3);
 // it leaves the selection's outline solid, and its ghost, the element's icon and name, follows the pointer at
-// drag.ghostOffset over the whole window (Problems in Pager 4). While a text is edited in place, its outline and label
-// ("Editing text · Intro") wear the text editing mode colour instead of the selection's.
+// drag.ghostOffset over the whole window (Problems in Pager 4). While the keyboard's hand holds an element
+// (core/structure/hand.ts), the same indicator stands at the hand's aim, with the refusal the move would meet there
+// (spec hand-keyboard-move, "Visual feedback"). While a text is edited in place, its outline and label ("Editing
+// text · Intro") wear the text editing mode colour instead of the selection's.
 // The label of the one selected element is the one part of the chrome that takes a
 // press: pointer.ts reads it (data-label-for) as a press on that element (spec select-click, "Hit zones"). Where a
 // node is on the screen comes from the
@@ -23,6 +25,7 @@ import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSPro
 import { createPortal } from 'react-dom';
 import { message, type Message } from '../../core/commands/registry.ts';
 import { locate, type DocNode, type DocumentJson, type NodeId } from '../../core/document/model.ts';
+import { heldHand, type HandState } from '../../core/structure/hand.ts';
 import type { MessageId } from '../../generated/ids.ts';
 import { elementIcon, manifest } from '../../manifest/runtime.ts';
 import { Icon } from '../doors/door.tsx';
@@ -42,17 +45,22 @@ const GHOST_OFFSET = ((): readonly [number, number] => {
   return [value[0], value[1]];
 })();
 
+// What the drop indicator draws: the drag in progress (pointer.ts), or the aim of the keyboard's hand, which has no
+// pointer and no ghost.
+type DropView = Pick<DragView, 'dragged' | 'inserting' | 'proposal' | 'refusal'>;
+
 // The words of the drag in progress (DESIGN.md "Canvas", drag): what its drop label reads, and, for a palette tile's
 // creation drag, the status bar too (spec palette-drag-insert, Problems in Pager 1 and 2). Over the dragged nodes'
 // own subtree, or where the new element's command refuses it, the refusal; a move reads "Drop in Hero · position 2 of
 // 3"; a creation drag "Insert Paragraph · position 2 of 4 in Hero", or "Insert Container · into Actions" into a
 // receiver with no child, and, with no proposal (off the page), "Outside the page — release to cancel.". Null for a
-// move with no proposal.
-export function dragWords(document: DocumentJson, view: DragView): Message | null {
+// move with no proposal. The hand's aim reads as a move, or its refusal.
+export function dragWords(document: DocumentJson, view: DropView): Message | null {
   const { proposal, dragged, inserting, refusal } = view;
   if (proposal === null) return inserting !== null ? message('status.drop.outsidePage') : null;
+  // the refusal its drop would meet (a creation drag's, the hand's aim), else the dragged nodes' own subtree
+  if (refusal !== null) return refusal;
   if (proposal.refused) return message('status.refused.intoItself');
-  if (inserting !== null && refusal !== null) return refusal;
   const receiver = locate(document, proposal.parent)?.node ?? null;
   if (receiver === null) return null;
   const siblings = receiver.children.filter((c) => !dragged.includes(c.id));
@@ -136,19 +144,26 @@ interface DropLayout {
   readonly label: { readonly box: Box; readonly placement: Placement } | null;
 }
 
+// The hand's aim as a drop (spec hand-keyboard-move: "the same indicator a mouse drag draws"): the held element is
+// dragged, the aim is a slot inside its receiver, and the move's refusal of the aim, if any, is the drop's.
+export function handDrop(hand: HandState): DropView {
+  const { parent, index } = hand.aim;
+  return { dragged: [hand.held], inserting: null, proposal: { parent, index, placement: 'inside', reference: parent, refused: false }, refusal: hand.refusal };
+}
+
 // The drop indicator of the drag in progress (spec drag-reorder-canvas, "Visual feedback", and Problems in Pager 3):
 // the insertion line where the dragged nodes will land, the receiving parent's outline, and the label naming the
 // receiver and the position ("Drop in Hero · position 1 of 3", DESIGN.md "Canvas", drag), placed by the label rule
-// next to the line, never at the receiver's far corner. A creation drag's proposal that its element's command refuses
-// is drawn refused (spec palette-drag-insert, Problems in Pager 3).
-function DropIndicator({ view }: { readonly view: DragView }) {
+// next to the line, never at the receiver's far corner. A proposal that the command would refuse (a creation drag's,
+// the hand's aim) is drawn refused (spec palette-drag-insert, Problems in Pager 3).
+function DropIndicator({ view }: { readonly view: DropView }) {
   const document = useEditorState((s) => s.document);
   const t = useT();
   const layer = useRef<HTMLDivElement>(null);
   const label = useRef<HTMLDivElement>(null);
   const [layout, setLayout] = useState<DropLayout | null>(null);
   const { dragged } = view;
-  const refusedHere = view.inserting !== null && view.refusal !== null;
+  const refusedHere = view.refusal !== null;
   const proposal = useMemo(() => (view.proposal !== null && refusedHere ? { ...view.proposal, refused: true } : view.proposal), [view.proposal, refusedHere]);
   const words = dragWords(document, view);
   const receiver = proposal === null ? null : (locate(document, proposal.parent)?.node ?? null);
@@ -247,6 +262,11 @@ export function CanvasChrome() {
   // the drag in progress (pointer.ts): the drop indicator is drawn, the selection's label hides and its outline turns
   // into the dashed outline of the source (Problems in Pager 1)
   const dragging = useSyncExternalStore(drag.subscribe, drag.get);
+  // the element the keyboard's hand holds: its aim is drawn as a drag's drop (spec hand-keyboard-move, "Visual
+  // feedback")
+  const hand = useEditorState(heldHand);
+  const aiming = useMemo(() => (hand === null ? null : handDrop(hand)), [hand]);
+  const dropping: DropView | null = dragging ?? aiming;
   // the primary selected node, read as the store holds it (a node object is replaced only when it changes)
   const node = useEditorState((s) => (s.selection[0] === undefined ? null : (locate(s.document, s.selection[0])?.node ?? null)));
   const hovered = useSyncExternalStore(hover.subscribe, hover.get);
@@ -306,12 +326,12 @@ export function CanvasChrome() {
       {shown.selected.map((b, i) => (
         <div
           key={i}
-          className={`chrome__selection${dragging && dragging.dragged.length > 0 ? ' is-source' : ''}${editing ? ' is-editing' : ''}${targets[i]?.hidden === true ? ' is-hidden-node' : ''}`}
+          className={`chrome__selection${dropping && dropping.dragged.length > 0 ? ' is-source' : ''}${editing ? ' is-editing' : ''}${targets[i]?.hidden === true ? ' is-hidden-node' : ''}`}
           data-chrome="selection"
           style={at(b)}
         />
       ))}
-      {dragging ? <DropIndicator view={dragging} /> : null}
+      {dropping ? <DropIndicator view={dropping} /> : null}
       {dragging?.inserting != null ? <Ghost entry={dragging.inserting} at={dragging.at} refused={dragging.proposal === null || dragging.refusal !== null} /> : null}
       {shown.union && selection.length > 1 ? <div className="chrome__union" data-chrome="union" style={at(shown.union)} /> : null}
       {selection.length > 1 ? (
@@ -327,7 +347,7 @@ export function CanvasChrome() {
       ) : node !== null ? (
         <div
           ref={label}
-          className={`chrome__label is-target${shown.label ? '' : ' is-measuring'}${dragging ? ' is-hidden' : ''}${editing ? ' is-editing' : ''}`}
+          className={`chrome__label is-target${shown.label ? '' : ' is-measuring'}${dropping ? ' is-hidden' : ''}${editing ? ' is-editing' : ''}`}
           data-chrome="label"
           data-label-for={node.id}
           data-placement={shown.label?.placement}
