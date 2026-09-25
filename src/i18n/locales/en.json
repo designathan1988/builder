@@ -1178,6 +1178,7 @@
   "status.editingState": "Editing {selector}.",
   "status.elementCount.one": "1 element",
   "status.elementCount.other": "{count} elements",
+  "status.export.done": "Exported the site as {file}.",
   "status.files.generatedPath": "{path} is generated from the document and keeps its path.",
   "status.files.holdsPage": "This folder holds a page; delete or move the page first.",
   "status.files.nameTaken": "{name} already exists in this folder.",

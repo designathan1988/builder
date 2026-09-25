@@ -3331,6 +3331,7 @@ export const MESSAGE_IDS = [
   "status.editingState",
   "status.elementCount.one",
   "status.elementCount.other",
+  "status.export.done",
   "status.files.generatedPath",
   "status.files.holdsPage",
   "status.files.nameTaken",

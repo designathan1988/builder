@@ -1178,6 +1178,7 @@
   "status.editingState": "Editando {selector}.",
   "status.elementCount.one": "1 elemento",
   "status.elementCount.other": "{count} elementos",
+  "status.export.done": "Site exportado como {file}.",
   "status.files.generatedPath": "{path} é gerado a partir do documento e mantém o caminho.",
   "status.files.holdsPage": "Esta pasta contém uma página; exclua ou mova a página primeiro.",
   "status.files.nameTaken": "{name} já existe nesta pasta.",

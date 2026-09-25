@@ -497,8 +497,10 @@
         "page.setSetting",
         "project.export"
       ],
-      "dependsOn": [],
-      "spec": null,
+      "dependsOn": [
+        "page-properties"
+      ],
+      "spec": "spec/behavior/export-zip.md",
       "intent": {
         "title": "Export the page as a ZIP with HTML and a separate CSS file",
         "steps": [
@@ -512,7 +514,527 @@
           "The exported page opened in Chrome renders every element with the same computed styles as the canvas, apart from editor-only aids (empty-container minimum height, closed details and dialogs shown while selected, selection chrome)."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "the-export-is-a-zip-of-the-page-and-its-stylesheet",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "project.export#toolbar-top-bar-export",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.export#toolbar-top-bar-export",
+            "project.export#menu-file"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.export.done",
+                  "params": {
+                    "file": "site.zip"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": {
+              "files": [
+                {
+                  "path": "index.html",
+                  "present": [
+                    "<!DOCTYPE html>",
+                    "<meta charset=\"utf-8\">",
+                    "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
+                    "<title>Home</title>",
+                    "<link rel=\"stylesheet\" href=\"css/styles.css\">",
+                    "<body>",
+                    "<section class=\"hero\">",
+                    "<h1>Welcome to Aurora</h1>",
+                    "<article class=\"card\">",
+                    "<ul>",
+                    "<footer>",
+                    "<p>Aurora Coffee</p>"
+                  ],
+                  "absent": [
+                    " style=",
+                    "<style",
+                    "data-",
+                    "id=\"n-",
+                    "canvas-export",
+                    "lang=",
+                    "dir="
+                  ]
+                },
+                {
+                  "path": "css/styles.css",
+                  "present": [
+                    ".hero {",
+                    "  padding-top: 56px;",
+                    "  padding-right: 40px;",
+                    "  padding-bottom: 56px;",
+                    "  padding-left: 40px;"
+                  ],
+                  "absent": [
+                    "[data-",
+                    "#n-",
+                    ".card {",
+                    "canvas-export"
+                  ]
+                }
+              ]
+            }
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-page-settings-are-written-in-the-head",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "page.openProperties#inspector-page-properties-button",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "page.setSetting#inspector-page-title",
+              "args": {
+                "setting": "pageTitle",
+                "value": "Landing"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "Landing\n"
+            },
+            {
+              "door": "page.setSetting#inspector-page-language",
+              "args": {
+                "setting": "pageLanguage",
+                "value": "pt-BR"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "pt-BR\n"
+            },
+            {
+              "door": "page.setSetting#inspector-page-direction",
+              "args": {
+                "setting": "pageDirection",
+                "value": "rtl"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "rtl\n"
+            },
+            {
+              "door": "project.export#toolbar-top-bar-export",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.export#toolbar-top-bar-export"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@attributes/pageTitle",
+                "value": "Landing"
+              },
+              {
+                "op": "set",
+                "path": "/Page/@attributes/pageLanguage",
+                "value": "pt-BR"
+              },
+              {
+                "op": "set",
+                "path": "/Page/@attributes/pageDirection",
+                "value": "rtl"
+              }
+            ],
+            "selection": [
+              "/Page"
+            ],
+            "history": {
+              "undoSteps": 3,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.export.done",
+                  "params": {
+                    "file": "site.zip"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": {
+              "files": [
+                {
+                  "path": "index.html",
+                  "present": [
+                    "<html lang=\"pt-BR\" dir=\"rtl\">",
+                    "<title>Landing</title>"
+                  ],
+                  "absent": [
+                    "<title>Home</title>"
+                  ]
+                }
+              ]
+            }
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-hidden-element-is-written-with-the-hidden-attribute",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Footer/Note"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "element.toggleHidden#layers-row-eye",
+              "args": {
+                "target": "/Page/Footer/Note"
+              },
+              "target": "/Page/Footer/Note",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "project.export#toolbar-top-bar-export",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.export#toolbar-top-bar-export"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Footer/Note/@hidden",
+                "value": true
+              }
+            ],
+            "selection": [
+              "/Page/Footer/Note"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.export.done",
+                  "params": {
+                    "file": "site.zip"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": {
+              "files": [
+                {
+                  "path": "index.html",
+                  "present": [
+                    "<p hidden>Aurora Coffee</p>"
+                  ],
+                  "absent": [
+                    "<p>Aurora Coffee</p>"
+                  ]
+                },
+                {
+                  "path": "css/styles.css",
+                  "present": [
+                    ".hero {"
+                  ],
+                  "absent": [
+                    "display: none"
+                  ]
+                }
+              ]
+            }
+          },
+          "refusals": []
+        },
+        {
+          "id": "text-is-escaped-in-the-export",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "text.startEdit#key-enter-in-canvas",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": " & <more>"
+            },
+            {
+              "door": "text.set#key-enter-in-text-editing",
+              "args": {
+                "target": "/Page/Hero/Title",
+                "content": "Welcome to Aurora & <more>"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "project.export#toolbar-top-bar-export",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.export#toolbar-top-bar-export"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Title/@text",
+                "value": "Welcome to Aurora & <more>"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.export.done",
+                  "params": {
+                    "file": "site.zip"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": {
+              "files": [
+                {
+                  "path": "index.html",
+                  "present": [
+                    "<h1>Welcome to Aurora &amp; &lt;more&gt;</h1>"
+                  ],
+                  "absent": [
+                    "<more>"
+                  ]
+                }
+              ]
+            }
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-line-break-in-a-text-is-written-as-br",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "text.startEdit#key-enter-in-canvas",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": " A"
+            },
+            {
+              "door": "text.insertLineBreak#key-shift-enter-in-text-editing",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "B"
+            },
+            {
+              "door": "text.set#key-enter-in-text-editing",
+              "args": {
+                "target": "/Page/Hero/Title",
+                "content": "Welcome to Aurora A\nB"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "project.export#toolbar-top-bar-export",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.export#toolbar-top-bar-export"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Title/@text",
+                "value": "Welcome to Aurora A\nB"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.export.done",
+                  "params": {
+                    "file": "site.zip"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": {
+              "files": [
+                {
+                  "path": "index.html",
+                  "present": [
+                    "<h1>Welcome to Aurora A<br>B</h1>"
+                  ],
+                  "absent": []
+                }
+              ]
+            }
+          },
+          "refusals": []
+        }
+      ]
     },
     {
       "id": "css-variables-tokens",
