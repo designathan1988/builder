@@ -105,8 +105,10 @@ const MODIFIERS = [
   ['altKey', 'Alt'],
   ['metaKey', 'Meta'],
 ] as const;
-// the one modifier held, as the manifest names it; null for none (two held match no door)
-function modifierOf(event: PointerEvent): string | null {
+// the one modifier held, as the manifest names it; null for none (two held match no door). A panel control drawn
+// for several doors of one gesture told apart by their modifier (a Layers row: click, Shift+click, Ctrl+click) runs
+// the door of the modifier its click holds, read the same way.
+export function modifierOf(event: Readonly<Record<(typeof MODIFIERS)[number][0], boolean>>): string | null {
   const held = MODIFIERS.filter(([key]) => event[key]).map(([, name]) => name);
   return held.length === 1 ? (held[0] ?? null) : held.length === 0 ? null : 'several';
 }

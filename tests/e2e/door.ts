@@ -21,6 +21,9 @@ export interface Door {
   readonly source?: string;
   readonly zone?: string;
   readonly gesture?: string | null;
+  // panel-control: the panel and the control it is drawn as
+  readonly panel?: string;
+  readonly control?: string;
 }
 interface Menu {
   readonly id: string;
@@ -90,9 +93,28 @@ export function control(page: Page, ref: string, options: { readonly args?: Read
   return options.any === true ? all.first() : all;
 }
 
-// runs a door as a user does: a shortcut by its keys, a menu item from its menu, any other control by a click
+// A panel control's door with a key held (a Layers row's Shift+click) is drawn by the control of the same gesture
+// with no key held: the door of the same panel, control and gesture whose modifier is null.
+export function modifiedControl(ref: string): { readonly drawn: string; readonly key: 'Shift' | 'Control' | 'Alt' | 'Meta' } | null {
+  const d = door(ref);
+  if (d.kind !== 'panel-control' || d.modifier === null || d.modifier === undefined) return null;
+  const drawn = [...DOORS].find(([, o]) => o.kind === 'panel-control' && o.panel === d.panel && o.control === d.control && o.gesture === d.gesture && (o.modifier ?? null) === null)?.[0];
+  if (drawn === undefined) throw new Error(`${ref}: no control of ${d.panel ?? ''} ${d.control ?? ''} is drawn for its gesture with no key held`);
+  const KEY = { Shift: 'Shift', Ctrl: 'Control', Alt: 'Alt', Meta: 'Meta' } as const;
+  const key = KEY[d.modifier as keyof typeof KEY] as (typeof KEY)[keyof typeof KEY] | undefined;
+  if (key === undefined) throw new Error(`${ref}: unknown modifier ${d.modifier}`);
+  return { drawn, key };
+}
+
+// runs a door as a user does: a shortcut by its keys, a menu item from its menu, a panel control's door with a key
+// held by a click on its control with that key held, any other control by a click
 export async function runDoor(page: Page, ref: string, options: { readonly args?: Readonly<Record<string, unknown>>; readonly any?: boolean } = {}): Promise<void> {
   const d = door(ref);
+  const modified = modifiedControl(ref);
+  if (modified !== null) {
+    await control(page, modified.drawn, options).click({ modifiers: [modified.key] });
+    return;
+  }
   if (d.kind === 'shortcut') {
     if (d.chord === undefined) throw new Error(`shortcut ${ref} has no chord`);
     await page.keyboard.press(keys(d.chord));

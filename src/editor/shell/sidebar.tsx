@@ -3,12 +3,14 @@
 // per page, node or palette entry; a section's actions are the region's controls before its first item.
 import { useEffect, useRef, type CSSProperties, type MouseEvent } from 'react';
 import { walk, type DocNode } from '../../core/document/model.ts';
-import type { FeatureId, MessageId, RegionId } from '../../generated/ids.ts';
+import type { DispatchResult } from '../../core/store/store.ts';
+import type { CommandId, FeatureId, MessageId, RegionId } from '../../generated/ids.ts';
 import { manifest, type DoorEntry } from '../../manifest/runtime.ts';
 import { DoorControl, Icon, isFeatureBuilt, useDoor } from '../doors/door.tsx';
 import { GLYPHS, doorSlots } from '../doors/placement.ts';
+import { modifierOf } from '../input/pointer.ts';
 import { isExpanded } from '../layers/tree.ts';
-import { useEditorState } from '../store.ts';
+import { useEditorState, useStore } from '../store.ts';
 import { isPanelOpen, panelName, type Panel } from '../workspace/panels.ts';
 import { useT } from '../text.ts';
 import type { BodyTable } from './bodies.ts';
@@ -36,6 +38,8 @@ const PAGE_ACTIONS = doorSlots('explorer-pages').filter((d) => drawnAs(d) === 'i
 const LAYERS_HEADER = requireDoor('explorer-layers', (d) => drawnAs(d) === 'disclosure');
 // a Layers row's plain click: the row's door of the layers-row-click gesture with no key held
 const LAYERS_SELECT = requireDoor('layers-row', (d) => d.door.kind === 'panel-control' && d.door.gesture === 'layers-row-click' && d.door.modifier === null);
+// the row's other clicks: the doors of the same gesture with a key held (Shift+click adds, Ctrl+click toggles)
+const LAYERS_MODIFIED = doorSlots('layers-row').filter((d) => d.door.kind === 'panel-control' && d.door.gesture === 'layers-row-click' && d.door.modifier !== null);
 const LAYERS_CARET = requireDoor('layers-row', (d) => drawnAs(d) === 'disclosure');
 const LAYERS_BUTTONS = doorSlots('layers-row').filter((d) => drawnAs(d) === 'icon-button');
 // an element tile: the item whose command takes a palette entry (a component tile takes a component)
@@ -79,8 +83,9 @@ function PageRow({ page }: { readonly page: { readonly id: string; readonly name
   );
 }
 
-// A node's row, then, while its branch is unfolded, its children's rows. A click on the row selects its node; a
-// click on a control of its own (the caret, Hide, Lock) runs that control's door alone. The primary selection's row
+// A node's row, then, while its branch is unfolded, its children's rows. A click on the row selects its node, a
+// Shift+click adds it to the selection and a Ctrl+click toggles it (spec multi-select-click); a click on a control
+// of its own (the caret, Hide, Lock) runs that control's door alone. The primary selection's row
 // is scrolled into view, at the nearest edge and without animation, whichever surface selected it (spec layers-tree,
 // Problems in Pager 1).
 function LayersRow({ node, depth }: { readonly node: DocNode; readonly depth: number }) {
@@ -92,9 +97,18 @@ function LayersRow({ node, depth }: { readonly node: DocNode; readonly depth: nu
   useEffect(() => {
     if (primary) row.current?.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'instant' });
   }, [primary]);
+  const store = useStore();
   const branch = node.children.length > 0;
+  // a click with no key held runs the row's own door; with a key held, the door of that key (none for another key)
   const select = (event: MouseEvent<HTMLDivElement>) => {
-    if (event.target instanceof Element && event.target.closest('[data-door]') === event.currentTarget) door.run();
+    if (!(event.target instanceof Element && event.target.closest('[data-door]') === event.currentTarget)) return;
+    const held = modifierOf(event);
+    if (held === null) {
+      door.run();
+      return;
+    }
+    const entry = LAYERS_MODIFIED.find((d) => d.door.kind === 'panel-control' && d.door.modifier === held);
+    if (entry) (store.dispatch as (id: CommandId, args: unknown) => DispatchResult)(entry.command.id as CommandId, { ...entry.door.args, target: node.id });
   };
   return (
     <>

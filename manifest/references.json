@@ -533,12 +533,12 @@
     {
       "kind": "handler",
       "id": "selection.add",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",
       "id": "selection.toggle",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",

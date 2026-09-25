@@ -19,6 +19,34 @@ export const selectCommand = registerHandler('selection.select', ({ state }, { t
 // selection.clear: nothing is selected any more
 export const clearSelectionCommand = registerHandler('selection.clear', () => ({ kind: 'change', selection: [], message: message('status.selection.cleared') }));
 
+// A selection of several nodes (spec multi-select-click): the nodes in the order they were selected, the primary
+// first. The status bar names a single node, counts several, and says when none is left.
+function several(state: StoreState<never>, selection: StoreState<never>['selection']): Outcome<never> {
+  const only = selection.length === 1 && selection[0] !== undefined ? locate(state.document, selection[0]) : null;
+  const said =
+    selection.length === 0 ? message('status.selection.cleared') : only !== null ? message('status.selected', { name: only.node.name }) : message('status.selection.count', { count: selection.length });
+  return { kind: 'change', selection, message: said };
+}
+function known(state: StoreState<never>, target: string) {
+  // every door gives a node of the document (a canvas click, a Layers row), so a node the document lacks is a
+  // defect of the door
+  if (!locate(state.document, target)) throw new Error(`adding to the selection: the document has no node ${target}`);
+}
+
+// selection.add (Shift+click): the node joins the selection after the nodes already in it; a node already selected
+// stays where it is (Shift+click adds and never removes, spec Problems in Pager 2)
+export const addCommand = registerHandler('selection.add', ({ state }, { target }) => {
+  known(state, target);
+  return several(state, state.selection.includes(target) ? state.selection : [...state.selection, target]);
+});
+
+// selection.toggle (Ctrl+click): a selected node leaves the selection, any other joins it after the others (spec
+// Problems in Pager 1)
+export const toggleCommand = registerHandler('selection.toggle', ({ state }, { target }) => {
+  known(state, target);
+  return several(state, state.selection.includes(target) ? state.selection.filter((id) => id !== target) : [...state.selection, target]);
+});
+
 // The walk of the tree with the arrow keys (spec keyboard-tree-walk): one level per key from the primary node, the
 // node reached alone becomes the selection and the status bar names it; at an end the selection stays and the status
 // bar says why. Siblings are the parent's children, hidden or locked included; the page root is reached from its

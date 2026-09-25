@@ -852,6 +852,12 @@ kbd {
   outline: 2px solid var(--color-canvas-selection);
 }
 
+/* several selected: the box around them all, dashed, apart from each element's own outline */
+.chrome__union {
+  position: absolute;
+  outline: 1px dashed var(--color-canvas-selection);
+}
+
 /* thinner than the selection's */
 .chrome__hover {
   outline: 1px solid var(--color-canvas-hover);

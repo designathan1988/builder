@@ -6,9 +6,11 @@ import { NOT_AVAILABLE_YET, always, type CommandTable, type PredicateTable } fro
 import { canRedo, canUndo, redoCommand, undoCommand } from '../core/history/history.ts';
 import { openProject } from '../core/project/archive.ts';
 import {
+  addCommand,
   clearSelectionCommand,
   hasSelection,
   selectCommand,
+  toggleCommand,
   walkFirstChildCommand,
   walkNextSiblingCommand,
   walkParentCommand,
@@ -130,8 +132,8 @@ export const COMMANDS = {
   'project.export': NOT_AVAILABLE_YET,
   'selection.select': selectCommand,
   'selection.clear': clearSelectionCommand,
-  'selection.add': NOT_AVAILABLE_YET,
-  'selection.toggle': NOT_AVAILABLE_YET,
+  'selection.add': addCommand,
+  'selection.toggle': toggleCommand,
   'selection.walkNextSibling': walkNextSiblingCommand,
   'selection.walkPreviousSibling': walkPreviousSiblingCommand,
   'selection.walkParent': walkParentCommand,
