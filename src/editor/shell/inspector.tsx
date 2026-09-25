@@ -7,7 +7,8 @@
 import { Fragment, type ReactNode } from 'react';
 import type { MessageId, SectionId, StyleTargetId } from '../../generated/ids.ts';
 import { GENERATED_VALUES } from '../../generated/value-lists.ts';
-import { manifest, type DoorEntry } from '../../manifest/runtime.ts';
+import { locate } from '../../core/document/model.ts';
+import { elementIcon, manifest, type DoorEntry } from '../../manifest/runtime.ts';
 import { DoorControl, Icon, useDoor } from '../doors/door.tsx';
 import { MenuButton } from '../doors/menu.tsx';
 import { GLYPHS, doorSlots, drawnAsOf, partOf, slotsIn } from '../doors/placement.ts';
@@ -238,6 +239,24 @@ function PanelField({ entry }: { readonly entry: DoorEntry }) {
   );
 }
 
+// What the selector bar names (DESIGN.md "Inspector": the element's icon, name and tag): the one selected element,
+// with its exported tag (the page root's is body); with several selected, how many; with none, that nothing is. Read
+// from the store's selection, so the inspector never says something the store contradicts.
+function SelectedElement() {
+  const t = useT();
+  const count = useEditorState((s) => s.selection.length);
+  const node = useEditorState((s) => (s.selection.length === 1 && s.selection[0] !== undefined ? (locate(s.document, s.selection[0])?.node ?? null) : null));
+  if (count > 1) return <div className="selector-bar__element">{t('canvas.selectedCount', { count })}</div>;
+  if (node === null) return <div className="selector-bar__element">{t('inspector.nothingSelected')}</div>;
+  return (
+    <div className="selector-bar__element">
+      <Icon name={elementIcon(node.type) ?? GLYPHS.folder} size="sm" />
+      <span className="selector-bar__name">{node.name}</span>
+      <small className="selector-bar__tag">{node.tag ?? ''}</small>
+    </div>
+  );
+}
+
 export function Inspector() {
   const t = useT();
   const open = useEditorState((s) => isPanelOpen(s.ui, 'inspector'));
@@ -253,7 +272,7 @@ export function Inspector() {
         </span>
       </div>
       <div className="selector-bar" data-region="inspector-selector-bar">
-        <div className="selector-bar__element">{t('inspector.nothingSelected')}</div>
+        <SelectedElement />
         <div className="selector-bar__targets">
           <Slots
             region="inspector-selector-bar"

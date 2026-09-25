@@ -6,6 +6,11 @@
 //   - a built command has no test that runs one of its doors;
 //   - a door of a built command that a user can run (drawn enabled, or a shortcut that runs by the keymap's own rule,
 //     src/editor/input/shortcut-rule.ts) is run by no test.
+//   - a control that stands for a palette entry (an Insert tile) is drawn enabled while the entry's feature is not
+//     registered as built;
+//   - a feature registered as built in the feature table (src/app/features.ts) has no scenario, a command it lists is
+//     not built, or a scenario of it runs a door that does not work yet (so its scenarios cannot all run and pass;
+//     a scenario that runs and fails fails the run through its own test and the status reporter).
 // While the manifest has no built undoable command, a built command none of whose drawn doors is enabled (Undo and
 // Redo: there is nothing to undo) is proven instead by a test that runs each of its doors and shows it cannot run yet
 // (annotation "door-unavailable"); from the first undoable command on it needs tests of its own (the user's answer).
@@ -14,7 +19,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
 import { shortcutRuns } from '../../src/editor/input/shortcut-rule.ts';
+import { isFeatureBuilt } from '../../src/app/features.ts';
 import { FEATURE_COMMANDS } from '../../src/generated/commands.ts';
+import type { FeatureId } from '../../src/generated/ids.ts';
+import { FEATURES, blockers, registered } from '../../tools/runner/scenarios.ts';
 import { DOOR_ANNOTATION, UNAVAILABLE_ANNOTATION, runDoor } from './door.ts';
 
 interface Command {
@@ -28,6 +36,10 @@ for (const file of fs.readdirSync('manifest/commands')) COMMANDS.push(...(JSON.p
 const REFERENCES = (JSON.parse(fs.readFileSync('manifest/references.json', 'utf8')) as { references: { kind: string; id: string; status: string }[] }).references;
 const BUILT = new Set(REFERENCES.filter((r) => r.kind === 'handler' && r.status === 'registered').map((r) => r.id));
 const UNDOABLE_BUILT = COMMANDS.some((c) => c.history.undoable && BUILT.has(c.id));
+// the feature of every palette entry (elements.json)
+const PALETTE_FEATURE = new Map(
+  (JSON.parse(fs.readFileSync('manifest/elements.json', 'utf8')) as { palette: { entries: { id: string; feature: string }[] }[] }).palette.flatMap((g) => g.entries.map((e) => [e.id, e.feature] as const)),
+);
 // a shortcut a user can press now: the keymap's own rule (src/editor/input/shortcut-rule.ts), on the manifest's data
 const runs = (c: Command, d: Command['entryPoints'][number]) =>
   d.kind === 'shortcut' && shortcutRuns({ command: c.id, introducedBy: c.introducedBy, feature: d.feature }, (id) => BUILT.has(id), FEATURE_COMMANDS);
@@ -55,6 +67,12 @@ async function annotated(): Promise<Map<string, Set<string>>> {
 // how many states are read at the same time, each in a browser context of its own
 const PARALLEL = 6;
 
+test('every feature registered as built has scenarios that can all run', () => {
+  const unproven = FEATURES.filter(registered).flatMap((f) => blockers(f).map((why) => `${f.id}: ${why}`));
+  expect(unproven, 'registered features whose scenarios cannot all run').toEqual([]);
+  console.log(`census: ${FEATURES.filter(registered).length} features registered as built, each with scenarios that can all run`);
+});
+
 test('every working command is proven by a browser test, and no door looks usable without a command', async ({ browser }, testInfo) => {
   // it visits every state a built door leads to, each from a fresh profile: a new browser context
   test.setTimeout(120_000);
@@ -66,19 +84,23 @@ test('every working command is proven by a browser test, and no door looks usabl
   // container (a field row, a label) counts by the controls it holds that are not doors of their own. `drawn` keeps,
   // over every state the census reaches, whether a door was ever drawn enabled.
   const drawn = new Map<string, boolean>();
+  // the palette entries whose control (an Insert tile) was ever drawn enabled
+  const enabledEntries = new Set<string>();
   const read = async (page: Page, state: Map<string, boolean>) => {
     const seen = await page.evaluate(() => {
       const CONTROL = 'button, input, select, textarea, [role^="menuitem"], [role="treeitem"], [role="tab"], [tabindex]';
       const usable = (el: Element) => el.getAttribute('aria-disabled') !== 'true' && !el.matches(':disabled');
       return [...document.querySelectorAll('[data-door]')].map((el) => {
         const controls = el.matches(CONTROL) ? [el] : [...el.querySelectorAll(CONTROL)].filter((c) => c.closest('[data-door]') === el);
-        return { ref: el.getAttribute('data-door') ?? '', control: controls.length > 0, enabled: controls.some(usable) };
+        return { ref: el.getAttribute('data-door') ?? '', args: el.getAttribute('data-args'), control: controls.length > 0, enabled: controls.some(usable) };
       });
     });
     for (const d of seen) {
       if (!d.control) continue;
       state.set(d.ref, (state.get(d.ref) ?? false) || d.enabled);
       drawn.set(d.ref, (drawn.get(d.ref) ?? false) || d.enabled);
+      const entry = d.args === null ? undefined : (JSON.parse(d.args) as { entry?: unknown }).entry;
+      if (d.enabled && typeof entry === 'string') enabledEntries.add(entry);
     }
   };
   // one state: the screen, then every menu and submenu opened in turn; `screen` keeps what the screen draws with no
@@ -176,6 +198,13 @@ test('every working command is proven by a browser test, and no door looks usabl
 
   // a door drawn enabled has a built command behind it
   expect([...drawn].filter(([ref, enabled]) => enabled && !BUILT.has(commandOf(ref))).map(([ref]) => ref), 'enabled on screen without a built command').toEqual([]);
+  // a control that stands for a palette entry (an Insert tile) is drawn enabled only once the entry's feature is
+  // registered as built: a tile of a feature still to come would insert a bare element (a "Hero" as an empty section)
+  expect(
+    [...enabledEntries].filter((id) => !isFeatureBuilt(PALETTE_FEATURE.get(id) as FeatureId)).map((id) => `${id} (${PALETTE_FEATURE.get(id) ?? 'no palette entry'})`),
+    'palette entries drawn enabled while their feature is not registered as built',
+  ).toEqual([]);
+  expect(enabledEntries.size, 'the census reached the Insert tiles').toBeGreaterThan(0);
 
   const missing: string[] = [];
   for (const c of COMMANDS.filter((c) => BUILT.has(c.id))) {

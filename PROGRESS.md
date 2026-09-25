@@ -4,8 +4,9 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 
 ## State (2026-09-25, brief "a aplicação completa": every feature of groups 01-20)
 
-- Group 01 and the foundation pass (runner, pointer.ts, menu doors, shortcut rule, lint rules: docs/history.md).
-- One e2e suite at a time (E2E_WORKERS=4), no dev server meanwhile; up to 3 helpers in worktrees, never in Chrome.
+- Group 01 and the foundation pass. One e2e suite at a time (E2E_WORKERS=4), no dev server meanwhile; helpers: 3.
+- First task: the feature table (src/app/features.ts) runs the runner, the census and the Insert tiles; next,
+  project-save-json and project-open-json (File › Open loads every fixture), then every door gated by its feature.
 - Group 02 passing: select-click, layers-tree, keyboard-tree-walk, palette-click-insert, undo-redo,
   multi-select-click, marquee-select, delete-element, move-up-down, wrap-row-column, drag-reorder-canvas,
   drag-drop-inside, context-menu, duplicate, text-edit-inline. Runner paths proven by switching them off: setup
@@ -15,8 +16,7 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 
 ## Conditions the user set
 
-- Runner paths committed without a test of their own (drag, held drag, dwell, marquee, typing): the first feature
-  that uses each path proves it by switching that step off in the runner and showing its scenarios fail.
+- A runner path with no test of its own (drag, held drag, dwell, typing): its first feature switches it off to fail.
 - Open finding 11's parts are fixed before the feature that needs them: a `}` in a style value before
   inspector-number-fields; a link's newTab as `target="_blank"` with `rel="noopener"` before elements-structure; a
   line break in textarea and option before elements-form-structure.

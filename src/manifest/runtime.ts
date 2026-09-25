@@ -84,6 +84,13 @@ export function commandOf(id: CommandId): Command & { readonly id: CommandId } {
   return command;
 }
 
+// The icon an element type shows wherever the editor names an element (a Layers row, an Insert tile, the inspector's
+// selector bar), from elements.json; null for a type the manifest does not know.
+const ELEMENT_ICONS = new Map<string, string>(manifest.elements.elements.map((e) => [e.id, e.icon]));
+export function elementIcon(type: string): string | null {
+  return ELEMENT_ICONS.get(type) ?? null;
+}
+
 // The doors placed in a region, in their order there (DESIGN.md: "order" 1 is first).
 export function doorsIn(region: RegionId): readonly DoorEntry[] {
   return manifest.doors

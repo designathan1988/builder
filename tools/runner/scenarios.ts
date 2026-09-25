@@ -9,16 +9,19 @@
 // geometry inside the frame, the feedback in the status bar, the editor's regions, storage after an immediate
 // reload, and the refusals. After the setup and after the steps the canvas must draw the document the port reads;
 // when it does not, the test fails on that assertion, never on a timeout.
-// A feature runs once every command it lists, and every command its scenarios' setups and steps run, is built (a
-// registered handler); the others are reported as not built by the status reporter (tools/runner/status.ts), which
-// derives each feature's status from the results. The tooth proof (tools/runner/tooth.ts) runs a feature's tests
+// A feature runs once it is registered as built in the feature table (src/app/features.ts); the others are reported
+// as not built by the status reporter (tools/runner/status.ts), which derives each feature's status from the results.
+// A registered feature must have scenarios, every command it lists built (a registered handler) and every door its
+// scenarios' setups, steps and Undo and Redo run working (`blockers`): the census fails one that does not. The tooth proof (tools/runner/tooth.ts) runs a feature's tests
 // with its handlers, or the module it names, made no-ops (tools/runner/tooth-plugin.ts) and requires every one of
 // them to fail on an assertion.
 import fs from 'node:fs';
 import path from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
+import { isFeatureBuilt } from '../../src/app/features.ts';
 import { shortcutRuns } from '../../src/editor/input/shortcut-rule.ts';
 import { FEATURE_COMMANDS } from '../../src/generated/commands.ts';
+import type { FeatureId } from '../../src/generated/ids.ts';
 import { EMPTY_FIXTURE, applyDiff, matchDocument, resolveNode, type DiffOp } from '../../src/manifest/scenario.ts';
 import { control, door as doorData, keys, modifiedControl, openMenu, runDoor, type Door } from '../../tests/e2e/door.ts';
 
@@ -161,7 +164,18 @@ const doorWorks = (ref: string) => {
   if (command === undefined || !BUILT.has(command.id)) return false;
   return d.kind !== 'shortcut' || shortcutRuns({ command: command.id, introducedBy: command.introducedBy, feature: d.feature }, (id) => BUILT.has(id), FEATURE_COMMANDS);
 };
-export const runnable = (f: Feature) => f.scenarios.length > 0 && f.commands.every((c) => BUILT.has(c)) && f.scenarios.every((s) => s.doors.every((d) => doorsRun(s, d).every(doorWorks)));
+// Whether a feature is registered as built (the feature table).
+export const registered = (f: Feature) => isFeatureBuilt(f.id as FeatureId);
+// Why a feature's scenarios cannot all run: it has none, a command it lists is not built, or a door they run does not
+// work yet. Empty when every test of every scenario and door can run.
+export function blockers(f: Feature): string[] {
+  const found: string[] = [];
+  if (f.scenarios.length === 0) found.push('it has no scenarios');
+  for (const c of f.commands) if (!BUILT.has(c)) found.push(`its command ${c} is not built`);
+  for (const s of f.scenarios) for (const d of s.doors) for (const ref of doorsRun(s, d)) if (!doorWorks(ref)) found.push(`${s.id} runs ${ref}, which does not work yet`);
+  return [...new Set(found)];
+}
+export const runnable = (f: Feature) => registered(f) && blockers(f).length === 0;
 export const FEATURE_TAG = (id: string) => `@feature:${id}`;
 
 // a message's text, as the app's own i18n runtime writes it (src/i18n/index.ts, served by the dev server)

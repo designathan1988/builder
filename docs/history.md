@@ -80,6 +80,15 @@ Decisions by small ambiguity (moved here from PROGRESS.md):
 - Playwright runs at most 3 workers (the machine froze with helpers in parallel at the default 12; the test Chrome
   already draws on the RTX 3060 through ANGLE D3D11, checked). Then (brief "a aplicação completa", bcd255e): the
   worker count comes from E2E_WORKERS, 4 when unset; a value that is not a whole number >= 1 fails the run.
+- The feature table (brief "a aplicação completa", first task), in three steps because the door of File › Open,
+  through which every scenario loads its fixture, belongs to project-open-json (not built: no confirmation, no
+  archive; it depends on project-save-json): (1) src/app/features.ts registers the 17 passing features; the runner
+  runs only registered features; the census fails a registered feature with no scenario, an unbuilt command or a
+  scenario door that does not work; the status reporter fails the run when a registered feature fails; the Insert
+  tiles follow the table (the 21 templates and the other entries of unregistered features are "not available yet");
+  the inspector's selector bar names the selection. (2) project-save-json and project-open-json, built first as the
+  dependency. (3) every door (drawn, shortcut, canvas gesture, context menu) enabled only when its feature is
+  registered; parked on branch wip/feature-table until then.
 - The tooth proof prints why each test failed (the first line and the matcher) and counts a failure that only ran
   out of time on an action or a wait (`locator.click: Timeout 5000ms exceeded.`) as no tooth, like a test timeout: a
   tooth fails on an assertion (brief "a aplicação completa").

@@ -1023,8 +1023,24 @@ kbd {
 }
 
 .selector-bar__element {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
   font: var(--fw-title) var(--fs-title) / var(--lh-title) var(--font-ui);
   color: var(--color-text-muted);
+}
+
+/* the selected element's name reads as text, its tag in the code face */
+.selector-bar__name {
+  overflow: hidden;
+  color: var(--color-text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.selector-bar__tag {
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-body) var(--font-mono);
 }
 
 .selector-bar__targets,

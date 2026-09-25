@@ -3,6 +3,8 @@
 // is drawn disabled with "not available yet", and neither a click nor Enter or Space on it inserts anything.
 import fs from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
+import { isFeatureBuilt } from '../../src/app/features.ts';
+import type { FeatureId } from '../../src/generated/ids.ts';
 import { control, runDoor, runs } from './door.ts';
 
 const INSERT_PANEL = 'workspace.setPanelOpen#toolbar-activity-bar-insert';
@@ -65,4 +67,23 @@ test('the tiles of palette-click-insert insert; a tile of a later feature is not
   const after = (await documentOf(page)) as { document: { pages: { tree: { children: { name: string; type: string }[] } }[] }; history: unknown };
   expect(after.document.pages[0]?.tree.children.map((c) => `${c.type} ${c.name}`)).toEqual(['paragraph Paragraph', 'paragraph Paragraph 2']);
   expect(after.history).toEqual({ undoSteps: 2, redoSteps: 0 });
+});
+
+// The feature table (src/app/features.ts) decides every tile: a tile is enabled exactly when its entry's feature is
+// registered as built, so a template of a feature still to come (Hero, templates-sections) is not available yet and
+// a click on it inserts nothing, never a bare section.
+test('every tile is enabled exactly when its entry\'s feature is registered as built; the Hero template inserts nothing', runs(INSERT_PANEL, TILE), async ({ page }) => {
+  await runDoor(page, INSERT_PANEL);
+  const drawn = await page.locator(`[data-door="${TILE}"]`).evaluateAll((els) => els.map((el) => [JSON.parse(el.getAttribute('data-args') ?? '{}').entry as string, el.getAttribute('aria-disabled') !== 'true'] as const));
+  expect(drawn.map(([entry]) => entry).sort()).toEqual(ENTRIES.map((e) => e.id).sort());
+  const expected = ENTRIES.map((e) => [e.id, isFeatureBuilt(e.feature as FeatureId)] as const);
+  expect(new Map(drawn)).toEqual(new Map(expected));
+  const hero = ENTRIES.find((e) => e.id === 'template-hero');
+  expect(hero?.feature).toBe('templates-sections');
+  const tile = control(page, TILE, { args: { entry: 'template-hero' } });
+  await expect(tile).toHaveAttribute('aria-disabled', 'true');
+  await expect(tile).toHaveAttribute('title', /not available yet/);
+  const before = await documentOf(page);
+  await tile.click({ force: true });
+  expect(await documentOf(page)).toEqual(before);
 });

@@ -2,11 +2,12 @@
 // of elements.json's palette) and Styles (classes and variables). Rows and tiles are the doors of their regions, one
 // per page, node or palette entry; a section's actions are the region's controls before its first item.
 import { useEffect, useRef, type CSSProperties, type MouseEvent } from 'react';
+import { isFeatureBuilt } from '../../app/features.ts';
 import { walk, type DocNode } from '../../core/document/model.ts';
 import type { DispatchResult } from '../../core/store/store.ts';
 import type { CommandId, FeatureId, MessageId, RegionId } from '../../generated/ids.ts';
-import { manifest, type DoorEntry } from '../../manifest/runtime.ts';
-import { DoorControl, Icon, isFeatureBuilt, useDoor } from '../doors/door.tsx';
+import { elementIcon, manifest, type DoorEntry } from '../../manifest/runtime.ts';
+import { DoorControl, Icon, useDoor } from '../doors/door.tsx';
 import { GLYPHS, doorSlots } from '../doors/placement.ts';
 import { modifierOf } from '../input/pointer.ts';
 import { isExpanded } from '../layers/tree.ts';
@@ -16,7 +17,6 @@ import { useT } from '../text.ts';
 import type { BodyTable } from './bodies.ts';
 import { Slots } from './slots.tsx';
 
-const ELEMENT_ICON = new Map(manifest.elements.elements.map((e) => [e.id, e.icon]));
 
 const drawnAs = (entry: DoorEntry): string | null => (entry.door.kind === 'toolbar' || entry.door.kind === 'panel-control' ? entry.door.drawnAs : null);
 const orderOf = (entry: DoorEntry): number => (typeof entry.door.placement === 'object' ? entry.door.placement.order : 0);
@@ -72,7 +72,7 @@ function PageRow({ page }: { readonly page: { readonly id: string; readonly name
   return (
     <div className="row">
       <DoorControl entry={PAGE_ROW} args={{ page: page.id }} className="row__main">
-        <Icon name={ELEMENT_ICON.get('page') ?? GLYPHS.folder} size="sm" />
+        <Icon name={elementIcon('page') ?? GLYPHS.folder} size="sm" />
         <span className="row__name">{page.name}</span>
         <span className="row__meta">{page.file}</span>
       </DoorControl>
@@ -146,7 +146,7 @@ function LayersRow({ node, depth }: { readonly node: DocNode; readonly depth: nu
         ) : (
           <span className="row__caret-space" />
         )}
-        <Icon name={ELEMENT_ICON.get(node.type) ?? GLYPHS.folder} size="sm" />
+        <Icon name={elementIcon(node.type) ?? GLYPHS.folder} size="sm" />
         <span className="row__name">{node.name}</span>
         <span className="row__meta">{node.tag}</span>
         <span className="row__actions">
@@ -226,7 +226,7 @@ function Insert() {
             <div className="tiles" data-key-context="palette">
               {g.entries.map((e) => (
                 <DoorControl key={e.id} entry={INSERT_TILE} args={{ entry: e.id }} className="tile" label={t(e.labelKey as MessageId)} ready={isFeatureBuilt(e.feature as FeatureId)}>
-                  <Icon name={ELEMENT_ICON.get(e.element) ?? GLYPHS.folder} />
+                  <Icon name={elementIcon(e.element) ?? GLYPHS.folder} />
                   <span className="tile__label">{t(e.labelKey as MessageId)}</span>
                 </DoorControl>
               ))}

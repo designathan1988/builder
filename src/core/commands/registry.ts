@@ -4,7 +4,7 @@
 // or NOT_AVAILABLE_YET while its feature is not built: every door of such a command is drawn disabled with
 // "not available yet", and dispatching it changes nothing.
 import type { CommandArgs } from '../../generated/commands.ts';
-import type { CommandId, MessageId, PredicateId } from '../../generated/ids.ts';
+import type { CommandId, FeatureId, MessageId, PredicateId } from '../../generated/ids.ts';
 import type { DocumentJson, Selection } from '../document/model.ts';
 import type { ModelRules } from '../document/validate.ts';
 import type { Patch } from '../history/transaction.ts';
@@ -76,6 +76,25 @@ export type CommandEntry<Id extends CommandId, Ui> = RegisteredHandler<Id, Ui> |
 export type CommandTable<Ui> = { readonly [Id in CommandId]: CommandEntry<Id, Ui> };
 
 export function isBuilt<Id extends CommandId, Ui>(entry: CommandEntry<Id, Ui>): entry is RegisteredHandler<Id, Ui> {
+  return entry !== NOT_AVAILABLE_YET;
+}
+
+// The feature table (src/app/features.ts) has the same design: an entry for every FeatureId of the manifest, the
+// feature registered with registerFeature once it is built, or NOT_AVAILABLE_YET. A door, and a control that stands
+// for an item a feature brings (a palette entry), is usable only while its feature is registered (DESIGN.md "Build
+// order"); the census fails a registered feature with no scenario, or one of whose scenarios cannot run or fails.
+export interface RegisteredFeature<Id extends FeatureId> {
+  readonly feature: Id;
+}
+
+export function registerFeature<Id extends FeatureId>(feature: Id): RegisteredFeature<Id> {
+  return Object.freeze({ feature });
+}
+
+export type FeatureEntry<Id extends FeatureId> = RegisteredFeature<Id> | NotAvailableYet;
+export type FeatureTable = { readonly [Id in FeatureId]: FeatureEntry<Id> };
+
+export function isRegistered<Id extends FeatureId>(entry: FeatureEntry<Id>): entry is RegisteredFeature<Id> {
   return entry !== NOT_AVAILABLE_YET;
 }
 

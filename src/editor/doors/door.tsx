@@ -6,8 +6,7 @@ import { useContext, type ReactNode } from 'react';
 import { COMMANDS, PREDICATES } from '../../app/commands.ts';
 import { isBuilt, type PredicateTable } from '../../core/commands/registry.ts';
 import type { DispatchResult } from '../../core/store/store.ts';
-import { FEATURE_COMMANDS } from '../../generated/commands.ts';
-import type { CommandId, FeatureId, KeyContextId, MessageId, PredicateId } from '../../generated/ids.ts';
+import type { CommandId, KeyContextId, MessageId, PredicateId } from '../../generated/ids.ts';
 import type { DoorEntry } from '../../manifest/runtime.ts';
 import { chordHint } from '../input/keymap.ts';
 import type { EditorUi } from '../state.ts';
@@ -28,12 +27,6 @@ export function Icon({ name, size = 'md' }: { readonly name: string; readonly si
 
 export function isDoorBuilt(entry: DoorEntry): boolean {
   return isBuilt(COMMANDS[entry.command.id]);
-}
-
-// Whether a feature is built: every command it lists is (FEATURE_COMMANDS). A control that stands for an item a later
-// feature brings (a palette entry of elements-structure) is not available yet until that feature is built.
-export function isFeatureBuilt(feature: FeatureId): boolean {
-  return FEATURE_COMMANDS[feature].every((command) => isBuilt(COMMANDS[command]));
 }
 
 export interface DoorState {
@@ -57,7 +50,8 @@ export interface DoorState {
 // command is built, whether it stands for the current state, and running it through the store. A control that
 // stands for one property, attribute or palette entry is labelled by it (the door's own label names the command
 // with placeholders: "Set {property} to {value}"), so the caller passes that label. A control whose item a later
-// feature brings (`ready` false: a palette entry of a feature not built yet) is not available yet either. The shortcut
+// feature brings (`ready` false: a palette entry whose feature the feature table does not register as built,
+// src/app/features.ts) is not available yet either. The shortcut
 // shown is the command's key in the context the control acts in (`keysIn`: the canvas's for the context menu).
 export function useDoor(entry: DoorEntry, args: Readonly<Record<string, unknown>> = {}, labelled?: string, ready = true, keysIn: KeyContextId = 'global'): DoorState {
   const t = useT();
@@ -116,7 +110,7 @@ export interface DoorControlProps {
   readonly className?: string;
   // the label of what the control stands for (a palette entry), instead of the door's own
   readonly label?: string;
-  // false while what the control stands for arrives with a feature not built yet (a palette entry's feature)
+  // false while what the control stands for arrives with a feature not registered as built (a palette entry's)
   readonly ready?: boolean;
 }
 
