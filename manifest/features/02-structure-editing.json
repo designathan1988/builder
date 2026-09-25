@@ -3281,8 +3281,8 @@
               },
               "target": "/Page/Hero",
               "drop": {
-                "placement": "after",
-                "reference": "/Page/Plans"
+                "placement": "before",
+                "reference": "/Page/Footer"
               },
               "action": false,
               "hold": true,

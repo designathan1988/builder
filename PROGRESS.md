@@ -9,17 +9,21 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
   killed from this session: every suite runs with E2E_PORT=5311.
 - First task: the feature table, the runner and the census run on main (144640b); the door rule on every kind of door
   is on wip/feature-table, freed by answer 1.
-- The user's answers (2026-09-25, docs/history.md "The user's answers"): 1) project-open-json: the runner does not
+- The user's answers (2026-09-25; docs/history.md "The user's answers"): 1) project-open-json: the runner does not
   compare the page's and the root's ids when the action replaces the whole document; release the door rule after it.
-  2) drag-level-keys-escape's first step drops "before Footer" (the one authorized scenario edit). 3) Shift/Ctrl on
-  the Layers Page row does not add the page to the selection (the canvas's rule). 4) The style path comes first:
-  inspector-number-fields, props-spacing, props-typography, color-picker, props-background, props-size-overflow,
-  props-flex-container; helpers may advance others, the style ones are integrated first.
+  2) drag-level-keys-escape's first step drops "before Footer" (the one authorized scenario edit; on main, b31f6b4).
+  3) Shift/Ctrl on the Layers Page row does not add the page to the selection (the canvas's rule). 4) The style path
+  comes first: inspector-number-fields, props-spacing, props-typography, color-picker, props-background,
+  props-size-overflow, props-flex-container; helpers may advance others, the style ones are integrated first.
+- Another writer session pushes to origin/main too (rename-element, the drag-level scenario, PROGRESS). Its
+  rename-element let the page root be renamed and edited the committed tests/e2e/context-menu.spec.ts to suit it;
+  both were undone here (the test is restored, the root refused) and the user told.
 - Group 02 passing (24): select-click, layers-tree, keyboard-tree-walk, palette-click-insert, undo-redo,
   multi-select-click, marquee-select, delete-element, move-up-down, wrap-row-column, drag-reorder-canvas,
   drag-drop-inside, context-menu, duplicate, text-edit-inline, palette-drag-insert, unwrap, nest-into-previous,
   promote-out, hide-element, select-container-children, hand-keyboard-move, lock-element, rename-element. Rename
-  refuses the page root (status.rename.root): the page's name is the page's (pages.rename).
+  refuses the page root (status.rename.root): the page's name is the page's (pages.rename); every other element
+  command refuses it too.
 - Group 03 passing: autosave-restore, project-save-json, ui-language; project-open-json is 4 of 5 (code on
   wip/project-open-json, answer 1). Group 04 passing: inspector-panel. Contracts committed, code next:
   page-properties, export-zip (06), elements-structure (07).

@@ -24,6 +24,11 @@ rename-element (from feature/rename-element, e9e014b) integrated with its code:
   that account holds port 5310 and cannot be killed from this session: suites run with `E2E_PORT=5311`.
 - rename-element's 2 rename commands are one Tooth-off run: 4 of 4 tests fail on assertions (log
   `.cache/logs/tooth-rename-element-070803.log`).
+- A second writer (another coordinator session on the same identity) pushed rename-element and the drag-level
+  scenario to origin/main while this one worked. Its rename-element let the page root be renamed and rewrote the
+  committed tests/e2e/context-menu.spec.ts to match; this session merged origin/main, restored that test byte for
+  byte (4b38208) and kept the root refusal. The drag-level scenario edit (b31f6b4) is the user's authorized one and
+  was kept. Two writers on origin/main need a clear owner per file: coordinate before the next push.
 
 ## 2026-09-25 — Group 02: a coordinator integrating helpers, one feature per commit
 
@@ -177,6 +182,18 @@ Decisions by small ambiguity (moved here from PROGRESS.md):
   Runner: inspector-field steps (click the editable element, Control+A, type), keys of the element-text-field
   context act on what the field holds, U+2028 in `type` presses Shift+Enter; each proven by switching it off (7,
   3 and 1 scenarios failed). Escape's field case off: its scenario and its browser test failed.
+- elements-structure (group 07): spec and scenarios by the coordinator (no Card type; Navigation's layer name is
+  its label; default styles only declarations that act, a Link Block display: block; the Settings tab's Link field
+  refuses a scheme other than http/https/mailto/tel with status.url.unsafe; an interactive element inside a Link Block
+  is refused with status.refused.interactiveInside naming it).
+- rename-element (helper): F2, a double-click on a row's name, Arrange › Rename and the context menu start a rename
+  in the node's Layers row (layers.startRename, ui.rename in src/editor/layers/rename.ts); Enter or leaving the field
+  keeps it (element.rename, trimmed; empty keeps the old name with status.rename.empty); a locked element refuses.
+  pointer.ts: a canvas press first blurs a focused editor field, so its text is kept before the press's selection.
+  The page root is refused (status.rename.root): the version that let it be renamed came with an edit to the
+  committed tests/e2e/context-menu.spec.ts and was undone on 2026-09-25 (see the entry above). Runner: a panel-control door with count 2 is double-clicked; a panel field is typed with Backspace, the
+  step's text and Enter; a Layers row part with no argument of its own is the row of the step's target. Each proven
+  by switching it off, as were leaveField and the lock refusal. Open: Escape does not cancel (finding 31).
 - Coordinator's slip, noted so it does not happen again: the Pager preview server (pager-run) stayed open during
   four suites of this stretch (e2e at 06:15, 06:22, 06:28, the tooth at 06:31); every server is stopped first now.
 
