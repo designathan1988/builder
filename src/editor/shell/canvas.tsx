@@ -155,7 +155,8 @@ export function CanvasColumn() {
         <CanvasToolbar />
         <div className="stage-wrap">
           <Rulers width={size.height} gap={size.gap} />
-          <div className="stage" ref={stage}>
+          {/* the stage around the page: a press here is on no node (pointer.ts) */}
+          <div className="stage" ref={stage} data-canvas-stage>
             <div className="frame" style={{ width: (BASE?.width ?? 0) * zoom }}>
               <BreakpointTabs />
               <CanvasFrame width={BASE?.width ?? 0} zoom={zoom} />

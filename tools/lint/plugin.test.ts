@@ -44,6 +44,58 @@ scripts.run('builder/use-ports', builder.rules['use-ports'], {
   ],
 });
 
+tsx.run('builder/pointer-owner', builder.rules['pointer-owner'], {
+  valid: [
+    'button.addEventListener("click", run);',
+    'window.addEventListener("keydown", onKey);',
+    'input.addEventListener("change", pick);',
+    'const b = <button onClick={run} onKeyDown={key} onFocus={f} onBlur={b} />;',
+  ],
+  invalid: [
+    { code: 'overlay.addEventListener("pointerdown", press);', errors: [{ messageId: 'listener' }] },
+    { code: 'window.removeEventListener("pointermove", move, true);', errors: [{ messageId: 'listener' }] },
+    { code: 'document.addEventListener(`mousedown`, close);', errors: [{ messageId: 'listener' }] },
+    { code: 'tile.addEventListener("dragstart", start);', errors: [{ messageId: 'listener' }] },
+    { code: 'zone.addEventListener("drop", land);', errors: [{ messageId: 'listener' }] },
+    { code: 'el.onpointerup = release;', errors: [{ messageId: 'listener' }] },
+    { code: 'const a = <div onPointerDown={press} />;', errors: [{ messageId: 'prop' }] },
+    { code: 'const a = <div onMouseEnter={open} onMouseLeave={close} />;', errors: [{ messageId: 'prop' }, { messageId: 'prop' }] },
+    { code: 'const a = <div onDragOver={over} onDrop={land} />;', errors: [{ messageId: 'prop' }, { messageId: 'prop' }] },
+    { code: 'const a = <div onPointerMoveCapture={move} />;', errors: [{ messageId: 'prop' }] },
+  ],
+});
+
+scripts.run('builder/gesture-owner', builder.rules['gesture-owner'], {
+  valid: ['store.dispatch("selection.select", { target });', 'const g = interactions.gestures;', 'gesture.commit();'],
+  invalid: [
+    { code: 'const g = store.gesture();', errors: [{ messageId: 'gesture' }] },
+    { code: 'context.store.gesture().dispatch("element.insert", args);', errors: [{ messageId: 'gesture' }] },
+  ],
+});
+
+scripts.run('builder/frame-owner', builder.rules['frame-owner'], {
+  valid: [
+    'const hit = nodeAt(canvasFrame(), point);',
+    'import { nodeAt, nodeBox } from "../canvas/coordinates.ts";',
+    { code: 'const doc = iframe.contentDocument; const el = doc.elementFromPoint(x, y);', filename: 'src/editor/canvas/coordinates.ts' },
+    { code: 'renderer.mount(frame.contentDocument);', filename: 'src/editor/canvas/frame.tsx' },
+    'label.textContent = name;',
+  ],
+  invalid: [
+    { code: 'const doc = iframe.contentDocument;', errors: [{ messageId: 'reach' }] },
+    { code: 'iframe.contentWindow.document.body.append(x);', errors: [{ messageId: 'reach' }] },
+    { code: 'const page = window.frames[0];', errors: [{ messageId: 'reach' }] },
+    { code: 'import { elementAt } from "../canvas/coordinates.ts";', errors: [{ messageId: 'element' }] },
+    { code: 'import { screenBox as box } from "../canvas/coordinates.ts";', errors: [{ messageId: 'element' }] },
+    { code: 'doc.body.appendChild(node);', filename: 'src/editor/canvas/coordinates.ts', errors: [{ messageId: 'write' }] },
+    { code: 'el.setAttribute("data-hover", "");', filename: 'src/editor/canvas/coordinates.ts', errors: [{ messageId: 'write' }] },
+    { code: 'el.classList.add("hover");', filename: 'src/editor/canvas/frame.tsx', errors: [{ messageId: 'write' }] },
+    { code: 'el.style.outline = "1px solid";', filename: 'src/editor/canvas/frame.tsx', errors: [{ messageId: 'write' }] },
+    { code: 'el.innerHTML = markup;', filename: 'src/editor/canvas/coordinates.ts', errors: [{ messageId: 'write' }] },
+    { code: 'sheet.insertRule(rule);', filename: 'src/editor/canvas/frame.tsx', errors: [{ messageId: 'write' }] },
+  ],
+});
+
 describe('style values', () => {
   it('turns React style keys into CSS property names', () => {
     expect(cssPropertyName('backgroundColor')).toBe('background-color');

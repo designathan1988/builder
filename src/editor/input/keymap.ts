@@ -7,6 +7,7 @@ import { normaliseChord } from '../../manifest/chord.ts';
 import { keyContextChain, manifest, type DoorEntry } from '../../manifest/runtime.ts';
 import type { DispatchResult } from '../../core/store/store.ts';
 import type { EditorStore } from '../store.ts';
+import { openGesture } from './pointer.ts';
 
 // The key of an event as the manifest writes it: a letter or a digit by its physical key (so Ctrl+Alt+B is B on any
 // layout), the other printable keys by the character they type, named keys by name.
@@ -56,10 +57,12 @@ export function contextOf(target: EventTarget | null): KeyContextId {
 
 export function installKeymap(store: EditorStore, target: Window = window): () => void {
   const onKeyDown = (event: KeyboardEvent) => {
-    const binding = bindingFor(contextOf(event.target), chordOf(event));
+    // during a pointer gesture the keys are the gesture's (pointer.ts)
+    const gesture = openGesture();
+    const binding = bindingFor(gesture?.context ?? contextOf(event.target), chordOf(event));
     if (!binding) return;
     event.preventDefault();
-    const dispatch = store.dispatch as (id: CommandId, args: unknown) => DispatchResult;
+    const dispatch = (gesture?.gesture.dispatch ?? store.dispatch) as (id: CommandId, args: unknown) => DispatchResult;
     dispatch(binding.command.id, binding.door.args);
   };
   target.addEventListener('keydown', onKeyDown);

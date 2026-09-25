@@ -2,7 +2,7 @@
 // of its submenus (menus anchored in it), in their order. An application menu shows every item: one whose command is
 // not built yet is disabled with "not available yet" (DESIGN.md "Overlays"). Opening a menu is not a command, so which
 // menu is open is this component's own state.
-import { useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type FocusEvent, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react';
 import type { MenuId, MessageId } from '../../generated/ids.ts';
 import type { DoorEntry } from '../../manifest/runtime.ts';
 import { useT } from '../text.ts';
@@ -38,12 +38,14 @@ function MenuItem({ entry, onDone }: { readonly entry: DoorEntry; readonly onDon
   );
 }
 
-function MenuList({ menu, onDone }: { readonly menu: MenuId; readonly onDone: () => void }) {
+// A menu's items. A menu opened from its button takes the focus on its first item; a submenu is drawn with its menu
+// and shown while the pointer is over its item or the focus is in it (shell.css), so no pointer listener is needed.
+function MenuList({ menu, onDone, focusFirst }: { readonly menu: MenuId; readonly onDone: () => void; readonly focusFirst: boolean }) {
   const list = useRef<HTMLDivElement>(null);
   const t = useT();
   useEffect(() => {
-    list.current?.querySelector<HTMLElement>('[role^="menuitem"]')?.focus();
-  }, []);
+    if (focusFirst) list.current?.querySelector<HTMLElement>('[role^="menuitem"]')?.focus();
+  }, [focusFirst]);
   const onKeyDown = (event: ReactKeyboardEvent) => {
     if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
     event.preventDefault();
@@ -53,7 +55,8 @@ function MenuList({ menu, onDone }: { readonly menu: MenuId; readonly onDone: ()
     next?.focus();
   };
   return (
-    <div className="menu" role="menu" ref={list} aria-label={t(menuOf(menu).labelKey as MessageId)} data-region={`menu:${menu}`} data-key-context="menu" onKeyDown={onKeyDown}>
+    // tabIndex -1: a press inside the menu keeps the focus in it, so the menu stays open (MenuButton closes on blur)
+    <div className="menu" role="menu" ref={list} tabIndex={-1} aria-label={t(menuOf(menu).labelKey as MessageId)} data-region={`menu:${menu}`} data-key-context="menu" onKeyDown={onKeyDown}>
       {slotsIn(`menu:${menu}`).map((slot) =>
         slot.kind === 'door' ? <MenuItem key={slot.entry.ref} entry={slot.entry} onDone={onDone} /> : <SubMenu key={slot.menu} menu={slot.menu} onDone={onDone} />,
       )}
@@ -65,13 +68,13 @@ function SubMenu({ menu, onDone }: { readonly menu: MenuId; readonly onDone: () 
   const [open, setOpen] = useState(false);
   const t = useT();
   return (
-    <div className="menu__sub" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
+    <div className={`menu__sub${open ? ' is-open' : ''}`}>
       <button type="button" role="menuitem" aria-haspopup="menu" aria-expanded={open} className="menu__item" onClick={() => setOpen(!open)}>
         <span className="menu__icon" />
         <span className="menu__label">{t(menuOf(menu).labelKey as MessageId)}</span>
         <Icon name={GLYPHS.submenu} size="sm" />
       </button>
-      {open ? <MenuList menu={menu} onDone={onDone} /> : null}
+      <MenuList menu={menu} onDone={onDone} focusFirst={false} />
     </div>
   );
 }
@@ -93,25 +96,22 @@ export function MenuButton({ menu, anchor, children, indicator = false, classNam
   const label = t(menuOf(menu).labelKey as MessageId);
   useEffect(() => {
     if (!open) return;
-    const close = (event: MouseEvent) => {
-      if (!root.current?.contains(event.target as Node)) setOpen(false);
-    };
     const escape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setOpen(false);
         root.current?.querySelector<HTMLElement>('.menu-button')?.focus();
       }
     };
-    document.addEventListener('mousedown', close);
     document.addEventListener('keydown', escape);
-    return () => {
-      document.removeEventListener('mousedown', close);
-      document.removeEventListener('keydown', escape);
-    };
+    return () => document.removeEventListener('keydown', escape);
   }, [open]);
+  // a press anywhere outside the menu takes the focus out of it, and the menu closes
+  const onBlur = (event: FocusEvent<HTMLDivElement>) => {
+    if (!root.current?.contains(event.relatedTarget as Node | null)) setOpen(false);
+  };
   const icon = anchor.icon !== null ? <Icon name={anchor.icon} size={anchor.drawnAs === 'icon-button' ? 'md' : 'sm'} /> : null;
   return (
-    <div className={['menu-anchor', className ?? ''].filter((c) => c !== '').join(' ')} ref={root}>
+    <div className={['menu-anchor', className ?? ''].filter((c) => c !== '').join(' ')} ref={root} onBlur={onBlur}>
       <button
         type="button"
         className={`menu-button menu-button--${anchor.drawnAs}${open ? ' is-open' : ''}`}
@@ -132,7 +132,7 @@ export function MenuButton({ menu, anchor, children, indicator = false, classNam
         {anchor.drawnAs === 'icon-button' ? null : (children ?? <span className="door__label">{label}</span>)}
         {indicator ? <Icon name={GLYPHS.dropdown} size="xs" /> : null}
       </button>
-      {open ? <MenuList menu={menu} onDone={() => setOpen(false)} /> : null}
+      {open ? <MenuList menu={menu} onDone={() => setOpen(false)} focusFirst /> : null}
     </div>
   );
 }

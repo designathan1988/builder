@@ -2,7 +2,8 @@
 // planted violation that fails npm run verify:fast (PROGRESS.md records the raw output).
 //
 // Two plugins: `builder` lints JavaScript and TypeScript (use-ports, no-literal-ui-string, use-tokens for React style
-// objects) and `builder-css` lints stylesheets with the @eslint/css language (use-tokens).
+// objects, pointer-owner, gesture-owner, frame-owner) and `builder-css` lints stylesheets with the @eslint/css
+// language (use-tokens).
 import { resolve } from 'node:path';
 import type { RuleDefinition, RuleVisitor } from '@eslint/core';
 import type { CSSRuleDefinition } from '@eslint/css';
@@ -333,9 +334,180 @@ const useTokensInStylesheet: CSSRuleDefinition<{
   },
 };
 
+// The text of a string literal or of a template literal without expressions; null for anything else.
+function staticText(node: TSESTree.Node | undefined): string | null {
+  if (node?.type === 'Literal' && typeof node.value === 'string') return node.value;
+  if (node?.type === 'TemplateLiteral' && node.expressions.length === 0) return node.quasis[0]?.value.cooked ?? null;
+  return null;
+}
+const memberName = (node: TSESTree.MemberExpression): string | null =>
+  !node.computed && node.property.type === 'Identifier' ? node.property.name : node.computed && node.property.type === 'Literal' && typeof node.property.value === 'string' ? node.property.value : null;
+
+type TsVisitor = RuleVisitor & {
+  CallExpression?: (node: TSESTree.CallExpression) => void;
+  AssignmentExpression?: (node: TSESTree.AssignmentExpression) => void;
+  MemberExpression?: (node: TSESTree.MemberExpression) => void;
+  ImportSpecifier?: (node: TSESTree.ImportSpecifier) => void;
+  JSXAttribute?: (node: TSESTree.JSXAttribute) => void;
+};
+type TsRuleDefinition<MessageIds extends string> = RuleDefinition<{
+  LangOptions: Linter.LanguageOptions;
+  Code: SourceCode;
+  RuleOptions: [];
+  Visitor: TsVisitor;
+  Node: TSESTree.Node;
+  MessageIds: MessageIds;
+  ExtRuleDocs: unknown;
+}>;
+
+// builder/pointer-owner: pointer, mouse and drag input belongs to the pointer owner (src/editor/input/pointer.ts),
+// the one file the configuration exempts. A listener of such an event (addEventListener, removeEventListener, an
+// on… property) and a React prop of one (onPointer…, onMouse…, onDrag…, onDrop, the pointer capture props) are
+// refused anywhere else; a control's onClick is not a gesture on the canvas and stays with the control.
+const POINTER_EVENT = /^(pointer|mouse|drag|drop|gotpointercapture|lostpointercapture)/i;
+const POINTER_PROP = /^on(Pointer|Mouse|Drag|Drop|GotPointerCapture|LostPointerCapture)/;
+const pointerOwner: TsRuleDefinition<'listener' | 'prop'> = {
+  meta: {
+    type: 'problem',
+    docs: { description: 'Pointer, mouse and drag input is handled only by the pointer owner' },
+    messages: {
+      listener: '{{what}}: pointer, mouse and drag input belongs to the pointer owner (src/editor/input/pointer.ts); a control keeps only its onClick.',
+      prop: '{{what}}: pointer, mouse and drag input belongs to the pointer owner (src/editor/input/pointer.ts); a control keeps only its onClick.',
+    },
+    schema: [],
+  },
+  create(context) {
+    return {
+      CallExpression(node) {
+        if (node.callee.type !== 'MemberExpression') return;
+        const method = memberName(node.callee);
+        if (method !== 'addEventListener' && method !== 'removeEventListener') return;
+        const event = staticText(node.arguments[0]);
+        if (event !== null && POINTER_EVENT.test(event)) context.report({ node, messageId: 'listener', data: { what: `${method}('${event}')` } });
+      },
+      AssignmentExpression(node) {
+        if (node.left.type !== 'MemberExpression') return;
+        const property = memberName(node.left);
+        if (property !== null && property.startsWith('on') && POINTER_EVENT.test(property.slice(2))) context.report({ node, messageId: 'listener', data: { what: property } });
+      },
+      JSXAttribute(node) {
+        const name = node.name.type === 'JSXIdentifier' ? node.name.name : null;
+        if (name !== null && POINTER_PROP.test(name)) context.report({ node, messageId: 'prop', data: { what: name } });
+      },
+    };
+  },
+};
+
+// builder/gesture-owner: a gesture's transaction is opened by its door, never by a handler: store.gesture() is
+// called only by the pointer owner, the one file the configuration exempts (with the store's own tests).
+const gestureOwner: TsRuleDefinition<'gesture'> = {
+  meta: {
+    type: 'problem',
+    docs: { description: 'Only the pointer owner opens a gesture transaction' },
+    messages: { gesture: 'gesture() opens a gesture\'s transaction: only the doors of the pointer owner (src/editor/input/pointer.ts) open one, never a handler.' },
+    schema: [],
+  },
+  create(context) {
+    return {
+      CallExpression(node) {
+        const callee = node.callee;
+        const name = callee.type === 'MemberExpression' ? memberName(callee) : callee.type === 'Identifier' ? callee.name : null;
+        if (name === 'gesture') context.report({ node, messageId: 'gesture' });
+      },
+    };
+  },
+};
+
+// builder/frame-owner: only the renderer (src/core/render/render.ts, which the configuration exempts) writes the
+// canvas iframe's DOM and CSS. The frame's document is reached (contentDocument, contentWindow, frames) only by the
+// frame's readers, the canvas frame and the coordinates module, which never write to a DOM or a stylesheet; every
+// other module learns nodes and boxes from coordinates' nodeAt and nodeBox, never its elements (elementAt,
+// screenBox).
+const FRAME_READERS = ['src/editor/canvas/frame.tsx', 'src/editor/canvas/coordinates.ts'];
+const REACH = new Set(['contentDocument', 'contentWindow', 'frames']);
+const ELEMENT_GIVERS = new Set(['elementAt', 'screenBox']);
+const WRITE_METHODS = new Set([
+  'append',
+  'appendChild',
+  'prepend',
+  'insertBefore',
+  'insertAdjacentElement',
+  'insertAdjacentHTML',
+  'insertAdjacentText',
+  'remove',
+  'removeChild',
+  'replaceChild',
+  'replaceChildren',
+  'replaceWith',
+  'before',
+  'after',
+  'setAttribute',
+  'setAttributeNS',
+  'removeAttribute',
+  'removeAttributeNS',
+  'toggleAttribute',
+  'setProperty',
+  'removeProperty',
+  'insertRule',
+  'deleteRule',
+  'addRule',
+  'removeRule',
+  'replaceSync',
+  'write',
+  'writeln',
+  'execCommand',
+  'attachShadow',
+]);
+const WRITE_PROPERTIES = new Set(['innerHTML', 'outerHTML', 'textContent', 'innerText', 'outerText', 'nodeValue', 'className', 'cssText', 'adoptedStyleSheets']);
+const frameOwner: TsRuleDefinition<'reach' | 'write' | 'element'> = {
+  meta: {
+    type: 'problem',
+    docs: { description: 'Only the renderer writes the canvas iframe' },
+    messages: {
+      reach: '{{what}} reaches the canvas iframe\'s page: only the renderer writes it and only the canvas frame and the coordinates module read it.',
+      write: '{{what}} writes a DOM or a stylesheet in a reader of the canvas iframe: only the renderer (src/core/render/render.ts) writes the page.',
+      element: '{{what}} hands out the canvas page\'s elements: take a node from nodeAt or a box from nodeBox instead.',
+    },
+    schema: [],
+  },
+  create(context) {
+    const file = context.filename.replaceAll('\\', '/');
+    const reader = FRAME_READERS.some((f) => file.endsWith(f));
+    const writesClassList = (node: TSESTree.MemberExpression) => node.object.type === 'MemberExpression' && ['classList', 'dataset', 'style'].includes(memberName(node.object) ?? '');
+    return {
+      MemberExpression(node) {
+        const name = memberName(node);
+        if (!reader && name !== null && REACH.has(name)) context.report({ node, messageId: 'reach', data: { what: name } });
+      },
+      ImportSpecifier(node) {
+        const imported = node.imported.type === 'Identifier' ? node.imported.name : node.imported.value;
+        if (!reader && ELEMENT_GIVERS.has(imported)) context.report({ node, messageId: 'element', data: { what: imported } });
+      },
+      CallExpression(node) {
+        if (!reader || node.callee.type !== 'MemberExpression') return;
+        const method = memberName(node.callee);
+        if (method === null) return;
+        if (WRITE_METHODS.has(method) || (writesClassList(node.callee) && ['add', 'remove', 'toggle', 'replace'].includes(method))) context.report({ node, messageId: 'write', data: { what: `${method}()` } });
+      },
+      AssignmentExpression(node) {
+        if (!reader || node.left.type !== 'MemberExpression') return;
+        const property = memberName(node.left);
+        if ((property !== null && WRITE_PROPERTIES.has(property)) || writesClassList(node.left)) context.report({ node, messageId: 'write', data: { what: property ?? 'a member' } });
+      },
+    };
+  },
+};
+
 const plugin = {
   meta: { name: 'builder' },
-  rules: { 'use-ports': usePorts, 'no-literal-ui-string': noLiteralUiString, 'use-tokens': useTokensInStyle },
+  rules: {
+    'use-ports': usePorts,
+    'no-literal-ui-string': noLiteralUiString,
+    'use-tokens': useTokensInStyle,
+    'pointer-owner': pointerOwner,
+    'gesture-owner': gestureOwner,
+    'frame-owner': frameOwner,
+  },
 };
 
 export const builderCss = {

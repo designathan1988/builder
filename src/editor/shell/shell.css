@@ -298,9 +298,17 @@ kbd {
   position: relative;
 }
 
+/* a submenu shows while the pointer is over its item or the focus is in it, or once its item is clicked */
 .menu__sub > .menu {
   top: 0;
   left: 100%;
+  display: none;
+}
+
+.menu__sub:hover > .menu,
+.menu__sub:focus-within > .menu,
+.menu__sub.is-open > .menu {
+  display: flex;
 }
 
 /* ---------------------------------------------------------------- top bar */

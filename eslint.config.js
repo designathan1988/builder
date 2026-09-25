@@ -36,6 +36,28 @@ export default defineConfig(
     rules: { 'builder/use-ports': 'error' },
   },
   {
+    // Pointer, mouse and drag input belongs to the pointer owner (ARCHITECTURE.md, Pointer input).
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: ['src/editor/input/pointer.ts'],
+    plugins: { builder },
+    rules: { 'builder/pointer-owner': 'error' },
+  },
+  {
+    // A gesture's transaction is opened by the pointer owner's doors, never by a handler; the store's own tests open
+    // gestures to prove them.
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: ['src/editor/input/pointer.ts', 'src/**/*.test.ts'],
+    plugins: { builder },
+    rules: { 'builder/gesture-owner': 'error' },
+  },
+  {
+    // Only the renderer writes the canvas iframe's page (ARCHITECTURE.md, Renderer); its tests build pages of their own.
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: ['src/core/render/render.ts', 'src/**/*.test.ts'],
+    plugins: { builder },
+    rules: { 'builder/frame-owner': 'error' },
+  },
+  {
     // UI text comes only from t() and the i18n catalogues, and style objects take their values from the tokens.
     files: ['src/**/*.tsx'],
     plugins: { builder },

@@ -2,6 +2,9 @@
 // inside the iframe, from the top-left of the page, scroll included), the frame (the iframe's viewport: the page's
 // CSS pixels from its visible top-left) and the screen (the editor window's client pixels). The iframe is scaled with
 // the standard CSS zoom, so one page pixel is `zoom` screen pixels; its layout keeps the breakpoint's width.
+import { NODE_ATTRIBUTE, nodeSelector } from '../../core/render/render.ts';
+import type { NodeId } from '../../generated/commands.ts';
+
 export interface Point {
   readonly x: number;
   readonly y: number;
@@ -72,6 +75,24 @@ export function screenBox(iframe: HTMLIFrameElement, element: Element): { x: num
   const r = element.getBoundingClientRect();
   const topLeft = frameToScreen({ x: r.left, y: r.top }, g);
   return { x: topLeft.x, y: topLeft.y, width: r.width * g.zoom, height: r.height * g.zoom };
+}
+
+// The node under a screen point: the deepest page element there that stands for a node (data-node, written by the
+// renderer), or the page root where no element is (the page's own background); null outside the frame's viewport.
+// The editor learns which node, never the element: only the renderer writes the page (lint rule builder/frame-owner).
+export function nodeAt(iframe: HTMLIFrameElement, point: Point): { readonly node: string; readonly root: boolean } | null {
+  const hit = elementAt(iframe, point);
+  if (!hit) return null;
+  const body = hit.ownerDocument.body;
+  const owner = hit.closest(`[${NODE_ATTRIBUTE}]`) ?? body;
+  const node = owner?.getAttribute(NODE_ATTRIBUTE) ?? null;
+  return node === null ? null : { node, root: owner === body };
+}
+
+// The screen box of a node's element, or null when the page does not draw it.
+export function nodeBox(iframe: HTMLIFrameElement, id: string): { x: number; y: number; width: number; height: number } | null {
+  const element = iframe.contentDocument?.querySelector(nodeSelector(id as NodeId));
+  return element ? screenBox(iframe, element) : null;
 }
 
 // The canvas's iframe, for the pointer owner and the canvas overlays.
