@@ -2,9 +2,9 @@
 // (workspace/layout.ts), the preferences (preferences/preferences.ts), the keyboard focus requests (focus/focus.ts),
 // the overlays' dismissals (menus/overlays.ts), the context menu's opening (menus/context-menu.ts), the folded
 // Layers branches (layers/tree.ts), the name being edited in Layers (layers/rename.ts), the text being edited on the
-// canvas (canvas/text-edit.ts), the drags'
-// cancellations (drag/drag-session.ts) and the keyboard's hand (core/structure/hand.ts). Each module owns its part;
-// this file only composes them. Document and selection state live in the core store, never here.
+// canvas (canvas/text-edit.ts), the drop level and the cancellations of the drags (drag/drag-session.ts) and the
+// keyboard's hand (core/structure/hand.ts). Each module owns its part; this file only composes them. Document and
+// selection state live in the core store, never here.
 import { NO_HAND, type HandState } from '../core/structure/hand.ts';
 import { INITIAL_TEXT_EDIT, type TextEditState } from './canvas/text-edit.ts';
 import { INITIAL_DRAG_SESSION, type DragSessionState } from './drag/drag-session.ts';

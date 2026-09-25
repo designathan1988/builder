@@ -8,7 +8,8 @@
 // same indicator, its label reading "Insert Paragraph · position 2 of 4 in Hero" (Problems in Pager 1), and, where
 // the element's command would refuse it, the refused indicator with that refusal and no line (Problems in Pager 3);
 // it leaves the selection's outline solid, and its ghost, the element's icon and name, follows the pointer at
-// drag.ghostOffset over the whole window (Problems in Pager 4). While the keyboard's hand holds an element
+// drag.ghostOffset over the whole window (Problems in Pager 4); cancelled with Escape, the ghost goes back to its
+// tile and fades out (spec drag-level-keys-escape, Problems in Pager 4). While the keyboard's hand holds an element
 // (core/structure/hand.ts), the same indicator stands at the hand's aim, with the refusal the move would meet there
 // (spec hand-keyboard-move, "Visual feedback"). While a text is edited in place, its outline and label ("Editing
 // text · Intro") wear the text editing mode colour instead of the selection's.
@@ -21,7 +22,7 @@
 //
 // Label rule (DESIGN.md "Canvas"): a label never covers page content. It sits above its element when that space is
 // free, otherwise inside the element's top-left corner when that corner is free, otherwise below the element.
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties, type Ref } from 'react';
 import { createPortal } from 'react-dom';
 import { message, type Message } from '../../core/commands/registry.ts';
 import { locate, type DocNode, type DocumentJson, type NodeId } from '../../core/document/model.ts';
@@ -31,7 +32,7 @@ import { elementIcon, manifest } from '../../manifest/runtime.ts';
 import { Icon } from '../doors/door.tsx';
 import { GLYPHS } from '../doors/placement.ts';
 import type { DropProposal } from '../drag/drop.ts';
-import { band, drag, hover, type DragView } from '../input/pointer.ts';
+import { band, drag, ghostReturn, hover, type DragView, type GhostReturn } from '../input/pointer.ts';
 import { useEditorState } from '../store.ts';
 import { useT } from '../text.ts';
 import { canvasFrame, contentBoxes, flowAxis, nodeBox } from './coordinates.ts';
@@ -44,19 +45,29 @@ const GHOST_OFFSET = ((): readonly [number, number] => {
   if (!Array.isArray(value) || typeof value[0] !== 'number' || typeof value[1] !== 'number') throw new Error('interactions.json has no pair drag.ghostOffset');
   return [value[0], value[1]];
 })();
+// how long the ghost of a cancelled creation drag takes to go back to its tile: halfway between the bounds of
+// interactions.json (spec drag-level-keys-escape, Problems in Pager 4: 150 to 250 ms)
+const GHOST_RETURN_MS = ((): number => {
+  const bound = (id: string) => manifest.interactions.constants.find((c) => c.id === id)?.value;
+  const [min, max] = [bound('drag.cancelReturnMin'), bound('drag.cancelReturnMax')];
+  if (typeof min !== 'number' || typeof max !== 'number') throw new Error('interactions.json has no number drag.cancelReturnMin or drag.cancelReturnMax');
+  return (min + max) / 2;
+})();
 
 // What the drop indicator draws: the drag in progress (pointer.ts), or the aim of the keyboard's hand, which has no
-// pointer and no ghost.
-type DropView = Pick<DragView, 'dragged' | 'inserting' | 'proposal' | 'refusal'>;
+// pointer and no ghost (and climbs no level of a drag).
+type DropView = Pick<DragView, 'dragged' | 'inserting' | 'proposal' | 'refusal' | 'levels'>;
 
 // The words of the drag in progress (DESIGN.md "Canvas", drag): what its drop label reads, and, for a palette tile's
 // creation drag, the status bar too (spec palette-drag-insert, Problems in Pager 1 and 2). Over the dragged nodes'
 // own subtree, or where the new element's command refuses it, the refusal; a move reads "Drop in Hero · position 2 of
 // 3"; a creation drag "Insert Paragraph · position 2 of 4 in Hero", or "Insert Container · into Actions" into a
 // receiver with no child, and, with no proposal (off the page), "Outside the page — release to cancel.". Null for a
-// move with no proposal. The hand's aim reads as a move, or its refusal.
+// move with no proposal. The hand's aim reads as a move, or its refusal. A proposal the level keys climbed says how
+// many receiver levels it climbed ("· ↑1", spec drag-level-keys-escape, Problems in Pager 3): the levels actually
+// climbed, never the keys pressed.
 export function dragWords(document: DocumentJson, view: DropView): Message | null {
-  const { proposal, dragged, inserting, refusal } = view;
+  const { proposal, dragged, inserting, refusal, levels } = view;
   if (proposal === null) return inserting !== null ? message('status.drop.outsidePage') : null;
   // the refusal its drop would meet (a creation drag's, the hand's aim), else the dragged nodes' own subtree
   if (refusal !== null) return refusal;
@@ -64,11 +75,15 @@ export function dragWords(document: DocumentJson, view: DropView): Message | nul
   const receiver = locate(document, proposal.parent)?.node ?? null;
   if (receiver === null) return null;
   const siblings = receiver.children.filter((c) => !dragged.includes(c.id));
-  if (inserting === null) return message('canvas.dropTarget', { parent: receiver.name, position: proposal.index + 1, count: siblings.length + dragged.length });
+  if (inserting === null) {
+    const where = { parent: receiver.name, position: proposal.index + 1, count: siblings.length + dragged.length };
+    return levels > 0 ? message('canvas.dropTargetLevel', { ...where, levels }) : message('canvas.dropTarget', where);
+  }
   const labelKey = PALETTE.get(inserting)?.labelKey;
   const element = labelKey === undefined ? inserting : { key: labelKey as MessageId };
   if (siblings.length === 0) return message('canvas.insertInto', { element, parent: receiver.name });
-  return message('canvas.insertTarget', { element, position: proposal.index + 1, count: siblings.length + 1, parent: receiver.name });
+  const where = { element, position: proposal.index + 1, count: siblings.length + 1, parent: receiver.name };
+  return levels > 0 ? message('canvas.insertTargetLevel', { ...where, levels }) : message('canvas.insertTarget', where);
 }
 
 export interface Box {
@@ -148,14 +163,15 @@ interface DropLayout {
 // dragged, the aim is a slot inside its receiver, and the move's refusal of the aim, if any, is the drop's.
 export function handDrop(hand: HandState): DropView {
   const { parent, index } = hand.aim;
-  return { dragged: [hand.held], inserting: null, proposal: { parent, index, placement: 'inside', reference: parent, refused: false }, refusal: hand.refusal };
+  return { dragged: [hand.held], inserting: null, proposal: { parent, index, placement: 'inside', reference: parent, refused: false }, refusal: hand.refusal, levels: 0 };
 }
 
 // The drop indicator of the drag in progress (spec drag-reorder-canvas, "Visual feedback", and Problems in Pager 3):
 // the insertion line where the dragged nodes will land, the receiving parent's outline, and the label naming the
 // receiver and the position ("Drop in Hero · position 1 of 3", DESIGN.md "Canvas", drag), placed by the label rule
 // next to the line, never at the receiver's far corner. A proposal that the command would refuse (a creation drag's,
-// the hand's aim) is drawn refused (spec palette-drag-insert, Problems in Pager 3).
+// the hand's aim) is drawn refused (spec palette-drag-insert, Problems in Pager 3). A drag's proposal drawn is the one
+// of the level the level keys set (drag-session.ts), redrawn as soon as a key changes it.
 function DropIndicator({ view }: { readonly view: DropView }) {
   const document = useEditorState((s) => s.document);
   const t = useT();
@@ -228,17 +244,49 @@ function DropIndicator({ view }: { readonly view: DropView }) {
 // stage or the page), so a creation drag never looks like the move of an element of the same name. Drawn over the
 // whole window (a portal on the body), never a pointer target; refused (off the page, or where the element is
 // refused) it wears the refusal's colour.
-function Ghost({ entry, at, refused }: { readonly entry: string; readonly at: { readonly x: number; readonly y: number }; readonly refused: boolean }) {
+function Ghost({ entry, at, refused, ref }: { readonly entry: string; readonly at: { readonly x: number; readonly y: number }; readonly refused: boolean; readonly ref?: Ref<HTMLDivElement> }) {
   const t = useT();
   const item = PALETTE.get(entry);
   if (item === undefined) return null;
   return createPortal(
-    <div className={`chrome-ghost${refused ? ' is-refused' : ''}`} data-chrome="ghost" data-entry={entry} style={{ left: at.x + GHOST_OFFSET[0], top: at.y + GHOST_OFFSET[1] }}>
+    <div ref={ref} className={`chrome-ghost${refused ? ' is-refused' : ''}`} data-chrome="ghost" data-entry={entry} style={{ left: at.x + GHOST_OFFSET[0], top: at.y + GHOST_OFFSET[1] }}>
       <Icon name={elementIcon(item.element) ?? GLYPHS.folder} size="sm" />
       <span className="chrome-ghost__label">{t(item.labelKey as MessageId)}</span>
     </div>,
     document.body,
   );
+}
+
+// The ghost of a creation drag Escape cancelled (pointer.ts, ghostReturn) goes back to the tile it came from and fades
+// out over GHOST_RETURN_MS (spec drag-level-keys-escape, Problems in Pager 4), then is drawn no more; at once when the
+// person asks for reduced motion.
+function ReturningGhost({ view }: { readonly view: GhostReturn }) {
+  const ghost = useRef<HTMLDivElement>(null);
+  const [back, setBack] = useState(false);
+  useLayoutEffect(() => {
+    const element = ghost.current;
+    if (element === null) return;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const way = element.animate(
+      [
+        { transform: 'translate(0px, 0px)', opacity: 1 },
+        { transform: `translate(${view.to.x - view.from.x}px, ${view.to.y - view.from.y}px)`, opacity: 0 },
+      ],
+      { duration: reduced ? 0 : GHOST_RETURN_MS, easing: 'ease-in', fill: 'forwards' },
+    );
+    let playing = true;
+    way.finished.then(
+      () => {
+        if (playing) setBack(true);
+      },
+      () => {},
+    );
+    return () => {
+      playing = false;
+      way.cancel();
+    };
+  }, [view]);
+  return back ? null : <Ghost ref={ghost} entry={view.entry} at={view.from} refused={false} />;
 }
 
 // Where a selected node is drawn: itself, or, when it or an ancestor is hidden (spec hide-element, Problems in Pager
@@ -262,6 +310,8 @@ export function CanvasChrome() {
   // the drag in progress (pointer.ts): the drop indicator is drawn, the selection's label hides and its outline turns
   // into the dashed outline of the source (Problems in Pager 1)
   const dragging = useSyncExternalStore(drag.subscribe, drag.get);
+  // the ghost of a creation drag Escape cancelled, on its way back to its tile
+  const returning = useSyncExternalStore(ghostReturn.subscribe, ghostReturn.get);
   // the element the keyboard's hand holds: its aim is drawn as a drag's drop (spec hand-keyboard-move, "Visual
   // feedback")
   const hand = useEditorState(heldHand);
@@ -333,6 +383,7 @@ export function CanvasChrome() {
       ))}
       {dropping ? <DropIndicator view={dropping} /> : null}
       {dragging?.inserting != null ? <Ghost entry={dragging.inserting} at={dragging.at} refused={dragging.proposal === null || dragging.refusal !== null} /> : null}
+      {returning !== null && dragging === null ? <ReturningGhost key={returning.id} view={returning} /> : null}
       {shown.union && selection.length > 1 ? <div className="chrome__union" data-chrome="union" style={at(shown.union)} /> : null}
       {selection.length > 1 ? (
         <div

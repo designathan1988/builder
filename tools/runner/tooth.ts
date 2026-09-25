@@ -3,6 +3,10 @@
 // (tools/runner/tooth-plugin.ts): its command handlers made no-ops (with those of its scenarios' action doors), or,
 // for a feature without commands, the module it names (toothProof). Every one of its tests must fail on an assertion; a feature with a test that still passes, or
 // that only times out, has no tooth, and the run fails. The raw result of each run is printed.
+// A test whose action undoes what a step before it did (ArrowDown after ArrowUp, drag-level-keys-escape) passes with
+// both switched off, since neither then happens: a test that passes with every command off is run once more with the
+// commands its steps before the action run switched back on, every other one (the action's own among them) still off,
+// and it has a tooth when it fails then. A test with no such step keeps its first result.
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { FEATURES, FEATURE_TAG, runnable } from './scenarios.ts';
@@ -36,12 +40,18 @@ const actionTimeout = (line: string): boolean => /: Timeout \d+ms exceeded/.test
 const toothCommands = (feature: (typeof features)[number]): string[] =>
   feature.commands.length === 0 ? [] : [...new Set([...feature.commands, ...feature.scenarios.flatMap((s) => s.doors.map((d) => d.split('#')[0] ?? ''))])];
 
-for (const feature of features) {
-  const commands = toothCommands(feature);
-  const env = { ...process.env, TOOTH_COMMANDS: commands.join(','), TOOTH_MODULE: commands.length === 0 ? (feature.toothProof ?? '') : '', E2E_PORT: process.env.TOOTH_PORT ?? '5390' };
-  const run = spawnSync(process.execPath, [cli, 'test', 'tests/e2e/scenarios.spec.ts', '--grep', FEATURE_TAG(feature.id), '--reporter=json', '--output', '.cache/pw-tooth'], { env, encoding: 'utf8', maxBuffer: 256 * 1024 * 1024 });
+interface Outcome {
+  readonly title: string;
+  readonly status: string;
+  readonly reason: string;
+}
+
+// The scenario tests whose titles match `grep`, run with these commands' handlers (or this module) made no-ops.
+function runSwitchedOff(commands: readonly string[], module: string, grep: string): Outcome[] {
+  const env = { ...process.env, TOOTH_COMMANDS: commands.join(','), TOOTH_MODULE: module, E2E_PORT: process.env.TOOTH_PORT ?? '5390' };
+  const run = spawnSync(process.execPath, [cli, 'test', 'tests/e2e/scenarios.spec.ts', '--grep', grep, '--reporter=json', '--output', '.cache/pw-tooth'], { env, encoding: 'utf8', maxBuffer: 256 * 1024 * 1024 });
   const report = JSON.parse(run.stdout) as { suites: Listed[] };
-  const outcomes: { title: string; status: string; reason: string }[] = [];
+  const outcomes: Outcome[] = [];
   const walk = (s: Listed) => {
     for (const spec of s.specs ?? [])
       for (const t of spec.tests) {
@@ -54,6 +64,24 @@ for (const feature of features) {
     for (const inner of s.suites ?? []) walk(inner);
   };
   for (const s of report.suites) walk(s);
+  return outcomes;
+}
+
+// The commands switched back on for a test's second run: those of its scenario's steps before the action step that
+// the first run switched off, but the action's own (a test is titled "<feature> › <scenario> › <door>").
+function stepsBeforeTheAction(feature: (typeof features)[number], commands: readonly string[], title: string): string[] {
+  const [, scenario, door] = title.split(' › ');
+  const s = feature.scenarios.find((x) => x.id === scenario);
+  const action = s?.steps.findIndex((step) => step.action) ?? -1;
+  if (s === undefined || action < 0 || door === undefined) return [];
+  const own = door.split('#')[0];
+  return [...new Set(s.steps.slice(0, action).map((step) => step.door.split('#')[0] ?? ''))].filter((c) => c !== own && commands.includes(c));
+}
+const exactly = (title: string) => title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+for (const feature of features) {
+  const commands = toothCommands(feature);
+  const outcomes = runSwitchedOff(commands, commands.length === 0 ? (feature.toothProof ?? '') : '', FEATURE_TAG(feature.id));
   const off = commands.length > 0 ? `handlers of ${commands.join(', ')} made no-ops, their availability predicates held true` : `module ${feature.toothProof ?? '(none named)'} made a no-op`;
   console.log(`\n${feature.id}: ${off}`);
   // a tooth is a test that fails on an assertion; one that passes, or times out, proves nothing
@@ -63,6 +91,24 @@ for (const feature of features) {
     actionTimedOut: 'ACTION TIMED OUT (no tooth: a test fails on an assertion, never on time)',
   };
   for (const o of outcomes) console.log(`  ${LABEL[o.status] ?? o.status}  ${o.title}${o.reason === '' ? '' : `\n      ${o.reason}`}`);
+  // a test that passed with every command off runs again with the commands of its steps before the action back on
+  const again = new Map<string, { on: string[]; titles: string[] }>();
+  for (const o of outcomes.filter((x) => x.status === 'passed')) {
+    const on = stepsBeforeTheAction(feature, commands, o.title);
+    if (on.length === 0) continue;
+    const key = on.join(',');
+    again.set(key, { on, titles: [...(again.get(key)?.titles ?? []), o.title] });
+  }
+  for (const { on, titles } of again.values()) {
+    const offAgain = commands.filter((c) => !on.includes(c));
+    console.log(`  run again with ${on.join(', ')} back on, the handlers of ${offAgain.join(', ')} still no-ops:`);
+    const rerun = runSwitchedOff(offAgain, '', titles.map(exactly).join('|')).filter((o) => titles.includes(o.title));
+    for (const o of rerun) {
+      console.log(`    ${LABEL[o.status] ?? o.status}  ${o.title}${o.reason === '' ? '' : `\n        ${o.reason}`}`);
+      const at = outcomes.findIndex((x) => x.title === o.title);
+      if (at >= 0) outcomes[at] = o;
+    }
+  }
   const failed = outcomes.filter((o) => o.status === 'failed').length;
   if (outcomes.length === 0 || failed < outcomes.length) toothless += 1;
   console.log(`  ${failed} of ${outcomes.length} tests fail with the feature switched off: ${outcomes.length > 0 && failed === outcomes.length ? 'it has teeth' : 'NO TOOTH'}`);

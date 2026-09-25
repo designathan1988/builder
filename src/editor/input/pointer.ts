@@ -25,8 +25,16 @@
 // and runs the tile's door at the release; past the threshold it is a creation drag with no dragged node, which asks
 // the same drop proposal and publishes it for the same drop indicator, and whose release runs the palette-drag door
 // with the tile's entry and the drawn proposal's parent and index, inside the gesture: one undo step. Released where
-// there is no proposal (outside the page), it inserts nothing. A drag cancelled by drag.cancel (drag-session.ts)
-// ends its gesture without committing it.
+// there is no proposal (outside the page), it inserts nothing.
+//
+// The keys of a drag (spec drag-level-keys-escape) run through the gesture too (keymap.ts, drag key context). Each
+// drag, an element's or a tile's, is the live drag of the drag session (src/editor/drag/drag-session.ts), which gets
+// the proposal the pointer makes; the proposal drawn, and dropped at the release, is the one of the level the session
+// holds, redrawn as soon as a level key changes it, without a pointer move. Escape (drag.cancel) ends the gesture at
+// once, its button still down: what the drag proposed is dropped with it, and the release that follows does nothing;
+// what the press itself did stays (the element it selected), except for a marquee, whose band is its own selection
+// and goes back to the selection held before the press (spec marquee-select); a creation drag's ghost goes back to
+// the tile it came from (ghostReturn, played by the canvas chrome).
 import { isFeatureBuilt } from '../../app/features.ts';
 import type { Message } from '../../core/commands/registry.ts';
 import { locate, type DocumentJson, type NodeId } from '../../core/document/model.ts';
@@ -35,6 +43,7 @@ import { selectionRoots } from '../../core/structure/remove.ts';
 import type { CommandId, DoorId, FeatureId, KeyContextId } from '../../generated/ids.ts';
 import { manifest, type DoorEntry } from '../../manifest/runtime.ts';
 import { canvasFrame, flowAxis, geometryOf, nodeAt, nodeBox, nodesUnder, screenToPage, type Point } from '../canvas/coordinates.ts';
+import { drawnProposal, liveDrag } from '../drag/drag-session.ts';
 import { proposeDrop, type DropProposal } from '../drag/drop.ts';
 import type { EditorStore } from '../store.ts';
 import { editArgs, editedNode, isTextElement } from '../canvas/text-edit.ts';
@@ -226,13 +235,15 @@ export function pressedByPointer(entry: DoorEntry): boolean {
 // The drag in progress, for the canvas chrome: the nodes dragged, or, for a palette tile's creation drag, none and
 // the palette entry it inserts; the drop proposal drawn now (the one a release commits) and, for a creation drag, the
 // refusal its drop would meet there (the command's own, store.refusal: a parent that does not accept the element,
-// spec palette-drag-insert, Problems in Pager 3); and where the pointer is on the screen (the ghost of a creation drag
-// follows it). Pointer state, not editor state: nothing changes until the release.
+// spec palette-drag-insert, Problems in Pager 3); the receiver levels the drawn proposal climbed above the pointer's
+// own (the drag session's level keys); and where the pointer is on the screen (the ghost of a creation drag follows
+// it). Pointer state, not editor state: nothing changes until the release.
 export interface DragView {
   readonly dragged: readonly NodeId[];
   readonly inserting: string | null;
   readonly proposal: DropProposal | null;
   readonly refusal: Message | null;
+  readonly levels: number;
   readonly at: Point;
 }
 let dragView: DragView | null = null;
@@ -248,6 +259,32 @@ function setDrag(next: DragView | null) {
   if (next === dragView) return;
   dragView = next;
   for (const listener of [...dragListeners]) listener();
+}
+
+// The ghost of a creation drag Escape cancelled, for the canvas chrome, which plays its way back (spec
+// drag-level-keys-escape, Problems in Pager 4): the palette entry, where the pointer was and where the press went down
+// on the tile, on the screen; each one numbered, so a new one plays anew. Pointer state: the next press takes it away.
+export interface GhostReturn {
+  readonly id: number;
+  readonly entry: string;
+  readonly from: Point;
+  readonly to: Point;
+}
+let returningGhost: GhostReturn | null = null;
+let ghostReturns = 0;
+const returnListeners = new Set<() => void>();
+export const ghostReturn = {
+  get: (): GhostReturn | null => returningGhost,
+  subscribe(listener: () => void): () => void {
+    returnListeners.add(listener);
+    return () => returnListeners.delete(listener);
+  },
+};
+function setGhostReturn(next: Omit<GhostReturn, 'id'> | null) {
+  if (next === null && returningGhost === null) return;
+  if (next !== null) ghostReturns += 1;
+  returningGhost = next === null ? null : { id: ghostReturns, ...next };
+  for (const listener of [...returnListeners]) listener();
 }
 
 // The proposal a pointer position makes now, measured on the page through the coordinates module.
@@ -311,14 +348,17 @@ export function installPointer(store: EditorStore, target: Window = window): () 
   let machine: Machine = IDLE;
   let buttons: { button: Button; count: number; modifier: string | null } | null = null;
   // an element drag, or a palette tile's creation drag: what it moves (nothing for a tile), the palette entry it
-  // inserts (a tile's), the proposal drawn, the refusal its drop would meet (a creation drag's), and where the pointer
-  // was when it was taken (drag.hysteresis)
+  // inserts (a tile's), the pointer's own proposal (level 0) and where the pointer was when it was taken
+  // (drag.hysteresis), and the proposal drawn at the drag session's level, the levels it climbed and the refusal its
+  // drop would meet (a creation drag's)
   let dragging: {
     readonly dragged: readonly NodeId[];
     readonly inserting: string | null;
-    proposal: DropProposal | null;
-    refusal: Message | null;
+    base: DropProposal | null;
     takenAt: Point | null;
+    proposal: DropProposal | null;
+    levels: number;
+    refusal: Message | null;
   } | null = null;
   // the press of the gesture, while one is open: a tile's press decides its click or its drop at the release
   let pressed: Press | null = null;
@@ -387,8 +427,9 @@ export function installPointer(store: EditorStore, target: Window = window): () 
         // starts over the palette, outside the page: no proposal yet
         const entry = press.args.entry;
         if (typeof entry !== 'string') return;
-        dragging = { dragged: [], inserting: entry, proposal: null, refusal: null, takenAt: null };
-        setDrag({ dragged: [], inserting: entry, proposal: null, refusal: null, at: pointerAt });
+        dragging = { dragged: [], inserting: entry, base: null, takenAt: null, proposal: null, levels: 0, refusal: null };
+        liveDrag.begin([]);
+        setDrag({ dragged: [], inserting: entry, proposal: null, refusal: null, levels: 0, at: pointerAt });
         return;
       }
       const node = press.on === 'node' ? (locate(store.getState().document, press.node as NodeId)?.node ?? null) : null;
@@ -402,8 +443,9 @@ export function installPointer(store: EditorStore, target: Window = window): () 
         const state = store.getState();
         const dragged = selectionRoots(state.document, state.selection).map((at) => at.node.id);
         if (dragged.length > 0) {
-          dragging = { dragged, inserting: null, proposal: null, refusal: null, takenAt: null };
-          setDrag({ dragged, inserting: null, proposal: null, refusal: null, at: pointerAt });
+          dragging = { dragged, inserting: null, base: null, takenAt: null, proposal: null, levels: 0, refusal: null };
+          liveDrag.begin(dragged);
+          setDrag({ dragged, inserting: null, proposal: null, refusal: null, levels: 0, at: pointerAt });
         }
       }
     } else if (effect === 'commit' || effect === 'cancel') {
@@ -413,6 +455,7 @@ export function installPointer(store: EditorStore, target: Window = window): () 
       const press = pressed;
       open = null;
       dragging = null;
+      liveDrag.end();
       pressed = null;
       setDrag(null);
       marquee = null;
@@ -438,22 +481,43 @@ export function installPointer(store: EditorStore, target: Window = window): () 
     }
   };
 
-  // While a drag goes on, each pointer position proposes a drop; a new proposal replaces the drawn one only once the
-  // pointer is drag.hysteresis screen pixels from where the drawn one was taken. A creation drag proposes a drop only
+  // The proposal drawn, and dropped at the release: the pointer's own at the level the drag session holds (its level
+  // keys, drag-session.ts), and, for a creation drag, the refusal its drop would meet there. It is published when it
+  // changes, whether the pointer or a level key changed it (a level key redraws it at once, without a pointer move),
+  // and on every move of a creation drag, whose ghost follows the pointer.
+  const redraw = (at: Point, publish: boolean) => {
+    const live = liveDrag.get();
+    if (dragging === null || live === null) return;
+    const state = store.getState();
+    const { proposal, level } = drawnProposal(state.ui.drag, live, state.document);
+    const changed = level !== dragging.levels || JSON.stringify(proposal) !== JSON.stringify(dragging.proposal);
+    if (changed) {
+      dragging.proposal = proposal;
+      dragging.levels = level;
+      // the refusal the creation drag's drop would meet there: its command's own, asked without running it
+      dragging.refusal =
+        dragging.inserting !== null && proposal !== null && PALETTE_DRAG !== null
+          ? store.refusal(PALETTE_DRAG.command.id, { ...PALETTE_DRAG.door.args, entry: dragging.inserting, parent: proposal.parent, index: proposal.index } as never)
+          : null;
+    }
+    if (changed || publish) setDrag({ dragged: dragging.dragged, inserting: dragging.inserting, proposal: dragging.proposal, refusal: dragging.refusal, levels: dragging.levels, at });
+  };
+
+  // While a drag goes on, each pointer position proposes a drop; a new proposal replaces the pointer's own only once
+  // the pointer is drag.hysteresis screen pixels from where that one was taken. A creation drag proposes a drop only
   // over the page (the canvas overlay): over the stage around it or over a panel it proposes none (spec
-  // palette-drag-insert, "Hit zones"), and it publishes every move, since its ghost follows the pointer.
+  // palette-drag-insert, "Hit zones").
   const over = (at: Point, onPage: boolean) => {
     if (dragging === null) return;
     const creation = dragging.inserting !== null;
     const next = creation && !onPage ? null : proposalAt(store.getState().document, dragging.dragged, at);
-    const taken = JSON.stringify(next) !== JSON.stringify(dragging.proposal) && !(dragging.takenAt !== null && Math.hypot(at.x - dragging.takenAt.x, at.y - dragging.takenAt.y) < DRAG_HYSTERESIS);
+    const taken = JSON.stringify(next) !== JSON.stringify(dragging.base) && !(dragging.takenAt !== null && Math.hypot(at.x - dragging.takenAt.x, at.y - dragging.takenAt.y) < DRAG_HYSTERESIS);
     if (taken) {
-      dragging.proposal = next;
+      dragging.base = next;
       dragging.takenAt = at;
-      // the refusal the creation drag's drop would meet there: its command's own, asked without running it
-      dragging.refusal = creation && next !== null && PALETTE_DRAG !== null ? store.refusal(PALETTE_DRAG.command.id, { ...PALETTE_DRAG.door.args, entry: dragging.inserting, parent: next.parent, index: next.index } as never) : null;
+      liveDrag.propose(next);
     }
-    if (taken || creation) setDrag({ dragged: dragging.dragged, inserting: dragging.inserting, proposal: dragging.proposal, refusal: dragging.refusal, at });
+    redraw(at, creation);
   };
 
   const isRoot = (node: string) => locate(store.getState().document, node as NodeId)?.parent === null;
@@ -482,6 +546,7 @@ export function installPointer(store: EditorStore, target: Window = window): () 
   const onDown = (event: PointerEvent) => {
     lastPress = { x: event.clientX, y: event.clientY };
     keepFocus = false;
+    setGhostReturn(null);
     const press = pressAt(event, isRoot);
     if (press === null || press === 'elsewhere') return;
     if (event.button !== 0 && event.button !== 2) return;
@@ -540,13 +605,32 @@ export function installPointer(store: EditorStore, target: Window = window): () 
     if (keep || (event.button === 2 && event.target instanceof Element && event.target.closest(EDITOR_MENU_AREA))) event.preventDefault();
   };
 
-  // drag.cancel (drag-session.ts) records a cancellation in the editor state; one newer than the open gesture ends
-  // it without committing (after the dispatch that recorded it returns), and the release that follows drops nothing
+  // A drag Escape cancelled ends its gesture at once, its button still down: the drag and what it would do at the
+  // release (its drop, a tile's click or insertion) are dropped, and the machine is idle, so the release that follows
+  // does nothing. What the press itself did stays (the element it selected: spec drag-level-keys-escape, the selection
+  // after Escape is the dragged element); a marquee's band is its own selection, and goes back to the selection held
+  // before the press (spec marquee-select). A creation drag's ghost goes back to the tile it came from.
+  const endCancelled = () => {
+    const effect: Effect = marquee !== null ? 'cancel' : 'commit';
+    if (dragging?.inserting != null && pressedAt !== null) setGhostReturn({ entry: dragging.inserting, from: pointerAt, to: pressedAt.screen });
+    dragging = null;
+    pressed = null;
+    machine = IDLE;
+    run(effect);
+  };
+
+  // The keys of the drag (drag-session.ts) change the editor state while the gesture is open: a level key's new level
+  // is redrawn at once; drag.cancel records a cancellation, and one newer than the open gesture ends it (once the
+  // dispatch that recorded it has returned).
   const stopListening = store.subscribe(() => {
-    if (open === null || store.getState().ui.drag.cancels === cancelsAtOpen) return;
+    if (open === null) return;
+    if (store.getState().ui.drag.cancels === cancelsAtOpen) {
+      redraw(pointerAt, false);
+      return;
+    }
     const cancelled = open;
     queueMicrotask(() => {
-      if (open === cancelled) onCancel();
+      if (open === cancelled) endCancelled();
     });
   });
 

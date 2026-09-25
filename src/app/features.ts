@@ -19,7 +19,7 @@ export const FEATURES = {
   'delete-element': registerFeature('delete-element'),
   'drag-reorder-canvas': registerFeature('drag-reorder-canvas'),
   'drag-drop-inside': registerFeature('drag-drop-inside'),
-  'drag-level-keys-escape': NOT_AVAILABLE_YET,
+  'drag-level-keys-escape': registerFeature('drag-level-keys-escape'),
   'palette-drag-insert': registerFeature('palette-drag-insert'),
   'layers-drag': NOT_AVAILABLE_YET,
   'move-up-down': registerFeature('move-up-down'),
