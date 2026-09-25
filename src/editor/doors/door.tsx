@@ -157,6 +157,9 @@ export function DoorControl({ entry, args = {}, children, expanded, className, l
           {children === undefined ? <span className="door__label">{door.face}</span> : children}
         </button>
       );
+    case 'area':
+      // part of a larger surface (a backdrop, a ruler): no text of its own, named by its label, out of the Tab order
+      return <button {...common} aria-label={door.label} tabIndex={-1} />;
     default:
       return (
         <button {...common} aria-label={children !== undefined || door.face !== door.label ? door.label : undefined} aria-pressed={pressed ? door.current : undefined}>

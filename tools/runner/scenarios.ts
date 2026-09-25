@@ -15,6 +15,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
+import { shortcutRuns } from '../../src/editor/input/shortcut-rule.ts';
+import { FEATURE_COMMANDS } from '../../src/generated/commands.ts';
 import { EMPTY_FIXTURE, applyDiff, matchDocument, resolveNode, type DiffOp } from '../../src/manifest/scenario.ts';
 import { control, door as doorData, keys, openMenu, runDoor, type Door } from '../../tests/e2e/door.ts';
 
@@ -78,7 +80,7 @@ const interactions = read('manifest/interactions.json') as {
 };
 const COMMANDS = fs
   .readdirSync('manifest/commands')
-  .flatMap((f) => (read(path.join('manifest/commands', f)) as { commands: { id: string; args: Record<string, { type: string }>; entryPoints: Door[] }[] }).commands);
+  .flatMap((f) => (read(path.join('manifest/commands', f)) as { commands: { id: string; introducedBy: string; args: Record<string, { type: string }>; entryPoints: Door[] }[] }).commands);
 const BASE_BREAKPOINT = properties.breakpoints.find((b) => b.base)?.id;
 const BASE_STATE = properties.states.find((s) => s.pseudo === null)?.id;
 const CONTENT = new Map(elements.elements.map((e) => [e.id, e.content]));
@@ -122,8 +124,14 @@ function doorsRun(s: Scenario, action: string): string[] {
 }
 
 // a feature runs once every command it lists, and every command its scenarios' setups, steps and doors run, is built
-export const runnable = (f: Feature) =>
-  f.scenarios.length > 0 && [...f.commands, ...f.scenarios.flatMap((s) => s.doors.flatMap((d) => doorsRun(s, d)).map(commandOf))].every((c) => BUILT.has(c));
+// a door the scenario runs works: its command is built, and a shortcut runs by the keymap's own rule
+const doorWorks = (ref: string) => {
+  const command = COMMANDS.find((c) => c.id === commandOf(ref));
+  const d = doorData(ref);
+  if (command === undefined || !BUILT.has(command.id)) return false;
+  return d.kind !== 'shortcut' || shortcutRuns({ command: command.id, introducedBy: command.introducedBy, feature: d.feature }, (id) => BUILT.has(id), FEATURE_COMMANDS);
+};
+export const runnable = (f: Feature) => f.scenarios.length > 0 && f.commands.every((c) => BUILT.has(c)) && f.scenarios.every((s) => s.doors.every((d) => doorsRun(s, d).every(doorWorks)));
 export const FEATURE_TAG = (id: string) => `@feature:${id}`;
 
 // a message's text, as the app's own i18n runtime writes it (src/i18n/index.ts, served by the dev server)

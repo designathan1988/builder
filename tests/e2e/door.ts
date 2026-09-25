@@ -7,6 +7,7 @@ import type { Locator, Page, TestDetails } from '@playwright/test';
 export interface Door {
   readonly id: string;
   readonly kind: string;
+  readonly feature: string;
   readonly args: Readonly<Record<string, unknown>>;
   readonly menu?: string;
   readonly chord?: string;

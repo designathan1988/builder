@@ -298,6 +298,22 @@ kbd {
   position: relative;
 }
 
+/* the backdrop under an open menu (ui.dismiss#overlay-backdrop): the whole window, transparent, under the menu */
+.overlay-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 49;
+  min-width: 0;
+  height: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.overlay-backdrop:not(.is-unavailable):hover {
+  background: transparent;
+}
+
 /* a submenu shows while the pointer is over its item or the focus is in it, or once its item is clicked */
 .menu__sub > .menu {
   top: 0;

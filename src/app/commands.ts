@@ -5,6 +5,8 @@
 import { NOT_AVAILABLE_YET, always, type CommandTable, type PredicateTable } from '../core/commands/registry.ts';
 import { canRedo, canUndo, redoCommand, undoCommand } from '../core/history/history.ts';
 import { openProject } from '../core/project/archive.ts';
+import { focusActivate, focusFirst, focusLast, focusNext, focusPrevious } from '../editor/focus/focus.ts';
+import { dismiss } from '../editor/menus/overlays.ts';
 import { setLanguage, setTheme } from '../editor/preferences/preferences.ts';
 import type { EditorUi } from '../editor/state.ts';
 import { setWorkbenchState } from '../editor/workspace/layout.ts';
@@ -81,15 +83,15 @@ export const COMMANDS = {
   'files.upload': NOT_AVAILABLE_YET,
   'files.saveContent': NOT_AVAILABLE_YET,
   'assets.insertImageFile': NOT_AVAILABLE_YET,
-  'focus.next': NOT_AVAILABLE_YET,
-  'focus.previous': NOT_AVAILABLE_YET,
-  'focus.first': NOT_AVAILABLE_YET,
-  'focus.last': NOT_AVAILABLE_YET,
-  'focus.activate': NOT_AVAILABLE_YET,
+  'focus.next': focusNext,
+  'focus.previous': focusPrevious,
+  'focus.first': focusFirst,
+  'focus.last': focusLast,
+  'focus.activate': focusActivate,
   'focus.nextRegion': NOT_AVAILABLE_YET,
   'focus.previousRegion': NOT_AVAILABLE_YET,
   'focus.canvas': NOT_AVAILABLE_YET,
-  'ui.dismiss': NOT_AVAILABLE_YET,
+  'ui.dismiss': dismiss,
   'position.setMode': NOT_AVAILABLE_YET,
   'geometry.resize': NOT_AVAILABLE_YET,
   'position.move': NOT_AVAILABLE_YET,

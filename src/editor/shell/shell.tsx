@@ -4,6 +4,7 @@
 import { useEffect, useState } from 'react';
 import { installKeymap } from '../input/keymap.ts';
 import { installPointer } from '../input/pointer.ts';
+import { installFocus } from '../focus/focus.ts';
 import { useEditorState, useStore } from '../store.ts';
 import { isPanelOpen } from '../workspace/panels.ts';
 import { useT } from '../text.ts';
@@ -43,6 +44,7 @@ export function Shell() {
   usePreferencesOnDocument();
   useEffect(() => installKeymap(store), [store]);
   useEffect(() => installPointer(store), [store]);
+  useEffect(() => installFocus(store), [store]);
   const classes = ['shell', sidebar ? '' : 'shell--no-sidebar', inspector ? '' : 'shell--no-inspector', `shell--dock-${dock}`].filter((c) => c !== '').join(' ');
   return (
     <PanelBodies.Provider value={drawsBody}>

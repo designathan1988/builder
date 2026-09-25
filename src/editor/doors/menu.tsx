@@ -1,13 +1,20 @@
 // Menus (ARCHITECTURE.md): a menu's button opens it; its items are the doors placed in "menu:<menu>" and the buttons
 // of its submenus (menus anchored in it), in their order. An application menu shows every item: one whose command is
 // not built yet is disabled with "not available yet" (DESIGN.md "Overlays"). Opening a menu is not a command, so which
-// menu is open is this component's own state.
-import { useEffect, useRef, useState, type FocusEvent, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react';
+// menu is open is this component's own state. A menu has no key or pointer listener of its own: its keys are the
+// doors of the "menu" key context, run by the keymap (the arrows, Home and End move the focus, Enter runs the focused
+// item, Escape dismisses), and a press outside lands on the backdrop, the door ui.dismiss#overlay-backdrop drawn
+// under an open menu. A dismissal closes the menus open when it arrives (menus/overlays.ts).
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import type { MenuId, MessageId } from '../../generated/ids.ts';
 import type { DoorEntry } from '../../manifest/runtime.ts';
+import { useEditorState } from '../store.ts';
 import { useT } from '../text.ts';
-import { Icon, useDoor } from './door.tsx';
-import { GLYPHS, menuOf, slotsIn, type Anchor } from './placement.ts';
+import { DoorControl, Icon, useDoor } from './door.tsx';
+import { GLYPHS, doorSlots, menuOf, slotsIn, type Anchor } from './placement.ts';
+
+// the backdrop under an open menu: the door the manifest places in the overlay region
+const BACKDROP = doorSlots('overlay')[0];
 
 function MenuItem({ entry, onDone }: { readonly entry: DoorEntry; readonly onDone: () => void }) {
   const door = useDoor(entry);
@@ -39,24 +46,15 @@ function MenuItem({ entry, onDone }: { readonly entry: DoorEntry; readonly onDon
 }
 
 // A menu's items. A menu opened from its button takes the focus on its first item; a submenu is drawn with its menu
-// and shown while the pointer is over its item or the focus is in it (shell.css), so no pointer listener is needed.
+// and shown while the pointer is over its item, the focus is in it, or its item was run (shell.css).
 function MenuList({ menu, onDone, focusFirst }: { readonly menu: MenuId; readonly onDone: () => void; readonly focusFirst: boolean }) {
   const list = useRef<HTMLDivElement>(null);
   const t = useT();
   useEffect(() => {
     if (focusFirst) list.current?.querySelector<HTMLElement>('[role^="menuitem"]')?.focus();
   }, [focusFirst]);
-  const onKeyDown = (event: ReactKeyboardEvent) => {
-    if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
-    event.preventDefault();
-    const items = [...(list.current?.querySelectorAll<HTMLElement>(':scope > [role^="menuitem"], :scope > .menu__sub > [role^="menuitem"]') ?? [])];
-    const at = items.indexOf(document.activeElement as HTMLElement);
-    const next = items[(at + (event.key === 'ArrowDown' ? 1 : items.length - 1)) % items.length];
-    next?.focus();
-  };
   return (
-    // tabIndex -1: a press inside the menu keeps the focus in it, so the menu stays open (MenuButton closes on blur)
-    <div className="menu" role="menu" ref={list} tabIndex={-1} aria-label={t(menuOf(menu).labelKey as MessageId)} data-region={`menu:${menu}`} data-key-context="menu" onKeyDown={onKeyDown}>
+    <div className="menu" role="menu" ref={list} aria-label={t(menuOf(menu).labelKey as MessageId)} data-region={`menu:${menu}`} data-key-context="menu">
       {slotsIn(`menu:${menu}`).map((slot) =>
         slot.kind === 'door' ? <MenuItem key={slot.entry.ref} entry={slot.entry} onDone={onDone} /> : <SubMenu key={slot.menu} menu={slot.menu} onDone={onDone} />,
       )}
@@ -90,28 +88,15 @@ export interface MenuButtonProps {
 }
 
 export function MenuButton({ menu, anchor, children, indicator = false, className }: MenuButtonProps) {
-  const [open, setOpen] = useState(false);
-  const root = useRef<HTMLDivElement>(null);
+  // the number of dismissals when the menu was opened, or null while it is closed: a later dismissal closes it
+  const dismissals = useEditorState((s) => s.ui.overlays.dismissals);
+  const [openedAt, setOpenedAt] = useState<number | null>(null);
+  const open = openedAt !== null && openedAt === dismissals;
   const t = useT();
   const label = t(menuOf(menu).labelKey as MessageId);
-  useEffect(() => {
-    if (!open) return;
-    const escape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setOpen(false);
-        root.current?.querySelector<HTMLElement>('.menu-button')?.focus();
-      }
-    };
-    document.addEventListener('keydown', escape);
-    return () => document.removeEventListener('keydown', escape);
-  }, [open]);
-  // a press anywhere outside the menu takes the focus out of it, and the menu closes
-  const onBlur = (event: FocusEvent<HTMLDivElement>) => {
-    if (!root.current?.contains(event.relatedTarget as Node | null)) setOpen(false);
-  };
   const icon = anchor.icon !== null ? <Icon name={anchor.icon} size={anchor.drawnAs === 'icon-button' ? 'md' : 'sm'} /> : null;
   return (
-    <div className={['menu-anchor', className ?? ''].filter((c) => c !== '').join(' ')} ref={root} onBlur={onBlur}>
+    <div className={['menu-anchor', className ?? ''].filter((c) => c !== '').join(' ')}>
       <button
         type="button"
         className={`menu-button menu-button--${anchor.drawnAs}${open ? ' is-open' : ''}`}
@@ -120,19 +105,14 @@ export function MenuButton({ menu, anchor, children, indicator = false, classNam
         aria-expanded={open}
         aria-label={anchor.drawnAs === 'icon-button' || children !== undefined ? label : undefined}
         title={label}
-        onClick={() => setOpen(!open)}
-        onKeyDown={(event) => {
-          if (event.key === 'ArrowDown') {
-            event.preventDefault();
-            setOpen(true);
-          }
-        }}
+        onClick={() => setOpenedAt(open ? null : dismissals)}
       >
         {icon}
         {anchor.drawnAs === 'icon-button' ? null : (children ?? <span className="door__label">{label}</span>)}
         {indicator ? <Icon name={GLYPHS.dropdown} size="xs" /> : null}
       </button>
-      {open ? <MenuList menu={menu} onDone={() => setOpen(false)} focusFirst /> : null}
+      {open && BACKDROP ? <DoorControl entry={BACKDROP} className="overlay-backdrop" /> : null}
+      {open ? <MenuList menu={menu} onDone={() => setOpenedAt(null)} focusFirst /> : null}
     </div>
   );
 }

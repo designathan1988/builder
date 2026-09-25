@@ -1,13 +1,18 @@
-// The keymap (ARCHITECTURE.md): the shortcut doors of the manifest, run in their key contexts. There is no other key
-// table. A context inherits the bindings of the contexts interactions.json names (text editing, menus, the palette,
-// dialogs and fields inherit nothing, so they keep their own keys). A bound chord's browser default is prevented,
-// whether or not its command is built yet (DESIGN.md "Keyboard model").
+// The keymap (ARCHITECTURE.md): the one owner of keys. It runs the shortcut doors
+// of the manifest in their key contexts; there is no other key table. A context inherits the bindings of the contexts
+// interactions.json names (text editing, menus, the palette, dialogs and fields inherit nothing, so they keep their
+// own keys). A bound chord's browser default is prevented, whether or not its door runs yet (DESIGN.md "Keyboard
+// model"); a door runs when shortcut-rule.ts says so (DESIGN.md "Build order").
 import type { CommandId, KeyContextId } from '../../generated/ids.ts';
 import { normaliseChord } from '../../manifest/chord.ts';
 import { keyContextChain, manifest, type DoorEntry } from '../../manifest/runtime.ts';
 import type { DispatchResult } from '../../core/store/store.ts';
+import { COMMANDS } from '../../app/commands.ts';
+import { isBuilt } from '../../core/commands/registry.ts';
+import { FEATURE_COMMANDS } from '../../generated/commands.ts';
 import type { EditorStore } from '../store.ts';
 import { openGesture } from './pointer.ts';
+import { shortcutRuns } from './shortcut-rule.ts';
 
 // The key of an event as the manifest writes it: a letter or a digit by its physical key (so Ctrl+Alt+B is B on any
 // layout), the other printable keys by the character they type, named keys by name.
@@ -55,13 +60,21 @@ export function contextOf(target: EventTarget | null): KeyContextId {
   return 'global';
 }
 
+// Whether a shortcut door runs now (shortcut-rule.ts, the rule the door census reads too): its command is built and
+// its feature introduces the command or has all its commands built.
+export function shortcutRunsNow(entry: DoorEntry): boolean {
+  return shortcutRuns({ command: entry.command.id, introducedBy: entry.command.introducedBy, feature: entry.door.feature }, (command) => isBuilt(COMMANDS[command as CommandId]), FEATURE_COMMANDS);
+}
+
 export function installKeymap(store: EditorStore, target: Window = window): () => void {
   const onKeyDown = (event: KeyboardEvent) => {
     // during a pointer gesture the keys are the gesture's (pointer.ts)
     const gesture = openGesture();
     const binding = bindingFor(gesture?.context ?? contextOf(event.target), chordOf(event));
     if (!binding) return;
+    // a bound chord is the editor's whether or not its door runs yet (DESIGN.md "Keyboard model")
     event.preventDefault();
+    if (!shortcutRunsNow(binding)) return;
     const dispatch = (gesture?.gesture.dispatch ?? store.dispatch) as (id: CommandId, args: unknown) => DispatchResult;
     dispatch(binding.command.id, binding.door.args);
   };
