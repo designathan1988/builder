@@ -613,12 +613,12 @@
     {
       "kind": "handler",
       "id": "element.wrapRow",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",
       "id": "element.wrapColumn",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",

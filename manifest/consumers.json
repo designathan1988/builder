@@ -173,6 +173,26 @@
       "reader": "src/editor/palette/palette.ts"
     },
     {
+      "field": "elements:wrappers",
+      "reader": "src/core/structure/wrap.ts"
+    },
+    {
+      "field": "elements:wrappers[].id",
+      "reader": "src/core/structure/wrap.ts"
+    },
+    {
+      "field": "elements:wrappers[].element",
+      "reader": "src/core/structure/wrap.ts"
+    },
+    {
+      "field": "elements:wrappers[].nameKey",
+      "reader": "src/core/structure/wrap.ts"
+    },
+    {
+      "field": "elements:wrappers[].styles",
+      "reader": "src/core/structure/wrap.ts"
+    },
+    {
       "field": "properties:sections",
       "reader": "src/editor/inspector/sections.ts"
     },

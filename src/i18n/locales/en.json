@@ -823,6 +823,8 @@
   "menu.theme": "Theme",
   "menu.view": "View",
   "menu.zoom": "Zoom",
+  "node.name.column": "Column",
+  "node.name.row": "Row",
   "pages.defaultHome": "Home",
   "palette.density.icons": "Icon grid",
   "palette.density.list": "List view",

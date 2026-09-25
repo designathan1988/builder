@@ -701,6 +701,16 @@ export function checkManifest(input: ManifestInput): CheckResult {
       ref(featureIndex.has(e.feature), 'elements.json', `palette[${gi}].entries[${i}].feature`, `unknown feature "${e.feature}"`);
     }
   }
+  // a wrapper is an element that holds children, and its styles are edited properties
+  for (const [i, w] of p.elements.wrappers.entries()) {
+    const element = elementById.get(w.element);
+    ref(element !== undefined, 'elements.json', `wrappers[${i}].element`, `unknown element type "${w.element}"`);
+    if (element !== undefined && element.content !== 'children') report('schema', 'elements.json', `wrappers[${i}].element`, `a wrapper holds children, and "${w.element}" holds none`);
+    for (const name of Object.keys(w.styles)) {
+      if (!isShorthand(name)) ref(propertyById.has(name), 'elements.json', `wrappers[${i}].styles.${name}`, `"${name}" is not an edited property of properties.json`);
+    }
+  }
+  unique('wrapper', 'elements.json', p.elements.wrappers.map((w, i) => ({ id: w.id, path: `wrappers[${i}]` })));
   const checkPlace = (file: string, path: string, item: { section: string; group: string }) => {
     const section = p.properties.sections.find((s) => s.id === item.section);
     ref(section !== undefined, file, `${path}.section`, `unknown section "${item.section}"`);
@@ -900,6 +910,7 @@ export function checkManifest(input: ManifestInput): CheckResult {
     noteKey(g.labelKey, `elements.json palette[${gi}].labelKey`);
     g.entries.forEach((e, i) => noteKey(e.labelKey, `elements.json palette[${gi}].entries[${i}].labelKey`));
   });
+  p.elements.wrappers.forEach((w, i) => noteKey(w.nameKey, `elements.json wrappers[${i}].nameKey`));
   p.properties.sections.forEach((s, si) => {
     noteKey(s.labelKey, `properties.json sections[${si}].labelKey`);
     s.groups.forEach((g, i) => noteKey(g.labelKey, `properties.json sections[${si}].groups[${i}].labelKey`));
@@ -1075,6 +1086,9 @@ export function checkManifest(input: ManifestInput): CheckResult {
   }
   for (const [i, e] of p.elements.elements.entries()) {
     for (const [name, value] of Object.entries(e.defaultStyles)) if (generated[name]) written.push({ file: 'elements.json', path: `elements[${i}].defaultStyles.${name}`, property: name, value, composite: null });
+  }
+  for (const [i, w] of p.elements.wrappers.entries()) {
+    for (const [name, value] of Object.entries(w.styles)) if (generated[name]) written.push({ file: 'elements.json', path: `wrappers[${i}].styles.${name}`, property: name, value, composite: null });
   }
   for (const [i, c] of p.properties.couplings.entries()) {
     if (c.effect.value !== null && generated[c.effect.property]) written.push({ file: 'properties.json', path: `couplings[${i}].effect.value`, property: c.effect.property, value: c.effect.value, composite: null });
@@ -1309,6 +1323,9 @@ export function checkManifest(input: ManifestInput): CheckResult {
   for (const [i, e] of p.elements.elements.entries()) {
     for (const name of Object.keys(e.defaultStyles)) if (structureOf(name)) report('structured-value', 'elements.json', `elements[${i}].defaultStyles.${name}`, `${name} stores typed fields, so it has no CSS text default`);
   }
+  for (const [i, w] of p.elements.wrappers.entries()) {
+    for (const name of Object.keys(w.styles)) if (structureOf(name)) report('structured-value', 'elements.json', `wrappers[${i}].styles.${name}`, `${name} stores typed fields, so it has no CSS text default`);
+  }
   for (const [i, c] of p.properties.couplings.entries()) {
     if (structureOf(c.effect.property) && c.effect.value !== null) report('structured-value', 'properties.json', `couplings[${i}].effect`, `${c.effect.property} stores typed fields, so a coupling cannot write it as CSS text`);
   }
@@ -1357,6 +1374,9 @@ export function checkManifest(input: ManifestInput): CheckResult {
   }
   for (const [i, e] of p.elements.elements.entries()) {
     for (const name of Object.keys(e.defaultStyles)) if (isShorthand(name) && !propertyById.has(name)) report('shorthand-write', 'elements.json', `elements[${i}].defaultStyles.${name}`, `default style ${name} is a shorthand; store its longhands`);
+  }
+  for (const [i, w] of p.elements.wrappers.entries()) {
+    for (const name of Object.keys(w.styles)) if (isShorthand(name) && !propertyById.has(name)) report('shorthand-write', 'elements.json', `wrappers[${i}].styles.${name}`, `a wrapper style ${name} is a shorthand; store its longhands`);
   }
 
   // ---- composite: a shorthand is edited as a composite whose door writes every longhand in one undoable command

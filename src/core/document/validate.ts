@@ -32,8 +32,12 @@ export interface ModelRules {
   readonly root: { readonly type: ElementType; readonly tag: string };
   // palette entry id → the element type it inserts and the feature that brings it (elements.json palette)
   readonly palette: ReadonlyMap<string, { readonly element: ElementType; readonly feature: string }>;
+  // the Row and Column wrappers (elements.json wrappers): the element type, the name's catalogue key, the styles
+  readonly wrappers: ReadonlyMap<WrapperId, { readonly element: ElementType; readonly nameKey: MessageId; readonly styles: Readonly<Record<string, string>> }>;
   readonly contentModel: ContentModel;
 }
+
+export type WrapperId = ElementsFile['wrappers'][number]['id'];
 
 export function rulesFromManifest(elements: ElementsFile, properties: PropertiesFile, html: GeneratedHtml): ModelRules {
   const body = elements.elements.find((e) => e.tag === 'body');
@@ -55,6 +59,7 @@ export function rulesFromManifest(elements: ElementsFile, properties: Properties
     base: { breakpoint: baseBreakpoint.id, state: baseState.id },
     root: { type: body.id as ElementType, tag: 'body' },
     palette: new Map(elements.palette.flatMap((g) => g.entries.map((e) => [e.id, { element: e.element as ElementType, feature: e.feature }] as const))),
+    wrappers: new Map(elements.wrappers.map((w) => [w.id, { element: w.element as ElementType, nameKey: w.nameKey as MessageId, styles: w.styles }] as const)),
     contentModel: contentModelFrom(html),
   };
 }

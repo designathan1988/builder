@@ -43,6 +43,13 @@ Decisions by small ambiguity (moved here from PROGRESS.md):
   so a block at the edge stays and keeps its order (Pager's rule); nothing moving is refused with
   status.move.alreadyFirst/alreadyLast and adds no undo step (the page root's message names the page); roots of
   different parents are refused with status.wrap.needsSameParent (the key the manifest lists); the selection stays.
+- wrap-row-column: the Row and Column wrappers are defined once in manifest/elements.json `wrappers` (a div named
+  node.name.row/column with display:flex and its flex-direction; schema, manifest:check rule and plant added), the
+  same for every door (the no-manifest-id rule refused them in code); the Row has no align-items (the scenario leaves
+  it out); several roots of one parent wrap together in document order; a parent refusing a div refuses with
+  status.refused.onlyAccepts. The runner reaches a setup node with no point of its own (CardB covered by its h3) by
+  clicking its nearest descendant with a point and pressing ArrowUp per level (spec select-click.md:41); the Layers
+  row was tried first but leaves the focus in the panel (Escape to the canvas is not built).
 
 ## 2026-09-25 — Slice 1: the rest of the foundation and the first usable block of group 02
 

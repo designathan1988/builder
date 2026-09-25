@@ -98,10 +98,22 @@ export const paletteGroupSchema = z.strictObject({
   entries: z.array(paletteEntrySchema).min(1),
 });
 
+// The Row and Column wrappers (element.wrapRow, element.wrapColumn; spec wrap-row-column, Problems 1 and 3): one
+// definition each, the same for every door and for the layout templates. The new node is an element of `element`,
+// named by `nameKey` in the person's language, with `styles` (longhand property → value) at the base breakpoint and
+// state, and nothing else.
+export const wrapperSchema = z.strictObject({
+  id: z.enum(['row', 'column']),
+  element: camelId,
+  nameKey: i18nKey,
+  styles: z.record(cssName, z.string()),
+});
+
 export const elementsFileSchema = z.strictObject({
   elements: z.array(elementSchema).min(1),
   attributes: z.array(attributeSchema).min(1),
   palette: z.array(paletteGroupSchema).min(1),
+  wrappers: z.array(wrapperSchema).min(1),
 });
 
 // ---------------------------------------------------------------- properties (the editor layer)

@@ -9,7 +9,7 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
   (branch feature/<feature>, node_modules junction, own E2E_PORT/TOOTH_PORT), and integrates one at a time after
   verify:fast, e2e with the census, e2e:tooth and the status. Done: findings 16 and 17.
 - Group 02 passing: select-click, layers-tree, keyboard-tree-walk, palette-click-insert, undo-redo,
-  multi-select-click, marquee-select, delete-element (with the toast and its Undo), move-up-down. Also built: the editor-only 40 px minimum height of an empty container, a
+  multi-select-click, marquee-select, delete-element (with the toast and its Undo), move-up-down, wrap-row-column. Also built: the editor-only 40 px minimum height of an empty container, a
   layout port for the core (src/core/ports/layout.ts). Runner paths proven by switching them off: setup selection,
   canvas click, focusing the control a shortcut acts on (Tab), modifier click, drag press, marquee.
 - Decisions by small ambiguity: docs/history.md, "Group 02" (the newest entry).
@@ -55,3 +55,7 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 27. delete and move up/down do not refuse a locked element yet (status.locked.*): lock-element must add the check.
 28. Arrange › Move up/down stay enabled at an edge (refused with a message): the manifest's predicate is only
     hasSelection, while DESIGN.md disables a menu item that cannot apply now.
+29. The runner selects a node with no point of its own by a descendant plus ArrowUp; adding one with Shift needs its
+    Layers row and then focus.canvas#key-escape-in-layers-tree (not built; multi-select-actions needs it). The census
+    reads the test list, so it sees the canvas click named, not the substitute door run (both have their own tests).
+30. Wrap refusals declared but not built: requiresParent, interactiveInside, formInForm, singleChild, labelOneControl.

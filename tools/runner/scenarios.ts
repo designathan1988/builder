@@ -1,6 +1,7 @@
 // The scenario runner (ARCHITECTURE.md): npm run e2e is generated from the manifest's scenarios. One Playwright test
 // per scenario and per door of its `doors`, on the installed Chrome: the fixture loaded through File › Open, the setup
-// through doors (the language, the selection clicked on the canvas, the breakpoint, the style state, the zoom),
+// through doors (the language, the selection clicked on the canvas or, for a node its children cover whole, reached
+// with ArrowUp from inside it or through its Layers row, the breakpoint, the style state, the zoom),
 // every step through its door with the real mouse and keyboard (a click on the node it targets, a drag released
 // where its drop says or held across the next steps, a marquee drawn from its target's empty area to its drop's node,
 // the characters it types), then the end terminals the scenario
@@ -103,11 +104,29 @@ function canvasClick(command: string): string {
 }
 const SELECT_DOOR = canvasClick('selection.select');
 const ADD_DOOR = canvasClick('selection.add');
+// the Layers row click that selects one node, and the one that adds a node to the selection (its key held)
+function layersRowClick(command: string, modifier: string | null): string {
+  const found = COMMANDS.find((c) => c.id === command)?.entryPoints.find((d) => d.kind === 'panel-control' && d.gesture === 'layers-row-click' && (d.modifier ?? null) === modifier);
+  if (!found) throw new Error(`${command} has no Layers row click${modifier === null ? '' : ` with ${modifier}`}`);
+  return `${command}#${found.id}`;
+}
+const ADD_ROW_DOOR = layersRowClick('selection.add', doorData(ADD_DOOR).modifier ?? null);
+// a command's shortcut in a key context
+function shortcutIn(command: string, context: string): string {
+  const found = COMMANDS.find((c) => c.id === command)?.entryPoints.find((d) => d.kind === 'shortcut' && d.context === context);
+  if (!found) throw new Error(`${command} has no shortcut in ${context}`);
+  return `${command}#${found.id}`;
+}
+// ArrowUp on the canvas: the selection's parent; Escape in Layers: the focus back to the canvas
+const WALK_UP_DOOR = shortcutIn('selection.walkParent', 'canvas');
+const BACK_TO_CANVAS_DOOR = shortcutIn('focus.canvas', 'layers-tree');
 const UNDO_DOOR = 'history.undo#toolbar-top-bar';
 const REDO_DOOR = 'history.redo#toolbar-top-bar';
 
 // The doors a scenario's setup runs, in order: File › Open for a fixture, the language, the selection (the first node
-// clicked, the others added), the breakpoint, the style state and the zoom.
+// clicked, the others added, on the canvas; a node its children cover whole is reached through ArrowUp or its Layers
+// row, which the test's annotations name once it runs, ranAlso and ranInstead), the breakpoint, the style state and
+// the zoom.
 function setupDoors(s: Scenario): string[] {
   const doors: string[] = [];
   if (s.setup.fixture !== EMPTY_FIXTURE) doors.push('project.open#menu-file');
@@ -290,6 +309,35 @@ function canvasPoint(page: Page, query: CanvasQuery): Promise<Point | string> {
     const at = row ? screen(along, cross) : screen(cross, along);
     return onOverlay(at) ? at : 'the drop point is not on the canvas';
   }, query);
+}
+
+// canvasPoint's answer for a node its children cover whole (the same text as in the page script above)
+const NO_OWN_POINT = 'no point of it on the canvas hits it rather than a child';
+
+// The doors a test names are listed before it runs (Playwright's list, which the door census reads), where the canvas
+// cannot be measured: a setup names the canvas click, its first choice. When the setup reaches a node another way,
+// the test's own annotations say so from then on (its results, the status reporter).
+function ranAlso(ran: string) {
+  test.info().annotations.push({ type: 'door', description: ran });
+}
+function ranInstead(listed: string, ran: string) {
+  const annotations = test.info().annotations;
+  const at = annotations.findIndex((a) => a.type === 'door' && a.description === listed);
+  if (at >= 0) annotations.splice(at, 1, { type: 'door', description: ran });
+  else ranAlso(ran);
+}
+
+// the nearest node inside a node its children cover whole that has a point of its own on the canvas (depth first, in
+// the children's order), and how many levels below the node it sits; null when there is none
+async function ownPointBelow(page: Page, node: Node, levels: number): Promise<{ readonly point: Point; readonly levels: number } | null> {
+  for (const child of node.children) {
+    const at = await canvasPoint(page, { kind: 'node', id: child.id, root: false, near: 'centre' });
+    if (typeof at !== 'string') return { point: at, levels };
+    if (at !== NO_OWN_POINT) continue;
+    const deeper = await ownPointBelow(page, child, levels + 1);
+    if (deeper !== null) return deeper;
+  }
+  return null;
 }
 
 async function nodePoint(page: Page, id: string, root: boolean, nodePath: string, near: 'centre' | 'start' = 'centre'): Promise<Point> {
@@ -506,12 +554,34 @@ async function setUp(page: Page, s: Scenario): Promise<unknown> {
   }
   await expectCanvasDraws(page, s.setup.fixture === EMPTY_FIXTURE ? 'at the start' : 'after File › Open');
   const loaded = (await port(page)).document;
-  // the selection, clicked on the canvas as a person selects: the first node, then each other added
+  // the selection, clicked on the canvas as a person selects: the first node, then each other added. A node its
+  // children cover whole has no point of its own on the canvas; a person reaches it another way (spec select-click,
+  // "Nested elements": its padding, the breadcrumb, ArrowUp or the Layers panel). The first node: a click on its
+  // nearest descendant that has a point of its own, then ArrowUp once per level, which leaves the focus on the canvas.
+  // A node added: its Layers row with the key held, then Escape, which gives the focus back to the canvas.
   for (const [i, nodePath] of s.setup.selection.entries()) {
-    const ref = i === 0 ? SELECT_DOOR : ADD_DOOR;
-    const d = doorData(ref);
-    const at = await nodePoint(page, idOf(loaded, nodePath), isRoot(loaded, nodePath), nodePath);
-    await withModifier(page, d.modifier, () => page.mouse.click(at.x, at.y));
+    const node = nodeAt(loaded, nodePath);
+    await frameElement(page, node.id, nodePath);
+    const at = await canvasPoint(page, { kind: 'node', id: node.id, root: isRoot(loaded, nodePath), near: 'centre' });
+    const door = i === 0 ? SELECT_DOOR : ADD_DOOR;
+    if (typeof at !== 'string') {
+      await withModifier(page, doorData(door).modifier, () => page.mouse.click(at.x, at.y));
+      continue;
+    }
+    if (at !== NO_OWN_POINT) throw new Error(`${nodePath}: ${at}`);
+    if (i === 0) {
+      const below = await ownPointBelow(page, node, 1);
+      if (below === null) throw new Error(`${nodePath}: neither it nor any node inside it has a point of its own on the canvas`);
+      await page.mouse.click(below.point.x, below.point.y);
+      for (let level = 0; level < below.levels; level += 1) await runDoor(page, WALK_UP_DOOR);
+      ranAlso(WALK_UP_DOOR);
+    } else {
+      await runDoor(page, ADD_ROW_DOOR, { args: { target: node.id } });
+      ranInstead(door, ADD_ROW_DOOR);
+      if (!doorWorks(BACK_TO_CANVAS_DOOR)) throw new Error(`${nodePath}: added through its Layers row, the focus stays there until ${BACK_TO_CANVAS_DOOR} is built`);
+      await runDoor(page, BACK_TO_CANVAS_DOOR);
+      ranAlso(BACK_TO_CANVAS_DOOR);
+    }
   }
   expect((await port(page)).selection, 'setup: the selection').toEqual(s.setup.selection.map((p) => idOf(loaded, p)));
   for (const [command, arg, value, base] of [

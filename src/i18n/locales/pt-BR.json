@@ -823,6 +823,8 @@
   "menu.theme": "Tema",
   "menu.view": "Exibir",
   "menu.zoom": "Zoom",
+  "node.name.column": "Coluna",
+  "node.name.row": "Linha",
   "pages.defaultHome": "Início",
   "palette.density.icons": "Grade de ícones",
   "palette.density.list": "Lista",

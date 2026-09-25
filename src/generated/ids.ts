@@ -2974,6 +2974,8 @@ export const MESSAGE_IDS = [
   "menu.theme",
   "menu.view",
   "menu.zoom",
+  "node.name.column",
+  "node.name.row",
   "pages.defaultHome",
   "palette.density.icons",
   "palette.density.list",

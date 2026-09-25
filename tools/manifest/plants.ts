@@ -360,6 +360,16 @@ export const PLANTS: Plant[] = [
     },
   },
   {
+    id: 'wrapper-holds-no-children',
+    rule: 'schema',
+    description: 'the Row wrapper is a paragraph, an element whose content is text, so it could not hold what it wraps',
+    apply: (m) => {
+      const wrapper = list(obj(m.files['elements.json']).wrappers).find((w) => w.id === 'row');
+      if (!wrapper) throw new Error('plant: no row wrapper');
+      wrapper.element = 'paragraph';
+    },
+  },
+  {
     id: 'composite-subset-sets-omitted-longhand',
     rule: 'composite',
     description: 'a columns subset offers "2 auto / 10em", which sets column-height, a longhand the composite omits',

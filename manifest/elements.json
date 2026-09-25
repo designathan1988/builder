@@ -2226,5 +2226,25 @@
         }
       ]
     }
+  ],
+  "wrappers": [
+    {
+      "id": "row",
+      "element": "div",
+      "nameKey": "node.name.row",
+      "styles": {
+        "display": "flex",
+        "flex-direction": "row"
+      }
+    },
+    {
+      "id": "column",
+      "element": "div",
+      "nameKey": "node.name.column",
+      "styles": {
+        "display": "flex",
+        "flex-direction": "column"
+      }
+    }
   ]
 }
