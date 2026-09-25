@@ -29,7 +29,8 @@ function FileTabs() {
   if (!page || !tab) return <div className="file-tabs" data-region="file-tabs" />;
   return (
     <div className="file-tabs" data-region="file-tabs" role="tablist">
-      <div className="file-tab is-current">
+      {/* the open page's tab is marked by its door's own current state (pages.switch), none before that command exists */}
+      <div className="file-tab">
         <DoorControl entry={tab} args={{ page: page.id }} className="file-tab__main">
           {PAGE_ICON !== null ? <Icon name={PAGE_ICON} size="sm" /> : null}
           <span className="file-tab__name">{page.name}</span>

@@ -84,6 +84,41 @@ test('no door of a command that is not built says or looks as if it stood for th
 
   expect(plainRow).not.toBeNull();
   expect(doors.filter((d) => d.row !== null && d.row !== plainRow).map((d) => d.ref)).toEqual([]);
+
+  // Any element, a door or any wrapper of one, that looks current only through a state marker (the classes
+  // is-current, is-active and is-selected, an ARIA pressed, selected or checked "true") must stand for a built door:
+  // be one, hold one, or sit inside one, or inherit its look from such an element. The markers are taken off the whole
+  // page and every computed look compared, with transitions off so each look settles at once.
+  const drawnCurrent = await page.evaluate((built) => {
+    const still = document.createElement('style');
+    still.textContent = '*, *::before, *::after { transition: none !important; animation: none !important; }';
+    document.head.append(still);
+    const look = (el: Element) => {
+      const s = getComputedStyle(el);
+      return [s.backgroundColor, s.color, s.fontWeight, s.boxShadow, s.borderTopColor, s.borderRightColor, s.borderBottomColor, s.borderLeftColor, s.outlineColor, s.textDecorationLine, s.opacity].join(' ');
+    };
+    const all = [...document.querySelectorAll('body *')];
+    const before = all.map(look);
+    for (const el of all) {
+      for (const marker of ['is-current', 'is-active', 'is-selected']) el.classList.remove(marker);
+      for (const aria of ['aria-pressed', 'aria-selected', 'aria-checked']) if (el.getAttribute(aria) === 'true') el.setAttribute(aria, 'false');
+    }
+    const isBuilt = (door: Element | null) => door !== null && built.includes((door.getAttribute('data-door') ?? '').split('#')[0] ?? '');
+    const standsForBuilt = (el: Element) => isBuilt(el.closest('[data-door]')) || [...el.querySelectorAll('[data-door]')].some(isBuilt);
+    const changed = new Set(all.filter((el, i) => look(el) !== before[i]));
+    const justified = new Set<Element>();
+    const unjustified: string[] = [];
+    for (const el of all) {
+      if (!changed.has(el)) continue;
+      const parent = el.parentElement;
+      if (standsForBuilt(el) || (parent !== null && justified.has(parent))) justified.add(el);
+      else if (parent === null || !changed.has(parent)) unjustified.push(el.getAttribute('data-door') ?? `${el.tagName.toLowerCase()}.${[...el.classList].join('.')}`);
+    }
+    return { changed: changed.size, unjustified };
+  }, BUILT);
+  // the built doors that stand for the current state now (the Explorer, the canvas tools, the Layers toggle) change
+  expect(drawnCurrent.changed).toBeGreaterThan(0);
+  expect(drawnCurrent.unjustified).toEqual([]);
 });
 
 test('no menu item of a command that is not built is checked', async ({ page }) => {

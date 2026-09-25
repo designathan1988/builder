@@ -626,7 +626,7 @@ kbd {
   color: var(--color-text-muted);
 }
 
-.file-tab.is-current {
+.file-tab:has(> .door.is-current) {
   background: var(--color-surface);
   color: var(--color-text);
   box-shadow: inset 0 var(--space-1) 0 var(--color-accent);
