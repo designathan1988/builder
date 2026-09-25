@@ -132,7 +132,7 @@ export function generateTypes(root: string): { file: string; content: string }[]
       return `  ${q(c.id)}: ${fields.length === 0 ? 'Record<string, never>' : `{ ${fields.join('; ')} }`};`;
     })
     .join('\n');
-  const commandTypes = `${HEADER}import type { AttributeId, BreakpointId, CommandId, PaletteEntryId, StateId, StyleTargetId } from './ids.ts';
+  const commandTypes = `${HEADER}import type { AttributeId, BreakpointId, CommandId, FeatureId, PaletteEntryId, StateId, StyleTargetId } from './ids.ts';
 
 export type NodeId = string;
 export type JsonValue = string | number | boolean | null | readonly JsonValue[] | { readonly [key: string]: JsonValue };
@@ -154,6 +154,11 @@ ${args}
 
 // every command has its arguments declared
 export type CommandArgsOf<Id extends CommandId> = CommandArgs[Id];
+
+// the commands each feature lists (manifest/features/*.json), for the doors whose feature is data of their own
+export const FEATURE_COMMANDS: Readonly<Record<FeatureId, readonly CommandId[]>> = {
+${featureFiles.flatMap((f) => f.features.map((x) => `  ${q(x.id)}: ${JSON.stringify(x.commands)},`)).join('\n')}
+};
 `;
 
   const data: OfferData = {
