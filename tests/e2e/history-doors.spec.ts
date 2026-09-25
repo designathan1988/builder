@@ -1,8 +1,8 @@
 // Undo and Redo through every door a user can reach (spec undo-redo, "Trigger"): Ctrl+Z; Ctrl+Shift+Z and Ctrl+Y; the
 // top bar's buttons; the Edit menu's items. Each undo restores the document and the selection from before its command,
 // each redo the ones after it, read through the read-only test port; with nothing to undo or redo, a drawn door is
-// disabled with its reason and a key reports it in the status bar, changing nothing. (The toast's Undo arrives with
-// delete-element, the command bar's with command-bar.)
+// disabled with its reason and a key reports it in the status bar, changing nothing. (The toast's Undo is tested in
+// delete-element.spec.ts; the command bar's arrives with command-bar.)
 import { expect, test, type Page } from '@playwright/test';
 import { control, openMenu, runDoor, runs } from './door.ts';
 

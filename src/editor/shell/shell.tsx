@@ -14,6 +14,7 @@ import { DOCK_TABS, Dock } from './dock.tsx';
 import { Inspector } from './inspector.tsx';
 import { ActivityBar, SIDEBAR_VIEWS, Sidebar } from './sidebar.tsx';
 import { StatusBar } from './status-bar.tsx';
+import { Toast } from './toast.tsx';
 import { TopBar } from './top-bar.tsx';
 import { FitZoom, ReportFitZoom } from './slots.tsx';
 
@@ -60,6 +61,7 @@ export function Shell() {
             </div>
             <Inspector />
             <StatusBar />
+            <Toast />
           </div>
         </ReportFitZoom.Provider>
       </FitZoom.Provider>

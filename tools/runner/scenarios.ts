@@ -19,7 +19,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { shortcutRuns } from '../../src/editor/input/shortcut-rule.ts';
 import { FEATURE_COMMANDS } from '../../src/generated/commands.ts';
 import { EMPTY_FIXTURE, applyDiff, matchDocument, resolveNode, type DiffOp } from '../../src/manifest/scenario.ts';
-import { control, door as doorData, keys, openMenu, runDoor, type Door } from '../../tests/e2e/door.ts';
+import { control, door as doorData, keys, modifiedControl, openMenu, runDoor, type Door } from '../../tests/e2e/door.ts';
 
 type Measure = 'x' | 'y' | 'width' | 'height';
 type Relation = 'equals' | 'less-than' | 'greater-than';
@@ -473,6 +473,11 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
     if (d.chord === undefined) throw new Error(`shortcut ${ref} has no chord`);
     await page.keyboard.press(keys(d.chord));
   } else if (d.kind === 'toolbar' || d.kind === 'menu' || d.kind === 'panel-control' || d.kind === 'context-menu') {
+    // a control drawn only in some states (the toast's Undo after a delete) fails the step on an assertion that says
+    // it is not drawn, never on the click's timeout. The control is the one runDoor clicks: a panel control's door with
+    // a key held (a Layers row's Shift+click) is its plain control clicked with that key (modifiedControl).
+    const clicked = modifiedControl(ref)?.drawn ?? ref;
+    if (d.kind === 'toolbar' || d.kind === 'panel-control') await expect(control(page, clicked, { args: own }), `step ${ref}: its control is drawn`).toBeVisible();
     await runDoor(page, ref, { args: own });
   } else {
     throw new Error(`step ${ref}: the runner cannot run a ${d.kind} door yet`);

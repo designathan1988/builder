@@ -18,6 +18,7 @@ import {
   walkPreviousSiblingCommand,
 } from '../core/selection/selection.ts';
 import { insertCommand } from '../core/structure/insert.ts';
+import { deleteCommand } from '../core/structure/remove.ts';
 import { focusActivate, focusFirst, focusLast, focusNext, focusPrevious } from '../editor/focus/focus.ts';
 import { setExpanded } from '../editor/layers/tree.ts';
 import { dismiss } from '../editor/menus/overlays.ts';
@@ -154,7 +155,7 @@ export const COMMANDS = {
   'element.nestIntoPrevious': NOT_AVAILABLE_YET,
   'element.promote': NOT_AVAILABLE_YET,
   'element.duplicate': NOT_AVAILABLE_YET,
-  'element.delete': NOT_AVAILABLE_YET,
+  'element.delete': deleteCommand,
   'element.unwrap': NOT_AVAILABLE_YET,
   'element.createNaturalChild': NOT_AVAILABLE_YET,
   'hand.take': NOT_AVAILABLE_YET,

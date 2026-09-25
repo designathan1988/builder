@@ -33,6 +33,12 @@ Decisions by small ambiguity (moved here from PROGRESS.md):
   every move the gesture goes back to the selection held before the press (a Shift/Ctrl press's add/toggle is undone
   once it becomes a marquee); the runner presses a marquee near its target's top-left corner; the stage outside the
   page starts no marquee.
+- delete-element: element.delete removes every selected root (the door's adapter says "roots"; status.deletedMany
+  for several; browser test with Shift+click); the toast shows while the latest undo step is a delete and the last
+  message is still its own, with no timer (the manifest has no toast duration), so there is at most one and its Undo
+  undoes the latest delete only; the toast has no role=status (the status bar stays the only live region); a
+  toolbar or panel-control step of the runner first asserts that the control runDoor clicks is drawn. Integration
+  took three rounds: the drawn check first broke the Layers modifier doors, then remove.test.ts lacked `layout`.
 
 ## 2026-09-25 — Slice 1: the rest of the foundation and the first usable block of group 02
 
