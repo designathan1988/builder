@@ -15,6 +15,7 @@
     "lint": "eslint . --max-warnings 0",
     "unit": "vitest run",
     "e2e": "playwright test",
+    "e2e:diagnose": "playwright test --last-failed --trace on",
     "e2e:tooth": "node tools/runner/tooth.ts",
     "gen": "node tools/gen/generate.ts",
     "gen:check": "node tools/gen/check.ts",

@@ -39,7 +39,10 @@ export default defineConfig({
   use: {
     baseURL,
     channel: 'chrome',
-    trace: 'retain-on-failure',
+    // no trace while testing: 'retain-on-failure' records every test (screencast and DOM snapshots) to keep the
+    // failures, and cost 38% of the suite's CPU (docs/testing/README.md, "Causes"); a failure is diagnosed by running
+    // the failed tests again with their trace: npm run e2e:diagnose
+    trace: 'off',
     actionTimeout: 5_000,
     navigationTimeout: 15_000,
   },
