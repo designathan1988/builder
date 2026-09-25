@@ -4,7 +4,7 @@
 // properties (the generated list and the presets, DESIGN.md) and draws a keyword-buttons control with the keyword
 // icons of properties.json. Without a selection every field is empty; the commands behind them arrive with their
 // features, so each shows "not available yet".
-import { Fragment } from 'react';
+import { Fragment, type ReactNode } from 'react';
 import type { MessageId, SectionId, StyleTargetId } from '../../generated/ids.ts';
 import { GENERATED_VALUES } from '../../generated/value-lists.ts';
 import { manifest, type DoorEntry } from '../../manifest/runtime.ts';
@@ -23,6 +23,8 @@ interface Target {
   readonly control: string;
   readonly icons: Readonly<Record<string, string>>;
   readonly subsets: readonly { readonly id: string; readonly values: readonly string[] | null }[];
+  // a composite's longhands, in its shorthand's order
+  readonly longhands?: readonly string[];
 }
 
 const TARGETS = new Map<string, Target>([
@@ -130,13 +132,8 @@ function BoxSide({ entry, where }: { readonly entry: DoorEntry; readonly where: 
   return <input className={`box__side box__side--${where}`} disabled={!door.available} aria-label={door.label} title={door.title} data-door={entry.ref} />;
 }
 
-// the label of the margin or the padding box: the door that sets all four sides at once
-function BoxLabel({ entry, label }: { readonly entry: DoorEntry | undefined; readonly label: string }) {
-  if (!entry) return <span className="box__label">{label}</span>;
-  return <BoxLabelDoor entry={entry} label={label} />;
-}
-
-function BoxLabelDoor({ entry, label }: { readonly entry: DoorEntry; readonly label: string }) {
+// the label of a box of the box model: the door that sets all four sides at once
+function BoxLabel({ entry, label }: { readonly entry: DoorEntry; readonly label: string }) {
   const door = useDoor(entry, {}, label);
   return (
     <span className="box__label" data-door={entry.ref} title={door.title}>
@@ -145,30 +142,37 @@ function BoxLabelDoor({ entry, label }: { readonly entry: DoorEntry; readonly la
   );
 }
 
-// the margin box drawn around the padding box, each side a field (DESIGN.md "Regions", inspector-style)
+// A box-sides composite lists its four longhands in its shorthand's order (CSS Box 3: top, right, bottom, left); the
+// index of a side's property there places its field.
+const BOX_SIDES = ['top', 'right', 'bottom', 'left'] as const;
+
+// The box model (DESIGN.md "Sections": margin outside, padding inside): the composites drawn as a box model
+// (properties.json control box-model), each a box around the next in their placement order, the first outermost;
+// each side is the field of the composite's longhand at that side's index. No property is named here.
 function BoxModel({ doors }: { readonly doors: readonly DoorEntry[] }) {
   const t = useT();
-  const side = (css: string) => doors.find((d) => d.door.kind === 'inspector-field' && d.door.property === css);
-  const whole = (id: string) => doors.find((d) => d.door.kind === 'inspector-field' && d.door.composite === id);
-  const input = (entry: DoorEntry | undefined, where: string) => (entry ? <BoxSide key={entry.ref} entry={entry} where={where} /> : null);
-  const labelOf = (id: string) => t((TARGETS.get(id)?.labelKey ?? 'inspector.group.box') as MessageId);
-  return (
-    <div className="box box--margin">
-      <BoxLabel entry={whole('margin')} label={labelOf('margin')} />
-      {input(side('margin-top'), 'top')}
-      {input(side('margin-left'), 'left')}
-      <div className="box box--padding">
-        <BoxLabel entry={whole('padding')} label={labelOf('padding')} />
-        {input(side('padding-top'), 'top')}
-        {input(side('padding-left'), 'left')}
-        <span className="box__core" />
-        {input(side('padding-right'), 'right')}
-        {input(side('padding-bottom'), 'bottom')}
+  const boxes = doors.filter((d) => d.door.kind === 'inspector-field' && d.door.composite !== null);
+  const sideField = (css: string | undefined) => doors.find((d) => d.door.kind === 'inspector-field' && d.door.property === css);
+  const draw = (level: number): ReactNode => {
+    const box = boxes[level];
+    const target = box ? targetOf(box) : null;
+    if (!box || !target) return <span className="box__core" />;
+    const side = (where: (typeof BOX_SIDES)[number]) => {
+      const entry = sideField(target.longhands?.[BOX_SIDES.indexOf(where)]);
+      return entry ? <BoxSide key={entry.ref} entry={entry} where={where} /> : null;
+    };
+    return (
+      <div className={`box box--${target.id}`}>
+        <BoxLabel entry={box} label={t(target.labelKey as MessageId)} />
+        {side('top')}
+        {side('left')}
+        {draw(level + 1)}
+        {side('right')}
+        {side('bottom')}
       </div>
-      {input(side('margin-right'), 'right')}
-      {input(side('margin-bottom'), 'bottom')}
-    </div>
-  );
+    );
+  };
+  return draw(0);
 }
 
 function StyleSections() {
