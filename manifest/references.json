@@ -643,7 +643,7 @@
     {
       "kind": "handler",
       "id": "element.unwrap",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",
@@ -1143,7 +1143,7 @@
     {
       "kind": "predicate",
       "id": "canUnwrap",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "predicate",

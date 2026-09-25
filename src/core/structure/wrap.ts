@@ -4,9 +4,9 @@
 // named in the person's language and numbered when the name is taken, holding them in their order, with the
 // wrapper's styles at the base breakpoint and state; the status names the styles it added. The page root cannot be
 // wrapped, and a parent whose content model refuses the wrapper's element refuses it; nothing changes then. The
-// wrapper becomes the selection. element.unwrap arrives with its own feature.
+// wrapper becomes the selection. element.unwrap (feature unwrap, below) takes a wrapper away and lifts its children.
 import type { NodeId } from '../../generated/commands.ts';
-import { message, registerHandler, type HandlerContext, type Outcome } from '../commands/registry.ts';
+import { message, registerHandler, registerPredicate, type HandlerContext, type Outcome } from '../commands/registry.ts';
 import { locate, type DocNode, type Location, type Styles } from '../document/model.ts';
 import type { WrapperId } from '../document/validate.ts';
 import type { Patch } from '../history/transaction.ts';
@@ -76,3 +76,44 @@ function wrap(id: WrapperId, { state, ids, rules, words }: HandlerContext<never>
 
 export const wrapRowCommand = registerHandler('element.wrapRow', (context): Outcome<never> => wrap('row', context));
 export const wrapColumnCommand = registerHandler('element.wrapColumn', (context): Outcome<never> => wrap('column', context));
+
+// element.unwrap (spec unwrap): the one selected element with children, below the page root, leaves its parent and
+// its children take its place, in their order, the same nodes; the wrapper's own styles go with it. A parent whose
+// content model refuses one of the children refuses the whole unwrap, and nothing changes. The lifted children
+// become the selection; one undo step restores the wrapper around them.
+function unwrappable(state: { readonly document: Parameters<typeof locate>[0]; readonly selection: readonly NodeId[] }): Location | null {
+  const [only, ...others] = state.selection;
+  if (only === undefined || others.length > 0) return null;
+  const found = locate(state.document, only);
+  return found !== null && found.parent !== null && found.node.children.length > 0 ? found : null;
+}
+
+// canUnwrap: one element selected, below the page root, holding children. Refused, the status bar says which: an
+// element with no children to lift names itself; anything else says what can lose its wrapper.
+export const canUnwrap = registerPredicate(
+  'canUnwrap',
+  (state) => unwrappable(state) !== null,
+  (state) => {
+    const [only, ...others] = state.selection;
+    const found = only === undefined || others.length > 0 ? null : locate(state.document, only);
+    if (found !== null && found.parent !== null && found.node.children.length === 0) return message('status.unwrap.noChildren', { name: found.node.name });
+    return message('status.unwrap.unavailable');
+  },
+);
+
+export const unwrapCommand = registerHandler('element.unwrap', ({ state, rules }): Outcome<never> => {
+  const wrapper = unwrappable(state);
+  // the availability predicate (canUnwrap) keeps anything else from reaching here
+  if (wrapper === null || wrapper.parent === null) throw new Error('element.unwrap: the selection is not one element with children below the page root');
+  const parent = wrapper.parent;
+  for (const child of wrapper.node.children) {
+    const only = parent.tag !== null && child.tag !== null ? rules.contentModel.refusal(parent.tag, child.tag) : null;
+    if (only !== null) return { kind: 'refused', message: message('status.refused.onlyAccepts', { parent: `<${parent.tag ?? ''}>`, children: only.map((t) => `<${t}>`).join(', ') }) };
+  }
+  const siblings = [...wrapper.path.slice(0, -1)];
+  const patches: Patch[] = [
+    { op: 'remove', path: wrapper.path },
+    ...wrapper.node.children.map((child, i): Patch => ({ op: 'add', path: [...siblings, wrapper.index + i], value: child })),
+  ];
+  return { kind: 'change', patches, selection: wrapper.node.children.map((c) => c.id), message: message('status.unwrapped', { name: wrapper.node.name }) };
+});

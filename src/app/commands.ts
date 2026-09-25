@@ -21,7 +21,7 @@ import { duplicateCommand } from '../core/structure/duplicate.ts';
 import { insertCommand } from '../core/structure/insert.ts';
 import { moveDownCommand, moveToCommand, moveUpCommand } from '../core/structure/move.ts';
 import { deleteCommand } from '../core/structure/remove.ts';
-import { wrapColumnCommand, wrapRowCommand } from '../core/structure/wrap.ts';
+import { canUnwrap, unwrapCommand, wrapColumnCommand, wrapRowCommand } from '../core/structure/wrap.ts';
 import { setTextCommand } from '../core/text/text.ts';
 import { cancelEdit, insertLineBreak, singleTextSelection, startEdit } from '../editor/canvas/text-edit.ts';
 import { cancelDrag } from '../editor/drag/drag-session.ts';
@@ -163,7 +163,7 @@ export const COMMANDS = {
   'element.promote': NOT_AVAILABLE_YET,
   'element.duplicate': duplicateCommand,
   'element.delete': deleteCommand,
-  'element.unwrap': NOT_AVAILABLE_YET,
+  'element.unwrap': unwrapCommand,
   'element.createNaturalChild': NOT_AVAILABLE_YET,
   'hand.take': NOT_AVAILABLE_YET,
   'hand.aimNext': NOT_AVAILABLE_YET,
@@ -256,4 +256,4 @@ export const COMMANDS = {
 } as const satisfies CommandTable<EditorUi>;
 
 // The availability predicates code has registered; a built command's predicate must be here (createStore checks it).
-export const PREDICATES = { always, canUndo, canRedo, hasSelection, singleTextSelection } as const satisfies PredicateTable<EditorUi>;
+export const PREDICATES = { always, canUndo, canRedo, hasSelection, singleTextSelection, canUnwrap } as const satisfies PredicateTable<EditorUi>;

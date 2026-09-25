@@ -11,7 +11,7 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
   branch wip/project-open-json, 4 of 5 scenarios pass).
 - Group 02 passing: select-click, layers-tree, keyboard-tree-walk, palette-click-insert, undo-redo,
   multi-select-click, marquee-select, delete-element, move-up-down, wrap-row-column, drag-reorder-canvas,
-  drag-drop-inside, context-menu, duplicate, text-edit-inline, palette-drag-insert. Runner paths proven off: setup
+  drag-drop-inside, context-menu, duplicate, text-edit-inline, palette-drag-insert, unwrap. Runner paths proven off: setup
   selection, canvas click, Tab, modifier click, drag press, marquee, no free gap, tile drag, held drag, export.
 - To integrate: feature/drag-level-keys-escape (its drag.cancel now on main too), feature/hand-keyboard-move.
 - User's conditions: a runner path with no test of its own (drag, held drag, dwell, typing) is proven by its first

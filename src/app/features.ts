@@ -35,7 +35,7 @@ export const FEATURES = {
   'text-inline-formatting': NOT_AVAILABLE_YET,
   'rename-element': NOT_AVAILABLE_YET,
   'multi-select-click': registerFeature('multi-select-click'),
-  unwrap: NOT_AVAILABLE_YET,
+  unwrap: registerFeature('unwrap'),
   'marquee-select': registerFeature('marquee-select'),
   'multi-select-actions': NOT_AVAILABLE_YET,
   'select-container-children': NOT_AVAILABLE_YET,
