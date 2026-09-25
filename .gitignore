@@ -9,4 +9,5 @@ coverage/
 blob-report/
 *.tsbuildinfo
 .cache/
+.memory/
 .playwright-mcp/

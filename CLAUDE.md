@@ -23,7 +23,14 @@ The project is built one slice of work per conversation. Each conversation start
 
 ## Memory
 
-At the start of every conversation, whenever the conversation has been compacted (a summary replaced the earlier messages), and whenever you are unsure what was decided, read the memory in `.cache/memory/` (`builder-brief.md` and `builder.md`) before any action. If the memory contradicts what you remember, the memory wins. `.cache/` is ignored by git, so the memory never enters a commit.
+The memory lives in `.memory/` (ignored by git, so it never enters a commit) and is imported here, so it comes back with this file after every compaction: `builder-brief.md` holds the brief and the /goal in force, word for word; `builder.md` (at most 60 lines, rewritten whole after every commit) holds the current item and the next concrete step, the last commit and what it proved, the decisions taken on small ambiguities, the approaches that failed and why, the contested scenarios and the open findings. If the memory contradicts what you remember, the memory wins.
+
+@.memory/builder-brief.md
+@.memory/builder.md
+
+## Compact Instructions
+
+When the conversation is compacted, the summary preserves: the current item of the brief, the last commit and what it proved, the decisions taken, the approaches that failed, and the verification commands still pending.
 
 ## The manifest is the contract
 
