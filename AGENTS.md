@@ -1,8 +1,9 @@
-Leia CLAUDE.md (as regras do projeto valem para qualquer agente).
-Leia .memory/builder.md e .memory/audit-checklist.md desta pasta antes de qualquer coisa.
-O pedido em vigor está em .memory/builder-brief.md; portas PORT=5341 e E2E_PORT=5311; commits só no branch codex.
-Coordenação com o Claude: C:\Users\jonathanrodriguesti\Documents\builder-coord\BOARD.md (ler antes de cada item e antes de abrir o Chrome).
-Entrega atual: divida 7.1 em partes a-e conforme .memory/builder-brief.md; cada parte fecha com teste leve, dente, uso real no navegador embutido em Desktop 100% e Phone Ajustar, evidência, commit e push. As quatro combinações e a suíte pesada ficam para o fim do item/bloco.
-Navegador: usar o browser embutido para uso real; CLAUDE e CODEX podem testar ao mesmo tempo. Marque uma sessão leve com C:\Users\jonathanrodriguesti\Documents\builder-coord\browser-codex.lock; E2E_WORKERS=2 e E2E_PORT=5311. suite.lock é só para uso pesado exclusivo, conforme BOARD seção 4.
-Regra obrigatória do usuário (2026-09-26): todos os trabalhos devem ser feitos com auxílio do navegador embutido junto das implementações. Se fechar o navegador entre uma sessão e outra, abra-o na sequência. Mantenha a sessão aberta durante análise e edição; marque-a com browser-codex.lock conforme BOARD. Para testes automatizados que exigem a única sessão de Chrome, feche o navegador embutido e reabra-o logo depois.
-Ritmo em vigor: nenhum npm run check amplo entre partes; merge de origin/integration só no começo de cada ITEM (7.2, 7.3...), não entre partes de 7.1. Reserve arquivo só durante a edição e libere no commit. Não espere o outro agente para trabalho leve.
+Read CLAUDE.md, .memory/builder.md, and .memory/audit-checklist.md before work. The current user instruction is the literal definitive prompt in .memory/builder-brief.md; it replaces prior Codex workflow prompts. Earlier audit criteria and adenda are preserved for reference in .memory/builder-audit-source.md.
+
+Work only in C:\Users\jonathanrodriguesti\Documents\builder-codex on branch codex, plus C:\Users\jonathanrodriguesti\Documents\builder-coord\BOARD.md and its marker directories. Never write in the Claude checkout. Commit only on codex; push only git push origin codex. Claude integrates and runs the full suite. No subagents.
+
+Current order: 7.1d (A3.5/A3.7), 7.1e (A3.39/A3.25), item 7.1 closure, then 7.2–7.7, phase B, and phase C only after Claude closes Block 6. Split every item into short delivered parts. For each part use its manifest contract, specific scenarios, feature-off tooth, targeted checks, visible real browser use at Desktop 100% and Phone Fit, export when output changes, raw logs, commit and push. Never weaken existing tests, scenarios, or fixtures to make a pass.
+
+Keep PORT=5341 npm run dev running. Use a visible headed Chrome with .cache/scratch/uso-lib.mjs for real use alongside coding, with mouse/keyboard interactions and read-only test-port observations. If the browser is closed between sessions, open it again immediately. Mark Chrome use with builder-coord\browser-codex.lock; one Chrome session at a time. E2E uses E2E_PORT=5311 and E2E_WORKERS=2. Do not run broad check or the complete suite. Follow BOARD.md sections 4–7 for concurrent browser use and short file reservations.
+
+Only write English in code, manifest, specifications and repository documentation; use Portuguese for BOARD and user messages. Keep chat to one delivery line per part. If a commit or push is blocked, stop and report it immediately.

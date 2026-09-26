@@ -1725,6 +1725,8 @@
   "status.attribute.reserved": "\"{name}\" pertence a {owner}; use esse campo.",
   "styles.deleteClassUsedBy": "Apagar classe usada por {count} elementos",
   "settings.inputTypeDrops": "Mudar o tipo removerá {attributes}. Pressione Enter para aplicar.",
+  "settings.tagDrops": "Mudar a tag removerá {attributes}. Pressione Enter para aplicar.",
+  "feature.settingsGrammarTag": "Gramática e troca de tag no Settings",
   "settings.valuePicker": "Escolher {attribute}",
   "feature.settingsClassManagement": "Gerenciar classes e atributos do Settings",
   "status.classes.registered": "Classe .{name} registrada no projeto."
