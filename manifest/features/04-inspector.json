@@ -7043,7 +7043,8 @@
       "titleKey": "feature.propsSpacing",
       "commands": [
         "style.setSpacing",
-        "inspector.toggleSpacingLink"
+        "inspector.toggleSpacingLink",
+        "field.cancel"
       ],
       "dependsOn": [
         "inspector-number-fields"
@@ -8360,6 +8361,99 @@
               "document": "unchanged"
             }
           ]
+        },
+        {
+          "id": "escape-in-a-spacing-side-discards-the-text-and-leaving-writes-nothing",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "style.setSpacing#inspector-padding-top-box-model",
+              "args": {
+                "box": "padding",
+                "sides": "top",
+                "value": "99"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "99"
+            },
+            {
+              "door": "field.cancel#key-escape-in-spacing-field",
+              "args": {
+                "property": "padding"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "selection.select#layers-row",
+              "args": {
+                "target": "/Page/Footer"
+              },
+              "target": "/Page/Footer",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "field.cancel#key-escape-in-spacing-field"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Footer"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero",
+                  "property": "padding-top",
+                  "value": "56px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.selected",
+                  "params": {
+                    "name": "Footer"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
         }
       ]
     },

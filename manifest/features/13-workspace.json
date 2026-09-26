@@ -3291,7 +3291,7 @@
                   "key": "status.align.done",
                   "params": {
                     "edge": "Align left",
-                    "count": 3
+                    "elements": "3 elements"
                   }
                 }
               ]
@@ -3715,7 +3715,7 @@
                   "key": "status.align.done",
                   "params": {
                     "edge": "Align centre",
-                    "count": 3
+                    "elements": "3 elements"
                   }
                 }
               ]
@@ -4134,7 +4134,7 @@
                   "key": "status.align.done",
                   "params": {
                     "edge": "Align right",
-                    "count": 3
+                    "elements": "3 elements"
                   }
                 }
               ]
@@ -4553,7 +4553,7 @@
                   "key": "status.align.done",
                   "params": {
                     "edge": "Align top",
-                    "count": 3
+                    "elements": "3 elements"
                   }
                 }
               ]
@@ -4972,7 +4972,7 @@
                   "key": "status.align.done",
                   "params": {
                     "edge": "Align middle",
-                    "count": 3
+                    "elements": "3 elements"
                   }
                 }
               ]
@@ -5391,7 +5391,7 @@
                   "key": "status.align.done",
                   "params": {
                     "edge": "Align bottom",
-                    "count": 3
+                    "elements": "3 elements"
                   }
                 }
               ]
@@ -5810,7 +5810,7 @@
                   "key": "status.distribute.done",
                   "params": {
                     "axis": "Distribute horizontally",
-                    "count": 3
+                    "elements": "3 elements"
                   }
                 }
               ]
@@ -6234,7 +6234,7 @@
                   "key": "status.distribute.done",
                   "params": {
                     "axis": "Distribute vertically",
-                    "count": 3
+                    "elements": "3 elements"
                   }
                 }
               ]
