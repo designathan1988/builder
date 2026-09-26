@@ -13,7 +13,7 @@ import type { DoorEntry } from '../../manifest/runtime.ts';
 import { chordHint } from '../input/keymap.ts';
 import { pressedByPointer } from '../input/pointer.ts';
 import type { EditorUi } from '../state.ts';
-import { MODEL_RULES, useEditorState, useStore } from '../store.ts';
+import { MODEL_RULES, useEditorState, useStore, type EditorStore } from '../store.ts';
 import { PanelBodies } from '../shell/bodies.ts';
 import { useT } from '../text.ts';
 import { opensEmptyPanel } from '../workspace/panels.ts';
@@ -103,6 +103,16 @@ export function useDoor(entry: DoorEntry, args: Readonly<Record<string, unknown>
 }
 
 // The browser's file chooser, as a user opens it; the chosen file's text, or null when nothing was chosen.
+// Whether a door applies now, for a list that offers only what applies (the command bar): its command can run with
+// the arguments the door and its control give. A command whose argument the door reads only when it runs (the file
+// chosen, what the clipboard holds) is asked its availability predicate instead, the argument not being known yet.
+export function appliesNow(entry: DoorEntry, args: Readonly<Record<string, unknown>>, store: EditorStore): boolean {
+  const given = { ...entry.door.args, ...args };
+  const readsAtRun = Object.entries(entry.command.args).some(([name, arg]) => (arg.type === 'file' || arg.type === 'clipboard') && !arg.optional && !(name in given));
+  if (!readsAtRun) return store.canRun(entry.command.id, given as never);
+  return (PREDICATES as PredicateTable<EditorUi>)[entry.command.availability.predicate as PredicateId]?.test(store.getState(), MODEL_RULES) ?? true;
+}
+
 function chooseFile(): Promise<Uint8Array | null> {
   return new Promise((resolve) => {
     const input = document.createElement('input');

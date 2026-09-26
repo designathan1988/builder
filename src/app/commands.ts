@@ -88,6 +88,7 @@ import { revealField, toggleSection, setMode } from '../editor/inspector/section
 import { setOffset } from '../editor/quick-panel/quick-panel.ts';
 import { setEditMode } from '../editor/canvas/edit-mode.ts';
 import { stepHandle } from '../editor/canvas/handles.ts';
+import { openCommandBar } from '../editor/command-bar/command-bar.ts';
 import { setActiveTab, setWorkbenchState } from '../editor/workspace/layout.ts';
 import { collapseDocks, setPanelOpen, toggleDeveloperTools, toggleInspector, toggleLeftDock } from '../editor/workspace/panels.ts';
 
@@ -306,7 +307,7 @@ export const COMMANDS = {
   'quickPanel.setOffset': setOffset,
   'preferences.setLanguage': setLanguage,
   'preferences.setTheme': setTheme,
-  'commandBar.open': NOT_AVAILABLE_YET,
+  'commandBar.open': openCommandBar,
   'palette.toggleGroup': toggleGroup,
   'palette.setDensity': setDensity,
   'layers.setExpanded': setExpanded,

@@ -186,6 +186,15 @@ function stepped(gesture: string, args: Readonly<Record<string, unknown>>, modif
 const HAND_FROM: readonly KeyContextId[] = ['canvas', 'layers-tree'];
 // the contexts whose Space types: a field and the text edited in place (and the contexts that inherit the field's)
 const FIELDS: readonly KeyContextId[] = (manifest.interactions.keyContexts as readonly { id: KeyContextId; inherits: string | null }[]).filter((k) => k.id === 'field' || k.id === TEXT_EDITING || k.inherits === 'field').map((k) => k.id);
+// a field that names a context of its own (the command bar's search field: its arrows and Enter are its list's) still
+// types Space
+const TEXT_INPUTS = ['text', 'search', 'email', 'url', 'tel', 'password', 'number'];
+function typesText(target: EventTarget | null): boolean {
+  const element = htmlElement(target);
+  if (element === null) return false;
+  if (element.isContentEditable || element.tagName === 'TEXTAREA') return true;
+  return element.tagName === 'INPUT' && TEXT_INPUTS.includes((element as HTMLInputElement).type);
+}
 
 // The arguments a key runs its command with: those the focused control stands for, then the door's own over them; an
 // object argument both give is one object, the door's keys over the control's (a gradient stop stands for
@@ -212,7 +221,7 @@ export function installKeymap(store: EditorStore, target: Window = window): () =
     const focused = contextOf(event.target);
     // Space held over the canvas arms the pan, whatever has the focus but a field or the text edited in place (spec
     // zoom-wheel-pan, Problems in Pager 2); Escape during a pan puts the view back (the pointer owner's)
-    if (event.code === 'Space' && !FIELDS.includes(focused) && holdSpace(true)) {
+    if (event.code === 'Space' && !FIELDS.includes(focused) && !typesText(event.target) && holdSpace(true)) {
       event.preventDefault();
       return;
     }

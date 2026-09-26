@@ -3,6 +3,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import type { Locator, Page, TestDetails } from '@playwright/test';
+import { expect } from '../support/test.ts';
 
 export interface Door {
   readonly id: string;
@@ -28,6 +29,9 @@ export interface Door {
   readonly control?: string;
   // toolbar and panel-control: the drawing (an "area" is part of a larger surface, such as a backdrop)
   readonly drawnAs?: string;
+  // command-bar: the kind of entry it gives, and its label (with placeholders: "Insert {element}")
+  readonly entry?: string;
+  readonly labelKey?: string;
 }
 interface Menu {
   readonly id: string;
@@ -78,6 +82,29 @@ export async function openQuickPanel(page: Page): Promise<void> {
   const chip = page.locator('[data-quick-panel-chip][aria-expanded="false"]');
   if ((await chip.count()) > 0) await chip.click();
   await page.locator('[data-quick-panel-chip][aria-expanded="true"]').waitFor();
+}
+
+// The command bar (src/editor/shell/command-bar.tsx) opens from the top bar's Commands field, which a click reaches
+// wherever the focus is (a field keeps Ctrl+K: DESIGN.md "Keyboard model"); an entry is picked as a person picks it:
+// its label typed into the bar's field (English UI), then its row clicked. An insert entry's label names its palette
+// entry and an open-panel entry's its panel; a placeholder a command's label fills in from the state is left out.
+const PALETTE_LABELS = new Map((JSON.parse(fs.readFileSync('manifest/elements.json', 'utf8')) as { palette: { entries: { id: string; labelKey: string }[] }[] }).palette.flatMap((g) => g.entries.map((e) => [e.id, e.labelKey] as const)));
+const PANEL_LABELS = (JSON.parse(fs.readFileSync('manifest/layout.json', 'utf8')) as { panels: Record<string, { labelKey: string }> }).panels;
+const BAR_FIELD = [...DOORS.entries()].find(([ref, d]) => ref.startsWith('commandBar.open#') && d.kind === 'toolbar')?.[0];
+export function barLabel(d: Door, args: Readonly<Record<string, unknown>>): string {
+  const template = EN[d.labelKey ?? ''];
+  if (template === undefined) throw new Error(`the catalogue has no label ${d.labelKey}`);
+  const filled: Record<string, string | undefined> = {
+    element: typeof args.entry === 'string' ? EN[PALETTE_LABELS.get(args.entry) ?? ''] : undefined,
+    panel: typeof args.panel === 'string' ? EN[PANEL_LABELS[args.panel]?.labelKey ?? ''] : undefined,
+  };
+  return template.replace(/\{(\w+)\}/g, (_, name: string) => filled[name] ?? '').replace(/\s+/g, ' ').trim();
+}
+export async function openCommandBar(page: Page): Promise<void> {
+  if (BAR_FIELD === undefined) throw new Error('commandBar.open has no toolbar door');
+  await page.locator(`[data-door="${BAR_FIELD}"]`).click();
+  // a bar that does not open fails on an assertion, never on a wait's timeout
+  await expect(page.locator('[data-region="command-palette"] [role="combobox"]'), 'the command bar opens').toBeVisible();
 }
 
 // opens a menu from its button, or from the menu it is a submenu of (English UI)
@@ -159,6 +186,10 @@ export async function runDoor(page: Page, ref: string, options: { readonly args?
   if (d.kind === 'menu') {
     if (d.menu === undefined) throw new Error(`menu door ${ref} names no menu`);
     await openMenu(page, d.menu);
+  }
+  if (d.kind === 'command-bar') {
+    await openCommandBar(page);
+    await page.keyboard.type(barLabel(d, { ...d.args, ...options.args }));
   }
   if (inQuickPanel(d)) await openQuickPanel(page);
   // a door drawn as an area (the backdrop under a menu, a Layers row's name) is pressed where nothing drawn over it

@@ -155,7 +155,7 @@ export const FEATURES = {
   'theme-switch': registerFeature('theme-switch'),
   // 13 workspace
   'dock-toggles': registerFeature('dock-toggles'),
-  'command-bar': NOT_AVAILABLE_YET,
+  'command-bar': registerFeature('command-bar'),
   'command-bar-set-property': NOT_AVAILABLE_YET,
   'shortcuts-panel': NOT_AVAILABLE_YET,
   'workbench-panel': registerFeature('workbench-panel'),

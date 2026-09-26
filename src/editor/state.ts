@@ -56,6 +56,8 @@ export interface EditorUi {
   readonly styleState?: string | undefined;
   // the preview (view/preview.ts): the selection to give back when it ends; absent while editing
   readonly preview?: { readonly selection: Selection } | undefined;
+  // the command bar shown (commandBar.open; command-bar/command-bar.ts); absent while closed
+  readonly commandBar?: true | undefined;
 }
 
 export function initialEditorUi(preferences: Preferences): EditorUi {

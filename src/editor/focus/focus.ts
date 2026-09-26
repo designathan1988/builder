@@ -39,8 +39,43 @@ function itemsAround(focused: Element): { readonly items: HTMLElement[]; readonl
   return { items, at: items.findIndex((el) => el === focused || el.contains(focused)) };
 }
 
+// The option a combobox names active (its aria-activedescendant), marked selected; null for none.
+export function setActiveOption(field: HTMLElement, options: readonly HTMLElement[], index: number | null): void {
+  for (const [i, option] of options.entries()) option.setAttribute('aria-selected', String(i === index));
+  const option = index === null ? undefined : options[index];
+  if (option === undefined) {
+    field.removeAttribute('aria-activedescendant');
+    return;
+  }
+  field.setAttribute('aria-activedescendant', option.id);
+  option.scrollIntoView({ block: 'nearest' });
+}
+
+// A combobox (the command bar's search field) keeps the focus while its active option moves (the WAI-ARIA combobox):
+// its items are the options of the listbox it controls, and activating it clicks the active option's control. False
+// when the focus is on no combobox.
+function comboboxMove(move: FocusMove, field: Element): boolean {
+  if (!(field instanceof HTMLElement) || field.getAttribute('role') !== 'combobox') return false;
+  const list = document.getElementById(field.getAttribute('aria-controls') ?? '');
+  if (!list) return false;
+  const options = [...list.querySelectorAll<HTMLElement>('[role="option"]')];
+  const count = options.length;
+  if (count === 0) return true;
+  const at = options.findIndex((o) => o.id !== '' && o.id === field.getAttribute('aria-activedescendant'));
+  if (move === 'activate') {
+    const option = options[at];
+    (option?.querySelector<HTMLElement>('[data-door]') ?? option)?.click();
+    return true;
+  }
+  if (move === 'parent') return true;
+  const index = move === 'first' ? 0 : move === 'last' ? count - 1 : move === 'next' ? (at + 1) % count : at < 0 ? count - 1 : (at - 1 + count) % count;
+  setActiveOption(field, options, index);
+  return true;
+}
+
 export function carryOut(move: FocusMove, focused: Element | null): void {
   if (!focused) return;
+  if (comboboxMove(move, focused)) return;
   const around = itemsAround(focused);
   if (!around || around.items.length === 0) return;
   const { items, at } = around;

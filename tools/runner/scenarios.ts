@@ -24,7 +24,7 @@ import { isFeatureBuilt } from '../../src/app/features.ts';
 import { shortcutRuns } from '../../src/editor/input/shortcut-rule.ts';
 import type { FeatureId } from '../../src/generated/ids.ts';
 import { EMPTY_FIXTURE, applyDiff, matchDocument, resolveNode, type DiffOp } from '../../src/manifest/scenario.ts';
-import { control, door as doorData, inQuickPanel, keys, modifiedControl, openMenu, openQuickPanel, runDoor, standingControl, type Door } from '../../tests/e2e/door.ts';
+import { barLabel, control, door as doorData, inQuickPanel, keys, modifiedControl, openCommandBar, openMenu, openQuickPanel, runDoor, standingControl, type Door } from '../../tests/e2e/door.ts';
 import { openEditor } from '../../tests/support/editor.ts';
 import { unzip } from './unzip.ts';
 
@@ -1259,6 +1259,13 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
       if (key !== undefined) await control(page, clicked, { args: standsFor }).click({ modifiers: [key as 'Shift' | 'Alt' | 'Control' | 'Meta'] });
       else await runDoor(page, ref, { args: standsFor });
     }
+  } else if (d.kind === 'command-bar') {
+    // the bar opened with its shortcut, the entry's label typed and its row clicked (door.ts); an entry the bar does not
+    // offer now (its command cannot run on the selection) fails the step on an assertion, never on the click's timeout
+    await openCommandBar(page);
+    await page.keyboard.type(barLabel(d, { ...d.args, ...own }));
+    await expect(control(page, ref, { args: own }), `step ${ref}: the command bar offers it`).toBeVisible();
+    await control(page, ref, { args: own }).click();
   } else if (d.kind === 'panel-drag') {
     // A panel drag (a number field's label scrubbed): pressed at the middle of the control that stands for the step's
     // arguments (rounded to whole pixels, so its travel is exact), moved `distance` screen pixels to the right (left
