@@ -19,6 +19,24 @@ const NONE: readonly StyleClass[] = [];
 export const classesOf = (document: DocumentJson): readonly StyleClass[] => document.classes ?? NONE;
 // a CSS class name, as an element's classes take it (validate.ts)
 const CLASS_NAME = /^-?[_a-zA-Z][_a-zA-Z0-9-]*$/;
+export const validClassName = (name: string): boolean => CLASS_NAME.test(name);
+
+// When Settings replaces an element's class words, every newly applied name enters this same
+// registry, so its Style chip can immediately become a target.
+export function missingClassDefinitions(document: DocumentJson, names: readonly string[]): Patch[] {
+  const existing = new Set(classesOf(document).map((styleClass) => styleClass.name));
+  const missing: string[] = [];
+  for (const name of names) {
+    if (existing.has(name)) continue;
+    existing.add(name);
+    missing.push(name);
+  }
+  if (missing.length === 0) return [];
+  const entries = missing.map((name): StyleClass => ({ name, styles: {} }));
+  return document.classes === undefined
+    ? [{ op: 'add', path: ['classes'], value: entries }]
+    : entries.map((entry, index): Patch => ({ op: 'add', path: ['classes', classesOf(document).length + index], value: entry }));
+}
 
 // how many elements of the project list a class
 export function usesOfClass(document: DocumentJson, name: string): number {
@@ -91,4 +109,41 @@ export const detachClassCommand = registerHandler('classes.detach', (context, { 
   if (locked !== null) return { kind: 'refused', message: locked };
   const patches: Patch[] = holding.map((found) => ({ op: 'replace', path: [...found.path, 'classes'], value: found.node.classes.filter((c) => c !== className) }));
   return { kind: 'change', patches, message: message('status.classes.detached', { name: className }) };
+});
+
+// All uses across all pages, in document order. A project class has one definition; a rename or
+// deletion changes that definition and every element naming it in one transaction.
+function classUses(document: DocumentJson, name: string) {
+  return document.pages.flatMap((page) => [...walk(page.tree)].filter((node) => node.classes.includes(name)).map((node) => locate(document, node.id)).filter((at) => at !== null));
+}
+
+export const renameClassCommand = registerHandler('classes.rename', ({ state }, { className, nextName }): Outcome<never> => {
+  const typed = nextName.trim();
+  const index = classesOf(state.document).findIndex((c) => c.name === className);
+  if (index < 0 || className === typed) return { kind: 'change' };
+  if (!CLASS_NAME.test(typed)) return { kind: 'refused', message: message('status.classes.badName', { name: typed }) };
+  if (classesOf(state.document).some((c) => c.name === typed)) return { kind: 'refused', message: message('status.classes.nameTaken', { name: typed }) };
+  const uses = classUses(state.document, className);
+  const locked = firstLockRefusal(state.document, uses.map((at) => at.node.id as NodeId), 'status.locked.edit');
+  if (locked !== null) return { kind: 'refused', message: locked };
+  const patches: Patch[] = [
+    { op: 'replace', path: ['classes', index, 'name'], value: typed },
+    ...uses.map((at): Patch => ({ op: 'replace', path: [...at.path, 'classes'], value: at.node.classes.map((name) => name === className ? typed : name) })),
+  ];
+  return { kind: 'change', patches, message: message('status.classes.renamed', { oldName: className, name: typed }) };
+});
+
+export const deleteClassCommand = registerHandler('classes.delete', ({ state, confirmed }, { className }): Outcome<never> => {
+  const classes = classesOf(state.document);
+  const index = classes.findIndex((c) => c.name === className);
+  if (index < 0) return { kind: 'change' };
+  const uses = classUses(state.document, className);
+  const locked = firstLockRefusal(state.document, uses.map((at) => at.node.id as NodeId), 'status.locked.edit');
+  if (locked !== null) return { kind: 'refused', message: locked };
+  if (!confirmed) return { kind: 'confirm' };
+  const patches: Patch[] = [
+    ...uses.map((at): Patch => ({ op: 'replace', path: [...at.path, 'classes'], value: at.node.classes.filter((name) => name !== className) })),
+    classes.length === 1 ? { op: 'remove', path: ['classes'] } : { op: 'remove', path: ['classes', index] },
+  ];
+  return { kind: 'change', patches, message: message('status.classes.deleted', { name: className, count: uses.length }) };
 });

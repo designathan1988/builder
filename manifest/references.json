@@ -138,12 +138,12 @@
     {
       "kind": "handler",
       "id": "classes.rename",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",
       "id": "classes.delete",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",

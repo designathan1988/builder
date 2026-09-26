@@ -5,23 +5,27 @@
 // nothing. Its two buttons are that door's run going on, not doors of their own (data-local).
 import { useEffect, useRef } from 'react';
 import { useEditorState, useStore } from '../store.ts';
+import { usesOfClass } from '../../core/design/classes.ts';
 import { useT } from '../text.ts';
 
 export function Confirmation() {
   const t = useT();
   const store = useStore();
   const waiting = useEditorState((s) => s.confirmation ?? null);
+  const document = useEditorState((s) => s.document);
   const cancel = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     if (waiting !== null) cancel.current?.focus();
   }, [waiting]);
   if (waiting === null) return null;
+  const className = (waiting.args as { readonly className?: unknown }).className;
+  const params = waiting.message === 'dialog.classes.delete' && typeof className === 'string' ? { count: usesOfClass(document, className) } : {};
   return (
     <div className="confirmation" data-confirmation-dialog>
       <div className="confirmation__scrim" />
       <div className="confirmation__box" role="alertdialog" aria-modal="true" aria-labelledby="confirmation-message">
         <p id="confirmation-message" className="confirmation__message">
-          {t(waiting.message)}
+          {t(waiting.message, params)}
         </p>
         <div className="confirmation__actions">
           <button ref={cancel} type="button" className="door door--button" data-local="confirmation" data-confirmation="cancel" onClick={() => store.answer(false)}>

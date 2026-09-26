@@ -34,6 +34,7 @@ import { afterGesture } from '../input/pointer.ts';
 import { collapsedSections, editedProperties, inspectorMode, inspectorSearchOf, isEssential, searchMatches, summaryOf, summaryProperties } from '../inspector/sections.ts';
 import { MODEL_RULES, useEditorState, useStore, type EditorStore, layeredRules } from '../store.ts';
 import { classOrigin, styleSource } from '../inspector/style-target.ts';
+import { ATTRIBUTES, SETTINGS_SECTIONS, settingsSectionFor } from '../inspector/attributes.ts';
 import { inspectorTab } from '../workspace/layout.ts';
 import { isPanelOpen, panelName } from '../workspace/panels.ts';
 import { useLocale, useT } from '../text.ts';
@@ -870,7 +871,6 @@ function StyleTab() {
 }
 
 // The attributes of elements.json by id, and the Settings tab's attribute fields in their order there.
-const ATTRIBUTES = new Map(manifest.elements.attributes.map((a) => [a.id, a]));
 const SETTINGS_FIELDS = doorSlots('inspector-settings').filter((d) => d.door.kind === 'inspector-field' && d.door.attribute !== null);
 // the toggles of a table's parts (caption, head, foot; core/elements/parts.ts), drawn while the selection is in a table
 const TABLE_PART_DOORS = doorSlots('inspector-settings').filter((d) => d.door.kind === 'panel-control' && d.door.drawnAs === 'toggle');
@@ -1005,7 +1005,8 @@ export function keptTextOf(entry: DoorEntry, attribute: AttributeId, valueType: 
   // a command whose one argument is a choice (element.setInputType's type): the field suggests its values
   const choices = args.filter(([name]) => name !== 'target');
   const choice = choices.length === 1 ? choices[0] : undefined;
-  if (choice !== undefined && choice[1].type === 'enum') return { args: forNode, filled: choice[0], stored, suggestions: choice[1].values };
+  if (choice !== undefined && (choice[1].type === 'enum' || (choice[1].type === 'string' && valueType === 'keyword')))
+    return { args: forNode, filled: choice[0], stored, suggestions: choice[1].type === 'enum' ? choice[1].values : keywordsOf(attribute) };
   // markup (an embed's, kept as the node's text; an SVG's, kept in its attribute): the command's one text argument
   // besides its node, several lines
   if (valueType === MARKUP_VALUE) {
@@ -1092,7 +1093,7 @@ export function KeptTextField({ entry, node, kept, label, attribute }: { readonl
       {kept.multiline === true ? (
         <textarea ref={field} className="input input--area" rows={4} disabled={!door.available} aria-label={label} spellCheck={false} />
       ) : (
-        <input ref={field} className="input" disabled={!door.available} aria-label={label} spellCheck={false} list={suggestions.length > 0 ? listId : undefined} />
+        <input ref={field} className="input" disabled={!door.available} aria-label={label} placeholder={attribute === 'buttonType' && stored === '' ? suggestions[0] : undefined} spellCheck={false} list={suggestions.length > 0 ? listId : undefined} />
       )}
       {suggestions.length > 0 ? (
         <datalist id={listId}>
@@ -1175,6 +1176,7 @@ function CustomAttributes({ node, add: addEntry }: { readonly node: DocNode; rea
   const t = useT();
   const addDoor = useDoor(addEntry, {}, undefined, isFeatureBuilt(addEntry.door.feature as FeatureId));
   const typedName = useRef<HTMLInputElement>(null);
+  useEffect(() => { if (typedName.current !== null) typedName.current.value = ''; }, [node.id]);
   const dispatch = store.dispatch as (id: CommandId, args: unknown) => DispatchResult;
   const add = () => {
     const field = typedName.current;
@@ -1329,6 +1331,10 @@ function SettingsTab() {
   const count = useEditorState((s) => s.selection.length);
   const node = useSingleNode();
   const inTable = useEditorState((s) => selectionInTable(s.document, s.selection));
+  const fields = node === null ? [] : SETTINGS_FIELDS.filter((entry) => {
+    const attribute = entry.door.kind === 'inspector-field' && entry.door.attribute !== null ? ATTRIBUTES.get(entry.door.attribute) : undefined;
+    return attribute !== undefined && (attribute.elements === 'all' || attribute.elements.includes(node.type)) && attributeApplies(node, attribute.id);
+  });
   return (
     <div className="inspector-scroll">
       <div className="inspector-body" data-region="inspector-settings">
@@ -1339,33 +1345,38 @@ function SettingsTab() {
           </>
         ) : node === null ? (
           <p className="inspector-empty">{t('canvas.selectedCount', { count })}</p>
-        ) : (
-          SETTINGS_FIELDS.map((entry) => {
-            const attribute = entry.door.kind === 'inspector-field' && entry.door.attribute !== null ? ATTRIBUTES.get(entry.door.attribute) : undefined;
-            if (attribute === undefined || (attribute.elements !== 'all' && !attribute.elements.includes(node.type))) return null;
-            // an input shows only the attributes its type takes (core/elements/inputs.ts)
-            if (!attributeApplies(node, attribute.id)) return null;
-            if (attribute.valueType === ID_REF) return <LabelTargetField key={`${entry.ref}@${node.id}`} entry={entry} node={node} label={t(attribute.labelKey as MessageId)} />;
-            const label = t(attribute.labelKey as MessageId);
-            if ('content' in entry.command.args) return <TextField key={`${entry.ref}@${node.id}`} entry={entry} node={node} label={label} />;
-            // a setting of the page on the page root (core/page/settings.ts), a link (core/elements/link.ts), or the
-            // element's HTML tag (core/elements/tag.ts)
-            const kept = keptTextOf(entry, attribute.id as AttributeId, attribute.valueType, node);
-            if (kept !== null) return <KeptTextField key={`${entry.ref}@${node.id}`} entry={entry} node={node} kept={kept} label={label} attribute={attribute.id} />;
-            if (attribute.valueType === 'boolean' && toggleArgOf(entry, attribute.id as AttributeId) !== null)
-              return <ToggleField key={`${entry.ref}@${node.id}`} entry={entry} node={node} attribute={attribute.id as AttributeId} label={label} />;
-            return <AttributeField key={entry.ref} entry={entry} label={label} toggle={attribute.valueType === 'boolean'} />;
-          })
-        )}
-        {node !== null ? <PartsEditor node={node} /> : null}
-        {node !== null && CUSTOM_ADD !== undefined && CUSTOM_VALUE !== undefined && CUSTOM_REMOVE !== undefined ? <CustomAttributes node={node} add={CUSTOM_ADD} /> : null}
-        {node !== null && inTable ? (
-          <div className="field-row field-row--toggles">
-            {TABLE_PART_DOORS.map((entry) => (
-              <DoorControl key={entry.ref} entry={entry} />
-            ))}
-          </div>
-        ) : null}
+        ) : SETTINGS_SECTIONS.map((section) => {
+          if (section.elements !== 'all' && !section.elements.includes(node.type)) return null;
+          const owned = fields.filter((entry) => entry.door.kind === 'inspector-field' && entry.door.attribute !== null && settingsSectionFor(entry.door.attribute, node.type) === section.id);
+          if (owned.length === 0 && section.id !== 'attributes') return null;
+          return (
+            <section key={section.id} className="settings-section" data-settings-section={section.id} aria-label={t(section.labelKey as MessageId)}>
+              <div className="settings-section__header">
+                <h3>{t(section.labelKey as MessageId)}</h3>
+                <p>{t(section.descriptionKey as MessageId)}</p>
+              </div>
+              {owned.map((entry) => {
+                const attribute = entry.door.kind === 'inspector-field' && entry.door.attribute !== null ? ATTRIBUTES.get(entry.door.attribute) : undefined;
+                if (attribute === undefined) return null;
+                const label = t(attribute.labelKey as MessageId);
+                if (attribute.valueType === ID_REF) return <LabelTargetField key={`${entry.ref}@${node.id}`} entry={entry} node={node} label={label} />;
+                if ('content' in entry.command.args) return <TextField key={`${entry.ref}@${node.id}`} entry={entry} node={node} label={label} />;
+                const kept = keptTextOf(entry, attribute.id as AttributeId, attribute.valueType, node);
+                if (kept !== null) return <KeptTextField key={`${entry.ref}@${node.id}`} entry={entry} node={node} kept={kept} label={label} attribute={attribute.id} />;
+                if (attribute.valueType === 'boolean' && toggleArgOf(entry, attribute.id as AttributeId) !== null)
+                  return <ToggleField key={`${entry.ref}@${node.id}`} entry={entry} node={node} attribute={attribute.id as AttributeId} label={label} />;
+                return <AttributeField key={entry.ref} entry={entry} label={label} toggle={attribute.valueType === 'boolean'} />;
+              })}
+              {section.id === 'attributes' ? <PartsEditor node={node} /> : null}
+              {section.id === 'attributes' && CUSTOM_ADD !== undefined && CUSTOM_VALUE !== undefined && CUSTOM_REMOVE !== undefined ? <CustomAttributes node={node} add={CUSTOM_ADD} /> : null}
+              {section.id === 'attributes' && inTable ? (
+                <div className="field-row field-row--toggles">
+                  {TABLE_PART_DOORS.map((entry) => <DoorControl key={entry.ref} entry={entry} />)}
+                </div>
+              ) : null}
+            </section>
+          );
+        })}
       </div>
     </div>
   );

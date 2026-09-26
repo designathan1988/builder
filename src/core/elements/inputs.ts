@@ -13,7 +13,7 @@ import type { Patch } from '../history/transaction.ts';
 import { lockRefusal } from '../nodes/flags.ts';
 
 const TEXTUAL = ['text', 'email', 'password', 'tel', 'url', 'search'];
-const RANGED = ['number', 'range', 'date', 'time'];
+const RANGED = ['number', 'range', 'date', 'datetime-local', 'month', 'week', 'time'];
 // attribute (elements.json id) → the input types that take it (HTML, "input type=..." applicability); an attribute
 // listed in neither table applies to every input type
 const APPLIES: Readonly<Record<string, readonly string[]>> = {
@@ -25,6 +25,10 @@ const APPLIES: Readonly<Record<string, readonly string[]>> = {
   placeholder: [...TEXTUAL, 'number'],
   readonly: [...TEXTUAL, 'number', 'date', 'time'],
   required: [...TEXTUAL, 'number', 'date', 'time', 'checkbox', 'radio', 'file'],
+  accept: ['file'],
+  multiple: ['file', 'email'],
+  maxLength: TEXTUAL,
+  minLength: TEXTUAL,
 };
 // attribute → the input types that do not take it (every other type does)
 const EXCEPT: Readonly<Record<string, readonly string[]>> = {
@@ -37,6 +41,10 @@ export const inputTypeOf = (node: DocNode): string => String(node.attributes.inp
 
 // Whether an attribute applies to a node: for an input, whether its type takes it; for any other element, true.
 export function attributeApplies(node: DocNode, attribute: string): boolean {
+  if (node.type === 'link') {
+    if (attribute === 'href' || attribute === 'newTab') return node.tag === 'a';
+    if (attribute === 'buttonType') return node.tag === 'button';
+  }
   if (node.type !== 'input') return true;
   const type = inputTypeOf(node);
   const only = APPLIES[attribute];
@@ -49,14 +57,16 @@ function oneSelected(state: { readonly document: DocumentJson; readonly selectio
   return only === undefined || others.length > 0 ? null : locate(state.document, only);
 }
 
-export const setInputTypeCommand = registerHandler('element.setInputType', ({ state }, { type }): Outcome<never> => {
+export const setInputTypeCommand = registerHandler('element.setInputType', ({ state, rules }, { type }): Outcome<never> => {
   const at = oneSelected(state);
   if (at === null || at.node.type !== 'input') return { kind: 'refused', message: message('status.needsSingleSelection') };
   const locked = lockRefusal(state.document, at.node.id, 'status.locked.edit');
   if (locked !== null) return { kind: 'refused', message: locked };
-  const said = message('status.input.typeSet', { name: at.node.name, type });
-  if (inputTypeOf(at.node) === type) return { kind: 'change', message: said };
-  const switched: DocNode = { ...at.node, attributes: { ...at.node.attributes, inputType: type } };
+  const nextType = type.trim().toLowerCase();
+  if (!rules.attributeValues.get('inputType')?.keywords.includes(nextType)) return { kind: 'refused', message: message('status.input.invalidType', { type }) };
+  const said = message('status.input.typeSet', { name: at.node.name, type: nextType });
+  if (inputTypeOf(at.node) === nextType) return { kind: 'change', message: said };
+  const switched: DocNode = { ...at.node, attributes: { ...at.node.attributes, inputType: nextType } };
   const kept = Object.fromEntries(Object.entries(switched.attributes).filter(([name]) => attributeApplies(switched, name)));
   return { kind: 'change', patches: [{ op: 'replace', path: [...at.path, 'attributes'], value: kept }], message: said };
 });

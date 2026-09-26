@@ -1712,9 +1712,10 @@
   "feature.settingsAudit": "Settings organizado",
   "command.classes.rename": "Renomear classe",
   "command.classes.delete": "Apagar classe",
-  "dialog.classes.delete": "Apagar esta classe do projeto e de todos os elementos que a usam? Você pode desfazer esta alteração.",
+  "dialog.classes.delete": "Apagar esta classe do projeto e de {count} elementos que a usam? Você pode desfazer esta alteração.",
   "status.classes.renamed": "Classe .{oldName} renomeada para .{name}.",
   "status.classes.deleted": "Classe .{name} apagada de {count} elementos.",
   "status.input.invalidType": "O tipo de input \"{type}\" não é um tipo HTML válido.",
-  "status.attribute.reserved": "\"{name}\" pertence a {owner}; use esse campo."
+  "status.attribute.reserved": "\"{name}\" pertence a {owner}; use esse campo.",
+  "styles.deleteClassUsedBy": "Apagar classe usada por {count} elementos"
 }

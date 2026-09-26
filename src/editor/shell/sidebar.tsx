@@ -9,7 +9,7 @@ import type { CommandId, FeatureId, MessageId, RegionId } from '../../generated/
 import { elementIcon, manifest, type DoorEntry } from '../../manifest/runtime.ts';
 import { DoorControl, Icon, useDoor } from '../doors/door.tsx';
 import { GLYPHS, doorSlots } from '../doors/placement.ts';
-import { drag, modifierOf } from '../input/pointer.ts';
+import { afterGesture, drag, modifierOf } from '../input/pointer.ts';
 import { renamedNode } from '../layers/rename.ts';
 import { paletteDensity, paletteMatches } from '../palette/palette.ts';
 import { isExpanded, rowDetailsOf, searchView, type SearchView } from '../layers/tree.ts';
@@ -473,15 +473,36 @@ function StyleClasses() {
   const t = useT();
   const text = useEditorState((s) => JSON.stringify(classesOf(s.document).map((c) => [c.name, usesOfClass(s.document, c.name)])));
   const rows = JSON.parse(text) as [string, number][];
+  const rename = doorSlots('styles').find((entry) => entry.command.args.nextName !== undefined);
+  const remove = doorSlots('styles').find((entry) => entry.command.args.className !== undefined && entry.command.args.nextName === undefined);
   return (
     <ul className="style-classes">
       {rows.map(([name, count]) => (
         <li key={name} className="style-classes__row">
-          <span className="style-classes__name">.{name}</span>
+          {rename !== undefined ? <ClassNameField entry={rename} name={name} /> : <span className="style-classes__name">.{name}</span>}
           <span className="style-classes__count">{count === 1 ? t('styles.count.one') : t('styles.count.other', { count })}</span>
+          {remove !== undefined ? <DoorControl entry={remove} args={{ className: name }} label={t('styles.deleteClassUsedBy', { count })} /> : null}
         </li>
       ))}
     </ul>
+  );
+}
+
+function ClassNameField({ entry, name }: { readonly entry: DoorEntry; readonly name: string }) {
+  const store = useStore();
+  const door = useDoor(entry, { className: name }, undefined, isFeatureBuilt(entry.door.feature as FeatureId));
+  const field = useRef<HTMLInputElement>(null);
+  const said = useEditorState((state) => state.message);
+  useEffect(() => { if (field.current !== null) field.current.value = name; }, [name, said]);
+  const keep = () => {
+    const nextName = field.current?.value ?? name;
+    if (nextName === name) return;
+    afterGesture(() => (store.dispatch as (id: CommandId, args: unknown) => DispatchResult)(entry.command.id, { className: name, nextName }));
+  };
+  return (
+    <form className={`style-classes__field${door.available ? '' : ' is-unavailable'}`} data-door={entry.ref} data-args={JSON.stringify({ className: name })} title={door.title} onSubmit={(event) => { event.preventDefault(); keep(); }}>
+      <input ref={field} className="input" aria-label={door.label} disabled={!door.available} spellCheck={false} onBlur={keep} />
+    </form>
   );
 }
 

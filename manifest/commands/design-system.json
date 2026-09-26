@@ -541,7 +541,7 @@
         "nextName": { "type": "string", "values": [], "optional": false }
       },
       "availability": { "predicate": "always", "refusalKey": null },
-      "refusals": ["status.classes.badName", "status.classes.nameTaken"],
+      "refusals": ["status.classes.badName", "status.classes.nameTaken", "status.locked.edit"],
       "confirmation": null,
       "history": { "undoable": true, "coalesce": "none", "undoRestoresSelection": "before-command", "transaction": "per-dispatch", "noChange": "no-entry" },
       "entryPoints": [
@@ -572,7 +572,7 @@
       "introducedBy": "settings-audit",
       "args": { "className": { "type": "string", "values": [], "optional": false } },
       "availability": { "predicate": "always", "refusalKey": null },
-      "refusals": [],
+      "refusals": ["status.locked.edit"],
       "confirmation": { "messageKey": "dialog.classes.delete", "confirmKey": "dialog.delete", "cancelKey": "dialog.cancel" },
       "history": { "undoable": true, "coalesce": "none", "undoRestoresSelection": "before-command", "transaction": "per-dispatch", "noChange": "no-entry" },
       "entryPoints": [

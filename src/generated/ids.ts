@@ -3985,5 +3985,6 @@ export const MESSAGE_IDS = [
   "status.classes.deleted",
   "status.input.invalidType",
   "status.attribute.reserved",
+  "styles.deleteClassUsedBy",
 ] as const;
 export type MessageId = (typeof MESSAGE_IDS)[number];

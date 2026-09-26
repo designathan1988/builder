@@ -45,6 +45,7 @@ export interface ModelRules {
   readonly attributes: ReadonlyMap<string, readonly string[] | 'all'>;
   // attribute id → what its value is
   readonly attributeValues: ReadonlyMap<string, AttributeRules>;
+  readonly autocompleteTokens: readonly string[];
   readonly properties: ReadonlySet<string>;
   // each edited property's codec, which reads and writes its values, its label and the predicate of the elements it
   // applies to (properties.json; src/core/style/applies.ts)
@@ -103,6 +104,7 @@ export function rulesFromManifest(elements: ElementsFile, properties: Properties
     ),
     attributes: new Map(elements.attributes.map((a) => [a.id, a.elements])),
     attributeValues: new Map(elements.attributes.map((a) => [a.id, { valueType: a.valueType, keywords: a.keywords, html: a.html, labelKey: a.labelKey as MessageId, command: a.command }] as const)),
+    autocompleteTokens: elements.autocompleteTokens,
     // what a node stores: the edited properties, and the recipes by their ids (the output writes their declarations)
     properties: new Set([...properties.properties.map((p) => p.id), ...properties.recipes.map((r) => r.id)]),
     propertyFacts: new Map(properties.properties.map((p) => [p.id, { codec: p.codec, labelKey: p.labelKey as MessageId, appliesTo: p.appliesTo }] as const)),
@@ -305,11 +307,25 @@ function validateInstances(node: DocNode, at: string, components: ReadonlySet<st
 // Why a name cannot be a custom attribute (feature element-attributes-aria), or null: an attribute name of HTML (a
 // letter, then letters, digits, "-", "_", ".", ":"), never an event handler (on…), never one of the editor's own marks
 // (data-node, data-container, data-hidden, data-key-context, contenteditable), which the page never carries.
-export const EDITOR_ATTRIBUTES: ReadonlySet<string> = new Set(['data-node', 'data-container', 'data-hidden', 'data-key-context', 'contenteditable', 'data-editor-style', 'data-node-style']);
-export function customAttributeRefusal(name: string): string | null {
+export const EDITOR_ATTRIBUTES: ReadonlySet<string> = new Set(['data-node', 'data-container', 'data-hidden', 'data-key-context', 'data-editor-style', 'data-node-style']);
+// A dedicated field owns these names even when its element type is not selected. The rule also
+// catches every HTML attribute declared in elements.json, through ModelRules.attributeValues.
+const RESERVED_OWNER: Readonly<Record<string, string>> = {
+  style: 'inspector.tab.style', class: 'attribute.classes.label', id: 'attribute.id.label',
+  srcdoc: 'attribute.embedMarkup.label', hidden: 'command.hide', tabindex: 'settings.section.accessibility',
+  contenteditable: 'attribute.text.label',
+};
+export function reservedAttributeOwner(name: string, rules: ModelRules): string | null {
+  const special = RESERVED_OWNER[name];
+  if (special !== undefined) return special;
+  const declared = [...rules.attributeValues.values()].find((attribute) => attribute.html === name);
+  return declared?.labelKey ?? null;
+}
+export function customAttributeRefusal(name: string, rules: ModelRules): string | null {
   if (!/^[a-z][a-z0-9_.:-]*$/.test(name)) return 'not an attribute name';
   if (name.startsWith('on')) return 'an event handler attribute';
   if (EDITOR_ATTRIBUTES.has(name)) return 'an attribute of the editor';
+  if (reservedAttributeOwner(name, rules) !== null) return 'a reserved attribute with a dedicated field';
   return null;
 }
 
@@ -368,7 +384,7 @@ function validateNode(
     if (!isRecord(custom) || Object.keys(custom).length === 0) bad(`${at}/customAttributes`, 'customAttributes is an object with at least one attribute, or absent');
     else
       for (const [name, value] of Object.entries(custom)) {
-        const why = customAttributeRefusal(name);
+        const why = customAttributeRefusal(name, rules);
         if (why !== null) bad(`${at}/customAttributes/${name}`, why);
         if (typeof value !== 'string') bad(`${at}/customAttributes/${name}`, 'a custom attribute value is a string');
       }

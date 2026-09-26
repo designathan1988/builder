@@ -1712,9 +1712,10 @@
   "feature.settingsAudit": "Organised Settings",
   "command.classes.rename": "Rename class",
   "command.classes.delete": "Delete class",
-  "dialog.classes.delete": "Delete this class from the project and every element using it? You can undo this change.",
+  "dialog.classes.delete": "Delete this class from the project and {count} elements using it? You can undo this change.",
   "status.classes.renamed": "Renamed .{oldName} to .{name}.",
   "status.classes.deleted": "Deleted .{name} from {count} elements.",
   "status.input.invalidType": "Input type \"{type}\" is not an HTML input type.",
-  "status.attribute.reserved": "\"{name}\" is managed by {owner}; use that field."
+  "status.attribute.reserved": "\"{name}\" is managed by {owner}; use that field.",
+  "styles.deleteClassUsedBy": "Delete class used by {count} elements"
 }

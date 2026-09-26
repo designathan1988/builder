@@ -153,6 +153,7 @@ export const elementsFileSchema = z.strictObject({
   elements: z.array(elementSchema).min(1),
   attributes: z.array(attributeSchema).min(1),
   settingsSections: z.array(settingsSectionSchema).min(1),
+  autocompleteTokens: z.array(z.string().min(1)).min(1),
   palette: z.array(paletteGroupSchema).min(1),
   wrappers: z.array(wrapperSchema).min(1),
 });

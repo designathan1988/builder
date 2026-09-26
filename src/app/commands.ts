@@ -10,7 +10,7 @@ import { setEmbedMarkupCommand } from '../core/elements/embed.ts';
 import { setSvgMarkupCommand } from '../core/elements/svg.ts';
 import { removeSwatchCommand, saveSwatchCommand } from '../core/design/colors.ts';
 import { createToken, deleteToken, renameToken, updateToken } from '../core/design/tokens.ts';
-import { applyClassCommand, createClassCommand, detachClassCommand } from '../core/design/classes.ts';
+import { applyClassCommand, createClassCommand, deleteClassCommand, detachClassCommand, renameClassCommand } from '../core/design/classes.ts';
 import { createComponentCommand, detachInstanceCommand, insertInstanceCommand, instanceSelected } from '../core/design/components.ts';
 import { setStyleTarget } from '../editor/inspector/style-target.ts';
 import { setInputTypeCommand, setLabelTargetCommand } from '../core/elements/inputs.ts';
@@ -123,6 +123,8 @@ export const COMMANDS = {
   'classes.create': createClassCommand,
   'classes.apply': applyClassCommand,
   'classes.detach': detachClassCommand,
+  'classes.rename': renameClassCommand,
+  'classes.delete': deleteClassCommand,
   'inspector.setStyleTarget': setStyleTarget,
   'components.create': createComponentCommand,
   'components.insertInstance': insertInstanceCommand,
