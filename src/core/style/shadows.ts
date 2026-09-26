@@ -10,7 +10,7 @@ import { message, registerHandler } from '../commands/registry.ts';
 import { locate, type StructuredLayer } from '../document/model.ts';
 import type { ModelRules, StructureField } from '../document/validate.ts';
 import { structuredCss } from '../render/output.ts';
-import { propertyName, storedLayers, writeStyle } from './set.ts';
+import { propertyName, storedLayers, typedText, writeStyle } from './set.ts';
 
 // the layer Add a shadow appends (spec, "Trigger"): its colour, its lengths, its flags off
 const DEFAULT_COLOUR = 'rgba(15, 23, 42, 0.24)';
@@ -144,7 +144,7 @@ export const setShadowsCommand = registerHandler('style.setShadows', (context, {
   if (fields === undefined) throw new Error(`properties.json: ${property} has no structured value`);
   const primary = state.selection[0] === undefined ? null : locate(state.document, state.selection[0]);
   if (primary === null || edit === null || typeof edit !== 'object' || Array.isArray(edit)) return { kind: 'change' };
-  const refuse = (typed: unknown) => ({ kind: 'refused' as const, message: message('status.value.invalid', { property: propertyName(property, rules), value: typeof typed === 'string' ? typed : JSON.stringify(edit) }) });
+  const refuse = (typed: unknown) => ({ kind: 'refused' as const, message: message('status.value.invalid', { property: propertyName(property, rules), value: typedText(typed ?? edit) }) });
   // Shift with a key of the light pad moves the light ten pixels (the gesture shadow-pad-keys)
   const given = edit as ShadowEdit;
   const stepped = modifier === 'Shift' && given.nudge !== undefined ? { ...given, nudge: { ...(given.nudge.x === undefined ? {} : { x: given.nudge.x * 10 }), ...(given.nudge.y === undefined ? {} : { y: given.nudge.y * 10 }) } } : given;

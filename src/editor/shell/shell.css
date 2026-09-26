@@ -3662,3 +3662,15 @@ button.picker__swatch {
   color: var(--color-text-muted);
   font: var(--fw-body) var(--fs-body) / var(--lh-body) var(--font-ui);
 }
+
+/* a value the field's command refused (spec inspector-number-fields, Problems in Pager 3): the field in the error
+   outline, and the refusal said under it, across the row */
+.field-row.is-invalid .input {
+  outline: 1px solid var(--color-danger);
+}
+
+.field-row__refusal {
+  grid-column: 1 / -1;
+  color: var(--color-danger);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-ui);
+}

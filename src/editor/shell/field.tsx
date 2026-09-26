@@ -76,6 +76,24 @@ export function usePageValues(node: NodeId | null, properties: readonly string[]
   return read !== null && read.node === node ? read.values : null;
 }
 
+// The refusal of the field's own command, said beside the field (spec inspector-number-fields, Problems in Pager 3):
+// the store's last refusal when it was the field's command asked for the field's property, in a short text (what was
+// typed, quoted once), until the field is typed in again.
+function useFieldRefusal(command: CommandId, property: string): { readonly text: string | null; readonly dismiss: () => void } {
+  const t = useT();
+  const refusal = useEditorState((s) => {
+    const r = s.refusal;
+    if (!r || r.command !== command) return null;
+    const args = r.args as { readonly property?: unknown } | null;
+    return args !== null && typeof args === 'object' && args.property === property ? r : null;
+  });
+  const [dismissed, setDismissed] = useState<unknown>(null);
+  if (refusal === null || refusal === dismissed) return { text: null, dismiss: () => undefined };
+  const said = refusal.message;
+  const text = said.key === 'status.value.invalid' && typeof said.params.value === 'string' ? t('field.invalid', { value: said.params.value }) : t(said.key, said.params);
+  return { text, dismiss: () => setDismissed(refusal) };
+}
+
 // The effective value a field's placeholder shows while the element holds none of its own at the edited target,
 // breakpoint and state (spec inspector-provenance-reset, Problems in Pager 4): the value the document gives it along
 // the cascade (another breakpoint or state), else what the page computes (inherited or the default), composed as a
@@ -346,11 +364,12 @@ export function NumberField({ entry, door, property, label }: NumberFieldProps) 
   }, [store, command, property]);
   useRevealed(property, input);
   const scrub = SCRUB === null ? null : <ScrubLabel entry={SCRUB} property={property} shown={base} label={label} ready={available} />;
+  const refused = useFieldRefusal(command, property);
   return (
-    <div className={`field-row${available ? '' : ' is-unavailable'}${stored !== undefined ? ' is-set' : ''}`} data-door={entry.ref} data-args={JSON.stringify({ property })} data-number-field title={door.title}>
+    <div className={`field-row${available ? '' : ' is-unavailable'}${stored !== undefined ? ' is-set' : ''}${refused.text !== null ? ' is-invalid' : ''}`} data-door={entry.ref} data-args={JSON.stringify({ property })} data-number-field title={door.title}>
       {scrub ?? <span className="field-row__label">{label}</span>}
       <span className="input-wrap input-wrap--number">
-        <input ref={input} className="input" disabled={!available} aria-label={label} inputMode="decimal" spellCheck={false} data-key-context={NUMBER_FIELD_CONTEXT} placeholder={mixed ? t('inspector.mixedValue') : effective || undefined} list={tokens.length > 0 ? listId : undefined} />
+        <input ref={input} className="input" disabled={!available} aria-label={label} inputMode="decimal" spellCheck={false} data-key-context={NUMBER_FIELD_CONTEXT} placeholder={mixed ? t('inspector.mixedValue') : effective || undefined} list={tokens.length > 0 ? listId : undefined} aria-invalid={refused.text !== null ? true : undefined} onInput={refused.dismiss} />
         {tokens.length > 0 ? (
           <datalist id={listId}>
             {tokens.map((value) => (
@@ -367,6 +386,7 @@ export function NumberField({ entry, door, property, label }: NumberFieldProps) 
           return <DoorControl key={part.ref} entry={part} args={{ property }} ready={available} />;
         })}
       </span>
+      {refused.text !== null ? <span className="field-row__refusal" role="alert">{refused.text}</span> : null}
     </div>
   );
 }
@@ -489,6 +509,7 @@ export function TextStyleField({
       keep();
     };
   }, [store, command, property]);
+  const refused = useFieldRefusal(entry.command.id, property);
   // a field whose door is a command of its own (the background image: style.setBackgroundImage), not style.set: Enter
   // submits its form and keeps what it holds with that command, since the number field's Enter is style.set's
   const submit = (event: FormEvent) => {
@@ -499,7 +520,7 @@ export function TextStyleField({
     keepText.current(element.value);
   };
   return (
-    <div className={`field-row${available ? '' : ' is-unavailable'}${set ? ' is-set' : ''}`} data-door={entry.ref} data-args={JSON.stringify({ property })} title={door.title}>
+    <div className={`field-row${available ? '' : ' is-unavailable'}${set ? ' is-set' : ''}${refused.text !== null ? ' is-invalid' : ''}`} data-door={entry.ref} data-args={JSON.stringify({ property })} title={door.title}>
       <span className="field-row__label" title={property}>
         {label}
       </span>
@@ -511,10 +532,10 @@ export function TextStyleField({
         ) : null}
         {own ? (
           <form className="input-wrap__form" onSubmit={submit}>
-            <input ref={input} className="input" disabled={!available} aria-label={label} spellCheck={false} placeholder={placeholder} />
+            <input ref={input} className="input" disabled={!available} aria-label={label} spellCheck={false} placeholder={placeholder} aria-invalid={refused.text !== null ? true : undefined} onInput={refused.dismiss} />
           </form>
         ) : (
-          <input ref={input} className="input" disabled={!available} aria-label={label} spellCheck={false} list={suggestions.length > 0 ? listId : undefined} data-key-context={NUMBER_FIELD_CONTEXT} placeholder={placeholder} />
+          <input ref={input} className="input" disabled={!available} aria-label={label} spellCheck={false} list={suggestions.length > 0 ? listId : undefined} data-key-context={NUMBER_FIELD_CONTEXT} placeholder={placeholder} aria-invalid={refused.text !== null ? true : undefined} onInput={refused.dismiss} />
         )}
         {suggestions.length > 0 ? (
           <datalist id={listId}>
@@ -525,6 +546,7 @@ export function TextStyleField({
         ) : null}
         {RESET !== undefined && set ? <DoorControl entry={RESET} args={{ property }} ready={available} /> : null}
       </span>
+      {refused.text !== null ? <span className="field-row__refusal" role="alert">{refused.text}</span> : null}
     </div>
   );
 }

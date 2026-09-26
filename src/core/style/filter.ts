@@ -5,7 +5,7 @@
 import { message, registerHandler } from '../commands/registry.ts';
 import { locate } from '../document/model.ts';
 import { withFunction } from './functions.ts';
-import { propertyName, readValue, storedValue, writeStyle } from './set.ts';
+import { propertyName, readValue, storedValue, typedText, writeStyle } from './set.ts';
 
 // the functions to set (name → argument), or none for none of them
 export function applyFunctions(held: string | undefined, functions: unknown): string | null {
@@ -25,6 +25,6 @@ export const setFilterCommand = registerHandler('style.setFilter', (context, { p
   if (primary === null) return { kind: 'change' };
   const value = applyFunctions(storedValue(primary.node, property, rules), functions);
   const read = value === null ? null : readValue(context, property, value);
-  if (read === null) return { kind: 'refused', message: message('status.value.invalid', { property: propertyName(property, rules), value: value ?? JSON.stringify(functions) }) };
+  if (read === null) return { kind: 'refused', message: message('status.value.invalid', { property: propertyName(property, rules), value: value ?? typedText(functions) }) };
   return writeStyle(context, property, read.css);
 });

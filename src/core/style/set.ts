@@ -161,6 +161,15 @@ export function composedText(property: string, values: readonly string[], rules:
   return new Set(values).size === 1 ? (values[0] ?? '') : values.join(' ');
 }
 
+// What a refused edit typed, as the refusal quotes it once (spec inspector-number-fields, Problems in Pager 3): a text
+// as it is, the values an edit names one after the other (a filter's { blur: "2" } is 2), never JSON.
+export function typedText(typed: unknown): string {
+  if (typeof typed === 'string') return typed;
+  if (Array.isArray(typed)) return typed.map(typedText).filter((t) => t !== '').join(' ');
+  if (typed !== null && typeof typed === 'object') return Object.values(typed).map(typedText).filter((t) => t !== '').join(' ');
+  return typed === undefined || typed === null ? '' : String(typed);
+}
+
 // A value read for a property, and the CSS text it is written as.
 export interface ReadValue {
   readonly value: Value;

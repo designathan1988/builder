@@ -28,7 +28,16 @@ export interface StoreState<Ui> {
   // a dispatch waiting for the person's answer to its command's confirmation (the manifest's `confirmation`); absent
   // or null while none waits
   readonly confirmation?: PendingConfirmation | null;
+  // the refusal the last command met, with what it was asked, so the control that asked says it beside itself (a
+  // field: spec inspector-number-fields, Problems in Pager 3); absent or null once a command runs
+  readonly refusal?: Refusal | null;
   readonly ui: Ui;
+}
+
+export interface Refusal {
+  readonly command: CommandId;
+  readonly args: unknown;
+  readonly message: Message;
 }
 
 // What a confirmation asks and its two answers' labels, from the command's manifest entry, and the dispatch it holds.
@@ -258,7 +267,7 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
       return { status: 'confirm' };
     }
     if (outcome.kind === 'refused') {
-      publish(commit({ ...state, message: outcome.message }, id));
+      publish(commit({ ...state, message: outcome.message, refusal: { command: id, args, message: outcome.message } }, id));
       return { status: 'refused', message: outcome.message };
     }
     if (outcome.kind === 'undo' || outcome.kind === 'redo') {
@@ -300,6 +309,7 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
       history,
       message: outcome.message ?? before.message,
       confirmation: before.confirmation ?? null,
+      refusal: null,
       ui: outcome.ui ?? before.ui,
     };
     const next: StoreState<Ui> = options.followCommand === undefined ? ran : { ...ran, ui: options.followCommand(ran, command) };

@@ -13,7 +13,7 @@ import { locate } from '../document/model.ts';
 import { isSafeSource } from '../text/inline.ts';
 import { imageAddress } from './codecs.ts';
 import { editedGradient, type GradientEdit } from './gradient.ts';
-import { propertyName, readValue, storedValue, writeStyle } from './set.ts';
+import { propertyName, readValue, storedValue, typedText, writeStyle } from './set.ts';
 
 export const setBackgroundImageCommand = registerHandler('style.setBackgroundImage', (context, { property, value, edit }) => {
   if (typeof property !== 'string') throw new Error('style.setBackgroundImage: a door hands the property it edits');
@@ -27,7 +27,8 @@ export const setBackgroundImageCommand = registerHandler('style.setBackgroundIma
     if ('refused' in edited) {
       if (edited.refused === 'noGradient') return { kind: 'refused', message: message('status.gradient.none', { name: primary.node.name }) };
       if (edited.refused === 'minStops') return { kind: 'refused', message: message('status.gradient.minStops') };
-      return { kind: 'refused', message: message('status.value.invalid', { property: propertyName(property, rules), value: JSON.stringify(edit) }) };
+      // what the edit typed, quoted once as typed: not the stop it names (spec inspector-number-fields, Problems in Pager 3)
+      return { kind: 'refused', message: message('status.value.invalid', { property: propertyName(property, rules), value: typedText(Object.fromEntries(Object.entries(edit as Record<string, unknown>).filter(([name]) => name !== 'stop'))) }) };
     }
     text = edited.text;
   } else {
