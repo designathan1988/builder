@@ -844,3 +844,14 @@ Fragile / worth knowing:
   fixed coordinates (the inspector's overflow cut the State menu). The selector bar names the active state and
   breakpoint (it read the base ones: fixed with a test and its tooth).
 - Block check: .cache/logs/check-group11-093700.log: 1317 passed, 8 failed (findings), unit 1 (finding 49).
+
+## 2026-09-26: decisions moved out of PROGRESS.md
+
+- Quick panel: its chip sits beside the selection's label (DESIGN "Canvas"), so it covers no more than the label;
+  the open panel goes to the side with the most free space. SVG: the element's name is "SVG" (a "/" broke node paths);
+  its viewBox is its px size; shapes keep geometry attributes (elements.json). Saved colours live in the document
+  (`swatches`, diff path "/@swatches"), recent ones in the preferences; saving joins the picker's session.
+- A field's Reset leaves the Tab order while there is nothing to reset. plants.ts: door-writes-shorthand's door runs in a
+  quick-panel scenario. Scenarios name no vendor-prefixed property (spec tests prove a recipe's).
+- Export stylesheet: a blank line parts every rule, the :root and class blocks too. A class target returns to Element
+  on a new selection; a field of a kind (list, table, form, media) shows only while every selected element is of it.
