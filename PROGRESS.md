@@ -8,6 +8,7 @@
 - Previous Settings layout: one flat attribute list; new layout: manifest-driven General, Link, Image, Accessibility, SEO and Attributes sections.
 - 7.1a delivered as `5343759` on origin/codex: `settings-organized.spec.ts` and its UI tooth passed, plus 32+36 nearby scenarios and four-combination real use; logs in `.cache/logs/`. The class-registry write was deferred to 7.1c so the old Classes scenario stays green.
 - 7.1b spec correction: page-properties P3 formerly accepted any language-shaped tag; now a known BCP 47 language or valid private-use tag is required, so `banana` is refused beside Page language.
+- 7.1b verified: type-specific refusals and local errors, type-switch loss warning, native date/colour/range controls; 6 focused browser tests, 9 existing scenarios, 16 unit tests and three direct document-diff teeth passed. In-app browser Desktop 100%/Phone Fit, undo/redo/reload/Preview, ZIP and file URL render, console 0: `.cache/logs/uso-7.1b-20260926-1622/`. Broad `npm run check` is deferred to the block-end suite by the user's latest order.
 
 At most 60 lines: state, the user's pending decisions, open findings. History and proofs: `docs/history.md`.
 

@@ -1,6 +1,10 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
 import { control, runs } from './door.ts';
+import { unzip } from '../../tools/runner/unzip.ts';
 
 const INSERT = 'workspace.setPanelOpen#toolbar-activity-bar-insert';
 const TILE = 'element.insert#elements-tile';
@@ -13,6 +17,7 @@ const STEP = 'element.setAttribute#inspector-step';
 const PLACEHOLDER = 'element.setAttribute#inspector-placeholder';
 const UNDO = 'history.undo#toolbar-top-bar';
 const PAGE = 'page.openProperties#inspector-page-properties-button';
+const EXPORT = 'project.export#toolbar-top-bar-export';
 
 interface Node { readonly type: string; readonly attributes: Readonly<Record<string, unknown>>; readonly children: readonly Node[] }
 const current = (page: Page) => page.evaluate(() => {
@@ -28,7 +33,7 @@ async function openInput(page: Page, entry: string): Promise<void> {
 }
 
 async function typeInto(page: Page, ref: string, value: string): Promise<void> {
-  const input = control(page, ref).locator('input');
+  const input = control(page, ref).locator('input.input');
   await input.click();
   await page.keyboard.press('Control+A');
   await page.keyboard.type(value);
@@ -117,4 +122,40 @@ test('progress, meter, textarea and canvas keep impossible numbers out of the do
   await insertNext(page, 'canvas');
   await rejects(page, 'element.setAttribute#inspector-canvas-width', '-5');
   await rejects(page, 'element.setAttribute#inspector-canvas-height', '99999999');
+});
+
+test('valid typed media values survive ZIP export and render from the exported index file', runs(INSERT, TILE, SETTINGS, PAGE, VALUE, EXPORT), async ({ page, context }) => {
+  await openInput(page, 'input-date');
+  await typeInto(page, VALUE, '2026-09-25');
+  await insertNext(page, 'input-color');
+  await typeInto(page, VALUE, '#34699d');
+  await insertNext(page, 'input-range');
+  await typeInto(page, VALUE, '50');
+
+  const download = page.waitForEvent('download');
+  await control(page, EXPORT).click();
+  const archive = fs.readFileSync(await (await download).path());
+  const files = unzip(archive);
+  const html = files.get('index.html')?.toString('utf8');
+  const css = files.get('css/styles.css')?.toString('utf8');
+  if (html === undefined || css === undefined) throw new Error('The site ZIP lacks index.html or css/styles.css');
+  const inputs = html.match(/<input[^>]*>/g) ?? [];
+  expect(inputs).toHaveLength(3);
+  expect(inputs.find((tag) => tag.includes('type="date"'))).toContain('value="2026-09-25"');
+  expect(inputs.find((tag) => tag.includes('type="color"'))).toContain('value="#34699d"');
+  expect(inputs.find((tag) => tag.includes('type="range"'))).toContain('value="50"');
+  expect(html).not.toContain('style=');
+
+  const directory = path.resolve('.cache/scratch/export-7.1b');
+  fs.mkdirSync(path.join(directory, 'css'), { recursive: true });
+  fs.writeFileSync(path.join(directory, 'site.zip'), archive);
+  fs.writeFileSync(path.join(directory, 'index.html'), html);
+  fs.writeFileSync(path.join(directory, 'css/styles.css'), css);
+  const exported = await context.newPage();
+  await exported.goto(pathToFileURL(path.join(directory, 'index.html')).href);
+  await expect(exported.locator('input[type="date"]')).toHaveValue('2026-09-25');
+  await expect(exported.locator('input[type="color"]')).toHaveValue('#34699d');
+  await expect(exported.locator('input[type="range"]')).toHaveValue('50');
+  await exported.screenshot({ path: '.cache/logs/uso-7.1b-20260926-1622/exported-site.png' });
+  await exported.close();
 });
