@@ -9,7 +9,7 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
   panel-resize), nesting-grammar-structure (36), layers-row-colours (no label colour
   tokens), hover-measure (46). Not built: Alt+drag duplicates, a line outside the stage refused.
 - Last check (12): 1333 passed, 9 failed (findings since decided). Group 13: dock-toggles, workbench-panel,
-  command-bar built. Next: the user's audit prompt, blocks 1-9 (.memory/audit-checklist.md), then group 13 on.
+  command-bar built. Now: audit blocks 1-9 (.memory/audit-checklist.md); full checks wait for each block's end.
 
 ## Decisions (small ambiguities and the user's corrections)
 
@@ -34,6 +34,7 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
   reason (a door's reason is its predicate's refusal); distribute-needs-three-elements retired for
   distribute-availability.spec; workspace-doors tests View › Explorer working. Decision: Help keeps its one item
   disabled (door rule) until shortcuts-panel (group 13, mine); Paste waits for item 3.8.
+- A3.38 text-edit-inline P4: emptied text keeps a min height, dashed mark, Layers "empty" (image part: no repro).
 
 ## Open findings
 

@@ -250,6 +250,13 @@
       "note": "Editor-only minimum height of an empty container on the canvas; never exported."
     },
     {
+      "id": "canvas.emptyTextMinHeight",
+      "value": 24,
+      "unit": "css-px",
+      "source": "spec/behavior/text-edit-inline.md",
+      "note": "Editor-only minimum height of a text element whose text is empty (a heading cleared), so it can be seen and pointed at (the audit's A3.38); never exported."
+    },
+    {
       "id": "drop.autoscrollZone",
       "value": 56,
       "unit": "screen-px",

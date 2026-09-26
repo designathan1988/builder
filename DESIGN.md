@@ -129,6 +129,8 @@ Face text. A control shows its door's label, or, when the drawing shows a shorte
 
 ## Canvas
 
+On the canvas only, never exported: a text element whose text is empty keeps a minimum height (canvas.emptyTextMinHeight) and a dashed outline in its own colour (spec text-edit-inline, Problems in Pager 4; the audit's A3.38).
+
 The page renders inside an iframe scaled with CSS `zoom`. The frame sits 24 px from the left ruler; rulers (the `rulers` component, the top band) show page pixels, highlight the primary selection's extent (the `ruler-selection` component) and mark the pointer's place. Outlines draw a dashed box around every element (the first, the page's, is the `canvas-outlines` component); Zones tint every container's padding and hatch an empty container's content as a drop area (the first band is the `canvas-zones` component). Both are drawn over the page, never in it. The layout grids (column, row and dot, `Ctrl+'` and the canvas tools) are translucent bands and dots over the page, in the chrome too; their first column, first row and dots are the `grid-columns`, `grid-rows` and `grid-dots` components.
 
 **Breakpoints belong to the page.** A breakpoint is the viewport width. Its tabs are attached to the top of the frame, ordered along the cascade from the base breakpoint, as `properties.json` lists them (desktop-first: Desktop 1440 "base", Laptop 1180, Tablet 834, Phone 390). When a breakpoint other than the base is active, the frame gets the breakpoint outline (`--color-mode-breakpoint`) and a band under the tabs reads "Tablet · 834 px — edits apply to Tablet" (`canvas.breakpointWarning`). The inspector shows the active breakpoint read-only, and values that come from another breakpoint wear the breakpoint origin colour.

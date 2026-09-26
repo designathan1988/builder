@@ -184,6 +184,18 @@ function RowDetails({ node }: { readonly node: DocNode }) {
   );
 }
 
+// A row of a text element whose text is empty says so beside its name (spec text-edit-inline, Problems in Pager 4):
+// the canvas draws it with a minimum height, the Layers row names it empty.
+const TEXT_TYPES: ReadonlySet<string> = new Set(manifest.elements.elements.filter((e) => e.content === 'text').map((e) => e.id));
+function EmptyMark({ node }: { readonly node: DocNode }) {
+  const t = useT();
+  return TEXT_TYPES.has(node.type) && (node.text ?? '') === '' ? (
+    <span className="row__meta" data-region="layers-row-empty">
+      {t('layers.empty')}
+    </span>
+  ) : null;
+}
+
 function LayersRow({ node, depth, view }: { readonly node: DocNode; readonly depth: number; readonly view: SearchView | null }) {
   const door = useDoor(LAYERS_SELECT, { target: node.id });
   const rename = useDoor(LAYERS_NAME);
@@ -278,6 +290,7 @@ function LayersRow({ node, depth, view }: { readonly node: DocNode; readonly dep
           </span>
         )}
         <RowDetails node={node} />
+        <EmptyMark node={node} />
         <span className="row__actions">
           {LAYERS_BUTTONS.map((b) => (
             <DoorControl key={b.ref} entry={b} args={{ target: node.id }} />

@@ -894,6 +894,7 @@
   "keyContext.toolbar": "In a toolbar",
   "language.en": "English",
   "language.ptBR": "Português (Brasil)",
+  "layers.empty": "empty",
   "layers.collapseAll": "Collapse every branch",
   "layers.expandAll": "Expand every branch",
   "layers.key.nextRow": "Next row",

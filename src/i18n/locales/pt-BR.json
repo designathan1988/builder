@@ -894,6 +894,7 @@
   "keyContext.toolbar": "Em uma barra de ferramentas",
   "language.en": "English",
   "language.ptBR": "Português (Brasil)",
+  "layers.empty": "vazio",
   "layers.collapseAll": "Recolher todos os ramos",
   "layers.expandAll": "Expandir todos os ramos",
   "layers.key.nextRow": "Próxima linha",

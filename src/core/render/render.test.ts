@@ -7,7 +7,7 @@ import type { NodeId } from '../../generated/commands.ts';
 import { manifest } from '../../manifest/runtime.ts';
 import type { DocNode, DocumentJson } from '../document/model.ts';
 import { applyPatches, type Patch } from '../history/transaction.ts';
-import { HIDDEN_ATTRIBUTE, NODE_ATTRIBUTE, NODE_STYLE_ATTRIBUTE, PageRenderer, editorCss, nodeCss, renderModelFromManifest, type RenderModel } from './render.ts';
+import { EMPTY_TEXT_ATTRIBUTE, HIDDEN_ATTRIBUTE, NODE_ATTRIBUTE, NODE_STYLE_ATTRIBUTE, PageRenderer, editorCss, nodeCss, renderModelFromManifest, type RenderModel } from './render.ts';
 
 const model = renderModelFromManifest(manifest.elements, manifest.properties, manifest.interactions);
 const node = (id: string, type: string, tag: string | null, fields: Partial<DocNode> = {}): DocNode => ({ id: id as NodeId, type: type as DocNode['type'], name: id, tag, attributes: {}, classes: [], styles: {}, text: null, children: [], ...fields });
@@ -291,6 +291,17 @@ describe('the renderer (src/core/render/render.ts)', () => {
     // a hidden container carries the mark alone: its subtree goes with it
     const { target: section } = check(doc, [{ op: 'add', path: at('children', 0, 'hidden'), value: true }]);
     expect([...section.querySelectorAll(`[${HIDDEN_ATTRIBUTE}]`)].map((e) => e.getAttribute('data-node'))).toEqual(['hero']);
+  });
+
+  // spec text-edit-inline, Problems in Pager 4 (the audit's A3.38): an empty text is marked for the editor's style, and
+  // unmarked once it holds text again; the incremental render stays the same as a fresh one (check)
+  it('marks a text element whose text is emptied, and unmarks it when it holds text again', () => {
+    const { target, after } = check(doc, [{ op: 'replace', path: at('children', 0, 'children', 1, 'text'), value: '' }]);
+    expect(target.querySelector('[data-node="intro"]')?.getAttribute(EMPTY_TEXT_ATTRIBUTE)).toBe('');
+    expect(target.querySelectorAll(`[${EMPTY_TEXT_ATTRIBUTE}]`).length).toBe(1);
+    expect(editorCss(model)).toContain(`:where([${EMPTY_TEXT_ATTRIBUTE}]) { min-height: ${model.emptyTextMinHeight}px;`);
+    const { target: filled } = check(after, [{ op: 'replace', path: at('children', 0, 'children', 1, 'text'), value: 'Back' }]);
+    expect(filled.querySelectorAll(`[${EMPTY_TEXT_ATTRIBUTE}]`).length).toBe(0);
   });
 
   it('writes the settings of the page on its <html>, never on <body>, as patches set, change and remove them', () => {

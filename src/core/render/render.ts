@@ -58,6 +58,8 @@ export const NODE_STYLE_ATTRIBUTE = 'data-node-style';
 // the editor-only marks: an element of a container, a hidden node's element, and the editor's own style element
 export const CONTAINER_ATTRIBUTE = 'data-container';
 export const HIDDEN_ATTRIBUTE = 'data-hidden';
+// editor-only: a text element whose text is empty (the audit's A3.38)
+export const EMPTY_TEXT_ATTRIBUTE = 'data-empty-text';
 export const EDITOR_STYLE_ATTRIBUTE = 'data-editor-style';
 // the marks of the text edited in place: editable as plain text, in the key context the editor names
 export const EDITABLE_ATTRIBUTE = 'contenteditable';
@@ -83,22 +85,26 @@ const IMAGE_PLACEHOLDER = `data:image/svg+xml,${encodeURIComponent(
 export const EDITABLE_VALUE = 'plaintext-only';
 export const KEY_CONTEXT_ATTRIBUTE = 'data-key-context';
 
-// The canvas's model: the output's, and the editor-only minimum height of an empty container, in CSS px
-// (canvas.emptyContainerMinHeight)
+// The canvas's model: the output's, and the editor-only minimum heights of an empty container and of an empty text,
+// in CSS px (canvas.emptyContainerMinHeight, canvas.emptyTextMinHeight)
 export interface RenderModel extends OutputModel {
   readonly emptyContainerMinHeight: number;
+  readonly emptyTextMinHeight: number;
 }
 
 export function renderModelFromManifest(elements: ElementsFile, properties: PropertiesFile, interactions: InteractionsFile): RenderModel {
   const minHeight = interactions.constants.find((c) => c.id === 'canvas.emptyContainerMinHeight')?.value;
   if (typeof minHeight !== 'number') throw new Error('the manifest has no number canvas.emptyContainerMinHeight');
-  return { ...outputModelFromManifest(elements, properties), emptyContainerMinHeight: minHeight };
+  const textMinHeight = interactions.constants.find((c) => c.id === 'canvas.emptyTextMinHeight')?.value;
+  if (typeof textMinHeight !== 'number') throw new Error('the manifest has no number canvas.emptyTextMinHeight');
+  return { ...outputModelFromManifest(elements, properties), emptyContainerMinHeight: minHeight, emptyTextMinHeight: textMinHeight };
 }
 
 // The editor's own CSS in the page: an empty container keeps a visible minimum height; a hidden node's element is
-// not drawn, whatever its own rules say.
+// not drawn, whatever its own rules say; an empty text keeps a minimum height and a dashed outline in its own colour
+// (the audit's A3.38), weightless (:where) so the node's own rules win.
 export function editorCss(model: RenderModel): string {
-  return `:where([${CONTAINER_ATTRIBUTE}]:empty) { min-height: ${model.emptyContainerMinHeight}px; }\n[${HIDDEN_ATTRIBUTE}] { display: none !important; }\n[${EMBED_FRAME_ATTRIBUTE}] { display: block; width: 100%; min-height: ${model.emptyContainerMinHeight}px; border: 0; pointer-events: none; }`;
+  return `:where([${CONTAINER_ATTRIBUTE}]:empty) { min-height: ${model.emptyContainerMinHeight}px; }\n:where([${EMPTY_TEXT_ATTRIBUTE}]) { min-height: ${model.emptyTextMinHeight}px; outline: 1px dashed currentColor; outline-offset: -1px; }\n[${HIDDEN_ATTRIBUTE}] { display: none !important; }\n[${EMBED_FRAME_ATTRIBUTE}] { display: block; width: 100%; min-height: ${model.emptyContainerMinHeight}px; border: 0; pointer-events: none; }`;
 }
 
 // The selector of a node's element: its id quoted as a CSS string.
@@ -422,7 +428,9 @@ export class PageRenderer {
   // The page's nodes of runs: a text node for each line of a string with a <br> between lines, an element for each mark.
   private runNodes(runs: readonly InlineRun[]): Node[] {
     return runs.flatMap((run): Node[] => {
-      if (typeof run === 'string') return run.split('\n').flatMap((line, i) => (i === 0 ? [this.target.createTextNode(line)] : [this.target.createElement('br'), this.target.createTextNode(line)]));
+      // an empty line makes no text node, so an emptied text leaves its element as empty as a fresh one
+      const text = (line: string): Node[] => (line === '' ? [] : [this.target.createTextNode(line)]);
+      if (typeof run === 'string') return run.split('\n').flatMap((line, i) => (i === 0 ? text(line) : [this.target.createElement('br'), ...text(line)]));
       const element = this.target.createElement(run.tag);
       if (run.tag === 'a') element.setAttribute('href', run.href);
       element.append(...this.runNodes(run.children));
@@ -558,6 +566,8 @@ export class PageRenderer {
     if (tag === 'iframe') wanted.set('sandbox', '');
     if (this.revealed.has(node.id)) wanted.set('open', '');
     if (tag === 'img' && !wanted.has('src')) wanted.set('src', IMAGE_PLACEHOLDER);
+    // a text element with no text (editor-only, the audit's A3.38), but the one being edited in place
+    if (!edited && this.model.elements.get(node.type)?.content === 'text' && (node.text ?? '') === '') wanted.set(EMPTY_TEXT_ATTRIBUTE, '');
     writeAttributes(element, wanted);
     if (root) writeAttributes(this.target.documentElement, page);
     if (tag === SVG_TAG) this.drawSvgMarkup(element, node);

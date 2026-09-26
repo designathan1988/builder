@@ -70,7 +70,8 @@ test('with an element without children, or the page root, Remove wrapper is disa
   await clickNode(page, 'n-intro');
   await openMenu(page, 'arrange');
   await expect(item()).toHaveAttribute('aria-disabled', 'true');
-  await expect(item()).toHaveAttribute('title', /Only an element with children, inside a parent, can lose its wrapper\./);
+  // the reason is the predicate's own, naming the element (the audit's A3.23: a door's reason is its predicate's refusal)
+  await expect(item()).toHaveAttribute('title', 'Remove wrapper — Intro has no children to lift.');
   await item().click({ force: true });
   await page.keyboard.press('Escape');
   expect(await read(page)).toEqual({ ...before, selection: ['n-intro'] });

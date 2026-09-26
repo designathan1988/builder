@@ -56,10 +56,13 @@ test('the Theme and Language items are one choice of a set and say which is chos
   await expect(page.locator(door('view.zoomFit#menu-zoom'))).toHaveAttribute('role', 'menuitem');
   await page.keyboard.press('Escape');
 
-  // a command item of the same menu bar is no choice
+  // a command item of the same menu bar is no choice; a toggle of it says what it shows (the audit's A3.23: the left
+  // dock is shown, so its toggle is checked)
   await openMenu(page, 'view');
-  await expect(page.locator(door('workspace.toggleLeftDock#menu-view'))).toHaveAttribute('role', 'menuitem');
-  await expect(page.locator(door('workspace.toggleLeftDock#menu-view'))).not.toHaveAttribute('aria-checked', /.*/);
+  await expect(page.locator(door('workspace.collapseDocks#menu-view'))).toHaveAttribute('role', 'menuitem');
+  await expect(page.locator(door('workspace.collapseDocks#menu-view'))).not.toHaveAttribute('aria-checked', /.*/);
+  await expect(page.locator(door('workspace.toggleLeftDock#menu-view'))).toHaveAttribute('role', 'menuitemcheckbox');
+  await expect(page.locator(door('workspace.toggleLeftDock#menu-view'))).toHaveAttribute('aria-checked', 'true');
 });
 
 // A control looks like it can run exactly when it can (brief "a aplicação completa": no enabled-looking control that
