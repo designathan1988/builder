@@ -1,11 +1,15 @@
 // A door whose only effect is to open a panel without its content is disabled with "not available yet" (CLAUDE.md;
 // the user's decision 2 as the user corrected it): Help › Keyboard shortcuts and View › Checks. The doors of the panels
 // that exist (the sidebar's Explorer with Layers, Insert and Styles, the inspector, the dock with its Timeline, the
-// canvas tools) stay enabled.
+// canvas tools) stay enabled while their feature is registered, and wait with "not available yet" until it is (the door
+// rule, the user's order of 2026-09-26, item 3: View › Explorer and View › Timeline wait for explorer-pages and
+// timeline-animations).
 import fs from 'node:fs';
 import path from 'node:path';
 import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
+import { isFeatureBuilt } from '../../src/app/features.ts';
+import type { FeatureId } from '../../src/generated/ids.ts';
 
 const EMPTY = ['checks', 'shortcuts'];
 const BUILT = ['explorer', 'elements', 'variables', 'layers', 'inspector', 'workbench', 'timeline', 'canvas-tools'];
@@ -13,16 +17,17 @@ const BUILT = ['explorer', 'elements', 'variables', 'layers', 'inspector', 'work
 interface Door {
   id: string;
   kind: string;
+  feature: string;
   menu?: string;
   args: Record<string, unknown>;
 }
-const panelDoors: { ref: string; kind: string; menu: string | null; panel: string }[] = [];
+const panelDoors: { ref: string; kind: string; menu: string | null; panel: string; feature: string }[] = [];
 for (const file of fs.readdirSync('manifest/commands')) {
   const { commands } = JSON.parse(fs.readFileSync(path.join('manifest/commands', file), 'utf8')) as { commands: { id: string; entryPoints: Door[] }[] };
   for (const c of commands) {
     if (c.id !== 'workspace.setPanelOpen') continue;
     for (const d of c.entryPoints) {
-      if (typeof d.args.panel === 'string' && d.args.open !== 'close' && (d.kind === 'menu' || d.kind === 'toolbar')) panelDoors.push({ ref: `${c.id}#${d.id}`, kind: d.kind, menu: d.menu ?? null, panel: d.args.panel });
+      if (typeof d.args.panel === 'string' && d.args.open !== 'close' && (d.kind === 'menu' || d.kind === 'toolbar')) panelDoors.push({ ref: `${c.id}#${d.id}`, kind: d.kind, menu: d.menu ?? null, panel: d.args.panel, feature: d.feature });
     }
   }
 }
@@ -79,11 +84,18 @@ test('a door that only opens a panel without its content is disabled with "not a
   }
 });
 
-test('the doors of the panels that exist stay enabled', async ({ page }) => {
+test('the doors of the panels that exist are enabled exactly while their feature is registered', async ({ page }) => {
   const built = panelDoors.filter((d) => BUILT.includes(d.panel));
   expect(built.length).toBeGreaterThan(8);
+  // some wait for their feature (the door rule), most are enabled
+  expect(built.some((d) => isFeatureBuilt(d.feature as FeatureId))).toBe(true);
+  expect(built.some((d) => !isFeatureBuilt(d.feature as FeatureId))).toBe(true);
   for (const door of built) {
     const button = await control(page, door);
-    await expect(button, door.ref).not.toHaveAttribute('aria-disabled', 'true');
+    if (isFeatureBuilt(door.feature as FeatureId)) await expect(button, door.ref).not.toHaveAttribute('aria-disabled', 'true');
+    else {
+      await expect(button, door.ref).toHaveAttribute('aria-disabled', 'true');
+      await expect(button, door.ref).toHaveAttribute('title', /not available yet/);
+    }
   }
 });

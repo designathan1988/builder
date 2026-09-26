@@ -55,7 +55,8 @@ for (const ref of ['workspace.setPanelOpen#toolbar-activity-bar-styles', 'worksp
     expect(view?.x).toBeCloseTo(sidebar?.x ?? -1, 0);
     await expect(page.locator('[data-region="explorer-layers"]')).toHaveCount(0);
     const drawn = await drawnIn(page, 'styles');
-    expect(drawn.map((d) => d.ref)).toEqual(['tokens.create#variables-add']);
+    // the view's title draws the panel header's Close (dock-toggles), then New variable
+    expect(drawn.map((d) => d.ref)).toEqual(['workspace.setPanelOpen#panel-header-close', 'tokens.create#variables-add']);
     expect(drawn.filter((d) => d.disabled || d.title.includes('not available yet')).map((d) => d.ref)).toEqual([]);
   });
 }
