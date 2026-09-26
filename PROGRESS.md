@@ -35,7 +35,9 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 - A1.1 spec zoom-wheel-pan P2 "Space pans ... no text field has focus" -> also not a control the keyboard focused
   whose Space runs (palette tile); a click-focused control never keeps Space. elements-lists spec + 8 scenarios.
 - A3.41 decision: "every preference change reports" = settings chosen in menus/switches; folding sections, groups or
-  branches is layout state and stays silent. Truncation CSS waits for shell.css (reserved by CODEX for 7.1).
+  branches is layout state and stays silent; a long message is cut, the other status items keep their size.
+- A3.32 spec inspector-number-fields + P4: a bare number takes the field's default unit (was: the unit held; set.ts,
+  set.test and number-field.test updated). Spacing-box Escape pending: inspector.tsx reserved by CODEX.
 
 ## Open findings
 

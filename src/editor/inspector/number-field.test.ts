@@ -42,13 +42,19 @@ describe('the number fields', () => {
     expect(step({ direction: 'down', modifier: 'Alt' })).toBe('239.9px');
     expect(step({ size: 'page' })).toBe('250px');
     expect(step({ size: 'page', direction: 'down' })).toBe('230px');
-    // a bare number typed and not kept yet takes the unit of the value held
-    expect(written(stepField.run(context(DOC({ styles: { desktop: { base: { width: '10%' } } } })), { property: width, value: '30', direction: 'up', size: 'step' }))).toBe('31%');
+    // a bare number typed and not kept yet takes the field's default unit, never the unit held (Problems in Pager 4)
+    expect(written(stepField.run(context(DOC({ styles: { desktop: { base: { width: '10%' } } } })), { property: width, value: '30', direction: 'up', size: 'step' }))).toBe('31px');
+    // a font-relative unit steps by numberField.fineStep, with the factors (Problems in Pager 4)
+    expect(step({ value: '2em' })).toBe('2.1em');
+    expect(step({ value: '2rem', direction: 'down', modifier: 'Shift' })).toBe('1rem');
   });
 
-  it('step nothing in a field that holds no length', () => {
-    expect(stepField.run(context(), { property: width, value: 'auto', direction: 'up', size: 'step' })).toEqual({ kind: 'change' });
-    expect(stepField.run(context(), { property: width, value: 'abc', direction: 'up', size: 'step' })).toEqual({ kind: 'change' });
+  it('say that a field holding no number to step steps nothing, and step nothing in an empty one', () => {
+    for (const value of ['auto', 'abc', 'calc(100% - 20px)']) {
+      const outcome = stepField.run(context(), { property: width, value, direction: 'up', size: 'step' });
+      expect(outcome).toMatchObject({ kind: 'refused', message: { key: 'status.value.notSteppable', params: { value } } });
+    }
+    expect(stepField.run(context(), { property: width, value: '', direction: 'up', size: 'step' })).toEqual({ kind: 'change' });
   });
 
   it('scrub one step per numberField.scrubPixelsPerStep, with the factors, and stop at zero where negatives are refused', () => {
@@ -57,6 +63,8 @@ describe('the number fields', () => {
     expect(scrub(20, 'Shift')).toBe('340px');
     expect(scrub(20, 'Alt')).toBe('241px');
     expect(scrub(-600)).toBe('0px');
+    // 40 px of scrub on 3em is 20 steps of numberField.fineStep: 5em, never 23em (Problems in Pager 4)
+    expect(written(scrubField.run(context(), { property: width, value: '3em', distance: 40 }))).toBe('5em');
   });
 
   it('set a keyword, convert a length between absolute units, and refuse a unit it cannot convert to', () => {

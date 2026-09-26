@@ -702,6 +702,10 @@ export function codecOf(id: string): Codec | null {
   return CODECS.get(id) ?? null;
 }
 
+// The units a number field steps by a tenth (numberField.fineStep; spec inspector-number-fields, Problems in Pager 4):
+// the font-relative ones (CSS Values 4, "Font-relative lengths"), of which one is a large jump.
+export const FINE_STEP_UNITS: ReadonlySet<string> = new Set(['em', 'rem', 'ex', 'rex', 'ch', 'rch', 'lh', 'rlh', 'cap', 'rcap', 'ic', 'ric']);
+
 // How many CSS pixels one of each absolute length unit is (CSS Values 4, "Absolute lengths"): the only units a length
 // converts between without measuring the page.
 const PIXELS_PER: Readonly<Record<string, number>> = { px: 1, in: 96, cm: 96 / 2.54, mm: 96 / 25.4, q: 96 / 101.6, pt: 96 / 72, pc: 16 };

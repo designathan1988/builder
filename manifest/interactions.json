@@ -499,6 +499,20 @@
       "note": "A scrub starts on the press, with no dead zone."
     },
     {
+      "id": "numberField.fineStep",
+      "value": 0.1,
+      "unit": "count",
+      "source": "spec/behavior/inspector-number-fields.md",
+      "note": "A step or a scrub step of a font-relative unit (em, rem, ex, ch, lh): one of them is a large jump (the audit's A3.32)."
+    },
+    {
+      "id": "numberField.stepBurstWindow",
+      "value": 1000,
+      "unit": "ms",
+      "source": "spec/behavior/inspector-number-fields.md",
+      "note": "Arrow presses on the same field and property, each within this time of the previous one, are one undo step (the audit's A3.32; the same window as history.nudgeBurstWindow)."
+    },
+    {
       "id": "colorPicker.sliderStep",
       "value": 1,
       "unit": "percent",

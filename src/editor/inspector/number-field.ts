@@ -5,7 +5,9 @@
 // transaction, the status bar naming the value.
 //  - field.step: ArrowUp/ArrowDown and the step buttons step by numberField.step, PageUp/PageDown by
 //    numberField.pageStep; Shift multiplies a step by numberField.shiftFactor, Alt by numberField.altFactor (the
-//    gesture number-field-keys, interactions.json). One undo step each.
+//    gesture number-field-keys, interactions.json). Presses in a row on the same field and property, each within
+//    numberField.stepBurstWindow of the previous one, are one undo step (the manifest's history.coalesce; Problems
+//    in Pager 4).
 //  - field.scrub: the label dragged horizontally, round(distance / numberField.scrubPixelsPerStep) steps from the value
 //    the field held at the press, with the same multipliers (the gesture number-scrub); the pointer owner runs the
 //    whole drag as one gesture, so a scrub is one undo step, and Escape cancels it (drag.cancel).
@@ -15,10 +17,12 @@
 //  - field.cancel: Escape in the field puts back the value the document holds (the field shows it again after every
 //    message); nothing is written.
 // A step or a scrub never takes a length below zero where the browser refuses a negative value (Width, Height: the
-// CSS support port), and a field that holds no length (a keyword, an expression, nothing it can read) steps nothing.
+// CSS support port). A font-relative unit (em, rem…: FINE_STEP_UNITS of the codecs) moves by numberField.fineStep a
+// step, any other by the step itself; a field that holds no number to step (a keyword, calc()) says so
+// (status.value.notSteppable) and writes nothing; an empty field steps nothing (Problems in Pager 4).
 import { message, registerHandler, type HandlerContext, type Outcome } from '../../core/commands/registry.ts';
 import { locate } from '../../core/document/model.ts';
-import { convertLength } from '../../core/style/codecs.ts';
+import { convertLength, FINE_STEP_UNITS } from '../../core/style/codecs.ts';
 import { propertyName, readValue, writeStyle, writeValue } from '../../core/style/set.ts';
 import type { ConstantId } from '../../generated/ids.ts';
 import { manifest } from '../../manifest/runtime.ts';
@@ -33,6 +37,7 @@ const PAGE_STEP = constant('numberField.pageStep');
 const SHIFT_FACTOR = constant('numberField.shiftFactor');
 const ALT_FACTOR = constant('numberField.altFactor');
 const SCRUB_PIXELS_PER_STEP = constant('numberField.scrubPixelsPerStep');
+const FINE_STEP = constant('numberField.fineStep');
 
 // The factor the key held with a step or a scrub gives it: Shift ×10, Alt ×0.1, none ×1.
 export function factorOf(modifier: 'Shift' | 'Alt' | undefined): number {
@@ -42,10 +47,11 @@ export function factorOf(modifier: 'Shift' | 'Alt' | undefined): number {
 // The length the field holds moved by `delta` of its own unit, written into the selection; nothing for a field that
 // holds no length. Below zero it stops at zero where the browser takes no negative value.
 function moved<Ui>(context: HandlerContext<Ui>, property: string, value: string, delta: number): Outcome<Ui> {
+  if (value.trim() === '') return { kind: 'change' };
   const read = readValue(context, property, value);
-  if (read === null || read.value.kind !== 'length') return { kind: 'change' };
+  if (read === null || read.value.kind !== 'length') return { kind: 'refused', message: message('status.value.notSteppable', { property: propertyName(property, context.rules), value: value.trim() }) };
   const unit = read.value.unit;
-  const next = read.value.number + delta;
+  const next = read.value.number + delta * (FINE_STEP_UNITS.has(unit) ? FINE_STEP : 1);
   const nextCss = writeValue(property, { kind: 'length', number: next, unit }, context.rules);
   const floor = writeValue(property, { kind: 'length', number: 0, unit }, context.rules);
   const css = nextCss !== null && next < 0 && !context.css.supports(property, nextCss) ? floor : nextCss;

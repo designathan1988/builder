@@ -89,10 +89,11 @@ describe('style.set', () => {
     expect(both.message?.key).toBe('status.style.setMany');
   });
 
-  it('gives a bare number the unit of the value the primary element holds', () => {
+  // spec inspector-number-fields, Problems in Pager 4 (the audit's A3.32): the field's default unit, never the one held
+  it('gives a bare number the field\'s default unit, px, even when the element holds another unit', () => {
     const outcome = run(doc({ styles: { desktop: { base: { width: '50%' } } } }), ['Actions'], '30');
     if (outcome.kind !== 'change') throw new Error(outcome.kind);
-    expect(outcome.patches?.[0]).toMatchObject({ value: { desktop: { base: { width: '30%' } } } });
+    expect(outcome.patches?.[0]).toMatchObject({ value: { desktop: { base: { width: '30px' } } } });
   });
 
   it('keeps the other declarations and records nothing for the value already held', () => {

@@ -9149,12 +9149,16 @@
       },
       "refusals": [
         "status.locked.edit",
-        "status.locked.byAncestor"
+        "status.locked.byAncestor",
+      "status.value.notSteppable"
       ],
       "confirmation": null,
       "history": {
         "undoable": true,
-        "coalesce": "none",
+        "coalesce": {
+          "same": "target-and-property",
+          "within": "numberField.stepBurstWindow"
+        },
         "undoRestoresSelection": "before-command",
         "transaction": "per-dispatch",
         "noChange": "no-entry"
@@ -9348,7 +9352,8 @@
       },
       "refusals": [
         "status.locked.edit",
-        "status.locked.byAncestor"
+        "status.locked.byAncestor",
+      "status.value.notSteppable"
       ],
       "confirmation": null,
       "history": {

@@ -1537,6 +1537,7 @@
   "status.unwrapped": "Removed the wrapper {name}.",
   "status.url.unsafe": "This address is not allowed: {url}",
   "status.value.invalid": "{property}: \"{value}\" is not a value this field takes.",
+  "status.value.notSteppable": "\"{value}\" in {property} holds no number to step.",
   "status.value.negativePadding": "Padding cannot be negative.",
   "status.value.unitNotConverted": "The value could not be converted to {unit}.",
   "status.visible": "Visible: {name}",

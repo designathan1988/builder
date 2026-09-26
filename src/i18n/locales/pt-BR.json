@@ -1537,6 +1537,7 @@
   "status.unwrapped": "O contêiner {name} foi removido.",
   "status.url.unsafe": "Este endereço não é permitido: {url}",
   "status.value.invalid": "{property}: \"{value}\" não é um valor aceito por este campo.",
+  "status.value.notSteppable": "\"{value}\" em {property} não tem número para ajustar.",
   "status.value.negativePadding": "O padding não pode ser negativo.",
   "status.value.unitNotConverted": "Não foi possível converter o valor para {unit}.",
   "status.visible": "Visível: {name}",

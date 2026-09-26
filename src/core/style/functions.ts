@@ -36,12 +36,40 @@ export function functionArgument(value: string | undefined, name: string): strin
   return functionsOf(value)?.find((f) => f.name === name)?.argument ?? '';
 }
 
-// the value with the function set to an argument (in its place, else last), or taken away for an empty argument;
-// none once it holds no function; null for a value that is no list of functions
+// The unit a bare number typed as a function's argument takes (spec inspector-number-fields, Problems in Pager 4): the
+// function's own, as a field's default unit; a function absent here (scale, a factor) keeps its bare number.
+const BARE_UNIT: Readonly<Record<string, string>> = {
+  blur: 'px',
+  'hue-rotate': 'deg',
+  brightness: '%',
+  contrast: '%',
+  saturate: '%',
+  grayscale: '%',
+  invert: '%',
+  sepia: '%',
+  opacity: '%',
+  skew: 'deg',
+  skewX: 'deg',
+  skewY: 'deg',
+  rotate: 'deg',
+  rotateX: 'deg',
+  rotateY: 'deg',
+  rotateZ: 'deg',
+  translateX: 'px',
+  translateY: 'px',
+  translateZ: 'px',
+};
+export function withBareUnit(name: string, argument: string): string {
+  const unit = BARE_UNIT[name];
+  return unit !== undefined && /^[+-]?(\d+\.?\d*|\.\d+)$/.test(argument) ? `${argument}${unit}` : argument;
+}
+
+// the value with the function set to an argument (in its place, else last; a bare number in the function's unit), or
+// taken away for an empty argument; none once it holds no function; null for a value that is no list of functions
 export function withFunction(value: string | undefined, name: string, argument: string): string | null {
   const functions = functionsOf(value);
   if (functions === null) return null;
-  const typed = argument.trim();
+  const typed = withBareUnit(name, argument.trim());
   const at = functions.findIndex((f) => f.name === name);
   const next = typed === '' ? functions.filter((f) => f.name !== name) : at >= 0 ? functions.map((f, i) => (i === at ? { name, argument: typed } : f)) : [...functions, { name, argument: typed }];
   return next.length === 0 ? 'none' : next.map((f) => `${f.name}(${f.argument})`).join(' ');
