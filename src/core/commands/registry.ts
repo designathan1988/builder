@@ -21,7 +21,8 @@ export type NotAvailableYet = typeof NOT_AVAILABLE_YET;
 
 // A parameter of a message is plain text, a number, or another catalogue key, translated when the message is shown
 // (so "{panel} opened." names the panel in the language the person reads it in).
-export type MessageParam = string | number | { readonly key: MessageId };
+// a value, a text of the catalogue, or a whole message (the action an undo names: history.ts)
+export type MessageParam = string | number | { readonly key: MessageId; readonly params?: Readonly<Record<string, MessageParam>> };
 
 export interface Message {
   readonly key: MessageId;

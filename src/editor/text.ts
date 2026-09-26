@@ -9,7 +9,7 @@ export type Translate = (key: MessageId, params?: Readonly<Record<string, Messag
 
 function resolve(locale: Locale, params: Readonly<Record<string, MessageParam>>): Record<string, string | number> {
   const out: Record<string, string | number> = {};
-  for (const [name, value] of Object.entries(params)) out[name] = typeof value === 'object' ? translate(locale, value.key) : value;
+  for (const [name, value] of Object.entries(params)) out[name] = typeof value === 'object' ? translate(locale, value.key, resolve(locale, value.params ?? {})) : value;
   return out;
 }
 

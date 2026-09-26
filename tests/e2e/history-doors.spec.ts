@@ -92,16 +92,22 @@ test('every Undo door restores the document and the selection before its command
   const undone = { tree: 'Page(Section)', selection: ['Section'], history: { undoSteps: 1, redoSteps: 1 } };
   expect(await read(page)).toEqual(inserted);
   const status = page.getByRole('status');
+  // what the Heading's insert said it did, which undo and redo name
+  const said = (await status.textContent()) ?? '';
+  expect(said).not.toBe('');
+  const UNDONE = `Undone: ${said}`;
+  const REDONE = `Redone: ${said}`;
   for (const [i, undo] of UNDO.entries()) {
     // the keys act in the global context and the contexts that inherit it (the focus rests on a tile, a button)
     await runDoor(page, undo);
     await expect.poll(() => read(page), undo).toEqual(undone);
-    await expect(status, undo).toHaveText('Undone');
+    // the status names what was undone or redone (spec undo-redo, Problems in Pager 3; the audit, item 1.5)
+    await expect(status, undo).toHaveText(UNDONE);
     // each Redo door in turn, the last two after the same undo
     const redo = REDO[i] ?? '';
     await runDoor(page, redo);
     await expect.poll(() => read(page), redo).toEqual(inserted);
-    await expect(status, redo).toHaveText('Redone');
+    await expect(status, redo).toHaveText(REDONE);
   }
   const last = REDO[REDO.length - 1] ?? '';
   await runDoor(page, UNDO[0] ?? '');

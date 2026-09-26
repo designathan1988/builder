@@ -80,7 +80,7 @@ describe('element.delete (src/core/structure/remove.ts)', () => {
   });
 
   it('follows a delete while the last undo step is a delete and the last message is its own', () => {
-    const tx = (command: Transaction['command']): Transaction => ({ command, patches: [], inverses: [], selectionBefore: [], selectionAfter: [], at: 0, coalesceKey: null });
+    const tx = (command: Transaction['command']): Transaction => ({ command, patches: [], inverses: [], selectionBefore: [], selectionAfter: [], at: 0, coalesceKey: null, message: null });
     const state = (history: HistoryState, message: Message | null) => ({ document: DOC, selection: [], history, message, ui: null });
     const deleted: Message = { key: 'status.deleted', params: { name: 'Intro' } };
     expect(followsDelete(state({ past: [tx('element.delete')], future: [] }, deleted))).toBe(true);

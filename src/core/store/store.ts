@@ -10,7 +10,7 @@ import type { Command } from '../../manifest/schema.ts';
 import { isBuilt, message, type CommandTable, type HandlerContext, type Message, type Outcome, type PredicateTable } from '../commands/registry.ts';
 import type { DocumentJson, Selection } from '../document/model.ts';
 import { validateDocument, type Invalid, type ModelRules } from '../document/validate.ts';
-import { EMPTY_HISTORY, REDONE, UNDONE, record, redo, undo, type HistoryState, type Restorable } from '../history/history.ts';
+import { EMPTY_HISTORY, LAST_CHANGE, record, redo, redone, undo, undone, type HistoryState, type Restorable } from '../history/history.ts';
 import { applyPatches, deepEqual, type Patch, type Transaction } from '../history/transaction.ts';
 import type { Clock } from '../ports/clock.ts';
 import type { ClipboardWriter } from '../ports/clipboard.ts';
@@ -266,7 +266,9 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
       const tx = outcome.kind === 'undo' ? state.history.past.at(-1) : state.history.future.at(-1);
       const restored: Restorable | null = (outcome.kind === 'undo' ? undo : redo)(state);
       if (restored === null || tx === undefined) return { status: 'done', changed: false };
-      publish(commit({ ...state, ...restored, message: outcome.kind === 'undo' ? UNDONE : REDONE }, id), outcome.kind === 'undo' ? tx.inverses : tx.patches);
+      // the step names what it undoes or redoes: what its command said, else "the last change"
+      const action = tx.message ?? LAST_CHANGE;
+      publish(commit({ ...state, ...restored, message: outcome.kind === 'undo' ? undone(action) : redone(action) }, id), outcome.kind === 'undo' ? tx.inverses : tx.patches);
       return { status: 'done', changed: true };
     }
     if (outcome.kind === 'load') {
@@ -288,7 +290,7 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
       gesture.inverses.unshift(...applied.inverses);
     } else if (documentChanged) {
       const { key, within } = coalescing(command, args, before.selection);
-      const tx: Transaction = { command: id, patches: applied.applied, inverses: applied.inverses, selectionBefore: before.selection, selectionAfter: selection, at: clock.now(), coalesceKey: key };
+      const tx: Transaction = { command: id, patches: applied.applied, inverses: applied.inverses, selectionBefore: before.selection, selectionAfter: selection, at: clock.now(), coalesceKey: key, message: outcome.message ?? null };
       history = record(before.history, tx, key !== null && key === previousMergeable ? within : null);
       lastMergeable = key;
     }
@@ -368,7 +370,8 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
             return;
           }
           // one gesture is one entry: it never merges with another
-          const tx: Transaction = { command: current.command, patches: current.patches, inverses: current.inverses, selectionBefore: before.selection, selectionAfter: state.selection, at: clock.now(), coalesceKey: null };
+          // a gesture says what it did by the last message its commands gave
+          const tx: Transaction = { command: current.command, patches: current.patches, inverses: current.inverses, selectionBefore: before.selection, selectionAfter: state.selection, at: clock.now(), coalesceKey: null, message: state.message !== before.message ? state.message : null };
           publish(commit({ ...state, history: record(before.history, tx, null) }, current.command));
         },
         cancel: () => {

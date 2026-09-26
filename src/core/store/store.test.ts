@@ -203,16 +203,18 @@ describe('the store', () => {
     const initial = s.store.getState().document;
     insertInto(s);
     const afterInsert = s.store.getState();
+    // what the insert said it did, which undo and redo name (spec undo-redo, Problems in Pager 3)
+    const said = afterInsert.message ?? { key: 'history.lastChange' };
     // the user selects the root afterwards: undo restores the selection of the insert's "before", not this one
     s.store.dispatch('selection.select', { target: s.root });
     s.store.dispatch('history.undo', {});
     expect(s.store.getState().document).toEqual(initial);
     expect(s.store.getState().selection).toEqual([]);
-    expect(s.store.getState().message).toEqual({ key: 'status.undone', params: {} });
+    expect(s.store.getState().message).toEqual({ key: 'status.undone', params: { action: said } });
     s.store.dispatch('history.redo', {});
     expect(s.store.getState().document).toEqual(afterInsert.document);
     expect(s.store.getState().selection).toEqual(afterInsert.selection);
-    expect(s.store.getState().message).toEqual({ key: 'status.redone', params: {} });
+    expect(s.store.getState().message).toEqual({ key: 'status.redone', params: { action: said } });
   });
 
   it('refuses undo and redo when there is nothing to undo or redo', () => {

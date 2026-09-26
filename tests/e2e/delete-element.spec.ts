@@ -118,7 +118,8 @@ test('the toast: one at most, a new delete replaces it, its Undo undoes the most
   await runDoor(page, TOAST_UNDO);
   await expect.poll(() => read(page)).toEqual({ hero: ['n-title', 'n-actions'], selection: ['n-actions'], undoSteps: 1 });
   await expect(drawn(page, 'n-actions')).toHaveCount(1);
-  await expect(page.getByRole('status')).toHaveText('Undone');
+  // the status names what was undone (spec undo-redo, Problems in Pager 3; the user's real-use audit, item 1.5)
+  await expect(page.getByRole('status')).toHaveText('Undone: Deleted Actions.');
   await expect(toast).toHaveCount(0);
 
   // the next message takes a toast away: a click that selects

@@ -3,7 +3,7 @@
 // A new transaction empties the redo stack; a command that changes nothing records no entry (the store never
 // calls record for it). Commands whose manifest history coalesces (same target and property within a constant)
 // merge into the previous entry.
-import { message, registerHandler, registerPredicate } from '../commands/registry.ts';
+import { message, registerHandler, registerPredicate, type Message, type MessageParam } from '../commands/registry.ts';
 import type { DocumentJson, Selection } from '../document/model.ts';
 import { applyPatches, type Transaction } from './transaction.ts';
 
@@ -29,6 +29,8 @@ export function record(history: HistoryState, tx: Transaction, within: number | 
       selectionAfter: tx.selectionAfter,
       at: tx.at,
       coalesceKey: last.coalesceKey,
+      // the entry says what its latest command did
+      message: tx.message ?? last.message,
     };
     return { past: [...history.past.slice(0, -1), merged], future: [] };
   }
@@ -66,8 +68,10 @@ export function redo(state: Restorable): Restorable | null {
 export const canUndo = registerPredicate('canUndo', (state) => state.history.past.length > 0);
 export const canRedo = registerPredicate('canRedo', (state) => state.history.future.length > 0);
 
-// The store walks the history for these outcomes and says "Undone" or "Redone" (spec undo-redo, Problems 2).
+// The store walks the history for these outcomes and says what was undone or redone: "Undone: Height of Hero: 900px."
+// (spec undo-redo, Problems in Pager 3), the entry's own message, else "the last change".
 export const undoCommand = registerHandler('history.undo', () => ({ kind: 'undo' }));
 export const redoCommand = registerHandler('history.redo', () => ({ kind: 'redo' }));
-export const UNDONE = message('status.undone');
-export const REDONE = message('status.redone');
+export const LAST_CHANGE: MessageParam = { key: 'history.lastChange' };
+export const undone = (action: MessageParam): Message => message('status.undone', { action });
+export const redone = (action: MessageParam): Message => message('status.redone', { action });

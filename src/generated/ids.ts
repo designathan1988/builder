@@ -2910,6 +2910,7 @@ export const MESSAGE_IDS = [
   "files.generated",
   "files.generatedJsTip",
   "files.generatedTip",
+  "history.lastChange",
   "insert.search",
   "inspector.activeBreakpoint",
   "inspector.addClass",

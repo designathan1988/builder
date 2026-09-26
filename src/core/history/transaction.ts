@@ -3,6 +3,7 @@
 // applied without changing the input (only the objects on the path are copied), and a patch that changes
 // nothing is dropped, so a command that changes nothing leaves no patch.
 import type { CommandId } from '../../generated/ids.ts';
+import type { Message } from '../commands/registry.ts';
 import type { DocumentJson, Selection } from '../document/model.ts';
 
 export type Path = readonly (string | number)[];
@@ -22,6 +23,9 @@ export interface Transaction {
   readonly at: number;
   // commands that coalesce (manifest history.coalesce) merge with the previous entry of the same key
   readonly coalesceKey: string | null;
+  // what the command said it did (its status message), which an undo or a redo names (spec undo-redo, Problems in Pager
+  // 3); null when it said nothing
+  readonly message: Message | null;
 }
 
 export class PatchError extends Error {
