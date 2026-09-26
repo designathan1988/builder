@@ -430,6 +430,10 @@ export const panState = {
     return () => panListeners.delete(listener);
   },
 };
+// Whether a pointer button is down anywhere in the editor: the keymap asks it to tell a focus a click gave from one
+// the keyboard gave (Space on a focused control, keymap.ts)
+let pressing = false;
+export const pointerPressing = (): boolean => pressing;
 // Space went down or up (the keymap, which owns the keys): held over the stage it arms the pan; true when it did
 export function holdSpace(down: boolean): boolean {
   if (!down) {
@@ -1234,6 +1238,7 @@ export function installPointer(store: EditorStore, target: Window = window): () 
     if (focused instanceof HTMLElement && (focused.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(focused.tagName))) focused.blur();
   };
   const onDown = (event: PointerEvent) => {
+    pressing = true;
     // the colour picker's area, during its session: the colour it points at, then at every move while held
     const area = session !== null && event.button === 0 && event.target instanceof Element ? event.target.closest<HTMLElement>('[data-color-area]') : null;
     if (area !== null) {
@@ -1476,6 +1481,7 @@ export function installPointer(store: EditorStore, target: Window = window): () 
     }
   };
   const onUp = (event: PointerEvent) => {
+    pressing = false;
     if (pickingColor !== null) {
       if (event.pointerId === pickingColor.pointer) pickingColor = null;
       return;
@@ -1559,6 +1565,7 @@ export function installPointer(store: EditorStore, target: Window = window): () 
     run(next.effect);
   };
   const onCancel = () => {
+    pressing = false;
     const next = step(machine, { type: 'cancel' });
     machine = next.machine;
     run(next.effect);

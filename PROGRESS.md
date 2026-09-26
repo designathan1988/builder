@@ -35,6 +35,8 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
   every menu (Escape, backdrop, focus back to +); its filter a combobox of the menu key context (arrows, Enter).
 - 2.1 spec drag-reorder-canvas P5 + "an ancestor's escape band wins over a side drop inside it". Own new scenarios,
   never green, corrected: y equals CardA -> y < CardA + 24 (a p's 16 px margin); inline-block cards set one by one.
+- A1.1 spec zoom-wheel-pan P2 "Space pans ... no text field has focus" -> also not a control the keyboard focused
+  whose Space runs (palette tile); a click-focused control never keeps Space. elements-lists spec + 8 scenarios.
 
 ## Open findings
 
