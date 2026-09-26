@@ -15,7 +15,7 @@ import { locate, type DocNode } from '../../core/document/model.ts';
 import { functionArgument, functionOfControl, functionsOf, translateAxis, translateWith } from '../../core/style/functions.ts';
 import type { AttributeId, FeatureId } from '../../generated/ids.ts';
 import { manifest, type DoorEntry } from '../../manifest/runtime.ts';
-import { DoorControl, Icon, useDoor } from '../doors/door.tsx';
+import { DoorControl, Icon, appliesNow, isDoorBuilt, useDoor } from '../doors/door.tsx';
 import { GLYPHS, doorSlots } from '../doors/placement.ts';
 import { drag } from '../input/pointer.ts';
 import { appliesTo, offsetOf, placeChip, placeQuickPanel, quickPanelOffsets, type Box, type Offset } from '../quick-panel/quick-panel.ts';
@@ -24,7 +24,7 @@ import { EDIT_MODES, modeApplies, modeBuilt, type EditMode } from './edit-mode.t
 import { MODEL_RULES } from '../store.ts';
 import type { MessageId } from '../../generated/ids.ts';
 import { KeptTextField, keptTextOf } from '../shell/inspector.tsx';
-import { useEditorState } from '../store.ts';
+import { useEditorState, useStore } from '../store.ts';
 import { useT } from '../text.ts';
 import { canvasFrame, nodeBox } from './coordinates.ts';
 
@@ -77,6 +77,12 @@ const sameList = (a: readonly string[], b: readonly string[]) => a.length === b.
 // that writes no property (align, distribute, the Edit on canvas modes)
 const isTag = (entry: DoorEntry) => TAG !== null && TAG in entry.command.args;
 const isAction = (entry: DoorEntry) => !isTag(entry) && (entry.command.args.target?.type === 'node' || entry.door.adapter.writes.length === 0);
+// a door whose command's one choice it leaves open (Edit on canvas): it opens the list of its values, which say
+// themselves whether each applies (ChoiceItem)
+const opensChoice = (entry: DoorEntry): boolean => {
+  const args = Object.entries(entry.command.args);
+  return args.length === 1 && args.every(([name, arg]) => arg.type === 'enum' && !(name in entry.door.args));
+};
 
 // A door whose command takes one choice the door leaves open (Edit on canvas: canvas.setEditMode's mode): a button that
 // opens the list of its values, each an item of the door standing for its value, pressed when it is the one in force.
@@ -204,6 +210,18 @@ const token = (element: Element, name: string) => parseFloat(getComputedStyle(el
 
 export function QuickPanel({ stage }: { readonly stage: RefObject<HTMLDivElement | null> }) {
   const t = useT();
+  const store = useStore();
+  // the bar's actions drawn: those built that apply to the selection now (align and distribute take several positioned
+  // elements); an action that cannot act is not drawn at all (the user's real-use audit, item 1.4)
+  const applicable = useEditorState((s) => {
+    const first = s.selection[0];
+    // nothing selected: no quick panel, no action
+    if (first === undefined) return '';
+    return FIELDS.filter(isAction)
+      .filter((entry) => isDoorBuilt(entry) && (opensChoice(entry) || appliesNow(entry, entry.command.args.target?.type === 'node' ? { target: first } : {}, store)))
+      .map((entry) => entry.ref)
+      .join(' ');
+  });
   const node = useEditorState((s) => {
     const at = s.selection[0] === undefined ? null : locate(s.document, s.selection[0]);
     // the page root has no quick panel
@@ -279,7 +297,7 @@ export function QuickPanel({ stage }: { readonly stage: RefObject<HTMLDivElement
       </button>
     );
   }
-  const actions = FIELDS.filter(isAction);
+  const actions = FIELDS.filter((entry) => isAction(entry) && applicable.split(' ').includes(entry.ref));
   const fields = FIELDS.filter((entry) => !isAction(entry) && (isTag(entry) || appliesTo(entry.door.adapter.writes, node, MODEL_RULES)));
   return (
     <div

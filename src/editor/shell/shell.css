@@ -133,8 +133,11 @@ kbd {
   cursor: not-allowed;
 }
 
+/* a control that cannot act (its feature not built, nothing it applies to): clearly disabled, never looking like one
+   that works (the user's real-use audit, item 1.4) */
 .door.is-unavailable:not(.door--primary) {
   color: var(--color-text-subtle);
+  opacity: 0.45;
 }
 
 .door--icon-button {

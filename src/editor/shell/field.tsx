@@ -361,8 +361,10 @@ export function NumberField({ entry, door, property, label }: NumberFieldProps) 
         {PARTS.map((part) => {
           if (part.door.kind === 'panel-control' && part.door.control === 'unit-menu') return <UnitMenu key={part.ref} entry={part} property={property} shown={base} input={input} ready={available} />;
           if ('value' in part.command.args) return <StepButton key={part.ref} entry={part} property={property} shown={base} input={input} ready={available} />;
-          // Reset this value: usable while the element holds a value of its own (spec inspector-provenance-reset)
-          return <DoorControl key={part.ref} entry={part} args={{ property }} ready={available && (part !== RESET || stored !== undefined)} tabbable={part !== RESET || (available && stored !== undefined)} />;
+          // Reset this value: drawn only while the element holds a value of its own (spec inspector-provenance-reset,
+          // Problems in Pager 5): with nothing to reset there is no control
+          if (part === RESET && stored === undefined) return null;
+          return <DoorControl key={part.ref} entry={part} args={{ property }} ready={available} />;
         })}
       </span>
     </div>
@@ -521,7 +523,7 @@ export function TextStyleField({
             ))}
           </datalist>
         ) : null}
-        {RESET !== undefined ? <DoorControl entry={RESET} args={{ property }} ready={available && set} tabbable={available && set} /> : null}
+        {RESET !== undefined && set ? <DoorControl entry={RESET} args={{ property }} ready={available} /> : null}
       </span>
     </div>
   );
