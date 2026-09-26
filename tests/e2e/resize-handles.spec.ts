@@ -117,8 +117,8 @@ test('a press on a short selected element, under the overhang of a handle\'s dot
   await page.mouse.down();
   await page.mouse.move(at.x, title.y + title.height / 2 - 1, { steps: 8 });
   await page.mouse.up();
-  const document = (await page.evaluate(() => (window as unknown as Record<string, { document: () => unknown }>).__builderTestPort?.document())) as { pages: { tree: Node }[] };
-  const hero = document.pages[0] ? nodeIn(document.pages[0].tree, 'n-hero') : null;
+  const moved = (await page.evaluate(() => (window as unknown as Record<string, { document: () => unknown }>).__builderTestPort?.document())) as { pages: { tree: Node }[] };
+  const hero = moved.pages[0] ? nodeIn(moved.pages[0].tree, 'n-hero') : null;
   expect(hero?.children.map((c) => c.id), 'the Intro moved before the Title').toEqual(['n-intro', 'n-title', 'n-actions']);
   expect(await declared(page, 'n-intro'), 'the Intro keeps its size').toEqual({});
 });

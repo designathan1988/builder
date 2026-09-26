@@ -61,6 +61,20 @@ const INSERT_TILE = requireDoor('insert', (d) => drawnAs(d) === 'item' && Object
 const INSERT_GROUP = requireDoor('insert', (d) => drawnAs(d) === 'disclosure');
 // a component's tile (components.insertInstance): the project's components, after the element groups
 const COMPONENT_TILE = requireDoor('insert', (d) => drawnAs(d) === 'item' && 'component' in d.command.args);
+// the panel header's doors (DESIGN.md `panel-header`: Close the panel), drawn in the title of each sidebar view
+const PANEL_HEADER = doorSlots('panel-header');
+
+// A sidebar view's title: its name, and the panel header's doors, each standing for the view it acts on.
+function ViewTitle({ panel, title }: { readonly panel: Panel; readonly title: string }) {
+  return (
+    <div className="view__title" data-region="panel-header">
+      <span className="view__name">{title}</span>
+      {PANEL_HEADER.map((entry) => (
+        <DoorControl key={entry.ref} entry={entry} args={{ panel }} />
+      ))}
+    </div>
+  );
+}
 
 export function ActivityBar() {
   return (
@@ -318,7 +332,7 @@ function Explorer() {
   const view = useMemo(() => (tree ? searchView(tree, query) : null), [tree, query]);
   return (
     <section className="view" aria-label={t(panelName('explorer'))}>
-      <div className="view__title">{t(panelName('explorer'))}</div>
+      <ViewTitle panel="explorer" title={t(panelName('explorer'))} />
       <div data-region="explorer-pages">
         <SectionTitle title={t('explorer.pages')} region="explorer-pages" />
         {pages.map((p) => (
@@ -369,7 +383,7 @@ function Insert() {
   const matches = groups.reduce((n, g) => n + g.entries.length, 0);
   return (
     <section className="view" aria-label={t('activity.insert')} data-region="insert">
-      <div className="view__title">{t('activity.insert')}</div>
+      <ViewTitle panel="elements" title={t('activity.insert')} />
       <div className={`insert insert--${density}`}>
         <input className="search" type="search" placeholder={t('insert.search')} aria-label={t('insert.search')} data-local="search" value={query} onChange={(event) => setQuery(event.target.value)} />
         {/* the densities fill the panel's width, each drawn by its icon with its name as its tooltip */}
@@ -443,7 +457,7 @@ function Styles() {
   const t = useT();
   return (
     <section className="view" aria-label={t('activity.styles')} data-region="styles">
-      <div className="view__title">{t('activity.styles')}</div>
+      <ViewTitle panel="variables" title={t('activity.styles')} />
       <div className="section-title">
         <span className="section-title__text">{t('styles.classes')}</span>
       </div>

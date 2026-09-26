@@ -24,6 +24,7 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 - Export stylesheet: a blank line parts every rule, the :root and class blocks too. A class target returns to Element
   on a new selection; a field of a kind (list, table, form, media) shows only while every selected element is of it.
 - Dialogs, snap targets, smart guides, corrected-before-commit scenarios: docs/history.md (2026-09-26 decisions).
+  The panel header's Close is drawn in each sidebar view's title; the inspector closes by Ctrl+Alt+B and View.
 
 ## Decided findings (the user's order of 2026-09-26: decide, record why, tooth for each changed test)
 

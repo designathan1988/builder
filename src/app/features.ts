@@ -154,7 +154,7 @@ export const FEATURES = {
   'embed-html': registerFeature('embed-html'),
   'theme-switch': registerFeature('theme-switch'),
   // 13 workspace
-  'dock-toggles': NOT_AVAILABLE_YET,
+  'dock-toggles': registerFeature('dock-toggles'),
   'command-bar': NOT_AVAILABLE_YET,
   'command-bar-set-property': NOT_AVAILABLE_YET,
   'shortcuts-panel': NOT_AVAILABLE_YET,
