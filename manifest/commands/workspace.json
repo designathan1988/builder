@@ -2508,6 +2508,56 @@
       ]
     },
     {
+      "id": "inspector.search",
+      "labelKey": "inspector.searchProperty",
+      "owner": "src/editor/inspector/sections.ts",
+      "introducedBy": "inspector-property-search",
+      "args": {
+        "query": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "history": {
+        "undoable": false
+      },
+      "entryPoints": [
+        {
+          "id": "inspector-search-field",
+          "kind": "panel-control",
+          "drawnAs": "field",
+          "pressed": false,
+          "feature": "inspector-property-search",
+          "panel": "inspector",
+          "control": "search-field",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "inspector.searchProperty",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "inspector-style",
+            "order": 211
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
       "id": "codePanel.copyPane",
       "labelKey": "codePanel.copyPane",
       "owner": "src/editor/code-panel/code-panel.ts",

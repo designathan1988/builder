@@ -241,6 +241,7 @@ export interface CommandArgs {
   "inspector.toggleSection": { readonly section: string };
   "inspector.setMode": { readonly mode: "all" | "essentials" };
   "inspector.reveal": { readonly property?: StyleTargetId; readonly attribute?: AttributeId };
+  "inspector.search": { readonly query: string };
   "codePanel.copyPane": Record<string, never>;
   "codePanel.downloadPane": Record<string, never>;
   "colorPicker.open": { readonly property: StyleTargetId };
@@ -322,7 +323,7 @@ export const FEATURE_COMMANDS: Readonly<Record<FeatureId, readonly CommandId[]>>
   "props-more": ["style.set"],
   "props-attributes": ["style.setCustomDeclarations","element.setAttribute","element.setId","element.setClasses"],
   "inspector-provenance-reset": ["style.reset","style.resetAll"],
-  "inspector-property-search": [],
+  "inspector-property-search": ["inspector.search"],
   "inspector-advanced-mode": ["inspector.setMode"],
   "inspector-add-property": ["inspector.reveal"],
   "semantic-tag-switch": ["element.setTag"],

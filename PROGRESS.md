@@ -23,6 +23,8 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 
 - 1.1 DESIGN Style tab: "a field never shows a blank: it shows the effective value" -> the document's value as written;
   none there: empty, the effective value as its muted placeholder, nothing zoom-dependent. Spec provenance-reset: + P4.
+- 1.2 DESIGN Style 4 "Property search: typing lists matching properties; choosing one reveals" -> Find a property
+  (inspector.search, order 211) filters the sections; region row "3 the property search result" -> "3 Add a property's item".
 
 ## Decided findings (the user's order of 2026-09-26: decide, record why, tooth for each changed test)
 
