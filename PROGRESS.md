@@ -5,8 +5,9 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 ## State (2026-09-26, /goal "todas as funcionalidades", blocks in the user's order)
 
 - Order (the user's): palette, Layers, drag and drop, canvas, style, export, the rest; one suite per block. Work staged
-  in .cache/wt/integration (branch integration); the commit guard judges the main folder: the commit is the user's.
-- Groups 01-11 pass with teeth (docs/history.md) but: multi-select-actions (needs keyboard-panel-navigation and
+  in .cache/wt/integration (branch integration), saved after every feature: commit + push origin integration (the
+  guard now judges the worktree and lets a commit off main save; the user's decision, 735ac78).
+- Groups 01-12 pass with teeth (docs/history.md) but: multi-select-actions (needs keyboard-panel-navigation and
   panel-resize), inspector-property-search (43), nesting-grammar-structure (36), layers-row-colours (no label colour
   tokens), hover-measure (46). Not built: Alt+drag duplicates, a line outside the stage refused.
 - Last check (11): check-group11-093700.log: static green but unit (finding 49), 1317 passed, 8 = findings 39, 41x2,
