@@ -855,3 +855,19 @@ Fragile / worth knowing:
   quick-panel scenario. Scenarios name no vendor-prefixed property (spec tests prove a recipe's).
 - Export stylesheet: a blank line parts every rule, the :root and class blocks too. A class target returns to Element
   on a new selection; a field of a kind (list, table, form, media) shows only while every selected element is of it.
+
+## 2026-09-26: decided findings moved out of PROGRESS.md
+
+## Decided findings (the user's order of 2026-09-26: decide, record why, tooth for each changed test)
+
+- 39 current-state: built features left 15 unbuilt doors, not the fixed floor of 100: it now expects every unbuilt door
+  the manifest places at start, each set side by side compared (tooth: unbuilt doors drawn current are caught).
+- 40 door rule applied: isDoorBuilt needs the feature registered; the census fails a door usable without it (13 caught).
+- 41 palette-tiles: every palette feature is built; the tests prove every tile usable and inserting (tooth: insert off);
+  a door of a feature to come is proven unusable by the census and waiting-panels.
+- 44 waiting-panels: New variable built, expected usable (tooth: tokens.create off); Timeline waits (tooth: rule off).
+- 45 props-position: absolute-free-drag's couplings are built; both scenarios expect top/left and the relative parent
+  too (tooth: handlers off, couplings off).
+- 47 Delete is always the context menu's last item (DESIGN and manifest order 99): the scenario holds unchanged.
+- 49 check.test plants move or rebind an existing, covered door instead of adding one (tooth: rule off fails each).
+

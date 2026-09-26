@@ -25,19 +25,10 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
   none there: empty, the effective value as its muted placeholder, nothing zoom-dependent. Spec provenance-reset: + P4.
 - 1.2 DESIGN Style 4 "Property search ... reveals" -> Find a property filters; row "3 search result" -> "3 Add a property's item".
 - 1.3 text-shadow effects/shadow -> text/typography; DESIGN "Text" -> "Text (with the text shadow)", + Add a property rule.
-
-## Decided findings (the user's order of 2026-09-26: decide, record why, tooth for each changed test)
-
-- 39 current-state: built features left 15 unbuilt doors, not the fixed floor of 100: it now expects every unbuilt door
-  the manifest places at start, each set side by side compared (tooth: unbuilt doors drawn current are caught).
-- 40 door rule applied: isDoorBuilt needs the feature registered; the census fails a door usable without it (13 caught).
-- 41 palette-tiles: every palette feature is built; the tests prove every tile usable and inserting (tooth: insert off);
-  a door of a feature to come is proven unusable by the census and waiting-panels.
-- 44 waiting-panels: New variable built, expected usable (tooth: tokens.create off); Timeline waits (tooth: rule off).
-- 45 props-position: absolute-free-drag's couplings are built; both scenarios expect top/left and the relative parent
-  too (tooth: handlers off, couplings off).
-- 47 Delete is always the context menu's last item (DESIGN and manifest order 99): the scenario holds unchanged.
-- 49 check.test plants move or rebind an existing, covered door instead of adding one (tooth: rule off fails each).
+- 1.4 DESIGN Build order + "a disabled control is drawn clearly disabled; the quick panel leaves out an action that
+  cannot act; a field draws its Reset only while there is a value"; specs quick-panel P8, provenance-reset P5.
+- 1.4 decision: Canvas/Split/Code stay drawn, clearly disabled, none pressed (an unbuilt door never stands for a
+  state: ARCHITECTURE Door rendering, current-state.spec); Canvas shows pressed once code-panel-view (group 17) is built.
 
 ## Open findings
 
