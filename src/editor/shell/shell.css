@@ -2503,6 +2503,14 @@ kbd {
   gap: var(--space-2);
 }
 
+.dock-checks__issue {
+  width: 100%;
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.dock-checks__empty { margin: 0; color: var(--color-text-muted); }
+
 /* a sidebar view the editor draws no body for says so under its title */
 .view__empty {
   margin: 0;

@@ -1,6 +1,7 @@
 // The bottom dock (DESIGN.md "Dock and status bar"): its strip with a tab for each open dock panel (the tab-strip
 // component, the panel's icon from layout.json panels), show or hide, maximize, close the tab; its body when open.
 import { useMemo } from 'react';
+import { iframeTitleIssues } from '../../core/checks/iframe-title.ts';
 import { DoorControl, Icon } from '../doors/door.tsx';
 import { doorSlots } from '../doors/placement.ts';
 import { useEditorState } from '../store.ts';
@@ -12,6 +13,7 @@ import { Slots } from './slots.tsx';
 const TAB = doorSlots('tab-strip')[0];
 // the strip's button that closes the tab it shows (its door's own arguments close a panel)
 const CLOSE = doorSlots('dock-strip').find((d) => d.door.args.open === 'close');
+const CHECK_ISSUE = doorSlots('dock-checks').find((d) => d.door.kind === 'panel-control' && d.door.control === 'issue');
 
 // The Timeline tab: the doors the manifest places in dock-timeline, where the animation features' doors wait, each
 // disabled with "not available yet" until its command is built (the user's correction of decision 2).
@@ -19,6 +21,18 @@ function Timeline() {
   return (
     <div className="dock-region" data-region="dock-timeline" data-key-context="timeline">
       <Slots region="dock-timeline" />
+    </div>
+  );
+}
+
+function Checks() {
+  const t = useT();
+  const document = useEditorState((s) => s.document);
+  const issues = useMemo(() => iframeTitleIssues(document), [document]);
+  return (
+    <div className="dock-region" data-region="dock-checks">
+      {issues.length === 0 ? <p className="dock-checks__empty">{t('checks.none')}</p> : issues.map((issue) =>
+        CHECK_ISSUE === undefined ? null : <DoorControl key={issue.node} entry={CHECK_ISSUE} args={{ target: issue.node }} label={t('checks.iframeTitle', { category: t('checks.category.accessibility'), name: issue.name })} className="dock-checks__issue" />)}
     </div>
   );
 }
@@ -38,7 +52,7 @@ function DocumentJson() {
 
 // The body of each dock tab the editor draws; a tab without one says "not available yet" and the doors that only open
 // it are not available yet (bodies.ts). Checks (no check exists yet) and Keyboard shortcuts arrive with their features.
-export const DOCK_TABS: BodyTable = { timeline: Timeline, document: DocumentJson };
+export const DOCK_TABS: BodyTable = { timeline: Timeline, checks: Checks, document: DocumentJson };
 
 // the tab's panel, named after its tab
 function DockBody({ tab }: { readonly tab: Panel }) {

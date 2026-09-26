@@ -132,6 +132,7 @@
   "checks.category.seo": "SEO",
   "checks.imageAlt": "{category} · Imagem sem texto alternativo em {name}",
   "checks.none": "Nenhum problema",
+  "checks.iframeTitle": "{category} · O quadro incorporado {name} precisa de título",
   "codePanel.copyPane": "Copiar este painel",
   "codePanel.downloadPane": "Baixar este painel",
   "codeView.generatedNote": "Gerado: aplicar transforma a edição em comandos no documento.",

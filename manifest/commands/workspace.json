@@ -197,7 +197,7 @@
         {
           "id": "menu-view-checks",
           "kind": "menu",
-          "feature": "accessibility-checks",
+          "feature": "settings-type-fields",
           "menu": "view",
           "checked": "checkbox",
           "labelKey": "panel.checks",

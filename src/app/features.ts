@@ -117,6 +117,7 @@ export const FEATURES = {
   'props-element-specific': registerFeature('props-element-specific'),
   'settings-class-management': registerFeature('settings-class-management'),
   'settings-grammar-tag': registerFeature('settings-grammar-tag'),
+  'settings-type-fields': registerFeature('settings-type-fields'),
   'settings-audit': NOT_AVAILABLE_YET,
   // 08 templates and components
   'templates-layout': registerFeature('templates-layout'),

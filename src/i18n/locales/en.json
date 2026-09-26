@@ -132,6 +132,7 @@
   "checks.category.seo": "SEO",
   "checks.imageAlt": "{category} · Image without alt text in {name}",
   "checks.none": "No issues",
+  "checks.iframeTitle": "{category} · Embedded frame {name} needs a title",
   "codePanel.copyPane": "Copy this pane",
   "codePanel.downloadPane": "Download this pane",
   "codeView.generatedNote": "Generated: applying turns the edit into commands on the document.",

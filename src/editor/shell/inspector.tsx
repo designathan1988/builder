@@ -1408,7 +1408,7 @@ function SettingsTab() {
               {owned.map((entry) => {
                 const attribute = entry.door.kind === 'inspector-field' && entry.door.attribute !== null ? ATTRIBUTES.get(entry.door.attribute) : undefined;
                 if (attribute === undefined) return null;
-                const label = t(attribute.labelKey as MessageId);
+                const label = node.type === 'page' && attribute.id === 'title' ? t('settings.bodyTooltip') : t(attribute.labelKey as MessageId);
                 if (attribute.valueType === ID_REF) return <LabelTargetField key={`${entry.ref}@${node.id}`} entry={entry} node={node} label={label} />;
                 if ('content' in entry.command.args) return <TextField key={`${entry.ref}@${node.id}`} entry={entry} node={node} label={label} />;
                 const kept = keptTextOf(entry, attribute.id as AttributeId, attribute.valueType, node);

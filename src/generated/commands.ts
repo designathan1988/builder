@@ -360,6 +360,7 @@ export const FEATURE_COMMANDS: Readonly<Record<FeatureId, readonly CommandId[]>>
   "props-element-specific": ["style.set"],
   "settings-class-management": ["element.setClasses","element.setCustomAttribute","inspector.setStyleTarget","classes.rename","classes.delete"],
   "settings-grammar-tag": ["element.insert","element.setAttribute","text.set","element.setTag"],
+  "settings-type-fields": ["element.setAttribute","selection.select","workspace.setPanelOpen"],
   "settings-audit": ["element.setAttribute","element.setInputType","element.setClasses","element.setCustomAttribute","element.setTag","text.toggleBold","text.toggleItalic","classes.rename","classes.delete"],
   "templates-layout": ["element.insert"],
   "templates-content": ["element.insert"],
