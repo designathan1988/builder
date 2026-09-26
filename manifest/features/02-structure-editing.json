@@ -4510,8 +4510,8 @@
                 {
                   "node": "/Page/Plans/Grid/Paragraph",
                   "measure": "y",
-                  "relation": "equals",
-                  "value": 0,
+                  "relation": "less-than",
+                  "value": 24,
                   "reference": "/Page/Plans/Grid/CardA"
                 }
               ],
@@ -4726,8 +4726,8 @@
                 {
                   "node": "/Page/Plans/Grid/Paragraph",
                   "measure": "y",
-                  "relation": "equals",
-                  "value": 0,
+                  "relation": "less-than",
+                  "value": 24,
                   "reference": "/Page/Plans/Grid/CardA"
                 }
               ],
@@ -4946,9 +4946,7 @@
           "setup": {
             "fixture": "aurora",
             "selection": [
-              "/Page/Plans/Grid/CardA",
-              "/Page/Plans/Grid/CardB",
-              "/Page/Plans/Grid/CardC"
+              "/Page/Plans/Grid/CardA"
             ],
             "context": "global",
             "breakpoint": "desktop",
@@ -4958,6 +4956,52 @@
             "zoom": "fit"
           },
           "steps": [
+            {
+              "door": "style.set#inspector-display",
+              "args": {
+                "property": "display",
+                "value": "inline-block"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "inline-block\n"
+            },
+            {
+              "door": "selection.select#layers-row",
+              "args": {
+                "target": "/Page/Plans/Grid/CardB"
+              },
+              "target": "/Page/Plans/Grid/CardB",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.set#inspector-display",
+              "args": {
+                "property": "display",
+                "value": "inline-block"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "inline-block\n"
+            },
+            {
+              "door": "selection.select#layers-row",
+              "args": {
+                "target": "/Page/Plans/Grid/CardC"
+              },
+              "target": "/Page/Plans/Grid/CardC",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
             {
               "door": "style.set#inspector-display",
               "args": {
@@ -5113,7 +5157,7 @@
               "/Page/Plans/Grid/Paragraph"
             ],
             "history": {
-              "undoSteps": 2,
+              "undoSteps": 4,
               "undoRestores": true,
               "redoRestores": true
             },

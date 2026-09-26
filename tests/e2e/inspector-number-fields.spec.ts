@@ -27,6 +27,19 @@ const UNIT = 'field.setUnit#inspector-unit-menu';
 const DRAG_ESCAPE = 'drag.cancel#key-escape-in-drag';
 const UNDO = 'history.undo#toolbar-top-bar';
 const ACTIONS = 'n-actions';
+// presses in a row on the same field, each within this of the one before, are one undo step (interactions.json; spec
+// inspector-number-fields, Problems in Pager 4)
+const BURST = (JSON.parse(fs.readFileSync('manifest/interactions.json', 'utf8')) as { constants: { id: string; value: number }[] }).constants.find((c) => c.id === 'numberField.stepBurstWindow')?.value ?? Number.NaN;
+// the time the history reads (Date.now) stands still, so presses come within the window of each other; `pause` moves it
+// past the window, as a person who waits a second
+async function burstClock(page: Page): Promise<() => Promise<void>> {
+  let now = Date.parse('2026-09-26T12:00:00Z');
+  await page.clock.setFixedTime(now);
+  return async () => {
+    now += BURST + 1;
+    await page.clock.setFixedTime(now);
+  };
+}
 
 interface Tree {
   readonly id: string;
@@ -108,43 +121,51 @@ test.beforeEach(async ({ page }) => {
   await selectActions(page);
 });
 
-test('the arrows step by 1, with Shift by 10, with Alt by 0.1, PageUp and PageDown by 10, each one undo step', runs(OPEN, SELECT, WIDTH, ENTER, UP, DOWN, PAGE_UP, PAGE_DOWN, UNDO), async ({ page }) => {
+test('the arrows step by 1, with Shift by 10, with Alt by 0.1, PageUp and PageDown by 10; presses in a row are one undo step, one after a pause starts another', runs(OPEN, SELECT, WIDTH, ENTER, UP, DOWN, PAGE_UP, PAGE_DOWN, UNDO), async ({ page }) => {
   await typeWidth(page, '240');
   await expect.poll(() => stored(page)).toEqual({ width: '240px', undoSteps: 1, present: true });
+  const pause = await burstClock(page);
   const expectWidth = async (width: string, undoSteps: number) => {
     await expect.poll(() => stored(page)).toEqual({ width, undoSteps, present: true });
     await expect.poll(() => computedWidth(page)).toBe(width);
   };
+  // one burst: every press is one more step of the value, and the burst one undo step
   await page.keyboard.press('ArrowUp');
   await expectWidth('241px', 2);
   await page.keyboard.press('Shift+ArrowUp');
-  await expectWidth('251px', 3);
+  await expectWidth('251px', 2);
   await page.keyboard.press('ArrowDown');
-  await expectWidth('250px', 4);
+  await expectWidth('250px', 2);
   await page.keyboard.press('Alt+ArrowDown');
-  await expect.poll(() => stored(page)).toEqual({ width: '249.9px', undoSteps: 5, present: true });
+  await expect.poll(() => stored(page)).toEqual({ width: '249.9px', undoSteps: 2, present: true });
+  // after a pause longer than the window, another burst: another undo step
+  await pause();
   await page.keyboard.press('PageUp');
-  await expect.poll(() => stored(page)).toEqual({ width: '259.9px', undoSteps: 6, present: true });
+  await expect.poll(() => stored(page)).toEqual({ width: '259.9px', undoSteps: 3, present: true });
   await page.keyboard.press('PageDown');
   await page.keyboard.press('PageDown');
-  await expect.poll(() => stored(page)).toEqual({ width: '239.9px', undoSteps: 8, present: true });
-  // one Undo takes back one step
+  await expect.poll(() => stored(page)).toEqual({ width: '239.9px', undoSteps: 3, present: true });
+  // one Undo takes back one burst, the next one the burst before it
   await runDoor(page, UNDO);
-  await expect.poll(() => stored(page)).toEqual({ width: '249.9px', undoSteps: 7, present: true });
+  await expect.poll(() => stored(page)).toEqual({ width: '249.9px', undoSteps: 2, present: true });
+  await runDoor(page, UNDO);
+  await expect.poll(() => stored(page)).toEqual({ width: '240px', undoSteps: 1, present: true });
 });
 
-test('the step buttons step by 1, with Shift by 10 and with Alt by 0.1, each click one undo step', runs(OPEN, SELECT, WIDTH, ENTER, STEP_UP, STEP_DOWN), async ({ page }) => {
+test('the step buttons step by 1, with Shift by 10 and with Alt by 0.1; clicks in a row are one undo step, one after a pause starts another', runs(OPEN, SELECT, WIDTH, ENTER, STEP_UP, STEP_DOWN), async ({ page }) => {
   await typeWidth(page, '240');
   await expect.poll(() => stored(page)).toEqual({ width: '240px', undoSteps: 1, present: true });
+  const pause = await burstClock(page);
   const button = (ref: string) => control(page, ref, { args: { property: 'width' } });
   await button(STEP_UP).click();
   await expect.poll(() => stored(page)).toEqual({ width: '241px', undoSteps: 2, present: true });
   await button(STEP_UP).click({ modifiers: ['Shift'] });
-  await expect.poll(() => stored(page)).toEqual({ width: '251px', undoSteps: 3, present: true });
+  await expect.poll(() => stored(page)).toEqual({ width: '251px', undoSteps: 2, present: true });
   await button(STEP_DOWN).click({ modifiers: ['Alt'] });
-  await expect.poll(() => stored(page)).toEqual({ width: '250.9px', undoSteps: 4, present: true });
+  await expect.poll(() => stored(page)).toEqual({ width: '250.9px', undoSteps: 2, present: true });
+  await pause();
   await button(STEP_DOWN).click();
-  await expect.poll(() => stored(page)).toEqual({ width: '249.9px', undoSteps: 5, present: true });
+  await expect.poll(() => stored(page)).toEqual({ width: '249.9px', undoSteps: 3, present: true });
   // the page draws 249.9px to Chrome's layout unit (1/64 px): 249.890625px
   await expect.poll(async () => Math.abs(parseFloat(await computedWidth(page)) - 249.9)).toBeLessThanOrEqual(1 / 64);
 });

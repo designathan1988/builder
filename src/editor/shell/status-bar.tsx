@@ -32,10 +32,12 @@ export function StatusBar() {
   const dragging = useSyncExternalStore(drag.subscribe, drag.get);
   const words = dragging !== null && dragging.inserting !== null ? dragWords(document, dragging) : null;
   const shown = words ?? message;
+  // the whole message, also its tooltip: a long one is cut on the bar (DESIGN.md "Dock and status bar")
+  const text = shown !== null ? messageText(locale, shown) : null;
   return (
     <footer className="status-bar" data-region="status-bar">
-      <span className="status-bar__message" role="status" aria-live="polite">
-        {shown !== null ? messageText(locale, shown) : null}
+      <span className="status-bar__message" role="status" aria-live="polite" title={text ?? undefined}>
+        {text}
       </span>
       <Slots
         region="status-bar"

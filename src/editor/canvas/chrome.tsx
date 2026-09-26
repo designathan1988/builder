@@ -27,6 +27,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalS
 import { createPortal } from 'react-dom';
 import { message, type Message } from '../../core/commands/registry.ts';
 import { locate, type DocNode, type DocumentJson, type NodeId } from '../../core/document/model.ts';
+import { lineExtent, linesOf, sameLine } from '../../core/geometry/lines.ts';
 import { heldHand, type HandState } from '../../core/structure/hand.ts';
 import type { MessageId } from '../../generated/ids.ts';
 import { elementIcon, manifest } from '../../manifest/runtime.ts';
@@ -36,7 +37,7 @@ import type { DropProposal } from '../drag/drop.ts';
 import { band, drag, ghostReturn, hover, lastDrop, measuring, type DragView, type GhostReturn, type Inserting, type SideView } from '../input/pointer.ts';
 import { useEditorState } from '../store.ts';
 import { useT } from '../text.ts';
-import { canvasFrame, contentBoxes, flowAxis, holdsNode, innerBox, nodeBox } from './coordinates.ts';
+import { canvasFrame, contentBoxes, flowAxis, flowReversed, holdsNode, innerBox, nodeBox } from './coordinates.ts';
 import { TextToolbar } from './text-toolbar.tsx';
 import { EditHandles } from './edit-handles.tsx';
 import { editMode, EDIT_MODES } from './edit-mode.ts';
@@ -247,13 +248,29 @@ export function placeLabel(box: Box, size: { readonly width: number; readonly he
   return places.find((p) => within(p.box, canvas) && !content.some((c) => overlaps(p.box, c))) ?? (places[2] as { box: Box; placement: Placement });
 }
 
-// Where the insertion line of a drop goes, on the screen: across the receiver's box, in the middle of the gap between
-// the reference and its neighbour on the side of the drop (the reference's own edge when it has none there), along
-// the receiver's flow axis.
-export function dropLine(axis: 'x' | 'y', receiver: Box, reference: Box, neighbour: Box | null, placement: 'before' | 'after'): Box {
+// Where the insertion line of a drop goes, on the screen: in the middle of the gap between the reference and its
+// neighbour on the side of the drop as shown (the reference's own edge when it has none there), along the receiver's
+// flow axis; across the receiver's box, or across the line of children the reference is on (`across`, when the
+// receiver lays its children on several lines: a grid's row, a wrapped line).
+export function dropLine(axis: 'x' | 'y', receiver: Box, reference: Box, neighbour: Box | null, placement: 'before' | 'after', across: { readonly from: number; readonly to: number } | null = null): Box {
   const [start, end] = axis === 'y' ? [(b: Box) => b.y, (b: Box) => b.y + b.height] : [(b: Box) => b.x, (b: Box) => b.x + b.width];
   const at = placement === 'before' ? (neighbour ? (end(neighbour) + start(reference)) / 2 : start(reference)) : neighbour ? (end(reference) + start(neighbour)) / 2 : end(reference);
-  return axis === 'y' ? { x: receiver.x, y: at, width: receiver.width, height: 0 } : { x: at, y: receiver.y, width: 0, height: receiver.height };
+  const span = across ?? (axis === 'y' ? { from: receiver.x, to: receiver.x + receiver.width } : { from: receiver.y, to: receiver.y + receiver.height });
+  return axis === 'y' ? { x: span.from, y: at, width: span.to - span.from, height: 0 } : { x: at, y: span.from, width: 0, height: span.to - span.from };
+}
+
+// The insertion line's reference, neighbour and side as shown (spec drag-reorder-canvas, Problems in Pager 5): a
+// neighbour on another line of children is none; at the end of a line (the slot's child begins the next line) the
+// line is drawn after the child before it when the pointer is on that child's line; in a parent that shows its
+// children reversed, before in the document is after as shown.
+export function shownAnchor(axis: 'x' | 'y', reversed: boolean, reference: Box, neighbour: Box | null, placement: 'before' | 'after', pointer: { readonly x: number; readonly y: number } | null): { reference: Box; neighbour: Box | null; placement: 'before' | 'after' } {
+  let anchor = { reference, neighbour, placement };
+  if (neighbour !== null && !sameLine(reference, neighbour, axis)) {
+    const cross = pointer === null ? null : axis === 'x' ? pointer.y : pointer.x;
+    const onNeighbour = cross !== null && (axis === 'x' ? cross >= neighbour.y && cross <= neighbour.y + neighbour.height : cross >= neighbour.x && cross <= neighbour.x + neighbour.width);
+    anchor = onNeighbour ? { reference: neighbour, neighbour: null, placement: placement === 'before' ? 'after' : 'before' } : { reference, neighbour: null, placement };
+  }
+  return reversed ? { ...anchor, placement: anchor.placement === 'before' ? 'after' : 'before' } : anchor;
 }
 
 // The sibling an insertion line is drawn against, and its neighbour on that side: the proposal's own reference
@@ -302,6 +319,8 @@ function DropIndicator({ view }: { readonly view: DropView }) {
   const proposal = useMemo(() => (view.proposal !== null && refusedHere ? { ...view.proposal, refused: true } : view.proposal), [view.proposal, refusedHere]);
   const sideTarget = armed?.offer.target ?? null;
   const sideOffer = armed?.offer ?? null;
+  // where the pointer is, for the line at the end of a line of children (shownAnchor)
+  const pointerAt = view.at;
   const words = dragWords(document, view);
   const receiver = proposal === null ? null : (locate(document, proposal.parent)?.node ?? null);
   const siblings = receiver === null ? [] : receiver.children.filter((c) => !dragged.includes(c.id));
@@ -326,7 +345,17 @@ function DropIndicator({ view }: { readonly view: DropView }) {
         const reference = anchor === null ? null : local(nodeBox(iframe, anchor.reference));
         const next = anchor?.neighbour == null ? null : local(nodeBox(iframe, anchor.neighbour));
         if (box && (target !== null || anchor === null || reference)) {
-          const line = target !== null && sideOffer !== null ? sideLine(target, sideOffer) : anchor !== null && reference ? dropLine(flowAxis(iframe, proposal.parent), box, reference, next, anchor.placement) : null;
+          // the line between the neighbours as shown, across the line of children they are on when there are several
+          const axis = flowAxis(iframe, proposal.parent);
+          const laid = siblings.flatMap((c) => {
+            const b = local(nodeBox(iframe, c.id));
+            return b === null ? [] : [{ box: b }];
+          });
+          const lines = linesOf(laid, axis);
+          const pointer = pointerAt === null ? null : local({ x: pointerAt.x, y: pointerAt.y, width: 0, height: 0 });
+          const shown = anchor !== null && reference ? shownAnchor(axis, flowReversed(iframe, proposal.parent), reference, next, anchor.placement, pointer) : null;
+          const across = shown === null || lines.length < 2 ? null : lineExtent(lines.find((l) => l.some((i) => sameLine(i.box, shown.reference, axis))) ?? [{ box: shown.reference }], axis);
+          const line = target !== null && sideOffer !== null ? sideLine(target, sideOffer) : shown !== null ? dropLine(axis, box, shown.reference, shown.neighbour, shown.placement, across) : null;
           const size = label.current ? { width: label.current.offsetWidth, height: label.current.offsetHeight } : null;
           const gap = parseFloat(getComputedStyle(layer.current as HTMLDivElement).getPropertyValue('--space-2')) || 0;
           const content = contentBoxes(iframe).map((b) => local(b) as Box);
@@ -339,7 +368,7 @@ function DropIndicator({ view }: { readonly view: DropView }) {
     };
     request = requestAnimationFrame(measure);
     return () => cancelAnimationFrame(request);
-  }, [proposal, dragged, document, sideTarget, sideOffer]);
+  }, [proposal, dragged, document, sideTarget, sideOffer, pointerAt]);
 
   if (proposal === null || receiver === null) return <div ref={layer} className="chrome__drop" />;
   const at = (b: Box): CSSProperties => ({ left: b.x, top: b.y, width: b.width, height: b.height });

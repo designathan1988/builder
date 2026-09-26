@@ -4,7 +4,7 @@
 // theme-switch and inspector-panel).
 import { DEFAULT_LOCALE, LOCALES, SECTION_IDS, type Locale, type SectionId } from '../../generated/ids.ts';
 import type { CommandArgs } from '../../generated/commands.ts';
-import { registerHandler } from '../../core/commands/registry.ts';
+import { registerHandler, type RegisteredHandler } from '../../core/commands/registry.ts';
 import { commandOf, manifest } from '../../manifest/runtime.ts';
 import type { Store } from '../../core/store/store.ts';
 import type { EditorUi } from '../state.ts';
@@ -14,24 +14,25 @@ import { ZOOM_MAX, ZOOM_MIN } from '../view/camera.ts';
 import { readOffsets, type Offset } from '../quick-panel/quick-panel.ts';
 import { readSnapSettings, type SnapSettings } from '../view/snap.ts';
 import { readBreakpoint } from '../view/breakpoints.ts';
+import { chosen } from './said.ts';
 
 export type Theme = CommandArgs['preferences.setTheme']['theme'];
 
 // a language item or a theme item stands for the language or the theme the editor shows
-export const setLanguage = registerHandler<'preferences.setLanguage', EditorUi>(
+export const setLanguage: RegisteredHandler<'preferences.setLanguage', EditorUi> = registerHandler(
   'preferences.setLanguage',
   ({ state }, args) => {
     if (state.ui.preferences.locale === args.locale) return { kind: 'change' };
-    return { kind: 'change', ui: { ...state.ui, preferences: { ...state.ui.preferences, locale: args.locale } } };
+    return { kind: 'change', ui: { ...state.ui, preferences: { ...state.ui.preferences, locale: args.locale } }, message: chosen(setLanguage.command, args) };
   },
   (state, args) => args.locale === state.ui.preferences.locale,
 );
 
-export const setTheme = registerHandler<'preferences.setTheme', EditorUi>(
+export const setTheme: RegisteredHandler<'preferences.setTheme', EditorUi> = registerHandler(
   'preferences.setTheme',
   ({ state }, args) => {
     if (state.ui.preferences.theme === args.theme) return { kind: 'change' };
-    return { kind: 'change', ui: { ...state.ui, preferences: { ...state.ui.preferences, theme: args.theme } } };
+    return { kind: 'change', ui: { ...state.ui, preferences: { ...state.ui.preferences, theme: args.theme } }, message: chosen(setTheme.command, args) };
   },
   (state, args) => args.theme === state.ui.preferences.theme,
 );

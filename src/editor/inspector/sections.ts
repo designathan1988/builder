@@ -10,7 +10,7 @@
 // names (properties.json sections[].summary), read on the page the canvas draws (the CSS computed values, whatever
 // sets them: the element's own styles or the browser's defaults; spec, Problems in Pager 2). How each section writes
 // them is below (SUMMARIES); the words come from the catalogue.
-import { message, registerHandler } from '../../core/commands/registry.ts';
+import { message, registerHandler, type RegisteredHandler } from '../../core/commands/registry.ts';
 import { fold } from '../../core/text/fold.ts';
 import type { CommandArgs } from '../../generated/commands.ts';
 import { SECTION_IDS, type MessageId, type SectionId } from '../../generated/ids.ts';
@@ -18,6 +18,7 @@ import type { Locale } from '../../i18n/index.ts';
 import { pluralForm } from '../../i18n/index.ts';
 import { manifest } from '../../manifest/runtime.ts';
 import type { EditorUi } from '../state.ts';
+import { chosen } from '../preferences/said.ts';
 import { withInspectorTab } from '../workspace/layout.ts';
 import { withInspector } from '../workspace/panels.ts';
 
@@ -53,12 +54,12 @@ export const toggleSection = registerHandler<'inspector.toggleSection', EditorUi
 export type InspectorMode = CommandArgs['inspector.setMode']['mode'];
 export const inspectorMode = (ui: EditorUi): InspectorMode => ui.preferences.inspectorMode ?? 'all';
 
-export const setMode = registerHandler<'inspector.setMode', EditorUi>(
+export const setMode: RegisteredHandler<'inspector.setMode', EditorUi> = registerHandler(
   'inspector.setMode',
   ({ state }, { mode }) => {
     const { inspectorMode: _dropped, ...rest } = state.ui.preferences;
     void _dropped;
-    return { kind: 'change', ui: { ...state.ui, preferences: mode === 'essentials' ? { ...rest, inspectorMode: mode } : rest } };
+    return { kind: 'change', ui: { ...state.ui, preferences: mode === 'essentials' ? { ...rest, inspectorMode: mode } : rest }, message: chosen(setMode.command, { mode }) };
   },
   (state, args) => inspectorMode(state.ui) === args.mode,
 );

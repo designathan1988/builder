@@ -3,10 +3,11 @@
 // three columns, an icon grid). Both are editor preferences (src/editor/preferences/preferences.ts), kept after a
 // reload; neither changes the document nor records anything. What the search field filters is the panel's own view
 // (paletteMatches).
-import { registerHandler } from '../../core/commands/registry.ts';
+import { registerHandler, type RegisteredHandler } from '../../core/commands/registry.ts';
 import type { PaletteDensity } from '../preferences/preferences.ts';
 import { commandOf } from '../../manifest/runtime.ts';
 import type { EditorUi } from '../state.ts';
+import { chosen } from '../preferences/said.ts';
 
 // the density while none is chosen (DESIGN.md: two columns is the default in this sidebar width)
 export const DEFAULT_DENSITY: PaletteDensity = 'two-columns';
@@ -27,11 +28,11 @@ export const toggleGroup = registerHandler<'palette.toggleGroup', EditorUi>(
   (state, args) => !isGroupCollapsed(state.ui, String(args.group)),
 );
 
-export const setDensity = registerHandler<'palette.setDensity', EditorUi>(
+export const setDensity: RegisteredHandler<'palette.setDensity', EditorUi> = registerHandler(
   'palette.setDensity',
   ({ state }, { density }) => {
     if (paletteDensity(state.ui) === density) return { kind: 'change' };
-    return { kind: 'change', ui: { ...state.ui, preferences: { ...state.ui.preferences, paletteDensity: density } } };
+    return { kind: 'change', ui: { ...state.ui, preferences: { ...state.ui.preferences, paletteDensity: density } }, message: chosen(setDensity.command, { density }) };
   },
   (state, args) => paletteDensity(state.ui) === args.density,
 );

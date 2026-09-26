@@ -26755,7 +26755,7 @@
           "refusals": []
         },
         {
-          "id": "the-brightness-field-sets-its-filter",
+          "id": "a-bare-number-in-brightness-is-a-percentage",
           "setup": {
             "fixture": "aurora",
             "selection": [
@@ -26774,14 +26774,14 @@
               "args": {
                 "property": "filter",
                 "functions": {
-                  "brightness": "1.2"
+                  "brightness": "120"
                 }
               },
               "target": null,
               "drop": null,
               "action": true,
               "hold": false,
-              "type": "1.2\n"
+              "type": "120\n"
             }
           ],
           "doors": [
@@ -26792,7 +26792,7 @@
               {
                 "op": "set",
                 "path": "/Page/Hero/Actions/@styles/desktop/base/filter",
-                "value": "brightness(1.2)"
+                "value": "brightness(120%)"
               }
             ],
             "selection": [
@@ -26818,7 +26818,7 @@
                   "params": {
                     "property": "Filter",
                     "name": "Actions",
-                    "value": "brightness(1.2)"
+                    "value": "brightness(120%)"
                   }
                 }
               ]
@@ -26830,7 +26830,7 @@
           "refusals": []
         },
         {
-          "id": "the-contrast-field-sets-its-filter",
+          "id": "a-bare-number-in-contrast-is-a-percentage",
           "setup": {
             "fixture": "aurora",
             "selection": [
@@ -26849,14 +26849,14 @@
               "args": {
                 "property": "filter",
                 "functions": {
-                  "contrast": "0.8"
+                  "contrast": "80"
                 }
               },
               "target": null,
               "drop": null,
               "action": true,
               "hold": false,
-              "type": "0.8\n"
+              "type": "80\n"
             }
           ],
           "doors": [
@@ -26867,7 +26867,7 @@
               {
                 "op": "set",
                 "path": "/Page/Hero/Actions/@styles/desktop/base/filter",
-                "value": "contrast(0.8)"
+                "value": "contrast(80%)"
               }
             ],
             "selection": [
@@ -26893,7 +26893,7 @@
                   "params": {
                     "property": "Filter",
                     "name": "Actions",
-                    "value": "contrast(0.8)"
+                    "value": "contrast(80%)"
                   }
                 }
               ]
@@ -26905,7 +26905,7 @@
           "refusals": []
         },
         {
-          "id": "the-saturate-field-sets-its-filter",
+          "id": "a-bare-number-in-saturate-is-a-percentage",
           "setup": {
             "fixture": "aurora",
             "selection": [
@@ -26924,14 +26924,14 @@
               "args": {
                 "property": "filter",
                 "functions": {
-                  "saturate": "2"
+                  "saturate": "200"
                 }
               },
               "target": null,
               "drop": null,
               "action": true,
               "hold": false,
-              "type": "2\n"
+              "type": "200\n"
             }
           ],
           "doors": [
@@ -26942,7 +26942,7 @@
               {
                 "op": "set",
                 "path": "/Page/Hero/Actions/@styles/desktop/base/filter",
-                "value": "saturate(2)"
+                "value": "saturate(200%)"
               }
             ],
             "selection": [
@@ -26968,7 +26968,7 @@
                   "params": {
                     "property": "Filter",
                     "name": "Actions",
-                    "value": "saturate(2)"
+                    "value": "saturate(200%)"
                   }
                 }
               ]
@@ -27055,7 +27055,7 @@
           "refusals": []
         },
         {
-          "id": "the-grayscale-field-sets-its-filter",
+          "id": "a-bare-number-in-grayscale-is-a-percentage",
           "setup": {
             "fixture": "aurora",
             "selection": [
@@ -27074,14 +27074,14 @@
               "args": {
                 "property": "filter",
                 "functions": {
-                  "grayscale": "1"
+                  "grayscale": "100"
                 }
               },
               "target": null,
               "drop": null,
               "action": true,
               "hold": false,
-              "type": "1\n"
+              "type": "100\n"
             }
           ],
           "doors": [
@@ -27092,7 +27092,7 @@
               {
                 "op": "set",
                 "path": "/Page/Hero/Actions/@styles/desktop/base/filter",
-                "value": "grayscale(1)"
+                "value": "grayscale(100%)"
               }
             ],
             "selection": [
@@ -27118,7 +27118,7 @@
                   "params": {
                     "property": "Filter",
                     "name": "Actions",
-                    "value": "grayscale(1)"
+                    "value": "grayscale(100%)"
                   }
                 }
               ]
@@ -27130,7 +27130,7 @@
           "refusals": []
         },
         {
-          "id": "the-invert-field-sets-its-filter",
+          "id": "a-bare-number-in-invert-is-a-percentage",
           "setup": {
             "fixture": "aurora",
             "selection": [
@@ -27149,14 +27149,14 @@
               "args": {
                 "property": "filter",
                 "functions": {
-                  "invert": "1"
+                  "invert": "100"
                 }
               },
               "target": null,
               "drop": null,
               "action": true,
               "hold": false,
-              "type": "1\n"
+              "type": "100\n"
             }
           ],
           "doors": [
@@ -27167,7 +27167,7 @@
               {
                 "op": "set",
                 "path": "/Page/Hero/Actions/@styles/desktop/base/filter",
-                "value": "invert(1)"
+                "value": "invert(100%)"
               }
             ],
             "selection": [
@@ -27193,7 +27193,7 @@
                   "params": {
                     "property": "Filter",
                     "name": "Actions",
-                    "value": "invert(1)"
+                    "value": "invert(100%)"
                   }
                 }
               ]
@@ -27205,7 +27205,7 @@
           "refusals": []
         },
         {
-          "id": "the-sepia-field-sets-its-filter",
+          "id": "a-bare-number-in-sepia-is-a-percentage",
           "setup": {
             "fixture": "aurora",
             "selection": [
@@ -27224,14 +27224,14 @@
               "args": {
                 "property": "filter",
                 "functions": {
-                  "sepia": "0.5"
+                  "sepia": "50"
                 }
               },
               "target": null,
               "drop": null,
               "action": true,
               "hold": false,
-              "type": "0.5\n"
+              "type": "50\n"
             }
           ],
           "doors": [
@@ -27242,7 +27242,7 @@
               {
                 "op": "set",
                 "path": "/Page/Hero/Actions/@styles/desktop/base/filter",
-                "value": "sepia(0.5)"
+                "value": "sepia(50%)"
               }
             ],
             "selection": [
@@ -27268,7 +27268,7 @@
                   "params": {
                     "property": "Filter",
                     "name": "Actions",
-                    "value": "sepia(0.5)"
+                    "value": "sepia(50%)"
                   }
                 }
               ]
@@ -27280,7 +27280,7 @@
           "refusals": []
         },
         {
-          "id": "a-second-filter-keeps-the-first",
+          "id": "a-second-filter-keeps-the-first-in-its-unit",
           "setup": {
             "fixture": "aurora",
             "selection": [
@@ -27313,14 +27313,14 @@
               "args": {
                 "property": "filter",
                 "functions": {
-                  "brightness": "1.2"
+                  "brightness": "120"
                 }
               },
               "target": null,
               "drop": null,
               "action": true,
               "hold": false,
-              "type": "1.2\n"
+              "type": "120\n"
             }
           ],
           "doors": [
@@ -27331,7 +27331,7 @@
               {
                 "op": "set",
                 "path": "/Page/Hero/Actions/@styles/desktop/base/filter",
-                "value": "blur(4px) brightness(1.2)"
+                "value": "blur(4px) brightness(120%)"
               }
             ],
             "selection": [
@@ -27357,7 +27357,7 @@
                   "params": {
                     "property": "Filter",
                     "name": "Actions",
-                    "value": "blur(4px) brightness(1.2)"
+                    "value": "blur(4px) brightness(120%)"
                   }
                 }
               ]

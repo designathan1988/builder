@@ -4,8 +4,9 @@
 // ends here: a field's Enter, the number fields' steps, scrub and unit menu (src/editor/inspector/number-field.ts),
 // through `writeStyle`, in one transaction and one undo step, the same value for every selected element.
 //  - What was typed is read by the property's codec (src/core/style/codecs.ts) against the units and keywords the
-//    property offers (the generated lists), a bare number taking the field's unit (the unit of the value the primary
-//    selected element holds, else the codec's default), and written only when the browser takes it (the CSS support
+//    property offers (the generated lists), a bare number taking the field's default unit (the codec's, px for a
+//    length; never the unit the element held before: spec inspector-number-fields, Problems in Pager 4), and written
+//    only when the browser takes it (the CSS support
 //    port): anything else is refused with status.value.invalid, which names the field and the text (spec, Problems in
 //    Pager 2: never refused without a word), and nothing changes.
 //  - A locked element, or one inside a locked element, is refused (lockRefusal of flags.ts) and keeps its value.
@@ -195,8 +196,8 @@ function longhandValues(property: string, value: Value, rules: ModelRules): Read
 }
 
 // What a text means for a property in the fields of the selection: read by its codec against what the property offers,
-// a bare number in the unit of the value the primary selected element holds (else the codec's default); null when it
-// means nothing the property takes or the browser does not take it.
+// a bare number in the field's default unit (the codec's; Problems in Pager 4); null when it means nothing the
+// property takes or the browser does not take it.
 export function readValue<Ui>(context: HandlerContext<Ui>, property: string, text: string): ReadValue | null {
   const { state, rules, css } = context;
   // a design token of the project, named as a CSS variable, is kept as written (spec css-variables-tokens, Problems in
@@ -206,11 +207,7 @@ export function readValue<Ui>(context: HandlerContext<Ui>, property: string, tex
   const codec = codecFor(property, rules);
   if (codec === null) return null;
   const { units, keywords, axes } = factsOf(property, rules);
-  const primary = state.selection[0] === undefined ? null : locate(state.document, state.selection[0])?.node;
-  const held = primary ? storedValue(primary, property, rules) : undefined;
-  const heldValue = held === undefined ? null : codec.read(held, { units, keywords, defaultUnit: DEFAULT_UNIT });
-  const defaultUnit = heldValue?.kind === 'length' ? heldValue.unit : DEFAULT_UNIT;
-  const value = codec.read(text, { units, keywords, defaultUnit, ...(axes === undefined ? {} : { axes }) });
+  const value = codec.read(text, { units, keywords, defaultUnit: DEFAULT_UNIT, ...(axes === undefined ? {} : { axes }) });
   if (value === null) return null;
   const written = codec.write(value);
   // a recipe is stored by its id and written out as its declarations (output.ts): the browser must take every one of

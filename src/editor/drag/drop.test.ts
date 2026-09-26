@@ -1,7 +1,7 @@
 // The drop proposal (spec drag-reorder-canvas, "Hit zones and thresholds") on measured boxes given by hand.
 import { describe, expect, it } from 'vitest';
 import type { DocNode, DocumentJson, NodeId } from '../../core/document/model.ts';
-import { DROP_ZONES, edgeBand, escapeBand, proposeDrop, type Axis, type Box, type DropSpace } from './drop.ts';
+import { DROP_ZONES, edgeBand, escapeBand, proposeDrop, slotAt, type Axis, type Box, type DropSpace } from './drop.ts';
 
 const node = (id: string, type: string, children: DocNode[] = []): DocNode => ({ id: id as NodeId, type: type as DocNode['type'], name: id, tag: null, attributes: {}, classes: [], styles: {}, text: null, children });
 const DOC: DocumentJson = {
@@ -76,5 +76,27 @@ describe('the drop proposal (src/editor/drag/drop.ts)', () => {
     // a card below the floor's length keeps only the slop; near the card's lower edge, after it
     expect(escapeBand(11, 2, DROP_ZONES)).toBe(2);
     expect(propose(['CardB'], ['CardATitle', 'CardA', 'Grid', 'Page'], 50, 209)).toEqual({ parent: 'Grid', index: 1, placement: 'after', reference: 'CardA', refused: false });
+  });
+});
+
+// the slot in two dimensions (spec drag-reorder-canvas, Problems in Pager 5): a grid of 3 columns of 100 px with 20 px
+// gaps, cards 0-2 on the first row and 3 on the second
+describe('slotAt', () => {
+  const laid = [0, 1, 2, 3].map((order) => ({ id: `c${order}` as NodeId, order, box: { x: (order % 3) * 120, y: order < 3 ? 0 : 60, width: 100, height: 50 } }));
+  it('is between two cards of a row for a point in the gap between them', () => {
+    expect(slotAt(laid, { x: 110, y: 25 }, 'x', false)).toBe(1);
+  });
+  it('is after the last card of a row for a point in the empty cell after it, on the second row', () => {
+    expect(slotAt(laid, { x: 200, y: 85 }, 'x', false)).toBe(4);
+  });
+  it('takes the nearest row for a point in the row gap, never the first card', () => {
+    expect(slotAt(laid, { x: 250, y: 53 }, 'x', false)).toBe(2);
+    expect(slotAt(laid, { x: 250, y: 57 }, 'x', false)).toBe(4);
+  });
+  it('turns before as shown into after in the document in a reversed row', () => {
+    const reversed = [0, 1, 2].map((order) => ({ id: `r${order}` as NodeId, order, box: { x: 240 - order * 120, y: 0, width: 100, height: 50 } }));
+    expect(slotAt(reversed, { x: 350, y: 25 }, 'x', true)).toBe(0);
+    expect(slotAt(reversed, { x: 230, y: 25 }, 'x', true)).toBe(1);
+    expect(slotAt(reversed, { x: 10, y: 25 }, 'x', true)).toBe(3);
   });
 });

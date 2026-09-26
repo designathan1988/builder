@@ -10,8 +10,11 @@
 //   receiver. A container keeps an edge band at each end (min(drop.emptyEdgeMax, drop.emptyEdgeFraction × S) when
 //   empty, min(clamp(drop.edgeFraction × S, drop.edgeMin, drop.edgeMax), drop.edgeCapFraction × S) with children, in
 //   the page's CSS pixels, so they scale with the zoom): before or after it there. Between its bands, and on the page
-//   root's own background, the drop is inside it, at the slot of the pointer: the number of its children whose centre
-//   lies before the pointer along its own flow (spec drag-drop-inside, "Hit zones").
+//   root's own background, the drop is inside it, at the slot of the pointer, read in two dimensions from its
+//   children's real boxes (spec drag-reorder-canvas, Problems in Pager 5; `slotAt`): the line of them the pointer is
+//   on (a row along an x flow, a column along a y flow; else the nearest), then its place along that line as shown.
+// - Before and after are read as shown, along the parent's flow; where the parent shows its children against the
+//   document's order (a row-reverse or column-reverse flex), before a node as shown is after it in the document.
 // - Escape ladder: within min(drop.escapeBandMax, S / 2 − drop.escapeBandInset) screen pixels of an ancestor's edge,
 //   never less than drop.escapeBandFloor on an ancestor at least drop.escapeBandFloorExtent CSS pixels long (Problems in
 //   Pager 4), plus drop.escapeBandSlop, the drop is before or after that ancestor. Where several ancestors share the
@@ -20,6 +23,7 @@
 // The proposal's index counts the receiving parent's children without the dragged nodes: it is the position the
 // first dragged node takes (element.moveTo's index).
 import { locate, walk, type DocumentJson, type NodeId } from '../../core/document/model.ts';
+import { lineExtent, linesOf } from '../../core/geometry/lines.ts';
 import { manifest } from '../../manifest/runtime.ts';
 
 export interface Box {
@@ -37,6 +41,36 @@ export interface DropSpace {
   box(id: NodeId): Box | null;
   // the axis a node lays its children along
   axis(id: NodeId): Axis;
+  // whether a node shows its children against the document's order along that axis (a reverse flex); none: false
+  reversed?(id: NodeId): boolean;
+}
+
+// A child of a container as it is laid out: its box, and its place among the container's children the proposal
+// counts (the dragged ones left out).
+export interface Laid {
+  readonly id: NodeId;
+  readonly box: Box;
+  readonly order: number;
+}
+
+// The slot of a point among a container's children, in two dimensions (spec drag-reorder-canvas, Problems in Pager 5):
+// the line of them the point is on (core/geometry/lines.ts), else the nearest, then before the first child of that
+// line whose centre lies past the point as shown, or after the line's last. Where the container shows its children
+// against the document's order, before a child as shown is after it in the document.
+export function slotAt(laid: readonly Laid[], point: { readonly x: number; readonly y: number }, axis: Axis, reversed: boolean): number {
+  if (laid.length === 0) return 0;
+  const cross = axis === 'x' ? point.y : point.x;
+  const main = axis === 'x' ? point.x : point.y;
+  const distance = (line: readonly Laid[]) => {
+    const { from, to } = lineExtent(line, axis);
+    return cross < from ? from - cross : cross > to ? cross - to : 0;
+  };
+  const line = linesOf(laid, axis).reduce((best, l) => (distance(l) < distance(best) ? l : best));
+  const centre = (k: Laid) => (axis === 'x' ? k.box.x + k.box.width / 2 : k.box.y + k.box.height / 2);
+  const past = line.find((k) => centre(k) > main);
+  const last = line[line.length - 1] as Laid;
+  if (reversed) return past !== undefined ? past.order + 1 : last.order;
+  return past !== undefined ? past.order : last.order + 1;
 }
 
 // Where the dragged nodes would land: in `parent` at `index`; before or after `reference` (a sibling), or inside
@@ -120,26 +154,26 @@ export function proposeDrop(
   const at = hit === undefined ? null : locate(document, hit as NodeId);
   if (at === null) return null;
 
-  const place = (id: NodeId, placement: 'before' | 'after'): DropProposal | null => {
+  // before or after a node as shown, in the document's order: swapped in a parent that shows its children reversed
+  const place = (id: NodeId, shown: 'before' | 'after'): DropProposal | null => {
     const node = locate(document, id);
     if (!node?.parent) return null;
+    const placement = space.reversed?.(node.parent.id) === true ? (shown === 'before' ? 'after' : 'before') : shown;
     const siblings = node.parent.children.filter((c) => !dragged.includes(c.id));
     const index = siblings.findIndex((c) => c.id === id) + (placement === 'after' ? 1 : 0);
     return { parent: node.parent.id, index, placement, reference: id, refused: false };
   };
-  // inside a container, at the slot of the pointer: the number of its children (without the dragged ones) whose
-  // centre lies before the pointer along the container's own flow (spec drag-reorder-canvas, "Hit zones")
+  // inside a container, at the slot of the pointer among its children (without the dragged ones), in two dimensions
   const inside = (id: NodeId): DropProposal | null => {
     const node = locate(document, id);
     if (!node) return null;
-    const axis = space.axis(id);
-    let index = 0;
-    for (const child of node.node.children) {
-      if (dragged.includes(child.id)) continue;
-      const box = space.box(child.id);
-      if (box && (axis === 'x' ? box.x + box.width / 2 : box.y + box.height / 2) < (axis === 'x' ? point.x : point.y)) index += 1;
-    }
-    return { parent: id, index, placement: 'inside', reference: id, refused: false };
+    const laid = node.node.children
+      .filter((c) => !dragged.includes(c.id))
+      .flatMap((c, order) => {
+        const box = space.box(c.id);
+        return box ? [{ id: c.id, box, order }] : [];
+      });
+    return { parent: id, index: slotAt(laid, point, space.axis(id), space.reversed?.(id) === true), placement: 'inside', reference: id, refused: false };
   };
   // the page root under the pointer (its own background): inside it
   if (at.parent === null) return inside(at.node.id);

@@ -2,13 +2,14 @@
 // only (spec layers-tree: not saved, not an undo step): folding never changes the document nor the selection. A
 // branch that hides a selected node unfolds when the selection changes (spec layers-tree, Problems in Pager 2), so a
 // selection made on the canvas always has its row in Layers.
-import { message, registerHandler } from '../../core/commands/registry.ts';
+import { message, registerHandler, type RegisteredHandler } from '../../core/commands/registry.ts';
 import { locate, walk, type DocNode, type DocumentJson, type NodeId } from '../../core/document/model.ts';
 import type { StoreState } from '../../core/store/store.ts';
 import { asking } from '../focus/focus.ts';
 import type { RowDetail } from '../preferences/preferences.ts';
 import { commandOf } from '../../manifest/runtime.ts';
 import type { EditorUi } from '../state.ts';
+import { itemSwitched } from '../preferences/said.ts';
 
 export interface LayersState {
   // the nodes whose branch is folded
@@ -118,17 +119,18 @@ export const expandAll = registerHandler<'layers.expandAll', EditorUi>('layers.e
 // layers.setRowDetails shows or hides one detail beside each row's name (spec layers-row-columns): the HTML tag, the id,
 // the classes, the attributes; the choice is a preference, kept after a reload. Its menu item stands for the detail
 // being shown; run without `shown` (its menu item), it turns the detail over.
-export const setRowDetails = registerHandler<'layers.setRowDetails', EditorUi>(
+export const setRowDetails: RegisteredHandler<'layers.setRowDetails', EditorUi> = registerHandler(
   'layers.setRowDetails',
   ({ state }, { detail, shown }) => {
     const now = rowDetailsOf(state.ui);
     const on = shown ?? !now.includes(detail);
     const next = ROW_DETAILS.filter((d) => (d === detail ? on : now.includes(d)));
     if (next.join() === now.join()) return { kind: 'change' };
+    const said = itemSwitched(setRowDetails.command, { detail }, on);
     const { rowDetails: _dropped, ...rest } = state.ui.preferences;
     void _dropped;
     const same = next.join() === DEFAULT_ROW_DETAILS.join();
-    return { kind: 'change', ui: { ...state.ui, preferences: same ? rest : { ...rest, rowDetails: next } } };
+    return { kind: 'change', ui: { ...state.ui, preferences: same ? rest : { ...rest, rowDetails: next } }, message: said };
   },
   (state, args) => rowDetailsOf(state.ui).includes(args.detail as RowDetail),
 );

@@ -18,7 +18,7 @@ import { isFeatureBuilt } from '../../app/features.ts';
 import { TEXT_EDITING, editArgs } from '../canvas/text-edit.ts';
 import { readClipboard } from '../clipboard.ts';
 import type { EditorStore } from '../store.ts';
-import { cancelPan, holdAlt, holdSpace, modifierOf, openGesture } from './pointer.ts';
+import { cancelPan, holdAlt, holdSpace, modifierOf, openGesture, pointerPressing } from './pointer.ts';
 import { shortcutRuns } from './shortcut-rule.ts';
 import { keyContextIn } from '../canvas/edit-mode.ts';
 
@@ -196,6 +196,16 @@ function typesText(target: EventTarget | null): boolean {
   return element.tagName === 'INPUT' && TEXT_INPUTS.includes((element as HTMLInputElement).type);
 }
 
+// Whether Space belongs to the focused control rather than to the pan (spec zoom-wheel-pan, Problems in Pager 2): a
+// control the keyboard focused (reached with Tab or the arrows, never one a click left focused: `pointerFocused`, the
+// element that took the focus during a pointer press) whose key context has a Space door that runs now (a palette
+// tile: key-space-in-palette). :focus-visible cannot tell: a key pressed on a clicked control turns it on.
+const SPACE_DOORS = manifest.doors.filter((d) => d.door.kind === 'shortcut' && d.door.chord === 'Space');
+function spaceIsTheControls(target: EventTarget | null, context: KeyContextId, pointerFocused: EventTarget | null): boolean {
+  const element = htmlElement(target);
+  return element !== null && element !== pointerFocused && SPACE_DOORS.some((d) => d.door.kind === 'shortcut' && d.door.context === context && shortcutRunsNow(d));
+}
+
 // The arguments a key runs its command with: those the focused control stands for, then the door's own over them; an
 // object argument both give is one object, the door's keys over the control's (a gradient stop stands for
 // { edit: { stop: 2 } }, its ArrowLeft door gives { edit: { nudge: -1 } }: the key nudges that stop).
@@ -213,15 +223,17 @@ function withDoorArgs(own: Readonly<Record<string, unknown>>, door: Readonly<Rec
 const SLIDER_KEYS: Readonly<Record<string, number>> = { ArrowRight: 1, ArrowUp: 1, ArrowLeft: -1, ArrowDown: -1 };
 
 export function installKeymap(store: EditorStore, target: Window = window): () => void {
+  let pointerFocused: EventTarget | null = null;
   const onKeyDown = (event: KeyboardEvent) => {
     // Alt held: the canvas measures distances while it is (spec hover-measure); it binds nothing alone
     if (event.key === ALT) holdAlt(true);
     // during a pointer gesture the keys are the gesture's (pointer.ts)
     const gesture = openGesture();
     const focused = contextOf(event.target);
-    // Space held over the canvas arms the pan, whatever has the focus but a field or the text edited in place (spec
-    // zoom-wheel-pan, Problems in Pager 2); Escape during a pan puts the view back (the pointer owner's)
-    if (event.code === 'Space' && !FIELDS.includes(focused) && !typesText(event.target) && holdSpace(true)) {
+    // Space held over the canvas arms the pan, whatever has the focus but a field, the text edited in place or a control
+    // the keyboard focused that takes Space (spec zoom-wheel-pan, Problems in Pager 2); Escape during a pan puts the
+    // view back (the pointer owner's)
+    if (event.code === 'Space' && !FIELDS.includes(focused) && !typesText(event.target) && !spaceIsTheControls(event.target, focused, pointerFocused) && holdSpace(true)) {
       event.preventDefault();
       return;
     }
@@ -283,6 +295,12 @@ export function installKeymap(store: EditorStore, target: Window = window): () =
     holdSpace(false);
     holdAlt(false);
   };
+  // the element that took the focus during a pointer press (a clicked tile: the pointer owner says a button is down),
+  // for Space (spaceIsTheControls); a focus that arrives otherwise (Tab, the arrows, a script after a key) clears it
+  const onFocusIn = (event: FocusEvent) => {
+    pointerFocused = pointerPressing() ? event.target : null;
+  };
+  target.addEventListener('focusin', onFocusIn, true);
   target.addEventListener('keydown', onKeyDown);
   target.addEventListener('keyup', onKeyUp);
   target.addEventListener('blur', onBlur);
@@ -290,5 +308,6 @@ export function installKeymap(store: EditorStore, target: Window = window): () =
     target.removeEventListener('keydown', onKeyDown);
     target.removeEventListener('keyup', onKeyUp);
     target.removeEventListener('blur', onBlur);
+    target.removeEventListener('focusin', onFocusIn, true);
   };
 }
