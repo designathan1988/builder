@@ -33,6 +33,8 @@ export interface ShadowEdit {
   readonly hidden?: boolean;
   readonly remove?: boolean;
   readonly nudge?: { readonly x?: number; readonly y?: number };
+  // every layer at once, as CSS text (the text shadow's text field; spec shadow-editor, Problems in Pager 4)
+  readonly css?: string;
 }
 
 const LENGTH = /^(-?(?:\d+(?:\.\d*)?|\.\d+))(px|em|rem)?$/i;
@@ -45,9 +47,59 @@ function lengthOf(text: string, least: number | null): string | null {
   return `${Math.round(n * 100) / 100}${(typed[2] ?? 'px').toLowerCase()}`;
 }
 
+// A shadow's layers read from its CSS text (spec shadow-editor, Problems in Pager 4): layers part at the commas outside
+// parentheses; in each, the lengths in order are X, Y, blur and (a box shadow's) spread, `inset` sets inset, and what is
+// left is the colour (currentcolor when nothing is); null when a layer has fewer than two lengths or more than the
+// structure takes, or a length is no length.
+function layersFromCss(text: string, fields: readonly StructureField[]): StructuredLayer[] | null {
+  const parts: string[][] = [[]];
+  let word = '';
+  let depth = 0;
+  const push = () => {
+    if (word !== '') parts[parts.length - 1]?.push(word);
+    word = '';
+  };
+  for (const c of text) {
+    if (c === '(') depth += 1;
+    if (c === ')') depth -= 1;
+    if (depth === 0 && (c === ',' || /\s/.test(c))) {
+      push();
+      if (c === ',') parts.push([]);
+      continue;
+    }
+    word += c;
+  }
+  push();
+  const lengths = Object.values(LENGTH_OF).filter((id) => fields.some((f) => f.id === id));
+  const colour = fields.find((f) => f.type !== 'length' && f.type !== 'boolean')?.id;
+  const layers: StructuredLayer[] = [];
+  for (const words of parts) {
+    const inset = words.some((w) => w.toLowerCase() === 'inset');
+    const rest = words.filter((w) => w.toLowerCase() !== 'inset');
+    const typed = rest.filter((w) => LENGTH.test(w));
+    if (typed.length < 2 || typed.length > lengths.length) return null;
+    const read = typed.map((w, i) => lengthOf(w, lengths[i] === 'blur' ? 0 : null));
+    if (read.some((l) => l === null)) return null;
+    const named = rest.filter((w) => !LENGTH.test(w)).join(' ');
+    const layer: Record<string, string | boolean> = {};
+    for (const field of fields) {
+      if (field.id === colour) layer[field.id] = named === '' ? 'currentcolor' : named;
+      else if (field.type === 'boolean') layer[field.id] = field.id === 'inset' ? inset : false;
+      else layer[field.id] = read[lengths.indexOf(field.id)] ?? '0px';
+    }
+    layers.push(layer);
+  }
+  return layers;
+}
+
 // The layers once the edit is made, or the name of what the edit typed that is refused (layer: no such layer).
 export function editedLayers(layers: readonly StructuredLayer[], fields: readonly StructureField[], edit: ShadowEdit): { readonly layers: readonly StructuredLayer[] } | { readonly refused: string } {
   if (edit.reset === true) return { layers: [] };
+  if (typeof edit.css === 'string') {
+    if (edit.css.trim() === '') return { layers: [] };
+    const read = layersFromCss(edit.css, fields);
+    return read === null ? { refused: 'css' } : { layers: read };
+  }
   // the colour field: the one that is neither a length nor a flag (the structure's closed list of types)
   const isColour = (f: StructureField) => f.type !== 'length' && f.type !== 'boolean';
   const colour = fields.find(isColour)?.id;

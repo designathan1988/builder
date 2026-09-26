@@ -137,6 +137,11 @@ export function ShadowControl({ entry, door }: { readonly entry: DoorEntry; read
       );
     case 'shadow-reset':
       return <EditButton entry={entry} door={door} args={{ property, edit: fixedEdit }} ready={door.available && selected && layers.length > 0} />;
+    case 'shadow-css': {
+      // every layer as CSS text (spec shadow-editor, Problems in Pager 4): what the rows show, typed back as one value
+      const part = { show: () => (layers.length === 0 ? '' : shadowCss(layers, property, MODEL_RULES)), args: (typed: string) => ({ property, edit: { css: typed } }) };
+      return <TextStyleField entry={entry} door={{ ...door, available: door.available && selected }} property={property} longhands={null} label={door.label} part={part} />;
+    }
     case 'shadow-remove':
       return <EditButton entry={entry} door={door} args={{ property, edit: { layer: chosen, remove: true } }} ready={editing} />;
     case 'shadow-inset':

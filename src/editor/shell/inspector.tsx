@@ -607,6 +607,12 @@ function AddProperty() {
   const t = useT();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
+  // opened, the list's filter takes the focus (spec inspector-add-property, Problems in Pager 3)
+  const filter = useRef<HTMLInputElement>(null);
+  const list = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (open) filter.current?.focus();
+  }, [open]);
   const mode = useEditorState((s) => inspectorMode(s.ui));
   const revealed = useEditorState((s) => s.ui.revealed?.field ?? null);
   const node = useSingleNode();
@@ -628,8 +634,17 @@ function AddProperty() {
         {REVEAL.door.icon !== null ? <Icon name={REVEAL.door.icon} size="md" /> : null}
       </button>
       {open ? (
-        <div className="add-property__menu" role="menu" aria-label={door.label}>
-          <input className="input" type="search" aria-label={t('inspector.addProperty.filter')} placeholder={t('inspector.addProperty.filter')} value={query} onChange={(event) => setQuery(event.currentTarget.value)} data-local="add-property-filter" />
+        // a property chosen closes the list; its field takes the focus (inspector.reveal)
+        <div ref={list} className="add-property__menu" role="menu" aria-label={door.label} onClick={(event) => (event.target instanceof Element && event.target.closest('[data-door]') ? setOpen(false) : undefined)}>
+          {/* Enter in the filter (its form's one field) chooses the first property listed */}
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              list.current?.querySelector<HTMLElement>('.add-property__item')?.click();
+            }}
+          >
+            <input ref={filter} className="input" type="search" aria-label={t('inspector.addProperty.filter')} placeholder={t('inspector.addProperty.filter')} value={query} onChange={(event) => setQuery(event.currentTarget.value)} data-local="add-property-filter" />
+          </form>
           {hidden.length === 0 ? <p className="add-property__none">{t('inspector.addProperty.none')}</p> : null}
           {hidden.map((target) => (
             <DoorControl key={target} entry={REVEAL} args={{ property: target }} label={`${t((TARGETS.get(target)?.labelKey ?? '') as MessageId)} · ${target}`} className="add-property__item" />
