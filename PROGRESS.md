@@ -60,4 +60,3 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
     under a full check's load: the state walk grows with the doors; cause to fix (faster walk), never the limit.
 50. e2e:tooth: workbench-panel's fold scenario ends in the start state (targeted tooth: toggle only opens);
     command-bar fails 52 in setup (finding 35): teeth by commandBar.open off and offers off (tooth-bar-* logs).
-52. OPEN FAILURE (codex 7.1, a2e1689): shared-style-classes.spec:69 reads "2 elements", the name now an input (a310-light-*).
