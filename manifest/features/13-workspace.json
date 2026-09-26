@@ -949,7 +949,793 @@
           "Developer tools adds a Document tab showing the live document JSON read-only, updated after every command; the choice is stored in preferences."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "the-strip-toggle-opens-the-workbench-under-the-canvas-with-its-tab",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setWorkbenchState#toolbar-workbench-strip-toggle",
+              "args": {
+                "state": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "workspace.setWorkbenchState#toolbar-workbench-strip-toggle"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": null,
+            "editor": {
+              "regions": [
+                {
+                  "region": "dock-strip",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 600,
+                  "reference": null
+                },
+                {
+                  "region": "dock-strip",
+                  "measure": "y",
+                  "relation": "less-than",
+                  "value": 700,
+                  "reference": null
+                },
+                {
+                  "region": "dock-timeline",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": "dock-strip"
+                },
+                {
+                  "region": "file-tabs",
+                  "measure": "width",
+                  "relation": "equals",
+                  "value": 888,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-second-strip-toggle-folds-it-to-its-strip",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setWorkbenchState#toolbar-workbench-strip-toggle",
+              "args": {
+                "state": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setWorkbenchState#toolbar-workbench-strip-toggle",
+              "args": {
+                "state": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "workspace.setWorkbenchState#toolbar-workbench-strip-toggle"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": null,
+            "editor": {
+              "regions": [
+                {
+                  "region": "dock-strip",
+                  "measure": "y",
+                  "relation": "equals",
+                  "value": 848,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "maximize-covers-the-whole-canvas-area",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setWorkbenchState#toolbar-workbench-strip-toggle",
+              "args": {
+                "state": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setWorkbenchState#toolbar-workbench-strip-maximize",
+              "args": {
+                "state": "toggle-max"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "workspace.setWorkbenchState#toolbar-workbench-strip-maximize"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": null,
+            "editor": {
+              "regions": [
+                {
+                  "region": "dock-strip",
+                  "measure": "y",
+                  "relation": "equals",
+                  "value": 41,
+                  "reference": null
+                },
+                {
+                  "region": "dock-strip",
+                  "measure": "width",
+                  "relation": "equals",
+                  "value": 888,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "maximize-again-restores-the-open-workbench",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setWorkbenchState#toolbar-workbench-strip-toggle",
+              "args": {
+                "state": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setWorkbenchState#toolbar-workbench-strip-maximize",
+              "args": {
+                "state": "toggle-max"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setWorkbenchState#toolbar-workbench-strip-maximize",
+              "args": {
+                "state": "toggle-max"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "workspace.setWorkbenchState#toolbar-workbench-strip-maximize"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": null,
+            "editor": {
+              "regions": [
+                {
+                  "region": "dock-strip",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 600,
+                  "reference": null
+                },
+                {
+                  "region": "dock-strip",
+                  "measure": "y",
+                  "relation": "less-than",
+                  "value": 700,
+                  "reference": null
+                },
+                {
+                  "region": "file-tabs",
+                  "measure": "y",
+                  "relation": "equals",
+                  "value": 40,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "view-workbench-opens-it-and-says-so",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#menu-view-workbench",
+              "args": {
+                "panel": "workbench",
+                "open": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "workspace.setPanelOpen#menu-view-workbench"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.panel.opened",
+                  "params": {
+                    "panel": "Workbench"
+                  }
+                }
+              ]
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "dock-strip",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 600,
+                  "reference": null
+                },
+                {
+                  "region": "dock-strip",
+                  "measure": "y",
+                  "relation": "less-than",
+                  "value": 700,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "developer-tools-adds-the-document-tab-and-shows-it",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.toggleDeveloperTools#menu-view",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "workspace.toggleDeveloperTools#menu-view"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.panel.opened",
+                  "params": {
+                    "panel": "Document"
+                  }
+                }
+              ]
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "dock-strip",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 600,
+                  "reference": null
+                },
+                {
+                  "region": "dock-strip",
+                  "measure": "y",
+                  "relation": "less-than",
+                  "value": 700,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": {
+              "reload": "immediate",
+              "document": null,
+              "preferences": "same",
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "developer-tools-turned-off-takes-the-document-tab-out",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.toggleDeveloperTools#menu-view",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.toggleDeveloperTools#menu-view",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "workspace.toggleDeveloperTools#menu-view"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.panel.closed",
+                  "params": {
+                    "panel": "Document"
+                  }
+                }
+              ]
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "dock-strip",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 600,
+                  "reference": null
+                },
+                {
+                  "region": "dock-strip",
+                  "measure": "y",
+                  "relation": "less-than",
+                  "value": 700,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": {
+              "reload": "immediate",
+              "document": null,
+              "preferences": "same",
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-tab-of-the-strip-shows-its-panel",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.toggleDeveloperTools#menu-view",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setActiveTab#tab-strip-tab",
+              "args": {
+                "group": "workbench",
+                "panel": "timeline"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "workspace.setActiveTab#tab-strip-tab"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": null,
+            "editor": {
+              "regions": [
+                {
+                  "region": "dock-strip",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 600,
+                  "reference": null
+                },
+                {
+                  "region": "dock-strip",
+                  "measure": "y",
+                  "relation": "less-than",
+                  "value": 700,
+                  "reference": null
+                },
+                {
+                  "region": "dock-timeline",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": "dock-strip"
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "closing-a-tab-leaves-the-others-open",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setWorkbenchState#toolbar-workbench-strip-toggle",
+              "args": {
+                "state": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setPanelOpen#workbench-tab-close",
+              "args": {
+                "panel": "timeline",
+                "open": "close"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "workspace.setPanelOpen#workbench-tab-close"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.panel.closed",
+                  "params": {
+                    "panel": "Timeline"
+                  }
+                }
+              ]
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "dock-strip",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 600,
+                  "reference": null
+                },
+                {
+                  "region": "dock-strip",
+                  "measure": "y",
+                  "relation": "less-than",
+                  "value": 700,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "closing-the-last-tab-folds-the-workbench",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setWorkbenchState#toolbar-workbench-strip-toggle",
+              "args": {
+                "state": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setPanelOpen#workbench-tab-close",
+              "args": {
+                "panel": "timeline",
+                "open": "close"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setPanelOpen#workbench-tab-close",
+              "args": {
+                "panel": "checks",
+                "open": "close"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "workspace.setPanelOpen#workbench-tab-close"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.panel.closed",
+                  "params": {
+                    "panel": "Checks"
+                  }
+                }
+              ]
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "dock-strip",
+                  "measure": "y",
+                  "relation": "equals",
+                  "value": 848,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
     },
     {
       "id": "panel-resize",
