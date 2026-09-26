@@ -61,3 +61,23 @@ test('Distribute waits for three positioned elements, saying its own reason, and
   await select(page, ['n-card-a', 'n-card-b', 'n-card-c']);
   expect((await distributeItem(page)).available).toBe(true);
 });
+
+// The doors read the layer the editor shows (the audit's A3.23, found in its real use): an element made absolute at
+// Phone is positioned there, so Arrange › Align left is available at Phone and runs, and its message counts the one
+// element in words.
+const PHONE = 'view.setBreakpoint#toolbar-breakpoint-tabs-phone';
+const ALIGN_LEFT = 'position.align#menu-arrange-left';
+test('at Phone an element made absolute there aligns: the door reads the breakpoint shown, and says "1 element"', runs(OPEN, PHONE, ROW, POSITION, ALIGN_LEFT), async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await openEditor(page);
+  const chooser = page.waitForEvent('filechooser');
+  await runDoor(page, OPEN);
+  await (await chooser).setFiles({ name: 'aurora.json', mimeType: 'application/json', buffer: fs.readFileSync(FIXTURE) });
+  await expect(page.frameLocator('.frame__page').locator('[data-node="n-grid"]')).toHaveCount(1);
+  await runDoor(page, PHONE);
+  await positionAbsolute(page, 'n-card-a');
+  await openMenu(page, 'arrange');
+  await expect(page.locator(`[data-door="${ALIGN_LEFT}"]`)).not.toHaveAttribute('aria-disabled', 'true');
+  await page.locator(`[data-door="${ALIGN_LEFT}"]`).click();
+  await expect(page.getByRole('status')).toHaveText('Align left: 1 element.');
+});

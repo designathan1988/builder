@@ -13,7 +13,7 @@ import type { DoorEntry } from '../../manifest/runtime.ts';
 import { chordHint } from '../input/keymap.ts';
 import { pressedByPointer } from '../input/pointer.ts';
 import type { EditorUi } from '../state.ts';
-import { MODEL_RULES, useEditorState, useStore, type EditorStore } from '../store.ts';
+import { layeredRules, useEditorState, useStore, type EditorStore } from '../store.ts';
 import { PanelBodies } from '../shell/bodies.ts';
 import { useT } from '../text.ts';
 import { opensEmptyPanel } from '../workspace/panels.ts';
@@ -69,10 +69,11 @@ export function useDoor(entry: DoorEntry, args: Readonly<Record<string, unknown>
   const built = ready && isDoorBuilt(entry) && !opensEmptyPanel({ ...entry.door.args, ...args }, drawsBody);
   const current = useEditorState((s) => built && isCurrent(entry, s, args));
   const predicate = (PREDICATES as PredicateTable<EditorUi>)[entry.command.availability.predicate as PredicateId];
-  const available = useEditorState((s) => built && (predicate?.test(s, MODEL_RULES) ?? true));
+  // the predicate reads the layer the editor shows, as the store does when the command runs
+  const available = useEditorState((s) => built && (predicate?.test(s, layeredRules(s.ui)) ?? true));
   // why it is not available now: its predicate's own refusal when it names one (Distribute: three elements, or
   // positioned ones; the audit's A3.23), else the door's reason (disabledReasonKey); one JSON text, stable between renders
-  const refused = useEditorState((s) => (built && !available && predicate?.refusal !== undefined ? JSON.stringify(predicate.refusal(s, MODEL_RULES)) : null));
+  const refused = useEditorState((s) => (built && !available && predicate?.refusal !== undefined ? JSON.stringify(predicate.refusal(s, layeredRules(s.ui))) : null));
   // the words the label fills in for the state now (the command's labelParams), as one JSON text so the hook's value
   // is stable between renders
   const params = useEditorState((s) => (built ? JSON.stringify(labelParamsOf(entry, s)) : '{}'));
@@ -115,7 +116,7 @@ export function appliesNow(entry: DoorEntry, args: Readonly<Record<string, unkno
   const given = { ...entry.door.args, ...args };
   const readsAtRun = Object.entries(entry.command.args).some(([name, arg]) => (arg.type === 'file' || arg.type === 'clipboard') && !arg.optional && !(name in given));
   if (!readsAtRun) return store.canRun(entry.command.id, given as never);
-  return (PREDICATES as PredicateTable<EditorUi>)[entry.command.availability.predicate as PredicateId]?.test(store.getState(), MODEL_RULES) ?? true;
+  return (PREDICATES as PredicateTable<EditorUi>)[entry.command.availability.predicate as PredicateId]?.test(store.getState(), layeredRules(store.getState().ui)) ?? true;
 }
 
 function chooseFile(): Promise<Uint8Array | null> {
