@@ -1723,5 +1723,7 @@
   "status.classes.deleted": "Classe .{name} apagada de {count} elementos.",
   "status.input.invalidType": "O tipo de input \"{type}\" não é um tipo HTML válido.",
   "status.attribute.reserved": "\"{name}\" pertence a {owner}; use esse campo.",
-  "styles.deleteClassUsedBy": "Apagar classe usada por {count} elementos"
+  "styles.deleteClassUsedBy": "Apagar classe usada por {count} elementos",
+  "settings.inputTypeDrops": "Mudar o tipo removerá {attributes}. Pressione Enter para aplicar.",
+  "settings.valuePicker": "Escolher {attribute}"
 }

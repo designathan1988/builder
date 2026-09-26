@@ -154,6 +154,7 @@ export const elementsFileSchema = z.strictObject({
   attributes: z.array(attributeSchema).min(1),
   settingsSections: z.array(settingsSectionSchema).min(1),
   autocompleteTokens: z.array(z.string().min(1)).min(1),
+  inputValueEditors: z.record(z.string(), z.enum(['date', 'time', 'month', 'week', 'datetime-local', 'color', 'number'])),
   palette: z.array(paletteGroupSchema).min(1),
   wrappers: z.array(wrapperSchema).min(1),
 });

@@ -3994,5 +3994,7 @@ export const MESSAGE_IDS = [
   "status.input.invalidType",
   "status.attribute.reserved",
   "styles.deleteClassUsedBy",
+  "settings.inputTypeDrops",
+  "settings.valuePicker",
 ] as const;
 export type MessageId = (typeof MESSAGE_IDS)[number];

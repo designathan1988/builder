@@ -1723,5 +1723,7 @@
   "status.classes.deleted": "Deleted .{name} from {count} elements.",
   "status.input.invalidType": "Input type \"{type}\" is not an HTML input type.",
   "status.attribute.reserved": "\"{name}\" is managed by {owner}; use that field.",
-  "styles.deleteClassUsedBy": "Delete class used by {count} elements"
+  "styles.deleteClassUsedBy": "Delete class used by {count} elements",
+  "settings.inputTypeDrops": "Changing type will remove {attributes}. Press Enter to apply.",
+  "settings.valuePicker": "Choose {attribute}"
 }

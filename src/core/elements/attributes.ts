@@ -102,6 +102,14 @@ function invalidForNode(at: Location, attribute: string, stored: string | number
     }
     if (['min', 'max', 'step'].includes(attribute) && ['number', 'range'].includes(type) && numeric(text) === null && !(attribute === 'step' && text === 'any')) return true;
     if (attribute === 'step' && text !== 'any' && ['number', 'range'].includes(type) && (numeric(text) ?? 0) <= 0) return true;
+    if (['min', 'max', 'value'].includes(attribute) && ['date', 'time', 'month', 'week', 'datetime-local'].includes(type)) {
+      if (!validDateValue(type, text)) return true;
+      const minimum = next.min === undefined ? null : String(next.min);
+      const maximum = next.max === undefined ? null : String(next.max);
+      const current = next.value === undefined ? null : String(next.value);
+      if (minimum !== null && maximum !== null && minimum > maximum) return true;
+      if (current !== null && ((minimum !== null && current < minimum) || (maximum !== null && current > maximum))) return true;
+    }
     if (['min', 'max', 'value'].includes(attribute) && ['number', 'range'].includes(type)) {
       const minimum = numeric(next.min) ?? (type === 'range' ? 0 : null);
       const maximum = numeric(next.max) ?? (type === 'range' ? 100 : null);
@@ -112,7 +120,7 @@ function invalidForNode(at: Location, attribute: string, stored: string | number
   }
   if (at.node.type === 'progress' || at.node.type === 'meter') {
     const minimum = at.node.type === 'meter' ? (numeric(next.min) ?? 0) : 0;
-    const maximum = numeric(next.max) ?? Number.POSITIVE_INFINITY;
+    const maximum = numeric(next.max) ?? (at.node.type === 'progress' ? 1 : Number.POSITIVE_INFINITY);
     if (maximum <= minimum) return true;
     for (const name of ['value', 'low', 'high', 'optimum']) {
       const current = numeric(next[name as keyof typeof next]);

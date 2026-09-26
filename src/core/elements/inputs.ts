@@ -52,6 +52,14 @@ export function attributeApplies(node: DocNode, attribute: string): boolean {
   return !(EXCEPT[attribute] ?? []).includes(type);
 }
 
+// The attributes a type change will remove, named by their manifest IDs for the inspector's
+// warning. The handler and its warning use this one applicability rule.
+export function droppedInputAttributes(node: DocNode, nextType: string): readonly string[] {
+  if (node.type !== 'input') return [];
+  const switched: DocNode = { ...node, attributes: { ...node.attributes, inputType: nextType } };
+  return Object.keys(node.attributes).filter((attribute) => attribute !== 'inputType' && !attributeApplies(switched, attribute));
+}
+
 function oneSelected(state: { readonly document: DocumentJson; readonly selection: readonly NodeId[] }): Location | null {
   const [only, ...others] = state.selection;
   return only === undefined || others.length > 0 ? null : locate(state.document, only);
@@ -67,7 +75,8 @@ export const setInputTypeCommand = registerHandler('element.setInputType', ({ st
   const said = message('status.input.typeSet', { name: at.node.name, type: nextType });
   if (inputTypeOf(at.node) === nextType) return { kind: 'change', message: said };
   const switched: DocNode = { ...at.node, attributes: { ...at.node.attributes, inputType: nextType } };
-  const kept = Object.fromEntries(Object.entries(switched.attributes).filter(([name]) => attributeApplies(switched, name)));
+  const dropped = new Set(droppedInputAttributes(at.node, nextType));
+  const kept = Object.fromEntries(Object.entries(switched.attributes).filter(([name]) => !dropped.has(name)));
   return { kind: 'change', patches: [{ op: 'replace', path: [...at.path, 'attributes'], value: kept }], message: said };
 });
 

@@ -6,7 +6,8 @@
 - 7.1 baseline reproduced in the in-app browser from 92bb39b: flat Settings, blank Button type, invalid attributes/values, stale link data, class target, Label/Select, inline text and missing fields. Evidence: `.cache/logs/uso-7.1-20260926-1459/antes/`.
 - 7.1a current app: General/Link/Attributes for a link and `submit` default on a button in Desktop/Phone at 100%/Fit; undo/redo, reload and adjacent drag checked, zero console errors. Evidence: `.cache/logs/uso-7.1a-20260926-1519/`.
 - Previous Settings layout: one flat attribute list; new layout: manifest-driven General, Link, Image, Accessibility, SEO and Attributes sections.
-- 7.1a proof: `settings-organized.spec.ts` passed; disabled section mapping failed immediately on the expected sections, restored mapping passed; `e2e:tooth elements-form-structure` failed 10/10 with handlers off. One deferred 7.1c class-registry write restored the old Classes scenario; 32 other nearby scenarios and 36 form/media/page scenarios passed. Logs in `.cache/logs/`; 7.1a is ready for commit/push.
+- 7.1a delivered as `5343759` on origin/codex: `settings-organized.spec.ts` and its UI tooth passed, plus 32+36 nearby scenarios and four-combination real use; logs in `.cache/logs/`. The class-registry write was deferred to 7.1c so the old Classes scenario stays green.
+- 7.1b spec correction: page-properties P3 formerly accepted any language-shaped tag; now a known BCP 47 language or valid private-use tag is required, so `banana` is refused beside Page language.
 
 At most 60 lines: state, the user's pending decisions, open findings. History and proofs: `docs/history.md`.
 

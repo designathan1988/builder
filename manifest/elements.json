@@ -1935,6 +1935,15 @@
     }
   ],
   "autocompleteTokens": ["on", "off", "name", "honorific-prefix", "given-name", "family-name", "email", "username", "new-password", "current-password", "one-time-code", "organization", "street-address", "address-line1", "address-line2", "country", "postal-code", "tel", "url", "bday", "sex", "cc-name", "cc-number", "cc-exp", "cc-csc"],
+  "inputValueEditors": {
+    "date": "date",
+    "time": "time",
+    "month": "month",
+    "week": "week",
+    "datetime-local": "datetime-local",
+    "color": "color",
+    "range": "number"
+  },
   "settingsSections": [
     {
       "id": "general",

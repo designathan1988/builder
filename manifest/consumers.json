@@ -161,6 +161,10 @@
       "reader": "src/core/document/validate.ts"
     },
     {
+      "field": "elements:inputValueEditors",
+      "reader": "src/editor/inspector/attributes.ts"
+    },
+    {
       "field": "elements:palette",
       "reader": "src/editor/palette/palette.ts"
     },
