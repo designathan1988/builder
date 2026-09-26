@@ -672,6 +672,7 @@
   "featureGroup.templatesAndComponents": "Templates and components",
   "featureGroup.viewAndPositioning": "View, guides and positioning",
   "featureGroup.workspace": "Workspace",
+  "field.invalid": "\"{value}\" is not a value this field takes.",
   "field.commit": "Keep the value",
   "field.pageDown": "Step down by 10",
   "field.pageUp": "Step up by 10",

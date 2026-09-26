@@ -672,6 +672,7 @@
   "featureGroup.templatesAndComponents": "Modelos e componentes",
   "featureGroup.viewAndPositioning": "Visualização, guias e posicionamento",
   "featureGroup.workspace": "Espaço de trabalho",
+  "field.invalid": "\"{value}\" não é um valor aceito por este campo.",
   "field.commit": "Manter o valor",
   "field.pageDown": "Diminuir em 10",
   "field.pageUp": "Aumentar em 10",

@@ -2902,6 +2902,7 @@ export const MESSAGE_IDS = [
   "featureGroup.templatesAndComponents",
   "featureGroup.viewAndPositioning",
   "featureGroup.workspace",
+  "field.invalid",
   "field.commit",
   "field.pageDown",
   "field.pageUp",
