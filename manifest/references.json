@@ -1162,6 +1162,11 @@
     },
     {
       "kind": "predicate",
+      "id": "editableSelection",
+      "status": "registered"
+    },
+    {
+      "kind": "predicate",
       "id": "canUndo",
       "status": "registered"
     },

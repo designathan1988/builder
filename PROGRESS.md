@@ -32,8 +32,8 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 ## Audit prompt: documentation changed (item, before -> after)
 
 - Block 1 (1.1-1.6) documentation changes: docs/history.md (2026-09-26 entries).
-- A items of block 1 (A1.1, A3.41, A3.32, A3.23, A3.38): docs/history.md (2026-09-26, moved). A3.10 spec
-  provenance-reset P6: origin note per field (class muted, others in legend colour) + "Typing writes to X · layer".
+- Block 1 A items up to A3.10: docs/history.md. A3.11: hide-element P1 "dashed outline on the parent" -> none (Layers
+  row says it); 10 locked-field scenarios retired for locked-fields.spec; instance-part Delete not reproduced (deletes, says).
 
 ## Open findings
 

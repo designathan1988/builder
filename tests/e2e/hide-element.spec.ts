@@ -24,6 +24,7 @@ const MENU_HIDE = 'element.toggleHidden#menu-element-actions';
 const CONTEXT_HIDE = 'element.toggleHidden#context-menu';
 const CTRL_Z = 'history.undo#key-ctrl-z-in-global';
 const CTRL_SHIFT_Z = 'history.redo#key-ctrl-shift-z-in-global';
+const EXPORT = 'project.export#toolbar-top-bar-export';
 
 interface Tree {
   readonly id: string;
@@ -213,34 +214,57 @@ test('a row shows its Hide only under the pointer; the row of a hidden element k
   expect(await opacity(page, EYE, 'n-title')).toBe('0');
 });
 
-// spec, Problems in Pager 1: a hidden selected element is still shown to be there: its selection outline is drawn
-// dashed on its nearest shown ancestor (the Hero, whose box the page draws), and its label says it is hidden
-test('a hidden selected element is outlined, dashed, on its parent, and its label says hidden', runs(OPEN, SELECT, MENU_HIDE), async ({ page }) => {
+// spec, Problems in Pager 1 (the audit's A3.11): a hidden selected element has no box on the page, and the canvas draws
+// nothing for it, neither outline (before: a dashed one on its nearest shown ancestor, the whole Hero) nor label; its
+// Layers row, selected and dimmed, says where it is. Shown again, its outline lies on its own box and its label names it.
+test('a hidden selected element draws no outline nor label on the canvas, its Layers row says it; shown again it is outlined', runs(OPEN, SELECT, MENU_HIDE), async ({ page }) => {
   await clickNode(page, 'n-intro');
-  await runDoor(page, MENU_HIDE);
-  await expect.poll(() => display(page, 'n-intro')).toBe('none');
   const outline = page.locator('[data-chrome="selection"]');
   await expect(outline).toHaveCount(1);
-  expect(await outline.evaluate((el) => getComputedStyle(el).outlineStyle)).toBe('dashed');
-  // the outline covers the Hero's box on the screen: both read at one instant, once the chrome has drawn it there
+  await runDoor(page, MENU_HIDE);
+  await expect.poll(() => display(page, 'n-intro')).toBe('none');
+  await expect(outline).toHaveCount(0);
+  await expect(page.locator('[data-chrome="label"]')).toHaveCount(0);
+  const row = control(page, ROW, { args: { target: 'n-intro' } });
+  await expect(row).toHaveAttribute('role', 'treeitem');
+  await expect(row).toHaveAttribute('aria-selected', 'true');
+  await expect(row).toHaveClass(/row--hidden/);
+  expect((await read(page)).selection).toEqual(['n-intro']);
+  // shown again: the outline on Intro's own box on the screen, both read at one instant, and its label
+  await runDoor(page, MENU_HIDE);
+  await expect.poll(() => display(page, 'n-intro')).not.toBe('none');
   await expect
     .poll(
       () =>
         page.evaluate(() => {
           const iframe = document.querySelector<HTMLIFrameElement>('.frame__page');
-          const el = iframe?.contentDocument?.querySelector('[data-node="n-hero"]');
+          const el = iframe?.contentDocument?.querySelector('[data-node="n-intro"]');
           const drawn = [...document.querySelectorAll('[data-chrome="selection"]')].map((o) => o.getBoundingClientRect());
           if (!iframe || !el || drawn.length !== 1 || drawn[0] === undefined) return null;
           const zoom = iframe.currentCSSZoom;
           const frame = iframe.getBoundingClientRect();
           const r = el.getBoundingClientRect();
-          const hero = { x: frame.left + r.left * zoom, y: frame.top + r.top * zoom, width: r.width * zoom, height: r.height * zoom };
+          const intro = { x: frame.left + r.left * zoom, y: frame.top + r.top * zoom, width: r.width * zoom, height: r.height * zoom };
           const o = drawn[0];
-          return [o.x - hero.x, o.y - hero.y, o.width - hero.width, o.height - hero.height].every((d) => Math.abs(d) < 2);
+          return [o.x - intro.x, o.y - intro.y, o.width - intro.width, o.height - intro.height].every((d) => Math.abs(d) < 2);
         }),
-      { message: 'the outline lies on the Hero' },
+      { message: 'the outline lies on Intro' },
     )
     .toBe(true);
-  await expect(page.locator('[data-chrome="label"] .chrome__flag')).toHaveText('hidden');
   await expect(page.locator('[data-chrome="label"] .chrome__name')).toHaveText('Intro');
+});
+
+// the audit's A3.11: the Layers eye says it hides on the published page too, and the exported page carries the hidden
+// attribute on that element
+test('the Layers eye says it hides the element on the published page, and the export carries it hidden', runs(OPEN, SELECT, EYE, EXPORT), async ({ page }) => {
+  await clickNode(page, 'n-title');
+  const eye = control(page, EYE, { args: { target: 'n-intro' } });
+  await expect(eye).toHaveAttribute('aria-label', 'Hide on the published page');
+  await expect(eye).toHaveAttribute('title', /^Hide on the published page/);
+  await runDoor(page, EYE, { args: { target: 'n-intro' } });
+  await expect.poll(async () => (await read(page)).hidden).toEqual(['n-intro=true']);
+  const download = page.waitForEvent('download');
+  await runDoor(page, EXPORT);
+  const html = (unzip(fs.readFileSync(await (await download).path())).get('index.html') as Buffer).toString('utf8');
+  expect(html).toContain('<p hidden>Fresh coffee, roasted every week.</p>');
 });

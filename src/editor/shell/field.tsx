@@ -526,7 +526,7 @@ export function TextStyleField({
       </span>
       <span className="input-wrap">
         {colour && COLOR_SWATCH !== undefined ? (
-          <DoorControl entry={COLOR_SWATCH} args={{ property }} ready={available} className="field__swatch">
+          <DoorControl entry={COLOR_SWATCH} args={{ property }} ready={door.built && primary !== null} className="field__swatch">
             <span className="swatch" style={{ '--swatch-colour': shown || effective } as CSSProperties} />
           </DoorControl>
         ) : null}

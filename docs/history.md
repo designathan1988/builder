@@ -910,3 +910,8 @@ Fragile / worth knowing:
   distribute-availability.spec; workspace-doors tests View › Explorer working. Decision: Help keeps its one item
   disabled (door rule) until shortcuts-panel (group 13, mine); Paste waits for item 3.8.
 - A3.38 text-edit-inline P4: emptied text keeps a min height, dashed mark, Layers "empty" (image part: no repro).
+
+## 2026-09-26: audit A3.10 documentation (moved from PROGRESS.md)
+
+- A3.10 spec
+  provenance-reset P6: origin note per field (class muted, others in legend colour) + "Typing writes to X · layer".

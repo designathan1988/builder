@@ -18,7 +18,7 @@
 // node that carries a lock can be unlocked).
 import type { NodeId } from '../../generated/commands.ts';
 import type { MessageId } from '../../generated/ids.ts';
-import { message, registerHandler, type Message, type Outcome } from '../commands/registry.ts';
+import { message, registerHandler, registerPredicate, type Message, type Outcome } from '../commands/registry.ts';
 import { lineage, locate, type DocNode, type DocumentJson, type Location, type Selection } from '../document/model.ts';
 
 // The keys a command refuses a node it would change with, when the node carries the lock itself (en.json
@@ -50,6 +50,15 @@ export function firstLockRefusal(document: DocumentJson, ids: readonly NodeId[],
   }
   return null;
 }
+
+// The style fields' doors are usable only while no selected element is locked or inside a locked element (the audit's
+// A3.11; spec lock-element, Problems in Pager 3): drawn disabled, their reason is the lock's refusal (naming the lock),
+// before anything is typed. With nothing selected nothing is locked.
+export const editableSelection = registerPredicate(
+  'editableSelection',
+  (state) => firstLockRefusal(state.document, state.selection, 'status.locked.edit') === null,
+  (state) => firstLockRefusal(state.document, state.selection, 'status.locked.edit') ?? message('status.locked.edit', { name: '' }),
+);
 
 // Why a node's own flag may not be toggled: a locked element above it (status.locked.byAncestor), or null.
 function ancestorLockRefusal(document: DocumentJson, id: NodeId): Message | null {

@@ -43,5 +43,6 @@ None in Pager.
 
 ## Problems in Pager
 
-1. **A hidden selected element shows nothing on the canvas,** so the person cannot tell where it is. Required: a hidden selection draws a dashed outline at the place where the element would be, or on its parent, with a `hidden` flag on the chip.
+1. **A hidden selected element shows nothing on the canvas,** so the person cannot tell where it is. Required (changed by the user's real-use audit, A3.11: the dashed outline drawn on the nearest shown ancestor covered the whole page): a hidden selected element, hidden itself or inside a hidden element, has no box on the page, and the canvas draws nothing for it, neither outline nor label; its Layers row, selected and dimmed with its Hide pressed, says where it is. Shown again, its outline and label are drawn on its own box.
 2. **Toggling from Layers says nothing.** Required: the status bar reads `Hidden: <name>` / `Visible: <name>` for every door.
+3. **The eye did not say it hides the element on the published page too** (the user's real-use audit, A3.11): the export writes the `hidden` attribute. Required: the Layers eye is named "Hide on the published page" (its label and tooltip); the export keeps the element with `hidden`.

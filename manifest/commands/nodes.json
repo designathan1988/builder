@@ -376,7 +376,7 @@
           "control": "row-eye",
           "modifier": null,
           "gesture": null,
-          "labelKey": "command.hide",
+          "labelKey": "command.hideOnPage",
           "faceLabelKey": null,
           "icon": "eye",
           "disabledReasonKey": "refusal.nothingSelected",

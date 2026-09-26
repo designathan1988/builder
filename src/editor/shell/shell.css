@@ -1455,20 +1455,6 @@ kbd {
   visibility: hidden;
 }
 
-/* a hidden selected element (hide-element, Problems in Pager 1): its dashed outline on its nearest shown ancestor, and
-   a "hidden" flag on its label */
-.chrome__selection.is-hidden-node {
-  outline-style: dashed;
-}
-
-.chrome__flag {
-  padding: 0 var(--space-1);
-  border-radius: var(--radius-sm);
-  background: var(--color-on-accent);
-  color: var(--color-accent);
-  font: var(--fw-caption) var(--fs-caption) / var(--lh-body) var(--font-ui);
-}
-
 /* a text edited in place: its outline and label in the text editing mode colour, never the selection's
    (text-edit-inline, Problems in Pager 2) */
 .chrome__selection.is-editing {

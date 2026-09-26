@@ -19,8 +19,8 @@
         }
       },
       "availability": {
-        "predicate": "always",
-        "refusalKey": null
+        "predicate": "editableSelection",
+        "refusalKey": "status.locked.edit"
       },
       "refusals": [
         "status.value.invalid",
@@ -5173,8 +5173,8 @@
         }
       },
       "availability": {
-        "predicate": "always",
-        "refusalKey": null
+        "predicate": "editableSelection",
+        "refusalKey": "status.locked.edit"
       },
       "refusals": [
         "status.value.invalid",
@@ -5804,8 +5804,8 @@
         }
       },
       "availability": {
-        "predicate": "always",
-        "refusalKey": null
+        "predicate": "editableSelection",
+        "refusalKey": "status.locked.edit"
       },
       "refusals": [
         "status.value.invalid",
@@ -6433,8 +6433,8 @@
         }
       },
       "availability": {
-        "predicate": "always",
-        "refusalKey": null
+        "predicate": "editableSelection",
+        "refusalKey": "status.locked.edit"
       },
       "refusals": [
         "status.value.invalid",
@@ -6702,8 +6702,8 @@
         }
       },
       "availability": {
-        "predicate": "always",
-        "refusalKey": null
+        "predicate": "editableSelection",
+        "refusalKey": "status.locked.edit"
       },
       "refusals": [
         "status.value.invalid",
@@ -7353,8 +7353,8 @@
         }
       },
       "availability": {
-        "predicate": "always",
-        "refusalKey": null
+        "predicate": "editableSelection",
+        "refusalKey": "status.locked.edit"
       },
       "refusals": [
         "status.value.invalid",
@@ -8243,8 +8243,8 @@
         }
       },
       "availability": {
-        "predicate": "always",
-        "refusalKey": null
+        "predicate": "editableSelection",
+        "refusalKey": "status.locked.edit"
       },
       "refusals": [
         "status.value.invalid",
@@ -8623,8 +8623,8 @@
         }
       },
       "availability": {
-        "predicate": "always",
-        "refusalKey": null
+        "predicate": "editableSelection",
+        "refusalKey": "status.locked.edit"
       },
       "refusals": [
         "status.value.invalid",
@@ -8874,8 +8874,8 @@
         }
       },
       "availability": {
-        "predicate": "always",
-        "refusalKey": null
+        "predicate": "editableSelection",
+        "refusalKey": "status.locked.edit"
       },
       "refusals": [
         "status.css.notDeclaration",
@@ -8992,8 +8992,8 @@
         }
       },
       "availability": {
-        "predicate": "always",
-        "refusalKey": null
+        "predicate": "editableSelection",
+        "refusalKey": "status.locked.edit"
       },
       "refusals": [
         "status.locked.edit"

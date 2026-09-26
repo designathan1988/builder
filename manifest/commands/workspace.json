@@ -2658,8 +2658,8 @@
         }
       },
       "availability": {
-        "predicate": "always",
-        "refusalKey": null
+        "predicate": "editableSelection",
+        "refusalKey": "status.locked.edit"
       },
       "refusals": [],
       "confirmation": null,

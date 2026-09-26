@@ -18,7 +18,7 @@ import { addPartCommand, movePartCommand, removePartCommand, togglePartCommand }
 import { addColumnAfterCommand, addColumnEndCommand, addRowAfterCommand, cellSelected, inTable, removeColumnCommand, removeRowCommand } from '../core/elements/table.ts';
 import { setTagCommand } from '../core/elements/tag.ts';
 import { canRedo, canUndo, redoCommand, undoCommand } from '../core/history/history.ts';
-import { toggleHiddenCommand, toggleLockCommand } from '../core/nodes/flags.ts';
+import { editableSelection, toggleHiddenCommand, toggleLockCommand } from '../core/nodes/flags.ts';
 import { renameCommand } from '../core/nodes/names.ts';
 import { setPageSettingCommand } from '../core/page/settings.ts';
 import { openProject, saveProject } from '../core/project/archive.ts';
@@ -328,4 +328,4 @@ export const COMMANDS = {
 } as const satisfies CommandTable<EditorUi>;
 
 // The availability predicates code has registered; a built command's predicate must be here (createStore checks it).
-export const PREDICATES = { always, canUndo, canRedo, hasSelection, singleSelection, singleTextSelection, canUnwrap, canNestIntoPrevious, cellSelected, inTable, hasNaturalChild, flexOrGridContainer, instanceSelected, positionedSelection, distributableSelection } as const satisfies PredicateTable<EditorUi>;
+export const PREDICATES = { always, canUndo, canRedo, hasSelection, singleSelection, singleTextSelection, canUnwrap, canNestIntoPrevious, cellSelected, inTable, hasNaturalChild, flexOrGridContainer, instanceSelected, positionedSelection, distributableSelection, editableSelection } as const satisfies PredicateTable<EditorUi>;

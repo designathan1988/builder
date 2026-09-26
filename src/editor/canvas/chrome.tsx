@@ -26,7 +26,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties, type Ref } from 'react';
 import { createPortal } from 'react-dom';
 import { message, type Message } from '../../core/commands/registry.ts';
-import { locate, type DocNode, type DocumentJson, type NodeId } from '../../core/document/model.ts';
+import { lineage, locate, type DocNode, type DocumentJson, type NodeId } from '../../core/document/model.ts';
 import { lineExtent, linesOf, sameLine } from '../../core/geometry/lines.ts';
 import { heldHand, type HandState } from '../../core/structure/hand.ts';
 import type { MessageId } from '../../generated/ids.ts';
@@ -511,24 +511,18 @@ function ReturningGhost({ view }: { readonly view: GhostReturn }) {
   return back ? null : <Ghost ref={ghost} inserting={view.inserting} at={view.from} refused={false} />;
 }
 
-// Where a selected node is drawn: itself, or, when it or an ancestor is hidden (spec hide-element, Problems in Pager
-// 1), the nearest ancestor that is shown, with the node marked hidden. As one text, so the store's selector returns
-// the same value while nothing changes.
+// The selected nodes the canvas draws an outline for: those shown. A node hidden itself or inside a hidden element has
+// no box on the page, and the canvas draws nothing for it, neither outline nor label: its Layers row, selected and
+// marked hidden, says where it is (spec hide-element, Problems in Pager 1; the audit's A3.11). As one text, so the
+// store's selector returns the same value while nothing changes.
 function drawnTargets(document: DocumentJson, selection: readonly NodeId[]): string {
-  return JSON.stringify(
-    selection.map((id) => {
-      const chain: DocNode[] = [];
-      for (let at = locate(document, id); at !== null; at = at.parent === null ? null : locate(document, at.parent.id)) chain.push(at.node);
-      const outermost = chain.map((n) => n.hidden === true).lastIndexOf(true);
-      return outermost < 0 ? { id, hidden: false } : { id: chain[outermost + 1]?.id ?? id, hidden: true };
-    }),
-  );
+  return JSON.stringify(selection.filter((id) => !lineage(document, id).some((n: DocNode) => n.hidden === true)));
 }
 
 export function CanvasChrome() {
   const selection = useEditorState((s) => s.selection);
   const targetsText = useEditorState((s) => drawnTargets(s.document, s.selection));
-  const targets = useMemo(() => JSON.parse(targetsText) as { id: NodeId; hidden: boolean }[], [targetsText]);
+  const targets = useMemo(() => JSON.parse(targetsText) as NodeId[], [targetsText]);
   // the drag in progress (pointer.ts): the drop indicator is drawn, the selection's label hides and its outline turns
   // into the dashed outline of the source (Problems in Pager 1)
   const dragging = useSyncExternalStore(drag.subscribe, drag.get);
@@ -584,7 +578,7 @@ export function CanvasChrome() {
       const origin = layer.current?.getBoundingClientRect();
       if (iframe && origin) {
         const local = (b: Box | null): Box | null => (b === null ? null : { x: b.x - origin.x, y: b.y - origin.y, width: b.width, height: b.height });
-        const selected = targets.map((target) => local(nodeBox(iframe, target.id))).filter((b): b is Box => b !== null);
+        const selected = targets.map((target) => local(nodeBox(iframe, target))).filter((b): b is Box => b !== null);
         const union = selection.length > 1 ? unionOf(selected) : null;
         // the label belongs to the one selected node, or to the union of several
         const first = union ?? selected[0];
@@ -645,7 +639,7 @@ export function CanvasChrome() {
       {shown.selected.map((b, i) => (
         <div
           key={i}
-          className={`chrome__selection${dropping && dropping.dragged.length > 0 ? ' is-source' : ''}${editing ? ' is-editing' : ''}${targets[i]?.hidden === true ? ' is-hidden-node' : ''}`}
+          className={`chrome__selection${dropping && dropping.dragged.length > 0 ? ' is-source' : ''}${editing ? ' is-editing' : ''}`}
           data-chrome="selection"
           style={at(b)}
         />
@@ -679,7 +673,7 @@ export function CanvasChrome() {
         >
           <span className="chrome__name">{t('canvas.selectedCount', { count: selection.length })}</span>
         </div>
-      ) : node !== null ? (
+      ) : node !== null && targets.includes(node.id) ? (
         <div
           ref={label}
           className={`chrome__label is-target${shown.label ? '' : ' is-measuring'}${dropping ? ' is-hidden' : ''}${editing ? ' is-editing' : ''}`}
@@ -694,7 +688,6 @@ export function CanvasChrome() {
             <>
               <span className="chrome__name">{node.name}</span>
               <small className="chrome__tag">{node.tag ?? ''}</small>
-              {targets[0]?.hidden === true ? <small className="chrome__flag">{t('canvas.hiddenFlag')}</small> : null}
             </>
           )}
         </div>
