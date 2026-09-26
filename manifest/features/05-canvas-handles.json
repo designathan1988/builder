@@ -2510,6 +2510,129 @@
             "export": null
           },
           "refusals": []
+        },
+        {
+          "id": "the-column-gap-band-between-the-columns-of-a-grid",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Plans/Grid"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "style.set#inspector-display",
+              "args": {
+                "property": "display",
+                "value": "grid"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "grid\n"
+            },
+            {
+              "door": "style.set#inspector-grid-template-columns",
+              "args": {
+                "property": "grid-template-columns",
+                "value": "repeat(3, 1fr)"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "repeat(3, 1fr)\n"
+            },
+            {
+              "door": "canvas.setEditMode#quick-panel-edit-on-canvas",
+              "args": {
+                "mode": "column-gap"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.set#handle-column-gap-band",
+              "args": {
+                "property": "column-gap",
+                "value": "24px"
+              },
+              "target": "/Page/Plans/Grid",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "style.set#handle-column-gap-band"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@styles/desktop/base/display",
+                "value": "grid"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@styles/desktop/base/grid-template-columns",
+                "value": "repeat(3, 1fr)"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@styles/desktop/base/column-gap",
+                "value": "24px"
+              }
+            ],
+            "selection": [
+              "/Page/Plans/Grid"
+            ],
+            "history": {
+              "undoSteps": 3,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Plans/Grid",
+                  "property": "column-gap",
+                  "value": "24px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.style.set",
+                  "params": {
+                    "property": "Column gap",
+                    "name": "Grid",
+                    "value": "24px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
         }
       ]
     },

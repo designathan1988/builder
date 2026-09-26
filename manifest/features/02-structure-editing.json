@@ -2534,6 +2534,202 @@
             "export": null
           },
           "refusals": []
+        },
+        {
+          "id": "a-card-dragged-into-the-gap-after-the-first-card-of-a-grid-lands-there",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Plans/Grid"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "style.set#inspector-display",
+              "args": {
+                "property": "display",
+                "value": "grid"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "grid\n"
+            },
+            {
+              "door": "style.set#inspector-grid-template-columns",
+              "args": {
+                "property": "grid-template-columns",
+                "value": "repeat(3, 1fr)"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "repeat(3, 1fr)\n"
+            },
+            {
+              "door": "style.set#inspector-column-gap",
+              "args": {
+                "property": "column-gap",
+                "value": "40px"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "40px\n"
+            },
+            {
+              "door": "element.moveTo#canvas-drag-canvas-element-before-after",
+              "args": {
+                "parent": "/Page/Plans/Grid",
+                "index": 1
+              },
+              "target": "/Page/Plans/Grid/CardC",
+              "drop": {
+                "placement": "after",
+                "reference": "/Page/Plans/Grid/CardA"
+              },
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.moveTo#canvas-drag-canvas-element-before-after"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@styles/desktop/base/display",
+                "value": "grid"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@styles/desktop/base/grid-template-columns",
+                "value": "repeat(3, 1fr)"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@styles/desktop/base/column-gap",
+                "value": "40px"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@children",
+                "value": [
+                  {
+                    "type": "article",
+                    "name": "CardA",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardATitle",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Monthly",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardC",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardB",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardBTitle",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Weekly",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Plans/Grid/CardC"
+            ],
+            "history": {
+              "undoSteps": 4,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [
+                {
+                  "node": "/Page/Plans/Grid/CardC",
+                  "measure": "x",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": "/Page/Plans/Grid/CardA"
+                },
+                {
+                  "node": "/Page/Plans/Grid/CardC",
+                  "measure": "x",
+                  "relation": "less-than",
+                  "value": 0,
+                  "reference": "/Page/Plans/Grid/CardB"
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.moved",
+                  "params": {
+                    "name": "CardC",
+                    "position": 2,
+                    "count": 3,
+                    "parent": "Grid"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
         }
       ]
     },
@@ -4105,6 +4301,842 @@
                 {
                   "key": "status.drag.cancelled",
                   "params": {}
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-tile-dropped-in-the-gap-between-two-cards-of-a-grid-lands-between-them",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Plans/Grid"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "style.set#inspector-display",
+              "args": {
+                "property": "display",
+                "value": "grid"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "grid\n"
+            },
+            {
+              "door": "style.set#inspector-grid-template-columns",
+              "args": {
+                "property": "grid-template-columns",
+                "value": "repeat(3, 1fr)"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "repeat(3, 1fr)\n"
+            },
+            {
+              "door": "style.set#inspector-column-gap",
+              "args": {
+                "property": "column-gap",
+                "value": "40px"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "40px\n"
+            },
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#canvas-drag-palette-tile-drop-proposal",
+              "args": {
+                "entry": "paragraph",
+                "parent": "/Page/Plans/Grid",
+                "index": 1
+              },
+              "target": null,
+              "drop": {
+                "placement": "inside",
+                "reference": "/Page/Plans/Grid"
+              },
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.insert#canvas-drag-palette-tile-drop-proposal"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@styles/desktop/base/display",
+                "value": "grid"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@styles/desktop/base/grid-template-columns",
+                "value": "repeat(3, 1fr)"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@styles/desktop/base/column-gap",
+                "value": "40px"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@children",
+                "value": [
+                  {
+                    "type": "article",
+                    "name": "CardA",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardATitle",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Monthly",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "name": "Paragraph",
+                    "tag": "p",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "A freshly created paragraph.",
+                    "children": []
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardB",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardBTitle",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Weekly",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardC",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Plans/Grid/Paragraph"
+            ],
+            "history": {
+              "undoSteps": 4,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [
+                {
+                  "node": "/Page/Plans/Grid/Paragraph",
+                  "measure": "x",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": "/Page/Plans/Grid/CardA"
+                },
+                {
+                  "node": "/Page/Plans/Grid/Paragraph",
+                  "measure": "x",
+                  "relation": "less-than",
+                  "value": 0,
+                  "reference": "/Page/Plans/Grid/CardB"
+                },
+                {
+                  "node": "/Page/Plans/Grid/Paragraph",
+                  "measure": "y",
+                  "relation": "equals",
+                  "value": 0,
+                  "reference": "/Page/Plans/Grid/CardA"
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.placed",
+                  "params": {
+                    "element": "Paragraph",
+                    "parent": "Grid",
+                    "position": 2,
+                    "count": 4
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-tile-dropped-in-the-empty-cell-of-a-grid-row-lands-after-the-last-card",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Plans/Grid"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "style.set#inspector-display",
+              "args": {
+                "property": "display",
+                "value": "grid"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "grid\n"
+            },
+            {
+              "door": "style.set#inspector-grid-template-columns",
+              "args": {
+                "property": "grid-template-columns",
+                "value": "repeat(4, 1fr)"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "repeat(4, 1fr)\n"
+            },
+            {
+              "door": "style.set#inspector-column-gap",
+              "args": {
+                "property": "column-gap",
+                "value": "40px"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "40px\n"
+            },
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#canvas-drag-palette-tile-drop-proposal",
+              "args": {
+                "entry": "paragraph",
+                "parent": "/Page/Plans/Grid",
+                "index": 3
+              },
+              "target": null,
+              "drop": {
+                "placement": "inside",
+                "reference": "/Page/Plans/Grid"
+              },
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.insert#canvas-drag-palette-tile-drop-proposal"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@styles/desktop/base/display",
+                "value": "grid"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@styles/desktop/base/grid-template-columns",
+                "value": "repeat(4, 1fr)"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@styles/desktop/base/column-gap",
+                "value": "40px"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@children",
+                "value": [
+                  {
+                    "type": "article",
+                    "name": "CardA",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardATitle",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Monthly",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardB",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardBTitle",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Weekly",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardC",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  },
+                  {
+                    "type": "paragraph",
+                    "name": "Paragraph",
+                    "tag": "p",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "A freshly created paragraph.",
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Plans/Grid/Paragraph"
+            ],
+            "history": {
+              "undoSteps": 4,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [
+                {
+                  "node": "/Page/Plans/Grid/Paragraph",
+                  "measure": "x",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": "/Page/Plans/Grid/CardC"
+                },
+                {
+                  "node": "/Page/Plans/Grid/Paragraph",
+                  "measure": "y",
+                  "relation": "equals",
+                  "value": 0,
+                  "reference": "/Page/Plans/Grid/CardA"
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.placed",
+                  "params": {
+                    "element": "Paragraph",
+                    "parent": "Grid",
+                    "position": 4,
+                    "count": 4
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-tile-dropped-before-a-card-of-a-reversed-row-lands-before-it-drawn-to-its-right",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Plans/Grid"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "style.set#inspector-display",
+              "args": {
+                "property": "display",
+                "value": "flex"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "flex\n"
+            },
+            {
+              "door": "style.set#inspector-flex-direction",
+              "args": {
+                "property": "flex-direction",
+                "value": "row-reverse"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#canvas-drag-palette-tile-drop-proposal",
+              "args": {
+                "entry": "paragraph",
+                "parent": "/Page/Plans/Grid",
+                "index": 0
+              },
+              "target": null,
+              "drop": {
+                "placement": "before",
+                "reference": "/Page/Plans/Grid/CardA"
+              },
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.insert#canvas-drag-palette-tile-drop-proposal"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@styles/desktop/base/display",
+                "value": "flex"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@styles/desktop/base/flex-direction",
+                "value": "row-reverse"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@children",
+                "value": [
+                  {
+                    "type": "paragraph",
+                    "name": "Paragraph",
+                    "tag": "p",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "A freshly created paragraph.",
+                    "children": []
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardA",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardATitle",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Monthly",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardB",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardBTitle",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Weekly",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardC",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Plans/Grid/Paragraph"
+            ],
+            "history": {
+              "undoSteps": 3,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [
+                {
+                  "node": "/Page/Plans/Grid/Paragraph",
+                  "measure": "x",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": "/Page/Plans/Grid/CardA"
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.placed",
+                  "params": {
+                    "element": "Paragraph",
+                    "parent": "Grid",
+                    "position": 1,
+                    "count": 4
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-tile-dropped-between-two-inline-block-cards-lands-between-them",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Plans/Grid/CardA",
+              "/Page/Plans/Grid/CardB",
+              "/Page/Plans/Grid/CardC"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "style.set#inspector-display",
+              "args": {
+                "property": "display",
+                "value": "inline-block"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "inline-block\n"
+            },
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#canvas-drag-palette-tile-drop-proposal",
+              "args": {
+                "entry": "paragraph",
+                "parent": "/Page/Plans/Grid",
+                "index": 1
+              },
+              "target": null,
+              "drop": {
+                "placement": "inside",
+                "reference": "/Page/Plans/Grid"
+              },
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.insert#canvas-drag-palette-tile-drop-proposal"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/CardA/@styles/desktop/base/display",
+                "value": "inline-block"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/CardB/@styles/desktop/base/display",
+                "value": "inline-block"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/CardC/@styles/desktop/base/display",
+                "value": "inline-block"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@children",
+                "value": [
+                  {
+                    "type": "article",
+                    "name": "CardA",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "display": "inline-block"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardATitle",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Monthly",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "name": "Paragraph",
+                    "tag": "p",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "A freshly created paragraph.",
+                    "children": []
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardB",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "display": "inline-block"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardBTitle",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Weekly",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardC",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "display": "inline-block"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Plans/Grid/Paragraph"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [
+                {
+                  "node": "/Page/Plans/Grid/Paragraph",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": "/Page/Plans/Grid/CardA"
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.placed",
+                  "params": {
+                    "element": "Paragraph",
+                    "parent": "Grid",
+                    "position": 2,
+                    "count": 4
+                  }
                 }
               ]
             },
