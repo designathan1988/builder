@@ -1798,31 +1798,8 @@
       "introducedBy": "elements-form-inputs-rules",
       "args": {
         "type": {
-          "type": "enum",
-          "values": [
-            "text",
-            "hidden",
-            "email",
-            "password",
-            "number",
-            "tel",
-            "url",
-            "search",
-            "date",
-            "datetime-local",
-            "month",
-            "week",
-            "time",
-            "color",
-            "range",
-            "checkbox",
-            "radio",
-            "file",
-            "image",
-            "button",
-            "submit",
-            "reset"
-          ],
+          "type": "string",
+          "values": [],
           "optional": false
         }
       },
@@ -1831,7 +1808,8 @@
         "refusalKey": null
       },
       "refusals": [
-        "status.locked.edit"
+        "status.locked.edit",
+        "status.input.invalidType"
       ],
       "confirmation": null,
       "history": {
@@ -1950,6 +1928,7 @@
       "refusals": [
         "status.attribute.eventHandler",
         "status.attribute.invalidName",
+        "status.attribute.reserved",
         "status.locked.edit"
       ],
       "confirmation": null,

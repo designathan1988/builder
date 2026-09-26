@@ -3983,5 +3983,7 @@ export const MESSAGE_IDS = [
   "dialog.classes.delete",
   "status.classes.renamed",
   "status.classes.deleted",
+  "status.input.invalidType",
+  "status.attribute.reserved",
 ] as const;
 export type MessageId = (typeof MESSAGE_IDS)[number];

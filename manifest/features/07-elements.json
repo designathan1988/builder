@@ -20630,7 +20630,2023 @@
           "Inline marks and each type-specific field survive render, reload and export."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "settings-audit-cite-is-stored",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "blockquote"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setAttribute#inspector-cite",
+              "args": {
+                "attribute": "cite",
+                "value": "https://example.com/quote"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "https://example.com/quote\n"
+            }
+          ],
+          "doors": [
+            "element.setAttribute#inspector-cite"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "blockquote",
+                    "name": "Blockquote",
+                    "tag": "blockquote",
+                    "attributes": {
+                      "cite": "https://example.com/quote"
+                    },
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "paragraph",
+                        "name": "Paragraph",
+                        "tag": "p",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "A freshly created paragraph.",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Blockquote"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.attribute.set",
+                  "params": {
+                    "attribute": "Citation URL",
+                    "name": "Blockquote",
+                    "value": "https://example.com/quote"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "settings-audit-start-is-stored",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "ordered-list"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setAttribute#inspector-start",
+              "args": {
+                "attribute": "start",
+                "value": "3"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "3\n"
+            }
+          ],
+          "doors": [
+            "element.setAttribute#inspector-start"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "orderedList",
+                    "name": "Ordered list",
+                    "tag": "ol",
+                    "attributes": {
+                      "start": 3
+                    },
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "listItem",
+                        "name": "List item",
+                        "tag": "li",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "paragraph",
+                            "name": "Paragraph",
+                            "tag": "p",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "A freshly created paragraph.",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Ordered list"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Ordered list",
+                  "property": "list-style-type",
+                  "value": "decimal"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.attribute.set",
+                  "params": {
+                    "attribute": "Starting number",
+                    "name": "Ordered list",
+                    "value": "3"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "settings-audit-reversed-is-stored",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "ordered-list"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setAttribute#inspector-reversed",
+              "args": {
+                "attribute": "reversed",
+                "value": true
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.setAttribute#inspector-reversed"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "orderedList",
+                    "name": "Ordered list",
+                    "tag": "ol",
+                    "attributes": {
+                      "reversed": true
+                    },
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "listItem",
+                        "name": "List item",
+                        "tag": "li",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "paragraph",
+                            "name": "Paragraph",
+                            "tag": "p",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "A freshly created paragraph.",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Ordered list"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Ordered list",
+                  "property": "list-style-type",
+                  "value": "decimal"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.attribute.set",
+                  "params": {
+                    "attribute": "Reversed order",
+                    "name": "Ordered list",
+                    "value": "✓"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "settings-audit-list-type-is-stored",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "ordered-list"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setAttribute#inspector-list-type",
+              "args": {
+                "attribute": "listType",
+                "value": "A"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "A\n"
+            }
+          ],
+          "doors": [
+            "element.setAttribute#inspector-list-type"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "orderedList",
+                    "name": "Ordered list",
+                    "tag": "ol",
+                    "attributes": {
+                      "listType": "A"
+                    },
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "listItem",
+                        "name": "List item",
+                        "tag": "li",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "paragraph",
+                            "name": "Paragraph",
+                            "tag": "p",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "A freshly created paragraph.",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Ordered list"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Ordered list",
+                  "property": "list-style-type",
+                  "value": "decimal"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.attribute.set",
+                  "params": {
+                    "attribute": "Numbering type",
+                    "name": "Ordered list",
+                    "value": "A"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "settings-audit-scope-is-stored",
+          "setup": {
+            "fixture": "table",
+            "selection": [
+              "/Page/Table/Table head/Row/Header cell"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setAttribute#inspector-scope",
+              "args": {
+                "attribute": "scope",
+                "value": "col"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "col\n"
+            }
+          ],
+          "doors": [
+            "element.setAttribute#inspector-scope"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Table/Table head/Row/Header cell/@attributes/scope",
+                "value": "col"
+              }
+            ],
+            "selection": [
+              "/Page/Table/Table head/Row/Header cell"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.attribute.set",
+                  "params": {
+                    "attribute": "Header scope",
+                    "name": "Header cell",
+                    "value": "col"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "settings-audit-accept-is-stored",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "input-file"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setAttribute#inspector-accept",
+              "args": {
+                "attribute": "accept",
+                "value": "image/png"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "image/png\n"
+            }
+          ],
+          "doors": [
+            "element.setAttribute#inspector-accept"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "input",
+                    "name": "Input",
+                    "tag": "input",
+                    "attributes": {
+                      "inputType": "file",
+                      "accept": "image/png"
+                    },
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Input"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.attribute.set",
+                  "params": {
+                    "attribute": "Accepted file types",
+                    "name": "Input",
+                    "value": "image/png"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "settings-audit-multiple-is-stored",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "input-file"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setAttribute#inspector-multiple",
+              "args": {
+                "attribute": "multiple",
+                "value": true
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.setAttribute#inspector-multiple"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "input",
+                    "name": "Input",
+                    "tag": "input",
+                    "attributes": {
+                      "inputType": "file",
+                      "multiple": true
+                    },
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Input"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.attribute.set",
+                  "params": {
+                    "attribute": "Multiple files",
+                    "name": "Input",
+                    "value": "✓"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "settings-audit-cols-is-stored",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "textarea"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setAttribute#inspector-cols",
+              "args": {
+                "attribute": "cols",
+                "value": "30"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "30\n"
+            }
+          ],
+          "doors": [
+            "element.setAttribute#inspector-cols"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "textarea",
+                    "name": "Textarea",
+                    "tag": "textarea",
+                    "attributes": {
+                      "cols": 30
+                    },
+                    "classes": [],
+                    "styles": {},
+                    "text": "",
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Textarea"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.attribute.set",
+                  "params": {
+                    "attribute": "Columns",
+                    "name": "Textarea",
+                    "value": "30"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "settings-audit-max-length-is-stored",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "textarea"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setAttribute#inspector-max-length",
+              "args": {
+                "attribute": "maxLength",
+                "value": "120"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "120\n"
+            }
+          ],
+          "doors": [
+            "element.setAttribute#inspector-max-length"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "textarea",
+                    "name": "Textarea",
+                    "tag": "textarea",
+                    "attributes": {
+                      "maxLength": 120
+                    },
+                    "classes": [],
+                    "styles": {},
+                    "text": "",
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Textarea"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.attribute.set",
+                  "params": {
+                    "attribute": "Maximum length",
+                    "name": "Textarea",
+                    "value": "120"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "settings-audit-min-length-is-stored",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "textarea"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setAttribute#inspector-min-length",
+              "args": {
+                "attribute": "minLength",
+                "value": "4"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "4\n"
+            }
+          ],
+          "doors": [
+            "element.setAttribute#inspector-min-length"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "textarea",
+                    "name": "Textarea",
+                    "tag": "textarea",
+                    "attributes": {
+                      "minLength": 4
+                    },
+                    "classes": [],
+                    "styles": {},
+                    "text": "",
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Textarea"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.attribute.set",
+                  "params": {
+                    "attribute": "Minimum length",
+                    "name": "Textarea",
+                    "value": "4"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "settings-audit-low-is-stored",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "meter"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setAttribute#inspector-low",
+              "args": {
+                "attribute": "low",
+                "value": "20"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "20\n"
+            }
+          ],
+          "doors": [
+            "element.setAttribute#inspector-low"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "meter",
+                    "name": "Meter",
+                    "tag": "meter",
+                    "attributes": {
+                      "low": 20
+                    },
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Meter"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.attribute.set",
+                  "params": {
+                    "attribute": "Low threshold",
+                    "name": "Meter",
+                    "value": "20"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "settings-audit-high-is-stored",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "meter"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setAttribute#inspector-high",
+              "args": {
+                "attribute": "high",
+                "value": "80"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "80\n"
+            }
+          ],
+          "doors": [
+            "element.setAttribute#inspector-high"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "meter",
+                    "name": "Meter",
+                    "tag": "meter",
+                    "attributes": {
+                      "high": 80
+                    },
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Meter"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.attribute.set",
+                  "params": {
+                    "attribute": "High threshold",
+                    "name": "Meter",
+                    "value": "80"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "settings-audit-optimum-is-stored",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "meter"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setAttribute#inspector-optimum",
+              "args": {
+                "attribute": "optimum",
+                "value": "50"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "50\n"
+            }
+          ],
+          "doors": [
+            "element.setAttribute#inspector-optimum"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "meter",
+                    "name": "Meter",
+                    "tag": "meter",
+                    "attributes": {
+                      "optimum": 50
+                    },
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Meter"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.attribute.set",
+                  "params": {
+                    "attribute": "Optimum value",
+                    "name": "Meter",
+                    "value": "50"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "settings-audit-allow-is-stored",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "embedded-frame"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setAttribute#inspector-allow",
+              "args": {
+                "attribute": "allow",
+                "value": "fullscreen"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "fullscreen\n"
+            }
+          ],
+          "doors": [
+            "element.setAttribute#inspector-allow"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "iframe",
+                    "name": "Embedded frame",
+                    "tag": "iframe",
+                    "attributes": {
+                      "allow": "fullscreen"
+                    },
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "width": "420px",
+                          "height": "240px"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Embedded frame"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.attribute.set",
+                  "params": {
+                    "attribute": "Allowed features",
+                    "name": "Embedded frame",
+                    "value": "fullscreen"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "settings-audit-loading-is-stored",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "embedded-frame"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setAttribute#inspector-loading",
+              "args": {
+                "attribute": "loading",
+                "value": "lazy"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "lazy\n"
+            }
+          ],
+          "doors": [
+            "element.setAttribute#inspector-loading"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "iframe",
+                    "name": "Embedded frame",
+                    "tag": "iframe",
+                    "attributes": {
+                      "loading": "lazy"
+                    },
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "width": "420px",
+                          "height": "240px"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Embedded frame"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.attribute.set",
+                  "params": {
+                    "attribute": "Loading",
+                    "name": "Embedded frame",
+                    "value": "lazy"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "settings-audit-plays-inline-is-stored",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "video"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setAttribute#inspector-plays-inline",
+              "args": {
+                "attribute": "playsInline",
+                "value": true
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.setAttribute#inspector-plays-inline"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "video",
+                    "name": "Video",
+                    "tag": "video",
+                    "attributes": {
+                      "playsInline": true
+                    },
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "source",
+                        "name": "Source",
+                        "tag": "source",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Video"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.attribute.set",
+                  "params": {
+                    "attribute": "Play inline",
+                    "name": "Video",
+                    "value": "✓"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "settings-audit-preload-is-stored",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "video"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setAttribute#inspector-preload",
+              "args": {
+                "attribute": "preload",
+                "value": "metadata"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "metadata\n"
+            }
+          ],
+          "doors": [
+            "element.setAttribute#inspector-preload"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "video",
+                    "name": "Video",
+                    "tag": "video",
+                    "attributes": {
+                      "preload": "metadata"
+                    },
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "source",
+                        "name": "Source",
+                        "tag": "source",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Video"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.attribute.set",
+                  "params": {
+                    "attribute": "Preload",
+                    "name": "Video",
+                    "value": "metadata"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {"id":"settings-audit-renames-a-class-and-its-uses","setup":{"fixture":"aurora","selection":["/Page/Hero"],"context":"global","breakpoint":"desktop","state":"base","locale":"en","viewport":"desktop-1440","zoom":100},"steps":[{"door":"classes.create#inspector-class-save-as","args":{"name":"band"},"target":null,"drop":null,"action":false,"hold":false,"type":"band\n"},{"door":"workspace.setPanelOpen#toolbar-activity-bar-styles","args":{"panel":"variables","open":"toggle"},"target":null,"drop":null,"action":false,"hold":false,"type":null},{"door":"classes.rename#styles-class-rename","args":{"className":"band","nextName":"banner"},"target":null,"drop":null,"action":true,"hold":false,"type":null}],"doors":["classes.rename#styles-class-rename"],"expect":{"document":[{"op":"set","path":"/@classes","value":[{"name":"banner","styles":{"desktop":{"base":{"padding-top":"56px","padding-right":"40px","padding-bottom":"56px","padding-left":"40px"}}}}]},{"op":"set","path":"/Page/Hero/@styles","value":{}},{"op":"set","path":"/Page/Hero/@classes","value":["banner"]}],"selection":["/Page/Hero"],"history":{"undoSteps":2,"undoRestores":true,"redoRestores":true},"render":{"computed":[{"node":"/Page/Hero","property":"padding-top","value":"56px"},{"node":"/Page/Hero","property":"padding-left","value":"40px"}],"geometry":[],"feedback":[{"key":"status.classes.renamed","params":{"oldName":"band","name":"banner"}}]},"editor":null,"persistence":{"reload":"immediate","document":"same","preferences":null,"selection":null},"export":null},"refusals":[]},
+        {"id":"settings-audit-deletes-a-class-from-its-uses","setup":{"fixture":"aurora","selection":["/Page/Hero"],"context":"global","breakpoint":"desktop","state":"base","locale":"en","viewport":"desktop-1440","zoom":100},"steps":[{"door":"classes.create#inspector-class-save-as","args":{"name":"band"},"target":null,"drop":null,"action":false,"hold":false,"type":"band\n"},{"door":"workspace.setPanelOpen#toolbar-activity-bar-styles","args":{"panel":"variables","open":"toggle"},"target":null,"drop":null,"action":false,"hold":false,"type":null},{"door":"classes.delete#styles-class-delete","args":{"className":"band"},"target":null,"drop":null,"action":true,"hold":false,"type":null,"answer":"confirm"}],"doors":["classes.delete#styles-class-delete"],"expect":{"document":[{"op":"set","path":"/Page/Hero/@styles","value":{}}],"selection":["/Page/Hero"],"history":{"undoSteps":2,"undoRestores":true,"redoRestores":true},"render":{"computed":[],"geometry":[],"feedback":[{"key":"status.classes.deleted","params":{"name":"band","count":1}}]},"editor":null,"persistence":{"reload":"immediate","document":"same","preferences":null,"selection":null},"export":null},"refusals":[]},
+        {"id":"settings-audit-refuses-an-unknown-input-type","setup":{"fixture":"empty","selection":[],"context":"global","breakpoint":"desktop","state":"base","locale":"en","viewport":"desktop-1440","zoom":100},"steps":[{"door":"workspace.setPanelOpen#toolbar-activity-bar-insert","args":{},"target":null,"drop":null,"action":false,"hold":false,"type":null},{"door":"element.insert#elements-tile","args":{"entry":"input-number"},"target":null,"drop":null,"action":false,"hold":false,"type":null},{"door":"workspace.setActiveTab#inspector-tab-settings","args":{},"target":null,"drop":null,"action":false,"hold":false,"type":null},{"door":"element.setInputType#inspector-input-type","args":{"type":"potato"},"target":null,"drop":null,"action":true,"hold":false,"type":"potato\n"}],"doors":["element.setInputType#inspector-input-type"],"expect":{"document":[{"op":"set","path":"/Page/@children","value":[{"type":"input","name":"Input","tag":"input","attributes":{"inputType":"number"},"classes":[],"styles":{},"text":null,"children":[]}]}],"selection":["/Page/Input"],"history":{"undoSteps":1,"undoRestores":true,"redoRestores":true},"render":{"computed":[],"geometry":[],"feedback":[{"key":"status.input.invalidType","params":{"type":"potato"}}]},"editor":null,"persistence":{"reload":"immediate","document":"same","preferences":null,"selection":null},"export":null},"refusals":[{"key":"status.input.invalidType","document":"unchanged"}]},
+        {"id":"settings-audit-refuses-text-as-a-number-value","setup":{"fixture":"empty","selection":[],"context":"global","breakpoint":"desktop","state":"base","locale":"en","viewport":"desktop-1440","zoom":100},"steps":[{"door":"workspace.setPanelOpen#toolbar-activity-bar-insert","args":{},"target":null,"drop":null,"action":false,"hold":false,"type":null},{"door":"element.insert#elements-tile","args":{"entry":"input-number"},"target":null,"drop":null,"action":false,"hold":false,"type":null},{"door":"workspace.setActiveTab#inspector-tab-settings","args":{},"target":null,"drop":null,"action":false,"hold":false,"type":null},{"door":"element.setAttribute#inspector-value","args":{"attribute":"value","value":"hello"},"target":null,"drop":null,"action":true,"hold":false,"type":"hello\n"}],"doors":["element.setAttribute#inspector-value"],"expect":{"document":[{"op":"set","path":"/Page/@children","value":[{"type":"input","name":"Input","tag":"input","attributes":{"inputType":"number"},"classes":[],"styles":{},"text":null,"children":[]}]}],"selection":["/Page/Input"],"history":{"undoSteps":1,"undoRestores":true,"redoRestores":true},"render":{"computed":[],"geometry":[],"feedback":[{"key":"status.attribute.invalid","params":{"attribute":"Value","value":"hello"}}]},"editor":null,"persistence":{"reload":"immediate","document":"same","preferences":null,"selection":null},"export":null},"refusals":[{"key":"status.attribute.invalid","document":"unchanged"}]},
+        {"id":"settings-audit-refuses-a-minimum-above-maximum","setup":{"fixture":"empty","selection":[],"context":"global","breakpoint":"desktop","state":"base","locale":"en","viewport":"desktop-1440","zoom":100},"steps":[{"door":"workspace.setPanelOpen#toolbar-activity-bar-insert","args":{},"target":null,"drop":null,"action":false,"hold":false,"type":null},{"door":"element.insert#elements-tile","args":{"entry":"input-number"},"target":null,"drop":null,"action":false,"hold":false,"type":null},{"door":"workspace.setActiveTab#inspector-tab-settings","args":{},"target":null,"drop":null,"action":false,"hold":false,"type":null},{"door":"element.setAttribute#inspector-max","args":{"attribute":"max","value":"5"},"target":null,"drop":null,"action":false,"hold":false,"type":"5\n"},{"door":"element.setAttribute#inspector-min","args":{"attribute":"min","value":"10"},"target":null,"drop":null,"action":true,"hold":false,"type":"10\n"}],"doors":["element.setAttribute#inspector-min"],"expect":{"document":[{"op":"set","path":"/Page/@children","value":[{"type":"input","name":"Input","tag":"input","attributes":{"inputType":"number","max":"5"},"classes":[],"styles":{},"text":null,"children":[]}]}],"selection":["/Page/Input"],"history":{"undoSteps":2,"undoRestores":true,"redoRestores":true},"render":{"computed":[],"geometry":[],"feedback":[{"key":"status.attribute.invalid","params":{"attribute":"Minimum","value":"10"}}]},"editor":null,"persistence":{"reload":"immediate","document":"same","preferences":null,"selection":null},"export":null},"refusals":[{"key":"status.attribute.invalid","document":"unchanged"}]},
+        {"id":"settings-audit-refuses-zero-textarea-rows","setup":{"fixture":"empty","selection":[],"context":"global","breakpoint":"desktop","state":"base","locale":"en","viewport":"desktop-1440","zoom":100},"steps":[{"door":"workspace.setPanelOpen#toolbar-activity-bar-insert","args":{},"target":null,"drop":null,"action":false,"hold":false,"type":null},{"door":"element.insert#elements-tile","args":{"entry":"textarea"},"target":null,"drop":null,"action":false,"hold":false,"type":null},{"door":"workspace.setActiveTab#inspector-tab-settings","args":{},"target":null,"drop":null,"action":false,"hold":false,"type":null},{"door":"element.setAttribute#inspector-rows","args":{"attribute":"rows","value":"0"},"target":null,"drop":null,"action":true,"hold":false,"type":"0\n"}],"doors":["element.setAttribute#inspector-rows"],"expect":{"document":[{"op":"set","path":"/Page/@children","value":[{"type":"textarea","name":"Textarea","tag":"textarea","attributes":{},"classes":[],"styles":{},"text":"","children":[]}]}],"selection":["/Page/Textarea"],"history":{"undoSteps":1,"undoRestores":true,"redoRestores":true},"render":{"computed":[],"geometry":[],"feedback":[{"key":"status.attribute.invalid","params":{"attribute":"Rows","value":"0"}}]},"editor":null,"persistence":{"reload":"immediate","document":"same","preferences":null,"selection":null},"export":null},"refusals":[{"key":"status.attribute.invalid","document":"unchanged"}]},
+        {"id":"settings-audit-refuses-an-invalid-pattern","setup":{"fixture":"empty","selection":[],"context":"global","breakpoint":"desktop","state":"base","locale":"en","viewport":"desktop-1440","zoom":100},"steps":[{"door":"workspace.setPanelOpen#toolbar-activity-bar-insert","args":{},"target":null,"drop":null,"action":false,"hold":false,"type":null},{"door":"element.insert#elements-tile","args":{"entry":"input-text"},"target":null,"drop":null,"action":false,"hold":false,"type":null},{"door":"workspace.setActiveTab#inspector-tab-settings","args":{},"target":null,"drop":null,"action":false,"hold":false,"type":null},{"door":"element.setAttribute#inspector-pattern","args":{"attribute":"pattern","value":"["},"target":null,"drop":null,"action":true,"hold":false,"type":"[\n"}],"doors":["element.setAttribute#inspector-pattern"],"expect":{"document":[{"op":"set","path":"/Page/@children","value":[{"type":"input","name":"Input","tag":"input","attributes":{"inputType":"text"},"classes":[],"styles":{},"text":null,"children":[]}]}],"selection":["/Page/Input"],"history":{"undoSteps":1,"undoRestores":true,"redoRestores":true},"render":{"computed":[],"geometry":[],"feedback":[{"key":"status.attribute.invalid","params":{"attribute":"Pattern","value":"["}}]},"editor":null,"persistence":{"reload":"immediate","document":"same","preferences":null,"selection":null},"export":null},"refusals":[{"key":"status.attribute.invalid","document":"unchanged"}]},
+        {"id":"settings-audit-refuses-a-reserved-style-attribute","setup":{"fixture":"empty","selection":[],"context":"global","breakpoint":"desktop","state":"base","locale":"en","viewport":"desktop-1440","zoom":"fit"},"steps":[{"door":"workspace.setPanelOpen#toolbar-activity-bar-insert","args":{},"target":null,"drop":null,"action":false,"hold":false,"type":null},{"door":"element.insert#elements-tile","args":{"entry":"button"},"target":null,"drop":null,"action":false,"hold":false,"type":null},{"door":"workspace.setActiveTab#inspector-tab-settings","args":{},"target":null,"drop":null,"action":false,"hold":false,"type":null},{"door":"element.setCustomAttribute#inspector-custom-attribute-add","args":{"name":"style","value":""},"target":null,"drop":null,"action":true,"hold":false,"type":null}],"doors":["element.setCustomAttribute#inspector-custom-attribute-add"],"expect":{"document":[{"op":"set","path":"/Page/@children","value":[{"type":"button","name":"Button","tag":"button","attributes":{},"classes":[],"styles":{},"text":"New button","children":[]}]}],"selection":["/Page/Button"],"history":{"undoSteps":1,"undoRestores":true,"redoRestores":true},"render":{"computed":[],"geometry":[],"feedback":[{"key":"status.attribute.reserved","params":{"name":"style","owner":"Style"}}]},"editor":null,"persistence":null,"export":null},"refusals":[{"key":"status.attribute.reserved","document":"unchanged"}]},
+        {"id":"settings-audit-selected-option-is-exclusive","setup":{"fixture":"empty","selection":[],"context":"global","breakpoint":"desktop","state":"base","locale":"en","viewport":"desktop-1440","zoom":100},"steps":[{"door":"workspace.setPanelOpen#toolbar-activity-bar-insert","args":{},"target":null,"drop":null,"action":false,"hold":false,"type":null},{"door":"element.insert#elements-tile","args":{"entry":"select"},"target":null,"drop":null,"action":false,"hold":false,"type":null},{"door":"workspace.setPanelOpen#toolbar-activity-bar-explorer","args":{},"target":null,"drop":null,"action":false,"hold":false,"type":null},{"door":"selection.select#layers-row","args":{"target":"/Page/Select/Option"},"target":"/Page/Select/Option","drop":null,"action":false,"hold":false,"type":null},{"door":"workspace.setActiveTab#inspector-tab-settings","args":{},"target":null,"drop":null,"action":false,"hold":false,"type":null},{"door":"element.setAttribute#inspector-selected","args":{"attribute":"selected","value":true},"target":null,"drop":null,"action":false,"hold":false,"type":null},{"door":"selection.select#layers-row","args":{"target":"/Page/Select/Option 2"},"target":"/Page/Select/Option 2","drop":null,"action":false,"hold":false,"type":null},{"door":"element.setAttribute#inspector-selected","args":{"attribute":"selected","value":true},"target":null,"drop":null,"action":true,"hold":false,"type":null}],"doors":["element.setAttribute#inspector-selected"],"expect":{"document":[{"op":"set","path":"/Page/@children","value":[{"type":"select","name":"Select","tag":"select","attributes":{},"classes":[],"styles":{},"text":null,"children":[{"type":"option","name":"Option","tag":"option","attributes":{},"classes":[],"styles":{},"text":"Option","children":[]},{"type":"option","name":"Option 2","tag":"option","attributes":{"selected":true},"classes":[],"styles":{},"text":"Option","children":[]},{"type":"option","name":"Option 3","tag":"option","attributes":{},"classes":[],"styles":{},"text":"Option","children":[]}]}]}],"selection":["/Page/Select/Option 2"],"history":{"undoSteps":3,"undoRestores":true,"redoRestores":true},"render":{"computed":[],"geometry":[],"feedback":[{"key":"status.attribute.set","params":{"attribute":"Selected","name":"Option 2","value":"✓"}}]},"editor":null,"persistence":{"reload":"immediate","document":"same","preferences":null,"selection":null},"export":null},"refusals":[]}
+      ]
     }
   ]
 }
