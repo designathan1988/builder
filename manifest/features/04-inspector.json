@@ -19987,7 +19987,7 @@
           ]
         },
         {
-          "id": "a-stop-position-past-100-is-refused",
+          "id": "a-stop-position-past-100-is-refused-quoting-what-was-typed",
           "setup": {
             "fixture": "aurora",
             "selection": [
@@ -20064,7 +20064,7 @@
                   "key": "status.value.invalid",
                   "params": {
                     "property": "Background image",
-                    "value": "{\"stop\":0,\"position\":\"150\"}"
+                    "value": "150"
                   }
                 }
               ]
@@ -35280,7 +35280,7 @@
           "refusals": []
         },
         {
-          "id": "effects-that-are-no-filter-are-refused",
+          "id": "effects-that-are-no-filter-are-refused-quoting-them-once",
           "setup": {
             "fixture": "aurora",
             "selection": [
@@ -35334,7 +35334,7 @@
                   "key": "status.value.invalid",
                   "params": {
                     "property": "Filter",
-                    "value": "\"glow\""
+                    "value": "glow"
                   }
                 }
               ]
