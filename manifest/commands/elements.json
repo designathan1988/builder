@@ -1533,7 +1533,7 @@
           "id": "inspector-classes",
           "kind": "inspector-field",
           "drawnAs": "field",
-          "feature": "props-attributes",
+          "feature": "settings-class-management",
           "property": null,
           "composite": null,
           "recipe": null,

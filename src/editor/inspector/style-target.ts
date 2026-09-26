@@ -8,8 +8,8 @@
 //  - What the Style tab's fields read (styleSource): the primary element, or, while a class is the target, the primary
 //    element holding the class's styles; and, with the Element target, the class a value comes from when the element
 //    holds none of its own (classOrigin).
-import { registerHandler } from '../../core/commands/registry.ts';
-import { classTarget, classesOf } from '../../core/design/classes.ts';
+import { message, registerHandler } from '../../core/commands/registry.ts';
+import { classTarget, classesOf, missingClassDefinitions } from '../../core/design/classes.ts';
 import { locate, type DocNode } from '../../core/document/model.ts';
 import type { ModelRules } from '../../core/document/validate.ts';
 import type { StoreState } from '../../core/store/store.ts';
@@ -28,6 +28,13 @@ export const setStyleTarget = registerHandler<'inspector.setStyleTarget', Editor
   ({ state }, { target, className }) => {
     const { styleTarget: _dropped, ...rest } = state.ui;
     void _dropped;
+    // A class imported before the project registry existed is still an applied class. Its first
+    // target click registers one empty definition as an undoable repair, then selects that target.
+    if (target !== ELEMENT && className !== undefined && !classesOf(state.document).some((styleClass) => styleClass.name === className)) {
+      const selected = state.selection.map((id) => locate(state.document, id)?.node);
+      if (selected.length > 0 && selected.every((node) => node !== undefined && node.classes.includes(className)))
+        return { kind: 'change', patches: missingClassDefinitions(state.document, [className]), ui: { ...rest, styleTarget: className }, message: message('status.classes.registered', { name: className }) };
+    }
     // a class every selected element lists, else the Element target
     const name = target === ELEMENT || className === undefined ? null : classTarget(state.document, state.selection, className)?.styleClass.name ?? null;
     if (name === (state.ui.styleTarget ?? null)) return { kind: 'change' };
@@ -69,4 +76,3 @@ export function classOrigin(state: State, property: string, rules: ModelRules): 
   const holding = classes.filter((c) => node.classes.includes(c.name) && storedValue({ ...node, styles: c.styles }, property, rules) !== undefined);
   return holding.at(-1)?.name ?? null;
 }
-

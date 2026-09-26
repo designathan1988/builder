@@ -535,7 +535,7 @@
       "id": "classes.rename",
       "labelKey": "command.classes.rename",
       "owner": "src/core/design/classes.ts",
-      "introducedBy": "settings-audit",
+      "introducedBy": "settings-class-management",
       "args": {
         "className": { "type": "string", "values": [], "optional": false },
         "nextName": { "type": "string", "values": [], "optional": false }
@@ -550,7 +550,7 @@
           "kind": "panel-control",
           "drawnAs": "field",
           "pressed": false,
-          "feature": "settings-audit",
+          "feature": "settings-class-management",
           "panel": "styles",
           "control": "class-name-field",
           "modifier": null,
@@ -569,7 +569,7 @@
       "id": "classes.delete",
       "labelKey": "command.classes.delete",
       "owner": "src/core/design/classes.ts",
-      "introducedBy": "settings-audit",
+      "introducedBy": "settings-class-management",
       "args": { "className": { "type": "string", "values": [], "optional": false } },
       "availability": { "predicate": "always", "refusalKey": null },
       "refusals": ["status.locked.edit"],
@@ -581,7 +581,7 @@
           "kind": "panel-control",
           "drawnAs": "icon-button",
           "pressed": false,
-          "feature": "settings-audit",
+          "feature": "settings-class-management",
           "panel": "styles",
           "control": "class-delete",
           "modifier": null,
@@ -623,7 +623,11 @@
       "refusals": [],
       "confirmation": null,
       "history": {
-        "undoable": false
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-dispatch",
+        "noChange": "no-entry"
       },
       "entryPoints": [
         {

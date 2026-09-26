@@ -21,6 +21,22 @@ export const classesOf = (document: DocumentJson): readonly StyleClass[] => docu
 const CLASS_NAME = /^-?[_a-zA-Z][_a-zA-Z0-9-]*$/;
 export const validClassName = (name: string): boolean => CLASS_NAME.test(name);
 
+// Settings Classes uses the same project registry as + Class. A new word is defined once,
+// before the element lists it, so its Style chip is immediately a writable target.
+export function missingClassDefinitions(document: DocumentJson, names: readonly string[]): Patch[] {
+  const existing = new Set(classesOf(document).map((styleClass) => styleClass.name));
+  const missing: StyleClass[] = [];
+  for (const name of names) {
+    if (existing.has(name)) continue;
+    existing.add(name);
+    missing.push({ name, styles: {} });
+  }
+  if (missing.length === 0) return [];
+  return document.classes === undefined
+    ? [{ op: 'add', path: ['classes'], value: missing }]
+    : missing.map((styleClass, index): Patch => ({ op: 'add', path: ['classes', classesOf(document).length + index], value: styleClass }));
+}
+
 
 // how many elements of the project list a class
 export function usesOfClass(document: DocumentJson, name: string): number {

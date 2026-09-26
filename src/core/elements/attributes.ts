@@ -15,7 +15,7 @@ import type { NodeId } from '../../generated/commands.ts';
 import { message, registerHandler, type Outcome } from '../commands/registry.ts';
 import { allNodes, locate, walk, type DocumentJson, type Location } from '../document/model.ts';
 import { customAttributeRefusal, reservedAttributeOwner, type ModelRules } from '../document/validate.ts';
-import { validClassName } from '../design/classes.ts';
+import { missingClassDefinitions, validClassName } from '../design/classes.ts';
 import { inputTypeOf } from './inputs.ts';
 import type { Patch } from '../history/transaction.ts';
 import { lockRefusal } from '../nodes/flags.ts';
@@ -158,8 +158,10 @@ export const setClassesCommand = registerHandler('element.setClasses', ({ state,
   if (wrong !== undefined) return { kind: 'refused', message: message('status.attribute.invalid', { attribute: label, value: wrong }) };
   const kept = [...new Set(list)];
   const said = message(kept.length === 0 ? 'status.attribute.removed' : 'status.attribute.set', { attribute: label, name: at.node.name, value: kept.join(' ') });
-  if (kept.join(' ') === at.node.classes.join(' ')) return { kind: 'change', message: said };
-  return { kind: 'change', patches: [{ op: 'replace', path: [...at.path, 'classes'], value: kept }], message: said };
+  const definitions = missingClassDefinitions(state.document, kept);
+  if (kept.join(' ') === at.node.classes.join(' ') && definitions.length === 0) return { kind: 'change', message: said };
+  const classPatch: Patch[] = kept.join(' ') === at.node.classes.join(' ') ? [] : [{ op: 'replace', path: [...at.path, 'classes'], value: kept }];
+  return { kind: 'change', patches: [...definitions, ...classPatch], message: said };
 });
 
 export const setAttributeCommand = registerHandler('element.setAttribute', ({ state, rules, words }, { attribute, value, target }): Outcome<never> => {
