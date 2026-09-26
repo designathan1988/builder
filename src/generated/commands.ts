@@ -358,6 +358,7 @@ export const FEATURE_COMMANDS: Readonly<Record<FeatureId, readonly CommandId[]>>
   "elements-interactive": ["element.insert","element.setAttribute"],
   "natural-child-command": ["element.createNaturalChild"],
   "props-element-specific": ["style.set"],
+  "settings-class-management": ["element.setClasses","element.setCustomAttribute","inspector.setStyleTarget","classes.rename","classes.delete"],
   "settings-audit": ["element.setAttribute","element.setInputType","element.setClasses","element.setCustomAttribute","element.setTag","text.toggleBold","text.toggleItalic","classes.rename","classes.delete"],
   "templates-layout": ["element.insert"],
   "templates-content": ["element.insert"],

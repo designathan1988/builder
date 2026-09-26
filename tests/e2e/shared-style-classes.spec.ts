@@ -66,7 +66,8 @@ test('a class target says its reach, a class value is named on the element, the 
   await expect(control(page, CHIP, { args: { target: 'element' } })).toHaveClass(/is-current/);
   // the Styles view: band, on two elements
   await runDoor(page, STYLES);
-  await expect(page.locator('[data-region="styles"] .style-classes__row')).toHaveText(['.band2 elements']);
+  expect(await page.locator('[data-region="styles"] .style-classes__row .style-classes__count').allTextContents()).toEqual(['2 elements']);
+  await expect(page.locator('[data-region="styles"] [data-door="classes.rename#styles-class-rename"] input')).toHaveValue('band');
 });
 
 // Problems in Pager 3: the page drawn anew (after a reload) still lets the element's own value override its class.

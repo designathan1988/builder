@@ -115,6 +115,7 @@ export const FEATURES = {
   'elements-interactive': registerFeature('elements-interactive'),
   'natural-child-command': registerFeature('natural-child-command'),
   'props-element-specific': registerFeature('props-element-specific'),
+  'settings-class-management': registerFeature('settings-class-management'),
   'settings-audit': NOT_AVAILABLE_YET,
   // 08 templates and components
   'templates-layout': registerFeature('templates-layout'),

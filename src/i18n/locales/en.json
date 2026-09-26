@@ -1729,5 +1729,7 @@
   "status.attribute.reserved": "\"{name}\" is managed by {owner}; use that field.",
   "styles.deleteClassUsedBy": "Delete class used by {count} elements",
   "settings.inputTypeDrops": "Changing type will remove {attributes}. Press Enter to apply.",
-  "settings.valuePicker": "Choose {attribute}"
+  "settings.valuePicker": "Choose {attribute}",
+  "feature.settingsClassManagement": "Manage Settings classes and attributes",
+  "status.classes.registered": "Registered .{name} as a project class."
 }

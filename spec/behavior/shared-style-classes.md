@@ -31,7 +31,7 @@ Read from Pager's source (`reference/Pager`, run from `.cache/pager-run`); refer
 - **The target chips** (`inspector.setStyleTarget`): Element first, then each class every selected element has.
   - Choosing a chip makes it the style target and draws it pressed.
   - A class target holds only while every selected element has the class. A new selection returns the target to Element. So does a class that is detached or undone away.
-  - Choosing a chip changes nothing in the document and records nothing.
+  - Choosing a chip of a project class changes nothing in the document and records nothing. Audit 7.1c: a legacy applied class with no project definition is registered as an empty project class on its first target click, in one undo step; the target becomes that class immediately. This is the only target click that changes the document.
 
 ### Editing a class
 
@@ -51,7 +51,7 @@ Read from Pager's source (`reference/Pager`, run from `.cache/pager-run`); refer
 
 ### Styles view
 
-- The Styles view lists the project's classes, read-only, each with the number of elements that have it.
+- The Styles view lists the project's classes, each with the number of elements that have it. Audit 7.1c adds Rename and Delete there: Rename updates the project definition and all uses in one undo step; Delete confirms the use count and removes the definition and every use, also in one undo step. A class's style values are still edited through the selector bar.
 
 ## Refusals
 

@@ -1170,6 +1170,7 @@ function CustomAttributes({ node, add: addEntry }: { readonly node: DocNode; rea
   const store = useStore();
   const t = useT();
   const addDoor = useDoor(addEntry, {}, undefined, isFeatureBuilt(addEntry.door.feature as FeatureId));
+  const refused = useSettingsRefusal(addEntry.command.id, undefined, node.id);
   const typedName = useRef<HTMLInputElement>(null);
   useEffect(() => { if (typedName.current !== null) typedName.current.value = ''; }, [node.id]);
   const dispatch = store.dispatch as (id: CommandId, args: unknown) => DispatchResult;
@@ -1192,11 +1193,12 @@ function CustomAttributes({ node, add: addEntry }: { readonly node: DocNode; rea
       {Object.entries(node.customAttributes ?? {}).map(([name, value]) => (
         <CustomAttributeRow key={`${node.id}:${name}`} node={node} name={name} value={value} />
       ))}
-      <form className={`field-row${addDoor.available ? '' : ' is-unavailable'}`} title={addDoor.title} onSubmit={submit} data-door={addEntry.ref} data-args={ADDED_VALUE}>
-        <input ref={typedName} className="input" disabled={!addDoor.available} aria-label={t('inspector.customAttribute.name')} placeholder={t('inspector.customAttribute.name')} spellCheck={false} data-local="custom-attribute-name" />
+      <form className={`field-row${addDoor.available ? '' : ' is-unavailable'}${refused.text !== null ? ' is-invalid' : ''}`} title={addDoor.title} onSubmit={submit} data-door={addEntry.ref} data-args={ADDED_VALUE}>
+        <input ref={typedName} className="input" disabled={!addDoor.available} aria-label={t('inspector.customAttribute.name')} aria-invalid={refused.text !== null} placeholder={t('inspector.customAttribute.name')} spellCheck={false} data-local="custom-attribute-name" onInput={refused.dismiss} />
         <button type="button" className="door door--icon-button" disabled={!addDoor.available} aria-label={addDoor.label} onClick={add}>
           {addEntry.door.icon !== null ? <Icon name={addEntry.door.icon} size="md" /> : null}
         </button>
+        {refused.text !== null ? <span className="field-row__refusal" role="alert">{refused.text}</span> : null}
       </form>
     </div>
   );

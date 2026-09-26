@@ -1751,6 +1751,7 @@ export const FEATURE_IDS = [
   "elements-interactive",
   "natural-child-command",
   "props-element-specific",
+  "settings-class-management",
   "settings-audit",
   "templates-layout",
   "templates-content",
@@ -4006,5 +4007,7 @@ export const MESSAGE_IDS = [
   "styles.deleteClassUsedBy",
   "settings.inputTypeDrops",
   "settings.valuePicker",
+  "feature.settingsClassManagement",
+  "status.classes.registered",
 ] as const;
 export type MessageId = (typeof MESSAGE_IDS)[number];
