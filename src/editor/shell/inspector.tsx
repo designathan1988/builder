@@ -21,7 +21,7 @@ import { GENERATED_VALUES } from '../../generated/value-lists.ts';
 import { isFeatureBuilt } from '../../app/features.ts';
 import { locate, type DocNode, type NodeId, type StoredValue } from '../../core/document/model.ts';
 import { structuredCss } from '../../core/render/output.ts';
-import { attributeApplies, formControls } from '../../core/elements/inputs.ts';
+import { attributeApplies, droppedInputAttributes, formControls } from '../../core/elements/inputs.ts';
 import { partTypesOf, selectionInTable } from '../../core/elements/parts.ts';
 import { equivalentTags } from '../../core/elements/tag.ts';
 import type { DispatchResult } from '../../core/store/store.ts';
@@ -34,6 +34,9 @@ import { afterGesture } from '../input/pointer.ts';
 import { collapsedSections, editedProperties, inspectorMode, inspectorSearchOf, isEssential, searchMatches, summaryOf, summaryProperties } from '../inspector/sections.ts';
 import { MODEL_RULES, useEditorState, useStore, type EditorStore, layeredRules } from '../store.ts';
 import { classOrigin, styleSource } from '../inspector/style-target.ts';
+import { ATTRIBUTES, SETTINGS_SECTIONS, inputValueEditorOf, settingsSectionFor } from '../inspector/attributes.ts';
+import { useSettingsRefusal } from '../inspector/attribute-feedback.ts';
+import './settings.css';
 import { inspectorTab } from '../workspace/layout.ts';
 import { isPanelOpen, panelName } from '../workspace/panels.ts';
 import { useLocale, useT } from '../text.ts';
@@ -875,7 +878,6 @@ function StyleTab() {
 }
 
 // The attributes of elements.json by id, and the Settings tab's attribute fields in their order there.
-const ATTRIBUTES = new Map(manifest.elements.attributes.map((a) => [a.id, a]));
 const SETTINGS_FIELDS = doorSlots('inspector-settings').filter((d) => d.door.kind === 'inspector-field' && d.door.attribute !== null);
 // the toggles of a table's parts (caption, head, foot; core/elements/parts.ts), drawn while the selection is in a table
 const TABLE_PART_DOORS = doorSlots('inspector-settings').filter((d) => d.door.kind === 'panel-control' && d.door.drawnAs === 'toggle');
@@ -1010,7 +1012,8 @@ export function keptTextOf(entry: DoorEntry, attribute: AttributeId, valueType: 
   // a command whose one argument is a choice (element.setInputType's type): the field suggests its values
   const choices = args.filter(([name]) => name !== 'target');
   const choice = choices.length === 1 ? choices[0] : undefined;
-  if (choice !== undefined && choice[1].type === 'enum') return { args: forNode, filled: choice[0], stored, suggestions: choice[1].values };
+  if (choice !== undefined && (choice[1].type === 'enum' || (choice[1].type === 'string' && valueType === 'keyword')))
+    return { args: forNode, filled: choice[0], stored, suggestions: choice[1].type === 'enum' ? choice[1].values : keywordsOf(attribute) };
   // markup (an embed's, kept as the node's text; an SVG's, kept in its attribute): the command's one text argument
   // besides its node, several lines
   if (valueType === MARKUP_VALUE) {
@@ -1039,6 +1042,7 @@ export function keptTextOf(entry: DoorEntry, attribute: AttributeId, valueType: 
 // available yet, although the command it shares is built.
 export function KeptTextField({ entry, node, kept, label, attribute }: { readonly entry: DoorEntry; readonly node: DocNode; readonly kept: KeptText; readonly label: string; readonly attribute?: string }) {
   const store = useStore();
+  const t = useT();
   const { filled, stored, suggestions } = kept;
   const json = JSON.stringify(kept.args);
   const args = useMemo(() => JSON.parse(json) as Readonly<Record<string, string>>, [json]);
@@ -1048,14 +1052,23 @@ export function KeptTextField({ entry, node, kept, label, attribute }: { readonl
   const listId = useId();
   // the text the field last showed or kept: the field's own draft, never document state
   const draft = useRef({ shown: '' });
+  const [typed, setTyped] = useState(stored);
   const said = useEditorState((s) => s.message);
   const command = entry.command.id;
   const owner = node.id;
+  const refused = useSettingsRefusal(command, attribute, owner);
+  const pickerType = attribute === 'value' ? inputValueEditorOf(node) : null;
+  const pickerValue = pickerType === manifest.elements.inputValueEditors.color && !/^#[0-9a-f]{6}$/i.test(stored) ? '#000000' : stored;
+  const dropped = attribute === 'inputType' && node.type === 'input' && typed !== stored && suggestions.includes(typed.trim().toLowerCase())
+    ? droppedInputAttributes(node, typed.trim().toLowerCase())
+    : [];
+  const droppedLabels = dropped.map((id) => ATTRIBUTES.get(id)?.labelKey).filter((key): key is string => key !== undefined).map((key) => t(key as MessageId));
   useEffect(() => {
     const element = field.current;
     if (element === null) return;
     element.value = stored;
     draft.current.shown = stored;
+    setTyped(stored);
   }, [stored, said]);
   // the field the inspector was asked to show (inspector.reveal) takes the focus
   const revealed = useEditorState((s) => s.ui.revealed);
@@ -1091,14 +1104,31 @@ export function KeptTextField({ entry, node, kept, label, attribute }: { readonl
       keep();
     };
   }, [store, command, args, filled, owner]);
+  const choose = (value: string) => {
+    if (field.current === null) return;
+    field.current.value = value;
+    draft.current.shown = value;
+    setTyped(value);
+    refused.dismiss();
+    keepAfterGesture(() => {
+      if (locate(store.getState().document, owner) !== null)
+        (store.dispatch as (id: CommandId, args: unknown) => DispatchResult)(command, { ...args, [filled]: value });
+    });
+  };
   return (
-    <form ref={form} className={`field-row${door.available ? '' : ' is-unavailable'}`} data-door={entry.ref} data-args={JSON.stringify(args)} title={door.title}>
+    <form ref={form} className={`field-row${door.available ? '' : ' is-unavailable'}${refused.text !== null ? ' is-invalid' : ''}`} data-door={entry.ref} data-args={JSON.stringify(args)} title={door.title}>
       <span className="field-row__label">{label}</span>
       {kept.multiline === true ? (
-        <textarea ref={field} className="input input--area" rows={4} disabled={!door.available} aria-label={label} spellCheck={false} />
+        <textarea ref={field} className="input input--area" rows={4} disabled={!door.available} aria-label={label} aria-invalid={refused.text !== null} spellCheck={false} onInput={(event) => { setTyped(event.currentTarget.value); refused.dismiss(); }} />
       ) : (
-        <input ref={field} className="input" disabled={!door.available} aria-label={label} spellCheck={false} list={suggestions.length > 0 ? listId : undefined} />
+        <span className="settings-field__value">
+          <input ref={field} className="input" disabled={!door.available} aria-label={label} aria-invalid={refused.text !== null} placeholder={(attribute === 'buttonType' || attribute === 'inputType') && stored === '' ? suggestions[0] : undefined} spellCheck={false} list={suggestions.length > 0 ? listId : undefined} onInput={(event) => { setTyped(event.currentTarget.value); refused.dismiss(); }} />
+          {pickerType !== null ? (
+            <input className="settings-field__picker" type={pickerType} aria-label={t('settings.valuePicker', { attribute: label })} disabled={!door.available} value={pickerValue} onChange={(event) => choose(event.currentTarget.value)} />
+          ) : null}
+        </span>
       )}
+      <button type="submit" hidden aria-hidden="true" tabIndex={-1} />
       {suggestions.length > 0 ? (
         <datalist id={listId}>
           {suggestions.map((value) => (
@@ -1106,6 +1136,8 @@ export function KeptTextField({ entry, node, kept, label, attribute }: { readonl
           ))}
         </datalist>
       ) : null}
+      {droppedLabels.length > 0 ? <span className="field-row__warning" role="status">{t('settings.inputTypeDrops', { attributes: droppedLabels.join(', ') })}</span> : null}
+      {refused.text !== null ? <span className="field-row__refusal" role="alert">{refused.text}</span> : null}
     </form>
   );
 }
@@ -1180,6 +1212,7 @@ function CustomAttributes({ node, add: addEntry }: { readonly node: DocNode; rea
   const t = useT();
   const addDoor = useDoor(addEntry, {}, undefined, isFeatureBuilt(addEntry.door.feature as FeatureId));
   const typedName = useRef<HTMLInputElement>(null);
+  useEffect(() => { if (typedName.current !== null) typedName.current.value = ''; }, [node.id]);
   const dispatch = store.dispatch as (id: CommandId, args: unknown) => DispatchResult;
   const add = () => {
     const field = typedName.current;
@@ -1334,6 +1367,10 @@ function SettingsTab() {
   const count = useEditorState((s) => s.selection.length);
   const node = useSingleNode();
   const inTable = useEditorState((s) => selectionInTable(s.document, s.selection));
+  const fields = node === null ? [] : SETTINGS_FIELDS.filter((entry) => {
+    const attribute = entry.door.kind === 'inspector-field' && entry.door.attribute !== null ? ATTRIBUTES.get(entry.door.attribute) : undefined;
+    return attribute !== undefined && (attribute.elements === 'all' || attribute.elements.includes(node.type)) && attributeApplies(node, attribute.id);
+  });
   return (
     <div className="inspector-scroll">
       <div className="inspector-body" data-region="inspector-settings">
@@ -1344,33 +1381,38 @@ function SettingsTab() {
           </>
         ) : node === null ? (
           <p className="inspector-empty">{t('canvas.selectedCount', { count })}</p>
-        ) : (
-          SETTINGS_FIELDS.map((entry) => {
-            const attribute = entry.door.kind === 'inspector-field' && entry.door.attribute !== null ? ATTRIBUTES.get(entry.door.attribute) : undefined;
-            if (attribute === undefined || (attribute.elements !== 'all' && !attribute.elements.includes(node.type))) return null;
-            // an input shows only the attributes its type takes (core/elements/inputs.ts)
-            if (!attributeApplies(node, attribute.id)) return null;
-            if (attribute.valueType === ID_REF) return <LabelTargetField key={`${entry.ref}@${node.id}`} entry={entry} node={node} label={t(attribute.labelKey as MessageId)} />;
-            const label = t(attribute.labelKey as MessageId);
-            if ('content' in entry.command.args) return <TextField key={`${entry.ref}@${node.id}`} entry={entry} node={node} label={label} />;
-            // a setting of the page on the page root (core/page/settings.ts), a link (core/elements/link.ts), or the
-            // element's HTML tag (core/elements/tag.ts)
-            const kept = keptTextOf(entry, attribute.id as AttributeId, attribute.valueType, node);
-            if (kept !== null) return <KeptTextField key={`${entry.ref}@${node.id}`} entry={entry} node={node} kept={kept} label={label} attribute={attribute.id} />;
-            if (attribute.valueType === 'boolean' && toggleArgOf(entry, attribute.id as AttributeId) !== null)
-              return <ToggleField key={`${entry.ref}@${node.id}`} entry={entry} node={node} attribute={attribute.id as AttributeId} label={label} />;
-            return <AttributeField key={entry.ref} entry={entry} label={label} toggle={attribute.valueType === 'boolean'} />;
-          })
-        )}
-        {node !== null ? <PartsEditor node={node} /> : null}
-        {node !== null && CUSTOM_ADD !== undefined && CUSTOM_VALUE !== undefined && CUSTOM_REMOVE !== undefined ? <CustomAttributes node={node} add={CUSTOM_ADD} /> : null}
-        {node !== null && inTable ? (
-          <div className="field-row field-row--toggles">
-            {TABLE_PART_DOORS.map((entry) => (
-              <DoorControl key={entry.ref} entry={entry} />
-            ))}
-          </div>
-        ) : null}
+        ) : SETTINGS_SECTIONS.map((section) => {
+          if (section.elements !== 'all' && !section.elements.includes(node.type)) return null;
+          const owned = fields.filter((entry) => entry.door.kind === 'inspector-field' && entry.door.attribute !== null && settingsSectionFor(entry.door.attribute, node.type) === section.id);
+          if (owned.length === 0 && section.id !== 'attributes') return null;
+          return (
+            <section key={section.id} className="settings-section" data-settings-section={section.id} aria-label={t(section.labelKey as MessageId)}>
+              <div className="settings-section__header">
+                <h3>{t(section.labelKey as MessageId)}</h3>
+                <p>{t(section.descriptionKey as MessageId)}</p>
+              </div>
+              {owned.map((entry) => {
+                const attribute = entry.door.kind === 'inspector-field' && entry.door.attribute !== null ? ATTRIBUTES.get(entry.door.attribute) : undefined;
+                if (attribute === undefined) return null;
+                const label = t(attribute.labelKey as MessageId);
+                if (attribute.valueType === ID_REF) return <LabelTargetField key={`${entry.ref}@${node.id}`} entry={entry} node={node} label={label} />;
+                if ('content' in entry.command.args) return <TextField key={`${entry.ref}@${node.id}`} entry={entry} node={node} label={label} />;
+                const kept = keptTextOf(entry, attribute.id as AttributeId, attribute.valueType, node);
+                if (kept !== null) return <KeptTextField key={`${entry.ref}@${node.id}`} entry={entry} node={node} kept={kept} label={label} attribute={attribute.id} />;
+                if (attribute.valueType === 'boolean' && toggleArgOf(entry, attribute.id as AttributeId) !== null)
+                  return <ToggleField key={`${entry.ref}@${node.id}`} entry={entry} node={node} attribute={attribute.id as AttributeId} label={label} />;
+                return <AttributeField key={entry.ref} entry={entry} label={label} toggle={attribute.valueType === 'boolean'} />;
+              })}
+              {section.id === 'attributes' ? <PartsEditor node={node} /> : null}
+              {section.id === 'attributes' && CUSTOM_ADD !== undefined && CUSTOM_VALUE !== undefined && CUSTOM_REMOVE !== undefined ? <CustomAttributes node={node} add={CUSTOM_ADD} /> : null}
+              {section.id === 'attributes' && inTable ? (
+                <div className="field-row field-row--toggles">
+                  {TABLE_PART_DOORS.map((entry) => <DoorControl key={entry.ref} entry={entry} />)}
+                </div>
+              ) : null}
+            </section>
+          );
+        })}
       </div>
     </div>
   );

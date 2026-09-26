@@ -137,6 +137,16 @@
     },
     {
       "kind": "handler",
+      "id": "classes.rename",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
+      "id": "classes.delete",
+      "status": "registered"
+    },
+    {
+      "kind": "handler",
       "id": "inspector.setStyleTarget",
       "status": "registered"
     },

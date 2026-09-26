@@ -532,6 +532,71 @@
       ]
     },
     {
+      "id": "classes.rename",
+      "labelKey": "command.classes.rename",
+      "owner": "src/core/design/classes.ts",
+      "introducedBy": "settings-audit",
+      "args": {
+        "className": { "type": "string", "values": [], "optional": false },
+        "nextName": { "type": "string", "values": [], "optional": false }
+      },
+      "availability": { "predicate": "always", "refusalKey": null },
+      "refusals": ["status.classes.badName", "status.classes.nameTaken", "status.locked.edit"],
+      "confirmation": null,
+      "history": { "undoable": true, "coalesce": "none", "undoRestoresSelection": "before-command", "transaction": "per-dispatch", "noChange": "no-entry" },
+      "entryPoints": [
+        {
+          "id": "styles-class-rename",
+          "kind": "panel-control",
+          "drawnAs": "field",
+          "pressed": false,
+          "feature": "settings-audit",
+          "panel": "styles",
+          "control": "class-name-field",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.classes.rename",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": { "region": "styles", "order": 5 },
+          "adapter": { "selection": "none", "offers": null, "writes": [], "fields": [] },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "classes.delete",
+      "labelKey": "command.classes.delete",
+      "owner": "src/core/design/classes.ts",
+      "introducedBy": "settings-audit",
+      "args": { "className": { "type": "string", "values": [], "optional": false } },
+      "availability": { "predicate": "always", "refusalKey": null },
+      "refusals": ["status.locked.edit"],
+      "confirmation": { "messageKey": "dialog.classes.delete", "confirmKey": "dialog.delete", "cancelKey": "dialog.cancel" },
+      "history": { "undoable": true, "coalesce": "none", "undoRestoresSelection": "before-command", "transaction": "per-dispatch", "noChange": "no-entry" },
+      "entryPoints": [
+        {
+          "id": "styles-class-delete",
+          "kind": "panel-control",
+          "drawnAs": "icon-button",
+          "pressed": false,
+          "feature": "settings-audit",
+          "panel": "styles",
+          "control": "class-delete",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "command.classes.delete",
+          "faceLabelKey": null,
+          "icon": "trash",
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": { "region": "styles", "order": 6 },
+          "adapter": { "selection": "none", "offers": null, "writes": [], "fields": [] },
+          "args": {}
+        }
+      ]
+    },
+    {
       "id": "inspector.setStyleTarget",
       "labelKey": "command.inspector.styleTarget",
       "owner": "src/editor/inspector/style-target.ts",

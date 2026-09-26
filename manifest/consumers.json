@@ -133,6 +133,38 @@
       "reader": "src/editor/inspector/attributes.ts"
     },
     {
+      "field": "elements:settingsSections",
+      "reader": "src/editor/inspector/attributes.ts"
+    },
+    {
+      "field": "elements:settingsSections[].id",
+      "reader": "src/editor/inspector/attributes.ts"
+    },
+    {
+      "field": "elements:settingsSections[].labelKey",
+      "reader": "src/editor/inspector/attributes.ts"
+    },
+    {
+      "field": "elements:settingsSections[].descriptionKey",
+      "reader": "src/editor/inspector/attributes.ts"
+    },
+    {
+      "field": "elements:settingsSections[].elements",
+      "reader": "src/editor/inspector/attributes.ts"
+    },
+    {
+      "field": "elements:settingsSections[].attributes",
+      "reader": "src/editor/inspector/attributes.ts"
+    },
+    {
+      "field": "elements:autocompleteTokens",
+      "reader": "src/core/document/validate.ts"
+    },
+    {
+      "field": "elements:inputValueEditors",
+      "reader": "src/editor/inspector/attributes.ts"
+    },
+    {
       "field": "elements:palette",
       "reader": "src/editor/palette/palette.ts"
     },

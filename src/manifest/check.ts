@@ -637,6 +637,7 @@ export function checkManifest(input: ManifestInput): CheckResult {
   unique('scenario', 'features/', features.flatMap((f) => f.feature.scenarios.map((s, i) => ({ id: s.id, path: `${f.file} ${f.path}.scenarios[${i}]` }))));
   unique('element', 'elements.json', p.elements.elements.map((e, i) => ({ id: e.id, path: `elements[${i}]` })));
   unique('attribute', 'elements.json', p.elements.attributes.map((a, i) => ({ id: a.id, path: `attributes[${i}]` })));
+  unique('settings section', 'elements.json', p.elements.settingsSections.map((s, i) => ({ id: s.id, path: `settingsSections[${i}]` })));
   unique('palette group', 'elements.json', p.elements.palette.map((g, i) => ({ id: g.id, path: `palette[${i}]` })));
   unique('palette entry', 'elements.json', p.elements.palette.flatMap((g, gi) => g.entries.map((e, i) => ({ id: e.id, path: `palette[${gi}].entries[${i}]` }))));
   unique('property', 'properties.json', p.properties.properties.map((prop, i) => ({ id: prop.id, path: `properties[${i}]` })));
@@ -694,6 +695,10 @@ export function checkManifest(input: ManifestInput): CheckResult {
   for (const [i, a] of p.elements.attributes.entries()) {
     if (a.elements !== 'all') for (const id of a.elements) ref(elementById.has(id), 'elements.json', `attributes[${i}].elements`, `unknown element type "${id}"`);
     ref(commandById.has(a.command), 'elements.json', `attributes[${i}].command`, `unknown command "${a.command}"`);
+  }
+  for (const [i, s] of p.elements.settingsSections.entries()) {
+    if (s.elements !== 'all') for (const id of s.elements) ref(elementById.has(id), 'elements.json', `settingsSections[${i}].elements`, `unknown element type "${id}"`);
+    for (const id of s.attributes) ref(attributeById.has(id), 'elements.json', `settingsSections[${i}].attributes`, `unknown attribute "${id}"`);
   }
   for (const [gi, g] of p.elements.palette.entries()) {
     for (const [i, e] of g.entries.entries()) {
@@ -906,6 +911,10 @@ export function checkManifest(input: ManifestInput): CheckResult {
     noteKey(e.defaultTextKey, `elements.json elements[${i}].defaultTextKey`);
   });
   p.elements.attributes.forEach((a, i) => noteKey(a.labelKey, `elements.json attributes[${i}].labelKey`));
+  p.elements.settingsSections.forEach((s, i) => {
+    noteKey(s.labelKey, `elements.json settingsSections[${i}].labelKey`);
+    noteKey(s.descriptionKey, `elements.json settingsSections[${i}].descriptionKey`);
+  });
   p.elements.palette.forEach((g, gi) => {
     noteKey(g.labelKey, `elements.json palette[${gi}].labelKey`);
     g.entries.forEach((e, i) => noteKey(e.labelKey, `elements.json palette[${gi}].entries[${i}].labelKey`));
@@ -2210,4 +2219,3 @@ export function checkManifest(input: ManifestInput): CheckResult {
   };
   return { problems, summary };
 }
-

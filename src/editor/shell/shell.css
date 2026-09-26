@@ -1935,12 +1935,21 @@ kbd {
   color: var(--color-text-muted);
 }
 
-/* the Styles view's classes, read-only: each name and how many elements have it */
+/* the Styles view's project classes and their use counts */
 .style-classes__row {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
   gap: var(--space-2);
   padding: var(--space-1) var(--space-4);
+}
+
+.style-classes__field {
+  flex: 1;
+  min-width: 0;
+}
+
+.style-classes__field .input {
+  font-family: var(--font-mono);
 }
 
 .style-classes__name {
@@ -1950,6 +1959,7 @@ kbd {
 .style-classes__count {
   color: var(--color-text-muted);
   font-size: var(--fs-caption);
+  white-space: nowrap;
 }
 
 .state-picker .menu-button {
@@ -1986,6 +1996,33 @@ kbd {
   flex-direction: column;
   gap: var(--space-4);
   padding: var(--space-4) var(--space-6) var(--space-10);
+}
+
+.settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.settings-section:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.settings-section__header h3,
+.settings-section__header p {
+  margin: 0;
+}
+
+.settings-section__header h3 {
+  font: var(--fw-title) var(--fs-title) / var(--lh-title) var(--font-ui);
+}
+
+.settings-section__header p {
+  color: var(--color-text-muted);
+  font-size: var(--fs-body);
 }
 
 .inspector-empty {

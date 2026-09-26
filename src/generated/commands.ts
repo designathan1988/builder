@@ -49,6 +49,8 @@ export interface CommandArgs {
   "classes.create": { readonly name: string };
   "classes.apply": { readonly className: string };
   "classes.detach": { readonly className: string };
+  "classes.rename": { readonly className: string; readonly nextName: string };
+  "classes.delete": { readonly className: string };
   "inspector.setStyleTarget": { readonly target: "element" | "class"; readonly className?: string };
   "components.create": Record<string, never>;
   "components.insertInstance": { readonly component: string; readonly parent?: NodeId; readonly index?: number };
@@ -58,7 +60,7 @@ export interface CommandArgs {
   "element.setId": { readonly id: string; readonly target?: NodeId };
   "element.setClasses": { readonly classes: JsonValue; readonly target?: NodeId };
   "element.setLink": { readonly target?: NodeId; readonly href?: string; readonly newTab?: boolean; readonly page?: string; readonly anchor?: NodeId };
-  "element.setInputType": { readonly type: "text" | "email" | "password" | "number" | "tel" | "url" | "search" | "date" | "time" | "color" | "range" | "checkbox" | "radio" | "file" };
+  "element.setInputType": { readonly type: string };
   "element.setLabelTarget": { readonly control: NodeId };
   "element.setCustomAttribute": { readonly name: string; readonly value: string };
   "element.removeCustomAttribute": { readonly name: string };
@@ -356,6 +358,7 @@ export const FEATURE_COMMANDS: Readonly<Record<FeatureId, readonly CommandId[]>>
   "elements-interactive": ["element.insert","element.setAttribute"],
   "natural-child-command": ["element.createNaturalChild"],
   "props-element-specific": ["style.set"],
+  "settings-audit": ["element.setAttribute","element.setInputType","element.setClasses","element.setCustomAttribute","element.setTag","text.toggleBold","text.toggleItalic","classes.rename","classes.delete"],
   "templates-layout": ["element.insert"],
   "templates-content": ["element.insert"],
   "templates-sections": ["element.insert"],

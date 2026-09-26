@@ -8,8 +8,7 @@
 //  - The text is taken without the spaces around it. An empty one removes the setting (spec, Problems in Pager 5): the
 //    page then has none of its own.
 //  - A keyword setting (the direction) takes one of its keywords (elements.json), written in any case. The page's
-//    language (the setting whose HTML attribute is lang) takes a language tag, in BCP 47's shape: letters, then subtags
-//    of letters and digits, each after a "-". Anything else is refused with status.page.settingInvalid, which names the
+//    language (the setting whose HTML attribute is lang) takes a known BCP 47 language or a private-use tag. Anything else is refused with status.page.settingInvalid, which names the
 //    setting and the value, and nothing changes (Problems in Pager 3).
 //  - The same value records nothing (history.noChange "no-entry"); the status bar says the setting's value either way.
 //  - The settings of the other value types (an address, the linked scripts) arrive with their features (page-seo-meta,
@@ -22,9 +21,20 @@ export function isPageSetting(appliesTo: readonly string[] | 'all' | undefined, 
   return appliesTo !== undefined && appliesTo !== 'all' && appliesTo.length === 1 && appliesTo[0] === rootType;
 }
 
-// the HTML attribute that holds a language, and the shape of a language tag (BCP 47: subtags of at most 8 characters)
+// The HTML attribute that holds a language, its BCP 47 syntax, and an ICU language-name lookup.
 const LANGUAGE = 'lang';
 const LANGUAGE_TAG = /^[A-Za-z]{1,8}(?:-[A-Za-z0-9]{1,8})*$/;
+const LANGUAGE_NAMES = new Intl.DisplayNames(['en'], { type: 'language', fallback: 'none' });
+function validLanguageTag(value: string): boolean {
+  if (!LANGUAGE_TAG.test(value)) return false;
+  if (/^x-(?:[A-Za-z0-9]{1,8})(?:-[A-Za-z0-9]{1,8})*$/i.test(value)) return true;
+  try {
+    const canonical = Intl.getCanonicalLocales(value)[0];
+    return canonical !== undefined && LANGUAGE_NAMES.of(canonical) !== undefined;
+  } catch {
+    return false;
+  }
+}
 
 // The value a setting keeps for a text typed into its field (not empty, without the spaces around it), or null when
 // the setting cannot take it.
@@ -35,7 +45,7 @@ function keptValue(setting: string, rule: AttributeRules, typed: string): string
       return rule.keywords.includes(keyword) ? keyword : null;
     }
     case 'text':
-      return rule.html === LANGUAGE && !LANGUAGE_TAG.test(typed) ? null : typed;
+      return rule.html === LANGUAGE && !validLanguageTag(typed) ? null : typed;
     default:
       throw new Error(`page.setSetting: ${setting} is a setting of type ${rule.valueType}, which no built feature sets yet`);
   }
