@@ -412,9 +412,12 @@ function validateNode(
 
   validateStyles(node.styles, at, rules, bad);
 
+  // A summary or legend keeps a plain text prefix as well as any phrasing child elements.
+  const mixedText = node.type === 'summary' || node.type === 'legend';
   const holdsText = element.content === 'text' || element.content === 'markup';
   if (holdsText && typeof node.text !== 'string') bad(`${at}/text`, `a ${node.type} holds its ${element.content}`);
-  if (!holdsText && node.text !== null) bad(`${at}/text`, `a ${node.type} holds no text`);
+  if (!holdsText && !mixedText && node.text !== null) bad(`${at}/text`, `a ${node.type} holds no text`);
+  if (mixedText && node.text !== null && typeof node.text !== 'string') bad(`${at}/text`, `a ${node.type} holds plain text or no text`);
   // the marks of a text element's text (model.ts, src/core/text/inline.ts): the canonical tree of its text, links with
   // allowed addresses only, and only while something is marked
   if ('inline' in node) {

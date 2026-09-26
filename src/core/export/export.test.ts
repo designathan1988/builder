@@ -53,4 +53,14 @@ describe('the export (specs export-zip, export-bem-css)', () => {
     if (first.kind !== 'change' || second.kind !== 'change') throw new Error('the export did not run');
     expect(first.download?.bytes).toEqual(second.download?.bytes);
   });
+
+  it('exports Summary and Legend text before their child elements with escaped markup', () => {
+    const doc = page([
+      node('details', 'Details', 'details', 'details', { children: [node('summary', 'Summary', 'summary', 'summary', { text: 'Questions & answers ', children: [node('em', 'Emphasis', 'paragraph', 'span', { text: 'today' })] })] }),
+      node('fieldset', 'Fieldset', 'fieldset', 'fieldset', { children: [node('legend', 'Legend', 'legend', 'legend', { text: 'Contact <form>' })] }),
+    ]);
+    const { html } = exportPage(doc, 0, RULES);
+    expect(html).toMatch(/<summary>Questions &amp; answers\s+<span>today<\/span>/);
+    expect(html).toContain('<legend>Contact &lt;form&gt;</legend>');
+  });
 });

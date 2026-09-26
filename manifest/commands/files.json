@@ -968,6 +968,7 @@
       },
       "refusals": [
         "status.refused.onlyAccepts",
+        "status.refused.labelPhrasing",
         "status.refused.requiresParent",
         "status.refused.interactiveInside",
         "status.refused.formInForm",

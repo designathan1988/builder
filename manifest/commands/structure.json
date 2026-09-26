@@ -29,6 +29,7 @@
       },
       "refusals": [
         "status.refused.onlyAccepts",
+        "status.refused.labelPhrasing",
         "status.refused.requiresParent",
         "status.refused.interactiveInside",
         "status.refused.formInForm",
@@ -181,6 +182,7 @@
       },
       "refusals": [
         "status.refused.onlyAccepts",
+        "status.refused.labelPhrasing",
         "status.refused.requiresParent",
         "status.refused.interactiveInside",
         "status.refused.formInForm",
@@ -694,6 +696,7 @@
         "status.wrap.root",
         "status.wrap.needsSameParent",
         "status.refused.onlyAccepts",
+        "status.refused.labelPhrasing",
         "status.refused.requiresParent",
         "status.refused.interactiveInside",
         "status.refused.formInForm",
@@ -811,6 +814,7 @@
         "status.wrap.root",
         "status.wrap.needsSameParent",
         "status.refused.onlyAccepts",
+        "status.refused.labelPhrasing",
         "status.refused.requiresParent",
         "status.refused.interactiveInside",
         "status.refused.formInForm",
@@ -955,6 +959,7 @@
         "status.wrap.root",
         "status.refused.intoItself",
         "status.refused.onlyAccepts",
+        "status.refused.labelPhrasing",
         "status.refused.requiresParent",
         "status.refused.interactiveInside",
         "status.refused.formInForm",
@@ -1029,6 +1034,7 @@
       },
       "refusals": [
         "status.refused.onlyAccepts",
+        "status.refused.labelPhrasing",
         "status.refused.requiresParent",
         "status.refused.interactiveInside",
         "status.refused.formInForm",
@@ -1146,6 +1152,7 @@
       "refusals": [
         "status.promote.topLevel",
         "status.refused.onlyAccepts",
+        "status.refused.labelPhrasing",
         "status.refused.requiresParent",
         "status.refused.interactiveInside",
         "status.refused.formInForm",
@@ -1541,6 +1548,7 @@
       "refusals": [
         "status.unwrap.noChildren",
         "status.refused.onlyAccepts",
+        "status.refused.labelPhrasing",
         "status.refused.requiresParent",
         "status.refused.interactiveInside",
         "status.refused.formInForm",

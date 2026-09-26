@@ -3,7 +3,7 @@ import type { NodeId } from '../../generated/commands.ts';
 import { manifest } from '../../manifest/runtime.ts';
 import type { HandlerContext } from '../commands/registry.ts';
 import type { DocNode, DocumentJson } from '../document/model.ts';
-import { rulesFromManifest } from '../document/validate.ts';
+import { rulesFromManifest, validateDocument } from '../document/validate.ts';
 import { EMPTY_HISTORY } from '../history/history.ts';
 import { applyPatches } from '../history/transaction.ts';
 import { manualClock } from '../ports/clock.ts';
@@ -64,6 +64,21 @@ describe('text.set', () => {
 
   it('refuses a link whose address is not allowed, and writes nothing', () => {
     expect(setTextCommand.run(context, { target: 'Intro', content: [{ tag: 'a', href: 'javascript:alert(1)', children: ['Old'] }] })).toEqual({ kind: 'refused', message: { key: 'status.link.unsafe', params: {} } });
+  });
+
+  it('sets a summary and legend plain text while keeping their children valid', () => {
+    for (const [type, tag] of [['summary', 'summary'], ['legend', 'legend']] as const) {
+      const child = node('Strong', 'paragraph', 'span', { text: 'child' });
+      const page = DOC.pages[0];
+      if (page === undefined) throw new Error('missing page');
+      const document: DocumentJson = { ...DOC, pages: [{ ...page, tree: node('Page', 'page', 'body', { children: [node('Part', type, tag, { children: [child] })] }) }] };
+      const using = { ...context, state: { ...context.state, document } };
+      const outcome = setTextCommand.run(using, { target: 'Part', content: 'Prefix ' });
+      if (outcome.kind !== 'change') throw new Error(outcome.kind);
+      const after = applyPatches(document, outcome.patches ?? []).document;
+      expect(after.pages[0]?.tree.children[0]).toMatchObject({ text: 'Prefix ', children: [{ text: 'child' }] });
+      expect(validateDocument(after, [], RULES)).toEqual([]);
+    }
   });
 
   it('refuses what no door hands it: a missing node, an element without text, a content that is no string', () => {

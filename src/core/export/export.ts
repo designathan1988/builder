@@ -137,6 +137,11 @@ export function exportPage(document: DocumentJson, pageIndex: number, rules: Mod
     const content = output.elements.get(node.type)?.content;
     if (content === 'text') return `${open}${runsHtml(node.inline ?? [node.text ?? ''])}</${tag}>`;
     if (content === 'markup') return `${open}${node.text ?? ''}</${tag}>`;
+    if (node.type === 'summary' || node.type === 'legend') {
+      const prefix = escapeText(node.text ?? '');
+      const children = node.children.map((child) => write(child, depth + 1, false));
+      return children.length === 0 ? `${open}${prefix}</${tag}>` : `${open}${prefix}\n${children.join('\n')}\n${indent}</${tag}>`;
+    }
     // an SVG's markup after its shapes (core/elements/svg.ts)
     const markup = svgMarkupOf(node);
     const inner = [...node.children.map((child) => write(child, depth + 1, false)), ...(markup === '' ? [] : [`${indent}  ${markup}`])];

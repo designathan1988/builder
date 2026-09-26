@@ -33,6 +33,7 @@ export interface ContentModel {
   // HTML does not define. Pasted markup reads as text by them (src/core/text/inline.ts).
   phrasing(tag: string): boolean | null;
   metadata(tag: string): boolean | null;
+  labelable(tag: string): boolean;
   // whether an element of <tag> with these HTML attributes is interactive content
   isInteractive(tag: string, attributes: ReadonlyMap<string, string | number | true>): boolean;
   // whether no descendant of an element of <tag> may be interactive content
@@ -161,6 +162,10 @@ export function contentModelFrom(html: GeneratedHtml, foreign: ReadonlyMap<strin
     },
     phrasing: (tag) => category(tag, 'phrasing'),
     metadata: (tag) => category(tag, 'metadata'),
+    labelable: (tag) => {
+      const flag = html.elements[tag]?.categories.labelable;
+      return flag === true || flag === 'conditional';
+    },
     isInteractive(tag, attributes) {
       const flag = html.elements[tag]?.categories.interactive;
       if (flag === true) return true;
@@ -213,6 +218,12 @@ const shown = (tag: string | null) => `<${tag ?? ''}>`;
 // parents (an <li> wrapped in a <div>).
 export function childrenRefusal(rules: ModelRules, tag: string, children: readonly DocNode[]): Message | null {
   const model = rules.contentModel;
+  if (tag === 'label') {
+    if (children.some((child) => child.tag !== null && model.phrasing(child.tag) !== true))
+      return message('status.refused.labelPhrasing');
+    if (children.flatMap((child) => [...walk(child)]).filter((child) => child.tag !== null && model.labelable(child.tag)).length > 1)
+      return message('status.refused.labelOneControl');
+  }
   for (const child of children) {
     if (child.tag === null) continue;
     const only = model.refusal(tag, child.tag);
@@ -252,6 +263,19 @@ export function placementRefusal(document: DocumentJson, rules: ModelRules, rece
       if (held + coming > 1) return message('status.refused.singleChild', { parent: shown(host.tag), child: shown(node.tag) });
     }
   }
+  // HTML's label content model is phrasing content with at most one labelable descendant.
+  // Check the nearest label in the receiver chain, so click, drag, paste and structural moves agree.
+  const label = [...chain].reverse().find((node) => node.tag === 'label');
+  if (label !== undefined) {
+    if (host.id === label.id && arriving.some((node) => node.tag !== null && model.phrasing(node.tag) !== true))
+      return message('status.refused.labelPhrasing');
+    const incoming = arriving.flatMap((node) => [...walk(node)]).filter((node) => node.tag !== null && model.labelable(node.tag));
+    if (incoming.length > 0) {
+      const moved = new Set(arriving.flatMap((node) => [...walk(node)].map((inner) => inner.id)));
+      const held = [...walk(label)].filter((node) => !moved.has(node.id) && node.tag !== null && model.labelable(node.tag));
+      if (held.length + incoming.length > 1) return message('status.refused.labelOneControl');
+    }
+  }
   // interactive content inside interactive content first: the more particular rule names the element that refuses
   const interactive = interactiveInsideRefusal(document, rules, receiver, arriving);
   if (interactive !== null) return interactive;
@@ -277,6 +301,15 @@ export function retagRefusal(document: DocumentJson, rules: ModelRules, id: Node
   if (node === undefined) throw new Error(`retagRefusal: the document has no node ${id}`);
   const ancestors = chain.slice(0, -1);
   const parent = ancestors.at(-1);
+  const label = [...ancestors].reverse().find((ancestor) => ancestor.tag === 'label');
+  if (label !== undefined && parent?.id === label.id && model.phrasing(tag) !== true)
+    return message('status.refused.labelPhrasing');
+  if (tag === 'label') {
+    if (node.children.some((child) => child.tag !== null && model.phrasing(child.tag) !== true))
+      return message('status.refused.onlyAccepts', { parent: shown('label'), children: 'phrasing content' });
+    if ([...walk(node)].filter((inner) => inner !== node && inner.tag !== null && model.labelable(inner.tag)).length > 1)
+      return message('status.refused.labelOneControl');
+  }
   const only = parent === undefined || parent.tag === null ? null : model.refusal(parent.tag, tag);
   if (only !== null && parent !== undefined) return message('status.refused.onlyAccepts', { parent: shown(parent.tag), children: only.map(shown).join(', ') });
   for (const child of node.children) {

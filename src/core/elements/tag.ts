@@ -10,13 +10,14 @@
 //    or pre. Any other is refused with status.tag.notEquivalent (Problems in Pager 1).
 //  - The new tag must fit where the element is (Problems in Pager 3): the content model's retagRefusal asks each of its
 //    rules (closed lists, excluded descendants, interactive content).
-//  - A kept tag changes only the node's tag: its type, name, children, text, attributes, classes and styles stay. One
-//    undo step; the selection stays; the status bar names the element and its new tag (status.tag.set).
+//  - A kept tag changes the node's tag and removes attributes that no longer apply. Type, name, children, text,
+//    classes and styles stay. One undo step; the status bar names the new tag (status.tag.set).
 import type { ElementRules } from '../document/validate.ts';
 import { locate } from '../document/model.ts';
 import { message, registerHandler } from '../commands/registry.ts';
 import { lockRefusal } from '../nodes/flags.ts';
 import { retagRefusal } from './content-model.ts';
+import { attributeApplies } from './inputs.ts';
 
 // The tags an element of a type may take: its own and its alternatives (elements.json), each once.
 export function equivalentTags(element: ElementRules): readonly string[] {
@@ -41,5 +42,11 @@ export const setTagCommand = registerHandler('element.setTag', ({ state, rules }
   if (!equivalentTags(element).includes(typed)) return { kind: 'refused', message: message('status.tag.notEquivalent', { tag: shown(typed), name: node.name }) };
   const misplaced = retagRefusal(state.document, rules, node.id, typed);
   if (misplaced !== null) return { kind: 'refused', message: misplaced };
-  return { kind: 'change', patches: [{ op: 'replace', path: [...at.path, 'tag'], value: typed }], message: message('status.tag.set', { name: node.name, tag: shown(typed) }) };
+  const switched = { ...node, tag: typed };
+  const kept = Object.fromEntries(Object.entries(node.attributes).filter(([attribute]) => attributeApplies(switched, attribute)));
+  const patches = [
+    { op: 'replace' as const, path: [...at.path, 'tag'], value: typed },
+    ...(Object.keys(kept).length === Object.keys(node.attributes).length ? [] : [{ op: 'replace' as const, path: [...at.path, 'attributes'], value: kept }]),
+  ];
+  return { kind: 'change', patches, message: message('status.tag.set', { name: node.name, tag: shown(typed) }) };
 });

@@ -85,6 +85,16 @@ describe('element.setTag', () => {
     expect(run(document(), 'Intro', 'span').node?.tag).toBe('span');
   });
 
+  it('drops link-only attributes in the same tag change and restores them through undo patches', () => {
+    const doc = document({ children: [node('Go', 'link', 'a', { text: 'Go', attributes: { href: 'https://example.com', newTab: true } })] });
+    const done = run(doc, 'Go', 'button');
+    expect(done.node?.attributes).toEqual({});
+    expect(done.patches).toEqual([
+      { op: 'replace', path: ['pages', 0, 'tree', 'children', 0, 'children', 0, 'tag'], value: 'button' },
+      { op: 'replace', path: ['pages', 0, 'tree', 'children', 0, 'children', 0, 'attributes'], value: {} },
+    ]);
+  });
+
   it('takes the typed tag without the spaces around it and in lower case', () => {
     expect(run(document(), 'Title', '  H3 ').node?.tag).toBe('h3');
   });

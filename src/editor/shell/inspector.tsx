@@ -885,6 +885,8 @@ const TABLE_PART_DOORS = doorSlots('inspector-settings').filter((d) => d.door.ki
 // buttons of each part that stand for it (their command takes the part as its target: move up, move down, remove)
 const ADD_PART_DOORS = doorSlots('inspector-settings').filter((d) => d.door.kind === 'panel-control' && d.door.drawnAs === 'button' && typeof d.door.args.type === 'string');
 const PART_DOORS = doorSlots('inspector-settings').filter((d) => d.door.kind === 'panel-control' && d.door.drawnAs === 'icon-button' && d.command.args.target?.type === 'node');
+const OPTION_TEXT = SETTINGS_FIELDS.find((d) => d.door.kind === 'inspector-field' && d.door.attribute === 'text');
+const OPTION_VALUE = SETTINGS_FIELDS.find((d) => d.door.kind === 'inspector-field' && d.door.attribute === 'value');
 // the person's own attributes (feature element-attributes-aria): the doors whose command takes an attribute's name
 // (and its value): in the manifest's order, the name field that adds one and the value field of each, both fields of the
 // command that sets a value; then the remove button
@@ -1061,7 +1063,9 @@ export function KeptTextField({ entry, node, kept, label, attribute }: { readonl
   const pickerValue = pickerType === manifest.elements.inputValueEditors.color && !/^#[0-9a-f]{6}$/i.test(stored) ? '#000000' : stored;
   const dropped = attribute === 'inputType' && node.type === 'input' && typed !== stored && suggestions.includes(typed.trim().toLowerCase())
     ? droppedInputAttributes(node, typed.trim().toLowerCase())
-    : [];
+    : attribute === 'tag' && node.type === 'link' && typed !== stored && suggestions.includes(typed.trim().toLowerCase())
+      ? Object.keys(node.attributes).filter((id) => !attributeApplies({ ...node, tag: typed.trim().toLowerCase() }, id))
+      : [];
   const droppedLabels = dropped.map((id) => ATTRIBUTES.get(id)?.labelKey).filter((key): key is string => key !== undefined).map((key) => t(key as MessageId));
   useEffect(() => {
     const element = field.current;
@@ -1128,7 +1132,7 @@ export function KeptTextField({ entry, node, kept, label, attribute }: { readonl
           ) : null}
         </span>
       )}
-      <button type="submit" hidden aria-hidden="true" tabIndex={-1} />
+      <button type="submit" hidden aria-hidden="true" tabIndex={-1} disabled={!door.available} />
       {suggestions.length > 0 ? (
         <datalist id={listId}>
           {suggestions.map((value) => (
@@ -1136,7 +1140,7 @@ export function KeptTextField({ entry, node, kept, label, attribute }: { readonl
           ))}
         </datalist>
       ) : null}
-      {droppedLabels.length > 0 ? <span className="field-row__warning" role="status">{t('settings.inputTypeDrops', { attributes: droppedLabels.join(', ') })}</span> : null}
+      {droppedLabels.length > 0 ? <span className="field-row__warning" role="status">{t(attribute === 'tag' ? 'settings.tagDrops' : 'settings.inputTypeDrops', { attributes: droppedLabels.join(', ') })}</span> : null}
       {refused.text !== null ? <span className="field-row__refusal" role="alert">{refused.text}</span> : null}
     </form>
   );
@@ -1178,6 +1182,7 @@ function ToggleField({ entry, node, attribute, label }: { readonly entry: DoorEn
 // tracks): each part by name with its move up, move down and remove buttons, then the buttons that add each type of
 // part the element takes. Drawn only for an element that takes parts.
 function PartsEditor({ node }: { readonly node: DocNode }) {
+  const t = useT();
   const takes = partTypesOf(MODEL_RULES, node);
   const adds = ADD_PART_DOORS.filter((d) => takes(String(d.door.args.type)));
   if (adds.length === 0) return null;
@@ -1185,11 +1190,18 @@ function PartsEditor({ node }: { readonly node: DocNode }) {
   return (
     <div className="parts-editor">
       {parts.map((part) => (
-        <div key={part.id} className="field-row">
-          <span className="field-row__label">{part.name}</span>
-          {PART_DOORS.map((d) => (
-            <DoorControl key={d.ref} entry={d} args={{ target: part.id }} />
-          ))}
+        <div key={part.id} className="parts-editor__item">
+          <div className="parts-editor__heading">
+            <span>{part.name}</span>
+            <span className="parts-editor__actions">
+              {PART_DOORS.map((d) => <DoorControl key={d.ref} entry={d} args={{ target: part.id }} />)}
+            </span>
+          </div>
+          {part.type === 'option' && OPTION_TEXT !== undefined ? <TextField key={`text@${part.id}`} entry={OPTION_TEXT} node={part} label={t('settings.optionPart.text', { name: part.name })} /> : null}
+          {part.type === 'option' && OPTION_VALUE !== undefined ? (() => {
+            const kept = keptTextOf(OPTION_VALUE, 'value', 'text', part);
+            return kept === null ? null : <KeptTextField key={`value@${part.id}`} entry={OPTION_VALUE} node={part} kept={kept} label={t('settings.optionPart.value', { name: part.name })} attribute="value" />;
+          })() : null}
         </div>
       ))}
       <div className="field-row">

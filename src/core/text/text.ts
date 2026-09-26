@@ -18,7 +18,9 @@ export const setTextCommand = registerHandler('text.set', ({ state, rules }, { t
   const found = locate(state.document, target);
   // a door hands the node it edits and the content the edit produced; anything else is a defect of the door
   if (!found) throw new Error(`text.set: the document has no node ${target}`);
-  if (rules.elements.get(found.node.type)?.content !== 'text') throw new Error(`text.set: ${found.node.name} is no text element`);
+  const mixedText = found.node.type === 'summary' || found.node.type === 'legend';
+  if (rules.elements.get(found.node.type)?.content !== 'text' && !mixedText) throw new Error(`text.set: ${found.node.name} is no text element`);
+  if (mixedText && typeof content !== 'string') throw new Error(`text.set: ${found.node.name} takes plain text while it holds children`);
   // a plain text keeps the marks of what it keeps of a marked text (the inspector's text field); a tree is whole
   const runs = typeof content === 'string' ? withText(found.node.inline ?? [found.node.text ?? ''], content) : parseInline(content);
   if (runs === null) throw new Error('text.set: the content is not a string or a tree of runs');

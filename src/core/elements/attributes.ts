@@ -198,7 +198,7 @@ export const setAttributeCommand = registerHandler('element.setAttribute', ({ st
   if (at.node.type === 'option' && attribute === 'selected' && stored === true) {
     let ancestor = at.parent;
     while (ancestor !== null && ancestor.type !== 'select') ancestor = locate(state.document, ancestor.id)?.parent ?? null;
-    if (ancestor !== null) for (const sibling of walk(ancestor)) {
+    if (ancestor !== null && ancestor.attributes.multiple !== true) for (const sibling of walk(ancestor)) {
       if (sibling.type !== 'option' || sibling.id === at.node.id || sibling.attributes.selected !== true) continue;
       const other = locate(state.document, sibling.id);
       if (other !== null) exclusive.push({ op: 'remove', path: [...other.path, 'attributes', 'selected'] });

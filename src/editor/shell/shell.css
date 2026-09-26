@@ -2167,6 +2167,23 @@ kbd {
   min-height: var(--size-row);
 }
 
+.parts-editor__item {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.parts-editor__heading,
+.parts-editor__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.parts-editor__heading { justify-content: space-between; }
+.parts-editor__item .field-row { grid-template-columns: minmax(0, 1fr); row-gap: var(--space-2); }
+
 .field-row__label {
   overflow: hidden;
   color: var(--color-text-muted);

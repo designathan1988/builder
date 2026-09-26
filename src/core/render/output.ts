@@ -123,8 +123,7 @@ export function elementAttributes(node: DocNode, tag: string, root: boolean, mod
   for (const [id, value] of Object.entries(node.attributes)) {
     const name = model.attributes.get(id);
     if (name === null || name === undefined || name.startsWith('on') || value === false) continue;
-    // a link switched to a button keeps its address and tab in the document, for when it is switched back, but a
-    // button is no link
+    // A migrated document can still hold stale link data on a button; the export never writes it.
     if ((name === 'href' || name === 'target') && tag !== 'a') continue;
     if (name === 'target' && value === true) {
       element.set('target', '_blank');
@@ -139,4 +138,3 @@ export function elementAttributes(node: DocNode, tag: string, root: boolean, mod
   if (viewBox !== null) element.set(VIEW_BOX, viewBox);
   return { element, page };
 }
-

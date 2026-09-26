@@ -1452,6 +1452,7 @@
   "status.refused.noChildren": "Refused. {parent} cannot contain elements.",
   "status.refused.notInside": "Refused. {child} cannot sit inside {ancestor}.",
   "status.refused.onlyAccepts": "Refused. {parent} only accepts {children}.",
+  "status.refused.labelPhrasing": "Refused. A label only accepts phrasing content.",
   "status.refused.requiresParent": "Refused. {child} only exists inside {parents}.",
   "status.refused.singleChild": "Refused. {parent} accepts a single {child}.",
   "status.rename.empty": "A name cannot be empty; {name} keeps its name.",
@@ -1727,6 +1728,8 @@
   "settings.inputTypeDrops": "Changing type will remove {attributes}. Press Enter to apply.",
   "settings.tagDrops": "Changing tag will remove {attributes}. Press Enter to apply.",
   "feature.settingsGrammarTag": "Settings grammar and tag changes",
+  "settings.optionPart.text": "{name} · Text",
+  "settings.optionPart.value": "{name} · Value",
   "settings.valuePicker": "Choose {attribute}",
   "feature.settingsClassManagement": "Manage Settings classes and attributes",
   "status.classes.registered": "Registered .{name} as a project class."

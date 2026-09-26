@@ -1452,6 +1452,7 @@
   "status.refused.noChildren": "Recusado. {parent} não pode conter elementos.",
   "status.refused.notInside": "Recusado. {child} não pode ficar dentro de {ancestor}.",
   "status.refused.onlyAccepts": "Recusado. {parent} só aceita {children}.",
+  "status.refused.labelPhrasing": "Recusado. Um rótulo só aceita conteúdo em linha.",
   "status.refused.requiresParent": "Recusado. {child} só existe dentro de {parents}.",
   "status.refused.singleChild": "Recusado. {parent} aceita um único {child}.",
   "status.rename.empty": "Um nome não pode ficar vazio; {name} mantém o nome.",
@@ -1727,6 +1728,8 @@
   "settings.inputTypeDrops": "Mudar o tipo removerá {attributes}. Pressione Enter para aplicar.",
   "settings.tagDrops": "Mudar a tag removerá {attributes}. Pressione Enter para aplicar.",
   "feature.settingsGrammarTag": "Gramática e troca de tag no Settings",
+  "settings.optionPart.text": "{name} · Texto",
+  "settings.optionPart.value": "{name} · Valor",
   "settings.valuePicker": "Escolher {attribute}",
   "feature.settingsClassManagement": "Gerenciar classes e atributos do Settings",
   "status.classes.registered": "Classe .{name} registrada no projeto."

@@ -574,6 +574,15 @@ export class PageRenderer {
       if (frame === null) element.replaceChildren(shown);
       return;
     }
+    if (node.type === 'summary' || node.type === 'legend') {
+      const prefix = node.text ?? '';
+      const first = element.firstChild;
+      if (first?.nodeType === 3) {
+        if (prefix === '') first.remove();
+        else if (first.textContent !== prefix) first.textContent = prefix;
+      } else if (prefix !== '') element.insertBefore(this.target.createTextNode(prefix), first);
+      return;
+    }
     if (this.model.elements.get(node.type)?.content !== 'text' || edited) return;
     // the text with its marks (src/core/text/inline.ts), or the plain text when nothing is marked
     const runs = node.inline ?? [node.text ?? ''];

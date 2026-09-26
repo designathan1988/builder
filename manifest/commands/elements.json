@@ -20,6 +20,7 @@
       "refusals": [
         "status.tag.notEquivalent",
         "status.refused.onlyAccepts",
+        "status.refused.labelPhrasing",
         "status.refused.requiresParent",
         "status.refused.interactiveInside",
         "status.refused.formInForm",
@@ -2189,6 +2190,7 @@
       "refusals": [
         "status.html.invalidAt",
         "status.refused.onlyAccepts",
+        "status.refused.labelPhrasing",
         "status.refused.requiresParent",
         "status.refused.interactiveInside",
         "status.refused.formInForm",
@@ -2378,6 +2380,7 @@
       },
       "refusals": [
         "status.refused.onlyAccepts",
+        "status.refused.labelPhrasing",
         "status.refused.requiresParent",
         "status.refused.interactiveInside",
         "status.refused.formInForm",
