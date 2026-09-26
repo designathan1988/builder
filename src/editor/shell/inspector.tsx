@@ -30,7 +30,7 @@ import { DoorControl, Icon, useDoor } from '../doors/door.tsx';
 import { MenuButton } from '../doors/menu.tsx';
 import { GLYPHS, doorSlots, drawnAsOf, partOf, slotsIn } from '../doors/placement.ts';
 import { afterGesture } from '../input/pointer.ts';
-import { collapsedSections, editedProperties, inspectorMode, isEssential, summaryOf, summaryProperties } from '../inspector/sections.ts';
+import { collapsedSections, editedProperties, inspectorMode, inspectorSearchOf, isEssential, searchMatches, summaryOf, summaryProperties } from '../inspector/sections.ts';
 import { MODEL_RULES, useEditorState, useStore, type EditorStore, layeredRules } from '../store.ts';
 import { classOrigin, styleSource } from '../inspector/style-target.ts';
 import { inspectorTab } from '../workspace/layout.ts';
@@ -137,15 +137,22 @@ function FieldInput({ entry, target, label, available }: { readonly entry: DoorE
   );
 }
 
+// The label a door of the Style tab shows: one that carries only its command's label is labelled by its property,
+// composite or recipe (the glossary's term, rule label-term), or, for an editor control, by the first property it
+// writes; a button with a label of its own (Spread, Stretch) keeps it. Find a property matches it too.
+function fieldLabelKey(entry: DoorEntry): MessageId {
+  if (entry.door.labelKey !== entry.command.labelKey) return entry.door.labelKey as MessageId;
+  const named = targetOf(entry) ?? TARGETS.get(entry.door.adapter.writes[0] ?? '');
+  return (named?.labelKey ?? entry.door.labelKey) as MessageId;
+}
+
 function Field({ entry }: { readonly entry: DoorEntry }) {
   const t = useT();
   const target = targetOf(entry);
-  // a field that carries only its command's label is labelled by its property, composite or recipe (the glossary's
-  // term, rule label-term); a button with a label of its own (Spread, Stretch) keeps it. A field is usable only once
-  // its own feature is registered as built (DESIGN.md "Build order"): style.set runs Width and Height long before
-  // Display or Color.
+  // labelled as fieldLabelKey says. A field is usable only once its own feature is registered as built (DESIGN.md
+  // "Build order"): style.set runs Width and Height long before Display or Color.
   const own = entry.door.labelKey !== entry.command.labelKey;
-  const door = useDoor(entry, {}, target && !own ? t(target.labelKey as MessageId) : undefined, isFeatureBuilt(entry.door.feature as FeatureId));
+  const door = useDoor(entry, {}, target && !own ? t(fieldLabelKey(entry)) : undefined, isFeatureBuilt(entry.door.feature as FeatureId));
   if (!target) return null;
   const cssName = entry.door.kind === 'inspector-field' ? (entry.door.property ?? target.id) : target.id;
   // a composite of lengths (gap: row-gap and column-gap) is a text field of its longhands, one or two lengths
@@ -379,12 +386,23 @@ function BoxModel({ doors }: { readonly doors: readonly DoorEntry[] }) {
 // control sits in the section of the field before it. A section with no Style field (Content: its fields are in the
 // Settings tab; Interactions: its own tab) is not a Style section.
 const SECTION_HEADER = doorSlots('inspector-style').find((d) => d.door.kind === 'panel-control' && d.door.drawnAs === 'disclosure');
+// Find a property's field (spec inspector-property-search): the region's search field
+const FOUND_SEARCH = doorSlots('inspector-style').find((d) => d.door.kind === 'panel-control' && d.door.control === 'search-field');
+if (FOUND_SEARCH === undefined) throw new Error('inspector-style has no search field');
+const PROPERTY_SEARCH: DoorEntry = FOUND_SEARCH;
+// the CSS names a door of the Style tab edits, for the search: a field's property (a composite with its longhands), an
+// editor control's writes
+const cssNamesOf = (entry: DoorEntry): readonly string[] => {
+  const target = editedTarget(entry);
+  return target !== null ? [target, ...editedProperties(target)] : entry.door.adapter.writes;
+};
 const SECTION_DOORS = (() => {
   const headerOrder = SECTION_HEADER && typeof SECTION_HEADER.door.placement === 'object' ? SECTION_HEADER.door.placement.order : 0;
   const bySection = new Map<string, DoorEntry[]>();
   let section: string = SECTIONS[0]?.id ?? '';
   for (const slot of slotsIn('inspector-style')) {
-    if (slot.kind !== 'door' || slot.order <= headerOrder) continue;
+    // Find a property is drawn above the sections, not in one
+    if (slot.kind !== 'door' || slot.order <= headerOrder || slot.entry === PROPERTY_SEARCH) continue;
     section = targetOf(slot.entry)?.section ?? section;
     const list = bySection.get(section) ?? [];
     list.push(slot.entry);
@@ -406,15 +424,25 @@ function StyleSections() {
   const mode = useEditorState((s) => inspectorMode(s.ui));
   const revealed = useEditorState((s) => s.ui.revealed?.field ?? null);
   const kinds = useSelectionKinds();
+  // Find a property's query: every section keeps only its matching fields, in either mode (spec
+  // inspector-property-search)
+  const query = useEditorState((s) => inspectorSearchOf(s.ui));
+  const searching = query.trim() !== '';
   // what the element holds a value of, at the base breakpoint and state
   const held = node === null ? NO_HELD : heldProperties(node);
+  const shownDoors = (section: string) =>
+    (SECTION_DOORS.get(section) ?? []).filter((d) => shownForSelection(d, kinds) && (searching ? searchMatches(query, t(fieldLabelKey(d)), cssNamesOf(d)) : mode === 'all' || shownInEssentials(d, held, revealed)));
+  if (searching && STYLE_SECTIONS.every((s) => shownDoors(s.id).length === 0)) return <p className="inspector-search__none">{t('inspector.searchNoMatch', { query: query.trim() })}</p>;
   return (
     <>
       {STYLE_SECTIONS.map((s) => {
         const section = s.id as SectionId;
-        const doors = (SECTION_DOORS.get(s.id) ?? []).filter((d) => shownForSelection(d, kinds) && (mode === 'all' || shownInEssentials(d, held, revealed)));
+        const doors = shownDoors(s.id);
+        // a section with no match is not drawn while searching
+        if (searching && doors.length === 0) return null;
         const set = (SECTION_PROPERTIES.get(s.id) ?? []).filter((p) => held.has(p)).length;
-        const closed = collapsed.includes(section);
+        // a collapsed section with a match is drawn open for the search; its collapsed state is kept
+        const closed = !searching && collapsed.includes(section);
         const summary = closed ? summaryOf(section, values, t, locale) : null;
         const boxDoors = doors.filter((d) => targetOf(d)?.control === 'box-model');
         return (
@@ -446,6 +474,22 @@ function StyleSections() {
         );
       })}
     </>
+  );
+}
+
+// Find a property (spec inspector-property-search): each change runs inspector.search with what the field holds; Enter
+// keeps it (the form submits nothing)
+function PropertySearch() {
+  const store = useStore();
+  const query = useEditorState((s) => inspectorSearchOf(s.ui));
+  const door = useDoor(PROPERTY_SEARCH);
+  const change = (value: string) => {
+    if (door.built) (store.dispatch as (id: CommandId, args: unknown) => DispatchResult)(PROPERTY_SEARCH.command.id, { ...PROPERTY_SEARCH.door.args, query: value });
+  };
+  return (
+    <form className="inspector-search" data-door={PROPERTY_SEARCH.ref} data-args="{}" onSubmit={(event) => event.preventDefault()}>
+      <input className="search" type="search" placeholder={door.label} aria-label={door.label} title={door.title} disabled={!door.built} spellCheck={false} autoComplete="off" value={query} onChange={(event) => change(event.currentTarget.value)} />
+    </form>
   );
 }
 
@@ -761,7 +805,7 @@ function StyleTab() {
             </div>
             <AddProperty />
           </div>
-          <input className="search" type="search" placeholder={t('inspector.searchProperty')} aria-label={t('inspector.searchProperty')} data-local="search" />
+          <PropertySearch />
           <div className="inspector-sections">
             <StyleSections />
           </div>

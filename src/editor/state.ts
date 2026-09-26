@@ -58,6 +58,8 @@ export interface EditorUi {
   readonly preview?: { readonly selection: Selection } | undefined;
   // the command bar shown (commandBar.open; command-bar/command-bar.ts); absent while closed
   readonly commandBar?: true | undefined;
+  // the Style tab's Find a property query (inspector.search; inspector/sections.ts); absent while empty
+  readonly inspectorSearch?: string | undefined;
 }
 
 export function initialEditorUi(preferences: Preferences): EditorUi {

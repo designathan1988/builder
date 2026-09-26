@@ -6,6 +6,7 @@
 // and ranks them (matchScore): each word of the query matches a word of the label from its start, anywhere in it, the
 // initials of its words; the recently run entries come first while the query is empty.
 import { registerHandler } from '../../core/commands/registry.ts';
+import { fold } from '../../core/text/fold.ts';
 import { manifest, type DoorEntry } from '../../manifest/runtime.ts';
 import type { EditorUi } from '../state.ts';
 
@@ -38,8 +39,7 @@ export interface BarEntry {
 }
 export const entryKey = (entry: DoorEntry, args: Readonly<Record<string, unknown>>): string => `${entry.ref} ${JSON.stringify(args)}`;
 
-// the text as matched: lower case, without accents
-const fold = (text: string): string => text.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
+// the words of a text as matched (core/text/fold.ts: lower case, without accents)
 const wordsOf = (text: string): string[] => fold(text).split(/[^\p{L}\p{N}]+/u).filter((w) => w !== '');
 
 // How well a query matches a label: null when a word of the query matches nothing; higher is better. The words of the

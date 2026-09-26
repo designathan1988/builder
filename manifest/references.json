@@ -1098,7 +1098,7 @@
     {
       "kind": "handler",
       "id": "inspector.search",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",

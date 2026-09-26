@@ -84,7 +84,7 @@ import { setLanguage, setTheme } from '../editor/preferences/preferences.ts';
 import type { EditorUi } from '../editor/state.ts';
 import { openPageProperties } from '../editor/inspector/page-properties.ts';
 import { cancelField, scrubField, setFieldUnit, stepField } from '../editor/inspector/number-field.ts';
-import { revealField, toggleSection, setMode } from '../editor/inspector/sections.ts';
+import { revealField, searchInspector, toggleSection, setMode } from '../editor/inspector/sections.ts';
 import { setOffset } from '../editor/quick-panel/quick-panel.ts';
 import { setEditMode } from '../editor/canvas/edit-mode.ts';
 import { stepHandle } from '../editor/canvas/handles.ts';
@@ -320,6 +320,7 @@ export const COMMANDS = {
   'inspector.toggleSection': toggleSection,
   'inspector.setMode': setMode,
   'inspector.reveal': revealField,
+  'inspector.search': searchInspector,
   'codePanel.copyPane': NOT_AVAILABLE_YET,
   'codePanel.downloadPane': NOT_AVAILABLE_YET,
 } as const satisfies CommandTable<EditorUi>;

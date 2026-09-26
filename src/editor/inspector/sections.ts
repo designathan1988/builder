@@ -10,7 +10,8 @@
 // names (properties.json sections[].summary), read on the page the canvas draws (the CSS computed values, whatever
 // sets them: the element's own styles or the browser's defaults; spec, Problems in Pager 2). How each section writes
 // them is below (SUMMARIES); the words come from the catalogue.
-import { registerHandler } from '../../core/commands/registry.ts';
+import { message, registerHandler } from '../../core/commands/registry.ts';
+import { fold } from '../../core/text/fold.ts';
 import type { CommandArgs } from '../../generated/commands.ts';
 import { SECTION_IDS, type MessageId, type SectionId } from '../../generated/ids.ts';
 import type { Locale } from '../../i18n/index.ts';
@@ -176,3 +177,23 @@ export const revealField = registerHandler<'inspector.reveal', EditorUi>('inspec
   const shown = withInspectorTab(withInspector(state.ui, true), attribute !== undefined ? SETTINGS_TAB : STYLE_TAB);
   return { kind: 'change', ui: { ...shown, revealed: { field, count: (state.ui.revealed?.count ?? 0) + 1 } } };
 });
+
+// Find a property (spec inspector-property-search): inspector.search keeps the Style tab's query in the editor state
+// (ui.inspectorSearch, as typed; absent once nothing but spaces is left), never in the document; the tab draws only
+// what searchMatches keeps.
+export const inspectorSearchOf = (ui: EditorUi): string => ui.inspectorSearch ?? '';
+export const searchInspector = registerHandler<'inspector.search', EditorUi>('inspector.search', ({ state }, { query }) => {
+  const typed = query.trim();
+  const { inspectorSearch: _was, ...rest } = state.ui;
+  void _was;
+  if (typed === '') return { kind: 'change', ui: rest, message: message('status.inspector.searchCleared') };
+  return { kind: 'change', ui: { ...rest, inspectorSearch: query }, message: message('status.inspector.searchFor', { query: typed }) };
+});
+
+// Whether a field or an editor control of the Style tab matches a query: the query (case and accents ignored) is part of
+// its label as shown, or of one of the CSS names it edits. An empty query matches everything.
+export function searchMatches(query: string, label: string, cssNames: readonly string[]): boolean {
+  const wanted = fold(query.trim());
+  if (wanted === '') return true;
+  return fold(label).includes(wanted) || cssNames.some((name) => fold(name).includes(wanted));
+}

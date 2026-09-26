@@ -6,7 +6,7 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 
 - Work in .cache/wt/integration (branch integration), saved after every feature: commit + push origin integration.
 - Groups 01-12 pass with teeth (docs/history.md) but: multi-select-actions (needs keyboard-panel-navigation and
-  panel-resize), inspector-property-search (43), nesting-grammar-structure (36), layers-row-colours (no label colour
+  panel-resize), nesting-grammar-structure (36), layers-row-colours (no label colour
   tokens), hover-measure (46). Not built: Alt+drag duplicates, a line outside the stage refused.
 - Last check (12): 1333 passed, 9 failed (findings since decided). Group 13: dock-toggles, workbench-panel,
   command-bar built. Next: the user's audit prompt, blocks 1-9 (.memory/audit-checklist.md), then group 13 on.
@@ -53,7 +53,7 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 32. With nothing selected the inspector draws its sections.
 30. Declared, not built: wrap refusals formInForm, labelOneControl; drop.emptyAimMin; the hover label as a hit target.
 34/37. palette-density, layers-drag dwell: spec-test teeth only. 36. nesting-grammar-structure vs hand unit test.
-35. The tooth proof also switches off a scenario's setup doors' commands. 43. property-search: no door (audit 1.2).
+35. The tooth proof also switches off a scenario's setup doors' commands. (43 property-search: done, audit 1.2.)
 42. Quick panel: no F6 in nor Escape out; chip and fields are Tab stops (audit 6.3). 46. hover-measure: no door.
 48. Enter/Space on a toolbar button do nothing until keyboard-panel-navigation (group 14) binds focus.activate.
 50. e2e:tooth: workbench-panel's fold scenario ends in the start state (targeted tooth: toggle only opens);

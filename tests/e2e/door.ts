@@ -102,9 +102,13 @@ export function barLabel(d: Door, args: Readonly<Record<string, unknown>>): stri
 }
 export async function openCommandBar(page: Page): Promise<void> {
   if (BAR_FIELD === undefined) throw new Error('commandBar.open has no toolbar door');
-  await page.locator(`[data-door="${BAR_FIELD}"]`).click();
+  const field = page.locator('[data-region="command-palette"] [role="combobox"]');
+  // a bar already open (a door before opened it) is typed into as it is: its backdrop covers the top bar
+  if ((await field.count()) === 0) await page.locator(`[data-door="${BAR_FIELD}"]`).click();
   // a bar that does not open fails on an assertion, never on a wait's timeout
-  await expect(page.locator('[data-region="command-palette"] [role="combobox"]'), 'the command bar opens').toBeVisible();
+  await expect(field, 'the command bar opens').toBeVisible();
+  await field.click();
+  await page.keyboard.press('Control+A');
 }
 
 // opens a menu from its button, or from the menu it is a submenu of (English UI)

@@ -3651,3 +3651,11 @@ button.picker__swatch {
   font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-ui);
   color: var(--color-text-muted);
 }
+
+/* Find a property with no match (spec inspector-property-search): what the sections would show says so */
+.inspector-search__none {
+  margin: 0;
+  padding: var(--space-6);
+  color: var(--color-text-muted);
+  font: var(--fw-body) var(--fs-body) / var(--lh-body) var(--font-ui);
+}

@@ -79,7 +79,7 @@ export const FEATURES = {
   'props-more': registerFeature('props-more'),
   'props-attributes': registerFeature('props-attributes'),
   'inspector-provenance-reset': registerFeature('inspector-provenance-reset'),
-  'inspector-property-search': NOT_AVAILABLE_YET,
+  'inspector-property-search': registerFeature('inspector-property-search'),
   'inspector-advanced-mode': registerFeature('inspector-advanced-mode'),
   'inspector-add-property': registerFeature('inspector-add-property'),
   'semantic-tag-switch': registerFeature('semantic-tag-switch'),
