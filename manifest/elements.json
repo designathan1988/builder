@@ -972,6 +972,14 @@
         "pre",
         "button",
         "figureCaption",
+        "caption",
+        "headerCell",
+        "cell",
+        "listItem",
+        "term",
+        "description",
+        "legend",
+        "summary",
         "output",
         "option"
       ],
@@ -1260,6 +1268,7 @@
       "valueType": "keyword",
       "keywords": [
         "text",
+        "hidden",
         "email",
         "password",
         "number",
@@ -1267,12 +1276,19 @@
         "url",
         "search",
         "date",
+        "datetime-local",
+        "month",
+        "week",
         "time",
         "color",
         "range",
         "checkbox",
         "radio",
-        "file"
+        "file",
+        "image",
+        "button",
+        "submit",
+        "reset"
       ],
       "elements": [
         "input"
@@ -1628,6 +1644,159 @@
       "command": "element.setEmbedMarkup"
     },
     {
+      "id": "cite",
+      "html": "cite",
+      "labelKey": "attribute.cite.label",
+      "valueType": "url",
+      "keywords": [],
+      "elements": ["blockquote"],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "start",
+      "html": "start",
+      "labelKey": "attribute.start.label",
+      "valueType": "number",
+      "keywords": [],
+      "elements": ["orderedList"],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "reversed",
+      "html": "reversed",
+      "labelKey": "attribute.reversed.label",
+      "valueType": "boolean",
+      "keywords": [],
+      "elements": ["orderedList"],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "listType",
+      "html": "type",
+      "labelKey": "attribute.listType.label",
+      "valueType": "keyword",
+      "keywords": ["1", "a", "A", "i", "I"],
+      "elements": ["orderedList"],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "scope",
+      "html": "scope",
+      "labelKey": "attribute.scope.label",
+      "valueType": "keyword",
+      "keywords": ["row", "col", "rowgroup", "colgroup"],
+      "elements": ["headerCell"],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "accept",
+      "html": "accept",
+      "labelKey": "attribute.accept.label",
+      "valueType": "text",
+      "keywords": [],
+      "elements": ["input"],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "multiple",
+      "html": "multiple",
+      "labelKey": "attribute.multiple.label",
+      "valueType": "boolean",
+      "keywords": [],
+      "elements": ["input"],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "cols",
+      "html": "cols",
+      "labelKey": "attribute.cols.label",
+      "valueType": "number",
+      "keywords": [],
+      "elements": ["textarea"],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "maxLength",
+      "html": "maxlength",
+      "labelKey": "attribute.maxLength.label",
+      "valueType": "number",
+      "keywords": [],
+      "elements": ["input", "textarea"],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "minLength",
+      "html": "minlength",
+      "labelKey": "attribute.minLength.label",
+      "valueType": "number",
+      "keywords": [],
+      "elements": ["input", "textarea"],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "low",
+      "html": "low",
+      "labelKey": "attribute.low.label",
+      "valueType": "number",
+      "keywords": [],
+      "elements": ["meter"],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "high",
+      "html": "high",
+      "labelKey": "attribute.high.label",
+      "valueType": "number",
+      "keywords": [],
+      "elements": ["meter"],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "optimum",
+      "html": "optimum",
+      "labelKey": "attribute.optimum.label",
+      "valueType": "number",
+      "keywords": [],
+      "elements": ["meter"],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "allow",
+      "html": "allow",
+      "labelKey": "attribute.allow.label",
+      "valueType": "text",
+      "keywords": [],
+      "elements": ["iframe"],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "loading",
+      "html": "loading",
+      "labelKey": "attribute.loading.label",
+      "valueType": "keyword",
+      "keywords": ["eager", "lazy"],
+      "elements": ["iframe", "image"],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "playsInline",
+      "html": "playsinline",
+      "labelKey": "attribute.playsInline.label",
+      "valueType": "boolean",
+      "keywords": [],
+      "elements": ["video"],
+      "command": "element.setAttribute"
+    },
+    {
+      "id": "preload",
+      "html": "preload",
+      "labelKey": "attribute.preload.label",
+      "valueType": "keyword",
+      "keywords": ["none", "metadata", "auto"],
+      "elements": ["video", "audio"],
+      "command": "element.setAttribute"
+    },
+    {
       "id": "pageTitle",
       "html": null,
       "labelKey": "attribute.pageTitle.label",
@@ -1762,6 +1931,50 @@
         "page"
       ],
       "command": "page.setSetting"
+    }
+  ],
+  "settingsSections": [
+    {
+      "id": "general",
+      "labelKey": "settings.section.general",
+      "descriptionKey": "settings.section.general.description",
+      "elements": "all",
+      "attributes": ["text", "tag", "id", "classes", "title", "inputType", "buttonType", "pageLanguage", "pageDirection"]
+    },
+    {
+      "id": "link",
+      "labelKey": "settings.section.link",
+      "descriptionKey": "settings.section.link.description",
+      "elements": ["link", "linkBlock"],
+      "attributes": ["href", "newTab"]
+    },
+    {
+      "id": "image",
+      "labelKey": "settings.section.image",
+      "descriptionKey": "settings.section.image.description",
+      "elements": ["image"],
+      "attributes": ["src", "alt"]
+    },
+    {
+      "id": "accessibility",
+      "labelKey": "settings.section.accessibility",
+      "descriptionKey": "settings.section.accessibility.description",
+      "elements": "all",
+      "attributes": []
+    },
+    {
+      "id": "seo",
+      "labelKey": "settings.section.seo",
+      "descriptionKey": "settings.section.seo.description",
+      "elements": ["page"],
+      "attributes": ["pageTitle", "pageDescription", "pageCanonical", "pageOgTitle", "pageOgImage", "pageFavicon", "pageScripts"]
+    },
+    {
+      "id": "attributes",
+      "labelKey": "settings.section.attributes",
+      "descriptionKey": "settings.section.attributes.description",
+      "elements": "all",
+      "attributes": []
     }
   ],
   "palette": [

@@ -86,6 +86,14 @@ export const attributeSchema = z.strictObject({
   command: commandId,
 });
 
+export const settingsSectionSchema = z.strictObject({
+  id: kebabId,
+  labelKey: i18nKey,
+  descriptionKey: i18nKey,
+  elements: z.union([z.literal('all'), z.array(camelId).min(1)]),
+  attributes: z.array(camelId),
+});
+
 // A node of a template's tree (a palette entry of kind "template"): its element type, the tag when not its first one,
 // its name and text as catalogue keys (in the person's language), a wrapper whose styles it takes (the wrap commands'
 // Row and Column), its styles at the base breakpoint and state, its attributes, and its children; without children, it
@@ -144,6 +152,7 @@ export const wrapperSchema = z.strictObject({
 export const elementsFileSchema = z.strictObject({
   elements: z.array(elementSchema).min(1),
   attributes: z.array(attributeSchema).min(1),
+  settingsSections: z.array(settingsSectionSchema).min(1),
   palette: z.array(paletteGroupSchema).min(1),
   wrappers: z.array(wrapperSchema).min(1),
 });

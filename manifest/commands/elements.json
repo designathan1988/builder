@@ -987,6 +987,448 @@
           "args": {
             "attribute": "src"
           }
+        },
+        {
+          "id": "inspector-cite",
+          "kind": "inspector-field",
+          "drawnAs": "field",
+          "feature": "settings-audit",
+          "property": null,
+          "composite": null,
+          "recipe": null,
+          "attribute": "cite",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 90
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-start",
+          "kind": "inspector-field",
+          "drawnAs": "field",
+          "feature": "settings-audit",
+          "property": null,
+          "composite": null,
+          "recipe": null,
+          "attribute": "start",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 91
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-reversed",
+          "kind": "inspector-field",
+          "drawnAs": "field",
+          "feature": "settings-audit",
+          "property": null,
+          "composite": null,
+          "recipe": null,
+          "attribute": "reversed",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 92
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-list-type",
+          "kind": "inspector-field",
+          "drawnAs": "field",
+          "feature": "settings-audit",
+          "property": null,
+          "composite": null,
+          "recipe": null,
+          "attribute": "listType",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 93
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-scope",
+          "kind": "inspector-field",
+          "drawnAs": "field",
+          "feature": "settings-audit",
+          "property": null,
+          "composite": null,
+          "recipe": null,
+          "attribute": "scope",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 94
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-accept",
+          "kind": "inspector-field",
+          "drawnAs": "field",
+          "feature": "settings-audit",
+          "property": null,
+          "composite": null,
+          "recipe": null,
+          "attribute": "accept",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 95
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-multiple",
+          "kind": "inspector-field",
+          "drawnAs": "field",
+          "feature": "settings-audit",
+          "property": null,
+          "composite": null,
+          "recipe": null,
+          "attribute": "multiple",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 96
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-cols",
+          "kind": "inspector-field",
+          "drawnAs": "field",
+          "feature": "settings-audit",
+          "property": null,
+          "composite": null,
+          "recipe": null,
+          "attribute": "cols",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 97
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-max-length",
+          "kind": "inspector-field",
+          "drawnAs": "field",
+          "feature": "settings-audit",
+          "property": null,
+          "composite": null,
+          "recipe": null,
+          "attribute": "maxLength",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 98
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-min-length",
+          "kind": "inspector-field",
+          "drawnAs": "field",
+          "feature": "settings-audit",
+          "property": null,
+          "composite": null,
+          "recipe": null,
+          "attribute": "minLength",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 99
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-low",
+          "kind": "inspector-field",
+          "drawnAs": "field",
+          "feature": "settings-audit",
+          "property": null,
+          "composite": null,
+          "recipe": null,
+          "attribute": "low",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 100
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-high",
+          "kind": "inspector-field",
+          "drawnAs": "field",
+          "feature": "settings-audit",
+          "property": null,
+          "composite": null,
+          "recipe": null,
+          "attribute": "high",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 101
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-optimum",
+          "kind": "inspector-field",
+          "drawnAs": "field",
+          "feature": "settings-audit",
+          "property": null,
+          "composite": null,
+          "recipe": null,
+          "attribute": "optimum",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 102
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-allow",
+          "kind": "inspector-field",
+          "drawnAs": "field",
+          "feature": "settings-audit",
+          "property": null,
+          "composite": null,
+          "recipe": null,
+          "attribute": "allow",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 103
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-loading",
+          "kind": "inspector-field",
+          "drawnAs": "field",
+          "feature": "settings-audit",
+          "property": null,
+          "composite": null,
+          "recipe": null,
+          "attribute": "loading",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 104
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-plays-inline",
+          "kind": "inspector-field",
+          "drawnAs": "field",
+          "feature": "settings-audit",
+          "property": null,
+          "composite": null,
+          "recipe": null,
+          "attribute": "playsInline",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 105
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-preload",
+          "kind": "inspector-field",
+          "drawnAs": "field",
+          "feature": "settings-audit",
+          "property": null,
+          "composite": null,
+          "recipe": null,
+          "attribute": "preload",
+          "control": "field",
+          "labelKey": "command.setAttribute",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 106
+          },
+          "adapter": {
+            "selection": "single",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
         }
       ]
     },
@@ -1359,6 +1801,7 @@
           "type": "enum",
           "values": [
             "text",
+            "hidden",
             "email",
             "password",
             "number",
@@ -1366,12 +1809,19 @@
             "url",
             "search",
             "date",
+            "datetime-local",
+            "month",
+            "week",
             "time",
             "color",
             "range",
             "checkbox",
             "radio",
-            "file"
+            "file",
+            "image",
+            "button",
+            "submit",
+            "reset"
           ],
           "optional": false
         }

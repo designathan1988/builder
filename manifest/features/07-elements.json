@@ -20600,6 +20600,37 @@
           "refusals": []
         }
       ]
+    },
+    {
+      "id": "settings-audit",
+      "titleKey": "feature.settingsAudit",
+      "commands": [
+        "element.setAttribute",
+        "element.setInputType",
+        "element.setClasses",
+        "element.setCustomAttribute",
+        "element.setTag",
+        "text.toggleBold",
+        "text.toggleItalic",
+        "classes.rename",
+        "classes.delete"
+      ],
+      "dependsOn": ["inspector-panel", "elements-form-inputs-rules", "shared-style-classes", "text-inline-formatting"],
+      "spec": "spec/behavior/settings-audit.md",
+      "intent": {
+        "title": "Organised Settings and type-safe element attributes",
+        "steps": [
+          "Inspect a link, button, input, list, table and media element in Settings.",
+          "Change attributes, an input type, a tag and a project class; edit marked text inline."
+        ],
+        "expected": [
+          "Settings groups fields by their declared section and shows the effective default button type.",
+          "Invalid or reserved attributes are refused with a local error without changing the document.",
+          "Type and tag changes clear inapplicable data in one undo step; class names use one project registry.",
+          "Inline marks and each type-specific field survive render, reload and export."
+        ]
+      },
+      "scenarios": []
     }
   ]
 }

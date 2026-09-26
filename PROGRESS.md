@@ -1,5 +1,12 @@
 # Progress
 
+## Codex lane
+
+- 2026-09-26: Worktree `builder-codex`, branch `codex`; first commit `4a49cc1` adds the lane instructions.
+- 7.1 contract in progress: Settings sections, type-specific fields, closed input types, class management and the audited validation/grammar rules.
+- Previous Settings layout: one flat attribute list; new layout: manifest-driven General, Link, Image, Accessibility, SEO and Attributes sections.
+- No code or browser result has been claimed for 7.1 yet. Next: finish the contract, scenarios, code and item proof before pushing.
+
 At most 60 lines: state, the user's pending decisions, open findings. History and proofs: `docs/history.md`.
 
 ## State (2026-09-26, /goal "todas as funcionalidades", blocks in the user's order)
