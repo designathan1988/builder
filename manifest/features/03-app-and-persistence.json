@@ -253,7 +253,7 @@
           "refusals": []
         },
         {
-          "id": "undo-from-the-edit-menu",
+          "id": "undo-from-the-edit-menu-names-what-it-undid",
           "setup": {
             "fixture": "aurora",
             "selection": [
@@ -335,7 +335,9 @@
               "feedback": [
                 {
                   "key": "status.undone",
-                  "params": {}
+                  "params": {
+                    "action": "Placed Paragraph in Hero, position 2 of 4."
+                  }
                 }
               ]
             },
@@ -346,7 +348,7 @@
           "refusals": []
         },
         {
-          "id": "redo-from-the-edit-menu",
+          "id": "redo-from-the-edit-menu-names-what-it-redid",
           "setup": {
             "fixture": "aurora",
             "selection": [
@@ -484,7 +486,9 @@
               "feedback": [
                 {
                   "key": "status.redone",
-                  "params": {}
+                  "params": {
+                    "action": "Placed Paragraph in Hero, position 2 of 4."
+                  }
                 }
               ]
             },

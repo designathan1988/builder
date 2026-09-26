@@ -1220,7 +1220,7 @@
       },
       "scenarios": [
         {
-          "id": "undo-restores-document-and-selection-before-the-command",
+          "id": "undo-restores-the-document-and-selection-and-names-what-it-undid",
           "setup": {
             "fixture": "aurora",
             "selection": [
@@ -1303,7 +1303,9 @@
               "feedback": [
                 {
                   "key": "status.undone",
-                  "params": {}
+                  "params": {
+                    "action": "Placed Paragraph in Hero, position 2 of 4."
+                  }
                 }
               ]
             },
@@ -1314,7 +1316,7 @@
           "refusals": []
         },
         {
-          "id": "redo-restores-document-and-selection-after-the-command",
+          "id": "redo-restores-the-document-and-selection-and-names-what-it-redid",
           "setup": {
             "fixture": "aurora",
             "selection": [
@@ -1454,7 +1456,9 @@
               "feedback": [
                 {
                   "key": "status.redone",
-                  "params": {}
+                  "params": {
+                    "action": "Placed Paragraph in Hero, position 2 of 4."
+                  }
                 }
               ]
             },
@@ -1665,6 +1669,74 @@
               "document": "unchanged"
             }
           ]
+        },
+        {
+          "id": "undo-after-a-height-names-the-height-it-undid",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "style.set#inspector-height",
+              "args": {
+                "property": "height",
+                "value": "900px"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "900px\n"
+            },
+            {
+              "door": "history.undo#toolbar-top-bar",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "history.undo#toolbar-top-bar"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.undone",
+                  "params": {
+                    "action": "Height of Hero: 900px."
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
         }
       ]
     },
@@ -2011,7 +2083,7 @@
           ]
         },
         {
-          "id": "the-toast-undo-restores-the-deleted-element",
+          "id": "the-toast-undo-restores-the-deleted-element-and-names-the-delete",
           "setup": {
             "fixture": "aurora",
             "selection": [
@@ -2071,7 +2143,9 @@
               "feedback": [
                 {
                   "key": "status.undone",
-                  "params": {}
+                  "params": {
+                    "action": "Deleted Intro."
+                  }
                 }
               ]
             },
