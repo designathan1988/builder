@@ -15,6 +15,7 @@ const ADD = 'selection.add#layers-row-shift';
 const LOCK = 'element.toggleLock#layers-row-lock';
 const SE = 'geometry.resize#handle-resize-se';
 const W = 'geometry.resize#handle-resize-w';
+const MOVE = 'element.moveTo#canvas-drag-canvas-element-before-after';
 
 interface Node {
   readonly id: string;
@@ -85,6 +86,41 @@ test('a handle clicked without a drag clicks what lies under it: the Hero around
   await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
   await expect.poll(async () => page.evaluate(() => (window as unknown as Record<string, { selection: () => string[] }>).__builderTestPort?.selection())).toEqual(['n-hero']);
   expect(await declared(page, 'n-title'), 'the Title keeps its size').toEqual({});
+});
+
+// A handle takes a press only in its hit area, outside the element: its dot, drawn across the edge, overhangs the
+// element and must not take it. On a short element (the Intro, about 10 screen px high at the fit zoom) the dots of
+// the top and bottom handles reach its middle, so a press there that went to the dot would resize the Intro instead
+// of moving it (the hysteresis test of drag-reorder-canvas failed on it, finding 12).
+test('a press on a short selected element, under the overhang of a handle\'s dot, moves the element: it never resizes it', runs(OPEN, ROW, MOVE), async ({ page }) => {
+  await control(page, ROW, { args: { target: 'n-intro' } }).click();
+  const screen = (id: string) =>
+    page.evaluate((node) => {
+      const iframe = document.querySelector<HTMLIFrameElement>('.frame__page');
+      const el = iframe?.contentDocument?.querySelector(`[data-node="${node}"]`);
+      if (!iframe || !el) throw new Error(`the canvas does not draw ${node}`);
+      const zoom = iframe.currentCSSZoom;
+      const frame = iframe.getBoundingClientRect();
+      const r = el.getBoundingClientRect();
+      return { x: frame.left + r.left * zoom, y: frame.top + r.top * zoom, width: r.width * zoom, height: r.height * zoom };
+    }, id);
+  const intro = await screen('n-intro');
+  const south = await handle(page, 'geometry.resize#handle-resize-s').boundingBox();
+  if (south === null) throw new Error('the south handle is not drawn');
+  // the dot is centred on the bottom edge; the press lands 2 px above that edge, inside the Intro, under the dot
+  const dot = await handle(page, 'geometry.resize#handle-resize-s').evaluate((el) => parseFloat(getComputedStyle(el, '::after').height));
+  expect(dot / 2, 'the dot overhangs the Intro by more than the press\'s 2 px').toBeGreaterThan(2);
+  expect(intro.height, 'the Intro is short enough for the dots to meet its middle').toBeLessThan(dot * 2);
+  const at = { x: south.x + south.width / 2, y: intro.y + intro.height - 2 };
+  const title = await screen('n-title');
+  await page.mouse.move(at.x, at.y);
+  await page.mouse.down();
+  await page.mouse.move(at.x, title.y + title.height / 2 - 1, { steps: 8 });
+  await page.mouse.up();
+  const document = (await page.evaluate(() => (window as unknown as Record<string, { document: () => unknown }>).__builderTestPort?.document())) as { pages: { tree: Node }[] };
+  const hero = document.pages[0] ? nodeIn(document.pages[0].tree, 'n-hero') : null;
+  expect(hero?.children.map((c) => c.id), 'the Intro moved before the Title').toEqual(['n-intro', 'n-title', 'n-actions']);
+  expect(await declared(page, 'n-intro'), 'the Intro keeps its size').toEqual({});
 });
 
 test('no handle is drawn on the page, on a locked element or on several elements', runs(OPEN, ROW, ADD, LOCK, SE), async ({ page }) => {

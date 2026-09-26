@@ -43,7 +43,7 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 1. A node path cannot name a page itself nor tell apart two siblings with the same name.
 5. canvas.tsx RULER_STEP = 200 is a constant in code. 6. panels.spec.ts, doors.spec.ts run doors without `runs()`.
 9. inspector-fields.spec.ts: wrong `drawnAs` data passes. 11. Renderer: textarea/option line break becomes `<br>`.
-12. Flaky under load: coordinates:181, a 'stable' File menu; drag-reorder-canvas hysteresis (once, then 5 of 5).
+12. Flaky under load: coordinates:181, a 'stable' File menu. (Hysteresis fixed: a handle's dot took presses inside.)
 15. shell.tsx keeps the fit zoom in useState. 14. sidebar.tsx writes the argument name "target" and builds data-args.
 18. The backdrop's focus return is untested. 19. Canvas chrome not built: size chip, label as hit target. 20. Layers'
 folds survive File › Open. 22. Walking onto an off-screen element does not scroll it; history.depth (80).

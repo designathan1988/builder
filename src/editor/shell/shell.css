@@ -1121,6 +1121,9 @@ kbd {
   background: var(--color-canvas-handle);
   outline: 1.5px solid var(--color-canvas-selection);
   translate: -50% -50%;
+  /* the dot overhangs the element across its edge: only the hit area, outside the element, takes a press, or a short
+     element's middle would be its handles' */
+  pointer-events: none;
 }
 
 .chrome__handle:hover::after {
