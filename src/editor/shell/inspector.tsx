@@ -270,6 +270,10 @@ const SPACING_LINK = doorSlots('inspector-style').find((d) => d.door.kind === 'p
 // the value the primary selected element holds (the four sides' when they agree, else nothing), else the value the page
 // computes; it is the one field of a form of its own, so Enter submits it and keeps what it holds with its door's command
 // (style.setSpacing, with its box and sides), as leaving it with typing not kept yet does (one undo step).
+// the key context of a side of the box, whose Escape (field.cancel for the box: the form stands for it as `property`)
+// puts back the value the document holds; the message it gives rewrites the side, so leaving it writes nothing (spec
+// inspector-number-fields, Problems in Pager 4)
+const SPACING_KEYS: KeyContextId = 'spacing-field';
 function SpacingField({ entry, box, sides, properties, where, label }: { readonly entry: DoorEntry; readonly box: string; readonly sides: string; readonly properties: readonly string[]; readonly where: string; readonly label: string }) {
   const store = useStore();
   const door = useDoor(entry, { box, sides }, label, isFeatureBuilt(entry.door.feature as FeatureId));
@@ -308,7 +312,7 @@ function SpacingField({ entry, box, sides, properties, where, label }: { readonl
     <form
       className={`box__side box__side--${where}`}
       data-door={entry.ref}
-      data-args={JSON.stringify({ box, sides })}
+      data-args={JSON.stringify({ box, sides, property: box })}
       title={door.title}
       onSubmit={(event) => {
         event.preventDefault();
@@ -326,6 +330,7 @@ function SpacingField({ entry, box, sides, properties, where, label }: { readonl
           typed.current = true;
         }}
         onBlur={keep}
+        data-key-context={SPACING_KEYS}
       />
     </form>
   );

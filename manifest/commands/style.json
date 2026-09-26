@@ -9495,6 +9495,26 @@
             "fields": []
           },
           "args": {}
+        },
+        {
+          "id": "key-escape-in-spacing-field",
+          "kind": "shortcut",
+          "feature": "props-spacing",
+          "chord": "Escape",
+          "context": "spacing-field",
+          "gesture": null,
+          "labelKey": "command.fieldCancel",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
         }
       ]
     }

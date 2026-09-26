@@ -685,6 +685,8 @@ const FIELD_TEXT_CONTEXT = 'element-text-field';
 // Escape, the arrows, PageUp and PageDown) act on the field's property and the text it holds (spec
 // inspector-number-fields)
 const NUMBER_FIELD_CONTEXT = 'number-field';
+// a side of the spacing box: its keys act on the side that holds the focus, as a number field's do
+const SPACING_FIELD_CONTEXT = 'spacing-field';
 // A step's `modifier` argument (a number field's step or scrub: Shift, Alt) is the key held while its door runs, and
 // a panel drag's `distance` argument is the pointer's horizontal travel in screen pixels; neither is something the
 // drawn control stands for.
@@ -820,6 +822,7 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
   if (d.kind === 'shortcut' && d.context === FIELD_TEXT_CONTEXT) expect((await focusedContexts(page))[0], `step ${ref}: the focus is in the text field`).toBe(FIELD_TEXT_CONTEXT);
   // a key of a number field needs the focus in that field's input, which a step before it typed into
   if (d.kind === 'shortcut' && d.context === NUMBER_FIELD_CONTEXT) expect((await focusedContexts(page))[0], `step ${ref}: the focus is in a number field`).toBe(NUMBER_FIELD_CONTEXT);
+  if (d.kind === 'shortcut' && d.context === SPACING_FIELD_CONTEXT) expect((await focusedContexts(page))[0], `step ${ref}: the focus is in a side of the spacing box`).toBe(SPACING_FIELD_CONTEXT);
   // a key of the hand needs the focus on the canvas and an element in the hand, whose aim the canvas draws as a drop
   if (d.kind === 'shortcut' && d.context === HAND_CONTEXT) {
     expect((await focusedContexts(page))[0], `step ${ref}: the focus is on the canvas`).toBe('canvas');
@@ -1160,7 +1163,7 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
     // (asserted above) acts on the field: its arguments (the node, the text) are what the field holds
     // (a key held with it, the step's modifier, is no argument a control stands for)
     const standsFor = withoutGestureArgs(own);
-    if (d.context !== EDIT_CONTEXT && d.context !== HAND_CONTEXT && d.context !== FIELD_TEXT_CONTEXT && d.context !== NUMBER_FIELD_CONTEXT && Object.keys(standsFor).length > 0) {
+    if (d.context !== EDIT_CONTEXT && d.context !== HAND_CONTEXT && d.context !== FIELD_TEXT_CONTEXT && d.context !== NUMBER_FIELD_CONTEXT && d.context !== SPACING_FIELD_CONTEXT && Object.keys(standsFor).length > 0) {
       await focusControlFor(page, ref, standsFor);
       // the control the key acts on lies in the door's key context (a palette tile in the palette's)
       const chain = await focusedContexts(page);

@@ -55,7 +55,7 @@ export const alignCommand = registerHandler('position.align', (context, { edge }
   const target = EDGES[edge];
   if (target === undefined) throw new Error(`position.align: no edge ${edge}`);
   if (roots.length === 0) return { kind: 'change' };
-  const said = message('status.align.done', { edge: { key: `command.align.${camel(edge)}` as MessageId }, count: roots.length });
+  const said = message('status.align.done', { edge: { key: `command.align.${camel(edge)}` as MessageId }, elements: { plural: 'status.elementCount', count: roots.length } });
   const only = roots.length === 1 ? roots[0] : undefined;
   if (only !== undefined) {
     // one element: its parent's padding box, from the distances to its edges
@@ -91,7 +91,7 @@ export const distributeCommand = registerHandler('position.distribute', (context
     .sort((a, b) => a.start - b.start);
   const first = measured[0];
   const last = measured.at(-1);
-  const said = message('status.distribute.done', { axis: { key: `command.distribute.${axis}` as MessageId }, count: roots.length });
+  const said = message('status.distribute.done', { axis: { key: `command.distribute.${axis}` as MessageId }, elements: { plural: 'status.elementCount', count: roots.length } });
   if (first === undefined || last === undefined || measured.length < 3) return { kind: 'change', message: said };
   // the gap that fills the span from the first's start to the last's end with every element and equal gaps
   const gap = (last.start + last.size - first.start - measured.reduce((sum, m) => sum + m.size, 0)) / (measured.length - 1);

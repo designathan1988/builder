@@ -119,20 +119,30 @@ export const setPanelOpen = registerHandler<'workspace.setPanelOpen', EditorUi>(
   (state, args) => args.open === 'toggle' && typeof args.panel === 'string' && args.panel in PANELS && isPanelOpen(state.ui, args.panel as Panel),
 );
 
-export const toggleLeftDock = registerHandler<'workspace.toggleLeftDock', EditorUi>('workspace.toggleLeftDock', ({ state }) => {
-  const sidebar = !state.ui.panels.sidebar;
-  return { kind: 'change', ui: { ...state.ui, panels: { ...state.ui.panels, sidebar } }, message: message(sidebar ? 'status.sidebar.shown' : 'status.sidebar.hidden') };
-});
+// a toggle stands for what it shows being shown: View › Toggle left dock wears its check while the sidebar shows (the
+// audit's A3.23)
+export const toggleLeftDock = registerHandler<'workspace.toggleLeftDock', EditorUi>(
+  'workspace.toggleLeftDock',
+  ({ state }) => {
+    const sidebar = !state.ui.panels.sidebar;
+    return { kind: 'change', ui: { ...state.ui, panels: { ...state.ui.panels, sidebar } }, message: message(sidebar ? 'status.sidebar.shown' : 'status.sidebar.hidden') };
+  },
+  (state) => state.ui.panels.sidebar,
+);
 
 // the inspector column: the panels placed there (layout.json names one, the inspector), shown or hidden (Ctrl+Alt+B,
 // Ctrl+\, and Page properties, which shows the page in it: page-properties.ts)
 export const withInspector = (ui: EditorUi, open: boolean): EditorUi => panelsAt('inspector').reduce((next, panel) => withPanel(next, panel, open), ui);
 const inspectorOpen = (ui: EditorUi): boolean => panelsAt('inspector').some((panel) => isPanelOpen(ui, panel));
 
-export const toggleInspector = registerHandler<'workspace.toggleInspector', EditorUi>('workspace.toggleInspector', ({ state }) => {
-  const open = !inspectorOpen(state.ui);
-  return { kind: 'change', ui: withInspector(state.ui, open), message: message(open ? 'status.inspector.shown' : 'status.inspector.hidden') };
-});
+export const toggleInspector = registerHandler<'workspace.toggleInspector', EditorUi>(
+  'workspace.toggleInspector',
+  ({ state }) => {
+    const open = !inspectorOpen(state.ui);
+    return { kind: 'change', ui: withInspector(state.ui, open), message: message(open ? 'status.inspector.shown' : 'status.inspector.hidden') };
+  },
+  (state) => inspectorOpen(state.ui),
+);
 
 // Developer tools (spec workbench-panel, Problems in Pager 2): a preference that gives the dock its Document tab, where
 // the live document shows read-only (dock.tsx); turned on it shows the tab, turned off the tab goes. The editor starts

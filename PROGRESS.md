@@ -60,6 +60,7 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 42. Quick panel: no F6 in nor Escape out; chip and fields are Tab stops (audit 6.3). 46. hover-measure: no door.
 48. Enter/Space on a toolbar button do nothing until keyboard-panel-navigation (group 14) binds focus.activate.
 51. census.spec (78) near its 120 s limit: over it in check-a341-a332-152653 (4 workers + CODEX Chrome), 96 s alone
-    with 2 workers (census-154024); repeats: census-default-*. Cause to fix: the state walk grows with the doors.
+    with 2 workers (census-154024); alone with default workers 3/3 pass at 90 s (census-default-1..3). Fails only
+    under a full check's load: the state walk grows with the doors; cause to fix (faster walk), never the limit.
 50. e2e:tooth: workbench-panel's fold scenario ends in the start state (targeted tooth: toggle only opens);
     command-bar fails 52 in setup (finding 35): teeth by commandBar.open off and offers off (tooth-bar-* logs).

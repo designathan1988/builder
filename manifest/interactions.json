@@ -101,6 +101,11 @@
       "inherits": "field"
     },
     {
+      "id": "spacing-field",
+      "labelKey": "keyContext.spacingField",
+      "inherits": "field"
+    },
+    {
       "id": "element-text-field",
       "labelKey": "keyContext.elementTextField",
       "inherits": "field"

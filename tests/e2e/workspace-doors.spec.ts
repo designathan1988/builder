@@ -4,7 +4,7 @@
 // nothing or does something else.
 import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
-import { openMenu, runDoor, runs, runsUnavailable } from './door.ts';
+import { runDoor, runs } from './door.ts';
 
 const box = async (page: Page, selector: string) => {
   const found = await page.locator(selector).boundingBox();
@@ -38,22 +38,9 @@ for (const ref of ['workspace.setPanelOpen#menu-view-elements', 'workspace.setPa
   });
 }
 
-// View › Explorer waits for its feature (explorer-pages): the door rule (the user's order of 2026-09-26, item 3) draws
-// it not available yet, and a click on it changes nothing; the activity bar's Explorer opens and closes it
-test('View › Explorer waits for its feature: not available yet, and a click changes nothing', runsUnavailable('workspace.setPanelOpen#menu-view-explorer'), async ({ page }) => {
-  const start = await box(page, '.workbench');
-  const layers = await region(page, 'explorer-layers');
-  await openMenu(page, 'view');
-  const door = page.locator('[data-door="workspace.setPanelOpen#menu-view-explorer"]');
-  await expect(door).toHaveAttribute('aria-disabled', 'true');
-  await expect(door).toHaveAttribute('title', /not available yet/);
-  await door.click({ force: true });
-  await page.keyboard.press('Escape');
-  expect(await box(page, '.workbench')).toEqual(start);
-  expect(await region(page, 'explorer-layers')).toEqual(layers);
-});
-
-for (const ref of ['workspace.setPanelOpen#toolbar-activity-bar-explorer']) {
+// View › Explorer and the activity bar's Explorer do the same (the audit's A3.23: View › Explorer belongs to the feature
+// that built the Explorer, layers-tree, and is no longer drawn not available yet)
+for (const ref of ['workspace.setPanelOpen#toolbar-activity-bar-explorer', 'workspace.setPanelOpen#menu-view-explorer']) {
   test(`${ref} gives the Explorer's column to the canvas, and a second time puts the Explorer back`, runs(ref), async ({ page }) => {
     const start = await box(page, '.workbench');
     const sidebar = await box(page, '.sidebar');
