@@ -31,9 +31,8 @@ export const toggleGroup = registerHandler<'palette.toggleGroup', EditorUi>(
 export const setDensity: RegisteredHandler<'palette.setDensity', EditorUi> = registerHandler(
   'palette.setDensity',
   ({ state }, { density }) => {
-    const said = chosen(setDensity.command, { density });
-    if (paletteDensity(state.ui) === density) return { kind: 'change', message: said };
-    return { kind: 'change', ui: { ...state.ui, preferences: { ...state.ui.preferences, paletteDensity: density } }, message: said };
+    if (paletteDensity(state.ui) === density) return { kind: 'change' };
+    return { kind: 'change', ui: { ...state.ui, preferences: { ...state.ui.preferences, paletteDensity: density } }, message: chosen(setDensity.command, { density }) };
   },
   (state, args) => paletteDensity(state.ui) === args.density,
 );

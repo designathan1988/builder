@@ -40,7 +40,8 @@ test('a refusal is replaced by the next action, even one that says nothing of it
 
 test('a preference change says what it set: the theme, a view switch on and off, the language', runs(OPEN, LIGHT, DARK, OUTLINES, PORTUGUESE), async ({ page }) => {
   const status = page.getByRole('status');
-  // light, then dark: at least one of them changes the theme, whichever the profile starts with
+  // light, then dark: a fresh profile starts dark (DESIGN.md), so each changes the theme; choosing the theme in use
+  // changes nothing and says nothing
   await runDoor(page, LIGHT);
   await expect(status).toHaveText('Theme: Light.');
   await runDoor(page, DARK);

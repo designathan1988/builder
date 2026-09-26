@@ -22,9 +22,8 @@ export type Theme = CommandArgs['preferences.setTheme']['theme'];
 export const setLanguage: RegisteredHandler<'preferences.setLanguage', EditorUi> = registerHandler(
   'preferences.setLanguage',
   ({ state }, args) => {
-    const said = chosen(setLanguage.command, args);
-    if (state.ui.preferences.locale === args.locale) return { kind: 'change', message: said };
-    return { kind: 'change', ui: { ...state.ui, preferences: { ...state.ui.preferences, locale: args.locale } }, message: said };
+    if (state.ui.preferences.locale === args.locale) return { kind: 'change' };
+    return { kind: 'change', ui: { ...state.ui, preferences: { ...state.ui.preferences, locale: args.locale } }, message: chosen(setLanguage.command, args) };
   },
   (state, args) => args.locale === state.ui.preferences.locale,
 );
@@ -32,9 +31,8 @@ export const setLanguage: RegisteredHandler<'preferences.setLanguage', EditorUi>
 export const setTheme: RegisteredHandler<'preferences.setTheme', EditorUi> = registerHandler(
   'preferences.setTheme',
   ({ state }, args) => {
-    const said = chosen(setTheme.command, args);
-    if (state.ui.preferences.theme === args.theme) return { kind: 'change', message: said };
-    return { kind: 'change', ui: { ...state.ui, preferences: { ...state.ui.preferences, theme: args.theme } }, message: said };
+    if (state.ui.preferences.theme === args.theme) return { kind: 'change' };
+    return { kind: 'change', ui: { ...state.ui, preferences: { ...state.ui.preferences, theme: args.theme } }, message: chosen(setTheme.command, args) };
   },
   (state, args) => args.theme === state.ui.preferences.theme,
 );

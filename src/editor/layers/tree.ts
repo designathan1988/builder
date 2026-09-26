@@ -125,8 +125,8 @@ export const setRowDetails: RegisteredHandler<'layers.setRowDetails', EditorUi> 
     const now = rowDetailsOf(state.ui);
     const on = shown ?? !now.includes(detail);
     const next = ROW_DETAILS.filter((d) => (d === detail ? on : now.includes(d)));
+    if (next.join() === now.join()) return { kind: 'change' };
     const said = itemSwitched(setRowDetails.command, { detail }, on);
-    if (next.join() === now.join()) return { kind: 'change', message: said };
     const { rowDetails: _dropped, ...rest } = state.ui.preferences;
     void _dropped;
     const same = next.join() === DEFAULT_ROW_DETAILS.join();
