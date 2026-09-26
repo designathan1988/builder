@@ -14,7 +14,7 @@
 //    field keeps the text with text.set), then the attribute fields that apply to the element's type, in their order;
 //    on the page root, the fields of the page's settings keep what is typed with page.setSetting; on a Link Block or a
 //    link, the Link address keeps it with element.setLink; the HTML tag field keeps a typed tag with element.setTag.
-import { Fragment, useEffect, useId, useMemo, useRef, useState, type ComponentType, type FormEvent, type ReactNode } from 'react';
+import { Fragment, useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type ComponentType, type FormEvent, type ReactNode } from 'react';
 import type { AttributeId, CommandId, FeatureId, KeyContextId, MessageId, SectionId, StyleTargetId } from '../../generated/ids.ts';
 import type { CommandArgs } from '../../generated/commands.ts';
 import { GENERATED_VALUES } from '../../generated/value-lists.ts';
@@ -29,6 +29,7 @@ import { elementIcon, manifest, type DoorEntry } from '../../manifest/runtime.ts
 import { DoorControl, Icon, useDoor } from '../doors/door.tsx';
 import { MenuButton } from '../doors/menu.tsx';
 import { GLYPHS, doorSlots, drawnAsOf, partOf, slotsIn } from '../doors/placement.ts';
+import { setActiveOption } from '../focus/focus.ts';
 import { afterGesture } from '../input/pointer.ts';
 import { collapsedSections, editedProperties, inspectorMode, inspectorSearchOf, isEssential, searchMatches, summaryOf, summaryProperties } from '../inspector/sections.ts';
 import { MODEL_RULES, useEditorState, useStore, type EditorStore, layeredRules } from '../store.ts';
@@ -601,22 +602,43 @@ function shownForSelection(entry: DoorEntry, kinds: readonly string[]): boolean 
 
 // The Add a property button (spec inspector-add-property): it opens the list of the properties the Style tab does not
 // draw now (essentials mode), filtered by what is typed; choosing one reveals its field (inspector.reveal), which takes
-// the focus. The button and each item are the reveal door, the items standing for their property.
+// the focus. The button and each item are the reveal door, the items standing for their property. The list closes as
+// every menu does (Problems in Pager 4): a dismissal newer than its opening (Escape in its filter or on an item, a press
+// on the backdrop drawn under it) closes it, and the focus goes back to the button.
 const REVEAL = doorSlots('inspector-style').find((d) => d.door.kind === 'panel-control' && d.door.control === 'add-property-item');
+const ADD_PROPERTY_BACKDROP = doorSlots('overlay')[0];
 function AddProperty() {
   const t = useT();
-  const [open, setOpen] = useState(false);
+  // the number of dismissals when the list was opened, or null while it is closed
+  const dismissals = useEditorState((s) => s.ui.overlays.dismissals);
+  const [openedAt, setOpenedAt] = useState<number | null>(null);
+  const open = openedAt !== null && openedAt === dismissals;
+  const dismissed = openedAt !== null && !open;
+  const setOpen = (next: boolean) => setOpenedAt(next ? dismissals : null);
   const [query, setQuery] = useState('');
   // opened, the list's filter takes the focus (spec inspector-add-property, Problems in Pager 3)
   const filter = useRef<HTMLInputElement>(null);
   const list = useRef<HTMLDivElement>(null);
+  const button = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     if (open) filter.current?.focus();
   }, [open]);
+  // dismissed, the focus that went down with the list goes back to its button
+  useEffect(() => {
+    if (dismissed && (document.activeElement === null || document.activeElement === document.body)) button.current?.focus();
+  }, [dismissed]);
+  const listId = useId();
   const mode = useEditorState((s) => inspectorMode(s.ui));
   const revealed = useEditorState((s) => s.ui.revealed?.field ?? null);
   const node = useSingleNode();
   const kinds = useSelectionKinds();
+  // the first property listed is the marked one after every change of the list (what is typed, the selection)
+  const kindsKey = kinds.join(' ');
+  useLayoutEffect(() => {
+    const input = filter.current;
+    const options = [...(list.current?.querySelectorAll<HTMLElement>('[role="option"]') ?? [])];
+    if (open && input) setActiveOption(input, options, options.length > 0 ? 0 : null);
+  }, [open, query, mode, revealed, node, kindsKey]);
   const door = useDoor(REVEAL ?? (manifest.doors[0] as DoorEntry), {}, t('inspector.addProperty'), REVEAL !== undefined && isFeatureBuilt(REVEAL.door.feature as FeatureId));
   if (REVEAL === undefined) return null;
   const held = node === null ? NO_HELD : heldProperties(node);
@@ -630,25 +652,42 @@ function AddProperty() {
         });
   return (
     <div className="add-property">
-      <button type="button" className={`door door--icon-button${door.available ? '' : ' is-unavailable'}`} data-door={REVEAL.ref} data-args="{}" aria-haspopup="menu" aria-expanded={open} aria-label={door.label} title={door.title} aria-disabled={door.available ? undefined : true} onClick={() => (door.available ? setOpen(!open) : undefined)}>
+      <button ref={button} type="button" className={`door door--icon-button${door.available ? '' : ' is-unavailable'}`} data-door={REVEAL.ref} data-args="{}" aria-haspopup="dialog" aria-expanded={open} aria-label={door.label} title={door.title} aria-disabled={door.available ? undefined : true} onClick={() => (door.available ? setOpen(!open) : undefined)}>
         {REVEAL.door.icon !== null ? <Icon name={REVEAL.door.icon} size="md" /> : null}
       </button>
+      {/* the backdrop lies under the list and under "+", which closes the list as it opened it */}
+      {open && ADD_PROPERTY_BACKDROP ? (
+        <div className="add-property__backdrop">
+          <DoorControl entry={ADD_PROPERTY_BACKDROP} className="overlay-backdrop" />
+        </div>
+      ) : null}
       {open ? (
         // a property chosen closes the list; its field takes the focus (inspector.reveal)
-        <div ref={list} className="add-property__menu" role="menu" aria-label={door.label} onClick={(event) => (event.target instanceof Element && event.target.closest('[data-door]') ? setOpen(false) : undefined)}>
-          {/* Enter in the filter (its form's one field) chooses the first property listed */}
-          <form
-            onSubmit={(event) => {
-              event.preventDefault();
-              list.current?.querySelector<HTMLElement>('.add-property__item')?.click();
-            }}
-          >
-            <input ref={filter} className="input" type="search" aria-label={t('inspector.addProperty.filter')} placeholder={t('inspector.addProperty.filter')} value={query} onChange={(event) => setQuery(event.currentTarget.value)} data-local="add-property-filter" />
-          </form>
+        <div ref={list} className="add-property__menu" role="dialog" aria-label={door.label} onClick={(event) => (event.target instanceof Element && event.target.closest('[data-door]') ? setOpen(false) : undefined)}>
+          {/* the filter is a combobox of the menu key context: the arrows move the marked property, Enter chooses it */}
+          <input
+            ref={filter}
+            className="input"
+            type="search"
+            role="combobox"
+            aria-expanded="true"
+            aria-controls={listId}
+            aria-autocomplete="list"
+            aria-label={t('inspector.addProperty.filter')}
+            placeholder={t('inspector.addProperty.filter')}
+            value={query}
+            onChange={(event) => setQuery(event.currentTarget.value)}
+            data-local="add-property-filter"
+            data-key-context="menu"
+          />
           {hidden.length === 0 ? <p className="add-property__none">{t('inspector.addProperty.none')}</p> : null}
-          {hidden.map((target) => (
-            <DoorControl key={target} entry={REVEAL} args={{ property: target }} label={`${t((TARGETS.get(target)?.labelKey ?? '') as MessageId)} · ${target}`} className="add-property__item" />
-          ))}
+          <div id={listId} role="listbox" aria-label={door.label} className="add-property__list">
+            {hidden.map((target, i) => (
+              <div key={target} id={`${listId}-${i}`} role="option" aria-selected="false">
+                <DoorControl entry={REVEAL} args={{ property: target }} label={`${t((TARGETS.get(target)?.labelKey ?? '') as MessageId)} · ${target}`} className="add-property__item" />
+              </div>
+            ))}
+          </div>
         </div>
       ) : null}
     </div>

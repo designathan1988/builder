@@ -2880,6 +2880,16 @@ button.picker__swatch {
   position: relative;
 }
 
+/* the backdrop under the open list takes no place; "+" stays over it, so a press on it closes the list */
+.add-property__backdrop {
+  display: contents;
+}
+
+.add-property > .door[aria-expanded='true'] {
+  position: relative;
+  z-index: 50;
+}
+
 .add-property__menu {
   position: absolute;
   top: calc(100% + var(--space-2));
@@ -2904,9 +2914,21 @@ button.picker__swatch {
   font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-ui);
 }
 
+.add-property__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
 .add-property__item.door {
   justify-content: flex-start;
+  width: 100%;
   text-align: left;
+}
+
+/* the property the filter's arrows mark, which Enter chooses */
+[aria-selected='true'] > .add-property__item.door {
+  background: var(--color-accent-soft);
 }
 
 /* the quick panel over the stage (src/editor/canvas/quick-panel.tsx): a chip beside the selection, which opens the

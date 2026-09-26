@@ -31,6 +31,8 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
   state: ARCHITECTURE Door rendering, current-state.spec); Canvas shows pressed once code-panel-view (group 17) is built.
 - 1.5 spec undo-redo P2 "the status reads exactly Undone or Redone" -> "Undone/Redone with what it undid"; + P3.
 - 1.6 DESIGN field component + "a refused value is said beside the field"; spec inspector-number-fields P3.
+- 1.3 (block 1 real-use pass): Escape left the Add a property list open. Spec inspector-add-property + P4: closed as
+  every menu (Escape, backdrop, focus back to +); its filter a combobox of the menu key context (arrows, Enter).
 
 ## Open findings
 
