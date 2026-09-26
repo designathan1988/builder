@@ -7,13 +7,13 @@
 //  - The store hands the class to every handler (HandlerContext.styleClass); core/style/set.ts writes into it.
 //  - What the Style tab's fields read (styleSource): the primary element, or, while a class is the target, the primary
 //    element holding the class's styles; and, with the Element target, the class a value comes from when the element
-//    holds none of its own (classOrigin).
+//    holds none of its own (cascadeSource, in the stylesheet's order; inspector/origin.ts names it).
 import { registerHandler } from '../../core/commands/registry.ts';
 import { classTarget, classesOf } from '../../core/design/classes.ts';
-import { locate, type DocNode } from '../../core/document/model.ts';
+import { locate, type DocNode, type DocumentJson } from '../../core/document/model.ts';
 import type { ModelRules } from '../../core/document/validate.ts';
 import type { StoreState } from '../../core/store/store.ts';
-import { storedValue } from '../../core/style/set.ts';
+import { shownValue } from '../../core/style/set.ts';
 import type { EditorUi } from '../state.ts';
 
 type State = StoreState<EditorUi>;
@@ -57,16 +57,18 @@ export function styleSource(state: State): DocNode | null {
   return target === null ? node : { ...node, styles: target.styleClass.styles };
 }
 
-// With the Element target, the class a property's value comes from: the last class of the primary element (the one the
-// stylesheet writes last among them) that holds a value of it, while the element holds none of its own; null otherwise.
-export function classOrigin(state: State, property: string, rules: ModelRules): string | null {
-  if (styleClassOf(state) !== null) return null;
-  const primary = state.selection[0];
-  const node = primary === undefined ? null : (locate(state.document, primary)?.node ?? null);
-  if (node === null || storedValue(node, property, rules) !== undefined) return null;
-  const classes = classesOf(state.document);
-  // the stylesheet writes the classes in the project's order: of those the element lists, the last that holds a value wins
-  const holding = classes.filter((c) => node.classes.includes(c.name) && storedValue({ ...node, styles: c.styles }, property, rules) !== undefined);
-  return holding.at(-1)?.name ?? null;
+// Where a node's value of a property comes from on the page, as the stylesheet decides it (core/render/output.ts writes
+// every class, in the project's order, before the elements): the node's own value at the edited layer or the nearest
+// one up the cascade (className null), else the last class it lists that holds one there; with the layer it was found
+// at. Null when neither sets it (the node inherits it or takes the default).
+export function cascadeSource(doc: DocumentJson, node: DocNode, property: string, rules: ModelRules): { readonly breakpoint: string; readonly state: string; readonly className: string | null } | null {
+  const own = shownValue(node, property, rules);
+  if (own !== undefined) return { breakpoint: own.breakpoint, state: own.state, className: null };
+  for (const c of [...classesOf(doc)].reverse()) {
+    if (!node.classes.includes(c.name)) continue;
+    const held = shownValue({ ...node, styles: c.styles }, property, rules);
+    if (held !== undefined) return { breakpoint: held.breakpoint, state: held.state, className: c.name };
+  }
+  return null;
 }
 

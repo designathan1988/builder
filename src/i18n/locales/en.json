@@ -925,6 +925,8 @@
   "canvas.badge.editingState": "Editing {state}",
   "statusBar.breakpoint": "{breakpoint} · {width} px",
   "inspector.origin.here": "Set at {breakpoint}",
+  "inspector.origin.inherited": "Inherited from {name}",
+  "inspector.origin.writes": "Typing writes to {target} · {layer}",
   "inspector.origin.from": "From {source}",
   "menu.theme": "Theme",
   "menu.view": "View",

@@ -3200,6 +3200,8 @@ export const MESSAGE_IDS = [
   "canvas.badge.editingState",
   "statusBar.breakpoint",
   "inspector.origin.here",
+  "inspector.origin.inherited",
+  "inspector.origin.writes",
   "inspector.origin.from",
   "menu.theme",
   "menu.view",

@@ -1928,11 +1928,30 @@ kbd {
   color: var(--color-text-subtle);
 }
 
-/* a field's value that comes from one of the element's classes (spec shared-style-classes) */
-.field-origin {
+/* where a field's value comes from, in its origin's legend colour (field-origin.tsx; spec inspector-provenance-reset,
+   Problems in Pager 6); a class's value, which the legend does not name, stays muted like the placeholder beside it */
+.field-origin,
+.field-writes {
   padding: 0 var(--space-2);
   font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-mono);
   color: var(--color-text-muted);
+}
+
+.field-origin[data-origin='here'],
+.field-writes {
+  color: var(--color-origin-here);
+}
+
+.field-origin[data-origin='breakpoint'] {
+  color: var(--color-origin-breakpoint);
+}
+
+.field-origin[data-origin='state'] {
+  color: var(--color-origin-state);
+}
+
+.field-origin[data-origin='inherited'] {
+  color: var(--color-origin-inherited);
 }
 
 /* the Styles view's project classes and their use counts */

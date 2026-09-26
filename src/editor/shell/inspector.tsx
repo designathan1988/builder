@@ -33,17 +33,18 @@ import { setActiveOption } from '../focus/focus.ts';
 import { afterGesture } from '../input/pointer.ts';
 import { collapsedSections, editedProperties, inspectorMode, inspectorSearchOf, isEssential, searchMatches, summaryOf, summaryProperties } from '../inspector/sections.ts';
 import { MODEL_RULES, useEditorState, useStore, type EditorStore, layeredRules } from '../store.ts';
-import { classOrigin, styleSource } from '../inspector/style-target.ts';
+import { styleSource } from '../inspector/style-target.ts';
+import { FieldOrigin } from './field-origin.tsx';
 import { ATTRIBUTES, SETTINGS_SECTIONS, inputValueEditorOf, settingsSectionFor } from '../inspector/attributes.ts';
 import { useSettingsRefusal } from '../inspector/attribute-feedback.ts';
 import './settings.css';
 import { inspectorTab } from '../workspace/layout.ts';
 import { isPanelOpen, panelName } from '../workspace/panels.ts';
 import { useLocale, useT } from '../text.ts';
-import { activeBreakpoint, BREAKPOINTS } from '../view/breakpoints.ts';
-import { activeState, STATES } from '../view/style-state.ts';
+import { activeBreakpoint } from '../view/breakpoints.ts';
+import { activeState } from '../view/style-state.ts';
 import { KeywordButtons, NumberField, TextStyleField, presetsOf, useEffectiveText, usePageValues, type FieldPart } from './field.tsx';
-import { storedValue, shownValue } from '../../core/style/set.ts';
+import { storedValue } from '../../core/style/set.ts';
 import { kindsOf, shownForKinds } from '../../core/style/applies.ts';
 import { withTrackAdded } from '../../core/style/tracks.ts';
 import { functionArgument, functionOfControl, translateAxis, translateWith } from '../../core/style/functions.ts';
@@ -474,8 +475,7 @@ function StyleSections() {
                   return (
                     <Fragment key={d.ref}>
                       <Field entry={d} />
-                      <ClassOrigin entry={d} />
-                      <LayerOrigin entry={d} />
+                      <FieldOrigin entry={d} target={editedTarget(d)} />
                     </Fragment>
                   );
                 })}
@@ -551,47 +551,6 @@ function AnchorControl({ entry }: { readonly entry: DoorEntry }) {
           </div>
         ))}
       </div>
-    </div>
-  );
-}
-
-// With the Element target, the class a field's value comes from, while the element holds none of its own (spec
-// shared-style-classes): the field shows the value the page computes, and this note names the class.
-function ClassOrigin({ entry }: { readonly entry: DoorEntry }) {
-  const t = useT();
-  const target = editedTarget(entry);
-  const origin = useEditorState((s) => (target === null ? null : (editedProperties(target).map((p) => classOrigin(s, p, MODEL_RULES)).find((o) => o !== null) ?? null)));
-  if (origin === null) return null;
-  return (
-    <div className="field-origin" data-origin="class" data-field={entry.ref}>
-      {t('inspector.fromClass', { name: origin })}
-    </div>
-  );
-}
-
-// Away from the base layer (a breakpoint or a state chosen; spec breakpoint-overrides, state-styles), where a field's value
-// comes from: set at the edited layer ("here", naming the breakpoint), or inherited from a larger breakpoint or the base
-// state (naming it). Nothing at the base layer, nor for a value no layer sets.
-function LayerOrigin({ entry }: { readonly entry: DoorEntry }) {
-  const t = useT();
-  const target = editedTarget(entry);
-  const origin = useEditorState((s) => {
-    const rules = layeredRules(s.ui);
-    const node = styleSource(s);
-    if (target === null || node === null || rules === MODEL_RULES) return null;
-    const found = editedProperties(target).map((p) => shownValue(node, p, rules)).find((v) => v !== undefined);
-    if (found === undefined) return null;
-    const here = found.breakpoint === rules.base.breakpoint && found.state === rules.base.state;
-    return `${here ? 'here' : found.state !== rules.base.state ? 'state' : 'breakpoint'}|${found.breakpoint}|${found.state}`;
-  });
-  if (origin === null) return null;
-  const [kind = '', breakpoint = '', state = ''] = origin.split('|');
-  const breakpointName = t((BREAKPOINTS.find((b) => b.id === breakpoint)?.labelKey ?? 'breakpoint.desktop') as MessageId);
-  const stateLabel = STATES.find((x) => x.id === state)?.labelKey;
-  const source = kind === 'state' && stateLabel !== undefined ? `${breakpointName} · ${t(stateLabel as MessageId)}` : breakpointName;
-  return (
-    <div className="field-origin" data-origin={kind} data-field={entry.ref}>
-      {kind === 'here' ? t('inspector.origin.here', { breakpoint: breakpointName }) : t('inspector.origin.from', { source })}
     </div>
   );
 }

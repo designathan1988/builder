@@ -188,6 +188,7 @@ ${featureFiles.flatMap((f) => f.features.map((x) => `  ${q(x.id)}: ${JSON.string
       return css !== undefined && !css.inherited && typeof css.initial === 'string' ? [`  ${q(p.id)}: ${q(css.initial)},`] : [];
     })
     .join('\n');
+  const inheritedIds = properties.properties.filter((p) => data.css.properties[p.id]?.inherited === true).map((p) => `  ${q(p.id)},`);
   const valueLists = `${HEADER}import type { StyleTargetId } from './ids.ts';
 
 export interface GeneratedValues {
@@ -207,6 +208,12 @@ ${lists}
 export const INITIAL_VALUES: Readonly<Partial<Record<string, string>>> = {
 ${initials}
 };
+
+// Every edited property that is inherited (css-properties.json): an element holding none of its own takes its parent's,
+// as the Style tab says where a value comes from (src/editor/inspector/origin.ts).
+export const INHERITED_PROPERTIES: ReadonlySet<string> = new Set([
+${inheritedIds.join('\n')}
+]);
 `;
   return [
     { file: `${TYPES_DIR}/ids.ts`, content: ids },

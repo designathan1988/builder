@@ -925,6 +925,8 @@
   "canvas.badge.editingState": "Editando {state}",
   "statusBar.breakpoint": "{breakpoint} · {width} px",
   "inspector.origin.here": "Definido em {breakpoint}",
+  "inspector.origin.inherited": "Herdado de {name}",
+  "inspector.origin.writes": "Digitar grava em {target} · {layer}",
   "inspector.origin.from": "Vem de {source}",
   "menu.theme": "Tema",
   "menu.view": "Exibir",
