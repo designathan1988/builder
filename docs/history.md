@@ -877,3 +877,15 @@ Fragile / worth knowing:
 - 1.1 DESIGN Style tab: "a field never shows a blank: it shows the effective value" -> the document's value as written;
   none there: empty, the effective value as its muted placeholder, nothing zoom-dependent. Spec provenance-reset: + P4.
 - 1.2 DESIGN Style 4 "Property search ... reveals" -> Find a property filters; row "3 search result" -> "3 Add a property's item".
+
+## 2026-09-26: audit prompt, block 1 documentation changes, rest (moved from PROGRESS.md)
+
+- 1.3 text-shadow effects/shadow -> text/typography; DESIGN "Text" -> "Text (with the text shadow)", + Add a property rule.
+- 1.4 DESIGN Build order + "a disabled control is drawn clearly disabled; the quick panel leaves out an action that
+  cannot act; a field draws its Reset only while there is a value"; specs quick-panel P8, provenance-reset P5.
+- 1.4 decision: Canvas/Split/Code stay drawn, clearly disabled, none pressed (an unbuilt door never stands for a
+  state: ARCHITECTURE Door rendering, current-state.spec); Canvas shows pressed once code-panel-view (group 17) is built.
+- 1.5 spec undo-redo P2 "the status reads exactly Undone or Redone" -> "Undone/Redone with what it undid"; + P3.
+- 1.6 DESIGN field component + "a refused value is said beside the field"; spec inspector-number-fields P3.
+- 1.3 (block 1 real-use pass): Escape left the Add a property list open. Spec inspector-add-property + P4: closed as
+  every menu (Escape, backdrop, focus back to +); its filter a combobox of the menu key context (arrows, Enter).

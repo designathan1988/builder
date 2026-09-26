@@ -21,15 +21,7 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 
 ## Audit prompt: documentation changed (item, before -> after)
 
-- 1.3 text-shadow effects/shadow -> text/typography; DESIGN "Text" -> "Text (with the text shadow)", + Add a property rule.
-- 1.4 DESIGN Build order + "a disabled control is drawn clearly disabled; the quick panel leaves out an action that
-  cannot act; a field draws its Reset only while there is a value"; specs quick-panel P8, provenance-reset P5.
-- 1.4 decision: Canvas/Split/Code stay drawn, clearly disabled, none pressed (an unbuilt door never stands for a
-  state: ARCHITECTURE Door rendering, current-state.spec); Canvas shows pressed once code-panel-view (group 17) is built.
-- 1.5 spec undo-redo P2 "the status reads exactly Undone or Redone" -> "Undone/Redone with what it undid"; + P3.
-- 1.6 DESIGN field component + "a refused value is said beside the field"; spec inspector-number-fields P3.
-- 1.3 (block 1 real-use pass): Escape left the Add a property list open. Spec inspector-add-property + P4: closed as
-  every menu (Escape, backdrop, focus back to +); its filter a combobox of the menu key context (arrows, Enter).
+- Block 1 (1.1-1.6) documentation changes: docs/history.md (2026-09-26 entries).
 - 2.1 spec drag-reorder-canvas P5 + "an ancestor's escape band wins over a side drop inside it". Own new scenarios,
   never green, corrected: y equals CardA -> y < CardA + 24 (a p's 16 px margin); inline-block cards set one by one.
 - A1.1 spec zoom-wheel-pan P2 "Space pans ... no text field has focus" -> also not a control the keyboard focused
@@ -37,7 +29,9 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 - A3.41 decision: "every preference change reports" = settings chosen in menus/switches; folding sections, groups or
   branches is layout state and stays silent; a long message is cut, the other status items keep their size.
 - A3.32 spec inspector-number-fields + P4: a bare number takes the field's default unit (was: the unit held; set.ts,
-  set.test and number-field.test updated). Spacing-box Escape pending: inspector.tsx reserved by CODEX.
+  set.test, number-field.test, inspector-number-fields.spec (a burst is one step; Playwright clock splits bursts)
+  updated; 7 props-filters-clip scenarios retired for their bare-number-in-% twins (same computed factor).
+  Spacing-box Escape pending: inspector.tsx reserved by CODEX.
 
 ## Open findings
 
@@ -56,5 +50,7 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 35. The tooth proof also switches off a scenario's setup doors' commands. (43 property-search: done, audit 1.2.)
 42. Quick panel: no F6 in nor Escape out; chip and fields are Tab stops (audit 6.3). 46. hover-measure: no door.
 48. Enter/Space on a toolbar button do nothing until keyboard-panel-navigation (group 14) binds focus.activate.
+51. census.spec (78) near its 120 s limit: over it in check-a341-a332-152653 (4 workers + CODEX Chrome), 96 s alone
+    with 2 workers (census-154024); repeats: census-default-*. Cause to fix: the state walk grows with the doors.
 50. e2e:tooth: workbench-panel's fold scenario ends in the start state (targeted tooth: toggle only opens);
     command-bar fails 52 in setup (finding 35): teeth by commandBar.open off and offers off (tooth-bar-* logs).
