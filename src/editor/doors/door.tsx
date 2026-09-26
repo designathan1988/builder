@@ -4,10 +4,11 @@
 // the manifest gives (a door's icon, a glyph, a panel, an element); no component chooses one.
 import { useContext, type MouseEvent, type ReactNode } from 'react';
 import { COMMANDS, PREDICATES } from '../../app/commands.ts';
+import { isFeatureBuilt } from '../../app/features.ts';
 import { isBuilt, type PredicateTable } from '../../core/commands/registry.ts';
 import { projectFileText } from '../../core/project/archive.ts';
 import type { DispatchResult } from '../../core/store/store.ts';
-import type { CommandId, KeyContextId, MessageId, PredicateId } from '../../generated/ids.ts';
+import type { CommandId, FeatureId, KeyContextId, MessageId, PredicateId } from '../../generated/ids.ts';
 import type { DoorEntry } from '../../manifest/runtime.ts';
 import { chordHint } from '../input/keymap.ts';
 import { pressedByPointer } from '../input/pointer.ts';
@@ -28,8 +29,12 @@ export function Icon({ name, size = 'md' }: { readonly name: string; readonly si
   );
 }
 
+// A door is usable only when its command is built and its feature is registered as built (the feature table,
+// src/app/features.ts; DESIGN.md "Build order"): a menu item, a context-menu item or a toolbar button of a feature
+// still to come is drawn "not available yet", or left out of the context menu, even when another feature built its
+// command.
 export function isDoorBuilt(entry: DoorEntry): boolean {
-  return isBuilt(COMMANDS[entry.command.id]);
+  return isBuilt(COMMANDS[entry.command.id]) && isFeatureBuilt(entry.door.feature as FeatureId);
 }
 
 export interface DoorState {

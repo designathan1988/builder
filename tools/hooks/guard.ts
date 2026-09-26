@@ -69,6 +69,14 @@ export function repositoryOf(command: string, cwd: string): string {
   return path.isAbsolute(resolved) ? resolved : path.resolve(posix(cwd), resolved);
 }
 
+// Where a hook judges: the end of a turn, the directory the agent works in (the hook input's cwd: the worktree, never
+// the main folder); a git command, the repository it runs in (repositoryOf); the project's root when the input names no
+// directory.
+export function hookDirectory(mode: string | undefined, input: { readonly cwd?: string; readonly tool_input?: { readonly command?: string } }, root: string): string {
+  const cwd = typeof input.cwd === 'string' && input.cwd !== '' ? input.cwd : root;
+  return mode === 'bash' ? repositoryOf(input.tool_input?.command ?? '', cwd) : repositoryOf('', cwd);
+}
+
 export function bashVerdict(command: string, state: State, branch: () => { readonly current: string; readonly pushesTo: string }): string | null {
   const words = commandWords(command);
   const commits = /\bgit\s+(-C\s+\S+\s+)?commit\b/.test(words);
@@ -105,9 +113,7 @@ if (import.meta.main) {
   const mode = process.argv[2];
   const input = JSON.parse(fs.readFileSync(0, 'utf8') || '{}') as { stop_hook_active?: boolean; cwd?: string; tool_input?: { command?: string } };
   // the records and git are read in the repository the command runs in (repositoryOf), else the project's root
-  const root = path.resolve(import.meta.dirname, '..', '..');
-  const cwd = typeof input.cwd === 'string' && input.cwd !== '' ? input.cwd : root;
-  process.chdir(mode === 'bash' ? repositoryOf(input.tool_input?.command ?? '', cwd) : cwd);
+  process.chdir(hookDirectory(mode, input, path.resolve(import.meta.dirname, '..', '..')));
   if (mode === 'stop') {
     if (input.stop_hook_active === true) process.exit(0);
     const dirty = git('status', '--porcelain') !== '';

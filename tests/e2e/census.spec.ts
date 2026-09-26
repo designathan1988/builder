@@ -217,6 +217,10 @@ test('every working command is proven by a browser test, and no door looks usabl
 
   // a door drawn enabled has a built command behind it
   expect([...drawn].filter(([ref, enabled]) => enabled && !BUILT.has(commandOf(ref))).map(([ref]) => ref), 'enabled on screen without a built command').toEqual([]);
+  // and its feature is registered as built (the door rule: a menu item, a context-menu item or a toolbar button of a
+  // feature still to come is not usable, even when another feature built its command)
+  const featureOf = (ref: string) => COMMANDS.find((c) => c.id === commandOf(ref))?.entryPoints.find((d) => `${commandOf(ref)}#${d.id}` === ref)?.feature ?? '';
+  expect([...drawn].filter(([ref, enabled]) => enabled && !isFeatureBuilt(featureOf(ref) as FeatureId)).map(([ref]) => `${ref} (${featureOf(ref)})`), 'enabled on screen while its feature is not registered as built').toEqual([]);
   // a control that stands for a palette entry (an Insert tile) is drawn enabled only once the entry's feature is
   // registered as built: a tile of a feature still to come would insert a bare element (a "Hero" as an empty section)
   expect(

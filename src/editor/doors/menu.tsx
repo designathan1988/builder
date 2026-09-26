@@ -15,7 +15,7 @@ import { pressPoint } from '../input/pointer.ts';
 import { openContextMenu } from '../menus/context-menu.ts';
 import { useEditorState, useStore } from '../store.ts';
 import { useT } from '../text.ts';
-import { DoorControl, Icon, useDoor } from './door.tsx';
+import { DoorControl, Icon, useDoor, isDoorBuilt } from './door.tsx';
 import { GLYPHS, doorSlots, menuOf, slotsIn, type Anchor } from './placement.ts';
 
 // the backdrop under an open menu: the door the manifest places in the overlay region
@@ -171,7 +171,7 @@ function OpenContextMenu() {
   const store = useStore();
   const t = useT();
   const list = useRef<HTMLDivElement>(null);
-  const items = useMemo(() => CONTEXT_ITEMS.filter((entry) => store.canRun(entry.command.id, entry.door.args as never)), [store]);
+  const items = useMemo(() => CONTEXT_ITEMS.filter((entry) => isDoorBuilt(entry) && store.canRun(entry.command.id, entry.door.args as never)), [store]);
   const start = pressPoint() ?? { x: 0, y: 0 };
   // where the menu is drawn: at the pointer, then moved inside the window once its size is known (a layout measure)
   const [at, setAt] = useState({ left: start.x, top: start.y });

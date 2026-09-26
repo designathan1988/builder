@@ -1,6 +1,6 @@
 // The validation cycle's guard (tools/hooks/guard.ts): what it lets an agent do, and what it sends back.
 import { describe, expect, it } from 'vitest';
-import { bashVerdict, commandWords, pushesMain, repositoryOf, stopVerdict, type State } from './guard.ts';
+import { bashVerdict, commandWords, hookDirectory, pushesMain, repositoryOf, stopVerdict, type State } from './guard.ts';
 
 const at = '2026-09-25T00:00:00.000Z';
 const state = (over: Partial<State> = {}): State => ({ working: 'w', head: 'h', checked: 'w', e2e: { tree: 'h', passed: true, at }, verify: { tree: 'h', passed: true, at }, ...over });
@@ -10,6 +10,13 @@ describe('the end of a turn', () => {
     expect(stopVerdict(state({ checked: 'old' }), true, null)).toMatch(/npm run check/);
     // once per state of the working tree
     expect(stopVerdict(state({ checked: 'old' }), true, 'w')).toBeNull();
+  });
+  it('judges the worktree the agent works in, never the main folder', () => {
+    const root = 'C:/work/builder';
+    expect(hookDirectory('stop', { cwd: 'C:/work/builder/.cache/wt/integration' }, root)).toBe('C:/work/builder/.cache/wt/integration');
+    expect(hookDirectory('stop', { cwd: '/c/work/builder/.cache/wt/integration' }, root)).toBe('C:/work/builder/.cache/wt/integration');
+    expect(hookDirectory('stop', {}, root)).toBe(root);
+    expect(hookDirectory('bash', { cwd: root, tool_input: { command: 'git -C /c/work/builder/.cache/wt/x commit -m y' } }, root)).toBe('C:/work/builder/.cache/wt/x');
   });
   it('lets a validated or clean tree end the turn', () => {
     expect(stopVerdict(state(), true, null)).toBeNull();

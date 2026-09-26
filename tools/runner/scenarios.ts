@@ -99,6 +99,11 @@ const COMMANDS = fs
         }
       ).commands,
   );
+// The commands that replace the whole document, the only actions whose page and root ids are not compared (the user's
+// order of 2026-09-26): File › Open, File › New blank page, the recovery dialog's Restore (each loads a document:
+// outcome `load`), and Open folder, which replaces the project with a folder's files.
+const DOCUMENT_REPLACING: ReadonlySet<string> = new Set(['project.open', 'project.newBlankPage', 'project.restoreVersion', 'project.openFolder']);
+
 // a document with its pages' and their roots' ids left out, so a match does not compare them
 function withoutPageIds(document: unknown): unknown {
   const doc = document as { pages?: { id?: unknown; tree?: { id?: unknown } }[] };
@@ -1469,10 +1474,10 @@ export function registerScenarioTests(): void {
           // the document diff and the selection, through the test port
           const expected = applyDiff(fixture, s.expect.document);
           if ('error' in expected && expected.error) throw new Error(String(expected.error));
-          // An action whose command records no history and changes the document replaces it whole (File › Open): the
-          // page and its root come with the ids the opened project gives them, which the diff does not name (the user's
-          // decision, project-open-json), so they are not compared; everything else is.
-          const replacing = COMMANDS.find((c) => c.id === commandOf(door))?.history.undoable === false;
+          // An action that replaces the whole document (File › Open and the commands that do the same): the page and
+          // its root come with the ids the new project gives them, which the diff does not name (the user's decision),
+          // so they are not compared; for every other action, they are.
+          const replacing = DOCUMENT_REPLACING.has(commandOf(door));
           const compared = replacing ? withoutPageIds((expected as { document: unknown }).document) : (expected as { document: unknown }).document;
           expect(matchDocument(after.document, compared), 'document').toEqual([]);
           expect(after.selection, 'selection').toEqual(s.expect.selection.map((p) => idOf(after.document, p)));
