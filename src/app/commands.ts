@@ -89,7 +89,7 @@ import { setOffset } from '../editor/quick-panel/quick-panel.ts';
 import { setEditMode } from '../editor/canvas/edit-mode.ts';
 import { stepHandle } from '../editor/canvas/handles.ts';
 import { setActiveTab, setWorkbenchState } from '../editor/workspace/layout.ts';
-import { collapseDocks, setPanelOpen, toggleInspector, toggleLeftDock } from '../editor/workspace/panels.ts';
+import { collapseDocks, setPanelOpen, toggleDeveloperTools, toggleInspector, toggleLeftDock } from '../editor/workspace/panels.ts';
 
 // the hand's commands, for the editor state that holds the hand
 const HAND = handCommands<EditorUi>();
@@ -297,7 +297,7 @@ export const COMMANDS = {
   'workspace.toggleLeftDock': toggleLeftDock,
   'workspace.toggleInspector': toggleInspector,
   'workspace.collapseDocks': collapseDocks,
-  'workspace.toggleDeveloperTools': NOT_AVAILABLE_YET,
+  'workspace.toggleDeveloperTools': toggleDeveloperTools,
   'workspace.reset': NOT_AVAILABLE_YET,
   'workspace.setWorkbenchState': setWorkbenchState,
   'workspace.setActiveTab': setActiveTab,

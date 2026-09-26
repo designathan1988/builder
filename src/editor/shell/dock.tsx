@@ -1,5 +1,6 @@
 // The bottom dock (DESIGN.md "Dock and status bar"): its strip with a tab for each open dock panel (the tab-strip
 // component, the panel's icon from layout.json panels), show or hide, maximize, close the tab; its body when open.
+import { useMemo } from 'react';
 import { DoorControl, Icon } from '../doors/door.tsx';
 import { doorSlots } from '../doors/placement.ts';
 import { useEditorState } from '../store.ts';
@@ -22,10 +23,22 @@ function Timeline() {
   );
 }
 
+// The Document tab of Developer tools (spec workbench-panel, Problems in Pager 2): the document as it is now, as JSON,
+// read-only, drawn again after every command that changes it.
+function DocumentJson() {
+  const t = useT();
+  const document = useEditorState((s) => s.document);
+  const text = useMemo(() => JSON.stringify(document, null, 2), [document]);
+  return (
+    <pre className="dock-document" tabIndex={0} aria-readonly="true" aria-label={t(panelName('document'))}>
+      {text}
+    </pre>
+  );
+}
+
 // The body of each dock tab the editor draws; a tab without one says "not available yet" and the doors that only open
-// it are not available yet (bodies.ts). Checks (no check exists yet), Keyboard shortcuts and Document arrive with
-// their features.
-export const DOCK_TABS: BodyTable = { timeline: Timeline };
+// it are not available yet (bodies.ts). Checks (no check exists yet) and Keyboard shortcuts arrive with their features.
+export const DOCK_TABS: BodyTable = { timeline: Timeline, document: DocumentJson };
 
 // the tab's panel, named after its tab
 function DockBody({ tab }: { readonly tab: Panel }) {

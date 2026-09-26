@@ -134,6 +134,23 @@ export const toggleInspector = registerHandler<'workspace.toggleInspector', Edit
   return { kind: 'change', ui: withInspector(state.ui, open), message: message(open ? 'status.inspector.shown' : 'status.inspector.hidden') };
 });
 
+// Developer tools (spec workbench-panel, Problems in Pager 2): a preference that gives the dock its Document tab, where
+// the live document shows read-only (dock.tsx); turned on it shows the tab, turned off the tab goes. The editor starts
+// with the tab while the stored preference is on.
+const DOCUMENT_TAB: Panel = 'document';
+export const panelsFor = (developerTools: boolean): PanelsState =>
+  developerTools && !INITIAL_PANELS.dockTabs.includes(DOCUMENT_TAB) ? { ...INITIAL_PANELS, dockTabs: [...INITIAL_PANELS.dockTabs, DOCUMENT_TAB] } : INITIAL_PANELS;
+
+export const toggleDeveloperTools = registerHandler<'workspace.toggleDeveloperTools', EditorUi>(
+  'workspace.toggleDeveloperTools',
+  ({ state }) => {
+    const on = state.ui.preferences.developerTools !== true;
+    const preferences = { ...state.ui.preferences, developerTools: on ? (true as const) : undefined };
+    return { kind: 'change', ui: withPanel({ ...state.ui, preferences }, DOCUMENT_TAB, on), message: panelMessage(DOCUMENT_TAB, on) };
+  },
+  (state) => state.ui.preferences.developerTools === true,
+);
+
 // Ctrl+\: collapses every dock; the second press puts back exactly what was open (spec dock-toggles).
 export const collapseDocks = registerHandler<'workspace.collapseDocks', EditorUi>('workspace.collapseDocks', ({ state }) => {
   const { ui } = state;

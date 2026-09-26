@@ -988,7 +988,7 @@
     {
       "kind": "handler",
       "id": "workspace.toggleDeveloperTools",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",

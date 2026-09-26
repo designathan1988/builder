@@ -14,7 +14,7 @@ import { INITIAL_LAYERS, type LayersState } from './layers/tree.ts';
 import { INITIAL_CONTEXT_MENU, type ContextMenuState } from './menus/context-menu.ts';
 import { INITIAL_OVERLAYS, type OverlaysState } from './menus/overlays.ts';
 import { INITIAL_LAYOUT, type LayoutState } from './workspace/layout.ts';
-import { INITIAL_PANELS, type PanelsState } from './workspace/panels.ts';
+import { panelsFor, type PanelsState } from './workspace/panels.ts';
 import { INITIAL_CAMERA, type CameraState } from './view/camera.ts';
 import type { ColorPickerClosed, ColorPickerState } from './inspector/color-picker.ts';
 import type { Preferences } from './preferences/preferences.ts';
@@ -60,7 +60,7 @@ export interface EditorUi {
 
 export function initialEditorUi(preferences: Preferences): EditorUi {
   return {
-    panels: INITIAL_PANELS,
+    panels: panelsFor(preferences.developerTools === true),
     layout: INITIAL_LAYOUT,
     preferences,
     focus: INITIAL_FOCUS,

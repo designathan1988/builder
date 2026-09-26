@@ -2416,9 +2416,22 @@ kbd {
   color: var(--color-text-subtle);
 }
 
-/* a dock tab drawn from a region of the manifest: its doors in a row that wraps, as the body lays them out */
+/* the Document tab: the live document JSON, read-only, the body's whole width */
+.dock-document {
+  flex: 1 0 100%;
+  margin: 0;
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-body) var(--font-mono);
+  color: var(--color-text);
+  white-space: pre;
+}
+
+/* a dock tab drawn from a region of the manifest: its doors in a row that wraps, the body's whole width */
 .dock-region {
-  display: contents;
+  display: flex;
+  flex: 1 0 100%;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: var(--space-2);
 }
 
 /* a sidebar view the editor draws no body for says so under its title */

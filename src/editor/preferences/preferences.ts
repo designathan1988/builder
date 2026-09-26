@@ -81,6 +81,9 @@ export interface Preferences {
   // the last colours the colour picker applied, the newest first, at most RECENT_COLOURS (colorPicker.apply;
   // src/editor/inspector/color-picker.ts); absent while none
   readonly recentColors?: readonly string[] | undefined;
+  // Developer tools on (workspace.toggleDeveloperTools; src/editor/workspace/panels.ts): the dock has its Document tab;
+  // absent while off
+  readonly developerTools?: true | undefined;
 }
 
 export const RECENT_COLOURS = 10;
@@ -162,6 +165,7 @@ export function loadPreferences(storage: PreferenceStorage): Preferences {
       ...(stored.inspectorMode === 'essentials' ? { inspectorMode: 'essentials' as const } : {}),
       ...(offsets !== undefined ? { quickPanelOffsets: offsets } : {}),
       ...(recent.length > 0 ? { recentColors: recent } : {}),
+      ...(stored.developerTools === true ? { developerTools: true as const } : {}),
     };
   } catch {
     return INITIAL_PREFERENCES;

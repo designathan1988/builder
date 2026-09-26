@@ -158,7 +158,7 @@ export const FEATURES = {
   'command-bar': NOT_AVAILABLE_YET,
   'command-bar-set-property': NOT_AVAILABLE_YET,
   'shortcuts-panel': NOT_AVAILABLE_YET,
-  'workbench-panel': NOT_AVAILABLE_YET,
+  'workbench-panel': registerFeature('workbench-panel'),
   'panel-resize': NOT_AVAILABLE_YET,
   'floating-panels': NOT_AVAILABLE_YET,
   'panel-combine-tabs': NOT_AVAILABLE_YET,

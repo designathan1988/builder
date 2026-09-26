@@ -10,7 +10,7 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 - Groups 01-12 pass with teeth (docs/history.md) but: multi-select-actions (needs keyboard-panel-navigation and
   panel-resize), inspector-property-search (43), nesting-grammar-structure (36), layers-row-colours (no label colour
   tokens), hover-measure (46). Not built: Alt+drag duplicates, a line outside the stage refused.
-- Last check (12): 1333 passed, 9 failed = findings since decided + hysteresis (12). Next: finding 12, group 13.
+- Last check (12): 1333 passed, 9 failed (findings since decided). Group 13: dock-toggles, workbench-panel built.
 
 ## Decisions (small ambiguities and the user's corrections)
 
@@ -23,8 +23,7 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
   quick-panel scenario. Scenarios name no vendor-prefixed property (spec tests prove a recipe's).
 - Export stylesheet: a blank line parts every rule, the :root and class blocks too. A class target returns to Element
   on a new selection; a field of a kind (list, table, form, media) shows only while every selected element is of it.
-- Dialogs, snap targets, smart guides, corrected-before-commit scenarios: docs/history.md (2026-09-26 decisions).
-  The panel header's Close is drawn in each sidebar view's title; the inspector closes by Ctrl+Alt+B and View.
+- Panel header Close: in each sidebar view's title (the inspector: Ctrl+Alt+B, View). More: docs/history.md.
 
 ## Decided findings (the user's order of 2026-09-26: decide, record why, tooth for each changed test)
 
@@ -41,8 +40,7 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 
 ## Open findings
 
-1. A node path cannot name a page itself nor tell apart two siblings with the same name.
-5. canvas.tsx RULER_STEP = 200 is a constant in code. 6. panels.spec.ts, doors.spec.ts run doors without `runs()`.
+1. A node path names no page nor two same-named siblings. 5. canvas.tsx RULER_STEP = 200 is a constant in code. 6. panels.spec.ts, doors.spec.ts run doors without `runs()`.
 9. inspector-fields.spec.ts: wrong `drawnAs` data passes. 11. Renderer: textarea/option line break becomes `<br>`.
 12. Flaky under load: coordinates:181, a 'stable' File menu. (Hysteresis fixed: a handle's dot took presses inside.)
 15. shell.tsx keeps the fit zoom in useState. 14. sidebar.tsx writes the argument name "target" and builds data-args.
@@ -57,5 +55,6 @@ folds survive File › Open. 22. Walking onto an off-screen element does not scr
 35. Tool audit (awaiting OK): the tooth proof also switches off a scenario's action doors' commands.
 42. Quick panel: no F6 in nor Escape out (no door); its chip and fields are Tab stops. 43. property-search: no door.
 46. hover-measure: no door or region, so no scenario; built, proven by its spec test, not registered (census).
-48. Enter and Space on a toolbar button (top bar, canvas toolbar) do nothing: the toolbar key context binds them to
-    focus.activate of keyboard-panel-navigation (group 14, not built). Fixed when group 14 is built.
+48. Enter/Space on a toolbar button do nothing until keyboard-panel-navigation (group 14) binds focus.activate.
+50. workbench-panel a-second-strip-toggle-folds-it-to-its-strip: no tooth in e2e:tooth (it ends in the start state);
+    its fold proven by a targeted tooth (the toggle only opens: tooth-fold-off log fails).
