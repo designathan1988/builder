@@ -52,10 +52,13 @@ export interface Codec {
   read(text: string, facts: ValueFacts): Value | null;
   // the CSS text of a value
   write(value: Value): string;
+  // a composite's: the shorthand text of the longhand values it stores, in its longhands' order, as a person writes it
+  // (a border as "2px solid #00aa00", never its twelve longhands); null when they are no one shorthand value
+  compose?(values: readonly string[]): string | null;
 }
 
 export function registerCodec(id: CodecId, codec: Omit<Codec, 'id'>): Codec {
-  return Object.freeze({ id, read: codec.read, write: codec.write });
+  return Object.freeze({ id, read: codec.read, write: codec.write, ...(codec.compose ? { compose: codec.compose } : {}) });
 }
 
 // The unit a bare number takes in a field that holds no length yet (Pager's number fields: px).
@@ -445,8 +448,17 @@ function fourValues(text: string, facts: ValueFacts): Value | null {
   const [a = '', b = a, c = a, d = b] = words as string[];
   return { kind: 'longhands', values: [a, b, c, d], text: words.join(' ') };
 }
-export const boxSides = registerCodec('box-sides', { read: fourValues, write: (value) => (value.kind === 'longhands' ? value.text : '') });
-export const boxCorners = registerCodec('box-corners', { read: fourValues, write: (value) => (value.kind === 'longhands' ? value.text : '') });
+// Four sides' or corners' values as CSS writes them shortest: one for all, two for the opposite pairs, three with the
+// last pair sharing the second.
+function composeFour(values: readonly string[]): string | null {
+  const [a, b, c, d] = values;
+  if (values.length !== 4 || a === undefined || b === undefined || c === undefined || d === undefined || values.some((v) => v === '')) return null;
+  if (d !== b) return `${a} ${b} ${c} ${d}`;
+  if (c !== a) return `${a} ${b} ${c}`;
+  return b === a ? a : `${a} ${b}`;
+}
+export const boxSides = registerCodec('box-sides', { read: fourValues, write: (value) => (value.kind === 'longhands' ? value.text : ''), compose: composeFour });
+export const boxCorners = registerCodec('box-corners', { read: fourValues, write: (value) => (value.kind === 'longhands' ? value.text : ''), compose: composeFour });
 
 // A border side (or an outline): its width, style and colour in any order, each at most once, any of them left out
 // (spec props-border-outline). A word is the style when the style longhand offers it, the width when the width
@@ -463,12 +475,21 @@ function sideParts(text: string, facts: ValueFacts, [widths = [], styles = []]: 
   }
   return parts;
 }
+// A side's width, style and colour as one value, the ones it holds in that order; a side with no style (none, hidden)
+// draws no line, and reads none.
+const NO_LINE: readonly string[] = ['none', 'hidden'];
+function composeSide(width: string, style: string, colour: string): string | null {
+  if (NO_LINE.includes(style)) return style;
+  const text = [width, style, colour].filter((part) => part !== '').join(' ');
+  return text === '' ? null : text;
+}
 export const borderSide = registerCodec('border-side', {
   read(text, facts) {
     const parts = sideParts(text, facts, facts.axes ?? []);
     return parts === null ? null : { kind: 'longhands', values: parts, text: valueWords(text).join(' ') };
   },
   write: (value) => (value.kind === 'longhands' ? value.text : ''),
+  compose: ([width = '', style = '', colour = '']) => composeSide(width, style, colour),
 });
 // Every side's border at once: the same width, style and colour for the four sides (longhands: the four widths, the
 // four styles, the four colours).
@@ -481,6 +502,12 @@ export const border = registerCodec('border', {
     return { kind: 'longhands', values: [w, w, w, w, s, s, s, s, c, c, c, c], text: valueWords(text).join(' ') };
   },
   write: (value) => (value.kind === 'longhands' ? value.text : ''),
+  // one value for the four sides only while the sides hold the same width, style and colour
+  compose(values) {
+    const same = (from: number) => (new Set(values.slice(from, from + 4)).size === 1 ? (values[from] ?? '') : null);
+    const [width, style, colour] = [same(0), same(4), same(8)];
+    return values.length !== 12 || width === null || style === null || colour === null ? null : composeSide(width, style, colour);
+  },
 });
 
 // A whole number (z-index, order) or a keyword the property offers (auto).

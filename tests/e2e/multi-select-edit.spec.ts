@@ -34,8 +34,11 @@ test('several selected elements show Mixed where their values differ, and the va
   await control(page, ROW, { args: { target: 'n-intro' } }).click();
   await type(page, COLOR, '#ff0000');
   await expect(input(page, COLOR)).toHaveValue('#ff0000');
+  // one element holding no size of its own: an empty field, the size it has as the placeholder (the user's real-use
+  // audit, item 1.1: a field shows the document's value; spec inspector-provenance-reset, Problems in Pager 4)
   await control(page, ROW, { args: { target: 'n-title' } }).click();
-  await expect(input(page, FONT_SIZE)).not.toHaveValue('');
+  await expect(input(page, FONT_SIZE)).toHaveValue('');
+  await expect(input(page, FONT_SIZE)).toHaveAttribute('placeholder', '32px');
   // Title (an h1) and Intro (a red paragraph): different sizes, colours and weights
   await control(page, ROW, { args: { target: 'n-intro' } }).click({ modifiers: ['Shift'] });
   await expect.poll(async () => (await page.evaluate(() => (window as unknown as { __builderTestPort: { selection: () => string[] } }).__builderTestPort.selection())).length).toBe(2);

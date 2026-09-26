@@ -24,13 +24,13 @@ import { styleSource } from '../inspector/style-target.ts';
 import { FORMAT_CHANNELS, alphaBackground, areaBackground, channelText, formatColor, hsbToRgb, hueBackground, inSrgbGamut, parseColor, parseSrgb, rgbToHsb, type Hsba, type Rgba } from '../../core/style/color.ts';
 import { CHANNEL_LABELS, recentColours } from '../inspector/color-picker.ts';
 import { swatchesOf } from '../../core/design/colors.ts';
-import { storedValue } from '../../core/style/set.ts';
+import { lineStyles, storedValue } from '../../core/style/set.ts';
 import type { DoorEntry } from '../../manifest/runtime.ts';
 import { Icon, useDoor } from '../doors/door.tsx';
 import { doorSlots } from '../doors/placement.ts';
 import { computedValues } from '../canvas/coordinates.ts';
 import { dispatchInSession } from '../input/pointer.ts';
-import { layeredRules, useEditorState } from '../store.ts';
+import { MODEL_RULES, layeredRules, useEditorState } from '../store.ts';
 import { useT } from '../text.ts';
 import { COLOR_SWATCH, usePageValues } from './field.tsx';
 
@@ -272,7 +272,7 @@ function Picker({ property, previous }: { readonly property: string; readonly pr
   const hue = hsb.s > 0 && hsb.v > 0 ? Math.round(hsb.h) : chosenHue;
   // the colour the picker opened with: the element's own, else the one the page shows as it opens (read then, before
   // any part writes)
-  const [opened, setOpened] = useState(() => (previous !== '' ? previous : primary === null ? '' : (computedValues(primary, properties)?.[property] ?? current)));
+  const [opened, setOpened] = useState(() => (previous !== '' ? previous : primary === null ? '' : (computedValues(primary, properties, lineStyles(MODEL_RULES))?.[property] ?? current)));
   if (opened === '' && current !== '') setOpened(current);
   const popover = useAnchor(property);
   useModal(popover);

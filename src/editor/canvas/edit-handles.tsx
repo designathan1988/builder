@@ -34,6 +34,7 @@ import { canvasFrame, computedValues, flowAxis, nodeBox } from './coordinates.ts
 import { editMode, handlesOf, type EditMode } from './edit-mode.ts';
 import { handleArgs, movesOffset, shadowLength, shadowOf, valueArg } from './handles.ts';
 import { MODEL_RULES } from '../store.ts';
+import { lineStyles } from '../../core/style/set.ts';
 
 interface Box {
   readonly x: number;
@@ -70,7 +71,7 @@ function useComputed(node: NodeId | null, properties: readonly string[]): Readon
     let request = 0;
     let last = '';
     const measure = () => {
-      const values = computedValues(node, properties);
+      const values = computedValues(node, properties, lineStyles(MODEL_RULES));
       const text = JSON.stringify(values);
       if (text !== last) {
         last = text;

@@ -139,6 +139,28 @@ export function shownText(node: DocNode, property: string, rules: ModelRules): s
   return typeof shown === 'string' ? shown : undefined;
 }
 
+// The width of each line (a border side, the outline, the column rule) and its style: an edited property named
+// <line>-width whose <line>-style is edited too. A line's width computes to 0px while its style is none (spec
+// inspector-provenance-reset, Problems in Pager 4; the canvas reads it so: src/editor/canvas/coordinates.ts).
+const LINES = new WeakMap<ModelRules, ReadonlyMap<string, string>>();
+export function lineStyles(rules: ModelRules): ReadonlyMap<string, string> {
+  const known = LINES.get(rules);
+  if (known !== undefined) return known;
+  const WIDTH = '-width';
+  const map = new Map([...rules.propertyFacts.keys()].flatMap((p) => (p.endsWith(WIDTH) && rules.propertyFacts.has(`${p.slice(0, -WIDTH.length)}-style`) ? [[p, `${p.slice(0, -WIDTH.length)}-style`] as const] : [])));
+  LINES.set(rules, map);
+  return map;
+}
+
+// The text a field shows for a property or a composite from the values of its longhands, in order (spec
+// inspector-provenance-reset, Problems in Pager 4): the composite's shorthand as written (its codec's compose), else
+// the one value they share, else them in order.
+export function composedText(property: string, values: readonly string[], rules: ModelRules): string {
+  const composed = codecFor(property, rules)?.compose?.(values);
+  if (composed !== null && composed !== undefined) return composed;
+  return new Set(values).size === 1 ? (values[0] ?? '') : values.join(' ');
+}
+
 // A value read for a property, and the CSS text it is written as.
 export interface ReadValue {
   readonly value: Value;

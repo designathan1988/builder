@@ -310,12 +310,24 @@ export function contentBoxes(iframe: HTMLIFrameElement): { x: number; y: number;
 // node's own styles, the browser's defaults); null when the canvas draws no element of the node. The inspector's
 // collapsed sections summarise them (src/editor/inspector/sections.ts). A name the browser computes no property of (a
 // recipe's own id, such as line-clamp, whose declarations are prefixed ones) reads as nothing: the typed object model
-// throws on it.
-export function computedValues(id: string, properties: readonly string[]): Readonly<Record<string, string>> | null {
+// throws on it. A line's width (a border side's, the outline's, the column rule's, with its style: `lines`,
+// core/style/set.ts lineStyles) is the exception (spec inspector-provenance-reset, Problems in
+// Pager 4): Chrome's typed value keeps `medium` under a style of none and follows the canvas zoom, so it computes to
+// 0px under none or hidden (CSS Backgrounds 3) and is read as getComputedStyle gives it otherwise.
+const NO_LINE: readonly string[] = ['none', 'hidden'];
+export function computedValues(id: string, properties: readonly string[], lines: ReadonlyMap<string, string>): Readonly<Record<string, string>> | null {
   const element = current?.contentDocument?.querySelector(nodeSelector(id as NodeId));
   if (!element) return null;
   const map = element.computedStyleMap();
-  return Object.fromEntries(properties.map((property) => [property, CSS.supports(property, 'initial') ? (map.get(property)?.toString() ?? '') : '']));
+  const typed = (property: string): string => (CSS.supports(property, 'initial') ? (map.get(property)?.toString() ?? '') : '');
+  return Object.fromEntries(
+    properties.map((property) => {
+      const style = lines.get(property);
+      if (style === undefined) return [property, typed(property)];
+      if (NO_LINE.includes(typed(style))) return [property, '0px'];
+      return [property, element.ownerDocument.defaultView?.getComputedStyle(element).getPropertyValue(property) ?? typed(property)];
+    }),
+  );
 }
 
 // The canvas's iframe, for the pointer owner and the canvas overlays.

@@ -22,7 +22,7 @@ import type { DispatchResult } from '../../core/store/store.ts';
 import { locate, type NodeId } from '../../core/document/model.ts';
 import { DEFAULT_UNIT, codecOf } from '../../core/style/codecs.ts';
 import { borderArgs } from '../../core/style/border.ts';
-import { storedLayers, storedValue } from '../../core/style/set.ts';
+import { composedText, lineStyles, shownText, storedLayers, storedValue } from '../../core/style/set.ts';
 import type { CommandId, KeyContextId, StyleTargetId } from '../../generated/ids.ts';
 import { GENERATED_VALUES } from '../../generated/value-lists.ts';
 import { manifest, type DoorEntry } from '../../manifest/runtime.ts';
@@ -62,7 +62,7 @@ export function usePageValues(node: NodeId | null, properties: readonly string[]
     let request = 0;
     let last: string | null = null;
     const measure = () => {
-      const values = computedValues(node, properties);
+      const values = computedValues(node, properties, lineStyles(MODEL_RULES));
       const text = JSON.stringify(values);
       if (text !== last) {
         last = text;
@@ -74,6 +74,24 @@ export function usePageValues(node: NodeId | null, properties: readonly string[]
     return () => cancelAnimationFrame(request);
   }, [node, properties]);
   return read !== null && read.node === node ? read.values : null;
+}
+
+// The effective value a field's placeholder shows while the element holds none of its own at the edited target,
+// breakpoint and state (spec inspector-provenance-reset, Problems in Pager 4): the value the document gives it along
+// the cascade (another breakpoint or state), else what the page computes (inherited or the default), composed as a
+// value is (composedText). Nothing while the element holds its own.
+export function useEffectiveText(property: string, parts: readonly string[], own: boolean): string {
+  const primary = useEditorState((s) => s.selection[0] ?? null);
+  const cascaded = useEditorState((s) => {
+    const node = own ? null : styleSource(s);
+    if (!node) return undefined;
+    const values = parts.map((p) => shownText(node, p, layeredRules(s.ui)));
+    return values.every((v) => v === undefined) ? undefined : composedText(property, values.map((v) => v ?? ''), MODEL_RULES);
+  });
+  const computed = usePageValues(own || cascaded !== undefined ? null : primary, parts);
+  if (own) return '';
+  if (cascaded !== undefined) return cascaded;
+  return computed === null ? '' : composedText(property, parts.map((p) => computed[p] ?? ''), MODEL_RULES);
 }
 
 // Whether the selected elements show different values of these properties (spec multi-select-edit, Problems in Pager
@@ -100,7 +118,7 @@ export function useMixed(properties: readonly string[]): boolean {
     let request = 0;
     let last: string | null = null;
     const measure = () => {
-      const text = JSON.stringify(selection.map((id) => computedValues(id, properties)));
+      const text = JSON.stringify(selection.map((id) => computedValues(id, properties, lineStyles(MODEL_RULES))));
       if (text !== last) {
         last = text;
         setRead({ selection, text });
@@ -150,7 +168,7 @@ function StepButton({ entry, property, shown, input, ready }: { readonly entry: 
     if (!door.available) return;
     const held = modifierOf(event);
     const modifier = held !== null && entry.command.args.modifier?.values.includes(held) === true ? { modifier: held } : {};
-    (store.dispatch as Dispatch)(entry.command.id, { ...entry.door.args, property, value: input.current?.value ?? shown, ...modifier });
+    (store.dispatch as Dispatch)(entry.command.id, { ...entry.door.args, property, value: input.current?.value || shown, ...modifier });
   };
   return (
     <button
@@ -184,7 +202,7 @@ function UnitMenu({ entry, property, shown, input, ready }: { readonly entry: Do
   }, [open]);
   const choose = (unit: string) => {
     setOpenedAt(null);
-    (store.dispatch as Dispatch)(entry.command.id, { ...entry.door.args, property, value: input.current?.value ?? shown, unit });
+    (store.dispatch as Dispatch)(entry.command.id, { ...entry.door.args, property, value: input.current?.value || shown, unit });
     input.current?.focus();
   };
   return (
@@ -281,10 +299,13 @@ export function NumberField({ entry, door, property, label }: NumberFieldProps) 
     return node ? storedValue(node, property, layeredRules(s.ui)) : undefined;
   });
   const properties = useMemo(() => [property], [property]);
-  const computed = usePageValues(stored === undefined ? primary : null, properties)?.[property];
+  const effective = useEffectiveText(property, properties, stored !== undefined);
   // several elements with different values: no value, and Mixed as the field's placeholder (spec multi-select-edit)
   const mixed = useMixed(properties);
-  const shown = mixed ? '' : (stored ?? computed ?? '');
+  // the document's value, else nothing: the effective value is the placeholder (spec inspector-provenance-reset, P4)
+  const shown = mixed ? '' : (stored ?? '');
+  // what a step, the scrub and the unit menu start from: the value, else the effective one
+  const base = mixed ? '' : (stored ?? effective);
   const t = useT();
   // the project's variables the field offers (a length field: the length variables)
   const tokens = useTokenSuggestions(property);
@@ -324,12 +345,12 @@ export function NumberField({ entry, door, property, label }: NumberFieldProps) 
     };
   }, [store, command, property]);
   useRevealed(property, input);
-  const scrub = SCRUB === null ? null : <ScrubLabel entry={SCRUB} property={property} shown={shown} label={label} ready={available} />;
+  const scrub = SCRUB === null ? null : <ScrubLabel entry={SCRUB} property={property} shown={base} label={label} ready={available} />;
   return (
     <div className={`field-row${available ? '' : ' is-unavailable'}${stored !== undefined ? ' is-set' : ''}`} data-door={entry.ref} data-args={JSON.stringify({ property })} data-number-field title={door.title}>
       {scrub ?? <span className="field-row__label">{label}</span>}
       <span className="input-wrap input-wrap--number">
-        <input ref={input} className="input" disabled={!available} aria-label={label} inputMode="decimal" spellCheck={false} data-key-context={NUMBER_FIELD_CONTEXT} placeholder={mixed ? t('inspector.mixedValue') : undefined} list={tokens.length > 0 ? listId : undefined} />
+        <input ref={input} className="input" disabled={!available} aria-label={label} inputMode="decimal" spellCheck={false} data-key-context={NUMBER_FIELD_CONTEXT} placeholder={mixed ? t('inspector.mixedValue') : effective || undefined} list={tokens.length > 0 ? listId : undefined} />
         {tokens.length > 0 ? (
           <datalist id={listId}>
             {tokens.map((value) => (
@@ -338,8 +359,8 @@ export function NumberField({ entry, door, property, label }: NumberFieldProps) 
           </datalist>
         ) : null}
         {PARTS.map((part) => {
-          if (part.door.kind === 'panel-control' && part.door.control === 'unit-menu') return <UnitMenu key={part.ref} entry={part} property={property} shown={shown} input={input} ready={available} />;
-          if ('value' in part.command.args) return <StepButton key={part.ref} entry={part} property={property} shown={shown} input={input} ready={available} />;
+          if (part.door.kind === 'panel-control' && part.door.control === 'unit-menu') return <UnitMenu key={part.ref} entry={part} property={property} shown={base} input={input} ready={available} />;
+          if ('value' in part.command.args) return <StepButton key={part.ref} entry={part} property={property} shown={base} input={input} ready={available} />;
           // Reset this value: usable while the element holds a value of its own (spec inspector-provenance-reset)
           return <DoorControl key={part.ref} entry={part} args={{ property }} ready={available && (part !== RESET || stored !== undefined)} tabbable={part !== RESET || (available && stored !== undefined)} />;
         })}
@@ -391,11 +412,10 @@ export function TextStyleField({
     const node = styleSource(s);
     if (!node) return undefined;
     const values = parts.map((p) => storedValue(node, p, layeredRules(s.ui)));
-    if (values.some((v) => v === undefined)) return values.every((v) => v === undefined) ? undefined : values.map((v) => v ?? '').join(' ').trim();
-    return new Set(values).size === 1 ? values[0] : values.join(' ');
+    if (values.every((v) => v === undefined)) return undefined;
+    return composedText(property, values.map((v) => v ?? ''), MODEL_RULES);
   });
-  const computed = usePageValues(storedText === undefined ? primary : null, parts);
-  const computedText = computed === null ? undefined : new Set(parts.map((p) => computed[p])).size === 1 ? computed[parts[0] ?? ''] : parts.map((p) => computed[p] ?? '').join(' ');
+  const effective = useEffectiveText(property, parts, storedText !== undefined);
   const held = useEditorState((s) => {
     const node = styleSource(s);
     return node ? storedValue(node, property, layeredRules(s.ui)) : undefined;
@@ -408,7 +428,9 @@ export function TextStyleField({
   // several elements with different values: no value, and Mixed as the field's placeholder (spec multi-select-edit)
   const mixed = useMixed(parts);
   const t = useT();
-  const shown = mixed ? '' : part !== null ? part.show(held) : (storedText ?? computedText ?? '');
+  // the document's value, else nothing: the effective value is the placeholder (spec inspector-provenance-reset, P4)
+  const shown = mixed ? '' : part !== null ? part.show(held) : (storedText ?? '');
+  const placeholder = mixed ? t('inspector.mixedValue') : part === null && effective !== '' ? effective : undefined;
   // the element holds a value of its own for what the field edits (the row shows it; Reset this value takes it away)
   const set = part !== null ? held !== undefined || storedLayersOf !== 0 : storedText !== undefined || storedLayersOf !== 0;
   const said = useEditorState((s) => s.message);
@@ -482,15 +504,15 @@ export function TextStyleField({
       <span className="input-wrap">
         {colour && COLOR_SWATCH !== undefined ? (
           <DoorControl entry={COLOR_SWATCH} args={{ property }} ready={available} className="field__swatch">
-            <span className="swatch" style={{ '--swatch-colour': shown } as CSSProperties} />
+            <span className="swatch" style={{ '--swatch-colour': shown || effective } as CSSProperties} />
           </DoorControl>
         ) : null}
         {own ? (
           <form className="input-wrap__form" onSubmit={submit}>
-            <input ref={input} className="input" disabled={!available} aria-label={label} spellCheck={false} placeholder={mixed ? t('inspector.mixedValue') : undefined} />
+            <input ref={input} className="input" disabled={!available} aria-label={label} spellCheck={false} placeholder={placeholder} />
           </form>
         ) : (
-          <input ref={input} className="input" disabled={!available} aria-label={label} spellCheck={false} list={suggestions.length > 0 ? listId : undefined} data-key-context={NUMBER_FIELD_CONTEXT} placeholder={mixed ? t('inspector.mixedValue') : undefined} />
+          <input ref={input} className="input" disabled={!available} aria-label={label} spellCheck={false} list={suggestions.length > 0 ? listId : undefined} data-key-context={NUMBER_FIELD_CONTEXT} placeholder={placeholder} />
         )}
         {suggestions.length > 0 ? (
           <datalist id={listId}>
@@ -516,10 +538,13 @@ export function KeywordButtons({ entry, door, property, values, icons, label }: 
     return node ? storedValue(node, property, layeredRules(s.ui)) : undefined;
   });
   const properties = useMemo(() => [property], [property]);
-  const computed = usePageValues(stored === undefined ? primary : null, properties)?.[property];
+  const effective = useEffectiveText(property, properties, stored !== undefined);
   // several elements with different values: no button pressed (spec multi-select-edit)
   const mixed = useMixed(properties);
-  const shown = mixed ? '' : (stored ?? computed ?? '');
+  // pressed: the document's value; the effective one, while the element holds none, is marked muted (spec
+  // inspector-provenance-reset, Problems in Pager 4)
+  const shown = mixed ? '' : (stored ?? '');
+  const muted = mixed || stored !== undefined ? '' : effective;
   const available = door.available && primary !== null;
   const command = entry.command.id;
   // the argument the value goes in: style.set's value, position.setMode's mode
@@ -536,7 +561,7 @@ export function KeywordButtons({ entry, door, property, values, icons, label }: 
             <button
               key={value}
               type="button"
-              className={`door door--segment${available ? '' : ' is-unavailable'}${shown === value ? ' is-current' : ''}`}
+              className={`door door--segment${available ? '' : ' is-unavailable'}${shown === value ? ' is-current' : ''}${muted === value ? ' is-default' : ''}`}
               aria-disabled={available ? undefined : true}
               aria-pressed={shown === value}
               title={value}

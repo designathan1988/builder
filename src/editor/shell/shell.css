@@ -227,6 +227,18 @@ kbd {
   font-weight: var(--weight-semibold);
 }
 
+/* the effective keyword while the element holds none of its own (inherited or the default): muted, not pressed */
+.segmented .door.is-default {
+  outline: 1px dashed var(--color-origin-default);
+  outline-offset: -1px;
+}
+
+/* a field with no value of its own shows the effective value as its placeholder, in the Default origin colour */
+.input::placeholder,
+.box__input::placeholder {
+  color: var(--color-origin-default);
+}
+
 .search {
   width: 100%;
   height: var(--size-control-lg);

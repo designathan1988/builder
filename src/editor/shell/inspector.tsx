@@ -38,7 +38,7 @@ import { isPanelOpen, panelName } from '../workspace/panels.ts';
 import { useLocale, useT } from '../text.ts';
 import { activeBreakpoint, BREAKPOINTS } from '../view/breakpoints.ts';
 import { activeState, STATES } from '../view/style-state.ts';
-import { KeywordButtons, NumberField, TextStyleField, presetsOf, usePageValues, type FieldPart } from './field.tsx';
+import { KeywordButtons, NumberField, TextStyleField, presetsOf, useEffectiveText, usePageValues, type FieldPart } from './field.tsx';
 import { storedValue, shownValue } from '../../core/style/set.ts';
 import { kindsOf, shownForKinds } from '../../core/style/applies.ts';
 import { withTrackAdded } from '../../core/style/tracks.ts';
@@ -271,9 +271,11 @@ function SpacingField({ entry, box, sides, properties, where, label }: { readonl
     const values = properties.map((p) => storedValue(node, p, layeredRules(st.ui)));
     return values.some((v) => v === undefined) ? undefined : new Set(values).size === 1 ? values[0] : '';
   });
-  const computed = usePageValues(stored === undefined ? primary : null, properties);
-  const computedText = computed === null ? undefined : new Set(properties.map((p) => computed[p])).size === 1 ? computed[properties[0] ?? ''] : '';
-  const shown = stored ?? computedText ?? '';
+  // the document's value, else nothing; the effective value (one the sides share) is the placeholder (spec
+  // inspector-provenance-reset, Problems in Pager 4)
+  const effectiveSides = useEffectiveText(properties[0] ?? '', properties, stored !== undefined);
+  const effective = new Set(effectiveSides.split(' ')).size === 1 ? effectiveSides : '';
+  const shown = stored ?? '';
   const said = useEditorState((st) => st.message);
   const field = useRef<HTMLInputElement>(null);
   const typed = useRef(false);
@@ -310,6 +312,7 @@ function SpacingField({ entry, box, sides, properties, where, label }: { readonl
         disabled={!door.available || primary === null}
         aria-label={door.label}
         spellCheck={false}
+        placeholder={effective || undefined}
         onInput={() => {
           typed.current = true;
         }}
