@@ -542,11 +542,14 @@ export const PLANTS: Plant[] = [
     id: 'chord-conflict',
     rule: 'chord-conflict',
     description: 'Preview also binds Shift+Ctrl+z anywhere, the chord of Redo',
+    // Preview's own global shortcut rebound to the chord (the door preview-mode's scenarios run: rebinding it adds no
+    // door they leave out)
     apply: (m) => {
       const preview = command(m, 'view.enterPreview');
       const doors = list(preview.entryPoints);
-      const shortcut = doors.find((d) => d.kind === 'shortcut' && d.context === 'global');
-      doors.push({ ...structuredClone(shortcut), id: 'key-planted', chord: 'Shift+Ctrl+z' } as Json);
+      const shortcut = doors.find((d) => d.kind === 'shortcut' && d.context === 'global') as { chord?: string } | undefined;
+      if (shortcut === undefined) throw new Error('chord-conflict: Preview has no global shortcut');
+      shortcut.chord = 'Shift+Ctrl+z';
     },
   },
   {
@@ -815,9 +818,14 @@ PLANTS.push(
     id: 'state-door-on-canvas-toolbar',
     rule: 'state-placement',
     description: 'a Hover state button is drawn on the canvas toolbar (a state belongs to the class, not the page)',
+    // the Hover item of the State menu moved onto the canvas toolbar, as a toolbar button (the door the state-styles
+    // scenarios run: moving it adds no door they leave out)
     apply: (m) => {
-      list(command(m, 'view.setStyleState').entryPoints).push({
-        id: 'toolbar-canvas-toolbar-state-hover',
+      const doors = list(command(m, 'view.setStyleState').entryPoints);
+      const at = doors.findIndex((d) => (d as { id?: string }).id === 'menu-style-state-hover');
+      if (at < 0) throw new Error('state-door-on-canvas-toolbar: no Hover item in the State menu');
+      doors[at] = {
+        id: 'menu-style-state-hover',
         kind: 'toolbar',
         feature: 'state-styles',
         toolbar: 'canvas-toolbar',
@@ -830,7 +838,7 @@ PLANTS.push(
         placement: { region: 'canvas-toolbar', order: 13 },
         adapter: { selection: 'none', offers: null, writes: [], fields: [] },
         args: { state: 'hover' },
-      });
+      };
     },
   },
   {

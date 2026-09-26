@@ -10,8 +10,7 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 - Groups 01-12 pass with teeth (docs/history.md) but: multi-select-actions (needs keyboard-panel-navigation and
   panel-resize), inspector-property-search (43), nesting-grammar-structure (36), layers-row-colours (no label colour
   tokens), hover-measure (46). Not built: Alt+drag duplicates, a line outside the stage refused.
-- Last check (11): check-group11-093700.log: static green but unit (finding 49), 1317 passed, 8 = findings 39, 41x2,
-  44x2, 45x2, 47. Visual pass: Tablet tab refits, State menu, Editing Hover. Next: group 12.
+- Last check (12): 1333 passed, 9 failed = findings since decided + hysteresis (12). Next: finding 12, group 13.
 
 ## Decisions (small ambiguities and the user's corrections)
 
@@ -25,6 +24,19 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 - Export stylesheet: a blank line parts every rule, the :root and class blocks too. A class target returns to Element
   on a new selection; a field of a kind (list, table, form, media) shows only while every selected element is of it.
 - Dialogs, snap targets, smart guides, corrected-before-commit scenarios: docs/history.md (2026-09-26 decisions).
+
+## Decided findings (the user's order of 2026-09-26: decide, record why, tooth for each changed test)
+
+- 39 current-state: built features left 15 unbuilt doors, not the fixed floor of 100: it now expects every unbuilt door
+  the manifest places at start, each set side by side compared (tooth: unbuilt doors drawn current are caught).
+- 40 door rule applied: isDoorBuilt needs the feature registered; the census fails a door usable without it (13 caught).
+- 41 palette-tiles: every palette feature is built; the tests prove every tile usable and inserting (tooth: insert off);
+  a door of a feature to come is proven unusable by the census and waiting-panels.
+- 44 waiting-panels: New variable built, expected usable (tooth: tokens.create off); Timeline waits (tooth: rule off).
+- 45 props-position: absolute-free-drag's couplings are built; both scenarios expect top/left and the relative parent
+  too (tooth: handlers off, couplings off).
+- 47 Delete is always the context menu's last item (DESIGN and manifest order 99): the scenario holds unchanged.
+- 49 check.test plants move or rebind an existing, covered door instead of adding one (tooth: rule off fails each).
 
 ## Open findings
 
@@ -42,19 +54,7 @@ folds survive File › Open. 22. Walking onto an off-screen element does not scr
 30. Declared, not built: wrap refusals formInForm, labelOneControl; drop.emptyAimMin; the hover label as a hit target.
 34/37. palette-density, layers-drag dwell: spec-test teeth only. 36. nesting-grammar-structure vs hand unit test.
 35. Tool audit (awaiting OK): the tooth proof also switches off a scenario's action doors' commands.
-39. USER DECISION: current-state.spec.ts expects more than 100 drawn doors of unbuilt commands; 66 are left.
-40. USER DECISION: menu, context-menu and toolbar doors of an unregistered feature whose command is built are enabled
-    (31 features); applying the door rule to them disables them until each gets scenarios.
-41. USER DECISION: palette-tiles.spec.ts needs a palette entry of an unbuilt feature to prove the gate; with SVG built
-    every entry's feature is built, so both its tests stop ("no tile is left"). The census still proves the gate.
 42. Quick panel: no F6 in nor Escape out (no door); its chip and fields are Tab stops. 43. property-search: no door.
-44. USER DECISION: waiting-panels.spec.ts x2 wants New variable "not available yet"; css-variables-tokens built it.
-45. USER DECISION: props-position › the-absolute- and the-fixed-button-sets-the-position expect the mode alone;
-    absolute-free-drag's couplings (a static parent becomes relative, top/left keep the place) now also write them.
 46. hover-measure: no door or region, so no scenario; built, proven by its spec test, not registered (census).
-49. USER DECISION: check.test planted fixture state-door-on-canvas-toolbar expects state-placement alone; since state-styles
-    has scenarios, door-coverage also reports its planted door (a door of state-styles no scenario runs).
 48. Enter and Space on a toolbar button (top bar, canvas toolbar) do nothing: the toolbar key context binds them to
     focus.activate of keyboard-panel-navigation (group 14, not built). Fixed when group 14 is built.
-47. USER DECISION: context-menu › the-menu-runs-from-the-keyboard presses End then Enter to delete Intro; DESIGN keeps
-    items in the features' order, so reusable-components' Create component (order 25) now comes after Delete.

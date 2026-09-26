@@ -9754,6 +9754,21 @@
                 "op": "set",
                 "path": "/Page/Hero/Actions/@styles/desktop/base/position",
                 "value": "absolute"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/Actions/@styles/desktop/base/top",
+                "value": "170px"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/Actions/@styles/desktop/base/left",
+                "value": "40px"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/position",
+                "value": "relative"
               }
             ],
             "selection": [
@@ -9832,6 +9847,16 @@
                 "op": "set",
                 "path": "/Page/Hero/Actions/@styles/desktop/base/position",
                 "value": "fixed"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/Actions/@styles/desktop/base/top",
+                "value": "178px"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/Actions/@styles/desktop/base/left",
+                "value": "48px"
               }
             ],
             "selection": [

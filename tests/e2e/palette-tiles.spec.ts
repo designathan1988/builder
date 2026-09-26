@@ -1,6 +1,7 @@
-// The Insert tiles follow the feature of their palette entry (elements.json palette[].entries[].feature): the tiles
-// of palette-click-insert (Container, Section, Heading, Paragraph) insert; a tile whose entry a later feature brings
-// is drawn disabled with "not available yet", and neither a click nor Enter or Space on it inserts anything.
+// The Insert tiles follow the feature of their palette entry (elements.json palette[].entries[].feature): a tile is
+// usable exactly when its entry's feature is registered as built, and every entry's feature is built now, so every tile
+// is usable; the tiles of palette-click-insert (Container, Section, Heading, Paragraph) insert, by a click, Enter or
+// Space. A door of a feature still to come is proven unusable by the census and by waiting-panels (View › Timeline).
 import fs from 'node:fs';
 import { expect, test, type Page } from '../support/test.ts';
 import { openEditor } from '../support/editor.ts';
@@ -18,9 +19,8 @@ interface Entry {
 }
 const ENTRIES = (JSON.parse(fs.readFileSync('manifest/elements.json', 'utf8')) as { palette: { entries: Entry[] }[] }).palette.flatMap((g) => g.entries);
 const OWN = ENTRIES.filter((e) => e.feature === 'palette-click-insert').map((e) => e.id);
-// an entry of a feature that is not built yet (the first in the palette's order)
-const LATER = ENTRIES.find((e) => !isFeatureBuilt(e.feature as FeatureId));
-const NONE_LATER = 'every palette entry\'s feature is built: no tile is left to prove the gate';
+// the entries of a feature not built yet: none, since every palette entry's feature is built
+const LATER = ENTRIES.filter((e) => !isFeatureBuilt(e.feature as FeatureId)).map((e) => e.id);
 
 const documentOf = (page: Page) =>
   page.evaluate(() => {
@@ -43,25 +43,14 @@ test.beforeEach(async ({ page }) => {
   await expect(page.locator('.workbench')).toBeVisible();
 });
 
-test('the tiles of palette-click-insert insert; a tile of a later feature is not available yet and inserts nothing', runs(INSERT_PANEL, TILE, ENTER, SPACE), async ({ page }) => {
+test('every tile is usable, and the tiles of palette-click-insert insert by a click, Enter and Space', runs(INSERT_PANEL, TILE, ENTER, SPACE), async ({ page }) => {
   expect(OWN.sort()).toEqual(['container', 'heading', 'paragraph', 'section']);
-  if (LATER === undefined) throw new Error(NONE_LATER);
+  expect(LATER).toEqual([]);
   await runDoor(page, INSERT_PANEL);
-  for (const entry of OWN) await expect(control(page, TILE, { args: { entry } }), entry).not.toHaveAttribute('aria-disabled', 'true');
-
-  const later = control(page, TILE, { args: { entry: LATER.id } });
-  await expect(later).toHaveAttribute('aria-disabled', 'true');
-  await expect(later).toHaveAttribute('title', /not available yet/);
-  const before = await documentOf(page);
-  // a real click on it (Playwright would wait for an aria-disabled control to be enabled)
-  await later.click({ force: true });
-  await tabTo(page, LATER.id);
-  await page.keyboard.press('Enter');
-  await page.keyboard.press('Space');
-  expect(await documentOf(page)).toEqual(before);
+  for (const entry of ENTRIES.map((e) => e.id)) await expect(control(page, TILE, { args: { entry } }), entry).not.toHaveAttribute('aria-disabled', 'true');
 
   // Enter and Space on an available tile insert its entry, once each (Tab from the panel's search field, above every
-  // tile: the tile of the later feature may come after it)
+  // tile)
   await page.locator('[data-region="insert"] [data-local="search"]').click();
   await tabTo(page, 'paragraph');
   await page.keyboard.press('Enter');
@@ -78,19 +67,13 @@ test('the tiles of palette-click-insert insert; a tile of a later feature is not
 });
 
 // The feature table (src/app/features.ts) decides every tile: a tile is enabled exactly when its entry's feature is
-// registered as built, so a tile of a feature still to come (LATER) is not available yet and a click on it inserts
-// nothing, never a bare element.
-test('every tile is enabled exactly when its entry\'s feature is registered as built; a tile of a feature not built inserts nothing', runs(INSERT_PANEL, TILE), async ({ page }) => {
+// registered as built, and each says so: no tile says "not available yet".
+test('every tile is enabled exactly when its entry\'s feature is registered as built', runs(INSERT_PANEL, TILE), async ({ page }) => {
   await runDoor(page, INSERT_PANEL);
   const drawn = await page.locator(`[data-door="${TILE}"]`).evaluateAll((els) => els.map((el) => [JSON.parse(el.getAttribute('data-args') ?? '{}').entry as string, el.getAttribute('aria-disabled') !== 'true'] as const));
   expect(drawn.map(([entry]) => entry).sort()).toEqual(ENTRIES.map((e) => e.id).sort());
   const expected = ENTRIES.map((e) => [e.id, isFeatureBuilt(e.feature as FeatureId)] as const);
   expect(new Map(drawn)).toEqual(new Map(expected));
-  if (LATER === undefined) throw new Error(NONE_LATER);
-  const tile = control(page, TILE, { args: { entry: LATER.id } });
-  await expect(tile).toHaveAttribute('aria-disabled', 'true');
-  await expect(tile).toHaveAttribute('title', /not available yet/);
-  const before = await documentOf(page);
-  await tile.click({ force: true });
-  expect(await documentOf(page)).toEqual(before);
+  const titles = await page.locator(`[data-door="${TILE}"]`).evaluateAll((els) => els.map((el) => el.getAttribute('title') ?? ''));
+  expect(titles.filter((title) => title.includes('not available yet'))).toEqual([]);
 });

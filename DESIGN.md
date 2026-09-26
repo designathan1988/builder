@@ -114,7 +114,7 @@ Every region below is an id of `manifest/layout.json`. "Order" is the `order` of
 |---|---|
 | `shortcut`, `canvas-click`, `canvas-drag`, `canvas-wheel`, `canvas-handle`, `layers-drag`, `panel-drag` | `none`: a key or a pointer gesture has no control of its own. Handles are drawn on the selection (see "Canvas"). |
 | `menu` | `menu:<menu>`, in the order the features gave the items. |
-| `context-menu` | `context-menu`, in the order the features gave the items. |
+| `context-menu` | `context-menu`, in the order the features gave the items, but Delete, the destructive item, always last. |
 | `command-bar` | `command-palette`, commands first, then insert, open panel, set property, edit property. |
 | `quick-panel` | `quick-panel`, in the order of the table above. |
 | `inspector-field` | A style property, composite or recipe: `inspector-style`, ordered by section, then group, then the order of the property (properties, then composites, then recipes) in `properties.json`, then the door's order in its command. Editor controls: the alignment matrix follows direction and wrap in Flex, the spacing link opens Margin and padding (margin before padding), the anchor control opens Anchors; custom declarations close the tab. An attribute, or the text of a text element: `inspector-settings`. |
