@@ -892,6 +892,7 @@ export const DOOR_IDS = [
   "style.setShadows#inspector-text-shadow-shadow-visibility",
   "style.setShadows#inspector-text-shadow-shadow-remove",
   "style.setShadows#inspector-text-shadow-shadow-reset",
+  "style.setShadows#inspector-text-shadow-shadow-css",
   "style.setShadows#panel-drag-box-shadow-pad-pad",
   "style.setShadows#panel-drag-text-shadow-pad-pad",
   "style.setShadows#key-arrow-left-in-shadow-pad",

@@ -7946,6 +7946,36 @@
           }
         },
         {
+          "id": "inspector-text-shadow-shadow-css",
+          "kind": "inspector-field",
+          "drawnAs": "field",
+          "feature": "shadow-editor",
+          "property": "text-shadow",
+          "composite": null,
+          "recipe": null,
+          "attribute": null,
+          "control": "shadow-css",
+          "labelKey": "command.setShadows",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "inspector-style",
+            "order": 212
+          },
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": [
+              "text-shadow"
+            ],
+            "fields": []
+          },
+          "args": {
+            "property": "text-shadow"
+          }
+        },
+        {
           "id": "panel-drag-box-shadow-pad-pad",
           "kind": "panel-drag",
           "feature": "shadow-editor",

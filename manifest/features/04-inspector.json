@@ -26568,6 +26568,85 @@
               "document": "unchanged"
             }
           ]
+        },
+        {
+          "id": "a-text-shadow-typed-as-css-writes-its-layers",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "style.setShadows#inspector-text-shadow-shadow-css",
+              "args": {
+                "property": "text-shadow",
+                "edit": {
+                  "css": "0 1px 2px #000"
+                }
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "0 1px 2px #000\n"
+            }
+          ],
+          "doors": [
+            "style.setShadows#inspector-text-shadow-shadow-css"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Intro/@styles/desktop/base/text-shadow",
+                "value": [
+                  {
+                    "color": "#000",
+                    "offsetX": "0px",
+                    "offsetY": "1px",
+                    "blur": "2px",
+                    "hidden": false
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Intro",
+                  "property": "text-shadow",
+                  "value": "rgb(0, 0, 0) 0px 1px 2px"
+                }
+              ],
+              "geometry": [],
+              "feedback": []
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
         }
       ]
     },

@@ -3339,8 +3339,8 @@
     {
       "id": "text-shadow",
       "labelKey": "property.textShadow",
-      "section": "effects",
-      "group": "shadow",
+      "section": "text",
+      "group": "typography",
       "control": "shadow-editor",
       "icons": {},
       "valueType": "text-shadow-list",
@@ -3356,6 +3356,7 @@
         "style.setShadows#inspector-text-shadow-shadow-visibility",
         "style.setShadows#inspector-text-shadow-shadow-remove",
         "style.setShadows#inspector-text-shadow-shadow-reset",
+        "style.setShadows#inspector-text-shadow-shadow-css",
         "style.setShadows#panel-drag-text-shadow-pad-pad",
         "style.setShadows#handle-shadow-offset",
         "style.setShadows#handle-shadow-blur",
