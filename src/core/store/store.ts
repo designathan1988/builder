@@ -31,6 +31,9 @@ export interface StoreState<Ui> {
   // the refusal the last command met, with what it was asked, so the control that asked says it beside itself (a
   // field: spec inspector-number-fields, Problems in Pager 3); absent or null once a command runs
   readonly refusal?: Refusal | null;
+  // whether the message is a refusal: the next command that runs replaces it, with its own message or none (DESIGN.md
+  // "Dock and status bar"; the audit's A3.41: an error never stays after the next action); absent or false otherwise
+  readonly refused?: boolean;
   readonly ui: Ui;
 }
 
@@ -246,7 +249,7 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
       const declared = message((command.availability.refusalKey ?? 'common.notAvailableYet') as Message['key']);
       const refusal = predicate.refusal?.(state, rules) ?? declared;
       if (refusal.key !== declared.key && !(command.refusals as readonly string[]).includes(refusal.key)) throw new Error(`${id}: its predicate refuses with ${refusal.key}, which the manifest does not declare for it`);
-      publish(commit({ ...state, message: refusal }, id));
+      publish(commit({ ...state, message: refusal, refused: true }, id));
       return { status: 'refused', message: refusal };
     }
     const outcome: Outcome<Ui> = entry.run(handlerContext(confirmed), args);
@@ -254,7 +257,7 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
     // a read-only tab changes no document: a load, a confirmation before one, or patches, are refused
     if (options.readOnly?.() === true && (outcome.kind === 'load' || outcome.kind === 'confirm' || (outcome.kind === 'change' && (outcome.patches?.length ?? 0) > 0))) {
       const readOnly = message('status.tabGuard.readOnly');
-      publish(commit({ ...state, message: readOnly }, id));
+      publish(commit({ ...state, message: readOnly, refused: true }, id));
       return { status: 'refused', message: readOnly };
     }
     // the person is asked first: the dispatch waits, with the words of the command's confirmation (manifest)
@@ -267,7 +270,7 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
       return { status: 'confirm' };
     }
     if (outcome.kind === 'refused') {
-      publish(commit({ ...state, message: outcome.message, refusal: { command: id, args, message: outcome.message } }, id));
+      publish(commit({ ...state, message: outcome.message, refusal: { command: id, args, message: outcome.message }, refused: true }, id));
       return { status: 'refused', message: outcome.message };
     }
     if (outcome.kind === 'undo' || outcome.kind === 'redo') {
@@ -277,12 +280,12 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
       if (restored === null || tx === undefined) return { status: 'done', changed: false };
       // the step names what it undoes or redoes: what its command said, else "the last change"
       const action = tx.message ?? LAST_CHANGE;
-      publish(commit({ ...state, ...restored, message: outcome.kind === 'undo' ? undone(action) : redone(action) }, id), outcome.kind === 'undo' ? tx.inverses : tx.patches);
+      publish(commit({ ...state, ...restored, message: outcome.kind === 'undo' ? undone(action) : redone(action), refused: false }, id), outcome.kind === 'undo' ? tx.inverses : tx.patches);
       return { status: 'done', changed: true };
     }
     if (outcome.kind === 'load') {
       if (gesture) throw new Error(`${id} cannot run inside a gesture`);
-      const loaded = commit({ ...state, document: outcome.document, selection: [], history: EMPTY_HISTORY, message: outcome.message ?? state.message }, id);
+      const loaded = commit({ ...state, document: outcome.document, selection: [], history: EMPTY_HISTORY, message: outcome.message ?? (state.refused === true ? null : state.message), refused: false }, id);
       publish(loaded, [{ op: 'replace', path: ['pages'], value: outcome.document.pages }]);
       return { status: 'done', changed: true };
     }
@@ -307,9 +310,11 @@ export function createStore<Ui>(options: StoreOptions<Ui>): Store<Ui> {
       document: documentChanged ? applied.document : before.document,
       selection,
       history,
-      message: outcome.message ?? before.message,
+      // a refusal's message goes with the next command that runs, which says its own or nothing
+      message: outcome.message ?? (before.refused === true ? null : before.message),
       confirmation: before.confirmation ?? null,
       refusal: null,
+      refused: false,
       ui: outcome.ui ?? before.ui,
     };
     const next: StoreState<Ui> = options.followCommand === undefined ? ran : { ...ran, ui: options.followCommand(ran, command) };

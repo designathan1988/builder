@@ -21,9 +21,6 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 
 ## Audit prompt: documentation changed (item, before -> after)
 
-- 1.1 DESIGN Style tab: "a field never shows a blank: it shows the effective value" -> the document's value as written;
-  none there: empty, the effective value as its muted placeholder, nothing zoom-dependent. Spec provenance-reset: + P4.
-- 1.2 DESIGN Style 4 "Property search ... reveals" -> Find a property filters; row "3 search result" -> "3 Add a property's item".
 - 1.3 text-shadow effects/shadow -> text/typography; DESIGN "Text" -> "Text (with the text shadow)", + Add a property rule.
 - 1.4 DESIGN Build order + "a disabled control is drawn clearly disabled; the quick panel leaves out an action that
   cannot act; a field draws its Reset only while there is a value"; specs quick-panel P8, provenance-reset P5.
@@ -37,6 +34,8 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
   never green, corrected: y equals CardA -> y < CardA + 24 (a p's 16 px margin); inline-block cards set one by one.
 - A1.1 spec zoom-wheel-pan P2 "Space pans ... no text field has focus" -> also not a control the keyboard focused
   whose Space runs (palette tile); a click-focused control never keeps Space. elements-lists spec + 8 scenarios.
+- A3.41 decision: "every preference change reports" = settings chosen in menus/switches; folding sections, groups or
+  branches is layout state and stays silent. Truncation CSS waits for shell.css (reserved by CODEX for 7.1).
 
 ## Open findings
 

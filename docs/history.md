@@ -871,3 +871,9 @@ Fragile / worth knowing:
 - 47 Delete is always the context menu's last item (DESIGN and manifest order 99): the scenario holds unchanged.
 - 49 check.test plants move or rebind an existing, covered door instead of adding one (tooth: rule off fails each).
 
+
+## 2026-09-26: audit prompt, block 1 documentation changes (moved from PROGRESS.md)
+
+- 1.1 DESIGN Style tab: "a field never shows a blank: it shows the effective value" -> the document's value as written;
+  none there: empty, the effective value as its muted placeholder, nothing zoom-dependent. Spec provenance-reset: + P4.
+- 1.2 DESIGN Style 4 "Property search ... reveals" -> Find a property filters; row "3 search result" -> "3 Add a property's item".

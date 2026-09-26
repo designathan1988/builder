@@ -197,7 +197,7 @@ The project is a file tree and the export is that same tree as a ZIP.
 
 The bottom dock is collapsed to its strip by default. Its tabs are **Timeline** and **Checks**; Keyboard shortcuts (Help) and Document (developer tools) open there as tabs when asked. Checks is one list with the categories Accessibility, Links, SEO and Export; the collapsed strip previews the first issue. Checks never block editing or export.
 
-The status bar shows the last message, the selection path, the size, the breakpoint, the element count, the zoom, the language and the save state. It is the one coloured bar of the window (direction C): `--color-status-bar` with `--color-on-status-bar` for its text and icons.
+The status bar shows the last message, the selection path, the size, the breakpoint, the element count, the zoom, the language and the save state. A refusal's message goes with the next action, which shows its own message or none (an error never stays after it); every preference change (the theme, the language, a view switch, the Elements view, what each Layers row shows, the inspector's mode) says what it set, "Theme: Dark.", "Outlines: on."; folding a section, a group or a branch is not a preference change and says nothing; a message longer than the bar is cut with an ellipsis and read whole in its tooltip. It is the one coloured bar of the window (direction C): `--color-status-bar` with `--color-on-status-bar` for its text and icons.
 
 ## Keyboard model
 
