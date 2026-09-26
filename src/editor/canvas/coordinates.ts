@@ -126,14 +126,29 @@ export function nodesUnder(iframe: HTMLIFrameElement, point: Point): string[] {
   return nodes;
 }
 
-// The axis a node lays its children along: "x" for a flex row, "y" for a column and for block, grid and inline flow
-// (spec drag-reorder-canvas, "Hit zones": vertical for block and column flex, horizontal for row flex).
+// The axis a node lays its children along (spec drag-reorder-canvas, "Hit zones" and Problems in Pager 5): a grid
+// along its auto-flow (rows: "x", columns: "y"), a flex along its direction, any other container along "x" when every
+// child is inline-level (buttons side by side), else "y" (block flow). Its lines (rows along x, columns along y) are
+// read from the children's boxes (core/geometry/lines.ts).
 export function flowAxis(iframe: HTMLIFrameElement, id: string): 'x' | 'y' {
   const element = iframe.contentDocument?.querySelector(nodeSelector(id as NodeId));
   const view = iframe.contentWindow;
   if (!element || !view) return 'y';
   const style = view.getComputedStyle(element);
-  return style.display.includes('flex') && !style.flexDirection.startsWith('column') ? 'x' : 'y';
+  if (style.display.includes('grid')) return style.gridAutoFlow.startsWith('column') ? 'y' : 'x';
+  if (style.display.includes('flex')) return style.flexDirection.startsWith('column') ? 'y' : 'x';
+  const children = [...element.children].filter((c) => c.hasAttribute(NODE_ATTRIBUTE));
+  return children.length > 0 && children.every((c) => view.getComputedStyle(c).display.startsWith('inline')) ? 'x' : 'y';
+}
+
+// Whether a node shows its children against the document's order along its flow (a row-reverse or column-reverse
+// flex): before a child as shown is after it in the document (spec drag-reorder-canvas, Problems in Pager 5).
+export function flowReversed(iframe: HTMLIFrameElement, id: string): boolean {
+  const element = iframe.contentDocument?.querySelector(nodeSelector(id as NodeId));
+  const view = iframe.contentWindow;
+  if (!element || !view) return false;
+  const style = view.getComputedStyle(element);
+  return style.display.includes('flex') && style.flexDirection.endsWith('-reverse');
 }
 
 // The flow a node lays its children in, for a side drop (spec drag-layout, row 5): vertical (block, or a column flex),

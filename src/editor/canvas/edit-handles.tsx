@@ -14,9 +14,10 @@
 //    layer's X and Y (offset) or blur, so it follows the pointer while it is dragged (Problems in Pager 1), labelled
 //    X, Y or the blur; it edits the text shadow of an element that holds one, else its box shadow (canvas/handles.ts
 //    shadowOf); an element with no shadow draws none.
-//  - Gap, Row gap, Column gap (Problems in Pager 4): a band between each two children along the flow the gap separates
-//    (a row flex's columns, a column flex's or a block's rows), as thick as the gap; a mode whose gap the flow does
-//    not show (Row gap in a row flex) draws none.
+//  - Gap, Row gap, Column gap (Problems in Pager 4 and 5): the column gap as a band between each two columns of the
+//    children, the row gap between each two rows, read from their real boxes (core/geometry/lines.ts: a grid's
+//    columns and rows, a wrapped flex's lines, a row flex's items, a column's or a block's rows), as thick as the gap;
+//    a gap the layout does not show (Row gap in a single row) draws none.
 //
 // The sides are the box composite's longhands in CSS order (properties.json: top, right, bottom, left): a side's
 // opposite is two places on, and the side's band lies across the element for the first and the third.
@@ -24,13 +25,14 @@ import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties, 
 import { isFeatureBuilt } from '../../app/features.ts';
 import { locate, type NodeId } from '../../core/document/model.ts';
 import type { DispatchResult } from '../../core/store/store.ts';
+import { gapBands } from '../../core/geometry/lines.ts';
 import { mayBeNegative } from '../../core/style/spacing.ts';
 import type { CommandId, FeatureId } from '../../generated/ids.ts';
 import { manifest, numberConstant, type DoorEntry } from '../../manifest/runtime.ts';
 import { useDoor } from '../doors/door.tsx';
 import { useEditorState, useStore } from '../store.ts';
 import { typedBand } from './band-typing.ts';
-import { canvasFrame, computedValues, flowAxis, nodeBox } from './coordinates.ts';
+import { canvasFrame, computedValues, nodeBox } from './coordinates.ts';
 import { editMode, handlesOf, type EditMode } from './edit-mode.ts';
 import { handleArgs, movesOffset, shadowLength, shadowOf, valueArg } from './handles.ts';
 import { MODEL_RULES } from '../store.ts';
@@ -85,10 +87,10 @@ function useComputed(node: NodeId | null, properties: readonly string[]): Readon
   return read !== null && read.node === node ? read.values : null;
 }
 
-// the boxes of a node's children on the chrome (`origin`: the chrome's place on the screen) and the axis of its flow,
-// read at every frame while they are drawn
-function useFlow(node: NodeId | null, children: readonly string[], origin: { readonly x: number; readonly y: number }): { readonly boxes: readonly Box[]; readonly axis: 'x' | 'y' } | null {
-  const [read, setRead] = useState<{ readonly text: string; readonly boxes: readonly Box[]; readonly axis: 'x' | 'y' } | null>(null);
+// the boxes of a node's children on the chrome (`origin`: the chrome's place on the screen), read at every frame while
+// they are drawn
+function useFlow(node: NodeId | null, children: readonly string[], origin: { readonly x: number; readonly y: number }): { readonly boxes: readonly Box[] } | null {
+  const [read, setRead] = useState<{ readonly text: string; readonly boxes: readonly Box[] } | null>(null);
   const { x, y } = origin;
   useEffect(() => {
     if (node === null) return;
@@ -100,9 +102,8 @@ function useFlow(node: NodeId | null, children: readonly string[], origin: { rea
           .map((id) => nodeBox(frame, id))
           .filter((b): b is Box => b !== null)
           .map((b) => ({ x: b.x - x, y: b.y - y, width: b.width, height: b.height }));
-        const axis = flowAxis(frame, node);
-        const text = JSON.stringify([boxes, axis]);
-        setRead((before) => (before?.text === text ? before : { text, boxes, axis }));
+        const text = JSON.stringify(boxes);
+        setRead((before) => (before?.text === text ? before : { text, boxes }));
       }
       request = requestAnimationFrame(measure);
     };
@@ -284,19 +285,14 @@ export function EditHandles({ node, box }: { readonly node: NodeId; readonly box
       const cy = box.y + box.height / 2 - ny * (box.height / 2 - inset);
       drawn.push({ entry, box: { x: cx - DIRECT / 2, y: cy - DIRECT / 2, width: DIRECT, height: DIRECT }, start: w, normal: [nx, ny], min: 0, kind: 'direct' });
     } else if (flow !== null) {
-      // a gap band between each two children along the flow its gap separates
-      const axis = flow.axis;
-      const separates = writes.length > 1 ? axis : first === ROW_GAP ? 'y' : 'x';
-      if (separates !== axis) continue;
-      const g = px(computed[axis === 'y' ? ROW_GAP : COLUMN_GAP]);
-      flow.boxes.slice(1).forEach((after, k) => {
-        const before = flow.boxes[k] as Box;
-        const band: Box =
-          axis === 'y'
-            ? { x: box.x, y: before.y + before.height, width: box.width, height: Math.max(MIN_BAND, after.y - before.y - before.height) }
-            : { x: before.x + before.width, y: box.y, width: Math.max(MIN_BAND, after.x - before.x - before.width), height: box.height };
-        drawn.push({ entry, box: band, start: g, normal: axis === 'y' ? [0, 1] : [1, 0], min: 0, kind: 'band' });
-      });
+      // the gap bands, from the children's real boxes (Problems in Pager 5): the column gap between each two columns,
+      // the row gap between each two rows; Gap draws both
+      const laid = flow.boxes.map((b) => ({ box: b }));
+      const gaps: readonly ('column' | 'row')[] = writes.length > 1 ? ['column', 'row'] : first === ROW_GAP ? ['row'] : ['column'];
+      for (const gap of gaps) {
+        const g = px(computed[gap === 'row' ? ROW_GAP : COLUMN_GAP]);
+        for (const band of gapBands(laid, box, gap, MIN_BAND)) drawn.push({ entry, box: band, start: g, normal: gap === 'row' ? [0, 1] : [1, 0], min: 0, kind: 'band' });
+      }
     }
   }
   const typed = typing === null ? undefined : drawn.find((d) => d.entry.ref === typing.ref && d.opposite !== undefined);

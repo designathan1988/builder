@@ -50,7 +50,7 @@ import type { DispatchResult, Gesture } from '../../core/store/store.ts';
 import { selectionRoots } from '../../core/structure/remove.ts';
 import type { CommandId, DoorId, FeatureId, KeyContextId } from '../../generated/ids.ts';
 import { manifest, numberConstant, pairConstant, type DoorEntry } from '../../manifest/runtime.ts';
-import { canvasFrame, flowAxis, geometryOf, nodeAt, nodeBox, nodesUnder, pageLayout, resizeBasis, screenToPage, scrollPage, sideFlow, type Point, type ResizeBasis } from '../canvas/coordinates.ts';
+import { canvasFrame, flowAxis, flowReversed, geometryOf, nodeAt, nodeBox, nodesUnder, pageLayout, resizeBasis, screenToPage, scrollPage, sideFlow, type Point, type ResizeBasis } from '../canvas/coordinates.ts';
 import { snapMode, snapMove, snapResize, snapShown } from '../canvas/snapping.ts';
 import type { Box } from '../../core/geometry/snap.ts';
 import { resizedBox } from '../../core/geometry/resize.ts';
@@ -586,6 +586,7 @@ function proposalAt(document: DocumentJson, dragged: readonly NodeId[], at: Poin
     zoom: g.zoom,
     box: (id) => nodeBox(frame, id),
     axis: (id) => flowAxis(frame, id),
+    reversed: (id) => flowReversed(frame, id),
   });
 }
 
@@ -622,11 +623,16 @@ function rowUnder(at: Point): { readonly node: NodeId; readonly at: number; read
   return { node: node as NodeId, at: box.height > 0 ? (at.y - box.top) / box.height : 0.5, folded: row.getAttribute('aria-expanded') === 'false' };
 }
 
-// The side drop a pointer position offers now, measured on the page.
+// The side drop a pointer position offers now, measured on the page. Where the drop there is before or after an
+// ancestor of the offer's element (its escape band: a card's side edge in a grid, whose title fills it), the drop
+// wins and nothing is offered (spec drag-reorder-canvas, Problems in Pager 5).
 function sideAt(document: DocumentJson, dragged: readonly NodeId[], at: Point): SideOffer | null {
   const frame = canvasFrame();
   if (!frame) return null;
-  return offerSide(document, dragged, nodesUnder(frame, at), at, { box: (id) => nodeBox(frame, id), flow: (id) => sideFlow(frame, id) });
+  const offer = offerSide(document, dragged, nodesUnder(frame, at), at, { box: (id) => nodeBox(frame, id), flow: (id) => sideFlow(frame, id) });
+  if (offer === null) return null;
+  const proposal = proposalAt(document, dragged, at);
+  return proposal !== null && proposal.placement !== 'inside' && proposal.reference !== offer.target && isInside(document, offer.target, proposal.reference) ? null : offer;
 }
 
 // While a gesture is open the keys belong to it: they are read in the drag key context and their doors run through

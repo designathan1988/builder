@@ -33,6 +33,8 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 - 1.6 DESIGN field component + "a refused value is said beside the field"; spec inspector-number-fields P3.
 - 1.3 (block 1 real-use pass): Escape left the Add a property list open. Spec inspector-add-property + P4: closed as
   every menu (Escape, backdrop, focus back to +); its filter a combobox of the menu key context (arrows, Enter).
+- 2.1 spec drag-reorder-canvas P5 + "an ancestor's escape band wins over a side drop inside it". Own new scenarios,
+  never green, corrected: y equals CardA -> y < CardA + 24 (a p's 16 px margin); inline-block cards set one by one.
 
 ## Open findings
 

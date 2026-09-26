@@ -378,7 +378,9 @@ type CanvasQuery =
 // content box scaled by its CSS zoom; the point must land on the canvas overlay. Or why there is none.
 //  - A node: the centre when it hits the node, else the point nearest the centre on a grid over its visible box (for
 //    the press of a marquee, the point of that grid nearest the box's top-left corner).
-//  - A drop, by the zones of the drag specs (drag-reorder-canvas, drag-drop-inside): along the parent's flow axis a
+//  - A drop, by the zones of the drag specs (drag-reorder-canvas, drag-drop-inside; the flow read as the app reads it:
+//    a grid along its auto-flow, a flex along its direction, inline children along x, before and after as shown in a
+//    reverse flex, Problems in Pager 5): along the parent's flow axis a
 //    leaf splits in halves; a container keeps an edge band at each end (min(8, 0.25 S) when empty,
 //    min(clamp(0.25 S, 8, 32), 0.4 S) with children) and is "inside" between them, at the slot the step's index
 //    gives: in the free gap between its children there, or, with no gap, over the half of the neighbouring child
@@ -416,48 +418,80 @@ function canvasPoint(page: Page, query: CanvasQuery): Promise<Point | string> {
       }
       return 'no point of it on the canvas hits it rather than a child';
     }
+    // the flow a container lays its children along, as the app reads it (coordinates.ts flowAxis, flowReversed): a
+    // grid along its auto-flow, a flex along its direction, inline-level children along x; reversed in a reverse flex
+    const alongX = (e: Element) => {
+      const s = getComputedStyle(e);
+      if (s.display.includes('grid')) return !s.gridAutoFlow.startsWith('column');
+      if (s.display.includes('flex')) return !s.flexDirection.startsWith('column');
+      const children = [...e.children].filter((c) => c.hasAttribute('data-node'));
+      return children.length > 0 && children.every((c) => getComputedStyle(c).display.startsWith('inline'));
+    };
+    const reversedFlow = (e: Element) => {
+      const s = getComputedStyle(e);
+      return s.display.includes('flex') && s.flexDirection.endsWith('-reverse');
+    };
     const parent = el.parentElement;
-    const flow = parent ? getComputedStyle(parent) : null;
-    const row = flow !== null && flow.display.includes('flex') && !flow.flexDirection.includes('column');
+    const row = parent !== null && alongX(parent);
     const r = el.getBoundingClientRect();
-    const [start, size, cross] = row ? [r.left, r.width, r.top + r.height / 2] : [r.top, r.height, r.left + r.width / 2];
+    const [start, size] = row ? [r.left, r.width] : [r.top, r.height];
+    let cross = row ? r.top + r.height / 2 : r.left + r.width / 2;
     const kids = [...el.children].filter((c) => c.hasAttribute('data-node'));
     const band = !q.container ? size / 2 : kids.length === 0 ? Math.min(8, 0.25 * size) : Math.min(Math.max(8, Math.min(0.25 * size, 32)), 0.4 * size);
     let along: number;
-    if (q.placement === 'before') along = start + band / 2;
-    else if (q.placement === 'after') along = start + size - band / 2;
-    else if (!q.container) return 'a leaf takes nothing inside';
+    let x: boolean = row;
+    // before and after as shown: in a parent that shows its children reversed, before in the document is after
+    const shownBefore = (q.placement === 'before') !== (parent !== null && reversedFlow(parent));
+    if (q.placement === 'before' || q.placement === 'after') {
+      along = shownBefore ? start + band / 2 : start + size - band / 2;
+      // a container whose band there its content covers (a card's title across its width): just inside its edge,
+      // where its escape band puts the drop before or after it (drag-reorder-canvas, "Hit zones": the escape ladder)
+      const p = row ? { x: along, y: cross } : { x: cross, y: along };
+      if (q.container && doc.elementFromPoint(p.x, p.y)?.closest('[data-node]') !== el) along = shownBefore ? start + q.edgeInset / zoom : start + size - q.edgeInset / zoom;
+    } else if (!q.container) return 'a leaf takes nothing inside';
     else if (kids.length === 0) along = start + size / 2;
     else {
+      // inside, at the slot, on the line of children the slot lies on, along the container's own flow (drag-reorder-
+      // canvas, Problems in Pager 5): after the child before the slot, in the free space beside it on its line (up to
+      // the slot's child when it shares the line, else to the container's end); at slot 0 before the first child. With
+      // no free space there, over that child: its half on the slot's side, or just inside its edge when it is a
+      // container (its escape band)
+      x = alongX(el);
+      const reversed = reversedFlow(el);
       const slot = q.slot ?? kids.length;
-      const edges = kids.map((k) => {
-        const b = k.getBoundingClientRect();
-        return row ? [b.left, b.right] : [b.top, b.bottom];
-      });
-      const from = slot === 0 ? start + band : (edges[slot - 1]?.[1] ?? start + band);
-      const to = slot >= kids.length ? start + size - band : (edges[slot]?.[0] ?? start + size - band);
+      const boxes = kids.map((k) => k.getBoundingClientRect());
+      const lo = (b: DOMRect) => (x ? b.left : b.top);
+      const hi = (b: DOMRect) => (x ? b.right : b.bottom);
+      const sameLine = (a: DOMRect, b: DOMRect) => (x ? a.top < b.bottom && a.bottom > b.top : a.left < b.right && a.right > b.left);
+      const [limitLo, limitHi] = x === row ? [start + band, start + size - band] : x ? [r.left + 1, r.right - 1] : [r.top + 1, r.bottom - 1];
+      const prev = boxes[slot - 1];
+      const next = boxes[slot];
+      const beside = prev !== undefined && next !== undefined && sameLine(prev, next) ? next : undefined;
+      const [from, to] =
+        prev !== undefined
+          ? reversed
+            ? [beside !== undefined ? hi(beside) : limitLo, lo(prev)]
+            : [hi(prev), beside !== undefined ? lo(beside) : limitHi]
+          : next !== undefined
+            ? reversed
+              ? [hi(next), limitHi]
+              : [limitLo, lo(next)]
+            : [limitLo, limitHi];
+      const near = prev ?? next;
+      if (near !== undefined) cross = x ? near.top + near.height / 2 : near.left + near.width / 2;
+      if (x !== row) cross = Math.min(Math.max(cross, start + band), start + size - band);
       if (to - from >= 1) along = (from + to) / 2;
       else {
-        // no free gap at the slot: the spec's other way to it (drag-drop-inside, "Hit zones"): over a child, its
-        // halves are before or after it, so the slot is also the second half of the child before it or the first
-        // half of the child after it, between the container's own bands
-        const centre = (e: number[] | undefined) => (e === undefined ? undefined : ((e[0] ?? 0) + (e[1] ?? 0)) / 2);
-        const low = Math.max(start + band, slot === 0 ? start + band : (centre(edges[slot - 1]) ?? start + band));
-        const high = Math.min(start + size - band, slot >= kids.length ? start + size - band : (centre(edges[slot]) ?? start + size - band));
-        // with no room there either: a child that is a container stands for the slot at its own edge, where its
-        // escape band (the innermost of the ladder over whatever lies under the pointer inside it, or its own edge
-        // band) puts the drop before or after it: just inside the leading edge of the child after the slot, or the
-        // trailing edge of the last child (drag-reorder-canvas, "Hit zones": the escape ladder)
-        const next = kids[slot];
-        const last = kids.at(-1);
+        const child = prev !== undefined ? kids[slot - 1] : kids[slot];
+        if (near === undefined || child === undefined) return `no room inside it at slot ${slot}`;
+        // the side of that child the slot is on, as shown: after the child before it, before the child after it
+        const trailing = (prev !== undefined) !== reversed;
         const inset = q.edgeInset / zoom;
-        if (high - low >= 1) along = (low + high) / 2;
-        else if (next?.hasAttribute('data-container') === true && edges[slot] !== undefined) along = (edges[slot]?.[0] ?? 0) + inset;
-        else if (slot >= kids.length && last?.hasAttribute('data-container') === true && edges.at(-1) !== undefined) along = (edges.at(-1)?.[1] ?? 0) - inset;
-        else return `no room inside it at slot ${slot}, between its children, over their halves nor at a container child's edge`;
+        if (child.hasAttribute('data-container')) along = trailing ? hi(near) - inset : lo(near) + inset;
+        else along = lo(near) + (hi(near) - lo(near)) * (trailing ? 0.75 : 0.25);
       }
     }
-    const at = row ? screen(along, cross) : screen(cross, along);
+    const at = x ? screen(along, cross) : screen(cross, along);
     return onOverlay(at) ? at : 'the drop point is not on the canvas';
   }, query);
 }
