@@ -8,13 +8,13 @@
 // a locked element refuses (status.locked.move). The status bar names the command and how many elements it moved.
 import type { NodeId, Rect } from '../../generated/commands.ts';
 import type { MessageId } from '../../generated/ids.ts';
-import { message, registerHandler, type HandlerContext, type Outcome } from '../commands/registry.ts';
+import { message, registerHandler, registerPredicate, type HandlerContext, type Outcome } from '../commands/registry.ts';
 import type { Location } from '../document/model.ts';
 import type { Patch } from '../history/transaction.ts';
 import { firstLockRefusal } from '../nodes/flags.ts';
 import { selectionRoots } from '../structure/remove.ts';
 import { writeDeclarations } from '../style/set.ts';
-import { measuredPlace, movedInsets } from './position.ts';
+import { measuredPlace, movedInsets, positionedSelection } from './position.ts';
 
 type Axis = 'horizontal' | 'vertical';
 // what each edge argument lines up: its axis, and the start edge, the centre or the end edge
@@ -78,11 +78,21 @@ export const alignCommand = registerHandler('position.align', (context, { edge }
   return { kind: 'change', patches: moves(context, travels, target.axis), message: said };
 });
 
+// Distribute's door is available only for three positioned elements or more (the audit's A3.23): with fewer it says
+// so (status.distribute.needsThree), with elements that are not positioned its own reason
+// (status.distribute.needsPositioned), never align's.
+const DISTRIBUTE_MIN = 3;
+export const distributableSelection = registerPredicate(
+  'distributableSelection',
+  (state, rules) => positionedSelection.test(state, rules) && selectionRoots(state.document, state.selection).length >= DISTRIBUTE_MIN,
+  (state, rules) => message(positionedSelection.test(state, rules) ? 'status.distribute.needsThree' : 'status.distribute.needsPositioned'),
+);
+
 export const distributeCommand = registerHandler('position.distribute', (context, { axis }) => {
   const found = movable(context);
   if ('refused' in found) return found.refused;
   const { roots } = found;
-  if (roots.length < 3) return { kind: 'refused', message: message('status.distribute.needsThree') };
+  if (roots.length < DISTRIBUTE_MIN) return { kind: 'refused', message: message('status.distribute.needsThree') };
   const measured = roots
     .flatMap((at) => {
       const box = context.layout.box(at.node.id as NodeId);

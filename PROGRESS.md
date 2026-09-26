@@ -22,8 +22,6 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 ## Audit prompt: documentation changed (item, before -> after)
 
 - Block 1 (1.1-1.6) documentation changes: docs/history.md (2026-09-26 entries).
-- 2.1 spec drag-reorder-canvas P5 + "an ancestor's escape band wins over a side drop inside it". Own new scenarios,
-  never green, corrected: y equals CardA -> y < CardA + 24 (a p's 16 px margin); inline-block cards set one by one.
 - A1.1 spec zoom-wheel-pan P2 "Space pans ... no text field has focus" -> also not a control the keyboard focused
   whose Space runs (palette tile); a click-focused control never keeps Space. elements-lists spec + 8 scenarios.
 - A3.41 decision: "every preference change reports" = settings chosen in menus/switches; folding sections, groups or
@@ -31,7 +29,11 @@ At most 60 lines: state, the user's pending decisions, open findings. History an
 - A3.32 spec inspector-number-fields + P4: a bare number takes the field's default unit (was: the unit held; set.ts,
   set.test, number-field.test, inspector-number-fields.spec (a burst is one step; Playwright clock splits bursts)
   updated; 7 props-filters-clip scenarios retired for their bare-number-in-% twins (same computed factor).
-  Spacing-box Escape pending: inspector.tsx reserved by CODEX.
+  Spacing box: its own key context (spacing-field), Escape runs field.cancel for the box.
+- A3.23: View › Explorer -> layers-tree; View toggles checked; plural message params; Distribute own predicate and
+  reason (a door's reason is its predicate's refusal); distribute-needs-three-elements retired for
+  distribute-availability.spec; workspace-doors tests View › Explorer working. Decision: Help keeps its one item
+  disabled (door rule) until shortcuts-panel (group 13, mine); Paste waits for item 3.8.
 
 ## Open findings
 

@@ -1147,6 +1147,11 @@
     },
     {
       "kind": "predicate",
+      "id": "distributableSelection",
+      "status": "registered"
+    },
+    {
+      "kind": "predicate",
       "id": "canUndo",
       "status": "registered"
     },

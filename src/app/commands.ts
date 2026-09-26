@@ -51,7 +51,7 @@ import { flexOrGridContainer, setAlignmentCommand } from '../core/style/alignmen
 import { setBorderCommand, setRadiusCommand } from '../core/style/border.ts';
 import { movePositionedCommand, positionedSelection, setPositionModeCommand } from '../core/geometry/position.ts';
 import { setAnchorsCommand } from '../core/geometry/anchors.ts';
-import { alignCommand, distributeCommand } from '../core/geometry/align.ts';
+import { alignCommand, distributableSelection, distributeCommand } from '../core/geometry/align.ts';
 import { createGuideCommand, deleteGuideCommand, moveGuideCommand, toggleGuideLockCommand } from '../core/page/guides.ts';
 import { setFilterCommand } from '../core/style/filter.ts';
 import { setTransformCommand } from '../core/style/transform.ts';
@@ -326,4 +326,4 @@ export const COMMANDS = {
 } as const satisfies CommandTable<EditorUi>;
 
 // The availability predicates code has registered; a built command's predicate must be here (createStore checks it).
-export const PREDICATES = { always, canUndo, canRedo, hasSelection, singleSelection, singleTextSelection, canUnwrap, canNestIntoPrevious, cellSelected, inTable, hasNaturalChild, flexOrGridContainer, instanceSelected, positionedSelection } as const satisfies PredicateTable<EditorUi>;
+export const PREDICATES = { always, canUndo, canRedo, hasSelection, singleSelection, singleTextSelection, canUnwrap, canNestIntoPrevious, cellSelected, inTable, hasNaturalChild, flexOrGridContainer, instanceSelected, positionedSelection, distributableSelection } as const satisfies PredicateTable<EditorUi>;

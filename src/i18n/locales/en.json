@@ -1297,6 +1297,7 @@
   "status.align.done": "{edge}: {elements}.",
   "status.align.needsPositioned": "Align works on absolutely positioned elements.",
   "status.distribute.done": "{axis}: {elements}, equal gaps.",
+  "status.distribute.needsPositioned": "Distribute works on absolutely positioned elements.",
   "status.distribute.needsThree": "Distribute needs at least three elements.",
   "status.animation.invalidSetting": "{setting}: \"{value}\" is not accepted.",
   "status.animation.nameTaken": "An animation named {name} already exists.",

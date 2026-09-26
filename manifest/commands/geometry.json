@@ -1249,8 +1249,8 @@
         }
       },
       "availability": {
-        "predicate": "positionedSelection",
-        "refusalKey": "status.align.needsPositioned"
+        "predicate": "distributableSelection",
+        "refusalKey": "status.distribute.needsPositioned"
       },
       "refusals": [
         "status.distribute.needsThree",

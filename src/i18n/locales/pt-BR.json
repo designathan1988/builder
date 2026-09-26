@@ -1296,6 +1296,7 @@
   "snapSettings.target.edges": "Bordas",
   "status.align.done": "{edge}: {elements}.",
   "status.distribute.done": "{axis}: {elements}, espaços iguais.",
+  "status.distribute.needsPositioned": "Distribuir funciona com elementos com posição absoluta.",
   "status.distribute.needsThree": "Distribuir exige pelo menos três elementos.",
   "status.align.needsPositioned": "Alinhar funciona com elementos com posição absoluta.",
   "status.animation.invalidSetting": "{setting}: \"{value}\" não é aceito.",

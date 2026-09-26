@@ -5,7 +5,7 @@
 import { useContext, type MouseEvent, type ReactNode } from 'react';
 import { COMMANDS, PREDICATES } from '../../app/commands.ts';
 import { isFeatureBuilt } from '../../app/features.ts';
-import { isBuilt, type PredicateTable } from '../../core/commands/registry.ts';
+import { isBuilt, type Message, type PredicateTable } from '../../core/commands/registry.ts';
 import { projectFileText } from '../../core/project/archive.ts';
 import type { DispatchResult } from '../../core/store/store.ts';
 import type { CommandId, FeatureId, KeyContextId, MessageId, PredicateId } from '../../generated/ids.ts';
@@ -68,15 +68,20 @@ export function useDoor(entry: DoorEntry, args: Readonly<Record<string, unknown>
   const drawsBody = useContext(PanelBodies);
   const built = ready && isDoorBuilt(entry) && !opensEmptyPanel({ ...entry.door.args, ...args }, drawsBody);
   const current = useEditorState((s) => built && isCurrent(entry, s, args));
-  const available = useEditorState((s) => built && ((PREDICATES as PredicateTable<EditorUi>)[entry.command.availability.predicate as PredicateId]?.test(s, MODEL_RULES) ?? true));
+  const predicate = (PREDICATES as PredicateTable<EditorUi>)[entry.command.availability.predicate as PredicateId];
+  const available = useEditorState((s) => built && (predicate?.test(s, MODEL_RULES) ?? true));
+  // why it is not available now: its predicate's own refusal when it names one (Distribute: three elements, or
+  // positioned ones; the audit's A3.23), else the door's reason (disabledReasonKey); one JSON text, stable between renders
+  const refused = useEditorState((s) => (built && !available && predicate?.refusal !== undefined ? JSON.stringify(predicate.refusal(s, MODEL_RULES)) : null));
   // the words the label fills in for the state now (the command's labelParams), as one JSON text so the hook's value
   // is stable between renders
   const params = useEditorState((s) => (built ? JSON.stringify(labelParamsOf(entry, s)) : '{}'));
   const label = labelled ?? t(entry.door.labelKey as MessageId, JSON.parse(params) as Record<string, string>);
   const face = labelled === undefined && entry.door.faceLabelKey !== null ? t(entry.door.faceLabelKey as MessageId) : label;
   const chord = chordHint(entry.command.id, keysIn);
-  const reason: MessageId | null = !built ? 'common.notAvailableYet' : available ? null : (entry.door.disabledReasonKey as MessageId);
-  const title = reason !== null ? t('common.disabledTitle', { label, reason: { key: reason } }) : chord !== null ? t('common.withShortcut', { label, shortcut: chord }) : label;
+  const said = refused === null ? null : (JSON.parse(refused) as Message);
+  const reason: MessageId | null = !built ? 'common.notAvailableYet' : available ? null : (said?.key ?? (entry.door.disabledReasonKey as MessageId));
+  const title = reason !== null ? t('common.disabledTitle', { label, reason: { key: reason, params: said?.params ?? {} } }) : chord !== null ? t('common.withShortcut', { label, shortcut: chord }) : label;
   const run = () => {
     if (!built || !available) return;
     const dispatch = store.dispatch as (id: CommandId, args: unknown) => DispatchResult;
