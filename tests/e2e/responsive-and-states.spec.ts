@@ -43,6 +43,8 @@ test('the breakpoint shown is kept after a reload, and a field says where its va
   await expect(page.locator(`[data-door="${TABLET}"]`)).toHaveAttribute('aria-selected', 'true');
 
   await control(page, ROW, { args: { target: 'n-title' } }).click();
+  // the inspector names the breakpoint the editor edits, never the base one while another is shown
+  await expect(page.locator('.active-breakpoint')).toHaveText('Tablet834');
   // Title's font size is set nowhere yet; its padding neither: no origin note
   const origin = page.locator(`.field-origin[data-field="${FONT}"]`);
   await expect(origin).toHaveCount(0);
@@ -64,6 +66,7 @@ test('while Hover is edited the canvas says so, and the exported page changes on
   await control(page, ROW, { args: { target: 'n-intro' } }).click();
   await runDoor(page, HOVER);
   await expect(page.locator('[data-canvas-badge="state"]')).toHaveText('Editing Hover');
+  await expect(page.locator('.state-picker__value')).toHaveText('Hover');
   await typeInto(page, COLOR, '#aa0000');
   const downloaded = page.waitForEvent('download');
   await runDoor(page, EXPORT);

@@ -834,3 +834,13 @@ Fragile / worth knowing:
 - Block check: .cache/logs/check-group03-091000.log: static green, 1298 passed, 9 failed (findings + one runner race
   since fixed, .cache/logs/open-json-rerun-091601.log 27/27). Visual pass: New blank page asks and Cancel keeps; a
   second tab reads, Take over editing moves the lock.
+
+## 2026-09-26: group 11 (responsive and states)
+
+- breakpoints-switch, breakpoint-overrides, state-styles: scenarios pass, teeth (feature tooths + layer, preview,
+  origin by hand; logs g11-*). The store hands handlers the edited layer as rules.base (new elements' defaults use
+  rules.baseLayer); editor readers use layeredRules(ui); shownValue gives what a field inherits; the renderer's
+  previewState draws the selection with the state applied (its own stylesheet). Menus opened from a button open at
+  fixed coordinates (the inspector's overflow cut the State menu). The selector bar names the active state and
+  breakpoint (it read the base ones: fixed with a test and its tooth).
+- Block check: .cache/logs/check-group11-093700.log: 1317 passed, 8 failed (findings), unit 1 (finding 49).

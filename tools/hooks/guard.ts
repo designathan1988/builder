@@ -3,12 +3,15 @@
 //
 //   node tools/hooks/guard.ts stop   (Stop) a turn does not end on a change npm run check has not validated: the
 //                                    agent is sent back once per state of the working tree
-//   node tools/hooks/guard.ts bash   (PreToolUse, Bash and PowerShell) a commit takes a working tree npm run check
-//                                    validated; a push to main takes a commit that the whole suite (npm run e2e) and
-//                                    npm run verify:fast passed on
+//   node tools/hooks/guard.ts bash   (PreToolUse, Bash and PowerShell) a commit on main takes a working tree npm run
+//                                    check validated (a commit on any other branch saves the work, and takes none: the
+//                                    tests run at the end of a block); a push to main takes a commit that the whole
+//                                    suite (npm run e2e) and npm run verify:fast passed on
 //
-// It only reads the working tree and the records of the checks (.cache/impact/), apart from the last tree it sent an
-// agent back for (.cache/impact/stop.json).
+// It judges the repository the git command runs in: the path of `git -C`, else the directory the hook is given (its
+// input's cwd), never the project's main folder (a worktree is a repository of its own, with its own branch and its
+// own records of the checks). It only reads the working tree and the records of the checks (.cache/impact/), apart
+// from the last tree it sent an agent back for (.cache/impact/stop.json).
 import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -46,7 +49,7 @@ export function commandWords(command: string): string {
 // Whether a git push in the command updates main: a refspec whose destination is main, HEAD while on main, or no
 // refspec while the branch pushes to main (its push destination, which a branch of another name can have).
 export function pushesMain(words: string, branch: { readonly current: string; readonly pushesTo: string }): boolean {
-  for (const m of words.matchAll(/\bgit\s+push\b([^;&|\n]*)/g)) {
+  for (const m of words.matchAll(/\bgit\s+(?:-C\s+\S+\s+)?push\b([^;&|\n]*)/g)) {
     const args = (m[1] ?? '').trim().split(/\s+/).filter((a) => a !== '' && !a.startsWith('-'));
     // the first argument is the remote, the rest are refspecs
     const refspecs = args.slice(1);
@@ -55,13 +58,25 @@ export function pushesMain(words: string, branch: { readonly current: string; re
   return false;
 }
 
+// The repository a git command runs in: the path it names with `git -C` (from the directory the command starts in),
+// else that directory. A path in the shell's POSIX form (/c/Users/...) is read as the drive's (C:/Users/...).
+export function repositoryOf(command: string, cwd: string): string {
+  const posix = (p: string) => p.replace(/^\/([a-zA-Z])\//, (_all, drive: string) => `${drive.toUpperCase()}:/`);
+  const named = /\bgit\s+-C\s+(?:"([^"]+)"|'([^']+)'|(\S+))/.exec(command);
+  const target = named ? (named[1] ?? named[2] ?? named[3] ?? '') : '';
+  if (target === '') return posix(cwd);
+  const resolved = posix(target);
+  return path.isAbsolute(resolved) ? resolved : path.resolve(posix(cwd), resolved);
+}
+
 export function bashVerdict(command: string, state: State, branch: () => { readonly current: string; readonly pushesTo: string }): string | null {
   const words = commandWords(command);
-  const commits = /\bgit\s+commit\b/.test(words);
-  const pushes = /\bgit\s+push\b/.test(words);
+  const commits = /\bgit\s+(-C\s+\S+\s+)?commit\b/.test(words);
+  const pushes = /\bgit\s+(-C\s+\S+\s+)?push\b/.test(words);
   if (!commits && !pushes) return null;
   const s = state;
-  if (commits && s.checked !== s.working) return 'git commit: npm run check has not validated this working tree. Run npm run check first; the commit takes a validated tree.';
+  // a commit on main takes a validated tree; on any other branch it saves the work (the tests run at a block's end)
+  if (commits && branch().current === 'main' && s.checked !== s.working) return 'git commit on main: npm run check has not validated this working tree. Run npm run check first; a commit on main takes a validated tree.';
   if (pushes && pushesMain(words, branch())) {
     const e2e = s.e2e?.tree === s.head && s.e2e.passed;
     const verify = s.verify?.tree === s.head && s.verify.passed;
@@ -87,10 +102,12 @@ async function currentState(): Promise<State> {
 }
 
 if (import.meta.main) {
-  // the records and git are read from the project's root, wherever the hook runs from
-  process.chdir(path.resolve(import.meta.dirname, '..', '..'));
   const mode = process.argv[2];
-  const input = JSON.parse(fs.readFileSync(0, 'utf8') || '{}') as { stop_hook_active?: boolean; tool_input?: { command?: string } };
+  const input = JSON.parse(fs.readFileSync(0, 'utf8') || '{}') as { stop_hook_active?: boolean; cwd?: string; tool_input?: { command?: string } };
+  // the records and git are read in the repository the command runs in (repositoryOf), else the project's root
+  const root = path.resolve(import.meta.dirname, '..', '..');
+  const cwd = typeof input.cwd === 'string' && input.cwd !== '' ? input.cwd : root;
+  process.chdir(mode === 'bash' ? repositoryOf(input.tool_input?.command ?? '', cwd) : cwd);
   if (mode === 'stop') {
     if (input.stop_hook_active === true) process.exit(0);
     const dirty = git('status', '--porcelain') !== '';
@@ -106,7 +123,7 @@ if (import.meta.main) {
     }
   } else if (mode === 'bash') {
     const command = input.tool_input?.command ?? '';
-    if (!/\bgit\s+(commit|push)\b/.test(commandWords(command))) process.exit(0);
+    if (!/\bgit\s+(-C\s+\S+\s+)?(commit|push)\b/.test(commandWords(command))) process.exit(0);
     const reason = bashVerdict(command, await currentState(), () => {
       const current = git('rev-parse', '--abbrev-ref', 'HEAD');
       // where a push with no refspec goes (push.default and the upstream decide it); the branch itself when unset

@@ -22,6 +22,8 @@ import { GuidesGridsDialog } from './guides-grids.tsx';
 import { SnapSettingsDialog } from './snap-settings.tsx';
 import { RecoveryDialog } from './recovery.tsx';
 import { TabGuardNotice } from './tab-guard.tsx';
+import { PreviewBar, PreviewPage } from './preview.tsx';
+import { previewing } from '../view/preview.ts';
 import { TopBar } from './top-bar.tsx';
 import { FitZoom, ReportFitZoom } from './slots.tsx';
 
@@ -54,6 +56,9 @@ export function Shell() {
   useEffect(() => installPointer(store), [store]);
   useEffect(() => installFocus(store), [store]);
   const classes = ['shell', sidebar ? '' : 'shell--no-sidebar', inspector ? '' : 'shell--no-inspector', `shell--dock-${dock}`].filter((c) => c !== '').join(' ');
+  // while previewing, the preview bar and the exported page over the editor (spec preview-mode): the editor stays as it
+  // is underneath, its canvas included, and the status bar below says so
+  const inPreview = useEditorState((s) => previewing(s.ui));
   return (
     <PanelBodies.Provider value={drawsBody}>
       <FitZoom.Provider value={zoom}>
@@ -76,6 +81,12 @@ export function Shell() {
             <SnapSettingsDialog />
             <RecoveryDialog />
             <TabGuardNotice />
+            {inPreview ? (
+              <div className="preview" data-key-context="preview">
+                <PreviewBar />
+                <PreviewPage />
+              </div>
+            ) : null}
           </div>
         </ReportFitZoom.Provider>
       </FitZoom.Provider>

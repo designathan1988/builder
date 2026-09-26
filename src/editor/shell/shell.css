@@ -3482,3 +3482,39 @@ button.picker__swatch {
   color: var(--color-on-mode-state);
   font: var(--fw-label) var(--fs-label) / var(--lh-label) var(--font-ui);
 }
+
+/* the preview (preview.tsx, spec preview-mode): the preview bar over the exported page, which keeps its width at 100 %,
+   laid over the editor down to the status bar */
+.preview {
+  position: fixed;
+  inset: 0 0 var(--size-status-bar) 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-canvas);
+}
+
+.preview-bar {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-3);
+  height: var(--size-top-bar);
+  padding: 0 var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.preview-stage {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+.preview__page {
+  display: block;
+  height: 100%;
+  margin: 0 auto;
+  border: 0;
+  background: var(--color-surface-raised);
+}

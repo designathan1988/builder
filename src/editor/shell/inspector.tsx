@@ -36,8 +36,8 @@ import { classOrigin, styleSource } from '../inspector/style-target.ts';
 import { inspectorTab } from '../workspace/layout.ts';
 import { isPanelOpen, panelName } from '../workspace/panels.ts';
 import { useLocale, useT } from '../text.ts';
-import { BREAKPOINTS } from '../view/breakpoints.ts';
-import { STATES } from '../view/style-state.ts';
+import { activeBreakpoint, BREAKPOINTS } from '../view/breakpoints.ts';
+import { activeState, STATES } from '../view/style-state.ts';
 import { KeywordButtons, NumberField, TextStyleField, presetsOf, usePageValues, type FieldPart } from './field.tsx';
 import { storedValue, shownValue } from '../../core/style/set.ts';
 import { kindsOf, shownForKinds } from '../../core/style/applies.ts';
@@ -65,10 +65,6 @@ const TARGETS = new Map<string, Target>([
   ...manifest.properties.recipes.map((r) => [r.id, { ...r, icons: {}, subsets: [] }] as const),
 ]);
 const SECTIONS = manifest.properties.sections;
-const BASE_BREAKPOINT = manifest.properties.breakpoints.find((b) => b.base);
-const BASE_STATE = manifest.properties.states[0];
-// the icon the frame's tab of the base breakpoint shows, for the read-only active breakpoint
-const BASE_BREAKPOINT_ICON = doorSlots('canvas-frame').find((d) => d.door.args.breakpoint === BASE_BREAKPOINT?.id)?.door.icon ?? null;
 // the selector bar's target chip and the × drawn inside a class chip
 const CHIP = doorSlots('inspector-selector-bar').find((d) => drawnAsOf(d) === 'item');
 const CHIP_PART = CHIP ? partOf('inspector-selector-bar', CHIP) : null;
@@ -1309,6 +1305,10 @@ export function Inspector() {
 // the active breakpoint.
 function SelectorBar() {
   const t = useT();
+  // the state and the breakpoint the editor edits (view/style-state.ts, view/breakpoints.ts)
+  const state = useEditorState((s) => activeState(s.ui));
+  const breakpoint = useEditorState((s) => activeBreakpoint(s.ui));
+  const breakpointIcon = doorSlots('canvas-frame').find((d) => d.door.args.breakpoint === breakpoint.id)?.door.icon ?? null;
   return (
     <div className="selector-bar" data-region="inspector-selector-bar">
       <SelectedElement />
@@ -1333,15 +1333,15 @@ function SelectorBar() {
             slot.kind === 'menu' ? (
               <MenuButton key={slot.menu} menu={slot.menu} anchor={slot.anchor} indicator className="state-picker">
                 <span className="state-picker__key">{t('menu.styleState')}</span>
-                <span className="state-picker__value">{BASE_STATE ? t(BASE_STATE.labelKey as MessageId) : null}</span>
+                <span className="state-picker__value">{t(state.labelKey as MessageId)}</span>
               </MenuButton>
             ) : null
           }
         />
         <span className="active-breakpoint" title={t('inspector.activeBreakpoint')}>
-          {BASE_BREAKPOINT_ICON !== null ? <Icon name={BASE_BREAKPOINT_ICON} size="sm" /> : null}
-          {BASE_BREAKPOINT ? <span>{t(BASE_BREAKPOINT.labelKey as MessageId)}</span> : null}
-          {BASE_BREAKPOINT ? <span className="active-breakpoint__width">{BASE_BREAKPOINT.width}</span> : null}
+          {breakpointIcon !== null ? <Icon name={breakpointIcon} size="sm" /> : null}
+          <span>{t(breakpoint.labelKey as MessageId)}</span>
+          <span className="active-breakpoint__width">{breakpoint.width}</span>
         </span>
       </div>
     </div>

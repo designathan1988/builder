@@ -6,6 +6,7 @@
 // (core/structure/hand.ts) the canvas's keys are the hand context's, and they act at the hand's aim. A command that
 // takes what the system clipboard holds runs once the clipboard is read (src/editor/clipboard.ts). A door whose
 // gesture gives a held key a meaning (a number field's Shift+ArrowUp) runs with that key held and hands it on.
+import { previewing } from '../view/preview.ts';
 import type { CommandId, DoorId, FeatureId, KeyContextId } from '../../generated/ids.ts';
 import { normaliseChord } from '../../manifest/chord.ts';
 import { keyContextChain, manifest, numberConstant, type DoorEntry } from '../../manifest/runtime.ts';
@@ -151,6 +152,8 @@ export function heldKeyBinding(context: KeyContextId, event: KeyboardEvent): { r
 // canvas element or of a Layers row, which gives the focus back to its row), and the hand's keys act wherever it was
 // taken from
 const HAND: KeyContextId = 'hand';
+// the key context of the preview (interactions.json): its keys while the editor previews (spec preview-mode)
+const PREVIEW: KeyContextId = 'preview';
 // the key that measures distances on the canvas while it is held (spec hover-measure)
 const ALT = 'Alt';
 // The nudge keys (spec absolute-nudge): the arrows of the canvas-positioned context, which the canvas's keys are while
@@ -233,7 +236,8 @@ export function installKeymap(store: EditorStore, target: Window = window): () =
     const hand = gesture === null && HAND_FROM.includes(focused) ? heldHand(store.getState()) : null;
     // while an Edit on canvas mode is on, the canvas's keys are its mode's (canvas/edit-mode.ts)
     // while every selected element is absolute or fixed, the canvas's arrows nudge them (canvas-positioned)
-    const context = gesture?.context ?? (hand !== null ? HAND : positionedContext(store, keyContextIn(store.getState().ui, focused)));
+    // while previewing, the keys are the preview's, wherever the focus is in the editor (spec preview-mode)
+    const context = gesture?.context ?? (previewing(store.getState().ui) ? PREVIEW : hand !== null ? HAND : positionedContext(store, keyContextIn(store.getState().ui, focused)));
     const held = bindingFor(context, chordOf(event)) === null ? heldKeyBinding(context, event) : null;
     const binding = held?.entry ?? bindingFor(context, chordOf(event));
     if (!binding) return;

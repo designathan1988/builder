@@ -18,6 +18,7 @@ import { INITIAL_PANELS, type PanelsState } from './workspace/panels.ts';
 import { INITIAL_CAMERA, type CameraState } from './view/camera.ts';
 import type { ColorPickerClosed, ColorPickerState } from './inspector/color-picker.ts';
 import type { Preferences } from './preferences/preferences.ts';
+import type { Selection } from '../core/document/model.ts';
 import type { Revealed } from './inspector/sections.ts';
 import type { EditMode } from './canvas/edit-mode.ts';
 
@@ -53,6 +54,8 @@ export interface EditorUi {
   readonly recovery?: readonly { readonly revision: number; readonly time: number }[] | undefined;
   // the style state the editor edits (view.setStyleState; view/style-state.ts); absent while it is Base
   readonly styleState?: string | undefined;
+  // the preview (view/preview.ts): the selection to give back when it ends; absent while editing
+  readonly preview?: { readonly selection: Selection } | undefined;
 }
 
 export function initialEditorUi(preferences: Preferences): EditorUi {

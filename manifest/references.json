@@ -873,12 +873,12 @@
     {
       "kind": "handler",
       "id": "view.enterPreview",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",
       "id": "view.exitPreview",
-      "status": "planned"
+      "status": "registered"
     },
     {
       "kind": "handler",

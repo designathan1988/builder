@@ -71,6 +71,7 @@ import { toggleEqualSpacing, toggleGuidesVisible, toggleOutlines, toggleRulers, 
 import { openDialog } from '../editor/workspace/dialogs.ts';
 import { setBreakpoint } from '../editor/view/breakpoints.ts';
 import { setStyleState } from '../editor/view/style-state.ts';
+import { enterPreview, exitPreview } from '../editor/view/preview.ts';
 import { newBlankPage } from '../core/project/project.ts';
 import { restoreVersion } from '../core/project/recovery.ts';
 import { takeOverEditing } from '../core/project/tab-guard.ts';
@@ -273,8 +274,8 @@ export const COMMANDS = {
   'view.setBreakpoint': setBreakpoint,
   'view.setEditorView': NOT_AVAILABLE_YET,
   'view.setStyleState': setStyleState,
-  'view.enterPreview': NOT_AVAILABLE_YET,
-  'view.exitPreview': NOT_AVAILABLE_YET,
+  'view.enterPreview': enterPreview,
+  'view.exitPreview': exitPreview,
   'view.toggleOutlines': toggleOutlines,
   'view.toggleZones': toggleZones,
   'view.toggleRulers': toggleRulers,

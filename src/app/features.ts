@@ -150,9 +150,9 @@ export const FEATURES = {
   'breakpoint-overrides': registerFeature('breakpoint-overrides'),
   'state-styles': registerFeature('state-styles'),
   // 12 preview, embed, theme
-  'preview-mode': NOT_AVAILABLE_YET,
+  'preview-mode': registerFeature('preview-mode'),
   'embed-html': registerFeature('embed-html'),
-  'theme-switch': NOT_AVAILABLE_YET,
+  'theme-switch': registerFeature('theme-switch'),
   // 13 workspace
   'dock-toggles': NOT_AVAILABLE_YET,
   'command-bar': NOT_AVAILABLE_YET,

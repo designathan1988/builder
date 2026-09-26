@@ -16,8 +16,13 @@ The hooks in `.claude/settings.json` (`tools/hooks/guard.ts`) hold the agents to
 
 - **The end of a turn.** A turn that leaves changes `npm run check` has not validated is sent back once, to run it. Why:
   a change nobody validated is the most expensive kind to find later.
-- **A commit.** A commit takes only a working tree `npm run check` validated, even when the check failed. Why: the
+- **A commit on main.** It takes only a working tree `npm run check` validated, even when the check failed. Why: the
   author has seen the result. A failing tree belongs on a `wip/` branch.
+- **A commit on any other branch** (`integration`, `feature/`, `wip/`) takes no check. Why: it saves the work, which
+  must never wait for a test (the user's decision after a day of work was left out of every commit); the tests run at
+  the end of each block, and `main` is still guarded by the checkpoint below.
+- **Which repository.** The guard judges the repository the git command runs in: the path of `git -C`, else the hook's
+  cwd, never the project's main folder (a worktree has its own branch and its own records of the checks).
 - **A push to main.** It takes only a commit that `npm run e2e` and `npm run verify:fast` both passed on. Each records
   the tree it ran on and its final status (`tools/impact/checkpoint.ts`). Why: `main` stays green. The limited
   validation vouches for a change, and the checkpoint vouches for the commit.

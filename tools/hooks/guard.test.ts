@@ -1,6 +1,6 @@
 // The validation cycle's guard (tools/hooks/guard.ts): what it lets an agent do, and what it sends back.
 import { describe, expect, it } from 'vitest';
-import { bashVerdict, commandWords, pushesMain, stopVerdict, type State } from './guard.ts';
+import { bashVerdict, commandWords, pushesMain, repositoryOf, stopVerdict, type State } from './guard.ts';
 
 const at = '2026-09-25T00:00:00.000Z';
 const state = (over: Partial<State> = {}): State => ({ working: 'w', head: 'h', checked: 'w', e2e: { tree: 'h', passed: true, at }, verify: { tree: 'h', passed: true, at }, ...over });
@@ -44,6 +44,22 @@ describe('the commands a turn runs', () => {
     expect(bashVerdict('git push origin main', state({ e2e: { tree: 'h', passed: false, at } }), () => on('integration'))).toMatch(/npm run e2e passing/);
     expect(bashVerdict('git push origin main', state({ verify: { tree: 'older', passed: true, at } }), () => on('integration'))).toMatch(/verify:fast passing/);
     expect(bashVerdict('git push origin feature/x', state({ e2e: undefined }), () => on('feature/x'))).toBeNull();
+  });
+  it('judges the repository the git command runs in, never the main folder', () => {
+    // the directory the hook is given
+    expect(repositoryOf('git commit -m x', 'C:/work/builder/.cache/wt/integration')).toBe('C:/work/builder/.cache/wt/integration');
+    // the path of git -C, absolute in the shell's form or relative to that directory
+    expect(repositoryOf('git -C /c/work/builder/.cache/wt/integration commit -m x', 'C:/work/builder')).toBe('C:/work/builder/.cache/wt/integration');
+    expect(repositoryOf('git -C "D:/elsewhere/repo" push origin integration', 'C:/work/builder')).toBe('D:/elsewhere/repo');
+    expect(repositoryOf('git -C .cache/wt/integration commit -m x', 'C:/work/builder').replaceAll('\\', '/')).toBe('C:/work/builder/.cache/wt/integration');
+    expect(bashVerdict('git -C /c/w commit -m x', state({ checked: 'old' }), () => on('main'))).toMatch(/npm run check/);
+    expect(pushesMain('git -C /c/w push origin main', on('integration'))).toBe(true);
+  });
+  it('lets a commit on any branch but main save the work without npm run check', () => {
+    expect(bashVerdict('git add -A && git commit -m x', state({ checked: 'old' }), () => on('integration'))).toBeNull();
+    expect(bashVerdict('git -C /c/w commit -m x', state({ checked: null }), () => on('feature/x'))).toBeNull();
+    // the push of that branch, not to main, takes nothing either
+    expect(bashVerdict('git push origin integration', state({ checked: 'old', e2e: undefined }), () => on('integration'))).toBeNull();
   });
   it('lets through a command that neither commits nor pushes', () => {
     expect(bashVerdict('npm run check', state({ checked: 'old', e2e: undefined }), () => on('main'))).toBeNull();

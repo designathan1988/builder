@@ -165,15 +165,31 @@ export function exportPage(document: DocumentJson, pageIndex: number, rules: Mod
 // the time every entry of the archive carries: the ZIP format's first day, so the same document gives the same bytes
 const FIXED_TIME = Date.UTC(1980, 0, 1);
 
-export const exportProject = registerHandler('project.export', ({ state, rules }) => {
-  const encoder = new TextEncoder();
+// The site's files: each page's HTML, by its file, and the one stylesheet they link (the export writes them; the preview
+// shows them).
+export function siteFiles(document: DocumentJson, rules: ModelRules): { readonly pages: readonly { readonly file: string; readonly html: string }[]; readonly css: string } {
   const classes = newShared();
-  const pages = state.document.pages.map((page, i) => ({ page, files: exportPage(state.document, i, rules, classes) }));
+  const pages = document.pages.map((page, i) => ({ page, files: exportPage(document, i, rules, classes) }));
   // the project's design tokens first, as the :root rule of their variables (core/design/tokens.ts)
   // each block ends with its line's end, as a page's rules do, so a blank line parts every rule from the next
-  const shared = [rootCss(state.document.tokens ?? []), classesCss(state.document.classes ?? [], rules.output, 'block')].filter((c) => c !== '').map((c) => `${c}\n`);
+  const shared = [rootCss(document.tokens ?? []), classesCss(document.classes ?? [], rules.output, 'block')].filter((c) => c !== '').map((c) => `${c}\n`);
   const css = [...shared, ...pages.map((p) => p.files.css)].filter((c) => c !== '').join('\n');
-  const entries = [...pages.map(({ page, files }) => ({ path: page.file, bytes: encoder.encode(files.html) })), { path: STYLESHEET, bytes: encoder.encode(css) }];
+  return { pages: pages.map(({ page, files }) => ({ file: page.file, html: files.html })), css };
+}
+
+// A page as the preview shows it (spec preview-mode): the exported page itself, its stylesheet written in its head in
+// place of the link (the preview has no files to load), and links and forms opening in a new tab, never in the editor.
+export function previewPage(document: DocumentJson, rules: ModelRules, pageIndex = 0): string {
+  const site = siteFiles(document, rules);
+  const html = site.pages[pageIndex]?.html ?? '';
+  const link = `  <link rel="stylesheet" href="${STYLESHEET}">`;
+  return html.replace(link, `  <base target="_blank">\n  <style>\n${site.css}  </style>`);
+}
+
+export const exportProject = registerHandler('project.export', ({ state, rules }) => {
+  const encoder = new TextEncoder();
+  const site = siteFiles(state.document, rules);
+  const entries = [...site.pages.map(({ file, html }) => ({ path: file, bytes: encoder.encode(html) })), { path: STYLESHEET, bytes: encoder.encode(site.css) }];
   const bytes = zip(entries, FIXED_TIME);
   return { kind: 'change' as const, message: message('status.export.done', { file: SITE_ARCHIVE }), download: { name: SITE_ARCHIVE, type: 'application/zip', bytes } };
 });
