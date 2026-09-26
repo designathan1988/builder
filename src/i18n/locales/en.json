@@ -1728,6 +1728,8 @@
   "settings.inputTypeDrops": "Changing type will remove {attributes}. Press Enter to apply.",
   "settings.tagDrops": "Changing tag will remove {attributes}. Press Enter to apply.",
   "feature.settingsGrammarTag": "Settings grammar and tag changes",
+  "feature.settingsTypeFields": "Type-specific Settings fields",
+  "settings.bodyTooltip": "Tooltip",
   "settings.optionPart.text": "{name} · Text",
   "settings.optionPart.value": "{name} · Value",
   "settings.valuePicker": "Choose {attribute}",
