@@ -21,6 +21,8 @@ export interface Door {
   readonly source?: string;
   readonly zone?: string;
   readonly gesture?: string | null;
+  // canvas-handle: the handle it is drawn as
+  readonly handle?: string;
   // panel-control: the panel and the control it is drawn as
   readonly panel?: string;
   readonly control?: string;
@@ -67,10 +69,24 @@ export function door(ref: string): Door {
 const KEYS: Record<string, string> = { Ctrl: 'Control', '\\': 'Backslash' };
 export const keys = (chord: string): string => chord.split('+').map((k) => KEYS[k] ?? (k.length === 1 ? k.toLowerCase() : k)).join('+');
 
+// The quick panel (src/editor/canvas/quick-panel.tsx) opens from its chip, which is no door (DESIGN.md: opening the
+// quick panel is data-local): a door drawn in it (its fields, More actions) and its grip are reached by opening it
+// first, as a person clicks the chip beside the selection.
+const QUICK_PANEL_GRIP = 'quick-panel-grip';
+export const inQuickPanel = (d: Door): boolean => d.kind === 'quick-panel' || (d.kind === 'panel-drag' && d.source === QUICK_PANEL_GRIP);
+export async function openQuickPanel(page: Page): Promise<void> {
+  const chip = page.locator('[data-quick-panel-chip][aria-expanded="false"]');
+  if ((await chip.count()) > 0) await chip.click();
+  await page.locator('[data-quick-panel-chip][aria-expanded="true"]').waitFor();
+}
+
 // opens a menu from its button, or from the menu it is a submenu of (English UI)
 export async function openMenu(page: Page, id: string): Promise<void> {
   const menu = MENUS.find((m) => m.id === id);
   if (menu === undefined) throw new Error(`layout.json has no menu ${id}`);
+  // the menu buttons are drawn with the editor: count them only once it is on screen (counting right after a
+  // navigation raced the first render and read "no button" for a menu that has one)
+  await page.locator('.workbench').waitFor();
   const button = page.locator(`.menu-button[data-menu="${id}"]`);
   if ((await button.count()) > 0) {
     // a menu with more than one button (Zoom: the canvas toolbar and the status bar) opens from the first
@@ -86,13 +102,24 @@ export async function openMenu(page: Page, id: string): Promise<void> {
 
 // The control of a door drawn once per item it stands for (a Layers row per node, an Insert tile per palette entry):
 // the one whose arguments (data-args, written by the door's drawing) hold every argument given. Without arguments,
-// the door's only control, or with `any` the first of them.
+// the door's only control, or with `any` the first of them that is available (a field's parts are drawn for every
+// field, those of a feature still to come unavailable; the census runs only a door it read available).
 export function control(page: Page, ref: string, options: { readonly args?: Readonly<Record<string, unknown>>; readonly any?: boolean } = {}): Locator {
   // a CSS string of any text: quoted with ', its backslashes and quotes escaped
   const css = (text: string) => `'${text.replaceAll('\\', '\\\\').replaceAll("'", "\\'")}'`;
   const given = Object.entries(options.args ?? {}).map(([name, value]) => `[data-args*=${css(`${JSON.stringify(name)}:${JSON.stringify(value)}`)}]`);
   const all = page.locator(`[data-door="${ref}"]${given.join('')}`);
-  return options.any === true ? all.first() : all;
+  if (options.any !== true) return all;
+  const available = page.locator(`[data-door="${ref}"]${given.join('')}:not([aria-disabled="true"]):not([disabled])`);
+  return available.first();
+}
+
+// Any drawn control, of any door, that stands for these arguments (a canvas handle standing for itself: its arrows are
+// keys of another command, handle.step).
+export function standingControl(page: Page, args: Readonly<Record<string, unknown>>): Locator {
+  const css = (text: string) => `'${text.replaceAll('\\', '\\\\').replaceAll("'", "\\'")}'`;
+  const given = Object.entries(args).map(([name, value]) => `[data-args*=${css(`${JSON.stringify(name)}:${JSON.stringify(value)}`)}]`);
+  return page.locator(`[data-door]${given.join('')}`);
 }
 
 // A panel control's door with a key held (a Layers row's Shift+click) is drawn by the control of the same gesture
@@ -133,6 +160,7 @@ export async function runDoor(page: Page, ref: string, options: { readonly args?
     if (d.menu === undefined) throw new Error(`menu door ${ref} names no menu`);
     await openMenu(page, d.menu);
   }
+  if (inQuickPanel(d)) await openQuickPanel(page);
   // a door drawn as an area (the backdrop under a menu, a Layers row's name) is pressed where nothing drawn over it
   // lies, near its top-left corner, as a person clicks away from a menu; any other control at its centre
   const at = d.drawnAs === 'area' ? { position: { x: 4, y: 4 } } : undefined;

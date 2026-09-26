@@ -23,7 +23,7 @@
         "undoable": true,
         "coalesce": "none",
         "undoRestoresSelection": "before-command",
-        "transaction": "per-dispatch",
+        "transaction": "per-gesture",
         "noChange": "no-entry"
       },
       "entryPoints": [
@@ -77,7 +77,7 @@
         "undoable": true,
         "coalesce": "none",
         "undoRestoresSelection": "before-command",
-        "transaction": "per-dispatch",
+        "transaction": "per-gesture",
         "noChange": "no-entry"
       },
       "entryPoints": [
@@ -140,7 +140,9 @@
         "refusalKey": null
       },
       "refusals": [
-        "status.tokens.nameTaken"
+        "status.tokens.nameTaken",
+        "status.tokens.badName",
+        "status.tokens.invalidValue"
       ],
       "confirmation": null,
       "history": {
@@ -262,7 +264,8 @@
         "refusalKey": null
       },
       "refusals": [
-        "status.tokens.nameTaken"
+        "status.tokens.nameTaken",
+        "status.tokens.badName"
       ],
       "confirmation": null,
       "history": {
@@ -374,7 +377,9 @@
         "refusalKey": "status.needsSingleSelection"
       },
       "refusals": [
-        "status.classes.nameTaken"
+        "status.classes.nameTaken",
+        "status.classes.badName",
+        "status.locked.edit"
       ],
       "confirmation": null,
       "history": {
@@ -430,6 +435,7 @@
         "refusalKey": null
       },
       "refusals": [
+        "status.classes.badName",
         "status.locked.edit"
       ],
       "confirmation": null,
@@ -594,7 +600,9 @@
         "refusalKey": "status.needsSingleSelection"
       },
       "refusals": [
-        "status.components.root"
+        "status.components.root",
+        "status.components.inInstance",
+        "status.locked.edit"
       ],
       "confirmation": null,
       "history": {
@@ -682,7 +690,8 @@
         "status.refused.singleChild",
         "status.refused.labelOneControl",
         "status.refused.noChildren",
-        "status.locked.insert"
+        "status.locked.insert",
+        "status.components.inInstance"
       ],
       "confirmation": null,
       "history": {
@@ -705,7 +714,7 @@
           "gesture": null,
           "labelKey": "command.components.insertInstance",
           "faceLabelKey": null,
-          "icon": null,
+          "icon": "component",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "insert",

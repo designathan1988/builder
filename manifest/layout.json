@@ -163,7 +163,8 @@
     },
     {
       "id": "guides-grids-dialog",
-      "area": "overlay"
+      "area": "overlay",
+      "breaks": [3, 5, 7, 9, 11]
     },
     {
       "id": "snap-settings-dialog",
@@ -203,6 +204,42 @@
     },
     {
       "id": "dialog",
+      "area": "component"
+    },
+    {
+      "id": "palette-tiles",
+      "area": "component"
+    },
+    {
+      "id": "layers-row-details",
+      "area": "component"
+    },
+    {
+      "id": "rulers",
+      "area": "component"
+    },
+    {
+      "id": "ruler-selection",
+      "area": "component"
+    },
+    {
+      "id": "canvas-outlines",
+      "area": "component"
+    },
+    {
+      "id": "canvas-zones",
+      "area": "component"
+    },
+    {
+      "id": "grid-columns",
+      "area": "component"
+    },
+    {
+      "id": "grid-rows",
+      "area": "component"
+    },
+    {
+      "id": "grid-dots",
       "area": "component"
     }
   ],
@@ -371,7 +408,11 @@
     "collapsed": "chevron-right",
     "checked": "check",
     "folder": "folder",
-    "sizeVariable": "square-round-corner"
+    "sizeVariable": "square-round-corner",
+    "sideRow": "columns-2",
+    "sideColumn": "rows-2",
+    "quickPanel": "sliders-horizontal",
+    "grip": "grip-vertical"
   },
   "panels": {
     "explorer": {

@@ -1501,6 +1501,7 @@ export function checkManifest(input: ManifestInput): CheckResult {
 
   // ---- history: every command declares how it meets the history
   const writesProperties = new Set(doors.filter((d) => d.door.adapter.writes.length > 0).map((d) => d.command.id));
+  const sessionPanels = new Set(doors.flatMap((d) => (d.command.id === 'drag.cancel' && d.door.kind === 'shortcut' ? [d.door.context] : [])));
   for (const c of commands) {
     const h = c.command.history;
     const path = `${c.path}.history`;
@@ -1508,7 +1509,9 @@ export function checkManifest(input: ManifestInput): CheckResult {
       if (writesProperties.has(c.command.id)) report('history', c.file, path, `${c.command.id} writes properties, so it changes the document and must be undoable`);
       continue;
     }
-    const gesture = c.command.entryPoints.some((d) => (GESTURE_DOOR_KINDS as readonly DoorKind[]).includes(d.kind));
+    // a door of a panel that is a pointer gesture while it is open (the colour picker's session: Escape, drag.cancel,
+    // has a door in the key context of the panel's name) runs inside that gesture too
+    const gesture = c.command.entryPoints.some((d) => (GESTURE_DOOR_KINDS as readonly DoorKind[]).includes(d.kind) || (d.kind === 'panel-control' && d.panel !== undefined && sessionPanels.has(d.panel)));
     if (gesture && h.transaction !== 'per-gesture') report('history', c.file, `${path}.transaction`, `${c.command.id} has pointer-gesture doors: one transaction per gesture`);
     if (!gesture && h.transaction !== 'per-dispatch') report('history', c.file, `${path}.transaction`, `${c.command.id} has no pointer-gesture door: one transaction per dispatch`);
     if (h.coalesce !== 'none') {
@@ -2064,13 +2067,16 @@ export function checkManifest(input: ManifestInput): CheckResult {
             if (commandById.has(command) && command !== actionCommand) report('step', f.file, `${at}.doors[${di}]`, `${doorRef} is not a door of ${actionCommand}, the action step's command: the doors of a scenario are alternatives for its action step`);
           });
         }
-        // held drags: a hold ends at a release on its door or at drag.cancel; a release ends a hold
+        // held drags: a hold ends at a release on its door or at drag.cancel; a release ends a hold. A panel drag is
+        // pressed on the control its arguments stand for (a number field's label), never on a node: with no hold of
+        // its door before it, its step is a whole drag, not a release
         const held = new Map<string, number>();
         s.steps.forEach((step, ti) => {
           const entry = doorByRef.get(step.door);
           const drag = entry !== undefined && (GESTURE_DOOR_KINDS as readonly string[]).includes(entry.door.kind);
           const hold = step.hold === true;
-          const release = drag && !hold && step.target === null && step.drop === null;
+          const wholePanelDrag = entry?.door.kind === 'panel-drag' && !held.has(step.door);
+          const release = drag && !hold && step.target === null && step.drop === null && !wholePanelDrag;
           if (hold && !drag) report('step', f.file, `${at}.steps[${ti}].hold`, `${step.door} is not a drag: only a drag is held`);
           if (hold && drag) held.set(step.door, ti);
           if (release) {

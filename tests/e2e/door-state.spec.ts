@@ -1,16 +1,15 @@
 // A built door that stands for a state says whether it is on, as its door data says it is drawn: a toggle button
 // (pressed) by aria-pressed, a menu item (checked radio or checkbox) by its role and aria-checked, both from the
 // current state the store holds. A door that is no toggle (a close button, a command item) says nothing.
-import { expect, test } from '@playwright/test';
+import { expect, test } from '../support/test.ts';
+import { openEditor } from '../support/editor.ts';
 import { openMenu, runDoor, runs } from './door.ts';
 
 const door = (ref: string) => `[data-door="${ref}"]`;
 
 test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/');
-  await page.evaluate(() => window.localStorage.clear());
-  await page.reload();
+  await openEditor(page);
   await expect(page.locator('.workbench')).toBeVisible();
 });
 
@@ -63,12 +62,13 @@ test('the Theme and Language items are one choice of a set and say which is chos
   await expect(page.locator(door('workspace.toggleLeftDock#menu-view'))).not.toHaveAttribute('aria-checked', /.*/);
 });
 
-// A control that cannot run never looks like one that can (brief "a aplicação completa": no enabled-looking control
-// that does nothing): the top bar's main action, Export project (ZIP), wears the accent only while it can run; not
-// available yet, it is drawn like every other unavailable control, and a click on it exports nothing.
-test('a main action that is not available yet is not drawn in the accent colour, and a click on it does nothing', async ({ page }) => {
+// A control looks like it can run exactly when it can (brief "a aplicação completa": no enabled-looking control that
+// does nothing; finding 32): the top bar's main action, Export project (ZIP), wears the accent only while it can run.
+// Since export-zip is built it can: it wears the accent, and a click hands out the site (the unavailable case of this
+// rule has no main action left outside preview mode).
+test('the top bar\'s main action wears the accent once it can run, and a click exports the site', async ({ page }) => {
   const exportButton = page.locator(door('project.export#toolbar-top-bar-export'));
-  await expect(exportButton).toHaveAttribute('aria-disabled', 'true');
+  await expect(exportButton).not.toHaveAttribute('aria-disabled', 'true');
   const colours = await exportButton.evaluate((el) => {
     const probe = document.createElement('span');
     probe.style.color = 'var(--color-accent)';
@@ -77,10 +77,9 @@ test('a main action that is not available yet is not drawn in the accent colour,
     probe.remove();
     return { accent, background: getComputedStyle(el).backgroundColor };
   });
-  expect(colours.background).not.toBe(colours.accent);
-  const downloads: string[] = [];
-  page.on('download', (d) => downloads.push(d.suggestedFilename()));
-  await exportButton.click({ force: true });
-  await page.waitForTimeout(300);
-  expect(downloads).toEqual([]);
+  expect(colours.background).toBe(colours.accent);
+  const download = page.waitForEvent('download');
+  await exportButton.click();
+  expect((await download).suggestedFilename()).toBe('site.zip');
+  await expect(page.locator('[role="status"]')).toHaveText('Exported the site as site.zip.');
 });

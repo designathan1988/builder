@@ -3,6 +3,7 @@
 // the dock are shown or hidden by the workspace state; the theme and the language follow the preferences.
 import { useEffect, useState } from 'react';
 import { ContextMenu } from '../doors/menu.tsx';
+import { Confirmation } from './confirmation.tsx';
 import { installKeymap } from '../input/keymap.ts';
 import { installPointer } from '../input/pointer.ts';
 import { installFocus } from '../focus/focus.ts';
@@ -16,6 +17,11 @@ import { Inspector } from './inspector.tsx';
 import { ActivityBar, SIDEBAR_VIEWS, Sidebar } from './sidebar.tsx';
 import { StatusBar } from './status-bar.tsx';
 import { Toast } from './toast.tsx';
+import { ColorPicker } from './color.tsx';
+import { GuidesGridsDialog } from './guides-grids.tsx';
+import { SnapSettingsDialog } from './snap-settings.tsx';
+import { RecoveryDialog } from './recovery.tsx';
+import { TabGuardNotice } from './tab-guard.tsx';
 import { TopBar } from './top-bar.tsx';
 import { FitZoom, ReportFitZoom } from './slots.tsx';
 
@@ -64,6 +70,12 @@ export function Shell() {
             <StatusBar />
             <Toast />
             <ContextMenu />
+            <Confirmation />
+            <ColorPicker />
+            <GuidesGridsDialog />
+            <SnapSettingsDialog />
+            <RecoveryDialog />
+            <TabGuardNotice />
           </div>
         </ReportFitZoom.Provider>
       </FitZoom.Provider>

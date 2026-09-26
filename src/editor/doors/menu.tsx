@@ -51,16 +51,35 @@ function MenuItem({ entry, onDone, keysIn = 'global' }: { readonly entry: DoorEn
   );
 }
 
-// A menu's items. A menu opened from its button takes the focus on its first item; a submenu is drawn with its menu
-// and shown while the pointer is over its item, the focus is in it, or its item was run (shell.css).
-function MenuList({ menu, onDone, focusFirst }: { readonly menu: MenuId; readonly onDone: () => void; readonly focusFirst: boolean }) {
+// A menu's items. A menu opened from its button takes the focus on its first item, and opens at fixed window
+// coordinates under that button, inside the window with the --space-4 token between it and the window's edge, so no
+// panel that clips its content (the inspector) cuts it; a submenu is drawn with its menu and shown while the pointer
+// is over its item, the focus is in it, or its item was run (shell.css).
+function MenuList({ menu, onDone, focusFirst, anchor }: { readonly menu: MenuId; readonly onDone: () => void; readonly focusFirst: boolean; readonly anchor?: { readonly current: HTMLElement | null } }) {
   const list = useRef<HTMLDivElement>(null);
   const t = useT();
+  const [at, setAt] = useState<{ readonly left: number; readonly top: number } | null>(null);
+  useLayoutEffect(() => {
+    const button = anchor?.current;
+    const own = list.current;
+    if (!button || !own) return;
+    const edge = parseFloat(getComputedStyle(own).getPropertyValue('--space-4')) || 0;
+    const from = button.getBoundingClientRect();
+    const { width, height } = own.getBoundingClientRect();
+    // under the button from its left edge, or ending at its right edge when that would leave the window; above it when
+    // there is no room below (a menu of the status bar)
+    const left = from.left + width + edge <= window.innerWidth ? from.left : from.right - width;
+    const top = from.bottom + height + edge <= window.innerHeight ? from.bottom : from.top - height;
+    setAt({ left: Math.max(edge, Math.min(left, window.innerWidth - width - edge)), top: Math.max(edge, top) });
+  }, [anchor]);
+  // the first item takes the focus once the menu shows (a menu opened from a button, once it is placed)
+  const shown = anchor === undefined || at !== null;
   useEffect(() => {
-    if (focusFirst) list.current?.querySelector<HTMLElement>('[role^="menuitem"]')?.focus();
-  }, [focusFirst]);
+    if (focusFirst && shown) list.current?.querySelector<HTMLElement>('[role^="menuitem"]')?.focus();
+  }, [focusFirst, shown]);
+  const placed = anchor === undefined ? undefined : at === null ? { position: 'fixed' as const, visibility: 'hidden' as const } : { position: 'fixed' as const, left: at.left, top: at.top, right: 'auto', bottom: 'auto' };
   return (
-    <div className="menu" role="menu" ref={list} aria-label={t(menuOf(menu).labelKey as MessageId)} data-region={`menu:${menu}`} data-key-context="menu">
+    <div className="menu" role="menu" ref={list} style={placed} aria-label={t(menuOf(menu).labelKey as MessageId)} data-region={`menu:${menu}`} data-key-context="menu">
       {slotsIn(`menu:${menu}`).map((slot) =>
         slot.kind === 'door' ? <MenuItem key={slot.entry.ref} entry={slot.entry} onDone={onDone} /> : <SubMenu key={slot.menu} menu={slot.menu} onDone={onDone} />,
       )}
@@ -127,7 +146,7 @@ export function MenuButton({ menu, anchor, children, indicator = false, classNam
         {indicator ? <Icon name={GLYPHS.dropdown} size="xs" /> : null}
       </button>
       {open && BACKDROP ? <DoorControl entry={BACKDROP} className="overlay-backdrop" /> : null}
-      {open ? <MenuList menu={menu} onDone={() => setOpenedAt(null)} focusFirst /> : null}
+      {open ? <MenuList menu={menu} onDone={() => setOpenedAt(null)} focusFirst anchor={button} /> : null}
     </div>
   );
 }

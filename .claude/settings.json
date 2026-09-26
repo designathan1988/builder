@@ -3,5 +3,18 @@
   "enabledMcpjsonServers": ["playwright"],
   "permissions": {
     "deny": ["Edit(reference/**)"]
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [{ "type": "command", "command": "node \"$CLAUDE_PROJECT_DIR/tools/hooks/guard.ts\" stop", "timeout": 30 }]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [{ "type": "command", "command": "node \"$CLAUDE_PROJECT_DIR/tools/hooks/guard.ts\" bash", "timeout": 30 }]
+      }
+    ]
   }
 }

@@ -57,15 +57,24 @@ When the conversation is compacted, the summary preserves: the current item of t
 Features are grouped in `manifest/features/NN-group.json` and built in that order. Each group takes two sessions.
 
 1. **Scenario session.** Write the scenarios of every feature in the group, from its intent and its spec (the spec's "Problems in Pager" corrections are requirements). Each scenario names its setup, the doors it runs through, the expected document diff, selection and history, at least one end terminal (render, persistence after an immediate reload, or export) and its refusals. Write no app code. `npm run manifest:check` passes; commit and push.
-2. **Build session.** Start by reading `PROGRESS.md`, `git log --oneline -15`, the feature's manifest entry, scenarios and spec, and the sections of `DESIGN.md` and `ARCHITECTURE.md` it touches, and by running `npm run verify:fast` and `npm run e2e`; fix any failure first. Build the group's commands and doors until the runner passes every scenario of the group through every door. The build session never edits scenarios; if one looks wrong, stop and tell the user.
+2. **Build session.** Start by reading `PROGRESS.md`, `git log --oneline -15`, the feature's manifest entry, scenarios and spec, and the sections of `DESIGN.md` and `ARCHITECTURE.md` it touches, and by running `npm run check`; fix any failure first, the open ones included. Build the group's commands and doors until the runner passes every scenario of the group through every door. The build session never edits scenarios; if one looks wrong, stop and tell the user.
 3. **Tooth proof.** For each feature, make its command handler return without changing anything, run its scenarios and show they FAIL, then undo that single edit and show they pass. Show both raw outputs.
-4. **Handoff.** Update `PROGRESS.md`, commit naming the group and feature ids, and push to origin main.
+4. **Handoff.** Update `PROGRESS.md`, commit naming the group and feature ids, pass the checkpoint (`npm run verify:fast`, then `npm run e2e`, on that commit) and push to origin main.
 
 ## Tests
 
 - Tests enter only through doors, with the real mouse and keyboard, on the installed Chrome (`channel: 'chrome'`).
 - They assert on end artifacts: the document JSON diff, computed style or geometry inside the frame, storage after an immediate reload, the files inside the exported ZIP. Never on a proxy such as a Layers row, a readout or a "saved" label, and never only that something exists or is visible.
 - The test port is read-only. It reads the document, the selection, the history and the export; it never writes, loads or creates anything.
+
+## The validation cycle
+
+The strategy, its measurements and the reason for each rule are in `docs/testing/README.md`. The hooks in `.claude/settings.json` enforce the cycle.
+
+- After each change, run `npm run check`, the limited validation. It runs the static checks and the browser tests the change can affect, and says why each one runs. It widens by itself, up to everything, when it cannot tell. Never run the whole suite after an ordinary change: the tests `npm run check` leaves out passed on code that has not changed.
+- A commit takes only a working tree `npm run check` validated. A push to main takes only a commit that `npm run verify:fast` and `npm run e2e` passed on: that is the checkpoint.
+- An OPEN FAILURE in the output of `npm run check` is not caused by the change: it stays listed until it is fixed, blocks the checkpoint, and does not block independent work. Fix it or keep it in `PROGRESS.md`.
+- A failed browser test is diagnosed with `npm run e2e:diagnose` (the failed tests again, with their trace). A flaky test is reported in `PROGRESS.md` with its evidence (the failing log, and the count over repeated runs). Never add a retry, raise a timeout or lower the number of workers to make a test pass.
 
 ## Rules that are never broken
 

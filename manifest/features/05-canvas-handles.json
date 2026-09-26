@@ -25,7 +25,362 @@
           "The status bar shows the live size while dragging and 'Resized to W x H' [status.resized] at the end; each resize is one undo step."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "an-edge-handle-writes-the-width-and-is-one-undo-step",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "geometry.resize#handle-resize-e",
+              "args": {
+                "width": "1200px"
+              },
+              "target": "/Page/Hero/Title",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "geometry.resize#handle-resize-e",
+            "geometry.resize#handle-resize-w"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Title/@styles/desktop/base/width",
+                "value": "1200px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [
+                {
+                  "node": "/Page/Hero/Title",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 1199,
+                  "reference": null
+                },
+                {
+                  "node": "/Page/Hero/Title",
+                  "measure": "width",
+                  "relation": "less-than",
+                  "value": 1201,
+                  "reference": null
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.resized",
+                  "params": {
+                    "width": "1200px",
+                    "height": "auto"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-top-or-bottom-handle-writes-the-height",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "geometry.resize#handle-resize-s",
+              "args": {
+                "height": "100px"
+              },
+              "target": "/Page/Hero/Title",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "geometry.resize#handle-resize-s",
+            "geometry.resize#handle-resize-n"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Title/@styles/desktop/base/height",
+                "value": "100px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [
+                {
+                  "node": "/Page/Hero/Title",
+                  "measure": "height",
+                  "relation": "greater-than",
+                  "value": 99,
+                  "reference": null
+                },
+                {
+                  "node": "/Page/Hero/Title",
+                  "measure": "height",
+                  "relation": "less-than",
+                  "value": 101,
+                  "reference": null
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.resized",
+                  "params": {
+                    "width": "auto",
+                    "height": "100px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-corner-handle-writes-both",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "geometry.resize#handle-resize-se",
+              "args": {
+                "width": "1200px",
+                "height": "100px"
+              },
+              "target": "/Page/Hero/Title",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "geometry.resize#handle-resize-se",
+            "geometry.resize#handle-resize-ne",
+            "geometry.resize#handle-resize-sw",
+            "geometry.resize#handle-resize-nw"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Title/@styles/desktop/base/width",
+                "value": "1200px"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/Title/@styles/desktop/base/height",
+                "value": "100px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [
+                {
+                  "node": "/Page/Hero/Title",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 1199,
+                  "reference": null
+                },
+                {
+                  "node": "/Page/Hero/Title",
+                  "measure": "width",
+                  "relation": "less-than",
+                  "value": 1201,
+                  "reference": null
+                },
+                {
+                  "node": "/Page/Hero/Title",
+                  "measure": "height",
+                  "relation": "greater-than",
+                  "value": 99,
+                  "reference": null
+                },
+                {
+                  "node": "/Page/Hero/Title",
+                  "measure": "height",
+                  "relation": "less-than",
+                  "value": 101,
+                  "reference": null
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.resized",
+                  "params": {
+                    "width": "1200px",
+                    "height": "100px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "escape-during-a-resize-changes-nothing",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "geometry.resize#handle-resize-se",
+              "args": {
+                "width": "1200px",
+                "height": "100px"
+              },
+              "target": "/Page/Hero/Title",
+              "drop": null,
+              "action": false,
+              "hold": true,
+              "type": null
+            },
+            {
+              "door": "drag.cancel#key-escape-in-drag",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "drag.cancel#key-escape-in-drag"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [
+                {
+                  "node": "/Page/Hero/Title",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 1300,
+                  "reference": null
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.drag.cancelled",
+                  "params": {}
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
     },
     {
       "id": "spacing-handles",
@@ -53,7 +408,1133 @@
           "The status bar shows the live value; the value is written to the document JSON as one undo step."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "padding-mode-from-the-quick-panel-draws-the-bands",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "canvas.setEditMode#quick-panel-edit-on-canvas",
+              "args": {
+                "mode": "padding"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.setSpacing#handle-padding-top-band",
+              "args": {
+                "box": "padding",
+                "sides": "top",
+                "value": "76px"
+              },
+              "target": "/Page/Hero",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "canvas.setEditMode#quick-panel-edit-on-canvas"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/padding-top",
+                "value": "76px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.spacing.set",
+                  "params": {
+                    "property": "Padding top",
+                    "name": "Hero",
+                    "value": "76px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-top-padding-band-writes-its-side",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "canvas.setEditMode#quick-panel-edit-on-canvas",
+              "args": {
+                "mode": "padding"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.setSpacing#handle-padding-top-band",
+              "args": {
+                "box": "padding",
+                "sides": "top",
+                "value": "76px"
+              },
+              "target": "/Page/Hero",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "style.setSpacing#handle-padding-top-band"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/padding-top",
+                "value": "76px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.spacing.set",
+                  "params": {
+                    "property": "Padding top",
+                    "name": "Hero",
+                    "value": "76px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-right-padding-band-writes-its-side",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "canvas.setEditMode#quick-panel-edit-on-canvas",
+              "args": {
+                "mode": "padding"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.setSpacing#handle-padding-right-band",
+              "args": {
+                "box": "padding",
+                "sides": "right",
+                "value": "60px"
+              },
+              "target": "/Page/Hero",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "style.setSpacing#handle-padding-right-band"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/padding-right",
+                "value": "60px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.spacing.set",
+                  "params": {
+                    "property": "Padding right",
+                    "name": "Hero",
+                    "value": "60px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-bottom-padding-band-writes-its-side",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "canvas.setEditMode#quick-panel-edit-on-canvas",
+              "args": {
+                "mode": "padding"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.setSpacing#handle-padding-bottom-band",
+              "args": {
+                "box": "padding",
+                "sides": "bottom",
+                "value": "70px"
+              },
+              "target": "/Page/Hero",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "style.setSpacing#handle-padding-bottom-band"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/padding-bottom",
+                "value": "70px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.spacing.set",
+                  "params": {
+                    "property": "Padding bottom",
+                    "name": "Hero",
+                    "value": "70px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-left-padding-band-writes-its-side",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "canvas.setEditMode#quick-panel-edit-on-canvas",
+              "args": {
+                "mode": "padding"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.setSpacing#handle-padding-left-band",
+              "args": {
+                "box": "padding",
+                "sides": "left",
+                "value": "50px"
+              },
+              "target": "/Page/Hero",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "style.setSpacing#handle-padding-left-band"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/padding-left",
+                "value": "50px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.spacing.set",
+                  "params": {
+                    "property": "Padding left",
+                    "name": "Hero",
+                    "value": "50px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-top-margin-band-writes-its-side",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "canvas.setEditMode#quick-panel-edit-on-canvas",
+              "args": {
+                "mode": "margin"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.setSpacing#handle-margin-top-band",
+              "args": {
+                "box": "margin",
+                "sides": "top",
+                "value": "30px"
+              },
+              "target": "/Page/Hero/Intro",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "style.setSpacing#handle-margin-top-band"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Intro/@styles/desktop/base/margin-top",
+                "value": "30px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.spacing.set",
+                  "params": {
+                    "property": "Margin top",
+                    "name": "Intro",
+                    "value": "30px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-right-margin-band-writes-its-side",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "canvas.setEditMode#quick-panel-edit-on-canvas",
+              "args": {
+                "mode": "margin"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.setSpacing#handle-margin-right-band",
+              "args": {
+                "box": "margin",
+                "sides": "right",
+                "value": "12px"
+              },
+              "target": "/Page/Hero/Intro",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "style.setSpacing#handle-margin-right-band"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Intro/@styles/desktop/base/margin-right",
+                "value": "12px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.spacing.set",
+                  "params": {
+                    "property": "Margin right",
+                    "name": "Intro",
+                    "value": "12px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-bottom-margin-band-writes-its-side",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "canvas.setEditMode#quick-panel-edit-on-canvas",
+              "args": {
+                "mode": "margin"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.setSpacing#handle-margin-bottom-band",
+              "args": {
+                "box": "margin",
+                "sides": "bottom",
+                "value": "28px"
+              },
+              "target": "/Page/Hero/Intro",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "style.setSpacing#handle-margin-bottom-band"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Intro/@styles/desktop/base/margin-bottom",
+                "value": "28px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.spacing.set",
+                  "params": {
+                    "property": "Margin bottom",
+                    "name": "Intro",
+                    "value": "28px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-left-margin-band-writes-its-side",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "canvas.setEditMode#quick-panel-edit-on-canvas",
+              "args": {
+                "mode": "margin"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.setSpacing#handle-margin-left-band",
+              "args": {
+                "box": "margin",
+                "sides": "left",
+                "value": "12px"
+              },
+              "target": "/Page/Hero/Intro",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "style.setSpacing#handle-margin-left-band"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Intro/@styles/desktop/base/margin-left",
+                "value": "12px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.spacing.set",
+                  "params": {
+                    "property": "Margin left",
+                    "name": "Intro",
+                    "value": "12px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "shift-writes-all-four-sides",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "canvas.setEditMode#quick-panel-edit-on-canvas",
+              "args": {
+                "mode": "padding"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.setSpacing#handle-padding-top-band",
+              "args": {
+                "box": "padding",
+                "sides": "all",
+                "value": "70px",
+                "modifier": "Shift"
+              },
+              "target": "/Page/Hero",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "style.setSpacing#handle-padding-top-band"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/padding-top",
+                "value": "70px"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/padding-right",
+                "value": "70px"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/padding-bottom",
+                "value": "70px"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/padding-left",
+                "value": "70px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.spacing.set",
+                  "params": {
+                    "property": "Padding",
+                    "name": "Hero",
+                    "value": "70px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "alt-writes-the-opposite-side-by-the-same-amount",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "canvas.setEditMode#quick-panel-edit-on-canvas",
+              "args": {
+                "mode": "padding"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.setSpacing#handle-padding-left-band",
+              "args": {
+                "box": "padding",
+                "sides": "left",
+                "value": "50px",
+                "modifier": "Alt"
+              },
+              "target": "/Page/Hero",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "style.setSpacing#handle-padding-left-band"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/padding-left",
+                "value": "50px"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/padding-right",
+                "value": "50px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.spacing.set",
+                  "params": {
+                    "property": "Padding right",
+                    "name": "Hero",
+                    "value": "50px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-click-on-a-band-opens-its-typed-field",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "canvas.setEditMode#quick-panel-edit-on-canvas",
+              "args": {
+                "mode": "padding"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.setSpacing#handle-padding-top-band",
+              "args": {
+                "box": "padding",
+                "sides": "top",
+                "value": "30"
+              },
+              "target": "/Page/Hero",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "30\n"
+            }
+          ],
+          "doors": [
+            "style.setSpacing#handle-padding-top-band"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/padding-top",
+                "value": "30px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.spacing.set",
+                  "params": {
+                    "property": "Padding top",
+                    "name": "Hero",
+                    "value": "30px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-typed-value-the-browser-does-not-take-is-refused",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "canvas.setEditMode#quick-panel-edit-on-canvas",
+              "args": {
+                "mode": "padding"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.setSpacing#handle-padding-top-band",
+              "args": {
+                "box": "padding",
+                "sides": "top",
+                "value": "wide"
+              },
+              "target": "/Page/Hero",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "wide\n"
+            }
+          ],
+          "doors": [
+            "style.setSpacing#handle-padding-top-band"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.value.invalid",
+                  "params": {
+                    "property": "Padding top",
+                    "value": "wide"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": [
+            {
+              "key": "status.value.invalid",
+              "document": "unchanged"
+            }
+          ]
+        },
+        {
+          "id": "escape-leaves-the-edit-mode",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "canvas.setEditMode#quick-panel-edit-on-canvas",
+              "args": {
+                "mode": "padding"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "canvas.setEditMode#key-escape-in-canvas-edit-mode",
+              "args": {
+                "mode": "none"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "canvas.setEditMode#key-escape-in-canvas-edit-mode"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": null,
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
     },
     {
       "id": "radius-border-gap-handles",
@@ -82,7 +1563,955 @@
           "Gap modes show bands between children: Gap writes row-gap and column-gap together in one command, Row gap and Column gap write their own longhand; the measured distance between children in the iframe matches."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "the-radius-corner-rounds-every-corner",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "canvas.setEditMode#quick-panel-edit-on-canvas",
+              "args": {
+                "mode": "radius"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.setRadius#handle-radius-corner",
+              "args": {
+                "corners": "all",
+                "value": "12px"
+              },
+              "target": "/Page/Hero",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "style.setRadius#handle-radius-corner"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/border-top-left-radius",
+                "value": "12px"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/border-top-right-radius",
+                "value": "12px"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/border-bottom-right-radius",
+                "value": "12px"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/border-bottom-left-radius",
+                "value": "12px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.style.set",
+                  "params": {
+                    "property": "Radius",
+                    "name": "Hero",
+                    "value": "12px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-top-border-handle-writes-that-side",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "canvas.setEditMode#quick-panel-edit-on-canvas",
+              "args": {
+                "mode": "border"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.setBorder#handle-border-top",
+              "args": {
+                "sides": "top",
+                "width": "10px"
+              },
+              "target": "/Page/Hero",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "style.setBorder#handle-border-top"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/border-top-width",
+                "value": "10px"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/border-top-style",
+                "value": "solid"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.style.set",
+                  "params": {
+                    "property": "Border top width",
+                    "name": "Hero",
+                    "value": "10px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-right-border-handle-writes-that-side",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "canvas.setEditMode#quick-panel-edit-on-canvas",
+              "args": {
+                "mode": "border"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.setBorder#handle-border-right",
+              "args": {
+                "sides": "right",
+                "width": "10px"
+              },
+              "target": "/Page/Hero",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "style.setBorder#handle-border-right"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/border-right-width",
+                "value": "10px"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/border-right-style",
+                "value": "solid"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.style.set",
+                  "params": {
+                    "property": "Border right width",
+                    "name": "Hero",
+                    "value": "10px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-bottom-border-handle-writes-that-side",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "canvas.setEditMode#quick-panel-edit-on-canvas",
+              "args": {
+                "mode": "border"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.setBorder#handle-border-bottom",
+              "args": {
+                "sides": "bottom",
+                "width": "10px"
+              },
+              "target": "/Page/Hero",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "style.setBorder#handle-border-bottom"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/border-bottom-width",
+                "value": "10px"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/border-bottom-style",
+                "value": "solid"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.style.set",
+                  "params": {
+                    "property": "Border bottom width",
+                    "name": "Hero",
+                    "value": "10px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-left-border-handle-writes-that-side",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "canvas.setEditMode#quick-panel-edit-on-canvas",
+              "args": {
+                "mode": "border"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.setBorder#handle-border-left",
+              "args": {
+                "sides": "left",
+                "width": "10px"
+              },
+              "target": "/Page/Hero",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "style.setBorder#handle-border-left"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/border-left-width",
+                "value": "10px"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/border-left-style",
+                "value": "solid"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.style.set",
+                  "params": {
+                    "property": "Border left width",
+                    "name": "Hero",
+                    "value": "10px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-gap-band-writes-row-and-column-gap",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Plans/Grid"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "style.set#inspector-display",
+              "args": {
+                "property": "display",
+                "value": "flex"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "flex\n"
+            },
+            {
+              "door": "canvas.setEditMode#quick-panel-edit-on-canvas",
+              "args": {
+                "mode": "gap"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.set#handle-gap-band",
+              "args": {
+                "property": "gap",
+                "value": "24px"
+              },
+              "target": "/Page/Plans/Grid",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "style.set#handle-gap-band"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@styles/desktop/base/display",
+                "value": "flex"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@styles/desktop/base/row-gap",
+                "value": "24px"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@styles/desktop/base/column-gap",
+                "value": "24px"
+              }
+            ],
+            "selection": [
+              "/Page/Plans/Grid"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.style.set",
+                  "params": {
+                    "property": "Gap",
+                    "name": "Grid",
+                    "value": "24px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-column-gap-band-of-a-flex-row",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Plans/Grid"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "style.set#inspector-display",
+              "args": {
+                "property": "display",
+                "value": "flex"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "flex\n"
+            },
+            {
+              "door": "canvas.setEditMode#quick-panel-edit-on-canvas",
+              "args": {
+                "mode": "column-gap"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.set#handle-column-gap-band",
+              "args": {
+                "property": "column-gap",
+                "value": "20px"
+              },
+              "target": "/Page/Plans/Grid",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "style.set#handle-column-gap-band"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@styles/desktop/base/display",
+                "value": "flex"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@styles/desktop/base/column-gap",
+                "value": "20px"
+              }
+            ],
+            "selection": [
+              "/Page/Plans/Grid"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.style.set",
+                  "params": {
+                    "property": "Column gap",
+                    "name": "Grid",
+                    "value": "20px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-row-gap-band-of-a-flex-column",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Plans/Grid"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "style.set#inspector-display",
+              "args": {
+                "property": "display",
+                "value": "flex"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "flex\n"
+            },
+            {
+              "door": "style.set#inspector-flex-direction",
+              "args": {
+                "property": "flex-direction",
+                "value": "column"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "canvas.setEditMode#quick-panel-edit-on-canvas",
+              "args": {
+                "mode": "row-gap"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.set#handle-row-gap-band",
+              "args": {
+                "property": "row-gap",
+                "value": "16px"
+              },
+              "target": "/Page/Plans/Grid",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "style.set#handle-row-gap-band"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@styles/desktop/base/display",
+                "value": "flex"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@styles/desktop/base/flex-direction",
+                "value": "column"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@styles/desktop/base/row-gap",
+                "value": "16px"
+              }
+            ],
+            "selection": [
+              "/Page/Plans/Grid"
+            ],
+            "history": {
+              "undoSteps": 3,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.style.set",
+                  "params": {
+                    "property": "Row gap",
+                    "name": "Grid",
+                    "value": "16px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "arrow-right-on-the-radius-handle-adds-one",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "canvas.setEditMode#quick-panel-edit-on-canvas",
+              "args": {
+                "mode": "radius"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "handle.step#key-arrow-right-in-canvas-handle",
+              "args": {
+                "direction": "increase",
+                "handle": "style.setRadius#handle-radius-corner"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "handle.step#key-arrow-right-in-canvas-handle",
+            "handle.step#key-arrow-up-in-canvas-handle"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/border-top-left-radius",
+                "value": "1px"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/border-top-right-radius",
+                "value": "1px"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/border-bottom-right-radius",
+                "value": "1px"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/border-bottom-left-radius",
+                "value": "1px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.style.set",
+                  "params": {
+                    "property": "Radius",
+                    "name": "Hero",
+                    "value": "1px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "arrow-left-on-the-radius-handle-takes-one-away",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "canvas.setEditMode#quick-panel-edit-on-canvas",
+              "args": {
+                "mode": "radius"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.setRadius#handle-radius-corner",
+              "args": {
+                "corners": "all",
+                "value": "12px"
+              },
+              "target": "/Page/Hero",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "handle.step#key-arrow-left-in-canvas-handle",
+              "args": {
+                "direction": "decrease",
+                "handle": "style.setRadius#handle-radius-corner"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "handle.step#key-arrow-left-in-canvas-handle",
+            "handle.step#key-arrow-down-in-canvas-handle"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/border-top-left-radius",
+                "value": "11px"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/border-top-right-radius",
+                "value": "11px"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/border-bottom-right-radius",
+                "value": "11px"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/border-bottom-left-radius",
+                "value": "11px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.style.set",
+                  "params": {
+                    "property": "Radius",
+                    "name": "Hero",
+                    "value": "11px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
     },
     {
       "id": "shadow-handles",
@@ -109,7 +2538,446 @@
           "The box-shadow or text-shadow in the document JSON and the computed style update; each drag is one undo step."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "the-offset-handle-moves-the-box-shadow",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "style.setShadows#inspector-box-shadow-shadow-add",
+              "args": {
+                "property": "box-shadow",
+                "edit": {
+                  "add": true
+                }
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "canvas.setEditMode#quick-panel-edit-on-canvas",
+              "args": {
+                "mode": "shadow-offset"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.setShadows#handle-shadow-offset",
+              "args": {
+                "property": "box-shadow",
+                "edit": {
+                  "layer": 0,
+                  "x": "10px",
+                  "y": "12px"
+                }
+              },
+              "target": "/Page/Hero",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "style.setShadows#handle-shadow-offset"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/box-shadow",
+                "value": [
+                  {
+                    "color": "rgba(15, 23, 42, 0.24)",
+                    "offsetX": "10px",
+                    "offsetY": "12px",
+                    "blur": "12px",
+                    "spread": "0px",
+                    "inset": false,
+                    "hidden": false
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.style.set",
+                  "params": {
+                    "property": "Box shadow",
+                    "name": "Hero",
+                    "value": "rgba(15, 23, 42, 0.24) 10px 12px 12px 0px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-blur-handle-softens-the-box-shadow",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "style.setShadows#inspector-box-shadow-shadow-add",
+              "args": {
+                "property": "box-shadow",
+                "edit": {
+                  "add": true
+                }
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "canvas.setEditMode#quick-panel-edit-on-canvas",
+              "args": {
+                "mode": "shadow-blur"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.setShadows#handle-shadow-blur",
+              "args": {
+                "property": "box-shadow",
+                "edit": {
+                  "layer": 0,
+                  "blur": "20px"
+                }
+              },
+              "target": "/Page/Hero",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "style.setShadows#handle-shadow-blur"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/box-shadow",
+                "value": [
+                  {
+                    "color": "rgba(15, 23, 42, 0.24)",
+                    "offsetX": "0px",
+                    "offsetY": "4px",
+                    "blur": "20px",
+                    "spread": "0px",
+                    "inset": false,
+                    "hidden": false
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.style.set",
+                  "params": {
+                    "property": "Box shadow",
+                    "name": "Hero",
+                    "value": "rgba(15, 23, 42, 0.24) 0px 4px 20px 0px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-offset-handle-moves-a-text-shadow",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "style.setShadows#inspector-text-shadow-shadow-add",
+              "args": {
+                "property": "text-shadow",
+                "edit": {
+                  "add": true
+                }
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "canvas.setEditMode#quick-panel-edit-on-canvas",
+              "args": {
+                "mode": "shadow-offset"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.setShadows#handle-shadow-offset",
+              "args": {
+                "property": "text-shadow",
+                "edit": {
+                  "layer": 0,
+                  "x": "6px",
+                  "y": "8px"
+                }
+              },
+              "target": "/Page/Hero/Intro",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "style.setShadows#handle-shadow-offset"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Intro/@styles/desktop/base/text-shadow",
+                "value": [
+                  {
+                    "color": "rgba(15, 23, 42, 0.24)",
+                    "offsetX": "6px",
+                    "offsetY": "8px",
+                    "blur": "12px",
+                    "hidden": false
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.style.set",
+                  "params": {
+                    "property": "Text shadow",
+                    "name": "Intro",
+                    "value": "rgba(15, 23, 42, 0.24) 6px 8px 12px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-blur-handle-softens-a-text-shadow",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "style.setShadows#inspector-text-shadow-shadow-add",
+              "args": {
+                "property": "text-shadow",
+                "edit": {
+                  "add": true
+                }
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "canvas.setEditMode#quick-panel-edit-on-canvas",
+              "args": {
+                "mode": "shadow-blur"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.setShadows#handle-shadow-blur",
+              "args": {
+                "property": "text-shadow",
+                "edit": {
+                  "layer": 0,
+                  "blur": "24px"
+                }
+              },
+              "target": "/Page/Hero/Intro",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "style.setShadows#handle-shadow-blur"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Intro/@styles/desktop/base/text-shadow",
+                "value": [
+                  {
+                    "color": "rgba(15, 23, 42, 0.24)",
+                    "offsetX": "0px",
+                    "offsetY": "4px",
+                    "blur": "24px",
+                    "hidden": false
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.style.set",
+                  "params": {
+                    "property": "Text shadow",
+                    "name": "Intro",
+                    "value": "rgba(15, 23, 42, 0.24) 0px 4px 24px"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
     }
   ]
 }

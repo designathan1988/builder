@@ -2,7 +2,8 @@
 // bar names the one selected element (its name and exported tag), counts several, and says "Nothing selected" only
 // when the selection the test port reads is empty.
 import fs from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
+import { openEditor } from '../support/editor.ts';
 import { openMenu, runs } from './door.ts';
 
 const FIXTURE = 'manifest/features/fixtures/aurora.json';
@@ -32,9 +33,7 @@ function centre(page: Page, id: string) {
 
 test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/');
-  await page.evaluate(() => window.localStorage.clear());
-  await page.reload();
+  await openEditor(page);
   await expect(page.locator('.workbench')).toBeVisible();
   await openMenu(page, 'file');
   const chooser = page.waitForEvent('filechooser');

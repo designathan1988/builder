@@ -1,0 +1,232 @@
+{
+  "version": 1,
+  "pages": [
+    {
+      "id": "p-home",
+      "name": "Home",
+      "file": "index.html",
+      "tree": {
+        "id": "n-page",
+        "type": "page",
+        "name": "Page",
+        "tag": "body",
+        "attributes": {},
+        "classes": [],
+        "styles": {},
+        "text": null,
+        "children": [
+          {
+            "id": "n-1",
+            "type": "table",
+            "name": "Table",
+            "tag": "table",
+            "attributes": {},
+            "classes": [],
+            "styles": {},
+            "text": null,
+            "children": [
+              {
+                "id": "n-2",
+                "type": "tableHead",
+                "name": "Table head",
+                "tag": "thead",
+                "attributes": {},
+                "classes": [],
+                "styles": {},
+                "text": null,
+                "children": [
+                  {
+                    "id": "n-3",
+                    "type": "tableRow",
+                    "name": "Row",
+                    "tag": "tr",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "id": "n-4",
+                        "type": "headerCell",
+                        "name": "Header cell",
+                        "tag": "th",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "id": "n-5",
+                            "type": "paragraph",
+                            "name": "Paragraph",
+                            "tag": "p",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "A freshly created paragraph.",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "n-6",
+                        "type": "headerCell",
+                        "name": "Header cell 2",
+                        "tag": "th",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "id": "n-7",
+                            "type": "paragraph",
+                            "name": "Paragraph 2",
+                            "tag": "p",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "A freshly created paragraph.",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "n-8",
+                "type": "tableBody",
+                "name": "Table body",
+                "tag": "tbody",
+                "attributes": {},
+                "classes": [],
+                "styles": {},
+                "text": null,
+                "children": [
+                  {
+                    "id": "n-9",
+                    "type": "tableRow",
+                    "name": "Row 2",
+                    "tag": "tr",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "id": "n-10",
+                        "type": "cell",
+                        "name": "Cell",
+                        "tag": "td",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "id": "n-11",
+                            "type": "paragraph",
+                            "name": "Paragraph 3",
+                            "tag": "p",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "A freshly created paragraph.",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "n-12",
+                        "type": "cell",
+                        "name": "Cell 2",
+                        "tag": "td",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "id": "n-13",
+                            "type": "paragraph",
+                            "name": "Paragraph 4",
+                            "tag": "p",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "A freshly created paragraph.",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "n-14",
+                    "type": "tableRow",
+                    "name": "Row 3",
+                    "tag": "tr",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "id": "n-15",
+                        "type": "cell",
+                        "name": "Cell 3",
+                        "tag": "td",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "id": "n-16",
+                            "type": "paragraph",
+                            "name": "Paragraph 5",
+                            "tag": "p",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "A freshly created paragraph.",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "n-17",
+                        "type": "cell",
+                        "name": "Cell 4",
+                        "tag": "td",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "id": "n-18",
+                            "type": "paragraph",
+                            "name": "Paragraph 6",
+                            "tag": "p",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "A freshly created paragraph.",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

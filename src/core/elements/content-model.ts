@@ -11,7 +11,10 @@
 //    inside a <th>): an element takes none of them at any depth (`excludes`, status.refused.notInside). Interactive
 //    content is the rule above alone, which knows when a conditional element is interactive. `retagRefusal` asks every
 //    rule of this module for a node that would take another tag where it is (element.setTag);
-//  - text-inline-formatting: whether a tag is phrasing content or metadata, by HTML's categories, for pasted markup.
+//  - text-inline-formatting: whether a tag is phrasing content or metadata, by HTML's categories, for pasted markup;
+//  - elements-svg-shapes: a foreign element (<svg>) accepts only the elements of its own namespace the editor makes
+//    (elements.json: <rect>, <ellipse>, <line>), and those exist only inside it (spec elements-svg-shapes, Problems in
+//    Pager 1).
 // A parent whose content is given by categories (flow, phrasing), a child that requires a parent and the other rules
 // arrive with nesting-grammar, which completes this module and has insert, move and paste ask `excludes` too.
 import type { GeneratedHtml } from '../../manifest/schema.ts';
@@ -34,6 +37,21 @@ export interface ContentModel {
   isInteractive(tag: string, attributes: ReadonlyMap<string, string | number | true>): boolean;
   // whether no descendant of an element of <tag> may be interactive content
   excludesInteractive(tag: string): boolean;
+  // whether a <parent>'s permitted content names a <child> by its tag (a <select>'s options, a <picture>'s or a
+  // <video>'s sources, a <video>'s tracks): the parts its editor adds (parts.add)
+  names(parent: string, child: string): boolean;
+  // where a <child> goes among a <parent>'s children, by HTML's permitted order: after the last child whose tag comes
+  // no later than it in that order (a <picture>'s sources before its <img>, a <video>'s tracks after its sources); the
+  // end when the parent gives no order
+  slotIn(parent: string, childTags: readonly string[], child: string): number;
+  // whether a <tag> is a void element (HTML: no content, no end tag: <img>, <input>, <br>…)
+  isVoid(tag: string): boolean;
+  // whether a <parent> holds at most one <child> (an optional one, "legend?", or its required content: a <details>'s
+  // <summary>)
+  unique(parent: string, child: string): boolean;
+  // the parents a <child> only exists inside (an <li> inside <ul>, <ol>, <menu>; a <td> inside <tr>): the tags whose
+  // permitted content names it, for a tag in no content category; null for a tag that may sit in any flow content
+  parentsOf(child: string): readonly string[] | null;
 }
 
 // "@script" (script-supporting elements) is a category no user inserts; an entry ending in "?" is optional
@@ -57,9 +75,18 @@ const CONDITIONS: Readonly<Record<string, (attributes: ReadonlyMap<string, strin
   input: (a) => String(a.get('type') ?? '').toLowerCase() !== 'hidden',
 };
 
-export function contentModelFrom(html: GeneratedHtml): ContentModel {
-  // tag → the elements it only accepts, for the parents whose permitted content lists elements and no category
+// `foreign`: the tag of a foreign element (HTML's <svg>) → the tags of the elements of its namespace (elements.json)
+export function contentModelFrom(html: GeneratedHtml, foreign: ReadonlyMap<string, readonly string[]> = new Map()): ContentModel {
+  // tag → the elements it only accepts, for the parents whose permitted content lists elements and no category, and
+  // for a foreign element
   const closed = new Map<string, readonly string[]>();
+  // tag of an element of a foreign namespace → the foreign element it only exists inside
+  const foreignParent = new Map<string, string>();
+  for (const [parent, children] of foreign) {
+    if (html.elements[parent]?.foreign !== true || children.length === 0) continue;
+    closed.set(parent, children);
+    for (const child of children) foreignParent.set(child, parent);
+  }
   // the tags whose permitted descendants exclude interactive content
   const noInteractive = new Set<string>();
   // tag → the other tags and categories it excludes from its descendants
@@ -83,10 +110,51 @@ export function contentModelFrom(html: GeneratedHtml): ContentModel {
     const flag = html.elements[tag]?.categories[name];
     return flag === undefined ? null : flag !== false;
   };
+  // the place of a tag in a parent's permitted order: the index of the first entry naming it, else of the first
+  // category entry, else after them all
+  const orderOf = (parent: string, tag: string): number => {
+    const order = html.elements[parent]?.permittedOrder ?? null;
+    if (order === null) return 0;
+    const groups = order.map((entry) => entry.split(',').map((t) => tagOf(t.trim())));
+    // the last group naming it: a <figcaption> comes first or last in a <figure>, and the flow content before it
+    const named = groups.findLastIndex((group) => group.includes(tag));
+    if (named >= 0) return named;
+    const category = groups.findIndex((group) => group.some((t) => t.startsWith(CATEGORY)));
+    return category >= 0 ? category : groups.length;
+  };
   return {
     refusal(parent, child) {
       const only = closed.get(parent);
       return only === undefined || only.includes(child) ? null : only;
+    },
+    parentsOf(child) {
+      const inside = foreignParent.get(child);
+      if (inside !== undefined) return [inside];
+      const element = html.elements[child];
+      if (element === undefined || Object.values(element.categories).some((flag) => flag !== false)) return null;
+      const parents = Object.entries(html.elements)
+        .filter(([, e]) => (e.permittedContent ?? []).some((entry) => tagOf(entry) === child))
+        .map(([tag]) => tag);
+      return parents.length === 0 ? null : parents;
+    },
+    isVoid(tag) {
+      return html.elements[tag]?.void === true;
+    },
+    unique(parent, child) {
+      const element = html.elements[parent];
+      return (element?.permittedContent ?? []).includes(`${child}?`) || (element?.requiredContent ?? []).includes(child);
+    },
+    names(parent, child) {
+      if (foreignParent.get(child) === parent) return true;
+      return (html.elements[parent]?.permittedContent ?? []).some((entry) => tagOf(entry) === child);
+    },
+    slotIn(parent, childTags, child) {
+      const own = orderOf(parent, child);
+      let at = 0;
+      childTags.forEach((tag, i) => {
+        if (orderOf(parent, tag) <= own) at = i + 1;
+      });
+      return at;
     },
     excludes(ancestor, descendant) {
       return (excluded.get(ancestor) ?? []).some((entry) => (entry.startsWith(CATEGORY) ? inCategory(descendant, entry.slice(CATEGORY.length)) : entry === descendant));
@@ -139,6 +207,63 @@ export function interactiveInsideRefusal(document: DocumentJson, rules: ModelRul
 }
 
 const shown = (tag: string | null) => `<${tag ?? ''}>`;
+
+// Why elements may not be the children of a new element of <tag> that is not in the document yet (a wrapper around
+// them: element.wrapRow, element.wrapColumn), or null: its closed list, and each child that only exists inside other
+// parents (an <li> wrapped in a <div>).
+export function childrenRefusal(rules: ModelRules, tag: string, children: readonly DocNode[]): Message | null {
+  const model = rules.contentModel;
+  for (const child of children) {
+    if (child.tag === null) continue;
+    const only = model.refusal(tag, child.tag);
+    if (only !== null) return message('status.refused.onlyAccepts', { parent: shown(tag), children: only.map(shown).join(', ') });
+    const parents = model.parentsOf(child.tag);
+    if (parents !== null && !parents.includes(tag)) return message('status.refused.requiresParent', { child: shown(child.tag), parents: parents.map(shown).join(', ') });
+  }
+  return null;
+}
+
+// The one rule of where elements may go (feature nesting-grammar, Problems in Pager 2; nesting-grammar-structure,
+// Problems in Pager 3): why the nodes `arriving` (with their subtrees) may not become children of `receiver`, or null.
+// Every command that places elements asks it: an insert (a tile's click, Enter, Space, its drag), a move (a drag on the
+// canvas or in Layers, move up/down, nest, promote, the hand), a paste, a wrap and an unwrap. In order: a receiver that
+// holds no elements (status.refused.noChildren); a receiver whose permitted content is a closed list
+// (status.refused.onlyAccepts); an element that only exists inside certain parents (status.refused.requiresParent); a
+// receiver that holds at most one of an element and has it already (status.refused.singleChild); interactive content
+// inside interactive content (status.refused.interactiveInside); an ancestor, or the receiver, that excludes an
+// arriving element or something inside it (status.refused.notInside). `staying` names nodes already among the receiver's
+// children that the change keeps there (a move among siblings), which do not count as the one it holds.
+export function placementRefusal(document: DocumentJson, rules: ModelRules, receiver: NodeId, arriving: readonly DocNode[], staying: ReadonlySet<NodeId> = new Set()): Message | null {
+  const model = rules.contentModel;
+  const chain = lineage(document, receiver);
+  const host = chain.at(-1);
+  if (host === undefined) throw new Error(`placementRefusal: the document has no node ${receiver}`);
+  if (rules.elements.get(host.type)?.content !== 'children') return message('status.refused.noChildren', { parent: host.name });
+  const arrivingIds = new Set(arriving.map((node) => node.id));
+  for (const node of arriving) {
+    if (node.tag === null) continue;
+    const only = host.tag === null ? null : model.refusal(host.tag, node.tag);
+    if (only !== null) return message('status.refused.onlyAccepts', { parent: shown(host.tag), children: only.map(shown).join(', ') });
+    const parents = model.parentsOf(node.tag);
+    if (parents !== null && host.tag !== null && !parents.includes(host.tag)) return message('status.refused.requiresParent', { child: shown(node.tag), parents: parents.map(shown).join(', ') });
+    if (host.tag !== null && model.unique(host.tag, node.tag)) {
+      const held = host.children.filter((child) => child.tag === node.tag && !arrivingIds.has(child.id) && !staying.has(child.id)).length;
+      const coming = arriving.filter((other) => other.tag === node.tag).length;
+      if (held + coming > 1) return message('status.refused.singleChild', { parent: shown(host.tag), child: shown(node.tag) });
+    }
+  }
+  // interactive content inside interactive content first: the more particular rule names the element that refuses
+  const interactive = interactiveInsideRefusal(document, rules, receiver, arriving);
+  if (interactive !== null) return interactive;
+  for (const node of arriving) {
+    for (const inner of walk(node)) {
+      if (inner.tag === null) continue;
+      const excluding = [...chain].reverse().find((a) => a.tag !== null && model.excludes(a.tag, inner.tag as string));
+      if (excluding !== undefined) return message('status.refused.notInside', { child: shown(inner.tag), ancestor: shown(excluding.tag) });
+    }
+  }
+  return null;
+}
 
 // Why a node of the document may not take another tag where it is (element.setTag, spec semantic-tag-switch, Problems
 // in Pager 3), or null: its parent's closed list, then the tag's own closed list over its children

@@ -11,8 +11,10 @@ import { EMPTY_HISTORY } from '../history/history.ts';
 import { applyPatches } from '../history/transaction.ts';
 import { manualClock } from '../ports/clock.ts';
 import { sequentialIds } from '../ports/ids.ts';
+import { anyCss } from '../ports/css.ts';
 import { noLayout } from '../ports/layout.ts';
 import { insertCommand, uniqueName } from './insert.ts';
+import { deepFreeze } from '../store/store.ts';
 
 const RULES = rulesFromManifest(manifest.elements, manifest.properties, manifest.html);
 const node = (id: string, type: string, tag: string, fields: Partial<DocNode> = {}): DocNode => ({ id: id as NodeId, type: type as DocNode['type'], name: id, tag, attributes: {}, classes: [], styles: {}, text: null, children: [], ...fields });
@@ -42,6 +44,7 @@ function run(selection: string[], args: { entry: string; parent?: string; index?
     words: (key: MessageId) => translate(locale, key),
     // inserting measures nothing on the canvas
     layout: noLayout,
+    css: anyCss,
   } satisfies HandlerContext<never>;
   return insertCommand.run(context, args as never);
 }
@@ -53,6 +56,9 @@ const applied = (outcome: ReturnType<typeof run>) => {
   if (outcome.kind !== 'change') throw new Error(`not a change: ${JSON.stringify(outcome)}`);
   return applyPatches(DOC, outcome.patches ?? []).document;
 };
+
+// every handler runs on a frozen document, as the store commits it: a change in place throws
+deepFreeze(DOC);
 
 describe('element.insert (src/core/structure/insert.ts)', () => {
   it('with nothing selected, appends to the page root and selects the new element, with its default styles', () => {
@@ -123,7 +129,7 @@ describe('element.insert into a Link Block (spec elements-structure, Problems in
   };
   const insert = (selection: string[], args: { entry: string; parent?: string; index?: number }) =>
     insertCommand.run(
-      { state: { document: LINKED, selection: selection as NodeId[], history: EMPTY_HISTORY, message: null, ui: undefined as never }, clock: manualClock(), ids: sequentialIds('new'), rules: RULES, words: (key: MessageId) => translate('en', key), layout: noLayout },
+      { state: { document: LINKED, selection: selection as NodeId[], history: EMPTY_HISTORY, message: null, ui: undefined as never }, clock: manualClock(), ids: sequentialIds('new'), rules: RULES, words: (key: MessageId) => translate('en', key), layout: noLayout, css: anyCss },
       args as never,
     );
   const refused = { kind: 'refused', message: { key: 'status.refused.interactiveInside', params: { parent: 'Card' } } };

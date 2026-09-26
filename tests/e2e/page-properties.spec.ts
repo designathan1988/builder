@@ -6,7 +6,7 @@
 // a refused value leaves the document as it was and the field shows the document's value again (Problems in Pager 3).
 // The document, the selection and the history are read through the read-only test port; the page through the frame.
 import fs from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
 import { isFeatureBuilt } from '../../src/app/features.ts';
 import type { FeatureId } from '../../src/generated/ids.ts';
 import { DOORS, control, openMenu, runDoor, runs } from './door.ts';

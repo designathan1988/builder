@@ -4,7 +4,8 @@
 // with no check yet, and Keyboard shortcuts stay closed: their doors are disabled with "not available yet".
 import fs from 'node:fs';
 import path from 'node:path';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
+import { openEditor } from '../support/editor.ts';
 import { openMenu, runDoor, runs } from './door.ts';
 
 // the doors the manifest places in a region
@@ -23,9 +24,7 @@ const drawnIn = (page: Page, region: string) =>
 
 test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/');
-  await page.evaluate(() => window.localStorage.clear());
-  await page.reload();
+  await openEditor(page);
   await expect(page.locator('.workbench')).toBeVisible();
 });
 

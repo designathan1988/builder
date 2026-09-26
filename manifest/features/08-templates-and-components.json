@@ -22,7 +22,580 @@
           "Template wrappers use the same layout styles as the wrap commands."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "the-container-template-inserts-its-tree",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "template-container"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.insert#elements-tile"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "div",
+                    "name": "Container",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "padding-top": "0px",
+                          "padding-right": "0px",
+                          "padding-bottom": "0px",
+                          "padding-left": "0px"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Container"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Container",
+                  "property": "padding-top",
+                  "value": "0px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.placed",
+                  "params": {
+                    "element": "Container",
+                    "parent": "Page",
+                    "position": 1,
+                    "count": 1
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-row-template-inserts-its-tree",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "template-row"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.insert#elements-tile"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "div",
+                    "name": "Row",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "padding-top": "0px",
+                          "padding-right": "0px",
+                          "padding-bottom": "0px",
+                          "padding-left": "0px",
+                          "display": "flex",
+                          "flex-direction": "row",
+                          "column-gap": "16px"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "div",
+                        "name": "Column",
+                        "tag": "div",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {
+                          "desktop": {
+                            "base": {
+                              "padding-top": "0px",
+                              "padding-right": "0px",
+                              "padding-bottom": "0px",
+                              "padding-left": "0px",
+                              "display": "flex",
+                              "flex-direction": "column",
+                              "flex-grow": "1"
+                            }
+                          }
+                        },
+                        "text": null,
+                        "children": []
+                      },
+                      {
+                        "type": "div",
+                        "name": "Column 2",
+                        "tag": "div",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {
+                          "desktop": {
+                            "base": {
+                              "padding-top": "0px",
+                              "padding-right": "0px",
+                              "padding-bottom": "0px",
+                              "padding-left": "0px",
+                              "display": "flex",
+                              "flex-direction": "column",
+                              "flex-grow": "1"
+                            }
+                          }
+                        },
+                        "text": null,
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Row"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Row",
+                  "property": "display",
+                  "value": "flex"
+                },
+                {
+                  "node": "/Page/Row",
+                  "property": "flex-direction",
+                  "value": "row"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.placed",
+                  "params": {
+                    "element": "Row",
+                    "parent": "Page",
+                    "position": 1,
+                    "count": 1
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-column-template-inserts-its-tree",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "template-column"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.insert#elements-tile"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "div",
+                    "name": "Column",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "padding-top": "0px",
+                          "padding-right": "0px",
+                          "padding-bottom": "0px",
+                          "padding-left": "0px",
+                          "display": "flex",
+                          "flex-direction": "column",
+                          "row-gap": "16px"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "div",
+                        "name": "Container",
+                        "tag": "div",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {
+                          "desktop": {
+                            "base": {
+                              "padding-top": "0px",
+                              "padding-right": "0px",
+                              "padding-bottom": "0px",
+                              "padding-left": "0px"
+                            }
+                          }
+                        },
+                        "text": null,
+                        "children": []
+                      },
+                      {
+                        "type": "div",
+                        "name": "Container 2",
+                        "tag": "div",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {
+                          "desktop": {
+                            "base": {
+                              "padding-top": "0px",
+                              "padding-right": "0px",
+                              "padding-bottom": "0px",
+                              "padding-left": "0px"
+                            }
+                          }
+                        },
+                        "text": null,
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Column"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Column",
+                  "property": "display",
+                  "value": "flex"
+                },
+                {
+                  "node": "/Page/Column",
+                  "property": "flex-direction",
+                  "value": "column"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.placed",
+                  "params": {
+                    "element": "Column",
+                    "parent": "Page",
+                    "position": 1,
+                    "count": 1
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-grid-template-inserts-its-tree",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "template-grid"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.insert#elements-tile"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "div",
+                    "name": "Grid",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "padding-top": "0px",
+                          "padding-right": "0px",
+                          "padding-bottom": "0px",
+                          "padding-left": "0px",
+                          "display": "grid",
+                          "grid-template-columns": "repeat(3, minmax(0, 1fr))",
+                          "column-gap": "16px",
+                          "row-gap": "16px"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "div",
+                        "name": "Container",
+                        "tag": "div",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {
+                          "desktop": {
+                            "base": {
+                              "padding-top": "0px",
+                              "padding-right": "0px",
+                              "padding-bottom": "0px",
+                              "padding-left": "0px"
+                            }
+                          }
+                        },
+                        "text": null,
+                        "children": []
+                      },
+                      {
+                        "type": "div",
+                        "name": "Container 2",
+                        "tag": "div",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {
+                          "desktop": {
+                            "base": {
+                              "padding-top": "0px",
+                              "padding-right": "0px",
+                              "padding-bottom": "0px",
+                              "padding-left": "0px"
+                            }
+                          }
+                        },
+                        "text": null,
+                        "children": []
+                      },
+                      {
+                        "type": "div",
+                        "name": "Container 3",
+                        "tag": "div",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {
+                          "desktop": {
+                            "base": {
+                              "padding-top": "0px",
+                              "padding-right": "0px",
+                              "padding-bottom": "0px",
+                              "padding-left": "0px"
+                            }
+                          }
+                        },
+                        "text": null,
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Grid"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Grid",
+                  "property": "display",
+                  "value": "grid"
+                },
+                {
+                  "node": "/Page/Grid",
+                  "property": "padding-top",
+                  "value": "0px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.placed",
+                  "params": {
+                    "element": "Grid",
+                    "parent": "Page",
+                    "position": 1,
+                    "count": 1
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
     },
     {
       "id": "templates-content",
@@ -44,7 +617,1100 @@
           "Every subtree passes the nesting rules and exports with the same markup."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "the-list-template-inserts-its-tree",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "template-list"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.insert#elements-tile"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "list",
+                    "name": "List, 3 items",
+                    "tag": "ul",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "listItem",
+                        "name": "List item",
+                        "tag": "li",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "paragraph",
+                            "name": "Paragraph",
+                            "tag": "p",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "A freshly created paragraph.",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "name": "List item 2",
+                        "tag": "li",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "paragraph",
+                            "name": "Paragraph 2",
+                            "tag": "p",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "A freshly created paragraph.",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "name": "List item 3",
+                        "tag": "li",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "paragraph",
+                            "name": "Paragraph 3",
+                            "tag": "p",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "A freshly created paragraph.",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/List, 3 items"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.placed",
+                  "params": {
+                    "element": "List, 3 items",
+                    "parent": "Page",
+                    "position": 1,
+                    "count": 1
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-ordered-list-template-inserts-its-tree",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "template-ordered-list"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.insert#elements-tile"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "orderedList",
+                    "name": "Ordered, 3 items",
+                    "tag": "ol",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "listItem",
+                        "name": "List item",
+                        "tag": "li",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "paragraph",
+                            "name": "Paragraph",
+                            "tag": "p",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "A freshly created paragraph.",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "name": "List item 2",
+                        "tag": "li",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "paragraph",
+                            "name": "Paragraph 2",
+                            "tag": "p",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "A freshly created paragraph.",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "name": "List item 3",
+                        "tag": "li",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "paragraph",
+                            "name": "Paragraph 3",
+                            "tag": "p",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "A freshly created paragraph.",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Ordered, 3 items"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.placed",
+                  "params": {
+                    "element": "Ordered, 3 items",
+                    "parent": "Page",
+                    "position": 1,
+                    "count": 1
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-definition-list-template-inserts-its-tree",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "template-definition-list"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.insert#elements-tile"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "definitionList",
+                    "name": "Definition list",
+                    "tag": "dl",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "term",
+                        "name": "Term",
+                        "tag": "dt",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "paragraph",
+                            "name": "Paragraph",
+                            "tag": "p",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "A freshly created paragraph.",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "type": "description",
+                        "name": "Description",
+                        "tag": "dd",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "paragraph",
+                            "name": "Paragraph 2",
+                            "tag": "p",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "A freshly created paragraph.",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Definition list"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.placed",
+                  "params": {
+                    "element": "Definition list",
+                    "parent": "Page",
+                    "position": 1,
+                    "count": 1
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-table-template-inserts-its-tree",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "template-table"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.insert#elements-tile"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "table",
+                    "name": "Table 2 × 2",
+                    "tag": "table",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "tableHead",
+                        "name": "Table head",
+                        "tag": "thead",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "tableRow",
+                            "name": "Row",
+                            "tag": "tr",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": null,
+                            "children": [
+                              {
+                                "type": "headerCell",
+                                "name": "Header cell",
+                                "tag": "th",
+                                "attributes": {},
+                                "classes": [],
+                                "styles": {},
+                                "text": null,
+                                "children": [
+                                  {
+                                    "type": "paragraph",
+                                    "name": "Paragraph",
+                                    "tag": "p",
+                                    "attributes": {},
+                                    "classes": [],
+                                    "styles": {},
+                                    "text": "A freshly created paragraph.",
+                                    "children": []
+                                  }
+                                ]
+                              },
+                              {
+                                "type": "headerCell",
+                                "name": "Header cell 2",
+                                "tag": "th",
+                                "attributes": {},
+                                "classes": [],
+                                "styles": {},
+                                "text": null,
+                                "children": [
+                                  {
+                                    "type": "paragraph",
+                                    "name": "Paragraph 2",
+                                    "tag": "p",
+                                    "attributes": {},
+                                    "classes": [],
+                                    "styles": {},
+                                    "text": "A freshly created paragraph.",
+                                    "children": []
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "tableBody",
+                        "name": "Table body",
+                        "tag": "tbody",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "tableRow",
+                            "name": "Row 2",
+                            "tag": "tr",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": null,
+                            "children": [
+                              {
+                                "type": "cell",
+                                "name": "Cell",
+                                "tag": "td",
+                                "attributes": {},
+                                "classes": [],
+                                "styles": {},
+                                "text": null,
+                                "children": [
+                                  {
+                                    "type": "paragraph",
+                                    "name": "Paragraph 3",
+                                    "tag": "p",
+                                    "attributes": {},
+                                    "classes": [],
+                                    "styles": {},
+                                    "text": "A freshly created paragraph.",
+                                    "children": []
+                                  }
+                                ]
+                              },
+                              {
+                                "type": "cell",
+                                "name": "Cell 2",
+                                "tag": "td",
+                                "attributes": {},
+                                "classes": [],
+                                "styles": {},
+                                "text": null,
+                                "children": [
+                                  {
+                                    "type": "paragraph",
+                                    "name": "Paragraph 4",
+                                    "tag": "p",
+                                    "attributes": {},
+                                    "classes": [],
+                                    "styles": {},
+                                    "text": "A freshly created paragraph.",
+                                    "children": []
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "type": "tableRow",
+                            "name": "Row 3",
+                            "tag": "tr",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": null,
+                            "children": [
+                              {
+                                "type": "cell",
+                                "name": "Cell 3",
+                                "tag": "td",
+                                "attributes": {},
+                                "classes": [],
+                                "styles": {},
+                                "text": null,
+                                "children": [
+                                  {
+                                    "type": "paragraph",
+                                    "name": "Paragraph 5",
+                                    "tag": "p",
+                                    "attributes": {},
+                                    "classes": [],
+                                    "styles": {},
+                                    "text": "A freshly created paragraph.",
+                                    "children": []
+                                  }
+                                ]
+                              },
+                              {
+                                "type": "cell",
+                                "name": "Cell 4",
+                                "tag": "td",
+                                "attributes": {},
+                                "classes": [],
+                                "styles": {},
+                                "text": null,
+                                "children": [
+                                  {
+                                    "type": "paragraph",
+                                    "name": "Paragraph 6",
+                                    "tag": "p",
+                                    "attributes": {},
+                                    "classes": [],
+                                    "styles": {},
+                                    "text": "A freshly created paragraph.",
+                                    "children": []
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Table 2 × 2"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.placed",
+                  "params": {
+                    "element": "Table 2 × 2",
+                    "parent": "Page",
+                    "position": 1,
+                    "count": 1
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-form-template-inserts-its-tree",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "template-form"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.insert#elements-tile"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "form",
+                    "name": "Form with fields",
+                    "tag": "form",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "label",
+                        "name": "Label",
+                        "tag": "label",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "paragraph",
+                            "name": "Paragraph",
+                            "tag": "span",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "Name",
+                            "children": []
+                          },
+                          {
+                            "type": "input",
+                            "name": "Input",
+                            "tag": "input",
+                            "attributes": {
+                              "inputType": "text",
+                              "name": "name"
+                            },
+                            "classes": [],
+                            "styles": {},
+                            "text": null,
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "type": "label",
+                        "name": "Label 2",
+                        "tag": "label",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "paragraph",
+                            "name": "Paragraph 2",
+                            "tag": "span",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "Email",
+                            "children": []
+                          },
+                          {
+                            "type": "input",
+                            "name": "Input 2",
+                            "tag": "input",
+                            "attributes": {
+                              "inputType": "email",
+                              "name": "email"
+                            },
+                            "classes": [],
+                            "styles": {},
+                            "text": null,
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "type": "button",
+                        "name": "Button",
+                        "tag": "button",
+                        "attributes": {
+                          "buttonType": "submit"
+                        },
+                        "classes": [],
+                        "styles": {},
+                        "text": "Send",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Form with fields"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.placed",
+                  "params": {
+                    "element": "Form with fields",
+                    "parent": "Page",
+                    "position": 1,
+                    "count": 1
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-select-template-inserts-its-tree",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "template-select"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.insert#elements-tile"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "select",
+                    "name": "Select with options",
+                    "tag": "select",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "option",
+                        "name": "Option",
+                        "tag": "option",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Option",
+                        "children": []
+                      },
+                      {
+                        "type": "option",
+                        "name": "Option 2",
+                        "tag": "option",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Option",
+                        "children": []
+                      },
+                      {
+                        "type": "option",
+                        "name": "Option 3",
+                        "tag": "option",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Option",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Select with options"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.placed",
+                  "params": {
+                    "element": "Select with options",
+                    "parent": "Page",
+                    "position": 1,
+                    "count": 1
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-figure-template-inserts-its-tree",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "template-figure"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.insert#elements-tile"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "figure",
+                    "name": "Figure + caption",
+                    "tag": "figure",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "image",
+                        "name": "Image",
+                        "tag": "img",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {
+                          "desktop": {
+                            "base": {
+                              "max-width": "100%"
+                            }
+                          }
+                        },
+                        "text": null,
+                        "children": []
+                      },
+                      {
+                        "type": "figureCaption",
+                        "name": "Caption",
+                        "tag": "figcaption",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Caption",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Figure + caption"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.placed",
+                  "params": {
+                    "element": "Figure + caption",
+                    "parent": "Page",
+                    "position": 1,
+                    "count": 1
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
     },
     {
       "id": "templates-sections",
@@ -66,7 +1732,940 @@
           "Each template carries default styles in the document JSON (Card: padding, border radius and border; Hero: large heading and generous padding; Navbar: flex row with space-between; Sidebar: fixed width; Gallery: three-column grid) and the export writes them to styles.css without inline styles."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "the-card-template-inserts-its-tree",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "template-card"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.insert#elements-tile"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "article",
+                    "name": "Card",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "padding-top": "20px",
+                          "padding-right": "20px",
+                          "padding-bottom": "20px",
+                          "padding-left": "20px",
+                          "border-top-width": "1px",
+                          "border-right-width": "1px",
+                          "border-bottom-width": "1px",
+                          "border-left-width": "1px",
+                          "border-top-style": "solid",
+                          "border-right-style": "solid",
+                          "border-bottom-style": "solid",
+                          "border-left-style": "solid",
+                          "border-top-color": "#e2e8f0",
+                          "border-right-color": "#e2e8f0",
+                          "border-bottom-color": "#e2e8f0",
+                          "border-left-color": "#e2e8f0",
+                          "border-top-left-radius": "12px",
+                          "border-top-right-radius": "12px",
+                          "border-bottom-right-radius": "12px",
+                          "border-bottom-left-radius": "12px"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "image",
+                        "name": "Image",
+                        "tag": "img",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {
+                          "desktop": {
+                            "base": {
+                              "max-width": "100%"
+                            }
+                          }
+                        },
+                        "text": null,
+                        "children": []
+                      },
+                      {
+                        "type": "heading",
+                        "name": "Heading",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Card title",
+                        "children": []
+                      },
+                      {
+                        "type": "paragraph",
+                        "name": "Paragraph",
+                        "tag": "p",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "A short description of what this card shows.",
+                        "children": []
+                      },
+                      {
+                        "type": "link",
+                        "name": "Link",
+                        "tag": "a",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Read more",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Card"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Card",
+                  "property": "padding-top",
+                  "value": "20px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.placed",
+                  "params": {
+                    "element": "Card",
+                    "parent": "Page",
+                    "position": 1,
+                    "count": 1
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-hero-template-inserts-its-tree",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "template-hero"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.insert#elements-tile"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "section",
+                    "name": "Hero",
+                    "tag": "section",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "padding-top": "96px",
+                          "padding-right": "40px",
+                          "padding-bottom": "96px",
+                          "padding-left": "40px"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "Heading",
+                        "tag": "h1",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {
+                          "desktop": {
+                            "base": {
+                              "font-size": "48px"
+                            }
+                          }
+                        },
+                        "text": "A clear, bold headline",
+                        "children": []
+                      },
+                      {
+                        "type": "paragraph",
+                        "name": "Paragraph",
+                        "tag": "p",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {
+                          "desktop": {
+                            "base": {
+                              "font-size": "20px"
+                            }
+                          }
+                        },
+                        "text": "One supporting line that says what the page offers.",
+                        "children": []
+                      },
+                      {
+                        "type": "div",
+                        "name": "Actions",
+                        "tag": "div",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {
+                          "desktop": {
+                            "base": {
+                              "padding-top": "0px",
+                              "padding-right": "0px",
+                              "padding-bottom": "0px",
+                              "padding-left": "0px",
+                              "display": "flex",
+                              "flex-direction": "row",
+                              "column-gap": "12px"
+                            }
+                          }
+                        },
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "button",
+                            "name": "Button",
+                            "tag": "button",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "Get started",
+                            "children": []
+                          },
+                          {
+                            "type": "button",
+                            "name": "Button 2",
+                            "tag": "button",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "Learn more",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero",
+                  "property": "padding-top",
+                  "value": "96px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.placed",
+                  "params": {
+                    "element": "Hero",
+                    "parent": "Page",
+                    "position": 1,
+                    "count": 1
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-navbar-template-inserts-its-tree",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "template-navbar"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.insert#elements-tile"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "header",
+                    "name": "Navbar",
+                    "tag": "header",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "padding-top": "16px",
+                          "padding-right": "40px",
+                          "padding-bottom": "16px",
+                          "padding-left": "40px",
+                          "display": "flex",
+                          "justify-content": "space-between",
+                          "align-items": "center"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "link",
+                        "name": "Link",
+                        "tag": "a",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Brand",
+                        "children": []
+                      },
+                      {
+                        "type": "nav",
+                        "name": "Navigation",
+                        "tag": "nav",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {
+                          "desktop": {
+                            "base": {
+                              "padding-top": "20px",
+                              "padding-right": "40px",
+                              "padding-bottom": "20px",
+                              "padding-left": "40px",
+                              "display": "flex",
+                              "column-gap": "24px"
+                            }
+                          }
+                        },
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "link",
+                            "name": "Link 2",
+                            "tag": "a",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "Home",
+                            "children": []
+                          },
+                          {
+                            "type": "link",
+                            "name": "Link 3",
+                            "tag": "a",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "About",
+                            "children": []
+                          },
+                          {
+                            "type": "link",
+                            "name": "Link 4",
+                            "tag": "a",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "Contact",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "type": "button",
+                        "name": "Button",
+                        "tag": "button",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Sign in",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Navbar"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Navbar",
+                  "property": "display",
+                  "value": "flex"
+                },
+                {
+                  "node": "/Page/Navbar",
+                  "property": "padding-top",
+                  "value": "16px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.placed",
+                  "params": {
+                    "element": "Navbar",
+                    "parent": "Page",
+                    "position": 1,
+                    "count": 1
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-sidebar-template-inserts-its-tree",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "template-sidebar"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.insert#elements-tile"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "aside",
+                    "name": "Sidebar",
+                    "tag": "aside",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "padding-top": "24px",
+                          "padding-right": "24px",
+                          "padding-bottom": "24px",
+                          "padding-left": "24px",
+                          "width": "280px"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "Heading",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Sections",
+                        "children": []
+                      },
+                      {
+                        "type": "list",
+                        "name": "Unordered list",
+                        "tag": "ul",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "listItem",
+                            "name": "List item",
+                            "tag": "li",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": null,
+                            "children": [
+                              {
+                                "type": "link",
+                                "name": "Link",
+                                "tag": "a",
+                                "attributes": {},
+                                "classes": [],
+                                "styles": {},
+                                "text": "First link",
+                                "children": []
+                              }
+                            ]
+                          },
+                          {
+                            "type": "listItem",
+                            "name": "List item 2",
+                            "tag": "li",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": null,
+                            "children": [
+                              {
+                                "type": "link",
+                                "name": "Link 2",
+                                "tag": "a",
+                                "attributes": {},
+                                "classes": [],
+                                "styles": {},
+                                "text": "Second link",
+                                "children": []
+                              }
+                            ]
+                          },
+                          {
+                            "type": "listItem",
+                            "name": "List item 3",
+                            "tag": "li",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": null,
+                            "children": [
+                              {
+                                "type": "link",
+                                "name": "Link 3",
+                                "tag": "a",
+                                "attributes": {},
+                                "classes": [],
+                                "styles": {},
+                                "text": "Third link",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Sidebar"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Sidebar",
+                  "property": "padding-top",
+                  "value": "24px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.placed",
+                  "params": {
+                    "element": "Sidebar",
+                    "parent": "Page",
+                    "position": 1,
+                    "count": 1
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-gallery-template-inserts-its-tree",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "template-gallery"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.insert#elements-tile"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "section",
+                    "name": "Gallery",
+                    "tag": "section",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "padding-top": "40px",
+                          "padding-right": "40px",
+                          "padding-bottom": "40px",
+                          "padding-left": "40px",
+                          "display": "grid",
+                          "grid-template-columns": "repeat(3, minmax(0, 1fr))",
+                          "column-gap": "16px",
+                          "row-gap": "16px"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "figure",
+                        "name": "Figure",
+                        "tag": "figure",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "image",
+                            "name": "Image",
+                            "tag": "img",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {
+                              "desktop": {
+                                "base": {
+                                  "max-width": "100%"
+                                }
+                              }
+                            },
+                            "text": null,
+                            "children": []
+                          },
+                          {
+                            "type": "figureCaption",
+                            "name": "Caption",
+                            "tag": "figcaption",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "Caption",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "type": "figure",
+                        "name": "Figure 2",
+                        "tag": "figure",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "image",
+                            "name": "Image 2",
+                            "tag": "img",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {
+                              "desktop": {
+                                "base": {
+                                  "max-width": "100%"
+                                }
+                              }
+                            },
+                            "text": null,
+                            "children": []
+                          },
+                          {
+                            "type": "figureCaption",
+                            "name": "Caption 2",
+                            "tag": "figcaption",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "Caption",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "type": "figure",
+                        "name": "Figure 3",
+                        "tag": "figure",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "image",
+                            "name": "Image 3",
+                            "tag": "img",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {
+                              "desktop": {
+                                "base": {
+                                  "max-width": "100%"
+                                }
+                              }
+                            },
+                            "text": null,
+                            "children": []
+                          },
+                          {
+                            "type": "figureCaption",
+                            "name": "Caption 3",
+                            "tag": "figcaption",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "Caption",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Gallery"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Gallery",
+                  "property": "display",
+                  "value": "grid"
+                },
+                {
+                  "node": "/Page/Gallery",
+                  "property": "padding-top",
+                  "value": "40px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.placed",
+                  "params": {
+                    "element": "Gallery",
+                    "parent": "Page",
+                    "position": 1,
+                    "count": 1
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
     },
     {
       "id": "reusable-components",
@@ -79,7 +2678,7 @@
       "dependsOn": [
         "templates-sections"
       ],
-      "spec": null,
+      "spec": "spec/behavior/reusable-components.md",
       "intent": {
         "title": "Reusable components with instances",
         "steps": [
@@ -93,7 +2692,1254 @@
           "The export writes plain HTML for every instance, with the component's styles written once."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "create-a-component-from-the-context-menu",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "contextMenu.open#layers-row-secondary-click",
+              "args": {
+                "target": "/Page/Plans/Grid/CardA"
+              },
+              "target": "/Page/Plans/Grid/CardA",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "components.create#context-menu",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "components.create#context-menu"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@components",
+                "value": [
+                  {
+                    "name": "CardA",
+                    "tree": {
+                      "type": "article",
+                      "name": "CardA",
+                      "tag": "article",
+                      "attributes": {},
+                      "classes": [
+                        "card"
+                      ],
+                      "styles": {},
+                      "text": null,
+                      "children": [
+                        {
+                          "type": "heading",
+                          "name": "CardATitle",
+                          "tag": "h3",
+                          "attributes": {},
+                          "classes": [],
+                          "styles": {},
+                          "text": "Monthly",
+                          "children": []
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/CardA/@component",
+                "value": "CardA"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/CardA/@componentPart",
+                "value": []
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/CardA/CardATitle/@componentPart",
+                "value": [
+                  0
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Plans/Grid/CardA"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.components.created",
+                  "params": {
+                    "name": "CardA"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-component-tile-places-an-instance-after-the-selected-element",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "contextMenu.open#layers-row-secondary-click",
+              "args": {
+                "target": "/Page/Plans/Grid/CardA"
+              },
+              "target": "/Page/Plans/Grid/CardA",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "components.create#context-menu",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "selection.select#canvas-click-element-or-page",
+              "args": {
+                "target": "/Page/Footer/Note"
+              },
+              "target": "/Page/Footer/Note",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "components.insertInstance#elements-component-tile",
+              "args": {
+                "component": "CardA"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "components.insertInstance#elements-component-tile"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@components",
+                "value": [
+                  {
+                    "name": "CardA",
+                    "tree": {
+                      "type": "article",
+                      "name": "CardA",
+                      "tag": "article",
+                      "attributes": {},
+                      "classes": [
+                        "card"
+                      ],
+                      "styles": {},
+                      "text": null,
+                      "children": [
+                        {
+                          "type": "heading",
+                          "name": "CardATitle",
+                          "tag": "h3",
+                          "attributes": {},
+                          "classes": [],
+                          "styles": {},
+                          "text": "Monthly",
+                          "children": []
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/CardA/@component",
+                "value": "CardA"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/CardA/@componentPart",
+                "value": []
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/CardA/CardATitle/@componentPart",
+                "value": [
+                  0
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/Page/Footer/@children",
+                "value": [
+                  {
+                    "type": "paragraph",
+                    "name": "Note",
+                    "tag": "p",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Aurora Coffee",
+                    "children": []
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardA 2",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardATitle 2",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Monthly",
+                        "children": [],
+                        "componentPart": [
+                          0
+                        ]
+                      }
+                    ],
+                    "component": "CardA",
+                    "componentPart": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Footer/CardA 2"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.placed",
+                  "params": {
+                    "element": "CardA 2",
+                    "parent": "Footer",
+                    "position": 2,
+                    "count": 2
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-component-tile-dragged-after-a-card-places-an-instance-there",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "contextMenu.open#layers-row-secondary-click",
+              "args": {
+                "target": "/Page/Plans/Grid/CardA"
+              },
+              "target": "/Page/Plans/Grid/CardA",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "components.create#context-menu",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "components.insertInstance#canvas-drag-component-tile-drop-proposal",
+              "args": {
+                "component": "CardA",
+                "parent": "/Page/Plans/Grid",
+                "index": 3
+              },
+              "target": null,
+              "drop": {
+                "placement": "after",
+                "reference": "/Page/Plans/Grid/CardC"
+              },
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "components.insertInstance#canvas-drag-component-tile-drop-proposal"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@components",
+                "value": [
+                  {
+                    "name": "CardA",
+                    "tree": {
+                      "type": "article",
+                      "name": "CardA",
+                      "tag": "article",
+                      "attributes": {},
+                      "classes": [
+                        "card"
+                      ],
+                      "styles": {},
+                      "text": null,
+                      "children": [
+                        {
+                          "type": "heading",
+                          "name": "CardATitle",
+                          "tag": "h3",
+                          "attributes": {},
+                          "classes": [],
+                          "styles": {},
+                          "text": "Monthly",
+                          "children": []
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@children",
+                "value": [
+                  {
+                    "type": "article",
+                    "name": "CardA",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardATitle",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Monthly",
+                        "children": [],
+                        "componentPart": [
+                          0
+                        ]
+                      }
+                    ],
+                    "component": "CardA",
+                    "componentPart": []
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardB",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardBTitle",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Weekly",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardC",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardA 2",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardATitle 2",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Monthly",
+                        "children": [],
+                        "componentPart": [
+                          0
+                        ]
+                      }
+                    ],
+                    "component": "CardA",
+                    "componentPart": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Plans/Grid/CardA 2"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": null,
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-style-of-an-instance-reaches-the-component-and-every-instance",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "contextMenu.open#layers-row-secondary-click",
+              "args": {
+                "target": "/Page/Plans/Grid/CardA"
+              },
+              "target": "/Page/Plans/Grid/CardA",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "components.create#context-menu",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "selection.select#canvas-click-element-or-page",
+              "args": {
+                "target": "/Page/Footer/Note"
+              },
+              "target": "/Page/Footer/Note",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "components.insertInstance#elements-component-tile",
+              "args": {
+                "component": "CardA"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "selection.select#canvas-click-element-or-page",
+              "args": {
+                "target": "/Page/Footer/CardA 2/CardATitle 2"
+              },
+              "target": "/Page/Footer/CardA 2/CardATitle 2",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.set#inspector-color",
+              "args": {
+                "property": "color",
+                "value": "#ff0000"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "#ff0000\n"
+            },
+            {
+              "door": "project.export#toolbar-top-bar-export",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "style.set#inspector-color"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@components",
+                "value": [
+                  {
+                    "name": "CardA",
+                    "tree": {
+                      "type": "article",
+                      "name": "CardA",
+                      "tag": "article",
+                      "attributes": {},
+                      "classes": [
+                        "card"
+                      ],
+                      "styles": {},
+                      "text": null,
+                      "children": [
+                        {
+                          "type": "heading",
+                          "name": "CardATitle",
+                          "tag": "h3",
+                          "attributes": {},
+                          "classes": [],
+                          "styles": {
+                            "desktop": {
+                              "base": {
+                                "color": "#ff0000"
+                              }
+                            }
+                          },
+                          "text": "Monthly",
+                          "children": []
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/CardA/@component",
+                "value": "CardA"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/CardA/@componentPart",
+                "value": []
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/CardA/CardATitle/@componentPart",
+                "value": [
+                  0
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/CardA/CardATitle/@styles",
+                "value": {
+                  "desktop": {
+                    "base": {
+                      "color": "#ff0000"
+                    }
+                  }
+                }
+              },
+              {
+                "op": "set",
+                "path": "/Page/Footer/@children",
+                "value": [
+                  {
+                    "type": "paragraph",
+                    "name": "Note",
+                    "tag": "p",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Aurora Coffee",
+                    "children": []
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardA 2",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardATitle 2",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {
+                          "desktop": {
+                            "base": {
+                              "color": "#ff0000"
+                            }
+                          }
+                        },
+                        "text": "Monthly",
+                        "children": [],
+                        "componentPart": [
+                          0
+                        ]
+                      }
+                    ],
+                    "component": "CardA",
+                    "componentPart": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Footer/CardA 2/CardATitle 2"
+            ],
+            "history": {
+              "undoSteps": 3,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Plans/Grid/CardA/CardATitle",
+                  "property": "color",
+                  "value": "rgb(255, 0, 0)"
+                },
+                {
+                  "node": "/Page/Footer/CardA 2/CardATitle 2",
+                  "property": "color",
+                  "value": "rgb(255, 0, 0)"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.export.done",
+                  "params": {
+                    "file": "site.zip"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": {
+              "files": [
+                {
+                  "path": "css/styles.css",
+                  "present": [
+                    ".cardatitle {\n  color: #ff0000;\n}"
+                  ],
+                  "absent": [
+                    "cardatitle-2",
+                    "[data-"
+                  ]
+                },
+                {
+                  "path": "index.html",
+                  "present": [
+                    "<h3 class=\"cardatitle\">Monthly</h3>"
+                  ],
+                  "absent": [
+                    "style=",
+                    "component"
+                  ]
+                }
+              ]
+            }
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-text-set-on-an-instance-stays-on-it",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "contextMenu.open#layers-row-secondary-click",
+              "args": {
+                "target": "/Page/Plans/Grid/CardA"
+              },
+              "target": "/Page/Plans/Grid/CardA",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "components.create#context-menu",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "selection.select#canvas-click-element-or-page",
+              "args": {
+                "target": "/Page/Footer/Note"
+              },
+              "target": "/Page/Footer/Note",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "components.insertInstance#elements-component-tile",
+              "args": {
+                "component": "CardA"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "selection.select#canvas-click-element-or-page",
+              "args": {
+                "target": "/Page/Footer/CardA 2/CardATitle 2"
+              },
+              "target": "/Page/Footer/CardA 2/CardATitle 2",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "text.set#inspector-text",
+              "args": {
+                "target": "/Page/Footer/CardA 2/CardATitle 2",
+                "content": "Yearly"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "Yearly\n"
+            }
+          ],
+          "doors": [
+            "text.set#inspector-text"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@components",
+                "value": [
+                  {
+                    "name": "CardA",
+                    "tree": {
+                      "type": "article",
+                      "name": "CardA",
+                      "tag": "article",
+                      "attributes": {},
+                      "classes": [
+                        "card"
+                      ],
+                      "styles": {},
+                      "text": null,
+                      "children": [
+                        {
+                          "type": "heading",
+                          "name": "CardATitle",
+                          "tag": "h3",
+                          "attributes": {},
+                          "classes": [],
+                          "styles": {},
+                          "text": "Monthly",
+                          "children": []
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/CardA/@component",
+                "value": "CardA"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/CardA/@componentPart",
+                "value": []
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/CardA/CardATitle/@componentPart",
+                "value": [
+                  0
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/Page/Footer/@children",
+                "value": [
+                  {
+                    "type": "paragraph",
+                    "name": "Note",
+                    "tag": "p",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Aurora Coffee",
+                    "children": []
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardA 2",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardATitle 2",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Yearly",
+                        "children": [],
+                        "componentPart": [
+                          0
+                        ]
+                      }
+                    ],
+                    "component": "CardA",
+                    "componentPart": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Footer/CardA 2/CardATitle 2"
+            ],
+            "history": {
+              "undoSteps": 3,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": null,
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "detach-an-instance-from-the-context-menu",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "contextMenu.open#layers-row-secondary-click",
+              "args": {
+                "target": "/Page/Plans/Grid/CardA"
+              },
+              "target": "/Page/Plans/Grid/CardA",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "components.create#context-menu",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "selection.select#canvas-click-element-or-page",
+              "args": {
+                "target": "/Page/Footer/Note"
+              },
+              "target": "/Page/Footer/Note",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "components.insertInstance#elements-component-tile",
+              "args": {
+                "component": "CardA"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-explorer",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "contextMenu.open#layers-row-secondary-click",
+              "args": {
+                "target": "/Page/Footer/CardA 2"
+              },
+              "target": "/Page/Footer/CardA 2",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "components.detach#context-menu",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "components.detach#context-menu"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@components",
+                "value": [
+                  {
+                    "name": "CardA",
+                    "tree": {
+                      "type": "article",
+                      "name": "CardA",
+                      "tag": "article",
+                      "attributes": {},
+                      "classes": [
+                        "card"
+                      ],
+                      "styles": {},
+                      "text": null,
+                      "children": [
+                        {
+                          "type": "heading",
+                          "name": "CardATitle",
+                          "tag": "h3",
+                          "attributes": {},
+                          "classes": [],
+                          "styles": {},
+                          "text": "Monthly",
+                          "children": []
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/CardA/@component",
+                "value": "CardA"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/CardA/@componentPart",
+                "value": []
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/CardA/CardATitle/@componentPart",
+                "value": [
+                  0
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/Page/Footer/@children",
+                "value": [
+                  {
+                    "type": "paragraph",
+                    "name": "Note",
+                    "tag": "p",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Aurora Coffee",
+                    "children": []
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardA 2",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardATitle 2",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Monthly",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Footer/CardA 2"
+            ],
+            "history": {
+              "undoSteps": 3,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.components.detached",
+                  "params": {
+                    "name": "CardA 2"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
     },
     {
       "id": "templates-components",
@@ -115,7 +3961,814 @@
           "Each passes the nesting rules and exports with the same markup."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "the-form-group-template-inserts-its-tree",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "template-form-group"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.insert#elements-tile"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "div",
+                    "name": "Form group",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "padding-top": "0px",
+                          "padding-right": "0px",
+                          "padding-bottom": "0px",
+                          "padding-left": "0px",
+                          "display": "flex",
+                          "flex-direction": "column",
+                          "row-gap": "12px"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "label",
+                        "name": "Label",
+                        "tag": "label",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "paragraph",
+                            "name": "Paragraph",
+                            "tag": "span",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "Name",
+                            "children": []
+                          },
+                          {
+                            "type": "input",
+                            "name": "Input",
+                            "tag": "input",
+                            "attributes": {
+                              "inputType": "text",
+                              "name": "name"
+                            },
+                            "classes": [],
+                            "styles": {},
+                            "text": null,
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "type": "label",
+                        "name": "Label 2",
+                        "tag": "label",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "paragraph",
+                            "name": "Paragraph 2",
+                            "tag": "span",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "Email",
+                            "children": []
+                          },
+                          {
+                            "type": "input",
+                            "name": "Input 2",
+                            "tag": "input",
+                            "attributes": {
+                              "inputType": "email",
+                              "name": "email"
+                            },
+                            "classes": [],
+                            "styles": {},
+                            "text": null,
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Form group"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Form group",
+                  "property": "display",
+                  "value": "flex"
+                },
+                {
+                  "node": "/Page/Form group",
+                  "property": "flex-direction",
+                  "value": "column"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.placed",
+                  "params": {
+                    "element": "Form group",
+                    "parent": "Page",
+                    "position": 1,
+                    "count": 1
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-button-group-template-inserts-its-tree",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "template-button-group"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.insert#elements-tile"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "div",
+                    "name": "Button group",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "padding-top": "0px",
+                          "padding-right": "0px",
+                          "padding-bottom": "0px",
+                          "padding-left": "0px",
+                          "display": "flex",
+                          "flex-direction": "row",
+                          "column-gap": "8px"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "button",
+                        "name": "Button",
+                        "tag": "button",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "First",
+                        "children": []
+                      },
+                      {
+                        "type": "button",
+                        "name": "Button 2",
+                        "tag": "button",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Second",
+                        "children": []
+                      },
+                      {
+                        "type": "button",
+                        "name": "Button 3",
+                        "tag": "button",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Third",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Button group"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Button group",
+                  "property": "display",
+                  "value": "flex"
+                },
+                {
+                  "node": "/Page/Button group",
+                  "property": "flex-direction",
+                  "value": "row"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.placed",
+                  "params": {
+                    "element": "Button group",
+                    "parent": "Page",
+                    "position": 1,
+                    "count": 1
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-tabs-template-inserts-its-tree",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "template-tabs"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.insert#elements-tile"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "div",
+                    "name": "Tabs",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "padding-top": "0px",
+                          "padding-right": "0px",
+                          "padding-bottom": "0px",
+                          "padding-left": "0px"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "nav",
+                        "name": "Navigation",
+                        "tag": "nav",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {
+                          "desktop": {
+                            "base": {
+                              "padding-top": "20px",
+                              "padding-right": "40px",
+                              "padding-bottom": "20px",
+                              "padding-left": "40px",
+                              "display": "flex",
+                              "flex-direction": "row",
+                              "column-gap": "8px"
+                            }
+                          }
+                        },
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "button",
+                            "name": "Button",
+                            "tag": "button",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "First tab",
+                            "children": []
+                          },
+                          {
+                            "type": "button",
+                            "name": "Button 2",
+                            "tag": "button",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "Second tab",
+                            "children": []
+                          },
+                          {
+                            "type": "button",
+                            "name": "Button 3",
+                            "tag": "button",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "Third tab",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "type": "div",
+                        "name": "Container",
+                        "tag": "div",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {
+                          "desktop": {
+                            "base": {
+                              "padding-top": "0px",
+                              "padding-right": "0px",
+                              "padding-bottom": "0px",
+                              "padding-left": "0px"
+                            }
+                          }
+                        },
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "paragraph",
+                            "name": "Paragraph",
+                            "tag": "p",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "The content of the chosen tab.",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Tabs"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Tabs",
+                  "property": "padding-top",
+                  "value": "0px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.placed",
+                  "params": {
+                    "element": "Tabs",
+                    "parent": "Page",
+                    "position": 1,
+                    "count": 1
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-accordion-template-inserts-its-tree",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "template-accordion"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.insert#elements-tile"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "div",
+                    "name": "Accordion",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "padding-top": "0px",
+                          "padding-right": "0px",
+                          "padding-bottom": "0px",
+                          "padding-left": "0px"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "details",
+                        "name": "Details",
+                        "tag": "details",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "summary",
+                            "name": "Summary",
+                            "tag": "summary",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": null,
+                            "children": [
+                              {
+                                "type": "paragraph",
+                                "name": "Paragraph",
+                                "tag": "span",
+                                "attributes": {},
+                                "classes": [],
+                                "styles": {},
+                                "text": "First question",
+                                "children": []
+                              }
+                            ]
+                          },
+                          {
+                            "type": "paragraph",
+                            "name": "Paragraph 2",
+                            "tag": "p",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "The answer to the first question.",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "type": "details",
+                        "name": "Details 2",
+                        "tag": "details",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "summary",
+                            "name": "Summary 2",
+                            "tag": "summary",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": null,
+                            "children": [
+                              {
+                                "type": "paragraph",
+                                "name": "Paragraph 3",
+                                "tag": "span",
+                                "attributes": {},
+                                "classes": [],
+                                "styles": {},
+                                "text": "Second question",
+                                "children": []
+                              }
+                            ]
+                          },
+                          {
+                            "type": "paragraph",
+                            "name": "Paragraph 4",
+                            "tag": "p",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "The answer to the second question.",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Accordion"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Accordion",
+                  "property": "padding-top",
+                  "value": "0px"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.placed",
+                  "params": {
+                    "element": "Accordion",
+                    "parent": "Page",
+                    "position": 1,
+                    "count": 1
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-modal-template-inserts-its-tree",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "template-modal"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.insert#elements-tile"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "dialog",
+                    "name": "Modal",
+                    "tag": "dialog",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "Heading",
+                        "tag": "h2",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Dialog title",
+                        "children": []
+                      },
+                      {
+                        "type": "paragraph",
+                        "name": "Paragraph",
+                        "tag": "p",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "What the person needs to know or decide.",
+                        "children": []
+                      },
+                      {
+                        "type": "button",
+                        "name": "Button",
+                        "tag": "button",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Close",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Modal"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.placed",
+                  "params": {
+                    "element": "Modal",
+                    "parent": "Page",
+                    "position": 1,
+                    "count": 1
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
     }
   ]
 }

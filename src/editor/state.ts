@@ -3,7 +3,7 @@
 // the overlays' dismissals (menus/overlays.ts), the context menu's opening (menus/context-menu.ts), the folded
 // Layers branches (layers/tree.ts), the name being edited in Layers (layers/rename.ts), the text being edited on the
 // canvas (canvas/text-edit.ts), the drop level and the cancellations of the drags (drag/drag-session.ts) and the
-// keyboard's hand (core/structure/hand.ts). Each module owns its part; this file only composes them. Document and
+// keyboard's hand (core/structure/hand.ts) and the camera's pan (view/camera.ts). Each module owns its part; this file only composes them. Document and
 // selection state live in the core store, never here.
 import { NO_HAND, type HandState } from '../core/structure/hand.ts';
 import { INITIAL_TEXT_EDIT, type TextEditState } from './canvas/text-edit.ts';
@@ -15,7 +15,11 @@ import { INITIAL_CONTEXT_MENU, type ContextMenuState } from './menus/context-men
 import { INITIAL_OVERLAYS, type OverlaysState } from './menus/overlays.ts';
 import { INITIAL_LAYOUT, type LayoutState } from './workspace/layout.ts';
 import { INITIAL_PANELS, type PanelsState } from './workspace/panels.ts';
+import { INITIAL_CAMERA, type CameraState } from './view/camera.ts';
+import type { ColorPickerClosed, ColorPickerState } from './inspector/color-picker.ts';
 import type { Preferences } from './preferences/preferences.ts';
+import type { Revealed } from './inspector/sections.ts';
+import type { EditMode } from './canvas/edit-mode.ts';
 
 export interface EditorUi {
   readonly panels: PanelsState;
@@ -31,6 +35,24 @@ export interface EditorUi {
   readonly drag: DragSessionState;
   // the element held by the keyboard's hand and its aim (spec hand-keyboard-move)
   readonly hand: HandState | null;
+  // the page's horizontal place on the stage while it is wider than the stage (spec zoom-keyboard-buttons)
+  readonly camera: CameraState;
+  // the colour picker open on a property, and how its last session ended (inspector/color-picker.ts)
+  readonly colorPicker: ColorPickerState | null;
+  readonly colorPickerClosed: ColorPickerClosed;
+  // the field the inspector was last asked to show (inspector.reveal); absent until one is
+  readonly revealed?: Revealed | undefined;
+  // the Edit on canvas mode (canvas/edit-mode.ts); absent while none is on
+  readonly editMode?: EditMode | undefined;
+  // the class the Style tab's writes go to (inspector/style-target.ts); absent while the target is the element
+  readonly styleTarget?: string | undefined;
+  // the dialog open (workspace/dialogs.ts): Guides & Grids, Snap settings; absent while none is
+  readonly dialog?: 'guides-grids' | 'snap-settings' | 'recovery' | undefined;
+  // the saved versions the recovery dialog offers, the newest first, with their times (spec
+  // autosave-corruption-recovery); absent when the saved work was read
+  readonly recovery?: readonly { readonly revision: number; readonly time: number }[] | undefined;
+  // the style state the editor edits (view.setStyleState; view/style-state.ts); absent while it is Base
+  readonly styleState?: string | undefined;
 }
 
 export function initialEditorUi(preferences: Preferences): EditorUi {
@@ -46,5 +68,8 @@ export function initialEditorUi(preferences: Preferences): EditorUi {
     textEdit: INITIAL_TEXT_EDIT,
     drag: INITIAL_DRAG_SESSION,
     hand: NO_HAND,
+    camera: INITIAL_CAMERA,
+    colorPicker: null,
+    colorPickerClosed: { applied: false, count: 0 },
   };
 }

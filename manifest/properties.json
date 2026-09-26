@@ -508,7 +508,7 @@
       "valueType": "length-percentage",
       "codec": "length-percentage",
       "appliesTo": "flexOrGridContainer",
-      "essential": false,
+      "essential": true,
       "doors": [
         "style.set#inspector-gap",
         "style.set#inspector-row-gap",
@@ -536,7 +536,7 @@
       "valueType": "length-percentage",
       "codec": "length-percentage",
       "appliesTo": "flexOrGridContainer",
-      "essential": false,
+      "essential": true,
       "doors": [
         "style.set#inspector-gap",
         "style.set#inspector-column-gap",
@@ -1219,7 +1219,7 @@
       "valueType": "length-percentage",
       "codec": "length-percentage",
       "appliesTo": "always",
-      "essential": false,
+      "essential": true,
       "doors": [
         "style.setSpacing#inspector-padding-box-model",
         "style.setSpacing#inspector-padding-top-box-model",
@@ -1237,7 +1237,7 @@
       "valueType": "length-percentage",
       "codec": "length-percentage",
       "appliesTo": "always",
-      "essential": false,
+      "essential": true,
       "doors": [
         "style.setSpacing#inspector-padding-box-model",
         "style.setSpacing#inspector-padding-right-box-model",
@@ -1255,7 +1255,7 @@
       "valueType": "length-percentage",
       "codec": "length-percentage",
       "appliesTo": "always",
-      "essential": false,
+      "essential": true,
       "doors": [
         "style.setSpacing#inspector-padding-box-model",
         "style.setSpacing#inspector-padding-bottom-box-model",
@@ -1273,7 +1273,7 @@
       "valueType": "length-percentage",
       "codec": "length-percentage",
       "appliesTo": "always",
-      "essential": false,
+      "essential": true,
       "doors": [
         "style.setSpacing#inspector-padding-box-model",
         "style.setSpacing#inspector-padding-left-box-model",
@@ -1291,7 +1291,7 @@
       "valueType": "length-percentage",
       "codec": "length-percentage",
       "appliesTo": "always",
-      "essential": false,
+      "essential": true,
       "doors": [
         "position.setAnchors#inspector-anchor-control",
         "style.setSpacing#inspector-margin-box-model",
@@ -1310,7 +1310,7 @@
       "valueType": "length-percentage",
       "codec": "length-percentage",
       "appliesTo": "always",
-      "essential": false,
+      "essential": true,
       "doors": [
         "position.setAnchors#inspector-anchor-control",
         "style.setSpacing#inspector-margin-box-model",
@@ -1329,7 +1329,7 @@
       "valueType": "length-percentage",
       "codec": "length-percentage",
       "appliesTo": "always",
-      "essential": false,
+      "essential": true,
       "doors": [
         "position.setAnchors#inspector-anchor-control",
         "style.setSpacing#inspector-margin-box-model",
@@ -1348,7 +1348,7 @@
       "valueType": "length-percentage",
       "codec": "length-percentage",
       "appliesTo": "always",
-      "essential": false,
+      "essential": true,
       "doors": [
         "position.setAnchors#inspector-anchor-control",
         "style.setSpacing#inspector-margin-box-model",
@@ -1913,7 +1913,14 @@
         "style.setBackgroundImage#inspector-background-image-gradient-add",
         "style.setBackgroundImage#inspector-background-image-gradient-reset"
       ],
-      "subsets": []
+      "subsets": [
+        {
+          "id": "keywords",
+          "values": ["left", "center", "right"],
+          "units": null,
+          "reason": "The keywords of the horizontal axis: the position codec tells which axis a typed word names by them."
+        }
+      ]
     },
     {
       "id": "background-position-y",
@@ -1931,7 +1938,14 @@
         "style.setBackgroundImage#inspector-background-image-gradient-add",
         "style.setBackgroundImage#inspector-background-image-gradient-reset"
       ],
-      "subsets": []
+      "subsets": [
+        {
+          "id": "keywords",
+          "values": ["top", "center", "bottom"],
+          "units": null,
+          "reason": "The keywords of the vertical axis: the position codec tells which axis a typed word names by them."
+        }
+      ]
     },
     {
       "id": "background-repeat",
@@ -2080,7 +2094,7 @@
       "valueType": "length",
       "codec": "line-width",
       "appliesTo": "always",
-      "essential": false,
+      "essential": true,
       "doors": [
         "style.setBorder#inspector-border-border-editor",
         "style.setBorder#inspector-border-width-border-editor",
@@ -2101,7 +2115,7 @@
       "valueType": "keyword",
       "codec": "keyword",
       "appliesTo": "always",
-      "essential": false,
+      "essential": true,
       "doors": [
         "style.setBorder#inspector-border-border-editor",
         "style.setBorder#inspector-border-style-border-editor",
@@ -2120,7 +2134,7 @@
       "valueType": "color",
       "codec": "color",
       "appliesTo": "always",
-      "essential": false,
+      "essential": true,
       "doors": [
         "style.setBorder#inspector-border-border-editor",
         "style.setBorder#inspector-border-color-border-editor",
@@ -2139,7 +2153,7 @@
       "valueType": "length",
       "codec": "line-width",
       "appliesTo": "always",
-      "essential": false,
+      "essential": true,
       "doors": [
         "style.setBorder#inspector-border-border-editor",
         "style.setBorder#inspector-border-width-border-editor",
@@ -2160,7 +2174,7 @@
       "valueType": "keyword",
       "codec": "keyword",
       "appliesTo": "always",
-      "essential": false,
+      "essential": true,
       "doors": [
         "style.setBorder#inspector-border-border-editor",
         "style.setBorder#inspector-border-style-border-editor",
@@ -2179,7 +2193,7 @@
       "valueType": "color",
       "codec": "color",
       "appliesTo": "always",
-      "essential": false,
+      "essential": true,
       "doors": [
         "style.setBorder#inspector-border-border-editor",
         "style.setBorder#inspector-border-color-border-editor",
@@ -2198,7 +2212,7 @@
       "valueType": "length",
       "codec": "line-width",
       "appliesTo": "always",
-      "essential": false,
+      "essential": true,
       "doors": [
         "style.setBorder#inspector-border-border-editor",
         "style.setBorder#inspector-border-width-border-editor",
@@ -2219,7 +2233,7 @@
       "valueType": "keyword",
       "codec": "keyword",
       "appliesTo": "always",
-      "essential": false,
+      "essential": true,
       "doors": [
         "style.setBorder#inspector-border-border-editor",
         "style.setBorder#inspector-border-style-border-editor",
@@ -2238,7 +2252,7 @@
       "valueType": "color",
       "codec": "color",
       "appliesTo": "always",
-      "essential": false,
+      "essential": true,
       "doors": [
         "style.setBorder#inspector-border-border-editor",
         "style.setBorder#inspector-border-color-border-editor",
@@ -2257,7 +2271,7 @@
       "valueType": "length",
       "codec": "line-width",
       "appliesTo": "always",
-      "essential": false,
+      "essential": true,
       "doors": [
         "style.setBorder#inspector-border-border-editor",
         "style.setBorder#inspector-border-width-border-editor",
@@ -2278,7 +2292,7 @@
       "valueType": "keyword",
       "codec": "keyword",
       "appliesTo": "always",
-      "essential": false,
+      "essential": true,
       "doors": [
         "style.setBorder#inspector-border-border-editor",
         "style.setBorder#inspector-border-style-border-editor",
@@ -2297,7 +2311,7 @@
       "valueType": "color",
       "codec": "color",
       "appliesTo": "always",
-      "essential": false,
+      "essential": true,
       "doors": [
         "style.setBorder#inspector-border-border-editor",
         "style.setBorder#inspector-border-color-border-editor",
@@ -2316,7 +2330,7 @@
       "valueType": "length-percentage",
       "codec": "radius",
       "appliesTo": "always",
-      "essential": false,
+      "essential": true,
       "doors": [
         "style.setRadius#inspector-border-radius-radius-editor",
         "style.setRadius#inspector-border-top-left-radius-radius-editor",
@@ -2334,7 +2348,7 @@
       "valueType": "length-percentage",
       "codec": "radius",
       "appliesTo": "always",
-      "essential": false,
+      "essential": true,
       "doors": [
         "style.setRadius#inspector-border-radius-radius-editor",
         "style.setRadius#inspector-border-top-right-radius-radius-editor",
@@ -2352,7 +2366,7 @@
       "valueType": "length-percentage",
       "codec": "radius",
       "appliesTo": "always",
-      "essential": false,
+      "essential": true,
       "doors": [
         "style.setRadius#inspector-border-radius-radius-editor",
         "style.setRadius#inspector-border-bottom-right-radius-radius-editor",
@@ -2370,7 +2384,7 @@
       "valueType": "length-percentage",
       "codec": "radius",
       "appliesTo": "always",
-      "essential": false,
+      "essential": true,
       "doors": [
         "style.setRadius#inspector-border-radius-radius-editor",
         "style.setRadius#inspector-border-bottom-left-radius-radius-editor",
@@ -2644,7 +2658,7 @@
       "valueType": "keyword",
       "codec": "keyword",
       "appliesTo": "text",
-      "essential": false,
+      "essential": true,
       "doors": [
         "style.set#inspector-text-align",
         "style.set#quick-panel-text-align"
@@ -3300,7 +3314,7 @@
       "valueType": "shadow-list",
       "codec": "shadow-list",
       "appliesTo": "always",
-      "essential": false,
+      "essential": true,
       "doors": [
         "style.setShadows#inspector-box-shadow-shadow-add",
         "style.setShadows#inspector-box-shadow-shadow-x",
@@ -4126,7 +4140,7 @@
       "section": "paint",
       "group": "background",
       "control": "keyword-menu",
-      "codec": "axis-pair",
+      "codec": "position",
       "appliesTo": "imagePainting",
       "longhands": [
         "background-position-x",
@@ -4407,6 +4421,48 @@
       "feature": "props-more"
     },
     {
+      "id": "alignment-matrix-mirrors-a-reversed-row",
+      "trigger": {
+        "property": "justify-content",
+        "values": null,
+        "via": "alignment-matrix"
+      },
+      "condition": {
+        "predicate": "valueIn",
+        "property": "flex-direction",
+        "values": [
+          "row-reverse"
+        ]
+      },
+      "effect": {
+        "action": "mirror",
+        "property": "justify-content",
+        "value": null
+      },
+      "feature": "props-flex-container"
+    },
+    {
+      "id": "alignment-matrix-mirrors-a-reversed-column",
+      "trigger": {
+        "property": "align-items",
+        "values": null,
+        "via": "alignment-matrix"
+      },
+      "condition": {
+        "predicate": "valueIn",
+        "property": "flex-direction",
+        "values": [
+          "column-reverse"
+        ]
+      },
+      "effect": {
+        "action": "mirror",
+        "property": "align-items",
+        "value": null
+      },
+      "feature": "props-flex-container"
+    },
+    {
       "id": "alignment-matrix-follows-column-direction",
       "trigger": {
         "property": "justify-content",
@@ -4494,6 +4550,18 @@
         "value": null
       },
       "feature": "absolute-free-drag"
+    }
+  ],
+  "valuePredicates": [
+    {
+      "id": "flexOrGridContainer",
+      "property": "display",
+      "values": ["flex", "inline-flex", "grid", "inline-grid"]
+    },
+    {
+      "id": "positionedSelection",
+      "property": "position",
+      "values": ["absolute", "fixed"]
     }
   ],
   "storedWhole": [

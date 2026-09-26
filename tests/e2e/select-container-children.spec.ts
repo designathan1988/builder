@@ -3,7 +3,7 @@
 // hidden sibling is left out and the status bar counts it (spec, Problems in Pager 2). The selection is read through
 // the read-only test port.
 import fs from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
 import { openMenu, runDoor, runs } from './door.ts';
 
 const FIXTURE = 'manifest/features/fixtures/aurora.json';

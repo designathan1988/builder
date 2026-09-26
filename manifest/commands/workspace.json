@@ -1313,6 +1313,11 @@
           "type": "point",
           "values": [],
           "optional": false
+        },
+        "distance": {
+          "type": "number",
+          "values": [],
+          "optional": true
         }
       },
       "availability": {
@@ -2006,7 +2011,13 @@
       "labelKey": "command.layers.expandOrChild",
       "owner": "src/editor/layers/tree.ts",
       "introducedBy": "layers-keyboard-navigation",
-      "args": {},
+      "args": {
+        "target": {
+          "type": "node",
+          "values": [],
+          "optional": true
+        }
+      },
       "availability": {
         "predicate": "always",
         "refusalKey": null
@@ -2030,7 +2041,7 @@
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
-            "selection": "none",
+            "selection": "focused-row",
             "offers": null,
             "writes": [],
             "fields": []
@@ -2044,7 +2055,13 @@
       "labelKey": "command.layers.collapseOrParent",
       "owner": "src/editor/layers/tree.ts",
       "introducedBy": "layers-keyboard-navigation",
-      "args": {},
+      "args": {
+        "target": {
+          "type": "node",
+          "values": [],
+          "optional": true
+        }
+      },
       "availability": {
         "predicate": "always",
         "refusalKey": null
@@ -2068,7 +2085,7 @@
           "disabledReasonKey": "common.notAvailableYet",
           "placement": "none",
           "adapter": {
-            "selection": "none",
+            "selection": "focused-row",
             "offers": null,
             "writes": [],
             "fields": []
@@ -2096,7 +2113,7 @@
         "shown": {
           "type": "boolean",
           "values": [],
-          "optional": false
+          "optional": true
         }
       },
       "availability": {
@@ -2204,6 +2221,56 @@
           "args": {
             "detail": "attributes"
           }
+        }
+      ]
+    },
+    {
+      "id": "layers.search",
+      "labelKey": "layers.search",
+      "owner": "src/editor/layers/tree.ts",
+      "introducedBy": "layers-search",
+      "args": {
+        "query": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "history": {
+        "undoable": false
+      },
+      "entryPoints": [
+        {
+          "id": "layers-search-field",
+          "kind": "panel-control",
+          "drawnAs": "field",
+          "pressed": false,
+          "feature": "layers-search",
+          "panel": "layers",
+          "control": "search-field",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "layers.search",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "layers-row",
+            "order": 12
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
         }
       ]
     },
@@ -2379,7 +2446,7 @@
           "gesture": null,
           "labelKey": "command.editProperty",
           "faceLabelKey": null,
-          "icon": null,
+          "icon": "plus",
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-style",
@@ -2525,6 +2592,401 @@
             "fields": []
           },
           "args": {}
+        }
+      ]
+    },
+    {
+      "id": "colorPicker.open",
+      "labelKey": "command.colorPicker.open",
+      "owner": "src/editor/inspector/color-picker.ts",
+      "introducedBy": "color-picker",
+      "args": {
+        "property": {
+          "type": "property",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "history": {
+        "undoable": false
+      },
+      "entryPoints": [
+        {
+          "kind": "panel-control",
+          "pressed": false,
+          "feature": "color-picker",
+          "modifier": null,
+          "gesture": null,
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {},
+          "id": "field-color-swatch",
+          "drawnAs": "item",
+          "panel": "inspector",
+          "control": "color-swatch",
+          "labelKey": "command.colorPicker.open",
+          "placement": {
+            "region": "field",
+            "order": 5
+          }
+        }
+      ]
+    },
+    {
+      "id": "colorPicker.setFormat",
+      "labelKey": "command.colorPicker.setFormat",
+      "owner": "src/editor/inspector/color-picker.ts",
+      "introducedBy": "color-picker",
+      "args": {
+        "format": {
+          "type": "enum",
+          "values": [
+            "hsb",
+            "rgb",
+            "hex",
+            "oklch",
+            "oklab"
+          ],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "history": {
+        "undoable": false
+      },
+      "entryPoints": [
+        {
+          "kind": "panel-control",
+          "pressed": false,
+          "feature": "color-picker",
+          "modifier": null,
+          "gesture": null,
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {
+            "format": "hsb"
+          },
+          "id": "color-picker-format-hsb",
+          "drawnAs": "segment",
+          "panel": "color-picker",
+          "control": "format",
+          "labelKey": "colorPicker.format.hsb",
+          "placement": {
+            "region": "color-picker",
+            "order": 15
+          }
+        },
+        {
+          "kind": "panel-control",
+          "pressed": false,
+          "feature": "color-picker",
+          "modifier": null,
+          "gesture": null,
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {
+            "format": "rgb"
+          },
+          "id": "color-picker-format-rgb",
+          "drawnAs": "segment",
+          "panel": "color-picker",
+          "control": "format",
+          "labelKey": "colorPicker.format.rgb",
+          "placement": {
+            "region": "color-picker",
+            "order": 16
+          }
+        },
+        {
+          "kind": "panel-control",
+          "pressed": false,
+          "feature": "color-picker",
+          "modifier": null,
+          "gesture": null,
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {
+            "format": "hex"
+          },
+          "id": "color-picker-format-hex",
+          "drawnAs": "segment",
+          "panel": "color-picker",
+          "control": "format",
+          "labelKey": "colorPicker.format.hex",
+          "placement": {
+            "region": "color-picker",
+            "order": 17
+          }
+        },
+        {
+          "kind": "panel-control",
+          "pressed": false,
+          "feature": "color-picker-oklch",
+          "modifier": null,
+          "gesture": null,
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {
+            "format": "oklch"
+          },
+          "id": "color-picker-format-oklch",
+          "drawnAs": "segment",
+          "panel": "color-picker",
+          "control": "format",
+          "labelKey": "colorPicker.format.oklch",
+          "placement": {
+            "region": "color-picker",
+            "order": 18
+          }
+        },
+        {
+          "kind": "panel-control",
+          "pressed": false,
+          "feature": "color-picker-oklch",
+          "modifier": null,
+          "gesture": null,
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {
+            "format": "oklab"
+          },
+          "id": "color-picker-format-oklab",
+          "drawnAs": "segment",
+          "panel": "color-picker",
+          "control": "format",
+          "labelKey": "colorPicker.format.oklab",
+          "placement": {
+            "region": "color-picker",
+            "order": 19
+          }
+        }
+      ]
+    },
+    {
+      "id": "colorPicker.setChannel",
+      "labelKey": "command.colorPicker.setChannel",
+      "owner": "src/editor/inspector/color-picker.ts",
+      "introducedBy": "color-picker",
+      "args": {
+        "property": {
+          "type": "property",
+          "values": [],
+          "optional": false
+        },
+        "channel": {
+          "type": "enum",
+          "values": [
+            "h",
+            "s",
+            "v",
+            "r",
+            "g",
+            "b",
+            "hex",
+            "alpha",
+            "ok-l",
+            "ok-c",
+            "ok-h",
+            "ok-a",
+            "ok-b"
+          ],
+          "optional": false
+        },
+        "text": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        },
+        "base": {
+          "type": "string",
+          "values": [],
+          "optional": true
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.colorPicker.invalid",
+        "status.locked.edit",
+        "status.locked.byAncestor"
+      ],
+      "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-gesture",
+        "noChange": "no-entry"
+      },
+      "entryPoints": [
+        {
+          "kind": "panel-control",
+          "pressed": false,
+          "feature": "color-picker",
+          "modifier": null,
+          "gesture": null,
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {},
+          "id": "color-picker-channel",
+          "drawnAs": "field",
+          "panel": "color-picker",
+          "control": "channel-field",
+          "labelKey": "colorPicker.channel",
+          "placement": {
+            "region": "color-picker",
+            "order": 20
+          }
+        }
+      ]
+    },
+    {
+      "id": "colorPicker.cancel",
+      "labelKey": "command.colorPicker.cancel",
+      "owner": "src/editor/inspector/color-picker.ts",
+      "introducedBy": "color-picker",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "history": {
+        "undoable": false
+      },
+      "entryPoints": [
+        {
+          "kind": "panel-control",
+          "pressed": false,
+          "feature": "color-picker",
+          "modifier": null,
+          "gesture": null,
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {},
+          "id": "color-picker-cancel",
+          "drawnAs": "button",
+          "panel": "color-picker",
+          "control": "cancel",
+          "labelKey": "command.colorPicker.cancel",
+          "placement": {
+            "region": "color-picker",
+            "order": 21
+          }
+        }
+      ]
+    },
+    {
+      "id": "colorPicker.apply",
+      "labelKey": "command.colorPicker.apply",
+      "owner": "src/editor/inspector/color-picker.ts",
+      "introducedBy": "color-picker",
+      "args": {},
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "history": {
+        "undoable": false
+      },
+      "entryPoints": [
+        {
+          "kind": "panel-control",
+          "pressed": false,
+          "feature": "color-picker",
+          "modifier": null,
+          "gesture": null,
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {},
+          "id": "color-picker-apply",
+          "drawnAs": "primary",
+          "panel": "color-picker",
+          "control": "apply",
+          "labelKey": "command.colorPicker.apply",
+          "placement": {
+            "region": "color-picker",
+            "order": 22
+          }
         }
       ]
     }

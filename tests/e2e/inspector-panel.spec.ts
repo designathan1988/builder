@@ -6,7 +6,8 @@
 // dock's tab. The document, the selection and the history
 // are read through the read-only test port; the page through the frame; the editor's regions by their geometry.
 import fs from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
+import { openEditor } from '../support/editor.ts';
 import { isFeatureBuilt } from '../../src/app/features.ts';
 import { control, openMenu, runDoor, runs } from './door.ts';
 
@@ -126,9 +127,7 @@ const textField = (page: Page) => control(page, TEXT).locator('textarea');
 
 test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/');
-  await page.evaluate(() => window.localStorage.clear());
-  await page.reload();
+  await openEditor(page);
   await expect(page.locator('.workbench')).toBeVisible();
 });
 

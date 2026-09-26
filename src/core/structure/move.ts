@@ -22,7 +22,7 @@ import type { NodeId } from '../../generated/commands.ts';
 import { message, registerHandler, registerPredicate, type Outcome } from '../commands/registry.ts';
 import { locate, walk, type DocNode, type DocumentJson, type Selection } from '../document/model.ts';
 import type { ModelRules } from '../document/validate.ts';
-import { interactiveInsideRefusal } from '../elements/content-model.ts';
+import { placementRefusal } from '../elements/content-model.ts';
 import { applyPatches, type Patch } from '../history/transaction.ts';
 import { firstLockRefusal, lockRefusal } from '../nodes/flags.ts';
 import { selectionRoots } from './remove.ts';
@@ -46,15 +46,9 @@ export function moveSelectionTo(state: { readonly document: DocumentJson; readon
   if (locked !== null) return { kind: 'refused', message: locked };
   // a parent inside a moved node first: a moved leaf itself is refused as that, not as a leaf
   for (const at of moved) for (const inner of walk(at.node)) if (inner.id === parent) return { kind: 'refused', message: message('status.refused.intoItself') };
-  if (rules.elements.get(receiver.node.type)?.content !== 'children') return { kind: 'refused', message: message('status.refused.noChildren', { parent: receiver.node.name }) };
-  for (const at of moved) {
-    const only = receiver.node.tag !== null && at.node.tag !== null ? rules.contentModel.refusal(receiver.node.tag, at.node.tag) : null;
-    if (only !== null) return { kind: 'refused', message: message('status.refused.onlyAccepts', { parent: `<${receiver.node.tag ?? ''}>`, children: only.map((t) => `<${t}>`).join(', ') }) };
-  }
-  // an interactive element, moved itself or inside a moved node, never goes into a Link Block nor into an element
-  // inside one (content-model.ts; spec elements-structure, Problems in Pager 5)
-  const inside = interactiveInsideRefusal(state.document, rules, parent, moved.map((at) => at.node));
-  if (inside !== null) return { kind: 'refused', message: inside };
+  // the one rule of where elements may go (content-model.ts placementRefusal), a move among its siblings keeping them
+  const refused = placementRefusal(state.document, rules, parent, moved.map((at) => at.node), new Set(moved.filter((at) => at.parent?.id === parent).map((at) => at.node.id)));
+  if (refused !== null) return { kind: 'refused', message: refused };
 
   // each moved node leaves its place, found again in the document the earlier removals left
   const patches: Patch[] = [];

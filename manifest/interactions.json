@@ -36,6 +36,11 @@
       "inherits": null
     },
     {
+      "id": "color-picker",
+      "labelKey": "keyContext.colorPicker",
+      "inherits": null
+    },
+    {
       "id": "hand",
       "labelKey": "keyContext.hand",
       "inherits": null
@@ -352,17 +357,17 @@
     },
     {
       "id": "wrap.sideBandMax",
-      "value": 26,
+      "value": 40,
       "unit": "screen-px",
-      "source": "spec/behavior/wrap-row-column.md",
-      "note": "Side band of the side-drop wrapper: min(26, 0.22 × width) from the target left or right edge. Applies only if a side-drop door is declared."
+      "source": "spec/behavior/drag-layout.md",
+      "note": "Side strip of the side drop: min(40, 0.12 × width) from the left or right edge of the element under the pointer (top or bottom in a row flex), screen pixels; everywhere else the drop positions the element."
     },
     {
       "id": "wrap.sideBandFraction",
-      "value": 0.22,
+      "value": 0.12,
       "unit": "fraction",
-      "source": "spec/behavior/wrap-row-column.md",
-      "note": "Fraction in the side-drop band min(26, 0.22 × width)."
+      "source": "spec/behavior/drag-layout.md",
+      "note": "Fraction of the element in each side strip: min(40, 0.12 × width)."
     },
     {
       "id": "wrap.sideTargetMin",
@@ -373,9 +378,9 @@
     },
     {
       "id": "wrap.sideFill",
-      "value": 0.82,
+      "value": 0.5,
       "unit": "fraction",
-      "source": "spec/behavior/wrap-row-column.md",
+      "source": "spec/behavior/drag-layout.md",
       "note": "A side-drop target must fill at least this fraction of its parent content box on the cross axis."
     },
     {
@@ -387,10 +392,10 @@
     },
     {
       "id": "wrap.sideDwell",
-      "value": 400,
+      "value": 0,
       "unit": "ms",
-      "source": "spec/behavior/wrap-row-column.md",
-      "note": "Dwell in a side band before the side-drop wrapper is confirmed and its explanation pill appears."
+      "source": "spec/behavior/drag-layout.md",
+      "note": "Dwell in a side zone before the side drop is confirmed: none, the zone confirms it at once and the indicator shows it."
     },
     {
       "id": "wrap.pillFreeze",
@@ -850,6 +855,76 @@
       "note": "Default spacing of the dot grid."
     },
     {
+      "id": "grid.columnsRange",
+      "value": [
+        1,
+        96
+      ],
+      "unit": "count",
+      "source": "spec/behavior/workspace-settings-dialog.md",
+      "note": "Lowest and highest number of columns Guides & Grids accepts; outside them it is refused."
+    },
+    {
+      "id": "grid.widthRange",
+      "value": [
+        0,
+        20000
+      ],
+      "unit": "css-px",
+      "source": "spec/behavior/workspace-settings-dialog.md",
+      "note": "Lowest and highest column grid width Guides & Grids accepts; outside them it is refused."
+    },
+    {
+      "id": "grid.gutterRange",
+      "value": [
+        0,
+        400
+      ],
+      "unit": "css-px",
+      "source": "spec/behavior/workspace-settings-dialog.md",
+      "note": "Lowest and highest column gutter Guides & Grids accepts; outside them it is refused."
+    },
+    {
+      "id": "grid.marginRange",
+      "value": [
+        0,
+        2000
+      ],
+      "unit": "css-px",
+      "source": "spec/behavior/workspace-settings-dialog.md",
+      "note": "Lowest and highest column grid margin Guides & Grids accepts; outside them it is refused."
+    },
+    {
+      "id": "grid.rowHeightRange",
+      "value": [
+        1,
+        4000
+      ],
+      "unit": "css-px",
+      "source": "spec/behavior/workspace-settings-dialog.md",
+      "note": "Lowest and highest row height Guides & Grids accepts; outside them it is refused."
+    },
+    {
+      "id": "grid.rowGutterRange",
+      "value": [
+        0,
+        400
+      ],
+      "unit": "css-px",
+      "source": "spec/behavior/workspace-settings-dialog.md",
+      "note": "Lowest and highest row gutter Guides & Grids accepts; outside them it is refused."
+    },
+    {
+      "id": "grid.dotSpacingRange",
+      "value": [
+        2,
+        400
+      ],
+      "unit": "css-px",
+      "source": "spec/behavior/workspace-settings-dialog.md",
+      "note": "Lowest and highest dot spacing Guides & Grids accepts; outside them it is refused."
+    },
+    {
       "id": "snap.distance",
       "value": 6,
       "unit": "css-px",
@@ -1028,6 +1103,20 @@
       "unit": "percent",
       "source": "spec/behavior/timeline-keyframes.md",
       "note": "A dragged keyframe offset follows the pointer as a percentage of the track width, clamped to this range."
+    },
+    {
+      "id": "autosave.retryDelay",
+      "value": 2000,
+      "unit": "ms",
+      "source": "spec/behavior/unsaved-work-guard.md",
+      "note": "After a write the browser refused, how long autosave waits before it writes again on its own."
+    },
+    {
+      "id": "autosave.versions",
+      "value": 10,
+      "unit": "count",
+      "source": "spec/behavior/autosave-crash-recovery.md",
+      "note": "How many saved versions IndexedDB keeps, the oldest dropped first."
     }
   ],
   "gestures": [

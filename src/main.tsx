@@ -4,7 +4,8 @@ import './ui/tokens.css';
 import './editor/shell/shell.css';
 import sprite from './ui/icons.svg?raw';
 import { App } from './editor/App.tsx';
-import { readSavedWork, restoredWork, startAutosave } from './editor/persistence/autosave.ts';
+import { readSavedWork, readVersions, restoredWork, startAutosave } from './editor/persistence/autosave.ts';
+import { claimEditing, isEditing } from './editor/persistence/tab-guard.ts';
 import { MODEL_RULES, createEditorStore } from './editor/store.ts';
 import { installTestPort } from './editor/test-port.ts';
 
@@ -22,10 +23,14 @@ document.body.prepend(icons);
 
 // the work kept from the last session (autosave-restore), restored before anything is drawn; then every change is
 // written again
+// the editing lock first: a tab that opens while another edits only reads (multi-tab-guard)
+await claimEditing();
 const saved = await readSavedWork();
 const restored = restoredWork(saved, MODEL_RULES);
-const store = createEditorStore({ restored });
-startAutosave(store, saved, restored !== null);
+// saved work the reader refused: the recovery dialog offers the versions IndexedDB keeps (autosave-corruption-recovery)
+const recovery = saved !== null && restored === null ? await readVersions() : null;
+const store = createEditorStore({ restored, recovery });
+startAutosave(store, saved, restored !== null, isEditing);
 // what the end-to-end tests read, in every build (src/editor/test-port.ts)
 installTestPort(store);
 

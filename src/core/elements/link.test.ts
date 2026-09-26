@@ -9,6 +9,7 @@ import { applyPatches } from '../history/transaction.ts';
 import { manualClock } from '../ports/clock.ts';
 import { sequentialIds } from '../ports/ids.ts';
 import { noLayout } from '../ports/layout.ts';
+import { anyCss } from '../ports/css.ts';
 import { setLinkCommand } from './link.ts';
 
 const RULES = rulesFromManifest(manifest.elements, manifest.properties, manifest.html);
@@ -38,6 +39,7 @@ const contextOf = (document: DocumentJson, selection: string[]): HandlerContext<
   rules: RULES,
   words: (key) => key,
   layout: noLayout,
+  css: anyCss,
 });
 // the Link Block's attributes after the command, the patches and what the status bar says
 function run(document: DocumentJson, args: Record<string, unknown>, selection: string[] = []) {

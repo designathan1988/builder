@@ -15,8 +15,11 @@
 // marked data-node-style="<id>", with rules keyed by data-node: the base breakpoint without a media query, the
 // others as max-width queries in the cascade order of properties.json, the states as their pseudo-classes. A
 // recipe's stored value is written as the recipe's declarations. A markup element (embed) renders empty until its
-// feature sanitizes the markup. The renderer adds no event handler to the page and writes no event attribute: the
-// page only renders, and every pointer input arrives on the canvas overlay.
+// feature sanitizes the markup. The project's design tokens are one style element of their own (data-tokens-style),
+// the :root rule of their variables, written again when they change. An SVG's markup (core/elements/svg.ts, kept sanitized) is drawn in a group after its
+// shapes, marked data-svg-markup (editor-only: the export writes the markup itself). The renderer adds no event
+// handler to the page and writes no event attribute: the page only renders, and every pointer input arrives on the
+// canvas overlay.
 //
 // Editor-only, never in the document nor in an export: every element of a container below the page root carries
 // data-container, and one style element of the editor (data-editor-style), first in the head, gives an empty one the
@@ -37,11 +40,14 @@
 // text-inline-formatting). The marks go when the edit ends, and the element shows again the text the document holds.
 // They are the renderer's state, never the document's, and the page still gets no event handler.
 import type { NodeId } from '../../generated/commands.ts';
+import { classesCss, elementAttributes, nodeCss, outputModelFromManifest, type OutputModel } from './output.ts';
+export { elementAttributes, nodeCss, outputModelFromManifest, type OutputModel } from './output.ts';
 import type { ElementsFile, InteractionsFile, PropertiesFile } from '../../manifest/schema.ts';
-import { walk, type DocNode, type DocumentJson } from '../document/model.ts';
+import { locate, walk, type DocNode, type DocumentJson } from '../document/model.ts';
 import { applyPatches, deepEqual, type Patch } from '../history/transaction.ts';
-import { isPageSetting } from '../page/settings.ts';
 import { canonical, runsOf, type InlineRun, type Segment, type TextRange } from '../text/inline.ts';
+import { svgMarkupOf } from '../elements/svg.ts';
+import { rootCss } from '../design/tokens.ts';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const ELEMENT_NODE = 1;
@@ -55,71 +61,49 @@ export const HIDDEN_ATTRIBUTE = 'data-hidden';
 export const EDITOR_STYLE_ATTRIBUTE = 'data-editor-style';
 // the marks of the text edited in place: editable as plain text, in the key context the editor names
 export const EDITABLE_ATTRIBUTE = 'contenteditable';
+// editor-only: the sandboxed frame that shows an embed's markup on the canvas
+const EMBED_FRAME_ATTRIBUTE = 'data-embed-frame';
+// the style element of the project's design tokens (core/design/tokens.ts): the :root rule of its variables, after the
+// editor's, before every node's (the export writes the same rule first in its stylesheet)
+export const TOKENS_STYLE_ATTRIBUTE = 'data-tokens-style';
+const TOKENS_FIELD = 'tokens';
+// the style element of the project's style classes (core/design/classes.ts): their rules, after the tokens', before
+// every node's, so an element's own values override its classes (spec shared-style-classes)
+export const CLASSES_STYLE_ATTRIBUTE = 'data-classes-style';
+// the stylesheet of the state the editor previews on the selection (previewState)
+export const PREVIEW_STYLE_ATTRIBUTE = 'data-preview-style';
+const CLASSES_FIELD = 'classes';
+// editor-only: the group that draws an SVG's markup after its shapes (the export writes the markup itself there)
+const SVG_MARKUP_ATTRIBUTE = 'data-svg-markup';
+const SVG_TAG = 'svg';
+// editor-only: what an image with no source shows on the canvas, a grey box of the default image size naming it
+const IMAGE_PLACEHOLDER = `data:image/svg+xml,${encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="300" viewBox="0 0 800 300"><rect width="800" height="300" fill="#e2e8f0"/><text x="400" y="160" font-family="sans-serif" font-size="32" fill="#64748b" text-anchor="middle">800 × 300</text></svg>',
+)}`;
 export const EDITABLE_VALUE = 'plaintext-only';
 export const KEY_CONTEXT_ATTRIBUTE = 'data-key-context';
 
-export interface RenderModel {
-  readonly elements: ReadonlyMap<string, { readonly namespace: 'html' | 'svg'; readonly content: 'children' | 'text' | 'markup' | 'none' }>;
-  // attribute id → its HTML attribute name, or null when it is not one (the text, the tag)
-  readonly attributes: ReadonlyMap<string, string | null>;
-  // attribute id → the element types it applies to, or "all" (a setting of the page applies to a page root's alone)
-  readonly appliesTo: ReadonlyMap<string, readonly string[] | 'all'>;
-  // the breakpoints in cascade order: the base first, with no media query
-  readonly breakpoints: readonly { readonly id: string; readonly width: number; readonly base: boolean }[];
-  // state id → its pseudo-class, or null for the base state
-  readonly states: ReadonlyMap<string, string | null>;
-  // recipe id → its declarations; a null value is the stored value
-  readonly recipes: ReadonlyMap<string, readonly { readonly property: string; readonly value: string | null }[]>;
-  // the editor-only minimum height of an empty container, in CSS px (canvas.emptyContainerMinHeight)
+// The canvas's model: the output's, and the editor-only minimum height of an empty container, in CSS px
+// (canvas.emptyContainerMinHeight)
+export interface RenderModel extends OutputModel {
   readonly emptyContainerMinHeight: number;
 }
 
 export function renderModelFromManifest(elements: ElementsFile, properties: PropertiesFile, interactions: InteractionsFile): RenderModel {
   const minHeight = interactions.constants.find((c) => c.id === 'canvas.emptyContainerMinHeight')?.value;
   if (typeof minHeight !== 'number') throw new Error('the manifest has no number canvas.emptyContainerMinHeight');
-  return {
-    elements: new Map(elements.elements.map((e) => [e.id, { namespace: e.namespace, content: e.content }])),
-    attributes: new Map(elements.attributes.map((a) => [a.id, a.html])),
-    appliesTo: new Map(elements.attributes.map((a) => [a.id, a.elements])),
-    breakpoints: properties.breakpoints.map((b) => ({ id: b.id, width: b.width, base: b.base })),
-    states: new Map(properties.states.map((s) => [s.id, s.pseudo])),
-    recipes: new Map(properties.recipes.map((r) => [r.id, r.declarations])),
-    emptyContainerMinHeight: minHeight,
-  };
+  return { ...outputModelFromManifest(elements, properties), emptyContainerMinHeight: minHeight };
 }
 
 // The editor's own CSS in the page: an empty container keeps a visible minimum height; a hidden node's element is
 // not drawn, whatever its own rules say.
 export function editorCss(model: RenderModel): string {
-  return `:where([${CONTAINER_ATTRIBUTE}]:empty) { min-height: ${model.emptyContainerMinHeight}px; }\n[${HIDDEN_ATTRIBUTE}] { display: none !important; }`;
+  return `:where([${CONTAINER_ATTRIBUTE}]:empty) { min-height: ${model.emptyContainerMinHeight}px; }\n[${HIDDEN_ATTRIBUTE}] { display: none !important; }\n[${EMBED_FRAME_ATTRIBUTE}] { display: block; width: 100%; min-height: ${model.emptyContainerMinHeight}px; border: 0; pointer-events: none; }`;
 }
 
 // The selector of a node's element: its id quoted as a CSS string.
 export function nodeSelector(id: NodeId): string {
   return `[${NODE_ATTRIBUTE}="${id.replaceAll('\\', '\\\\').replaceAll('"', '\\"')}"]`;
-}
-
-// The CSS of one node: every declaration of every breakpoint and state it stores, for the selector given.
-export function nodeCss(node: DocNode, selector: string, model: RenderModel): string {
-  const blocks: string[] = [];
-  for (const breakpoint of model.breakpoints) {
-    const byState = node.styles[breakpoint.id as keyof DocNode['styles']];
-    if (!byState) continue;
-    const rules: string[] = [];
-    for (const [state, pseudo] of model.states) {
-      const declarations = byState[state as keyof typeof byState];
-      if (!declarations) continue;
-      const lines = Object.entries(declarations).flatMap(([property, value]) => {
-        const recipe = model.recipes.get(property);
-        if (recipe) return recipe.map((d) => `${d.property}: ${d.value ?? String(value)};`);
-        return [`${property}: ${String(value)};`];
-      });
-      if (lines.length > 0) rules.push(`${selector}${pseudo ?? ''} { ${lines.join(' ')} }`);
-    }
-    if (rules.length === 0) continue;
-    blocks.push(breakpoint.base ? rules.join('\n') : `@media (max-width: ${breakpoint.width}px) {\n${rules.join('\n')}\n}`);
-  }
-  return blocks.join('\n');
 }
 
 // What a patch changes, found in the document as it was just before the patch: the rendered page as a whole
@@ -231,11 +215,21 @@ function writeAttributes(element: Element, wanted: ReadonlyMap<string, string>):
   for (const [name, value] of wanted) if (element.getAttribute(name) !== value) element.setAttribute(name, value);
 }
 
+// An SVG's markup group stays after its shapes, whatever order the shapes arrived in.
+function markupLast(element: Element): void {
+  const group = [...element.children].find((child) => child.hasAttribute(SVG_MARKUP_ATTRIBUTE));
+  if (group !== undefined && element.lastElementChild !== group) element.append(group);
+}
+
 export class PageRenderer {
   private readonly elements = new Map<NodeId, Element>();
   private readonly sheets = new Map<NodeId, HTMLStyleElement>();
+  // the markup each SVG markup group draws
+  private readonly markups = new WeakMap<Element, string>();
   // the text being edited in place: its node and the key context its element names
   private edit: { readonly node: NodeId; readonly context: string } | null = null;
+  // the closed details and dialogs drawn open because of the selection (reveal)
+  private revealed = new Set<NodeId>();
 
   constructor(
     private readonly target: Document,
@@ -246,6 +240,60 @@ export class PageRenderer {
   // The element that renders a node, or null.
   element(id: NodeId): Element | null {
     return this.elements.get(id) ?? null;
+  }
+
+  // Editor-only (spec elements-interactive): a closed <details> or <dialog> is drawn open while it, or a node inside it,
+  // is selected, so its content can be seen and edited; the document and the export keep its own open state.
+  reveal(doc: DocumentJson, selection: readonly NodeId[]): void {
+    const wanted = new Set<NodeId>();
+    for (const id of selection) {
+      for (let at = locate(doc, id); at !== null; at = at.parent === null ? null : locate(doc, at.parent.id)) {
+        if (at.node.tag === 'details' || at.node.tag === 'dialog') wanted.add(at.node.id);
+      }
+    }
+    const changed = [...wanted].filter((id) => !this.revealed.has(id)).concat([...this.revealed].filter((id) => !wanted.has(id)));
+    this.revealed = wanted;
+    const tree = doc.pages[this.page]?.tree ?? null;
+    for (const id of changed) {
+      const node = tree === null ? null : findNode(tree, id);
+      const element = this.elements.get(id);
+      if (node && element) this.dress(element, node);
+    }
+  }
+
+  // Editor-only (spec state-styles): the selected elements drawn as if a state held, while a state other than Base is
+  // edited: one stylesheet, after every node's, holding each selected node's values of that state as plain rules (with
+  // their breakpoints' media queries); none otherwise. The export never has it.
+  previewState(doc: DocumentJson, selection: readonly NodeId[], state: string | null): void {
+    const tree = doc.pages[this.page]?.tree ?? null;
+    const css =
+      state === null || tree === null
+        ? ''
+        : selection
+            .map((id) => findNode(tree, id))
+            .flatMap((node) => {
+              if (!node) return [];
+              const held: Record<string, Record<string, unknown>> = {};
+              for (const [breakpoint, byState] of Object.entries(node.styles as Record<string, Record<string, unknown>>)) {
+                const values = byState[state];
+                if (values !== undefined) held[breakpoint] = { [this.model.base.state]: values };
+              }
+              return [nodeCss({ styles: held as DocNode['styles'] }, nodeSelector(node.id), this.model)];
+            })
+            .filter((c) => c !== '')
+            .join('\n');
+    let sheet = this.target.head.querySelector(`style[${PREVIEW_STYLE_ATTRIBUTE}]`);
+    if (css === '') {
+      sheet?.remove();
+      return;
+    }
+    if (!sheet) {
+      sheet = this.target.createElement('style');
+      sheet.setAttribute(PREVIEW_STYLE_ATTRIBUTE, '');
+    }
+    // always last, after every node's rules, so the state's values win as a state would
+    if (sheet !== this.target.head.lastElementChild) this.target.head.append(sheet);
+    if (sheet.textContent !== css) sheet.textContent = css;
   }
 
   // Starts editing a text element in place (the marks, the focus without scrolling, the caret at the end of its
@@ -385,7 +433,7 @@ export class PageRenderer {
   // Builds the whole page: once, and when the rendered page itself is replaced.
   mount(doc: DocumentJson): void {
     // the style elements of every node, also those a previous renderer of this document left
-    for (const sheet of [...this.target.head.querySelectorAll(`style[${NODE_STYLE_ATTRIBUTE}], style[${EDITOR_STYLE_ATTRIBUTE}]`)]) sheet.remove();
+    for (const sheet of [...this.target.head.querySelectorAll(`style[${NODE_STYLE_ATTRIBUTE}], style[${EDITOR_STYLE_ATTRIBUTE}], style[${TOKENS_STYLE_ATTRIBUTE}], style[${CLASSES_STYLE_ATTRIBUTE}]`)]) sheet.remove();
     this.sheets.clear();
     this.elements.clear();
     // the editor's style element, first, so every node's rules come after it
@@ -393,6 +441,14 @@ export class PageRenderer {
     editor.setAttribute(EDITOR_STYLE_ATTRIBUTE, '');
     editor.textContent = editorCss(this.model);
     this.target.head.prepend(editor);
+    const tokens = this.target.createElement('style');
+    tokens.setAttribute(TOKENS_STYLE_ATTRIBUTE, '');
+    editor.after(tokens);
+    this.writeTokens(doc);
+    const classes = this.target.createElement('style');
+    classes.setAttribute(CLASSES_STYLE_ATTRIBUTE, '');
+    tokens.after(classes);
+    this.writeClasses(doc);
     const body = this.target.body;
     body.replaceChildren();
     const tree = doc.pages[this.page]?.tree ?? null;
@@ -410,6 +466,8 @@ export class PageRenderer {
   // Applies a change's patches to the page: `before` is the document the page shows, `after` the one the patches
   // make of it.
   apply(before: DocumentJson, after: DocumentJson, patches: readonly Patch[]): void {
+    if (patches.some((patch) => patch.path[0] === TOKENS_FIELD)) this.writeTokens(after);
+    if (patches.some((patch) => patch.path[0] === CLASSES_FIELD)) this.writeClasses(after);
     const children = new Set<NodeId>();
     const styles = new Set<NodeId>();
     const elements = new Set<NodeId>();
@@ -449,6 +507,8 @@ export class PageRenderer {
     for (const id of styles) {
       const node = findNode(tree, id);
       if (node) this.writeStyle(node);
+      // an SVG's viewBox is its size (core/elements/svg.ts): a new size writes it again
+      if (node && node.tag === SVG_TAG && !elements.has(id)) this.redress(node);
     }
   }
 
@@ -465,18 +525,21 @@ export class PageRenderer {
     this.elements.set(node.id, element);
     this.writeStyle(node);
     element.append(...node.children.map((child) => this.build(child)));
+    markupLast(element);
     return element;
   }
 
-  // The node's own attributes, classes and text on its element, writing only what differs. The text of the element
+  // The node's own attributes (elementAttributes, the output's) and text on its element, with the editor's own marks,
+  // writing only what differs. The text of the element
   // being edited is the edit's until it ends (`rewrite` then writes the document's text whatever the element shows).
   private dress(element: Element, node: DocNode, rewrite = false): void {
     // the page root's element is the page's <body>; the settings of the page it stores are the page's <html>'s
     const root = element === this.target.body;
     const wanted = new Map<string, string>([[NODE_ATTRIBUTE, node.id]]);
     const page = new Map<string, string>();
-    // a container below the page root (editor-only: see the top of this file)
-    if (!root && this.model.elements.get(node.type)?.content === 'children') wanted.set(CONTAINER_ATTRIBUTE, '');
+    // a container below the page root (editor-only: see the top of this file); an SVG is no box of the layout, its
+    // declared size is its drawing's (core/elements/svg.ts)
+    if (!root && this.model.elements.get(node.type)?.content === 'children' && element.localName !== SVG_TAG) wanted.set(CONTAINER_ATTRIBUTE, '');
     // a hidden node (editor-only: see the top of this file)
     if (node.hidden === true) wanted.set(HIDDEN_ATTRIBUTE, '');
     const edited = this.edit?.node === node.id ? this.edit : null;
@@ -484,21 +547,33 @@ export class PageRenderer {
       wanted.set(EDITABLE_ATTRIBUTE, EDITABLE_VALUE);
       wanted.set(KEY_CONTEXT_ATTRIBUTE, edited.context);
     }
-    if (node.classes.length > 0) wanted.set('class', node.classes.join(' '));
-    for (const [id, value] of Object.entries(node.attributes)) {
-      const name = this.model.attributes.get(id);
-      // never an event attribute: the page has no handler of its own
-      if (name === null || name === undefined || name.startsWith('on') || value === false) continue;
-      // a link opened in a new tab (newTab, written target): a new browsing context that cannot reach the page back
-      if (name === 'target' && value === true) {
-        wanted.set('target', '_blank');
-        wanted.set('rel', 'noopener noreferrer');
-        continue;
-      }
-      (root && isPageSetting(this.model.appliesTo.get(id), node.type) ? page : wanted).set(name, value === true ? '' : String(value));
-    }
+    const tag = element.localName;
+    const output = elementAttributes(node, tag, root, this.model);
+    for (const [name, value] of output.element) if (!wanted.has(name)) wanted.set(name, value);
+    for (const [name, value] of output.page) page.set(name, value);
+    // editor-only: media never play by themselves on the canvas
+    wanted.delete('autoplay');
+    // editor-only: an embedded frame is sandboxed, so what it shows can run nothing against the editor; an image with
+    // no source shows a placeholder of its default size (spec elements-media-images)
+    if (tag === 'iframe') wanted.set('sandbox', '');
+    if (this.revealed.has(node.id)) wanted.set('open', '');
+    if (tag === 'img' && !wanted.has('src')) wanted.set('src', IMAGE_PLACEHOLDER);
     writeAttributes(element, wanted);
     if (root) writeAttributes(this.target.documentElement, page);
+    if (tag === SVG_TAG) this.drawSvgMarkup(element, node);
+    // editor-only (feature embed-html): an embed's markup is shown inside a sandboxed frame, where its scripts never
+    // run; the document and the export keep the markup as it is
+    if (this.model.elements.get(node.type)?.content === 'markup') {
+      const frame = element.firstElementChild?.localName === 'iframe' ? element.firstElementChild : null;
+      const markup = node.text ?? '';
+      if (frame !== null && frame.getAttribute('srcdoc') === markup) return;
+      const shown = frame ?? this.target.createElement('iframe');
+      shown.setAttribute('sandbox', '');
+      shown.setAttribute('srcdoc', markup);
+      shown.setAttribute(EMBED_FRAME_ATTRIBUTE, '');
+      if (frame === null) element.replaceChildren(shown);
+      return;
+    }
     if (this.model.elements.get(node.type)?.content !== 'text' || edited) return;
     // the text with its marks (src/core/text/inline.ts), or the plain text when nothing is marked
     const runs = node.inline ?? [node.text ?? ''];
@@ -541,6 +616,39 @@ export class PageRenderer {
     for (const extra of [...element.children].slice(wanted.length)) {
       if (extra.hasAttribute(NODE_ATTRIBUTE)) extra.remove();
     }
+    markupLast(element);
+  }
+
+  // The :root rule of the project's design tokens, in their style element.
+  private writeTokens(doc: DocumentJson): void {
+    const sheet = this.target.head.querySelector(`style[${TOKENS_STYLE_ATTRIBUTE}]`);
+    const css = rootCss(doc.tokens ?? []);
+    if (sheet !== null && sheet.textContent !== css) sheet.textContent = css;
+  }
+
+  // The rules of the project's style classes, in their style element.
+  private writeClasses(doc: DocumentJson): void {
+    const sheet = this.target.head.querySelector(`style[${CLASSES_STYLE_ATTRIBUTE}]`);
+    const css = classesCss(doc.classes ?? [], this.model);
+    if (sheet !== null && sheet.textContent !== css) sheet.textContent = css;
+  }
+
+  // An SVG's markup (core/elements/svg.ts, sanitized when it was kept): its group, drawn anew only when the markup
+  // changed, and gone when there is none.
+  private drawSvgMarkup(element: Element, node: DocNode): void {
+    const markup = svgMarkupOf(node);
+    const held = [...element.children].find((child) => child.hasAttribute(SVG_MARKUP_ATTRIBUTE)) ?? null;
+    if (markup === '') {
+      held?.remove();
+      return;
+    }
+    const group = held ?? this.target.createElementNS(SVG_NS, 'g');
+    if (held === null) group.setAttribute(SVG_MARKUP_ATTRIBUTE, '');
+    if (this.markups.get(group) !== markup) {
+      group.innerHTML = markup;
+      this.markups.set(group, markup);
+    }
+    element.append(group);
   }
 
   // Forgets the elements and style elements of nodes the document no longer has.

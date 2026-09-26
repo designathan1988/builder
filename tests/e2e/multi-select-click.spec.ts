@@ -4,7 +4,8 @@
 // adds nothing (the door's target is an element). The selection is read through the read-only test port; the
 // outlines are measured against the elements' boxes inside the frame, mapped to the screen through its CSS zoom.
 import fs from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
+import { openEditor } from '../support/editor.ts';
 import { openMenu, runs } from './door.ts';
 
 const FIXTURE = 'manifest/features/fixtures/aurora.json';
@@ -42,26 +43,6 @@ function screenBox(page: Page, id: string | null): Promise<Box> {
   }, id);
 }
 
-// the screen boxes of every run of text on the page
-function textBoxes(page: Page): Promise<Box[]> {
-  return page.evaluate(() => {
-    const iframe = document.querySelector<HTMLIFrameElement>('.frame__page');
-    const doc = iframe?.contentDocument;
-    if (!iframe || !doc) throw new Error('the canvas has no page');
-    const zoom = iframe.currentCSSZoom;
-    const frame = iframe.getBoundingClientRect();
-    const boxes: { x: number; y: number; width: number; height: number }[] = [];
-    const walker = doc.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT);
-    for (let text = walker.nextNode(); text !== null; text = walker.nextNode()) {
-      if ((text.textContent ?? '').trim() === '') continue;
-      const range = doc.createRange();
-      range.selectNodeContents(text);
-      for (const r of range.getClientRects()) if (r.width > 0 && r.height > 0) boxes.push({ x: frame.left + r.left * zoom, y: frame.top + r.top * zoom, width: r.width * zoom, height: r.height * zoom });
-    }
-    return boxes;
-  });
-}
-
 const centre = (b: Box) => ({ x: b.x + b.width / 2, y: b.y + b.height / 2 });
 const overlaps = (a: Box, b: Box) => a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
 const near = (a: Box, b: Box) => [a.x - b.x, a.y - b.y, a.width - b.width, a.height - b.height].every((d) => Math.abs(d) <= 1);
@@ -70,21 +51,59 @@ const union = (a: Box, b: Box): Box => {
   const y = Math.min(a.y, b.y);
   return { x, y, width: Math.max(a.x + a.width, b.x + b.width) - x, height: Math.max(a.y + a.height, b.y + b.height) - y };
 };
-async function boxesOf(page: Page, selector: string): Promise<Box[]> {
-  const found = page.locator(selector);
-  const boxes: Box[] = [];
-  for (let i = 0; i < (await found.count()); i += 1) {
-    const box = await found.nth(i).boundingBox();
-    if (box !== null) boxes.push(box);
-  }
-  return boxes;
+
+interface Drawn {
+  // the screen boxes of the nodes asked for, as the page lays them out
+  readonly nodes: Record<string, Box>;
+  // what the canvas chrome draws: each selection outline, the union outline, the label
+  readonly outlines: Box[];
+  readonly unions: Box[];
+  readonly labels: Box[];
+  // every run of text on the page
+  readonly texts: Box[];
 }
+
+// The page's elements and the canvas chrome, read at one instant (one task of the page, which no frame can split):
+// an outline is compared with its element as the element is while the outline is drawn. Reading them apart, a
+// count then each box, raced the chrome's next frame: the count saw the outline it was about to remove, and the box
+// of the removed one waited out the poll's whole time.
+function drawn(page: Page, ids: readonly string[]): Promise<Drawn> {
+  return page.evaluate((nodeIds) => {
+    const iframe = document.querySelector<HTMLIFrameElement>('.frame__page');
+    const doc = iframe?.contentDocument;
+    if (!iframe || !doc) throw new Error('the canvas has no page');
+    const zoom = iframe.currentCSSZoom;
+    const frame = iframe.getBoundingClientRect();
+    const onScreen = (r: DOMRect) => ({ x: frame.left + r.left * zoom, y: frame.top + r.top * zoom, width: r.width * zoom, height: r.height * zoom });
+    const nodes: Record<string, { x: number; y: number; width: number; height: number }> = {};
+    for (const id of nodeIds) {
+      const el = doc.querySelector(`[data-node="${id}"]`);
+      if (!el) throw new Error(`the canvas does not draw ${id}`);
+      nodes[id] = onScreen(el.getBoundingClientRect());
+    }
+    const chrome = (selector: string) =>
+      [...document.querySelectorAll(selector)].map((el) => {
+        const r = el.getBoundingClientRect();
+        return { x: r.left, y: r.top, width: r.width, height: r.height };
+      });
+    const texts: { x: number; y: number; width: number; height: number }[] = [];
+    const walker = doc.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT);
+    for (let text = walker.nextNode(); text !== null; text = walker.nextNode()) {
+      if ((text.textContent ?? '').trim() === '') continue;
+      const range = doc.createRange();
+      range.selectNodeContents(text);
+      for (const r of range.getClientRects()) if (r.width > 0 && r.height > 0) texts.push(onScreen(r));
+    }
+    return { nodes, outlines: chrome('[data-chrome="selection"]'), unions: chrome('[data-chrome="union"]'), labels: chrome('[data-chrome="label"]'), texts };
+  }, ids);
+}
+
+// which node each selection outline lies on ('elsewhere' when it lies on none of them), in the order drawn
+const outlinedNodes = (d: Drawn) => d.outlines.map((b) => Object.keys(d.nodes).find((id) => near(b, d.nodes[id] as Box)) ?? 'elsewhere');
 
 test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/');
-  await page.evaluate(() => window.localStorage.clear());
-  await page.reload();
+  await openEditor(page);
   await expect(page.locator('.workbench')).toBeVisible();
 });
 
@@ -93,37 +112,60 @@ test(
   runs('project.open#menu-file', 'selection.select#canvas-click-element-or-page', 'selection.add#canvas-click-element-shift', 'selection.toggle#canvas-click-element-ctrl'),
   async ({ page }) => {
     await openAurora(page);
-    const title = await screenBox(page, 'n-title');
+    const IDS = ['n-title', 'n-card-a-title'];
+    // where the two elements lie before any click: a click that selects moves nothing on the page
+    const before = (await drawn(page, IDS)).nodes;
+    const stayed = (d: Drawn) => IDS.every((id) => near(d.nodes[id] as Box, before[id] as Box));
+    const title = before['n-title'] as Box;
+    const card = before['n-card-a-title'] as Box;
     await page.mouse.click(centre(title).x, centre(title).y);
-    const card = await screenBox(page, 'n-card-a-title');
     await page.keyboard.down('Shift');
     await page.mouse.click(centre(card).x, centre(card).y);
     await page.keyboard.up('Shift');
     expect(await selection(page)).toEqual(['n-title', 'n-card-a-title']);
 
-    // one outline on each selected element
-    await expect.poll(async () => (await boxesOf(page, '[data-chrome="selection"]')).map((b) => near(b, title) || near(b, card)), { message: 'an outline on each element' }).toEqual([true, true]);
-    // the union of the two, dashed
-    const around = union(title, card);
-    await expect.poll(async () => (await boxesOf(page, '[data-chrome="union"]')).map((b) => near(b, around)), { message: 'the union is outlined' }).toEqual([true]);
-    expect(await page.locator('[data-chrome="union"]').evaluate((el) => getComputedStyle(el).outlineStyle)).toBe('dashed');
+    // each selected element has one outline of its own, on its box, and nothing else is outlined; their union has
+    // one outline, on the union of their boxes: all read at one instant, the elements as they are while outlined
+    await expect
+      .poll(
+        async () => {
+          const d = await drawn(page, IDS);
+          const around = union(d.nodes['n-title'] as Box, d.nodes['n-card-a-title'] as Box);
+          return { outlined: outlinedNodes(d).sort(), union: d.unions.map((b) => near(b, around)) };
+        },
+        { message: 'an outline on each selected element and one on their union' },
+      )
+      .toEqual({ outlined: ['n-card-a-title', 'n-title'], union: [true] });
+    expect(await page.locator('[data-chrome="union"]').evaluate((el) => getComputedStyle(el).outlineStyle), 'the union is dashed').toBe('dashed');
     // one label, counting them, over no text of the page
     const label = page.locator('[data-chrome="label"]');
     await expect(label).toHaveCount(1);
     await expect(label).toHaveText('2 elements selected');
     await expect(label).toHaveAttribute('data-placement', /above|inside|below/);
-    const labelBox = await label.boundingBox();
-    if (labelBox === null) throw new Error('the label is not laid out');
-    expect((await textBoxes(page)).filter((t) => overlaps(labelBox, t)), 'the label covers no text').toEqual([]);
+    const placed = await drawn(page, IDS);
+    expect(placed.labels, 'one label is laid out').toHaveLength(1);
+    expect(
+      placed.texts.filter((t) => overlaps(placed.labels[0] as Box, t)),
+      'the label covers no text',
+    ).toEqual([]);
+    expect(stayed(placed), 'a click that selects moves nothing on the page').toBe(true);
 
-    // Ctrl+click takes the card title out: one outline, no union, the label names the title and its tag
+    // Ctrl+click takes the card title out: one outline, on the title, no union, the label names the title and its tag
     await page.keyboard.down('Control');
     await page.mouse.click(centre(card).x, centre(card).y);
     await page.keyboard.up('Control');
     expect(await selection(page)).toEqual(['n-title']);
-    await expect(page.locator('[data-chrome="union"]')).toHaveCount(0);
     await expect(label).toHaveText(/Title\s*h1/);
-    await expect.poll(async () => (await boxesOf(page, '[data-chrome="selection"]')).map((b) => near(b, title)), { message: 'the outline is on the title alone' }).toEqual([true]);
+    await expect
+      .poll(
+        async () => {
+          const d = await drawn(page, IDS);
+          return { outlined: outlinedNodes(d), unions: d.unions.length };
+        },
+        { message: 'one outline, on the title alone, and no union' },
+      )
+      .toEqual({ outlined: ['n-title'], unions: 0 });
+    expect(stayed(await drawn(page, IDS)), 'a Ctrl+click moves nothing on the page').toBe(true);
   },
 );
 

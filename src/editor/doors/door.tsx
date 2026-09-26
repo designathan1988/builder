@@ -5,6 +5,7 @@
 import { useContext, type MouseEvent, type ReactNode } from 'react';
 import { COMMANDS, PREDICATES } from '../../app/commands.ts';
 import { isBuilt, type PredicateTable } from '../../core/commands/registry.ts';
+import { projectFileText } from '../../core/project/archive.ts';
 import type { DispatchResult } from '../../core/store/store.ts';
 import type { CommandId, KeyContextId, MessageId, PredicateId } from '../../generated/ids.ts';
 import type { DoorEntry } from '../../manifest/runtime.ts';
@@ -15,7 +16,8 @@ import { MODEL_RULES, useEditorState, useStore } from '../store.ts';
 import { PanelBodies } from '../shell/bodies.ts';
 import { useT } from '../text.ts';
 import { opensEmptyPanel } from '../workspace/panels.ts';
-import { isCurrent } from './current.ts';
+import { readClipboard } from '../clipboard.ts';
+import { isCurrent, labelParamsOf } from './current.ts';
 import { GLYPHS } from './placement.ts';
 
 export function Icon({ name, size = 'md' }: { readonly name: string; readonly size?: 'xs' | 'sm' | 'md' | 'lg' }) {
@@ -62,7 +64,10 @@ export function useDoor(entry: DoorEntry, args: Readonly<Record<string, unknown>
   const built = ready && isDoorBuilt(entry) && !opensEmptyPanel({ ...entry.door.args, ...args }, drawsBody);
   const current = useEditorState((s) => built && isCurrent(entry, s, args));
   const available = useEditorState((s) => built && ((PREDICATES as PredicateTable<EditorUi>)[entry.command.availability.predicate as PredicateId]?.test(s, MODEL_RULES) ?? true));
-  const label = labelled ?? t(entry.door.labelKey as MessageId);
+  // the words the label fills in for the state now (the command's labelParams), as one JSON text so the hook's value
+  // is stable between renders
+  const params = useEditorState((s) => (built ? JSON.stringify(labelParamsOf(entry, s)) : '{}'));
+  const label = labelled ?? t(entry.door.labelKey as MessageId, JSON.parse(params) as Record<string, string>);
   const face = labelled === undefined && entry.door.faceLabelKey !== null ? t(entry.door.faceLabelKey as MessageId) : label;
   const chord = chordHint(entry.command.id, keysIn);
   const reason: MessageId | null = !built ? 'common.notAvailableYet' : available ? null : (entry.door.disabledReasonKey as MessageId);
@@ -73,25 +78,33 @@ export function useDoor(entry: DoorEntry, args: Readonly<Record<string, unknown>
     const given = { ...entry.door.args, ...args };
     // a command that reads a file (File › Open) asks the browser for it, and runs with the file's text
     const file = Object.entries(entry.command.args).find(([name, arg]) => arg.type === 'file' && !arg.optional && !(name in given))?.[0];
+    // a command that takes what the system clipboard holds (clipboard.paste) runs once the clipboard is read
+    const clipboard = Object.entries(entry.command.args).find(([name, arg]) => arg.type === 'clipboard' && !(name in given))?.[0];
+    if (clipboard !== undefined) {
+      void readClipboard().then((content) => dispatch(entry.command.id, { ...given, [clipboard]: content }));
+      return;
+    }
     if (file === undefined) {
       dispatch(entry.command.id, given);
       return;
     }
-    void chooseFile().then((text) => {
-      if (text !== null) dispatch(entry.command.id, { ...given, [file]: text });
+    // the file's text as the project reader takes it (archive.ts): a project archive's project.json, or the file's own
+    // text (File › Open is the one command that takes a file)
+    void chooseFile().then(async (bytes) => {
+      if (bytes !== null) dispatch(entry.command.id, { ...given, [file]: await projectFileText(bytes) });
     });
   };
   return { label, face, title, built, available, current, chord, reason, run };
 }
 
 // The browser's file chooser, as a user opens it; the chosen file's text, or null when nothing was chosen.
-function chooseFile(): Promise<string | null> {
+function chooseFile(): Promise<Uint8Array | null> {
   return new Promise((resolve) => {
     const input = document.createElement('input');
     input.type = 'file';
     input.addEventListener('change', () => {
       const chosen = input.files?.[0];
-      if (chosen) void chosen.text().then(resolve, () => resolve(null));
+      if (chosen) void chosen.arrayBuffer().then((buffer) => resolve(new Uint8Array(buffer)), () => resolve(null));
       else resolve(null);
     });
     input.addEventListener('cancel', () => resolve(null));
@@ -115,10 +128,12 @@ export interface DoorControlProps {
   readonly ready?: boolean;
   // the key context the control acts in, whose shortcut its title shows (the text toolbar's: the text editing keys)
   readonly keysIn?: KeyContextId;
+  // false: out of the Tab order (a field's Reset this value while the field holds nothing to reset)
+  readonly tabbable?: boolean;
 }
 
 // A toolbar or panel control, drawn as its door's drawnAs says.
-export function DoorControl({ entry, args = {}, children, expanded, className, label, ready = true, keysIn = 'global' }: DoorControlProps) {
+export function DoorControl({ entry, args = {}, children, expanded, className, label, ready = true, keysIn = 'global', tabbable = true }: DoorControlProps) {
   const door = useDoor(entry, args, label, ready, keysIn);
   const { door: d } = entry;
   const pointerRuns = pressedByPointer(entry);
@@ -134,6 +149,7 @@ export function DoorControl({ entry, args = {}, children, expanded, className, l
     // keys a shortcut of the same command acts on while it has the focus
     'data-args': Object.keys(args).length > 0 ? JSON.stringify(args) : undefined,
     title: door.title,
+    tabIndex: tabbable ? undefined : -1,
     'aria-disabled': door.available ? undefined : true,
     // a control whose presses the pointer owner runs (a palette tile: a press is its click or its drag, pointer.ts)
     // runs here only an activation with no press (detail 0: assistive technology's)

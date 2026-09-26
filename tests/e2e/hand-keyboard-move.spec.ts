@@ -8,7 +8,8 @@
 // through the read-only test port; the drawing is measured against the elements' boxes inside the frame, mapped to
 // the screen through its CSS zoom.
 import fs from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
+import { openEditor } from '../support/editor.ts';
 import { runDoor, runs } from './door.ts';
 
 const FIXTURE = 'manifest/features/fixtures/aurora.json';
@@ -19,6 +20,8 @@ const ROW = 'selection.select#layers-row';
 const EYE = 'element.toggleHidden#layers-row-eye';
 const TAKE = 'hand.take#key-m-in-canvas';
 const TAKE_MENU = 'hand.take#menu-arrange';
+const TAKE_CONTEXT = 'hand.take#context-menu';
+const ROW_MENU = 'contextMenu.open#layers-row-secondary-click';
 const NEXT = 'hand.aimNext#key-arrow-down-in-hand';
 const PREVIOUS = 'hand.aimPrevious#key-shift-arrow-down-in-hand';
 const CLIMB = 'hand.climb#key-arrow-up-in-hand';
@@ -78,9 +81,16 @@ async function clickNode(page: Page, id: string) {
   await page.mouse.click(b.x + b.width / 2, b.y + b.height / 2);
 }
 
+// the box of the one element a selector finds, or null when it finds none or several, read in one task of the page:
+// counting first and then asking the box raced the chrome's next frame, whose removed element left the read waiting
 async function boxOf(page: Page, selector: string): Promise<Box | null> {
-  const found = page.locator(selector);
-  return (await found.count()) === 1 ? found.boundingBox() : null;
+  const boxes = await page.locator(selector).evaluateAll((els) =>
+    els.map((el) => {
+      const r = el.getBoundingClientRect();
+      return { x: r.x, y: r.y, width: r.width, height: r.height };
+    }),
+  );
+  return boxes.length === 1 ? (boxes[0] ?? null) : null;
 }
 const close = (a: number, b: number) => Math.abs(a - b) <= 1;
 const status = (page: Page) => page.getByRole('status');
@@ -102,9 +112,7 @@ async function lineAt(page: Page, y: number, across: Box, what: string) {
 
 test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/');
-  await page.evaluate(() => window.localStorage.clear());
-  await page.reload();
+  await openEditor(page);
   await expect(page.locator('.workbench')).toBeVisible();
   // File › Open with the browser's file chooser, as a person opens a project
   const chooser = page.waitForEvent('filechooser');
@@ -218,6 +226,20 @@ test('Arrange › Take into the hand takes the selected element; the keys then a
   await expect(status(page)).toHaveText('Holding Title. Arrows aim, Enter places, Esc drops.');
   await expect(dropLabel(page)).toHaveText('Drop in Hero · position 1 of 3');
   await runDoor(page, NEXT);
+  await runDoor(page, PLACE);
+  await expect.poll(() => childrenOf(page, 'n-hero')).toEqual(['n-intro', 'n-title', 'n-actions']);
+  expect(await port(page)).toMatchObject({ selection: ['n-title'], undoSteps: 1 });
+});
+
+// The context menu of a Layers row gives the focus back to its row when it closes: the hand's keys act there too, as
+// the status bar tells the person.
+test('taken from a Layers row\'s context menu, the hand\'s keys act with the focus back in Layers: they aim and place it', runs(OPEN, ROW_MENU, TAKE_CONTEXT, NEXT, PLACE), async ({ page }) => {
+  await runDoor(page, ROW_MENU, { args: { target: 'n-title' } });
+  await runDoor(page, TAKE_CONTEXT);
+  await expect(status(page)).toHaveText('Holding Title. Arrows aim, Enter places, Esc drops.');
+  expect(await page.evaluate(() => document.activeElement?.closest('[data-key-context="layers-tree"]') !== null), 'the focus is back in the Layers tree').toBe(true);
+  await runDoor(page, NEXT);
+  await expect(status(page)).toHaveText('Hero will receive. Position 2 of 3. Level 1 of 2.');
   await runDoor(page, PLACE);
   await expect.poll(() => childrenOf(page, 'n-hero')).toEqual(['n-intro', 'n-title', 'n-actions']);
   expect(await port(page)).toMatchObject({ selection: ['n-title'], undoSteps: 1 });

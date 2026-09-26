@@ -2,10 +2,10 @@
 // selection, the breakpoint, the element count, the zoom controls and the language, in the order of region
 // status-bar, then the save state (autosave-restore). During a palette tile's creation drag the message is the drag's
 // words (palette-drag-insert).
+import { activeBreakpoint } from '../view/breakpoints.ts';
 import { useSyncExternalStore } from 'react';
 import type { MessageId } from '../../generated/ids.ts';
 import { saveState, type SaveState } from '../persistence/autosave.ts';
-import { manifest } from '../../manifest/runtime.ts';
 import { allNodes } from '../../core/document/model.ts';
 import { pluralForm } from '../../i18n/index.ts';
 import { dragWords } from '../canvas/chrome.tsx';
@@ -18,7 +18,6 @@ import { messageText, useLocale, useT } from '../text.ts';
 import { ZoomValue } from './canvas.tsx';
 import { Slots } from './slots.tsx';
 
-const BASE_BREAKPOINT = manifest.properties.breakpoints.find((b) => b.base);
 
 export function StatusBar() {
   const t = useT();
@@ -26,6 +25,8 @@ export function StatusBar() {
   const message = useEditorState((s) => s.message);
   const document = useEditorState((s) => s.document);
   const count = [...allNodes(document)].length;
+  // the breakpoint the canvas shows and its width (spec breakpoints-switch)
+  const breakpoint = useEditorState((s) => activeBreakpoint(s.ui));
   // while a palette tile's creation drag goes on (pointer.ts), the message is the drop's own words, as its label reads
   // them on the canvas, or, off the page, that releasing cancels (spec palette-drag-insert, Problems in Pager 1 and 2)
   const dragging = useSyncExternalStore(drag.subscribe, drag.get);
@@ -45,7 +46,7 @@ export function StatusBar() {
             return [
               <nav key="breadcrumb" className="status-bar__breadcrumb" aria-label={t(panelName('layers'))} />,
               <span key="breakpoint" className="status-bar__item">
-                {BASE_BREAKPOINT ? t(BASE_BREAKPOINT.labelKey as MessageId) : null}
+                {t('statusBar.breakpoint', { breakpoint: t(breakpoint.labelKey as MessageId), width: breakpoint.width })}
               </span>,
               <span key="count" className="status-bar__item">
                 {t(`status.elementCount.${pluralForm(locale, count)}`, { count })}
@@ -75,13 +76,15 @@ export function StatusBar() {
 }
 
 // The save state, last in the bar (autosave: Not saved, Saving…, Saved, Save failed). A read-only display.
-const SAVE_STATE_KEYS: Readonly<Record<SaveState, MessageId>> = { notSaved: 'status.save.notSaved', saving: 'status.save.saving', saved: 'status.save.saved', failed: 'status.save.failed' };
+const SAVE_STATE_KEYS: Readonly<Record<SaveState, MessageId>> = { notSaved: 'status.save.notSaved', saving: 'status.save.saving', saved: 'status.save.saved', recoveryRequired: 'status.save.recoveryRequired' };
 function SaveStateLabel() {
   const t = useT();
   const current = useSyncExternalStore(saveState.subscribe, saveState.get);
+  // a write IndexedDB refused says why (spec unsaved-work-guard)
+  const reason = useSyncExternalStore(saveState.subscribe, saveState.reason);
   return (
     <span className={`status-bar__item status-bar__save is-${current}`} data-save-state={current}>
-      {t(SAVE_STATE_KEYS[current])}
+      {reason !== null && current === 'notSaved' ? t('status.save.notSavedBecause', { reason }) : t(SAVE_STATE_KEYS[current])}
     </span>
   );
 }

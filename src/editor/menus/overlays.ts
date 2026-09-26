@@ -12,7 +12,9 @@ export interface OverlaysState {
 
 export const INITIAL_OVERLAYS: OverlaysState = { dismissals: 0 };
 
-export const dismiss = registerHandler<'ui.dismiss', EditorUi>('ui.dismiss', ({ state }) => ({
-  kind: 'change',
-  ui: { ...state.ui, overlays: { dismissals: state.ui.overlays.dismissals + 1 } },
-}));
+// it also closes the dialog that is open (workspace/dialogs.ts)
+export const dismiss = registerHandler<'ui.dismiss', EditorUi>('ui.dismiss', ({ state }) => {
+  const { dialog: _closed, ...rest } = state.ui;
+  void _closed;
+  return { kind: 'change', ui: { ...rest, overlays: { dismissals: state.ui.overlays.dismissals + 1 } } };
+});

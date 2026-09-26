@@ -3,7 +3,8 @@
 // each redo the ones after it, read through the read-only test port; with nothing to undo or redo, a drawn door is
 // disabled with its reason and a key reports it in the status bar, changing nothing. (The toast's Undo is tested in
 // delete-element.spec.ts; the command bar's arrives with command-bar.)
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
+import { openEditor } from '../support/editor.ts';
 import { control, openMenu, runDoor, runs } from './door.ts';
 
 const DRAWN = ['history.undo#toolbar-top-bar', 'history.undo#menu-edit', 'history.redo#toolbar-top-bar', 'history.redo#menu-edit'];
@@ -15,15 +16,28 @@ const reasonOf = (ref: string) => REASON[ref.split('#')[0] ?? ''] ?? '';
 const INSERT_PANEL = 'workspace.setPanelOpen#toolbar-activity-bar-insert';
 const TILE = 'element.insert#elements-tile';
 
-// what a door could change: the window's regions and the stored preferences
+// what a door could change: the document, the selection and the history (what Undo and Redo change, read through
+// the read-only test port), the window's regions and the stored preferences
 const snapshot = (page: Page) =>
-  page.evaluate(() => ({
-    regions: [...document.querySelectorAll('[data-region]')].map((el) => {
-      const r = el.getBoundingClientRect();
-      return `${el.getAttribute('data-region')} ${r.x} ${r.y} ${r.width} ${r.height}`;
-    }),
-    stored: window.localStorage.getItem('preferences'),
-  }));
+  page.evaluate(() => {
+    const p = (window as unknown as Record<string, { document: () => unknown; selection: () => unknown; history: () => unknown }>).__builderTestPort;
+    if (!p) throw new Error('the test port is missing');
+    return {
+      document: p.document(),
+      selection: p.selection(),
+      history: p.history(),
+      regions: [...document.querySelectorAll('[data-region]')].map((el) => {
+        const r = el.getBoundingClientRect();
+        return `${el.getAttribute('data-region')} ${r.x} ${r.y} ${r.width} ${r.height}`;
+      }),
+      // the columns of the window, which carry no region of their own
+      columns: ['.sidebar', '.centre', '.inspector', '.workbench'].map((selector) => {
+        const r = document.querySelector(selector)?.getBoundingClientRect();
+        return r === undefined ? `${selector} absent` : `${selector} ${r.x} ${r.y} ${r.width} ${r.height}`;
+      }),
+      stored: window.localStorage.getItem('preferences'),
+    };
+  });
 
 interface Tree {
   readonly id: string;
@@ -46,9 +60,7 @@ const read = (page: Page) =>
 
 test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/');
-  await page.evaluate(() => window.localStorage.clear());
-  await page.reload();
+  await openEditor(page);
   await expect(page.locator('.workbench')).toBeVisible();
 });
 

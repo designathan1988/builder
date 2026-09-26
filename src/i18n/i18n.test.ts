@@ -81,7 +81,7 @@ describe('the i18n runtime', () => {
     expect(() => translate('en', unknown)).toThrow('The en catalogue has no text for "no.such.key".');
   });
 
-  it('switching the locale changes every text, and switching back restores English', () => {
+  it('switching the locale gives every text its Portuguese, which differs from the English for most keys, and switching back restores English', () => {
     const changed = MESSAGE_IDS.filter((key) => en[key] !== ptBR[key]);
     expect(changed.length).toBeGreaterThan(MESSAGE_IDS.length / 2);
     const portuguese = translator('pt-BR');

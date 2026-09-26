@@ -20,7 +20,10 @@ export interface DocumentPath {
 
 // the fields of a node a path may name; id is generated, so never named. locked, hidden (true, absent when off) and
 // inline (the runs of inline marks) arrive with the lock, hide and inline formatting features of group 02.
-export const NODE_FIELDS = ['type', 'name', 'tag', 'attributes', 'classes', 'styles', 'text', 'children', 'locked', 'hidden', 'inline'] as const;
+export const NODE_FIELDS = ['type', 'name', 'tag', 'attributes', 'classes', 'styles', 'text', 'children', 'locked', 'hidden', 'inline', 'customAttributes', 'component', 'componentPart', 'guides', 'grid'] as const;
+// the fields of the project itself a diff names with no node path ("/@swatches"): the saved colours and the design
+// tokens (model.ts)
+export const DOCUMENT_FIELDS = ['swatches', 'tokens', 'classes', 'components'] as const;
 
 // The id a fixture file names: manifest/features/fixtures/<id>.json. "empty" has no file.
 export const EMPTY_FIXTURE = 'empty';
@@ -105,6 +108,16 @@ export function applyDiff(document: unknown, ops: readonly DiffOp[]): DiffResult
 
 function applyOne(doc: JsonObject, op: DiffOp): string | null {
   const path = parsePath(op.path);
+  // a field of the project itself: set whole, or removed
+  if (path.nodes.length === 0 && path.field !== null) {
+    const [field, ...keys] = path.field;
+    if (!(DOCUMENT_FIELDS as readonly string[]).includes(field ?? '') || keys.length > 0) return `${op.path}: "@${field ?? ''}" is not a field of the project (${DOCUMENT_FIELDS.join(', ')}), set or removed whole`;
+    if (op.op === 'remove') {
+      if (!((field as string) in doc)) return `${op.path}: there is nothing at this path to remove`;
+      Reflect.deleteProperty(doc, field as string);
+    } else doc[field as string] = structuredClone(op.value) as Json;
+    return null;
+  }
   const found = resolveNode(doc, path.nodes);
   if (typeof found === 'string') return `${op.path}: ${found}`;
   const { node, parent, index, page } = found;
@@ -167,6 +180,8 @@ export function withStandInIds(document: unknown): unknown {
     for (const child of childrenOf(node)) visit(child);
   };
   for (const page of Array.isArray(doc.pages) ? doc.pages : []) if (isObject(page)) visit(page.tree ?? null);
+  // a component's definition is a tree of nodes too (spec reusable-components)
+  for (const component of Array.isArray(doc.components) ? doc.components : []) if (isObject(component)) visit(component.tree ?? null);
   return doc;
 }
 

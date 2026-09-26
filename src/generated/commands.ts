@@ -36,7 +36,7 @@ export interface CommandArgs {
   "timeline.stop": Record<string, never>;
   "timeline.toggleLoop": Record<string, never>;
   "clipboard.copy": Record<string, never>;
-  "clipboard.paste": Record<string, never>;
+  "clipboard.paste": { readonly clipboard: ClipboardContent };
   "clipboard.cut": Record<string, never>;
   "clipboard.copyStyle": Record<string, never>;
   "clipboard.pasteStyle": Record<string, never>;
@@ -54,16 +54,16 @@ export interface CommandArgs {
   "components.insertInstance": { readonly component: string; readonly parent?: NodeId; readonly index?: number };
   "components.detach": Record<string, never>;
   "element.setTag": { readonly tag: string };
-  "element.setAttribute": { readonly attribute: AttributeId; readonly value: JsonValue };
-  "element.setId": { readonly id: string };
-  "element.setClasses": { readonly classes: JsonValue };
+  "element.setAttribute": { readonly attribute: AttributeId; readonly value: JsonValue; readonly target?: NodeId };
+  "element.setId": { readonly id: string; readonly target?: NodeId };
+  "element.setClasses": { readonly classes: JsonValue; readonly target?: NodeId };
   "element.setLink": { readonly target?: NodeId; readonly href?: string; readonly newTab?: boolean; readonly page?: string; readonly anchor?: NodeId };
   "element.setInputType": { readonly type: "text" | "email" | "password" | "number" | "tel" | "url" | "search" | "date" | "time" | "color" | "range" | "checkbox" | "radio" | "file" };
   "element.setLabelTarget": { readonly control: NodeId };
   "element.setCustomAttribute": { readonly name: string; readonly value: string };
   "element.removeCustomAttribute": { readonly name: string };
   "element.setSvgMarkup": { readonly markup: string };
-  "element.setEmbedMarkup": { readonly markup: string };
+  "element.setEmbedMarkup": { readonly markup: string; readonly target?: NodeId };
   "element.applyHtml": { readonly html: string };
   "parts.toggle": { readonly type: "caption" | "tableHead" | "tableFoot" };
   "parts.add": { readonly type: "option" | "optionGroup" | "source" | "track" | "rectangle" | "ellipse" | "line" };
@@ -101,13 +101,13 @@ export interface CommandArgs {
   "focus.previousRegion": Record<string, never>;
   "focus.canvas": Record<string, never>;
   "ui.dismiss": Record<string, never>;
-  "position.setMode": { readonly mode: "static" | "relative" | "absolute" | "fixed" | "sticky" };
-  "geometry.resize": { readonly width?: string; readonly height?: string; readonly left?: string; readonly top?: string };
-  "position.move": { readonly dx: number; readonly dy: number };
-  "position.setAnchors": { readonly edge: "left" | "right" | "top" | "bottom" | "horizontal-center" | "vertical-center"; readonly mode: "toggle" | "set" };
+  "position.setMode": { readonly property: StyleTargetId; readonly mode: "static" | "relative" | "absolute" | "fixed" | "sticky" };
+  "geometry.resize": { readonly width?: string; readonly height?: string; readonly left?: string; readonly top?: string; readonly modifier?: "Shift" | "Alt" | "Ctrl" };
+  "position.move": { readonly dx: number; readonly dy: number; readonly modifier?: "Shift" | "Ctrl" };
+  "position.setAnchors": { readonly edge: "left" | "right" | "top" | "bottom" | "horizontal-center" | "vertical-center" | "horizontal-stretch" | "vertical-stretch"; readonly mode: "toggle" | "set" };
   "position.align": { readonly edge: "left" | "horizontal-center" | "right" | "top" | "vertical-center" | "bottom" };
   "position.distribute": { readonly axis: "horizontal" | "vertical" };
-  "handle.step": { readonly direction: "increase" | "decrease" };
+  "handle.step": { readonly direction: "increase" | "decrease"; readonly handle?: string };
   "canvas.setEditMode": { readonly mode: "none" | "padding" | "margin" | "radius" | "border" | "gap" | "row-gap" | "column-gap" | "shadow-offset" | "shadow-blur" };
   "history.undo": Record<string, never>;
   "history.redo": Record<string, never>;
@@ -146,6 +146,7 @@ export interface CommandArgs {
   "element.moveDown": Record<string, never>;
   "element.wrapRow": Record<string, never>;
   "element.wrapColumn": Record<string, never>;
+  "element.wrapBeside": { readonly target: NodeId; readonly side: "before" | "after"; readonly wrapper: "row" | "column"; readonly entry?: PaletteEntryId };
   "element.nestIntoPrevious": Record<string, never>;
   "element.promote": Record<string, never>;
   "element.duplicate": Record<string, never>;
@@ -159,22 +160,23 @@ export interface CommandArgs {
   "hand.descend": Record<string, never>;
   "hand.drop": Record<string, never>;
   "style.set": { readonly property: StyleTargetId; readonly value: string };
-  "style.setSpacing": { readonly box: "padding" | "margin"; readonly sides: "all" | "top" | "right" | "bottom" | "left"; readonly value: string };
+  "style.setSpacing": { readonly box: "padding" | "margin"; readonly sides: "all" | "top" | "right" | "bottom" | "left"; readonly value: string; readonly modifier?: "Shift" | "Alt" };
   "inspector.toggleSpacingLink": { readonly box: "padding" | "margin" };
   "style.setBorder": { readonly sides: "all" | "top" | "right" | "bottom" | "left"; readonly width?: string; readonly style?: string; readonly color?: string };
   "style.setRadius": { readonly corners: "all" | "top-left" | "top-right" | "bottom-right" | "bottom-left"; readonly value: string };
-  "style.setBackgroundImage": { readonly value: JsonValue };
-  "style.setShadows": { readonly property: "box-shadow" | "text-shadow"; readonly layers: JsonValue };
-  "style.setFilter": { readonly functions: JsonValue };
-  "style.setTransform": { readonly parts: JsonValue };
+  "style.setBackgroundImage": { readonly property: StyleTargetId; readonly value?: JsonValue; readonly edit?: JsonValue; readonly distance?: number };
+  "style.setShadows": { readonly property: "box-shadow" | "text-shadow"; readonly edit: JsonValue; readonly distance?: number; readonly modifier?: "Shift" };
+  "style.setFilter": { readonly property: StyleTargetId; readonly functions: JsonValue };
+  "style.setTransform": { readonly property: StyleTargetId; readonly parts: JsonValue };
   "style.setAlignment": { readonly x: "start" | "center" | "end"; readonly y: "start" | "center" | "end" };
-  "style.setCustomDeclarations": { readonly declarations: string };
+  "style.setCustomDeclarations": { readonly declarations: string; readonly target?: NodeId };
   "style.applyCssRule": { readonly css: string };
   "style.reset": { readonly property: StyleTargetId };
   "style.resetAll": Record<string, never>;
-  "field.step": { readonly direction: "up" | "down"; readonly size: "step" | "page" };
-  "field.scrub": Record<string, never>;
-  "field.setUnit": { readonly unit: string };
+  "field.step": { readonly direction: "up" | "down"; readonly size: "step" | "page"; readonly property: StyleTargetId; readonly value: string; readonly modifier?: "Shift" | "Alt" };
+  "field.scrub": { readonly property: StyleTargetId; readonly value: string; readonly distance: number; readonly modifier?: "Shift" | "Alt" };
+  "field.setUnit": { readonly property: StyleTargetId; readonly value: string; readonly unit: string };
+  "field.cancel": { readonly property: StyleTargetId };
   "text.startEdit": Record<string, never>;
   "text.set": { readonly target: NodeId; readonly content: JsonValue };
   "text.cancelEdit": Record<string, never>;
@@ -204,9 +206,9 @@ export interface CommandArgs {
   "grid.toggleColumns": Record<string, never>;
   "grid.toggleRows": Record<string, never>;
   "grid.toggleDots": Record<string, never>;
-  "grid.setSettings": { readonly grid: "columns" | "rows" | "dots"; readonly settings: JsonValue };
+  "grid.setSettings": { readonly grid: "columns" | "rows" | "dots"; readonly setting: "count" | "width" | "gutter" | "margin" | "height" | "spacing"; readonly value: number };
   "guides.create": { readonly axis: "horizontal" | "vertical"; readonly at: number };
-  "guides.move": { readonly guide: string; readonly at: number };
+  "guides.move": { readonly guide: string; readonly at?: number; readonly delta?: number; readonly along?: "horizontal" | "vertical"; readonly modifier?: "Shift" };
   "guides.delete": { readonly guide: string };
   "guides.toggleLock": { readonly guide: string };
   "guides.toggleVisible": Record<string, never>;
@@ -223,7 +225,7 @@ export interface CommandArgs {
   "workspace.setActiveTab": { readonly group: string; readonly panel: string };
   "workspace.resizeSplitter": { readonly splitter: string; readonly size: number };
   "workspace.movePanel": { readonly panel: string; readonly to: "float" | "dock-left" | "dock-right" | "workbench" | "tabs" | "stack"; readonly at?: Point };
-  "quickPanel.setOffset": { readonly target: NodeId; readonly offset: Point };
+  "quickPanel.setOffset": { readonly target: NodeId; readonly offset: Point; readonly distance?: number };
   "preferences.setLanguage": { readonly locale: "pt-BR" | "en" };
   "preferences.setTheme": { readonly theme: "light" | "dark" | "system" };
   "commandBar.open": Record<string, never>;
@@ -232,14 +234,20 @@ export interface CommandArgs {
   "layers.setExpanded": { readonly target: NodeId; readonly expanded: "expand" | "collapse" | "toggle" };
   "layers.collapseAll": Record<string, never>;
   "layers.expandAll": Record<string, never>;
-  "layers.expandOrFocusChild": Record<string, never>;
-  "layers.collapseOrFocusParent": Record<string, never>;
-  "layers.setRowDetails": { readonly detail: "tag" | "id" | "classes" | "attributes"; readonly shown: boolean };
+  "layers.expandOrFocusChild": { readonly target?: NodeId };
+  "layers.collapseOrFocusParent": { readonly target?: NodeId };
+  "layers.setRowDetails": { readonly detail: "tag" | "id" | "classes" | "attributes"; readonly shown?: boolean };
+  "layers.search": { readonly query: string };
   "inspector.toggleSection": { readonly section: string };
   "inspector.setMode": { readonly mode: "all" | "essentials" };
   "inspector.reveal": { readonly property?: StyleTargetId; readonly attribute?: AttributeId };
   "codePanel.copyPane": Record<string, never>;
   "codePanel.downloadPane": Record<string, never>;
+  "colorPicker.open": { readonly property: StyleTargetId };
+  "colorPicker.setFormat": { readonly format: "hsb" | "rgb" | "hex" | "oklch" | "oklab" };
+  "colorPicker.setChannel": { readonly property: StyleTargetId; readonly channel: "h" | "s" | "v" | "r" | "g" | "b" | "hex" | "alpha" | "ok-l" | "ok-c" | "ok-h" | "ok-a" | "ok-b"; readonly text: string; readonly base?: string };
+  "colorPicker.cancel": Record<string, never>;
+  "colorPicker.apply": Record<string, never>;
 }
 
 // every command has its arguments declared
@@ -261,6 +269,7 @@ export const FEATURE_COMMANDS: Readonly<Record<FeatureId, readonly CommandId[]>>
   "layers-drag": ["element.moveTo","layers.setExpanded"],
   "move-up-down": ["element.moveUp","element.moveDown"],
   "wrap-row-column": ["element.wrapRow","element.wrapColumn"],
+  "drag-side-wrap": ["element.wrapBeside"],
   "context-menu": ["contextMenu.open","focus.next","focus.previous","focus.first","focus.last","focus.activate","ui.dismiss","element.moveUp","element.moveDown","element.wrapRow","element.wrapColumn","element.delete"],
   "nest-into-previous": ["element.nestIntoPrevious"],
   "promote-out": ["element.promote"],
@@ -289,7 +298,7 @@ export const FEATURE_COMMANDS: Readonly<Record<FeatureId, readonly CommandId[]>>
   "project-save-json": ["project.save"],
   "project-open-json": ["project.open"],
   "inspector-panel": ["element.toggleLock","element.toggleHidden","text.set","text.cancelEdit","inspector.toggleSection","workspace.setActiveTab"],
-  "inspector-number-fields": ["style.set","field.step","field.scrub","field.setUnit"],
+  "inspector-number-fields": ["style.set","field.step","field.scrub","field.setUnit","field.cancel"],
   "props-display": ["style.set"],
   "props-flex-container": ["style.set","style.setAlignment"],
   "props-grid-container": ["style.set"],
@@ -297,9 +306,9 @@ export const FEATURE_COMMANDS: Readonly<Record<FeatureId, readonly CommandId[]>>
   "props-spacing": ["style.setSpacing","inspector.toggleSpacingLink"],
   "props-size-overflow": ["style.set"],
   "props-position": ["style.set","position.setMode"],
-  "color-picker": ["style.set"],
-  "color-picker-oklch": [],
-  "color-swatches-eyedropper": ["colors.saveSwatch","colors.removeSwatch"],
+  "color-picker": ["style.set","colorPicker.open","colorPicker.setFormat","colorPicker.setChannel","colorPicker.apply","colorPicker.cancel","drag.cancel"],
+  "color-picker-oklch": ["colorPicker.setFormat","colorPicker.setChannel"],
+  "color-swatches-eyedropper": ["colors.saveSwatch","colors.removeSwatch","style.set"],
   "props-typography": ["style.set"],
   "props-typography-advanced": ["style.set"],
   "props-background": ["style.set","style.setBackgroundImage"],
@@ -354,7 +363,7 @@ export const FEATURE_COMMANDS: Readonly<Record<FeatureId, readonly CommandId[]>>
   "palette-search-groups": ["element.insert","palette.toggleGroup"],
   "palette-density": ["palette.setDensity"],
   "layers-expand-collapse-all": ["layers.collapseAll","layers.expandAll"],
-  "layers-search": ["selection.select"],
+  "layers-search": ["layers.search","selection.select"],
   "layers-row-columns": ["layers.setRowDetails"],
   "layers-row-colours": ["element.setLayerColor"],
   "zoom-keyboard-buttons": ["view.zoomIn","view.zoomOut","view.zoomReset","view.zoomTo","view.zoomFit"],
@@ -363,7 +372,7 @@ export const FEATURE_COMMANDS: Readonly<Record<FeatureId, readonly CommandId[]>>
   "rulers": [],
   "guides-manual": ["guides.create","guides.move","guides.delete","guides.toggleLock"],
   "canvas-outlines-zones": ["view.toggleOutlines","view.toggleZones","workspace.setPanelOpen"],
-  "layout-grid-overlay": ["grid.toggleColumns","grid.toggleRows","grid.toggleDots"],
+  "layout-grid-overlay": ["grid.toggleColumns","grid.toggleRows","grid.toggleDots","page.setSetting"],
   "workspace-settings-dialog": ["ui.dismiss","view.toggleRulers","grid.toggleColumns","grid.toggleRows","grid.toggleDots","grid.setSettings","guides.create","guides.delete","guides.toggleVisible","workspace.openDialog"],
   "absolute-free-drag": ["position.move"],
   "absolute-nudge": ["position.move"],

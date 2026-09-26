@@ -540,8 +540,10 @@ const keyboardOwner: TsRuleDefinition<'listener' | 'prop'> = {
 
 // builder/no-manifest-id: code takes a command, a door or an edited property from the manifest's data, never from a
 // text written by hand. A string literal (or a template without expressions) that is a CommandId, a DoorId or a
-// PropertyId of the generated lists (src/generated/ids.ts) is refused, except as the id a handler or a predicate
-// registers (the first argument of registerHandler or registerPredicate, which manifest:check reads) and in a type
+// PropertyId of the generated lists (src/generated/ids.ts) is refused, except as the id a handler, a predicate or a
+// codec registers (the first argument of registerHandler, registerPredicate, registerCondition, registerAction or
+// registerCodec, which manifest:check
+// reads; a codec may share its id with the property it reads, font-weight) and in a type
 // (CommandArgs['…'], checked by TypeScript against the same lists). The configuration exempts src/generated/, the
 // manifest's own reader and checker (src/manifest/), the command table and the tests.
 const MANIFEST_IDS = new Map<string, string>([
@@ -549,7 +551,7 @@ const MANIFEST_IDS = new Map<string, string>([
   ...COMMAND_IDS.map((id) => [id, 'a command'] as const),
   ...DOOR_IDS.map((id) => [id, 'a door'] as const),
 ]);
-const REGISTRARS = new Set(['registerHandler', 'registerPredicate']);
+const REGISTRARS = new Set(['registerHandler', 'registerPredicate', 'registerCondition', 'registerAction', 'registerCodec']);
 const noManifestId: TsRuleDefinition<'id'> = {
   meta: {
     type: 'problem',

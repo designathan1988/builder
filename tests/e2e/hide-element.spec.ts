@@ -7,7 +7,8 @@
 // pressed. The document, the selection and the history are read through the read-only test port; the page through
 // the frame; the saved project through the runner's unzip.
 import fs from 'node:fs';
-import { expect, test, type Download, type Page } from '@playwright/test';
+import { expect, test, type Download, type Page } from '../support/test.ts';
+import { openEditor } from '../support/editor.ts';
 import { unzip } from '../../tools/runner/unzip.ts';
 import { control, runDoor, runs } from './door.ts';
 
@@ -81,9 +82,7 @@ const opacity = (page: Page, ref: string, target: string) => control(page, ref, 
 
 test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/');
-  await page.evaluate(() => window.localStorage.clear());
-  await page.reload();
+  await openEditor(page);
   await expect(page.locator('.workbench')).toBeVisible();
   // File › Open with the browser's file chooser, as a person opens a project
   const chooser = page.waitForEvent('filechooser');
@@ -223,19 +222,25 @@ test('a hidden selected element is outlined, dashed, on its parent, and its labe
   const outline = page.locator('[data-chrome="selection"]');
   await expect(outline).toHaveCount(1);
   expect(await outline.evaluate((el) => getComputedStyle(el).outlineStyle)).toBe('dashed');
-  // the outline covers the Hero's box on the screen
-  const hero = await page.evaluate(() => {
-    const iframe = document.querySelector<HTMLIFrameElement>('.frame__page');
-    const el = iframe?.contentDocument?.querySelector('[data-node="n-hero"]');
-    if (!iframe || !el) throw new Error('the canvas does not draw the Hero');
-    const zoom = iframe.currentCSSZoom;
-    const frame = iframe.getBoundingClientRect();
-    const r = el.getBoundingClientRect();
-    return { x: frame.left + r.left * zoom, y: frame.top + r.top * zoom, width: r.width * zoom, height: r.height * zoom };
-  });
-  const drawnOutline = await outline.boundingBox();
-  if (drawnOutline === null) throw new Error('the selection outline is not laid out');
-  for (const k of ['x', 'y', 'width', 'height'] as const) expect(Math.abs(drawnOutline[k] - hero[k]), `outline ${k}`).toBeLessThan(2);
+  // the outline covers the Hero's box on the screen: both read at one instant, once the chrome has drawn it there
+  await expect
+    .poll(
+      () =>
+        page.evaluate(() => {
+          const iframe = document.querySelector<HTMLIFrameElement>('.frame__page');
+          const el = iframe?.contentDocument?.querySelector('[data-node="n-hero"]');
+          const drawn = [...document.querySelectorAll('[data-chrome="selection"]')].map((o) => o.getBoundingClientRect());
+          if (!iframe || !el || drawn.length !== 1 || drawn[0] === undefined) return null;
+          const zoom = iframe.currentCSSZoom;
+          const frame = iframe.getBoundingClientRect();
+          const r = el.getBoundingClientRect();
+          const hero = { x: frame.left + r.left * zoom, y: frame.top + r.top * zoom, width: r.width * zoom, height: r.height * zoom };
+          const o = drawn[0];
+          return [o.x - hero.x, o.y - hero.y, o.width - hero.width, o.height - hero.height].every((d) => Math.abs(d) < 2);
+        }),
+      { message: 'the outline lies on the Hero' },
+    )
+    .toBe(true);
   await expect(page.locator('[data-chrome="label"] .chrome__flag')).toHaveText('hidden');
   await expect(page.locator('[data-chrome="label"] .chrome__name')).toHaveText('Intro');
 });

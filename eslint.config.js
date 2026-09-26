@@ -29,6 +29,14 @@ export default defineConfig(
     languageOptions: { globals: globals.node },
   },
   {
+    // Every browser test comes through tests/support/test.ts, whose fixture records what the test depends on for the
+    // limited validation (docs/testing/README.md): a test built on '@playwright/test' directly would be invisible to it.
+    files: ['tests/e2e/**/*.ts', 'tools/runner/**/*.ts'],
+    rules: {
+      'no-restricted-imports': ['error', { paths: [{ name: '@playwright/test', importNames: ['test', 'expect'], message: 'Import test and expect from tests/support/test.ts.' }] }],
+    },
+  },
+  {
     // The time is read only through the Clock port and ids come only from the IdGenerator port (ARCHITECTURE.md).
     files: ['src/**/*.{ts,tsx}'],
     ignores: ['src/core/ports/clock.ts', 'src/core/ports/ids.ts'],

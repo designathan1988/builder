@@ -3,7 +3,8 @@
 // new delete replaces it, its Undo undoes the most recent delete only, and the next message takes it away. The
 // document, the selection and the history are read through the read-only test port; the page through the frame.
 import fs from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
+import { openEditor } from '../support/editor.ts';
 import { openMenu, runDoor, runs } from './door.ts';
 
 const FIXTURE = 'manifest/features/fixtures/aurora.json';
@@ -52,9 +53,7 @@ async function clickNode(page: Page, id: string) {
 
 test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/');
-  await page.evaluate(() => window.localStorage.clear());
-  await page.reload();
+  await openEditor(page);
   await expect(page.locator('.workbench')).toBeVisible();
   await openAurora(page);
 });

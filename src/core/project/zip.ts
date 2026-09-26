@@ -98,3 +98,49 @@ export function zip(entries: readonly ZipEntry[], modified: number): Uint8Array 
   }
   return out;
 }
+
+// Whether bytes start as a ZIP archive does (a local file header).
+export function isZip(bytes: Uint8Array): boolean {
+  return bytes.length >= 4 && bytes[0] === 0x50 && bytes[1] === 0x4b && bytes[2] === 0x03 && bytes[3] === 0x04;
+}
+
+async function inflate(raw: Uint8Array): Promise<Uint8Array> {
+  const stream = new Blob([raw.slice().buffer]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
+  return new Uint8Array(await new Response(stream).arrayBuffer());
+}
+
+// Every entry of an archive by its path, read through its central directory, stored or deflated (as any ZIP tool
+// writes it); it throws, naming the problem, on an archive it cannot read (no directory, an unknown compression, a
+// size or a CRC-32 that does not match).
+export async function unzip(bytes: Uint8Array): Promise<Map<string, Uint8Array>> {
+  const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  let end = -1;
+  for (let i = bytes.length - 22; i >= Math.max(0, bytes.length - 22 - 0xffff); i -= 1) {
+    if (view.getUint32(i, true) === 0x06054b50) {
+      end = i;
+      break;
+    }
+  }
+  if (end < 0) throw new Error('it is not a ZIP archive');
+  const decoder = new TextDecoder();
+  const entries = new Map<string, Uint8Array>();
+  let at = view.getUint32(end + 16, true);
+  for (let n = view.getUint16(end + 10, true); n > 0; n -= 1) {
+    if (view.getUint32(at, true) !== 0x02014b50) throw new Error('its central directory is broken');
+    const method = view.getUint16(at + 10, true);
+    const crc = view.getUint32(at + 16, true);
+    const packed = view.getUint32(at + 20, true);
+    const size = view.getUint32(at + 24, true);
+    const nameLength = view.getUint16(at + 28, true);
+    const local = view.getUint32(at + 42, true);
+    const path = decoder.decode(bytes.subarray(at + 46, at + 46 + nameLength));
+    const start = local + 30 + view.getUint16(local + 26, true) + view.getUint16(local + 28, true);
+    const raw = bytes.subarray(start, start + packed);
+    const data = method === 0 ? raw : method === 8 ? await inflate(raw) : null;
+    if (data === null) throw new Error(`${path} uses a compression this app cannot read`);
+    if (data.length !== size || crc32(data) !== crc) throw new Error(`${path} is damaged`);
+    entries.set(path, data);
+    at += 46 + nameLength + view.getUint16(at + 30, true) + view.getUint16(at + 32, true);
+  }
+  return entries;
+}

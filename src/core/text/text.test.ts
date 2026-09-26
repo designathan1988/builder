@@ -8,8 +8,10 @@ import { EMPTY_HISTORY } from '../history/history.ts';
 import { applyPatches } from '../history/transaction.ts';
 import { manualClock } from '../ports/clock.ts';
 import { sequentialIds } from '../ports/ids.ts';
+import { anyCss } from '../ports/css.ts';
 import { noLayout } from '../ports/layout.ts';
 import { setTextCommand } from './text.ts';
+import { deepFreeze } from '../store/store.ts';
 
 const RULES = rulesFromManifest(manifest.elements, manifest.properties, manifest.html);
 const node = (id: string, type: string, tag: string, fields: Partial<DocNode> = {}): DocNode => ({ id: id as NodeId, type: type as DocNode['type'], name: id, tag, attributes: {}, classes: [], styles: {}, text: null, children: [], ...fields });
@@ -24,7 +26,11 @@ const context: HandlerContext<never> = {
   rules: RULES,
   words: (key) => key,
   layout: noLayout,
+  css: anyCss,
 };
+
+// every handler runs on a frozen document, as the store commits it: a change in place throws
+deepFreeze(DOC);
 
 describe('text.set', () => {
   it("writes a text element's text, a line break as \\n, and says the text is kept", () => {

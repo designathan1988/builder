@@ -2,7 +2,8 @@
 // of palette-click-insert (Container, Section, Heading, Paragraph) insert; a tile whose entry a later feature brings
 // is drawn disabled with "not available yet", and neither a click nor Enter or Space on it inserts anything.
 import fs from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
+import { openEditor } from '../support/editor.ts';
 import { isFeatureBuilt } from '../../src/app/features.ts';
 import type { FeatureId } from '../../src/generated/ids.ts';
 import { control, runDoor, runs } from './door.ts';
@@ -17,8 +18,9 @@ interface Entry {
 }
 const ENTRIES = (JSON.parse(fs.readFileSync('manifest/elements.json', 'utf8')) as { palette: { entries: Entry[] }[] }).palette.flatMap((g) => g.entries);
 const OWN = ENTRIES.filter((e) => e.feature === 'palette-click-insert').map((e) => e.id);
-// an entry of a feature that is not built: Header (elements-structure)
-const LATER = ENTRIES.find((e) => e.id === 'header');
+// an entry of a feature that is not built yet (the first in the palette's order)
+const LATER = ENTRIES.find((e) => !isFeatureBuilt(e.feature as FeatureId));
+const NONE_LATER = 'every palette entry\'s feature is built: no tile is left to prove the gate';
 
 const documentOf = (page: Page) =>
   page.evaluate(() => {
@@ -37,50 +39,55 @@ async function tabTo(page: Page, entry: string) {
 
 test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/');
-  await page.evaluate(() => window.localStorage.clear());
-  await page.reload();
+  await openEditor(page);
   await expect(page.locator('.workbench')).toBeVisible();
 });
 
 test('the tiles of palette-click-insert insert; a tile of a later feature is not available yet and inserts nothing', runs(INSERT_PANEL, TILE, ENTER, SPACE), async ({ page }) => {
   expect(OWN.sort()).toEqual(['container', 'heading', 'paragraph', 'section']);
-  expect(LATER?.feature).toBe('elements-structure');
+  if (LATER === undefined) throw new Error(NONE_LATER);
   await runDoor(page, INSERT_PANEL);
   for (const entry of OWN) await expect(control(page, TILE, { args: { entry } }), entry).not.toHaveAttribute('aria-disabled', 'true');
 
-  const header = control(page, TILE, { args: { entry: 'header' } });
-  await expect(header).toHaveAttribute('aria-disabled', 'true');
-  await expect(header).toHaveAttribute('title', /not available yet/);
+  const later = control(page, TILE, { args: { entry: LATER.id } });
+  await expect(later).toHaveAttribute('aria-disabled', 'true');
+  await expect(later).toHaveAttribute('title', /not available yet/);
   const before = await documentOf(page);
   // a real click on it (Playwright would wait for an aria-disabled control to be enabled)
-  await header.click({ force: true });
-  await tabTo(page, 'header');
+  await later.click({ force: true });
+  await tabTo(page, LATER.id);
   await page.keyboard.press('Enter');
   await page.keyboard.press('Space');
   expect(await documentOf(page)).toEqual(before);
 
-  // Enter and Space on an available tile insert its entry, once each
+  // Enter and Space on an available tile insert its entry, once each (Tab from the panel's search field, above every
+  // tile: the tile of the later feature may come after it)
+  await page.locator('[data-region="insert"] [data-local="search"]').click();
   await tabTo(page, 'paragraph');
   await page.keyboard.press('Enter');
   await page.keyboard.press('Space');
   const after = (await documentOf(page)) as { document: { pages: { tree: { children: { name: string; type: string }[] } }[] }; history: unknown };
   expect(after.document.pages[0]?.tree.children.map((c) => `${c.type} ${c.name}`)).toEqual(['paragraph Paragraph', 'paragraph Paragraph 2']);
   expect(after.history).toEqual({ undoSteps: 2, redoSteps: 0 });
+
+  // a click on an available tile inserts its entry after the selected element
+  await control(page, TILE, { args: { entry: 'heading' } }).click();
+  const clicked = (await documentOf(page)) as typeof after;
+  expect(clicked.document.pages[0]?.tree.children.map((c) => `${c.type} ${c.name}`)).toEqual(['paragraph Paragraph', 'paragraph Paragraph 2', 'heading Heading']);
+  expect(clicked.history).toEqual({ undoSteps: 3, redoSteps: 0 });
 });
 
 // The feature table (src/app/features.ts) decides every tile: a tile is enabled exactly when its entry's feature is
-// registered as built, so a template of a feature still to come (Hero, templates-sections) is not available yet and
-// a click on it inserts nothing, never a bare section.
-test('every tile is enabled exactly when its entry\'s feature is registered as built; the Hero template inserts nothing', runs(INSERT_PANEL, TILE), async ({ page }) => {
+// registered as built, so a tile of a feature still to come (LATER) is not available yet and a click on it inserts
+// nothing, never a bare element.
+test('every tile is enabled exactly when its entry\'s feature is registered as built; a tile of a feature not built inserts nothing', runs(INSERT_PANEL, TILE), async ({ page }) => {
   await runDoor(page, INSERT_PANEL);
   const drawn = await page.locator(`[data-door="${TILE}"]`).evaluateAll((els) => els.map((el) => [JSON.parse(el.getAttribute('data-args') ?? '{}').entry as string, el.getAttribute('aria-disabled') !== 'true'] as const));
   expect(drawn.map(([entry]) => entry).sort()).toEqual(ENTRIES.map((e) => e.id).sort());
   const expected = ENTRIES.map((e) => [e.id, isFeatureBuilt(e.feature as FeatureId)] as const);
   expect(new Map(drawn)).toEqual(new Map(expected));
-  const hero = ENTRIES.find((e) => e.id === 'template-hero');
-  expect(hero?.feature).toBe('templates-sections');
-  const tile = control(page, TILE, { args: { entry: 'template-hero' } });
+  if (LATER === undefined) throw new Error(NONE_LATER);
+  const tile = control(page, TILE, { args: { entry: LATER.id } });
   await expect(tile).toHaveAttribute('aria-disabled', 'true');
   await expect(tile).toHaveAttribute('title', /not available yet/);
   const before = await documentOf(page);

@@ -263,6 +263,8 @@ export const PLANTS: Plant[] = [
     id: 'door-writes-shorthand',
     rule: 'shorthand-write',
     description: 'a quick panel control writes the gap shorthand instead of row-gap and column-gap',
+    // the door runs in one of the quick panel's scenarios (its W scenario, of the same command), as every door of a
+    // feature with scenarios does, so the plant breaks the shorthand rule alone
     apply: (m) => {
       list(command(m, 'style.set').entryPoints).push({
         id: 'quick-panel-gap',
@@ -277,6 +279,9 @@ export const PLANTS: Plant[] = [
         adapter: { selection: 'all', offers: null, writes: ['gap'], fields: [] },
         args: {},
       });
+      const width = list(feature(m, 'quick-panel').scenarios).find((s) => strings(s.doors).includes('style.set#quick-panel-width'));
+      if (width === undefined) throw new Error('plant: no quick panel scenario runs W');
+      strings(width.doors).push('style.set#quick-panel-gap');
     },
   },
   {
@@ -965,6 +970,7 @@ PLANTS.push(
     rule: 'zoom',
     description: 'a scenario of delete-element starts at a canvas zoom of 50 % although zoom-keyboard-buttons is not built',
     apply: (m) => {
+      unbuildZoom(m);
       const [remove] = plantDeleteScenarios(m);
       obj(remove.setup).zoom = 50;
     },
@@ -978,6 +984,20 @@ PLANTS.push(
     },
   },
 );
+
+// The zoom doors' commands made unbuilt, as before zoom-keyboard-buttons: no handler registered, each reference planned,
+// and every scenario starting at Fit, as they all did then.
+export const ZOOM_COMMANDS = ['view.zoomIn', 'view.zoomOut', 'view.zoomReset', 'view.zoomTo', 'view.zoomFit'];
+export function unbuildZoom(m: MutableInput): void {
+  m.registered = { ...m.registered, handler: m.registered.handler.filter((id) => !ZOOM_COMMANDS.includes(id)) };
+  for (const r of (m.files['references.json'] as { references: { kind: string; id: string; status: string }[] }).references) {
+    if (r.kind === 'handler' && ZOOM_COMMANDS.includes(r.id)) r.status = 'planned';
+  }
+  for (const [file, json] of Object.entries(m.files)) {
+    if (!file.startsWith('features/') || file.startsWith('features/fixtures/')) continue;
+    for (const feature of list(obj(json).features)) for (const s of list(obj(feature).scenarios)) obj(obj(s).setup).zoom = 'fit';
+  }
+}
 
 // A fixture copies the hand-written files and shares the generated ones (ownGenerated copies what a plant changes).
 export function planted(input: ManifestInput, plant: Plant): ManifestInput {

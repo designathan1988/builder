@@ -9,6 +9,7 @@ import { applyPatches } from '../history/transaction.ts';
 import { manualClock } from '../ports/clock.ts';
 import { sequentialIds } from '../ports/ids.ts';
 import { noLayout } from '../ports/layout.ts';
+import { anyCss } from '../ports/css.ts';
 import { contentModelFrom } from './content-model.ts';
 import { equivalentTags, setTagCommand } from './tag.ts';
 
@@ -44,6 +45,7 @@ const contextOf = (doc: DocumentJson, selection: readonly string[]): HandlerCont
   rules: RULES,
   words: (key) => key,
   layout: noLayout,
+  css: anyCss,
 });
 // the node after the command, the patches and what the status bar says, or the refusal
 function run(doc: DocumentJson, selected: string, tag: string) {

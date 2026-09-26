@@ -82,7 +82,9 @@
         "predicate": "always",
         "refusalKey": null
       },
-      "refusals": [],
+      "refusals": [
+        "status.open.invalidArchive"
+      ],
       "confirmation": null,
       "history": {
         "undoable": false

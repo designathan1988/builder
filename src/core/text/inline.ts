@@ -42,6 +42,14 @@ export function isSafeHref(href: string): boolean {
   return SAFE_HREF.test(href);
 }
 
+// The addresses a resource attribute may have (an image's src, a form's action, a video's poster): a web address, or
+// a path inside the project (relative, or from the site's root), with no space and no other scheme (javascript:,
+// data:, file: are refused).
+const SAFE_SOURCE = /^(https?:\/\/[^\s/?#]+[^\s]*|(?![a-z][a-z0-9+.-]*:)[^\s]+)$/i;
+export function isSafeSource(source: string): boolean {
+  return SAFE_SOURCE.test(source);
+}
+
 // The marked characters of a tree, in order, empty stretches left out; an inner link's address wins over an outer one.
 export function segmentsOf(runs: readonly InlineRun[], marks: Omit<Segment, 'text'> = PLAIN): Segment[] {
   const out: Segment[] = [];

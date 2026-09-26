@@ -4,7 +4,8 @@
 // the outlines are measured against the element's box inside the frame, mapped to the screen through the frame's CSS
 // zoom.
 import fs from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
+import { openEditor } from '../support/editor.ts';
 import { control, openMenu, runDoor, runs } from './door.ts';
 
 const FIXTURE = 'manifest/features/fixtures/aurora.json';
@@ -43,26 +44,6 @@ function screenBox(page: Page, id: string | null): Promise<Box> {
   }, id);
 }
 
-// the screen boxes of every run of text on the page
-function textBoxes(page: Page): Promise<Box[]> {
-  return page.evaluate(() => {
-    const iframe = document.querySelector<HTMLIFrameElement>('.frame__page');
-    const doc = iframe?.contentDocument;
-    if (!iframe || !doc) throw new Error('the canvas has no page');
-    const zoom = iframe.currentCSSZoom;
-    const frame = iframe.getBoundingClientRect();
-    const boxes: { x: number; y: number; width: number; height: number }[] = [];
-    const walker = doc.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT);
-    for (let text = walker.nextNode(); text !== null; text = walker.nextNode()) {
-      if ((text.textContent ?? '').trim() === '') continue;
-      const range = doc.createRange();
-      range.selectNodeContents(text);
-      for (const r of range.getClientRects()) if (r.width > 0 && r.height > 0) boxes.push({ x: frame.left + r.left * zoom, y: frame.top + r.top * zoom, width: r.width * zoom, height: r.height * zoom });
-    }
-    return boxes;
-  });
-}
-
 const centre = (b: Box) => ({ x: b.x + b.width / 2, y: b.y + b.height / 2 });
 const overlaps = (a: Box, b: Box) => a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
 async function expectBox(page: Page, selector: string, expected: Box, what: string) {
@@ -78,9 +59,7 @@ async function expectBox(page: Page, selector: string, expected: Box, what: stri
 
 test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/');
-  await page.evaluate(() => window.localStorage.clear());
-  await page.reload();
+  await openEditor(page);
   await expect(page.locator('.workbench')).toBeVisible();
 });
 
@@ -95,13 +74,15 @@ test(
 
     // the selection outline lies on the element's box
     await expectBox(page, '[data-chrome="selection"]', intro, 'the selection outline lies on the paragraph');
-    // the label names the element and its tag, and covers no text of the page
+    // the label names the element and its tag, and sits above it, whatever the element, never inside it (DESIGN.md
+    // "Label rule", the user's decision of 2026-09-25)
     const label = page.locator('[data-chrome="label"]');
     await expect(label).toHaveText(/Intro\s*p/);
-    await expect(label).toHaveAttribute('data-placement', /above|inside|below/);
+    await expect(label).toHaveAttribute('data-placement', 'above');
     const labelBox = await label.boundingBox();
     if (labelBox === null) throw new Error('the label is not laid out');
-    expect((await textBoxes(page)).filter((t) => overlaps(labelBox, t)), 'the label covers no text').toEqual([]);
+    expect(labelBox.y + labelBox.height, 'the label ends above the element').toBeLessThanOrEqual(intro.y + 0.5);
+    expect(overlaps(labelBox, intro), 'the label lies outside the element').toBe(false);
 
     // hovering the title outlines it, thinner than the selection, and selects nothing
     const title = await screenBox(page, 'n-title');

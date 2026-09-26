@@ -9,7 +9,7 @@
         "view.setBreakpoint"
       ],
       "dependsOn": [],
-      "spec": null,
+      "spec": "spec/behavior/breakpoints-switch.md",
       "intent": {
         "title": "Switch between Desktop, Laptop, Tablet and Phone breakpoints",
         "steps": [
@@ -22,7 +22,304 @@
           "The active breakpoint is restored after a reload."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "the-laptop-tab-gives-the-page-1180-px",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 50
+          },
+          "steps": [
+            {
+              "door": "view.setBreakpoint#toolbar-breakpoint-tabs-laptop",
+              "args": {
+                "breakpoint": "laptop"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "view.setBreakpoint#toolbar-breakpoint-tabs-laptop"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [
+                {
+                  "node": "/Page/Hero",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 1163.5,
+                  "reference": null
+                },
+                {
+                  "node": "/Page/Hero",
+                  "measure": "width",
+                  "relation": "less-than",
+                  "value": 1164.5,
+                  "reference": null
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.breakpointActive",
+                  "params": {
+                    "breakpoint": "Laptop"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": null,
+              "preferences": "same",
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-tablet-tab-gives-the-page-834-px",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 50
+          },
+          "steps": [
+            {
+              "door": "view.setBreakpoint#toolbar-breakpoint-tabs-tablet",
+              "args": {
+                "breakpoint": "tablet"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "view.setBreakpoint#toolbar-breakpoint-tabs-tablet"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [
+                {
+                  "node": "/Page/Hero",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 817.5,
+                  "reference": null
+                },
+                {
+                  "node": "/Page/Hero",
+                  "measure": "width",
+                  "relation": "less-than",
+                  "value": 818.5,
+                  "reference": null
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.breakpointActive",
+                  "params": {
+                    "breakpoint": "Tablet"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": null,
+              "preferences": "same",
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-phone-tab-gives-the-page-390-px",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 50
+          },
+          "steps": [
+            {
+              "door": "view.setBreakpoint#toolbar-breakpoint-tabs-phone",
+              "args": {
+                "breakpoint": "phone"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "view.setBreakpoint#toolbar-breakpoint-tabs-phone"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [
+                {
+                  "node": "/Page/Hero",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 373.5,
+                  "reference": null
+                },
+                {
+                  "node": "/Page/Hero",
+                  "measure": "width",
+                  "relation": "less-than",
+                  "value": 374.5,
+                  "reference": null
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.breakpointActive",
+                  "params": {
+                    "breakpoint": "Phone"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": null,
+              "preferences": "same",
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-desktop-tab-gives-the-page-1440-px",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "tablet",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 50
+          },
+          "steps": [
+            {
+              "door": "view.setBreakpoint#toolbar-breakpoint-tabs-desktop",
+              "args": {
+                "breakpoint": "desktop"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "view.setBreakpoint#toolbar-breakpoint-tabs-desktop"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [
+                {
+                  "node": "/Page/Hero",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 1423.5,
+                  "reference": null
+                },
+                {
+                  "node": "/Page/Hero",
+                  "measure": "width",
+                  "relation": "less-than",
+                  "value": 1424.5,
+                  "reference": null
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.breakpointActive",
+                  "params": {
+                    "breakpoint": "Desktop"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": null,
+              "preferences": "same",
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
     },
     {
       "id": "breakpoint-overrides",
@@ -35,7 +332,7 @@
       "dependsOn": [
         "breakpoints-switch"
       ],
-      "spec": null,
+      "spec": "spec/behavior/breakpoint-overrides.md",
       "intent": {
         "title": "Style overrides per breakpoint, desktop first",
         "steps": [
@@ -53,7 +350,372 @@
           "The export media queries read the same breakpoint table as the buttons and the canvas (unit test)."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "a-value-set-at-tablet-is-stored-for-tablet-and-drawn-there",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "tablet",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 50
+          },
+          "steps": [
+            {
+              "door": "style.set#inspector-font-size",
+              "args": {
+                "property": "font-size",
+                "value": "24px"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": "24\n"
+            }
+          ],
+          "doors": [
+            "style.set#inspector-font-size"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Title/@styles/tablet/base/font-size",
+                "value": "24px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Title",
+                  "property": "font-size",
+                  "value": "24px"
+                }
+              ],
+              "geometry": [],
+              "feedback": []
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "phone-inherits-the-tablet-override",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "tablet",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 50
+          },
+          "steps": [
+            {
+              "door": "style.set#inspector-font-size",
+              "args": {
+                "property": "font-size",
+                "value": "24px"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "24\n"
+            },
+            {
+              "door": "view.setBreakpoint#toolbar-breakpoint-tabs-phone",
+              "args": {
+                "breakpoint": "phone"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "view.setBreakpoint#toolbar-breakpoint-tabs-phone"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Title/@styles/tablet/base/font-size",
+                "value": "24px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Title",
+                  "property": "font-size",
+                  "value": "24px"
+                }
+              ],
+              "geometry": [],
+              "feedback": []
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "desktop-keeps-its-own-value",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "tablet",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 50
+          },
+          "steps": [
+            {
+              "door": "style.set#inspector-font-size",
+              "args": {
+                "property": "font-size",
+                "value": "24px"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "24\n"
+            },
+            {
+              "door": "view.setBreakpoint#toolbar-breakpoint-tabs-desktop",
+              "args": {
+                "breakpoint": "desktop"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "view.setBreakpoint#toolbar-breakpoint-tabs-desktop"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Title/@styles/tablet/base/font-size",
+                "value": "24px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Title",
+                  "property": "font-size",
+                  "value": "32px"
+                }
+              ],
+              "geometry": [],
+              "feedback": []
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "reset-at-tablet-removes-only-the-override",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "tablet",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 50
+          },
+          "steps": [
+            {
+              "door": "style.set#inspector-font-size",
+              "args": {
+                "property": "font-size",
+                "value": "24px"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "24\n"
+            },
+            {
+              "door": "style.reset#inspector-property-reset",
+              "args": {
+                "property": "font-size"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "style.reset#inspector-property-reset"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Title",
+                  "property": "font-size",
+                  "value": "32px"
+                }
+              ],
+              "geometry": [],
+              "feedback": []
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-export-writes-the-override-in-its-media-query",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "tablet",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 50
+          },
+          "steps": [
+            {
+              "door": "style.set#inspector-font-size",
+              "args": {
+                "property": "font-size",
+                "value": "24px"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "24\n"
+            },
+            {
+              "door": "project.export#toolbar-top-bar-export",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.export#toolbar-top-bar-export"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Title/@styles/tablet/base/font-size",
+                "value": "24px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": null,
+            "editor": null,
+            "persistence": null,
+            "export": {
+              "files": [
+                {
+                  "path": "css/styles.css",
+                  "present": [
+                    "@media (max-width: 834px) {",
+                    "font-size: 24px;"
+                  ],
+                  "absent": [
+                    "@media (max-width: 834px) {\n}"
+                  ]
+                }
+              ]
+            }
+          },
+          "refusals": []
+        }
+      ]
     },
     {
       "id": "state-styles",
@@ -66,7 +728,7 @@
       "dependsOn": [
         "breakpoint-overrides"
       ],
-      "spec": null,
+      "spec": "spec/behavior/state-styles.md",
       "intent": {
         "title": "Style states: hover, focus, active, disabled, invalid and placeholder shown",
         "steps": [
@@ -81,7 +743,624 @@
           "styles.css contains :hover, :focus and @media rules for them; in the exported page hovering the button changes its computed background."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "the-hover-state-takes-the-value",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "view.setStyleState#menu-style-state-hover",
+              "args": {
+                "state": "hover"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.set#inspector-color",
+              "args": {
+                "property": "color",
+                "value": "#aa0000"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "#aa0000\n"
+            }
+          ],
+          "doors": [
+            "view.setStyleState#menu-style-state-hover"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Intro/@styles/desktop/hover/color",
+                "value": "#aa0000"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Intro",
+                  "property": "color",
+                  "value": "rgb(170, 0, 0)"
+                }
+              ],
+              "geometry": [],
+              "feedback": []
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-focus-state-takes-the-value",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "view.setStyleState#menu-style-state-focus",
+              "args": {
+                "state": "focus"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.set#inspector-color",
+              "args": {
+                "property": "color",
+                "value": "#aa0000"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "#aa0000\n"
+            }
+          ],
+          "doors": [
+            "view.setStyleState#menu-style-state-focus"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Intro/@styles/desktop/focus/color",
+                "value": "#aa0000"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Intro",
+                  "property": "color",
+                  "value": "rgb(170, 0, 0)"
+                }
+              ],
+              "geometry": [],
+              "feedback": []
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-active-state-takes-the-value",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "view.setStyleState#menu-style-state-active",
+              "args": {
+                "state": "active"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.set#inspector-color",
+              "args": {
+                "property": "color",
+                "value": "#aa0000"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "#aa0000\n"
+            }
+          ],
+          "doors": [
+            "view.setStyleState#menu-style-state-active"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Intro/@styles/desktop/active/color",
+                "value": "#aa0000"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Intro",
+                  "property": "color",
+                  "value": "rgb(170, 0, 0)"
+                }
+              ],
+              "geometry": [],
+              "feedback": []
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-disabled-state-takes-the-value",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "view.setStyleState#menu-style-state-disabled",
+              "args": {
+                "state": "disabled"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.set#inspector-color",
+              "args": {
+                "property": "color",
+                "value": "#aa0000"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "#aa0000\n"
+            }
+          ],
+          "doors": [
+            "view.setStyleState#menu-style-state-disabled"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Intro/@styles/desktop/disabled/color",
+                "value": "#aa0000"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Intro",
+                  "property": "color",
+                  "value": "rgb(170, 0, 0)"
+                }
+              ],
+              "geometry": [],
+              "feedback": []
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-invalid-state-takes-the-value",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "view.setStyleState#menu-style-state-invalid",
+              "args": {
+                "state": "invalid"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.set#inspector-color",
+              "args": {
+                "property": "color",
+                "value": "#aa0000"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "#aa0000\n"
+            }
+          ],
+          "doors": [
+            "view.setStyleState#menu-style-state-invalid"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Intro/@styles/desktop/invalid/color",
+                "value": "#aa0000"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Intro",
+                  "property": "color",
+                  "value": "rgb(170, 0, 0)"
+                }
+              ],
+              "geometry": [],
+              "feedback": []
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-placeholder-shown-state-takes-the-value",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "view.setStyleState#menu-style-state-placeholder-shown",
+              "args": {
+                "state": "placeholder-shown"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.set#inspector-color",
+              "args": {
+                "property": "color",
+                "value": "#aa0000"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "#aa0000\n"
+            }
+          ],
+          "doors": [
+            "view.setStyleState#menu-style-state-placeholder-shown"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Intro/@styles/desktop/placeholder-shown/color",
+                "value": "#aa0000"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Intro",
+                  "property": "color",
+                  "value": "rgb(170, 0, 0)"
+                }
+              ],
+              "geometry": [],
+              "feedback": []
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "base-goes-back-to-the-base-values",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "hover",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "view.setStyleState#menu-style-state-base",
+              "args": {
+                "state": "base"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.set#inspector-color",
+              "args": {
+                "property": "color",
+                "value": "#aa0000"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "#aa0000\n"
+            }
+          ],
+          "doors": [
+            "view.setStyleState#menu-style-state-base"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Intro/@styles/desktop/base/color",
+                "value": "#aa0000"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Intro",
+                  "property": "color",
+                  "value": "rgb(170, 0, 0)"
+                }
+              ],
+              "geometry": [],
+              "feedback": []
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-hover-value-at-tablet-is-exported-in-its-media-query",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "tablet",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "view.setStyleState#menu-style-state-hover",
+              "args": {
+                "state": "hover"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.set#inspector-color",
+              "args": {
+                "property": "color",
+                "value": "#aa0000"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "#aa0000\n"
+            },
+            {
+              "door": "project.export#toolbar-top-bar-export",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.export#toolbar-top-bar-export"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Intro/@styles/tablet/hover/color",
+                "value": "#aa0000"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": null,
+            "editor": null,
+            "persistence": null,
+            "export": {
+              "files": [
+                {
+                  "path": "css/styles.css",
+                  "present": [
+                    "@media (max-width: 834px) {",
+                    ":hover {",
+                    "color: #aa0000;"
+                  ],
+                  "absent": []
+                }
+              ]
+            }
+          },
+          "refusals": []
+        }
+      ]
     }
   ]
 }

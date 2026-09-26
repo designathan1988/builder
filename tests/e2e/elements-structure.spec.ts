@@ -8,7 +8,7 @@
 // in a new tab shares the command and comes with elements-text: not available yet. The document, the selection and
 // the history are read through the read-only test port; the page through the frame.
 import fs from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
 import { control, runDoor, runs } from './door.ts';
 
 const INSERT_PANEL = 'workspace.setPanelOpen#toolbar-activity-bar-insert';
@@ -273,15 +273,16 @@ test('a Link Block dragged on the canvas into another Link Block is refused on r
   await expect.poll(async () => (await named(page, 'Link Block')).children.map((c) => c.name)).toEqual(['Section']);
 });
 
-test('the Link address keeps the link on Enter, with Tab and with a click elsewhere, for the Link Block it was drawn for; Open in a new tab is not available yet', runs(INSERT_PANEL, CLEAR, TILE, SETTINGS_TAB, HREF, SELECT, UNDO), async ({ page }) => {
+test('the Link address keeps the link on Enter, with Tab and with a click elsewhere, for the Link Block it was drawn for; Open in a new tab stands beside it (feature elements-text)', runs(INSERT_PANEL, CLEAR, TILE, SETTINGS_TAB, HREF, SELECT, UNDO), async ({ page }) => {
   await insertInPage(page, 'section');
   await insertInPage(page, 'link-block');
   const link = await named(page, 'Link Block');
   const section = await named(page, 'Section');
   await runDoor(page, SETTINGS_TAB);
   await expect(hrefInput(page)).toBeEnabled();
-  await expect(control(page, NEW_TAB).locator('input')).toBeDisabled();
-  await expect(control(page, NEW_TAB)).toHaveAttribute('title', new RegExp(EN['common.notAvailableYet'] ?? 'not available yet'));
+  // elements-text is built: its toggle is usable, and what it does is proven by that feature's scenarios
+  await expect(control(page, NEW_TAB).locator('input')).toBeEnabled();
+  await expect(control(page, NEW_TAB).locator('input')).not.toBeChecked();
 
   // Enter keeps it: one undo step, on the document and on the canvas's <a>
   await typeLink(page, 'https://example.com');

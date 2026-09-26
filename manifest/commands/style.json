@@ -24,7 +24,8 @@
       },
       "refusals": [
         "status.value.invalid",
-        "status.locked.edit"
+        "status.locked.edit",
+        "status.locked.byAncestor"
       ],
       "confirmation": null,
       "history": {
@@ -4901,6 +4902,234 @@
             "fields": []
           },
           "args": {}
+        },
+        {
+          "id": "key-enter-in-number-field",
+          "kind": "shortcut",
+          "feature": "inspector-number-fields",
+          "chord": "Enter",
+          "context": "number-field",
+          "gesture": null,
+          "labelKey": "field.commit",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "kind": "panel-control",
+          "pressed": false,
+          "feature": "color-picker",
+          "modifier": null,
+          "gesture": null,
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {},
+          "id": "color-picker-previous",
+          "drawnAs": "item",
+          "panel": "color-picker",
+          "control": "previous-swatch",
+          "labelKey": "colorPicker.previous",
+          "placement": {
+            "region": "color-picker",
+            "order": 10
+          }
+        },
+        {
+          "id": "color-picker-area",
+          "kind": "panel-control",
+          "drawnAs": "area",
+          "pressed": false,
+          "feature": "color-picker",
+          "panel": "color-picker",
+          "control": "area",
+          "modifier": null,
+          "gesture": null,
+          "labelKey": "colorPicker.area",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "color-picker",
+            "order": 11
+          },
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "kind": "panel-control",
+          "pressed": false,
+          "feature": "color-picker",
+          "modifier": null,
+          "gesture": null,
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {},
+          "id": "color-picker-hue",
+          "drawnAs": "field",
+          "panel": "color-picker",
+          "control": "hue-slider",
+          "labelKey": "colorPicker.hue",
+          "placement": {
+            "region": "color-picker",
+            "order": 12
+          }
+        },
+        {
+          "kind": "panel-control",
+          "pressed": false,
+          "feature": "color-picker",
+          "modifier": null,
+          "gesture": null,
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {},
+          "id": "color-picker-alpha",
+          "drawnAs": "field",
+          "panel": "color-picker",
+          "control": "alpha-slider",
+          "labelKey": "colorPicker.alpha",
+          "placement": {
+            "region": "color-picker",
+            "order": 13
+          }
+        },
+        {
+          "kind": "panel-control",
+          "pressed": false,
+          "feature": "color-picker",
+          "modifier": null,
+          "gesture": null,
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {},
+          "id": "color-picker-value",
+          "drawnAs": "field",
+          "panel": "color-picker",
+          "control": "value-field",
+          "labelKey": "colorPicker.value",
+          "placement": {
+            "region": "color-picker",
+            "order": 14
+          }
+        },
+        {
+          "kind": "panel-control",
+          "pressed": false,
+          "feature": "color-swatches-eyedropper",
+          "modifier": null,
+          "gesture": null,
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {},
+          "id": "color-picker-saved-swatch",
+          "drawnAs": "item",
+          "panel": "color-picker",
+          "control": "saved-swatch",
+          "labelKey": "colorPicker.useSaved",
+          "placement": {
+            "region": "color-picker",
+            "order": 3
+          }
+        },
+        {
+          "kind": "panel-control",
+          "pressed": false,
+          "feature": "color-swatches-eyedropper",
+          "modifier": null,
+          "gesture": null,
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {},
+          "id": "color-picker-recent-swatch",
+          "drawnAs": "item",
+          "panel": "color-picker",
+          "control": "recent-swatch",
+          "labelKey": "colorPicker.useRecent",
+          "placement": {
+            "region": "color-picker",
+            "order": 4
+          }
+        },
+        {
+          "kind": "panel-control",
+          "pressed": false,
+          "feature": "color-swatches-eyedropper",
+          "modifier": null,
+          "gesture": null,
+          "faceLabelKey": null,
+          "icon": "pipette",
+          "disabledReasonKey": "common.notAvailableYet",
+          "adapter": {
+            "selection": "all",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {},
+          "id": "color-picker-eyedropper",
+          "drawnAs": "icon-button",
+          "panel": "color-picker",
+          "control": "eyedropper",
+          "labelKey": "colorPicker.eyedropper",
+          "placement": {
+            "region": "color-picker",
+            "order": 5
+          }
         }
       ]
     },
@@ -4933,6 +5162,14 @@
           "type": "string",
           "values": [],
           "optional": false
+        },
+        "modifier": {
+          "type": "enum",
+          "values": [
+            "Shift",
+            "Alt"
+          ],
+          "optional": true
         }
       },
       "availability": {
@@ -5625,7 +5862,9 @@
             ],
             "fields": []
           },
-          "args": {}
+          "args": {
+            "sides": "all"
+          }
         },
         {
           "id": "inspector-border-width-border-editor",
@@ -5661,7 +5900,9 @@
             ],
             "fields": []
           },
-          "args": {}
+          "args": {
+            "sides": "all"
+          }
         },
         {
           "id": "inspector-border-style-border-editor",
@@ -5697,7 +5938,9 @@
             ],
             "fields": []
           },
-          "args": {}
+          "args": {
+            "sides": "all"
+          }
         },
         {
           "id": "inspector-border-color-border-editor",
@@ -5728,7 +5971,9 @@
             ],
             "fields": []
           },
-          "args": {}
+          "args": {
+            "sides": "all"
+          }
         },
         {
           "id": "inspector-border-top-border-editor",
@@ -5763,7 +6008,9 @@
             ],
             "fields": []
           },
-          "args": {}
+          "args": {
+            "sides": "top"
+          }
         },
         {
           "id": "inspector-border-top-width-border-editor",
@@ -5796,7 +6043,9 @@
             ],
             "fields": []
           },
-          "args": {}
+          "args": {
+            "sides": "top"
+          }
         },
         {
           "id": "inspector-border-right-border-editor",
@@ -5831,7 +6080,9 @@
             ],
             "fields": []
           },
-          "args": {}
+          "args": {
+            "sides": "right"
+          }
         },
         {
           "id": "inspector-border-right-width-border-editor",
@@ -5864,7 +6115,9 @@
             ],
             "fields": []
           },
-          "args": {}
+          "args": {
+            "sides": "right"
+          }
         },
         {
           "id": "inspector-border-bottom-border-editor",
@@ -5899,7 +6152,9 @@
             ],
             "fields": []
           },
-          "args": {}
+          "args": {
+            "sides": "bottom"
+          }
         },
         {
           "id": "inspector-border-bottom-width-border-editor",
@@ -5932,7 +6187,9 @@
             ],
             "fields": []
           },
-          "args": {}
+          "args": {
+            "sides": "bottom"
+          }
         },
         {
           "id": "inspector-border-left-border-editor",
@@ -5967,7 +6224,9 @@
             ],
             "fields": []
           },
-          "args": {}
+          "args": {
+            "sides": "left"
+          }
         },
         {
           "id": "inspector-border-left-width-border-editor",
@@ -6000,7 +6259,9 @@
             ],
             "fields": []
           },
-          "args": {}
+          "args": {
+            "sides": "left"
+          }
         },
         {
           "id": "quick-panel-border",
@@ -6222,7 +6483,9 @@
             ],
             "fields": []
           },
-          "args": {}
+          "args": {
+            "corners": "all"
+          }
         },
         {
           "id": "inspector-border-top-left-radius-radius-editor",
@@ -6255,7 +6518,9 @@
             ],
             "fields": []
           },
-          "args": {}
+          "args": {
+            "corners": "top-left"
+          }
         },
         {
           "id": "inspector-border-top-right-radius-radius-editor",
@@ -6288,7 +6553,9 @@
             ],
             "fields": []
           },
-          "args": {}
+          "args": {
+            "corners": "top-right"
+          }
         },
         {
           "id": "inspector-border-bottom-right-radius-radius-editor",
@@ -6321,7 +6588,9 @@
             ],
             "fields": []
           },
-          "args": {}
+          "args": {
+            "corners": "bottom-right"
+          }
         },
         {
           "id": "inspector-border-bottom-left-radius-radius-editor",
@@ -6354,7 +6623,9 @@
             ],
             "fields": []
           },
-          "args": {}
+          "args": {
+            "corners": "bottom-left"
+          }
         },
         {
           "id": "command-bar-set-property",
@@ -6409,10 +6680,25 @@
       "owner": "src/core/style/background-image.ts",
       "introducedBy": "props-background",
       "args": {
+        "property": {
+          "type": "property",
+          "values": [],
+          "optional": false
+        },
         "value": {
           "type": "json",
           "values": [],
-          "optional": false
+          "optional": true
+        },
+        "edit": {
+          "type": "json",
+          "values": [],
+          "optional": true
+        },
+        "distance": {
+          "type": "number",
+          "values": [],
+          "optional": true
         }
       },
       "availability": {
@@ -6422,7 +6708,9 @@
       "refusals": [
         "status.value.invalid",
         "status.url.unsafe",
-        "status.locked.edit"
+        "status.locked.edit",
+        "status.gradient.none",
+        "status.gradient.minStops"
       ],
       "confirmation": null,
       "history": {
@@ -6504,7 +6792,12 @@
             ],
             "fields": []
           },
-          "args": {}
+          "args": {
+            "property": "background-image",
+            "edit": {
+              "add": true
+            }
+          }
         },
         {
           "id": "inspector-background-image-gradient-type",
@@ -6702,7 +6995,12 @@
             ],
             "fields": []
           },
-          "args": {}
+          "args": {
+            "property": "background-image",
+            "edit": {
+              "reverse": true
+            }
+          }
         },
         {
           "id": "inspector-background-image-gradient-distribute",
@@ -6735,7 +7033,12 @@
             ],
             "fields": []
           },
-          "args": {}
+          "args": {
+            "property": "background-image",
+            "edit": {
+              "distribute": true
+            }
+          }
         },
         {
           "id": "inspector-background-image-gradient-add-stop",
@@ -6768,7 +7071,12 @@
             ],
             "fields": []
           },
-          "args": {}
+          "args": {
+            "property": "background-image",
+            "edit": {
+              "addStopAt": 50
+            }
+          }
         },
         {
           "id": "inspector-background-image-gradient-remove-stop",
@@ -6841,7 +7149,12 @@
             ],
             "fields": []
           },
-          "args": {}
+          "args": {
+            "property": "background-image",
+            "edit": {
+              "reset": true
+            }
+          }
         },
         {
           "id": "panel-drag-gradient-stop-gradient-bar",
@@ -6883,7 +7196,11 @@
             "writes": [],
             "fields": []
           },
-          "args": {}
+          "args": {
+            "edit": {
+              "nudge": -1
+            }
+          }
         },
         {
           "id": "key-arrow-right-in-gradient-stop",
@@ -6903,7 +7220,11 @@
             "writes": [],
             "fields": []
           },
-          "args": {}
+          "args": {
+            "edit": {
+              "nudge": 1
+            }
+          }
         },
         {
           "id": "key-delete-in-gradient-stop",
@@ -6923,7 +7244,11 @@
             "writes": [],
             "fields": []
           },
-          "args": {}
+          "args": {
+            "edit": {
+              "removeStop": true
+            }
+          }
         },
         {
           "id": "key-backspace-in-gradient-stop",
@@ -6943,7 +7268,11 @@
             "writes": [],
             "fields": []
           },
-          "args": {}
+          "args": {
+            "edit": {
+              "removeStop": true
+            }
+          }
         },
         {
           "id": "quick-panel-fill-gradient",
@@ -7005,10 +7334,22 @@
           ],
           "optional": false
         },
-        "layers": {
+        "edit": {
           "type": "json",
           "values": [],
           "optional": false
+        },
+        "distance": {
+          "type": "number",
+          "values": [],
+          "optional": true
+        },
+        "modifier": {
+          "type": "enum",
+          "values": [
+            "Shift"
+          ],
+          "optional": true
         }
       },
       "availability": {
@@ -7055,7 +7396,10 @@
             "fields": []
           },
           "args": {
-            "property": "box-shadow"
+            "property": "box-shadow",
+            "edit": {
+              "add": true
+            }
           }
         },
         {
@@ -7339,7 +7683,10 @@
             "fields": []
           },
           "args": {
-            "property": "box-shadow"
+            "property": "box-shadow",
+            "edit": {
+              "reset": true
+            }
           }
         },
         {
@@ -7369,7 +7716,10 @@
             "fields": []
           },
           "args": {
-            "property": "text-shadow"
+            "property": "text-shadow",
+            "edit": {
+              "add": true
+            }
           }
         },
         {
@@ -7589,7 +7939,10 @@
             "fields": []
           },
           "args": {
-            "property": "text-shadow"
+            "property": "text-shadow",
+            "edit": {
+              "reset": true
+            }
           }
         },
         {
@@ -7669,7 +8022,13 @@
               "offsetX"
             ]
           },
-          "args": {}
+          "args": {
+            "edit": {
+              "nudge": {
+                "x": -1
+              }
+            }
+          }
         },
         {
           "id": "key-arrow-right-in-shadow-pad",
@@ -7694,7 +8053,13 @@
               "offsetX"
             ]
           },
-          "args": {}
+          "args": {
+            "edit": {
+              "nudge": {
+                "x": 1
+              }
+            }
+          }
         },
         {
           "id": "key-arrow-up-in-shadow-pad",
@@ -7719,7 +8084,13 @@
               "offsetY"
             ]
           },
-          "args": {}
+          "args": {
+            "edit": {
+              "nudge": {
+                "y": -1
+              }
+            }
+          }
         },
         {
           "id": "key-arrow-down-in-shadow-pad",
@@ -7744,7 +8115,13 @@
               "offsetY"
             ]
           },
-          "args": {}
+          "args": {
+            "edit": {
+              "nudge": {
+                "y": 1
+              }
+            }
+          }
         },
         {
           "id": "command-bar-set-property",
@@ -7824,6 +8201,11 @@
       "owner": "src/core/style/filter.ts",
       "introducedBy": "props-filters-clip",
       "args": {
+        "property": {
+          "type": "property",
+          "values": [],
+          "optional": false
+        },
         "functions": {
           "type": "json",
           "values": [],
@@ -8142,7 +8524,10 @@
             ],
             "fields": []
           },
-          "args": {}
+          "args": {
+            "property": "filter",
+            "functions": "none"
+          }
         },
         {
           "id": "quick-panel-effects",
@@ -8196,6 +8581,11 @@
       "owner": "src/core/style/transform.ts",
       "introducedBy": "props-transforms",
       "args": {
+        "property": {
+          "type": "property",
+          "values": [],
+          "optional": false
+        },
         "parts": {
           "type": "json",
           "values": [],
@@ -8408,8 +8798,8 @@
         {
           "id": "inspector-alignment-matrix",
           "kind": "panel-control",
-          "drawnAs": "area",
-          "pressed": false,
+          "drawnAs": "button",
+          "pressed": true,
           "feature": "props-flex-container",
           "panel": "inspector",
           "control": "alignment-matrix",
@@ -8446,6 +8836,11 @@
           "type": "string",
           "values": [],
           "optional": false
+        },
+        "target": {
+          "type": "node",
+          "values": [],
+          "optional": true
         }
       },
       "availability": {
@@ -8453,7 +8848,9 @@
         "refusalKey": null
       },
       "refusals": [
-        "status.css.invalidAt",
+        "status.css.notDeclaration",
+        "status.css.unknownProperty",
+        "status.css.badValue",
         "status.locked.edit"
       ],
       "confirmation": null,
@@ -8510,7 +8907,9 @@
         "refusalKey": null
       },
       "refusals": [
-        "status.css.invalidAt",
+        "status.css.notDeclaration",
+        "status.css.unknownProperty",
+        "status.css.badValue",
         "status.locked.edit"
       ],
       "confirmation": null,
@@ -8694,13 +9093,34 @@
             "page"
           ],
           "optional": false
+        },
+        "property": {
+          "type": "property",
+          "values": [],
+          "optional": false
+        },
+        "value": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        },
+        "modifier": {
+          "type": "enum",
+          "values": [
+            "Shift",
+            "Alt"
+          ],
+          "optional": true
         }
       },
       "availability": {
         "predicate": "always",
         "refusalKey": null
       },
-      "refusals": [],
+      "refusals": [
+        "status.locked.edit",
+        "status.locked.byAncestor"
+      ],
       "confirmation": null,
       "history": {
         "undoable": true,
@@ -8867,12 +9287,39 @@
       "labelKey": "command.fieldScrub",
       "owner": "src/editor/inspector/number-field.ts",
       "introducedBy": "inspector-number-fields",
-      "args": {},
+      "args": {
+        "property": {
+          "type": "property",
+          "values": [],
+          "optional": false
+        },
+        "value": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        },
+        "distance": {
+          "type": "number",
+          "values": [],
+          "optional": false
+        },
+        "modifier": {
+          "type": "enum",
+          "values": [
+            "Shift",
+            "Alt"
+          ],
+          "optional": true
+        }
+      },
       "availability": {
         "predicate": "always",
         "refusalKey": null
       },
-      "refusals": [],
+      "refusals": [
+        "status.locked.edit",
+        "status.locked.byAncestor"
+      ],
       "confirmation": null,
       "history": {
         "undoable": true,
@@ -8910,6 +9357,16 @@
       "owner": "src/editor/inspector/number-field.ts",
       "introducedBy": "inspector-number-fields",
       "args": {
+        "property": {
+          "type": "property",
+          "values": [],
+          "optional": false
+        },
+        "value": {
+          "type": "string",
+          "values": [],
+          "optional": false
+        },
         "unit": {
           "type": "string",
           "values": [],
@@ -8921,7 +9378,9 @@
         "refusalKey": null
       },
       "refusals": [
-        "status.value.unitNotConverted"
+        "status.value.unitNotConverted",
+        "status.locked.edit",
+        "status.locked.byAncestor"
       ],
       "confirmation": null,
       "history": {
@@ -8950,6 +9409,50 @@
             "region": "field",
             "order": 1
           },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "field.cancel",
+      "labelKey": "command.fieldCancel",
+      "owner": "src/editor/inspector/number-field.ts",
+      "introducedBy": "inspector-number-fields",
+      "args": {
+        "property": {
+          "type": "property",
+          "values": [],
+          "optional": false
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [],
+      "confirmation": null,
+      "history": {
+        "undoable": false
+      },
+      "entryPoints": [
+        {
+          "id": "key-escape-in-number-field",
+          "kind": "shortcut",
+          "feature": "inspector-number-fields",
+          "chord": "Escape",
+          "context": "number-field",
+          "gesture": null,
+          "labelKey": "command.fieldCancel",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
           "adapter": {
             "selection": "none",
             "offers": null,

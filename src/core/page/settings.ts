@@ -47,10 +47,18 @@ export const setPageSettingCommand = registerHandler('page.setSetting', ({ state
   // a door hands a setting of the page and the text of its field; anything else is a defect of the door
   if (page === undefined) throw new Error('page.setSetting: the document has no page');
   if (rule === undefined || !isPageSetting(rules.attributes.get(setting), rules.root.type)) throw new Error(`page.setSetting: ${setting} is no setting of the page`);
-  if (typeof value !== 'string') throw new Error('page.setSetting: the value is not a string');
   const name = { key: rule.labelKey };
   const path = ['pages', 0, 'tree', 'attributes', setting];
   const stored = page.tree.attributes[setting];
+  // an on/off setting (a layout grid, spec layout-grid-overlay): its checkbox hands true or false; on is stored as
+  // true, off as no setting at all
+  if (rule.valueType === 'boolean') {
+    if (typeof value !== 'boolean') throw new Error('page.setSetting: an on/off setting takes true or false');
+    const said = message(value ? 'status.page.settingOn' : 'status.page.settingOff', { setting: name });
+    if ((stored === true) === value) return { kind: 'change', message: said };
+    return { kind: 'change', patches: [value ? { op: 'add', path, value: true } : { op: 'remove', path }], message: said };
+  }
+  if (typeof value !== 'string') throw new Error('page.setSetting: the value is not a string');
   const typed = value.trim();
   if (typed === '') {
     const removed: Message = message('status.page.settingRemoved', { setting: name });

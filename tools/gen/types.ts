@@ -174,9 +174,19 @@ ${featureFiles.flatMap((f) => f.features.map((x) => `  ${q(x.id)}: ${JSON.string
     compat: generatedCompatSchema.parse(file('generated/css-compat.json')),
     excludedUnits: excludedUnitsOf(exclusionsFileSchema.parse(file('css-exclusions.json'))),
   };
-  const offered = [...new Set(commands.flatMap((c) => c.entryPoints.flatMap((d) => (d.adapter.offers?.list === 'generated' ? [d.adapter.offers.property] : []))))].sort();
+  const byDoor = commands.flatMap((c) => c.entryPoints.flatMap((d) => (d.adapter.offers?.list === 'generated' ? [d.adapter.offers.property] : [])));
+  // and the longhands of every composite offered that way: a codec tells which longhand a word of the composite names
+  // by their lists (border-top: its width, style and colour)
+  const longhandsOffered = properties.composites.filter((c) => byDoor.includes(c.id)).flatMap((c) => c.longhands);
+  const offered = [...new Set([...byDoor, ...longhandsOffered])].sort();
   const lists = offered
     .map((id) => `  ${q(id)}: { keywords: ${JSON.stringify(generatedOffer(data, id) ?? [])}, units: ${JSON.stringify(generatedUnits(data, id) ?? [])} },`)
+    .join('\n');
+  const initials = properties.properties
+    .flatMap((p) => {
+      const css = data.css.properties[p.id];
+      return css !== undefined && !css.inherited && typeof css.initial === 'string' ? [`  ${q(p.id)}: ${q(css.initial)},`] : [];
+    })
     .join('\n');
   const valueLists = `${HEADER}import type { StyleTargetId } from './ids.ts';
 
@@ -190,6 +200,12 @@ export interface GeneratedValues {
 // (css-compat.json). A declared subset or preset list is read from properties.json.
 export const GENERATED_VALUES: Readonly<Partial<Record<StyleTargetId, GeneratedValues>>> = {
 ${lists}
+};
+
+// The initial value of every edited property that is not inherited (css-properties.json): what an element holds for
+// it while it holds none of its own, as a coupling's condition reads it (src/core/style/couplings.ts).
+export const INITIAL_VALUES: Readonly<Partial<Record<string, string>>> = {
+${initials}
 };
 `;
   return [

@@ -8,7 +8,7 @@ import { registerHandler } from '../../core/commands/registry.ts';
 import type { EditorUi } from '../state.ts';
 import type { EditorStore } from '../store.ts';
 
-export type FocusMove = 'next' | 'previous' | 'first' | 'last' | 'activate';
+export type FocusMove = 'next' | 'previous' | 'first' | 'last' | 'activate' | 'parent';
 
 export interface FocusState {
   // the last request; its number tells a new request from one already carried out
@@ -17,7 +17,7 @@ export interface FocusState {
 
 export const INITIAL_FOCUS: FocusState = { request: null };
 
-const asking = (ui: EditorUi, move: FocusMove): EditorUi => ({ ...ui, focus: { request: { move, count: (ui.focus.request?.count ?? 0) + 1 } } });
+export const asking = (ui: EditorUi, move: FocusMove): EditorUi => ({ ...ui, focus: { request: { move, count: (ui.focus.request?.count ?? 0) + 1 } } });
 
 export const focusNext = registerHandler<'focus.next', EditorUi>('focus.next', ({ state }) => ({ kind: 'change', ui: asking(state.ui, 'next') }));
 export const focusPrevious = registerHandler<'focus.previous', EditorUi>('focus.previous', ({ state }) => ({ kind: 'change', ui: asking(state.ui, 'previous') }));
@@ -32,7 +32,10 @@ const FOCUSABLE = 'button, a[href], input, select, textarea, [tabindex]:not([tab
 function itemsAround(focused: Element): { readonly items: HTMLElement[]; readonly at: number } | null {
   const region = focused.closest('[data-key-context]');
   if (!region) return null;
-  const items = [...region.querySelectorAll<HTMLElement>(FOCUSABLE)].filter((el) => el.closest('[data-key-context]') === region && el.getClientRects().length > 0);
+  const own = [...region.querySelectorAll<HTMLElement>(FOCUSABLE)].filter((el) => el.closest('[data-key-context]') === region && el.getClientRects().length > 0);
+  // in a tree the items are its rows, not the buttons inside them (a row's caret, eye or lock)
+  const rows = own.filter((el) => el.getAttribute('role') === 'treeitem');
+  const items = rows.length > 0 ? rows : own;
   return { items, at: items.findIndex((el) => el === focused || el.contains(focused)) };
 }
 
@@ -43,6 +46,17 @@ export function carryOut(move: FocusMove, focused: Element | null): void {
   const { items, at } = around;
   if (move === 'activate') {
     items[at]?.click();
+    return;
+  }
+  // a tree row's parent row: the nearest row before it one level up (aria-level)
+  if (move === 'parent') {
+    const level = Number(items[at]?.getAttribute('aria-level') ?? '0');
+    for (let i = at - 1; i >= 0; i -= 1) {
+      if (Number(items[i]?.getAttribute('aria-level') ?? '0') === level - 1) {
+        items[i]?.focus();
+        return;
+      }
+    }
     return;
   }
   const count = items.length;

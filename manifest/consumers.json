@@ -169,6 +169,10 @@
       "reader": "src/editor/palette/palette.ts"
     },
     {
+      "field": "elements:palette[].entries[].template",
+      "reader": "src/core/structure/insert.ts"
+    },
+    {
       "field": "elements:palette[].entries[].feature",
       "reader": "src/editor/palette/palette.ts"
     },
@@ -574,6 +578,22 @@
     },
     {
       "field": "properties:couplings[].feature",
+      "reader": "src/core/style/couplings.ts"
+    },
+    {
+      "field": "properties:valuePredicates",
+      "reader": "src/core/style/couplings.ts"
+    },
+    {
+      "field": "properties:valuePredicates[].id",
+      "reader": "src/core/style/couplings.ts"
+    },
+    {
+      "field": "properties:valuePredicates[].property",
+      "reader": "src/core/style/couplings.ts"
+    },
+    {
+      "field": "properties:valuePredicates[].values",
       "reader": "src/core/style/couplings.ts"
     },
     {
@@ -1090,6 +1110,14 @@
     },
     {
       "field": "features:features[].scenarios[].setup.zoom",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].setup.storage",
+      "reader": "tools/runner/scenarios.ts"
+    },
+    {
+      "field": "features:features[].scenarios[].setup.tabs",
       "reader": "tools/runner/scenarios.ts"
     },
     {
@@ -1795,6 +1823,22 @@
     {
       "field": "layout:glyphs.submenu",
       "reader": "src/editor/doors/menu.tsx"
+    },
+    {
+      "field": "layout:glyphs.sideRow",
+      "reader": "src/editor/canvas/chrome.tsx"
+    },
+    {
+      "field": "layout:glyphs.sideColumn",
+      "reader": "src/editor/canvas/chrome.tsx"
+    },
+    {
+      "field": "layout:glyphs.quickPanel",
+      "reader": "src/editor/canvas/quick-panel.tsx"
+    },
+    {
+      "field": "layout:glyphs.grip",
+      "reader": "src/editor/canvas/quick-panel.tsx"
     },
     {
       "field": "layout:glyphs.expanded",

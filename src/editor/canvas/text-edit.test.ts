@@ -1,19 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import fixture from '../../../manifest/features/fixtures/aurora.json';
-import { COMMANDS, PREDICATES } from '../../app/commands.ts';
 import type { DocumentJson } from '../../core/document/model.ts';
 import { locate } from '../../core/document/model.ts';
-import { rulesFromManifest } from '../../core/document/validate.ts';
 import { manualClock } from '../../core/ports/clock.ts';
 import { sequentialIds } from '../../core/ports/ids.ts';
-import { createStore } from '../../core/store/store.ts';
-import type { CommandId, ConstantId, MessageId } from '../../generated/ids.ts';
-import { translate } from '../../i18n/index.ts';
+import type { CommandId } from '../../generated/ids.ts';
 import { manifest } from '../../manifest/runtime.ts';
 import { clickDoor, editEndDoor, type Press } from '../input/pointer.ts';
-import { INITIAL_PREFERENCES } from '../preferences/preferences.ts';
-import { initialEditorUi, type EditorUi } from '../state.ts';
-import { editArgs, editedLinkAddress, endOffSelection, endOnUndoable, isTextElement, openLinkPrompt, registerEditReader } from './text-edit.ts';
+import type { PreferenceStorage } from '../preferences/preferences.ts';
+import { createEditorStore } from '../store.ts';
+import { editArgs, editedLinkAddress, isTextElement, openLinkPrompt, registerEditReader } from './text-edit.ts';
 
 const AURORA = fixture as DocumentJson;
 const COMMAND = new Map(manifest.commands.map((c) => [c.id as CommandId, c]));
@@ -23,22 +19,11 @@ const command = (id: CommandId) => {
   return found;
 };
 
-// the store as the editor builds it (src/editor/store.ts): the edit follows the selection and the commands
+// the store the editor builds (src/editor/store.ts, createEditorStore), with the fixture as the work it restored: the
+// edit follows the selection and the commands through the editor's own wiring, never a copy of it
+const memory = (): PreferenceStorage => ({ read: () => null, write: () => {} });
 function editorStore() {
-  return createStore<EditorUi>({
-    table: COMMANDS,
-    predicates: PREDICATES,
-    commands: COMMAND,
-    constants: new Map(manifest.interactions.constants.map((c) => [c.id as ConstantId, c.value])),
-    rules: rulesFromManifest(manifest.elements, manifest.properties, manifest.html),
-    clock: manualClock(0),
-    ids: sequentialIds('t'),
-    words: (ui, key: MessageId) => translate(ui.preferences.locale, key),
-    initial: { document: AURORA, ui: initialEditorUi(INITIAL_PREFERENCES) },
-    freeze: true,
-    followSelection: endOffSelection,
-    followCommand: endOnUndoable,
-  });
+  return createEditorStore({ storage: memory(), clock: manualClock(0), ids: sequentialIds('t'), restored: { document: AURORA, selection: [] } });
 }
 const textOf = (doc: DocumentJson, id: string) => locate(doc, id)?.node.text;
 

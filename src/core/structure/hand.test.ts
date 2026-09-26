@@ -9,9 +9,11 @@ import { rulesFromManifest } from '../document/validate.ts';
 import { EMPTY_HISTORY } from '../history/history.ts';
 import { manualClock } from '../ports/clock.ts';
 import { sequentialIds } from '../ports/ids.ts';
+import { anyCss } from '../ports/css.ts';
 import { noLayout } from '../ports/layout.ts';
 import type { StoreState } from '../store/store.ts';
 import { aimArgs, handCommands, heldHand, slotsFor, type WithHand } from './hand.ts';
+import { deepFreeze } from '../store/store.ts';
 
 const RULES = rulesFromManifest(manifest.elements, manifest.properties, manifest.html);
 const node = (id: string, type: string, tag: string, fields: Partial<DocNode> = {}): DocNode => ({ id: id as NodeId, type: type as DocNode['type'], name: id, tag, attributes: {}, classes: [], styles: {}, text: null, children: [], ...fields });
@@ -36,8 +38,9 @@ const DOC: DocumentJson = {
 const HAND = handCommands<WithHand>();
 type State = StoreState<WithHand>;
 const initial = (selection: string[]): State => ({ document: DOC, selection: selection as NodeId[], history: EMPTY_HISTORY, message: null, ui: { hand: null } });
+// every state a handler reads is frozen, as the store commits it: a change in place throws
 const contextOf = (state: State) =>
-  ({ state, clock: manualClock(), ids: sequentialIds('new'), rules: RULES, words: (key: MessageId) => translate('en', key), layout: noLayout }) satisfies HandlerContext<WithHand>;
+  ({ state: deepFreeze(state), clock: manualClock(), ids: sequentialIds('new'), rules: RULES, words: (key: MessageId) => translate('en', key), layout: noLayout, css: anyCss }) satisfies HandlerContext<WithHand>;
 
 // the state after an outcome: its editor state and message
 function after(state: State, outcome: Outcome<WithHand>): State {
@@ -53,6 +56,9 @@ const taken = (id: string) => after(initial([id]), HAND.take.run(contextOf(initi
 // the document with one node hidden (element.toggleHidden's flag)
 const hide = (n: DocNode, id: string): DocNode => (n.id === id ? { ...n, hidden: true } : { ...n, children: n.children.map((c) => hide(c, id)) });
 const hiddenIn = (id: string): DocumentJson => ({ ...DOC, pages: DOC.pages.map((p) => ({ ...p, tree: hide(p.tree, id) })) });
+
+// every handler runs on a frozen document, as the store commits it: a change in place throws
+deepFreeze(DOC);
 
 describe('the hand (spec hand-keyboard-move)', () => {
   it('lists the slots in reading order, without the held element and its subtree', () => {

@@ -4,6 +4,7 @@
 // that runs nothing), its plain text, or the browser's refusal. The command decides what to make of it; this module
 // keeps nothing.
 import type { ClipboardContent, ClipboardNode } from '../generated/commands.ts';
+import type { ClipboardWriter } from '../core/ports/clipboard.ts';
 
 const ELEMENT_NODE = 1;
 const TEXT_NODE = 3;
@@ -45,3 +46,11 @@ export async function readClipboard(): Promise<ClipboardContent> {
   }
   return { status: 'read', html: html === null ? null : nodesOf(new DOMParser().parseFromString(html, 'text/html').body), text };
 }
+
+// The browser's side of the clipboard port (src/core/ports/clipboard.ts): what a command copies is written to the
+// system clipboard as text; a browser that refuses leaves the clipboard as it was.
+export const browserClipboard: ClipboardWriter = {
+  write(content) {
+    void navigator.clipboard.writeText(content.text).catch(() => undefined);
+  },
+};

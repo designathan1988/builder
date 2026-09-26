@@ -7,11 +7,18 @@ import { isBuilt, type RegisteredHandler } from '../../core/commands/registry.ts
 import type { CommandId } from '../../generated/ids.ts';
 import type { DoorEntry } from '../../manifest/runtime.ts';
 import type { EditorUi } from '../state.ts';
-import type { EditorState } from '../store.ts';
+import { MODEL_RULES, type EditorState } from '../store.ts';
+
+// The words a door's label fills in for the state now (the handler's labelParams), empty when it fills in none.
+export function labelParamsOf(entry: DoorEntry, state: EditorState): Readonly<Record<string, string>> {
+  const handler = COMMANDS[entry.command.id];
+  if (!isBuilt(handler)) return {};
+  return (handler as RegisteredHandler<CommandId, EditorUi>).labelParams?.(state, MODEL_RULES) ?? {};
+}
 
 export function isCurrent(entry: DoorEntry, state: EditorState, args: Readonly<Record<string, unknown>> = {}): boolean {
   const handler = COMMANDS[entry.command.id];
   if (!isBuilt(handler)) return false;
   const current = (handler as RegisteredHandler<CommandId, EditorUi>).current;
-  return current?.(state, { ...entry.door.args, ...args }) ?? false;
+  return current?.(state, { ...entry.door.args, ...args }, MODEL_RULES) ?? false;
 }

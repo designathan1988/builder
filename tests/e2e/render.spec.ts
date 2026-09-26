@@ -3,10 +3,12 @@
 // a change's patches to it. The end artifacts are what Chrome lays out in the frame: the computed style of the
 // changed nodes (also at a breakpoint other than the base, with the frame at that width), their geometry and their
 // text, and the elements of the nodes the change did not replace are the same objects as before (each is marked with
-// a property before the change). No command that changes the document is built yet, so this test proves the renderer
-// on its own.
+// a property before the change). The first test proves the renderer on its own, on every kind of patch; the second
+// proves the editor's canvas uses it that way: a command run through its door changes the page in place.
 import fs from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
+import { openEditor } from '../support/editor.ts';
+import { openMenu, runs } from './door.ts';
 
 // the manifest files the renderer is built from, as the runner reads them (manifest/runtime.ts loads the same JSON)
 const MANIFEST = {
@@ -149,3 +151,56 @@ test('the renderer applies a change to the iframe’s page in place: styles at e
   await expect(at('box')).toHaveCSS('width', '200px');
   expect(await rect('box')).toEqual({ x: 0, y: 12, width: 200, height: 50 });
 });
+
+// The editor's own canvas, through doors: a command that changes the document is applied to the page in place. Every
+// element of the page is marked before the command; after it, the page shows the new order and every element, the
+// moved one included, is the same object (a canvas that built the page again on every change would lose the marks).
+test(
+  'the canvas applies a command to its page in place: the elements keep their objects, the moved one included',
+  runs('project.open#menu-file', 'selection.select#canvas-click-element-or-page', 'element.moveUp#key-alt-arrow-up-in-canvas'),
+  async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await openEditor(page);
+    await openMenu(page, 'file');
+    const chooser = page.waitForEvent('filechooser');
+    await page.locator('[data-door="project.open#menu-file"]').click();
+    await (await chooser).setFiles({ name: 'aurora.json', mimeType: 'application/json', buffer: fs.readFileSync('manifest/features/fixtures/aurora.json') });
+    const canvas = page.frameLocator('.frame__page');
+    await expect(canvas.locator('[data-node="n-actions"]')).toHaveCount(1);
+    const heroOrder = () => canvas.locator('[data-node="n-hero"] > [data-node]').evaluateAll((els) => els.map((el) => el.getAttribute('data-node')));
+    expect(await heroOrder()).toEqual(['n-title', 'n-intro', 'n-actions']);
+
+    // every element of the page marked with its node id
+    const marked = await page.evaluate(() => {
+      const doc = document.querySelector<HTMLIFrameElement>('.frame__page')?.contentDocument;
+      if (!doc) throw new Error('the canvas has no page');
+      return [...doc.querySelectorAll('[data-node]')].map((el) => {
+        const id = el.getAttribute('data-node') ?? '';
+        (el as Element & { canvasMark?: string }).canvasMark = id;
+        return id;
+      });
+    });
+    expect(marked.length).toBeGreaterThan(10);
+
+    // Actions selected on the canvas, then Alt+ArrowUp: it moves before Intro
+    const at = await page.evaluate(() => {
+      const iframe = document.querySelector<HTMLIFrameElement>('.frame__page');
+      const el = iframe?.contentDocument?.querySelector('[data-node="n-actions"]');
+      if (!iframe || !el) throw new Error('the canvas does not draw n-actions');
+      const zoom = iframe.currentCSSZoom;
+      const frame = iframe.getBoundingClientRect();
+      const r = el.getBoundingClientRect();
+      return { x: frame.left + (r.left + r.width / 2) * zoom, y: frame.top + (r.top + r.height / 2) * zoom };
+    });
+    await page.mouse.click(at.x, at.y);
+    await page.keyboard.press('Alt+ArrowUp');
+    await expect.poll(heroOrder, { message: 'the page shows the move' }).toEqual(['n-title', 'n-actions', 'n-intro']);
+
+    // the same element objects: each still carries its mark
+    const marks = await page.evaluate((ids) => {
+      const doc = document.querySelector<HTMLIFrameElement>('.frame__page')?.contentDocument;
+      return ids.map((id) => (doc?.querySelector(`[data-node="${id}"]`) as (Element & { canvasMark?: string }) | null)?.canvasMark ?? null);
+    }, marked);
+    expect(marks, 'every element is the object it was before the command').toEqual(marked);
+  },
+);

@@ -6,7 +6,8 @@
 // The document, the selection and the history are read through the read-only test port; the drawing is measured
 // against the elements' boxes inside the frame, mapped to the screen through its CSS zoom.
 import fs from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
+import { openEditor } from '../support/editor.ts';
 import { openMenu, runs } from './door.ts';
 
 const FIXTURE = 'manifest/features/fixtures/aurora.json';
@@ -81,11 +82,21 @@ function pageBackground(page: Page): Promise<{ x: number; y: number }> {
   });
 }
 
+// two animation frames: the canvas chrome draws what it measures on its next frame, so a check that something is
+// not drawn waits until it would have been
+const nextFrames = (page: Page) => page.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
 const centre = (b: Box) => ({ x: b.x + b.width / 2, y: b.y + b.height / 2 });
 const near = (a: Box | null, b: Box) => a !== null && [a.x - b.x, a.y - b.y, a.width - b.width, a.height - b.height].every((d) => Math.abs(d) <= 1);
+// the box of the one element a selector finds, or null when it finds none or several, read in one task of the page:
+// counting first and then asking the box raced the chrome's next frame, whose removed element left the read waiting
 async function boxOf(page: Page, selector: string): Promise<Box | null> {
-  const found = page.locator(selector);
-  return (await found.count()) === 1 ? found.boundingBox() : null;
+  const boxes = await page.locator(selector).evaluateAll((els) =>
+    els.map((el) => {
+      const r = el.getBoundingClientRect();
+      return { x: r.x, y: r.y, width: r.width, height: r.height };
+    }),
+  );
+  return boxes.length === 1 ? (boxes[0] ?? null) : null;
 }
 
 // presses at a point and starts the drag past drag.threshold
@@ -99,9 +110,7 @@ const DOORS = ['project.open#menu-file', 'selection.select#canvas-click-element-
 
 test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/');
-  await page.evaluate(() => window.localStorage.clear());
-  await page.reload();
+  await openEditor(page);
   await expect(page.locator('.workbench')).toBeVisible();
   await openAurora(page);
 });
@@ -190,6 +199,7 @@ test('a container is dragged by its name label on the canvas; a press and drag o
   if (box === null) throw new Error('the hover label is not laid out');
   const background = await pageBackground(page);
   await pressAndStart(page, centre(box));
+  await nextFrames(page);
   await expect(page.locator('[data-chrome="band"]')).toHaveCount(0);
   await page.mouse.move(background.x, background.y, { steps: 8 });
   await expect(page.locator('[data-chrome="drop-label"]')).toHaveText('Drop in Page · position 3 of 3');

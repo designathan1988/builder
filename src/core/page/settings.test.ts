@@ -9,6 +9,7 @@ import { applyPatches } from '../history/transaction.ts';
 import { manualClock } from '../ports/clock.ts';
 import { sequentialIds } from '../ports/ids.ts';
 import { noLayout } from '../ports/layout.ts';
+import { anyCss } from '../ports/css.ts';
 import { isPageSetting, setPageSettingCommand } from './settings.ts';
 
 const RULES = rulesFromManifest(manifest.elements, manifest.properties, manifest.html);
@@ -24,6 +25,7 @@ const contextOf = (document: DocumentJson): HandlerContext<never> => ({
   rules: RULES,
   words: (key) => key,
   layout: noLayout,
+  css: anyCss,
 });
 const label = (setting: string) => ({ key: `attribute.${setting}.label` });
 // the page root's attributes after the command, and what the status bar says

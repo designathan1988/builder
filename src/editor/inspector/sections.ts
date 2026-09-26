@@ -11,11 +11,18 @@
 // sets them: the element's own styles or the browser's defaults; spec, Problems in Pager 2). How each section writes
 // them is below (SUMMARIES); the words come from the catalogue.
 import { registerHandler } from '../../core/commands/registry.ts';
+import type { CommandArgs } from '../../generated/commands.ts';
 import { SECTION_IDS, type MessageId, type SectionId } from '../../generated/ids.ts';
 import type { Locale } from '../../i18n/index.ts';
 import { pluralForm } from '../../i18n/index.ts';
 import { manifest } from '../../manifest/runtime.ts';
 import type { EditorUi } from '../state.ts';
+import { withInspectorTab } from '../workspace/layout.ts';
+import { withInspector } from '../workspace/panels.ts';
+
+// the inspector's tabs that show an attribute's field and a property's field (DESIGN.md)
+const SETTINGS_TAB = 'settings';
+const STYLE_TAB = 'style';
 
 export function isSectionId(value: unknown): value is SectionId {
   return typeof value === 'string' && (SECTION_IDS as readonly string[]).includes(value);
@@ -37,6 +44,29 @@ export const toggleSection = registerHandler<'inspector.toggleSection', EditorUi
   const ordered = SECTION_IDS.filter((s) => next.includes(s));
   return { kind: 'change', ui: { ...state.ui, preferences: { ...state.ui.preferences, collapsedSections: ordered.length > 0 ? ordered : undefined } } };
 });
+
+// inspector.setMode (spec inspector-advanced-mode): the Style tab shows every property that applies (All properties,
+// the default) or its essentials only (the properties properties.json marks essential, a composite when one of its
+// longhands is; a field whose property the element holds a value for, or the one just revealed, shows in both). An
+// editor preference, kept after a reload; nothing in the document changes.
+export type InspectorMode = CommandArgs['inspector.setMode']['mode'];
+export const inspectorMode = (ui: EditorUi): InspectorMode => ui.preferences.inspectorMode ?? 'all';
+
+export const setMode = registerHandler<'inspector.setMode', EditorUi>(
+  'inspector.setMode',
+  ({ state }, { mode }) => {
+    const { inspectorMode: _dropped, ...rest } = state.ui.preferences;
+    void _dropped;
+    return { kind: 'change', ui: { ...state.ui, preferences: mode === 'essentials' ? { ...rest, inspectorMode: mode } : rest } };
+  },
+  (state, args) => inspectorMode(state.ui) === args.mode,
+);
+
+const ESSENTIAL = new Set(manifest.properties.properties.filter((p) => p.essential).map((p) => p.id));
+// the properties a field edits: its property, a composite's longhands (LONGHANDS, below), a recipe's own id
+export const editedProperties = (target: string): readonly string[] => LONGHANDS.get(target) ?? [target];
+// whether a field of this property, composite or recipe is one of the essentials
+export const isEssential = (target: string): boolean => editedProperties(target).some((p) => ESSENTIAL.has(p));
 
 // ---------------------------------------------------------------- summaries
 
@@ -129,3 +159,20 @@ export function summaryOf(section: SectionId, values: Readonly<Record<string, st
   const items = (READS.get(section) ?? []).map((longhands) => longhands.map((p) => values[p] ?? ''));
   return write(items, words, locale);
 }
+
+// inspector.reveal (spec elements-form-inputs-rules, Problems in Pager 1): the inspector shows the field of a property
+// (the Style tab) or of an attribute (the Settings tab), opened if hidden, and that field takes the focus; a
+// double-click on a form control on the canvas reveals its Value field, where its value is edited. Nothing in the
+// document changes and nothing is recorded. `revealed` counts the requests, so a field tells a new one from one it
+// has answered.
+export interface Revealed {
+  readonly field: string;
+  readonly count: number;
+}
+
+export const revealField = registerHandler<'inspector.reveal', EditorUi>('inspector.reveal', ({ state }, { property, attribute }) => {
+  const field = attribute ?? property;
+  if (field === undefined) return { kind: 'change' };
+  const shown = withInspectorTab(withInspector(state.ui, true), attribute !== undefined ? SETTINGS_TAB : STYLE_TAB);
+  return { kind: 'change', ui: { ...shown, revealed: { field, count: (state.ui.revealed?.count ?? 0) + 1 } } };
+});

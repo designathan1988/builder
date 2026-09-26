@@ -1836,8 +1836,20 @@
           ],
           "optional": false
         },
-        "settings": {
-          "type": "json",
+        "setting": {
+          "type": "enum",
+          "values": [
+            "count",
+            "width",
+            "gutter",
+            "margin",
+            "height",
+            "spacing"
+          ],
+          "optional": false
+        },
+        "value": {
+          "type": "number",
           "values": [],
           "optional": false
         }
@@ -1847,7 +1859,7 @@
         "refusalKey": null
       },
       "refusals": [
-        "status.grid.invalid"
+        "status.grid.outOfRange"
       ],
       "confirmation": null,
       "history": {
@@ -2060,7 +2072,27 @@
         "at": {
           "type": "number",
           "values": [],
-          "optional": false
+          "optional": true
+        },
+        "delta": {
+          "type": "number",
+          "values": [],
+          "optional": true
+        },
+        "along": {
+          "type": "enum",
+          "values": [
+            "horizontal",
+            "vertical"
+          ],
+          "optional": true
+        },
+        "modifier": {
+          "type": "enum",
+          "values": [
+            "Shift"
+          ],
+          "optional": true
         }
       },
       "availability": {
@@ -2117,7 +2149,10 @@
             "writes": [],
             "fields": []
           },
-          "args": {}
+          "args": {
+            "delta": -1,
+            "along": "vertical"
+          }
         },
         {
           "id": "key-arrow-down-in-guide",
@@ -2137,7 +2172,10 @@
             "writes": [],
             "fields": []
           },
-          "args": {}
+          "args": {
+            "delta": 1,
+            "along": "vertical"
+          }
         },
         {
           "id": "key-arrow-left-in-guide",
@@ -2157,7 +2195,10 @@
             "writes": [],
             "fields": []
           },
-          "args": {}
+          "args": {
+            "delta": -1,
+            "along": "horizontal"
+          }
         },
         {
           "id": "key-arrow-right-in-guide",
@@ -2177,7 +2218,10 @@
             "writes": [],
             "fields": []
           },
-          "args": {}
+          "args": {
+            "delta": 1,
+            "along": "horizontal"
+          }
         }
       ]
     },
@@ -2496,7 +2540,16 @@
       "args": {
         "targets": {
           "type": "json",
-          "values": [],
+          "values": [
+            "page",
+            "parent",
+            "elements",
+            "guides",
+            "rulers",
+            "grid",
+            "centers",
+            "edges"
+          ],
           "optional": false
         },
         "distance": {

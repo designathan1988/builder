@@ -52,9 +52,9 @@ describe('the active tab of a tab group (workspace/layout.ts)', () => {
 
   it('takes only a tab its group has', () => {
     const s = store();
-    expect(() => s.dispatch('workspace.setActiveTab', { group: 'inspector', panel: 'nope' })).toThrow();
-    expect(() => s.dispatch('workspace.setActiveTab', { group: 'workbench', panel: 'shortcuts' })).toThrow();
-    expect(() => s.dispatch('workspace.setActiveTab', { group: 'nope', panel: 'style' })).toThrow();
+    expect(() => s.dispatch('workspace.setActiveTab', { group: 'inspector', panel: 'nope' })).toThrow(/the inspector has no tab nope/);
+    expect(() => s.dispatch('workspace.setActiveTab', { group: 'workbench', panel: 'shortcuts' })).toThrow(/the dock has no tab shortcuts/);
+    expect(() => s.dispatch('workspace.setActiveTab', { group: 'nope', panel: 'style' })).toThrow(/no tab group nope/);
     expect(inspectorTab(s.getState().ui)).toBe('style');
   });
 });

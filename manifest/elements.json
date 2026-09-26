@@ -611,7 +611,11 @@
       "icon": "square-chevron-down",
       "palette": true,
       "content": "children",
-      "naturalChild": "option",
+      "naturalChild": [
+        "option",
+        "option",
+        "option"
+      ],
       "defaultStyles": {},
       "defaultTextKey": null
     },
@@ -703,7 +707,7 @@
       "palette": true,
       "content": "none",
       "naturalChild": null,
-      "defaultStyles": {},
+      "defaultStyles": { "max-width": "100%" },
       "defaultTextKey": null
     },
     {
@@ -715,7 +719,9 @@
       "icon": "images",
       "palette": true,
       "content": "children",
-      "naturalChild": "source",
+      "naturalChild": [
+        "image"
+      ],
       "defaultStyles": {},
       "defaultTextKey": null
     },
@@ -728,7 +734,10 @@
       "icon": "frame",
       "palette": true,
       "content": "children",
-      "naturalChild": "figureCaption",
+      "naturalChild": [
+        "image",
+        "figureCaption"
+      ],
       "defaultStyles": {},
       "defaultTextKey": null
     },
@@ -1476,6 +1485,138 @@
       "command": "element.setSvgMarkup"
     },
     {
+      "id": "shapeX",
+      "html": "x",
+      "labelKey": "attribute.shapeX.label",
+      "valueType": "number",
+      "keywords": [],
+      "elements": [
+        "rectangle"
+      ],
+      "command": "geometry.resize"
+    },
+    {
+      "id": "shapeY",
+      "html": "y",
+      "labelKey": "attribute.shapeY.label",
+      "valueType": "number",
+      "keywords": [],
+      "elements": [
+        "rectangle"
+      ],
+      "command": "geometry.resize"
+    },
+    {
+      "id": "shapeWidth",
+      "html": "width",
+      "labelKey": "attribute.shapeWidth.label",
+      "valueType": "number",
+      "keywords": [],
+      "elements": [
+        "rectangle"
+      ],
+      "command": "geometry.resize"
+    },
+    {
+      "id": "shapeHeight",
+      "html": "height",
+      "labelKey": "attribute.shapeHeight.label",
+      "valueType": "number",
+      "keywords": [],
+      "elements": [
+        "rectangle"
+      ],
+      "command": "geometry.resize"
+    },
+    {
+      "id": "ellipseCx",
+      "html": "cx",
+      "labelKey": "attribute.ellipseCx.label",
+      "valueType": "number",
+      "keywords": [],
+      "elements": [
+        "ellipse"
+      ],
+      "command": "geometry.resize"
+    },
+    {
+      "id": "ellipseCy",
+      "html": "cy",
+      "labelKey": "attribute.ellipseCy.label",
+      "valueType": "number",
+      "keywords": [],
+      "elements": [
+        "ellipse"
+      ],
+      "command": "geometry.resize"
+    },
+    {
+      "id": "ellipseRx",
+      "html": "rx",
+      "labelKey": "attribute.ellipseRx.label",
+      "valueType": "number",
+      "keywords": [],
+      "elements": [
+        "ellipse"
+      ],
+      "command": "geometry.resize"
+    },
+    {
+      "id": "ellipseRy",
+      "html": "ry",
+      "labelKey": "attribute.ellipseRy.label",
+      "valueType": "number",
+      "keywords": [],
+      "elements": [
+        "ellipse"
+      ],
+      "command": "geometry.resize"
+    },
+    {
+      "id": "lineX1",
+      "html": "x1",
+      "labelKey": "attribute.lineX1.label",
+      "valueType": "number",
+      "keywords": [],
+      "elements": [
+        "line"
+      ],
+      "command": "geometry.resize"
+    },
+    {
+      "id": "lineY1",
+      "html": "y1",
+      "labelKey": "attribute.lineY1.label",
+      "valueType": "number",
+      "keywords": [],
+      "elements": [
+        "line"
+      ],
+      "command": "geometry.resize"
+    },
+    {
+      "id": "lineX2",
+      "html": "x2",
+      "labelKey": "attribute.lineX2.label",
+      "valueType": "number",
+      "keywords": [],
+      "elements": [
+        "line"
+      ],
+      "command": "geometry.resize"
+    },
+    {
+      "id": "lineY2",
+      "html": "y2",
+      "labelKey": "attribute.lineY2.label",
+      "valueType": "number",
+      "keywords": [],
+      "elements": [
+        "line"
+      ],
+      "command": "geometry.resize"
+    },
+    {
       "id": "embedMarkup",
       "html": null,
       "labelKey": "attribute.embedMarkup.label",
@@ -1518,6 +1659,39 @@
         "rtl",
         "auto"
       ],
+      "elements": [
+        "page"
+      ],
+      "command": "page.setSetting"
+    },
+    {
+      "id": "gridColumns",
+      "html": null,
+      "labelKey": "attribute.gridColumns.label",
+      "valueType": "boolean",
+      "keywords": [],
+      "elements": [
+        "page"
+      ],
+      "command": "page.setSetting"
+    },
+    {
+      "id": "gridRows",
+      "html": null,
+      "labelKey": "attribute.gridRows.label",
+      "valueType": "boolean",
+      "keywords": [],
+      "elements": [
+        "page"
+      ],
+      "command": "page.setSetting"
+    },
+    {
+      "id": "gridDots",
+      "html": null,
+      "labelKey": "attribute.gridDots.label",
+      "valueType": "boolean",
+      "keywords": [],
       "elements": [
         "page"
       ],
@@ -2067,7 +2241,10 @@
           "element": "div",
           "kind": "template",
           "inputType": null,
-          "feature": "templates-layout"
+          "feature": "templates-layout",
+          "template": {
+            "element": "div"
+          }
         },
         {
           "id": "template-row",
@@ -2075,7 +2252,32 @@
           "element": "div",
           "kind": "template",
           "inputType": null,
-          "feature": "templates-layout"
+          "feature": "templates-layout",
+          "template": {
+            "element": "div",
+            "wrapper": "row",
+            "styles": {
+              "column-gap": "16px"
+            },
+            "children": [
+              {
+                "element": "div",
+                "wrapper": "column",
+                "nameKey": "node.name.column",
+                "styles": {
+                  "flex-grow": "1"
+                }
+              },
+              {
+                "element": "div",
+                "wrapper": "column",
+                "nameKey": "node.name.column",
+                "styles": {
+                  "flex-grow": "1"
+                }
+              }
+            ]
+          }
         },
         {
           "id": "template-column",
@@ -2083,7 +2285,22 @@
           "element": "div",
           "kind": "template",
           "inputType": null,
-          "feature": "templates-layout"
+          "feature": "templates-layout",
+          "template": {
+            "element": "div",
+            "wrapper": "column",
+            "styles": {
+              "row-gap": "16px"
+            },
+            "children": [
+              {
+                "element": "div"
+              },
+              {
+                "element": "div"
+              }
+            ]
+          }
         },
         {
           "id": "template-grid",
@@ -2091,7 +2308,27 @@
           "element": "div",
           "kind": "template",
           "inputType": null,
-          "feature": "templates-layout"
+          "feature": "templates-layout",
+          "template": {
+            "element": "div",
+            "styles": {
+              "display": "grid",
+              "grid-template-columns": "repeat(3, minmax(0, 1fr))",
+              "column-gap": "16px",
+              "row-gap": "16px"
+            },
+            "children": [
+              {
+                "element": "div"
+              },
+              {
+                "element": "div"
+              },
+              {
+                "element": "div"
+              }
+            ]
+          }
         },
         {
           "id": "template-list",
@@ -2099,7 +2336,21 @@
           "element": "list",
           "kind": "template",
           "inputType": null,
-          "feature": "templates-content"
+          "feature": "templates-content",
+          "template": {
+            "element": "list",
+            "children": [
+              {
+                "element": "listItem"
+              },
+              {
+                "element": "listItem"
+              },
+              {
+                "element": "listItem"
+              }
+            ]
+          }
         },
         {
           "id": "template-ordered-list",
@@ -2107,7 +2358,21 @@
           "element": "orderedList",
           "kind": "template",
           "inputType": null,
-          "feature": "templates-content"
+          "feature": "templates-content",
+          "template": {
+            "element": "orderedList",
+            "children": [
+              {
+                "element": "listItem"
+              },
+              {
+                "element": "listItem"
+              },
+              {
+                "element": "listItem"
+              }
+            ]
+          }
         },
         {
           "id": "template-definition-list",
@@ -2115,7 +2380,10 @@
           "element": "definitionList",
           "kind": "template",
           "inputType": null,
-          "feature": "templates-content"
+          "feature": "templates-content",
+          "template": {
+            "element": "definitionList"
+          }
         },
         {
           "id": "template-table",
@@ -2123,7 +2391,10 @@
           "element": "table",
           "kind": "template",
           "inputType": null,
-          "feature": "templates-content"
+          "feature": "templates-content",
+          "template": {
+            "element": "table"
+          }
         },
         {
           "id": "template-form",
@@ -2131,7 +2402,53 @@
           "element": "form",
           "kind": "template",
           "inputType": null,
-          "feature": "templates-content"
+          "feature": "templates-content",
+          "template": {
+            "element": "form",
+            "children": [
+              {
+                "element": "label",
+                "children": [
+                  {
+                    "element": "paragraph",
+                    "tag": "span",
+                    "textKey": "template.form.name"
+                  },
+                  {
+                    "element": "input",
+                    "attributes": {
+                      "inputType": "text",
+                      "name": "name"
+                    }
+                  }
+                ]
+              },
+              {
+                "element": "label",
+                "children": [
+                  {
+                    "element": "paragraph",
+                    "tag": "span",
+                    "textKey": "template.form.email"
+                  },
+                  {
+                    "element": "input",
+                    "attributes": {
+                      "inputType": "email",
+                      "name": "email"
+                    }
+                  }
+                ]
+              },
+              {
+                "element": "button",
+                "textKey": "template.form.send",
+                "attributes": {
+                  "buttonType": "submit"
+                }
+              }
+            ]
+          }
         },
         {
           "id": "template-select",
@@ -2139,7 +2456,10 @@
           "element": "select",
           "kind": "template",
           "inputType": null,
-          "feature": "templates-content"
+          "feature": "templates-content",
+          "template": {
+            "element": "select"
+          }
         },
         {
           "id": "template-figure",
@@ -2147,7 +2467,10 @@
           "element": "figure",
           "kind": "template",
           "inputType": null,
-          "feature": "templates-content"
+          "feature": "templates-content",
+          "template": {
+            "element": "figure"
+          }
         },
         {
           "id": "template-card",
@@ -2155,7 +2478,50 @@
           "element": "article",
           "kind": "template",
           "inputType": null,
-          "feature": "templates-sections"
+          "feature": "templates-sections",
+          "template": {
+            "element": "article",
+            "styles": {
+              "padding-top": "20px",
+              "padding-bottom": "20px",
+              "padding-left": "20px",
+              "padding-right": "20px",
+              "border-top-width": "1px",
+              "border-right-width": "1px",
+              "border-bottom-width": "1px",
+              "border-left-width": "1px",
+              "border-top-style": "solid",
+              "border-right-style": "solid",
+              "border-bottom-style": "solid",
+              "border-left-style": "solid",
+              "border-top-color": "#e2e8f0",
+              "border-right-color": "#e2e8f0",
+              "border-bottom-color": "#e2e8f0",
+              "border-left-color": "#e2e8f0",
+              "border-top-left-radius": "12px",
+              "border-top-right-radius": "12px",
+              "border-bottom-right-radius": "12px",
+              "border-bottom-left-radius": "12px"
+            },
+            "children": [
+              {
+                "element": "image"
+              },
+              {
+                "element": "heading",
+                "tag": "h3",
+                "textKey": "template.card.title"
+              },
+              {
+                "element": "paragraph",
+                "textKey": "template.card.text"
+              },
+              {
+                "element": "link",
+                "textKey": "template.card.action"
+              }
+            ]
+          }
         },
         {
           "id": "template-hero",
@@ -2163,7 +2529,51 @@
           "element": "section",
           "kind": "template",
           "inputType": null,
-          "feature": "templates-sections"
+          "feature": "templates-sections",
+          "template": {
+            "element": "section",
+            "styles": {
+              "padding-top": "96px",
+              "padding-bottom": "96px",
+              "padding-left": "40px",
+              "padding-right": "40px"
+            },
+            "children": [
+              {
+                "element": "heading",
+                "tag": "h1",
+                "textKey": "template.hero.title",
+                "styles": {
+                  "font-size": "48px"
+                }
+              },
+              {
+                "element": "paragraph",
+                "textKey": "template.hero.text",
+                "styles": {
+                  "font-size": "20px"
+                }
+              },
+              {
+                "element": "div",
+                "wrapper": "row",
+                "nameKey": "template.hero.actions",
+                "styles": {
+                  "column-gap": "12px"
+                },
+                "children": [
+                  {
+                    "element": "button",
+                    "textKey": "template.hero.primary"
+                  },
+                  {
+                    "element": "button",
+                    "textKey": "template.hero.secondary"
+                  }
+                ]
+              }
+            ]
+          }
         },
         {
           "id": "template-navbar",
@@ -2171,7 +2581,50 @@
           "element": "header",
           "kind": "template",
           "inputType": null,
-          "feature": "templates-sections"
+          "feature": "templates-sections",
+          "template": {
+            "element": "header",
+            "styles": {
+              "display": "flex",
+              "justify-content": "space-between",
+              "align-items": "center",
+              "padding-top": "16px",
+              "padding-bottom": "16px",
+              "padding-left": "40px",
+              "padding-right": "40px"
+            },
+            "children": [
+              {
+                "element": "link",
+                "textKey": "template.navbar.brand"
+              },
+              {
+                "element": "nav",
+                "styles": {
+                  "display": "flex",
+                  "column-gap": "24px"
+                },
+                "children": [
+                  {
+                    "element": "link",
+                    "textKey": "template.navbar.home"
+                  },
+                  {
+                    "element": "link",
+                    "textKey": "template.navbar.about"
+                  },
+                  {
+                    "element": "link",
+                    "textKey": "template.navbar.contact"
+                  }
+                ]
+              },
+              {
+                "element": "button",
+                "textKey": "template.navbar.signIn"
+              }
+            ]
+          }
         },
         {
           "id": "template-sidebar",
@@ -2179,7 +2632,56 @@
           "element": "aside",
           "kind": "template",
           "inputType": null,
-          "feature": "templates-sections"
+          "feature": "templates-sections",
+          "template": {
+            "element": "aside",
+            "styles": {
+              "width": "280px",
+              "padding-top": "24px",
+              "padding-bottom": "24px",
+              "padding-left": "24px",
+              "padding-right": "24px"
+            },
+            "children": [
+              {
+                "element": "heading",
+                "tag": "h3",
+                "textKey": "template.sidebar.title"
+              },
+              {
+                "element": "list",
+                "children": [
+                  {
+                    "element": "listItem",
+                    "children": [
+                      {
+                        "element": "link",
+                        "textKey": "template.sidebar.link.one"
+                      }
+                    ]
+                  },
+                  {
+                    "element": "listItem",
+                    "children": [
+                      {
+                        "element": "link",
+                        "textKey": "template.sidebar.link.two"
+                      }
+                    ]
+                  },
+                  {
+                    "element": "listItem",
+                    "children": [
+                      {
+                        "element": "link",
+                        "textKey": "template.sidebar.link.three"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
         },
         {
           "id": "template-gallery",
@@ -2187,7 +2689,31 @@
           "element": "section",
           "kind": "template",
           "inputType": null,
-          "feature": "templates-sections"
+          "feature": "templates-sections",
+          "template": {
+            "element": "section",
+            "styles": {
+              "display": "grid",
+              "grid-template-columns": "repeat(3, minmax(0, 1fr))",
+              "column-gap": "16px",
+              "row-gap": "16px",
+              "padding-top": "40px",
+              "padding-bottom": "40px",
+              "padding-left": "40px",
+              "padding-right": "40px"
+            },
+            "children": [
+              {
+                "element": "figure"
+              },
+              {
+                "element": "figure"
+              },
+              {
+                "element": "figure"
+              }
+            ]
+          }
         },
         {
           "id": "template-form-group",
@@ -2195,7 +2721,50 @@
           "element": "div",
           "kind": "template",
           "inputType": null,
-          "feature": "templates-components"
+          "feature": "templates-components",
+          "template": {
+            "element": "div",
+            "wrapper": "column",
+            "styles": {
+              "row-gap": "12px"
+            },
+            "children": [
+              {
+                "element": "label",
+                "children": [
+                  {
+                    "element": "paragraph",
+                    "tag": "span",
+                    "textKey": "template.form.name"
+                  },
+                  {
+                    "element": "input",
+                    "attributes": {
+                      "inputType": "text",
+                      "name": "name"
+                    }
+                  }
+                ]
+              },
+              {
+                "element": "label",
+                "children": [
+                  {
+                    "element": "paragraph",
+                    "tag": "span",
+                    "textKey": "template.form.email"
+                  },
+                  {
+                    "element": "input",
+                    "attributes": {
+                      "inputType": "email",
+                      "name": "email"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
         },
         {
           "id": "template-button-group",
@@ -2203,7 +2772,28 @@
           "element": "div",
           "kind": "template",
           "inputType": null,
-          "feature": "templates-components"
+          "feature": "templates-components",
+          "template": {
+            "element": "div",
+            "wrapper": "row",
+            "styles": {
+              "column-gap": "8px"
+            },
+            "children": [
+              {
+                "element": "button",
+                "textKey": "template.buttons.one"
+              },
+              {
+                "element": "button",
+                "textKey": "template.buttons.two"
+              },
+              {
+                "element": "button",
+                "textKey": "template.buttons.three"
+              }
+            ]
+          }
         },
         {
           "id": "template-tabs",
@@ -2211,7 +2801,42 @@
           "element": "div",
           "kind": "template",
           "inputType": null,
-          "feature": "templates-components"
+          "feature": "templates-components",
+          "template": {
+            "element": "div",
+            "children": [
+              {
+                "element": "nav",
+                "wrapper": "row",
+                "styles": {
+                  "column-gap": "8px"
+                },
+                "children": [
+                  {
+                    "element": "button",
+                    "textKey": "template.tabs.one"
+                  },
+                  {
+                    "element": "button",
+                    "textKey": "template.tabs.two"
+                  },
+                  {
+                    "element": "button",
+                    "textKey": "template.tabs.three"
+                  }
+                ]
+              },
+              {
+                "element": "div",
+                "children": [
+                  {
+                    "element": "paragraph",
+                    "textKey": "template.tabs.panel"
+                  }
+                ]
+              }
+            ]
+          }
         },
         {
           "id": "template-accordion",
@@ -2219,7 +2844,50 @@
           "element": "div",
           "kind": "template",
           "inputType": null,
-          "feature": "templates-components"
+          "feature": "templates-components",
+          "template": {
+            "element": "div",
+            "children": [
+              {
+                "element": "details",
+                "children": [
+                  {
+                    "element": "summary",
+                    "children": [
+                      {
+                        "element": "paragraph",
+                        "tag": "span",
+                        "textKey": "template.accordion.question.one"
+                      }
+                    ]
+                  },
+                  {
+                    "element": "paragraph",
+                    "textKey": "template.accordion.answer.one"
+                  }
+                ]
+              },
+              {
+                "element": "details",
+                "children": [
+                  {
+                    "element": "summary",
+                    "children": [
+                      {
+                        "element": "paragraph",
+                        "tag": "span",
+                        "textKey": "template.accordion.question.two"
+                      }
+                    ]
+                  },
+                  {
+                    "element": "paragraph",
+                    "textKey": "template.accordion.answer.two"
+                  }
+                ]
+              }
+            ]
+          }
         },
         {
           "id": "template-modal",
@@ -2227,7 +2895,25 @@
           "element": "dialog",
           "kind": "template",
           "inputType": null,
-          "feature": "templates-components"
+          "feature": "templates-components",
+          "template": {
+            "element": "dialog",
+            "children": [
+              {
+                "element": "heading",
+                "tag": "h2",
+                "textKey": "template.modal.title"
+              },
+              {
+                "element": "paragraph",
+                "textKey": "template.modal.text"
+              },
+              {
+                "element": "button",
+                "textKey": "template.modal.close"
+              }
+            ]
+          }
         }
       ]
     }

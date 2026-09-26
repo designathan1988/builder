@@ -25,7 +25,76 @@
           "Collapsed groups stay collapsed after reload."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "a-collapsed-group-hides-its-tiles-and-stays-collapsed-after-a-reload",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "palette.toggleGroup#elements-group-header",
+              "args": {
+                "group": "structure"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "palette.toggleGroup#elements-group-header"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": null,
+            "editor": {
+              "regions": [
+                {
+                  "region": "palette-tiles",
+                  "measure": "height",
+                  "relation": "less-than",
+                  "value": 200,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": {
+              "reload": "immediate",
+              "document": null,
+              "preferences": "same",
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
     },
     {
       "id": "palette-density",
@@ -46,7 +115,228 @@
           "The chosen density is stored in the single preferences store and restored after reload."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "the-list-density-lays-the-tiles-out-and-is-kept-after-a-reload",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "palette.setDensity#elements-density-list",
+              "args": {
+                "density": "list"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "palette.setDensity#elements-density-list"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": null,
+            "editor": {
+              "regions": [],
+              "computed": [
+                {
+                  "region": "palette-tiles",
+                  "property": "grid-template-columns",
+                  "value": "203px"
+                }
+              ]
+            },
+            "persistence": {
+              "reload": "immediate",
+              "document": null,
+              "preferences": "same",
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-three-columns-density-lays-the-tiles-out-and-is-kept-after-a-reload",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "palette.setDensity#elements-density-three-columns",
+              "args": {
+                "density": "three-columns"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "palette.setDensity#elements-density-three-columns"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": null,
+            "editor": {
+              "regions": [],
+              "computed": [
+                {
+                  "region": "palette-tiles",
+                  "property": "grid-template-columns",
+                  "value": "65px 65px 65px"
+                }
+              ]
+            },
+            "persistence": {
+              "reload": "immediate",
+              "document": null,
+              "preferences": "same",
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-icons-density-lays-the-tiles-out-and-is-kept-after-a-reload",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "palette.setDensity#elements-density-list",
+              "args": {
+                "density": "list"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "palette.setDensity#elements-density-two-columns",
+              "args": {
+                "density": "two-columns"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "palette.setDensity#elements-density-icons",
+              "args": {
+                "density": "icons"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "palette.setDensity#elements-density-icons"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": null,
+            "editor": {
+              "regions": [],
+              "computed": [
+                {
+                  "region": "palette-tiles",
+                  "property": "grid-template-columns",
+                  "value": "25.5625px 25.5781px 25.5625px 25.5781px 25.5625px 25.5781px 25.5625px"
+                }
+              ]
+            },
+            "persistence": {
+              "reload": "immediate",
+              "document": null,
+              "preferences": "same",
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
     },
     {
       "id": "layers-expand-collapse-all",
@@ -69,12 +359,217 @@
           "Selecting a hidden descendant expands its ancestors and scrolls its row into view."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "collapse-every-branch-leaves-only-the-page-row",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "layers.collapseAll#toolbar-layers-header-collapse-all",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "layers.collapseAll#toolbar-layers-header-collapse-all"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.layers.collapsedAll",
+                  "params": {}
+                }
+              ]
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "layers-row",
+                  "measure": "height",
+                  "relation": "less-than",
+                  "value": 80,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "expand-every-branch-shows-every-row-again",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "layers.collapseAll#toolbar-layers-header-collapse-all",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "layers.expandAll#toolbar-layers-header-expand-all",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "layers.expandAll#toolbar-layers-header-expand-all"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.layers.expandedAll",
+                  "params": {}
+                }
+              ]
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "layers-row",
+                  "measure": "height",
+                  "relation": "greater-than",
+                  "value": 400,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "selecting-a-deep-element-after-collapsing-reveals-its-row",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "layers.collapseAll#toolbar-layers-header-collapse-all",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "selection.select#canvas-click-element-or-page",
+              "args": {
+                "target": "/Page/Plans/Grid/CardA/CardATitle"
+              },
+              "target": "/Page/Plans/Grid/CardA/CardATitle",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "selection.select#canvas-click-element-or-page"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Plans/Grid/CardA/CardATitle"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": null,
+            "editor": {
+              "regions": [
+                {
+                  "region": "layers-row",
+                  "measure": "height",
+                  "relation": "greater-than",
+                  "value": 230,
+                  "reference": null
+                },
+                {
+                  "region": "layers-row",
+                  "measure": "height",
+                  "relation": "less-than",
+                  "value": 330,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
     },
     {
       "id": "layers-search",
       "titleKey": "feature.layersSearch",
       "commands": [
+        "layers.search",
         "selection.select"
       ],
       "dependsOn": [],
@@ -92,7 +587,297 @@
           "Clearing restores the previous expansion state."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "typing-card-shows-the-matching-rows-and-their-ancestors",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "layers.search#layers-search-field",
+              "args": {
+                "query": "card"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "layers.search#layers-search-field"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.layers.searchMatches",
+                  "params": {
+                    "count": 5,
+                    "query": "card"
+                  }
+                }
+              ]
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "layers-row",
+                  "measure": "height",
+                  "relation": "greater-than",
+                  "value": 180,
+                  "reference": null
+                },
+                {
+                  "region": "layers-row",
+                  "measure": "height",
+                  "relation": "less-than",
+                  "value": 280,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "clearing-the-search-brings-back-the-folds-it-had",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "layers.setExpanded#layers-caret",
+              "args": {
+                "target": "/Page/Plans"
+              },
+              "target": "/Page/Plans",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "layers.search#layers-search-field",
+              "args": {
+                "query": "card"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "layers.search#layers-search-field",
+              "args": {
+                "query": ""
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "layers.search#layers-search-field"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.layers.searchCleared",
+                  "params": {}
+                }
+              ]
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "layers-row",
+                  "measure": "height",
+                  "relation": "greater-than",
+                  "value": 180,
+                  "reference": null
+                },
+                {
+                  "region": "layers-row",
+                  "measure": "height",
+                  "relation": "less-than",
+                  "value": 280,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "clicking-a-result-selects-its-element",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "layers.search#layers-search-field",
+              "args": {
+                "query": "card"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "selection.select#layers-row",
+              "args": {
+                "target": "/Page/Plans/Grid/CardB"
+              },
+              "target": "/Page/Plans/Grid/CardB",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "selection.select#layers-row"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Plans/Grid/CardB"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": null,
+            "editor": {
+              "regions": [
+                {
+                  "region": "layers-row",
+                  "measure": "height",
+                  "relation": "less-than",
+                  "value": 280,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-search-nothing-matches-says-so",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "layers.search#layers-search-field",
+              "args": {
+                "query": "zzz"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "layers.search#layers-search-field"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.layers.searchNoMatch",
+                  "params": {
+                    "query": "zzz"
+                  }
+                }
+              ]
+            },
+            "editor": {
+              "regions": [],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
     },
     {
       "id": "layers-row-columns",
@@ -114,7 +899,287 @@
           "The choice is stored in the preferences store and restored after reload."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "classes-without-the-tag-are-shown-and-kept-after-a-reload",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "layers.setRowDetails#menu-layers-row-details-tag",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "layers.setRowDetails#menu-layers-row-details-classes",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "layers.setRowDetails#menu-layers-row-details-classes"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": null,
+            "editor": {
+              "regions": [
+                {
+                  "region": "layers-row-details",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 150,
+                  "reference": "layers-row"
+                }
+              ],
+              "computed": []
+            },
+            "persistence": {
+              "reload": "immediate",
+              "document": null,
+              "preferences": "same",
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "an-id-is-shown-beside-its-row-and-kept-after-a-reload",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "selection.select#layers-row",
+              "args": {
+                "target": "/Page/Footer/Note"
+              },
+              "target": "/Page/Footer/Note",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setId#inspector-id",
+              "args": {
+                "id": "note"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "note\n"
+            },
+            {
+              "door": "layers.setRowDetails#menu-layers-row-details-tag",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "layers.setRowDetails#menu-layers-row-details-id",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "layers.setRowDetails#menu-layers-row-details-id"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Footer/Note/@attributes/id",
+                "value": "note"
+              }
+            ],
+            "selection": [
+              "/Page/Footer/Note"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": null,
+            "editor": {
+              "regions": [
+                {
+                  "region": "layers-row-details",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 400,
+                  "reference": "layers-row"
+                }
+              ],
+              "computed": []
+            },
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": "same",
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "attributes-are-shown-beside-their-row-and-kept-after-a-reload",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "selection.select#layers-row",
+              "args": {
+                "target": "/Page/Footer/Note"
+              },
+              "target": "/Page/Footer/Note",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "workspace.setActiveTab#inspector-tab-settings",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.setCustomAttribute#inspector-custom-attribute-add",
+              "args": {
+                "name": "data-state",
+                "value": ""
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "layers.setRowDetails#menu-layers-row-details-tag",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "layers.setRowDetails#menu-layers-row-details-attributes",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "layers.setRowDetails#menu-layers-row-details-attributes"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Footer/Note/@customAttributes",
+                "value": {
+                  "data-state": ""
+                }
+              }
+            ],
+            "selection": [
+              "/Page/Footer/Note"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": null,
+            "editor": {
+              "regions": [
+                {
+                  "region": "layers-row-details",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 400,
+                  "reference": "layers-row"
+                }
+              ],
+              "computed": []
+            },
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": "same",
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
     },
     {
       "id": "layers-row-colours",

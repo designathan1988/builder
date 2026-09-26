@@ -11,21 +11,26 @@ import { EMPTY_HISTORY } from '../history/history.ts';
 import { applyPatches } from '../history/transaction.ts';
 import { manualClock } from '../ports/clock.ts';
 import { sequentialIds } from '../ports/ids.ts';
+import { anyCss } from '../ports/css.ts';
 import { noLayout } from '../ports/layout.ts';
 import { toggleLockCommand } from './flags.ts';
 import { renameCommand } from './names.ts';
+import { deepFreeze } from '../store/store.ts';
 
 const RULES = rulesFromManifest(manifest.elements, manifest.properties, manifest.html);
-const AURORA = fixture as DocumentJson;
+// a frozen document, as the store commits it: a change in place throws
+const AURORA = deepFreeze(structuredClone(fixture) as DocumentJson);
 
 const context = (document: DocumentJson) =>
   ({
-    state: { document, selection: [], history: EMPTY_HISTORY, message: null, ui: undefined as never },
+    // every document a handler reads is frozen, as the store commits it: a change in place throws
+    state: { document: deepFreeze(document), selection: [], history: EMPTY_HISTORY, message: null, ui: undefined as never },
     clock: manualClock(),
     ids: sequentialIds('new'),
     rules: RULES,
     words: (key: MessageId) => translate('en', key),
     layout: noLayout,
+    css: anyCss,
   }) satisfies HandlerContext<never>;
 const rename = (document: DocumentJson, target: string, name: string) => renameCommand.run(context(document), { target: target as NodeId, name });
 const nameOf = (document: DocumentJson, id: string) => locate(document, id as NodeId)?.node.name;

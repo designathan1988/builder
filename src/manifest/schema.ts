@@ -76,7 +76,8 @@ export const elementSchema = z.strictObject({
 
 export const attributeSchema = z.strictObject({
   id: camelId,
-  html: z.string().regex(/^[a-z][a-z-]*$/).nullable(),
+  // its attribute's name in the markup: HTML's, or SVG's, whose may hold digits (a line's x1, y2)
+  html: z.string().regex(/^[a-z][a-z0-9-]*$/).nullable(),
   labelKey: i18nKey,
   valueType: z.enum(['text', 'url', 'number', 'boolean', 'keyword', 'id-ref', 'markup', 'tag', 'class-list', 'path-list']),
   // for a keyword attribute, the values offered: each is in the attribute's generated HTML enum
@@ -85,6 +86,33 @@ export const attributeSchema = z.strictObject({
   command: commandId,
 });
 
+// A node of a template's tree (a palette entry of kind "template"): its element type, the tag when not its first one,
+// its name and text as catalogue keys (in the person's language), a wrapper whose styles it takes (the wrap commands'
+// Row and Column), its styles at the base breakpoint and state, its attributes, and its children; without children, it
+// holds its natural children like any new element.
+export interface TemplateNode {
+  readonly element: string;
+  readonly tag?: string | undefined;
+  readonly nameKey?: string | undefined;
+  readonly textKey?: string | undefined;
+  readonly wrapper?: string | undefined;
+  readonly styles?: Readonly<Record<string, string>> | undefined;
+  readonly attributes?: Readonly<Record<string, string | number | boolean>> | undefined;
+  readonly children?: readonly TemplateNode[] | undefined;
+}
+export const templateNodeSchema: z.ZodType<TemplateNode> = z.lazy(() =>
+  z.strictObject({
+    element: camelId,
+    tag: z.string().optional(),
+    nameKey: i18nKey.optional(),
+    textKey: i18nKey.optional(),
+    wrapper: kebabId.optional(),
+    styles: z.record(cssName, z.string().min(1)).optional(),
+    attributes: z.record(camelId, z.union([z.string(), z.number(), z.boolean()])).optional(),
+    children: z.array(templateNodeSchema).optional(),
+  }),
+);
+
 export const paletteEntrySchema = z.strictObject({
   id: kebabId,
   labelKey: i18nKey,
@@ -92,6 +120,8 @@ export const paletteEntrySchema = z.strictObject({
   kind: z.enum(['element', 'template']),
   inputType: z.string().nullable(),
   feature: featureId,
+  // the tree a template inserts (kind "template"); absent for an element entry
+  template: templateNodeSchema.optional(),
 });
 
 export const paletteGroupSchema = z.strictObject({
@@ -304,6 +334,7 @@ export const COUPLING_ACTIONS = [
   'setParentValue', // also write `value` to `property` of the parent
   'swapWith', // the value meant for the trigger goes to `property`, and the other way round
   'keepVisualPlace', // also write `property` from the element's current rendered place
+  'mirror', // the value about to be written to `property` is mirrored along its axis: flex-start ↔ flex-end, start ↔ end
 ] as const;
 
 export const couplingSchema = z.strictObject({
@@ -342,6 +373,10 @@ export const propertiesFileSchema = z.strictObject({
   recipes: z.array(recipeSchema),
   // a coupling's effect runs inside the triggering command: same transaction, same undo step
   couplings: z.array(couplingSchema),
+  // Availability predicates that read one value of the primary selected element: the predicate holds while the value
+  // it holds for `property` is one of `values` (flexOrGridContainer: display is flex, inline-flex, grid or
+  // inline-grid). Their code registers them (registerPredicate) and reads this data, never a property written by hand.
+  valuePredicates: z.array(z.strictObject({ id: predicateId, property: cssName, values: z.array(z.string().min(1)).min(1) })),
   // Shorthands stored whole: an engine lacks one of their longhands, and the reason says why the
   // manifest stores the shorthand instead of a composite that omits the missing longhands.
   storedWhole: z.array(z.strictObject({ property: cssName, reason: z.string().min(1) })),
@@ -661,7 +696,7 @@ export const layoutFileSchema = z.strictObject({
   // list, the arrow of an item that opens a submenu, the disclosure of an expanded and of a collapsed section or tree
   // row, the mark of a checked item, a folder of the Explorer, a size variable of the Styles view. The shell draws no
   // other icon than these, the panels', the elements', the keywords' and the ones the doors name.
-  glyphs: z.strictObject({ dropdown: iconName, submenu: iconName, expanded: iconName, collapsed: iconName, checked: iconName, folder: iconName, sizeVariable: iconName }),
+  glyphs: z.strictObject({ dropdown: iconName, submenu: iconName, expanded: iconName, collapsed: iconName, checked: iconName, folder: iconName, sizeVariable: iconName, sideRow: iconName, sideColumn: iconName, quickPanel: iconName, grip: iconName }),
   // Each panel (the panel values of workspace.setPanelOpen): its icon (on its dock tab and its palette entry), its
   // name, where it lives, the sidebar view a section belongs to ("in", a section only), and whether it is open at the
   // first start (a dock panel: a tab of the dock; the workbench: the dock expanded). The dock's panels are its tabs
@@ -698,7 +733,9 @@ export const glossarySchema = z.strictObject({
 // resolves it; manifest:check proves every one names exactly one node). A document path may go on into a field of
 // that node after "/@": "/Page/Section/@styles/desktop/base/padding-top".
 const nodeRef = z.string().regex(/^(\/[^/@][^/]*)+$/, 'a node path from the fixture root, such as "/Page/Section/Heading"');
-const documentPath = z.string().regex(/^(\/[^/@][^/]*)+(\/@[a-z]+(\/[^/]+)*)?$/, 'a node path, optionally followed by /@<field>, such as "/Page/Section/@styles/desktop/base/padding-top"');
+// (a field's name is camelCase: @customAttributes)
+// a field of the project itself has no node path: "/@swatches"
+const documentPath = z.string().regex(/^(\/@[a-zA-Z]+|(\/[^/@][^/]*)+(\/@[a-zA-Z]+(\/[^/]+)*)?)$/, 'a node path, optionally followed by /@<field>, such as "/Page/Section/@styles/desktop/base/padding-top", or a field of the project, such as "/@swatches"');
 
 // One step of a scenario: a door run with the command's arguments as data (for element.insert, `entry` is the
 // palette entry whose tile the runner uses), on the node the gesture acts on, dropped before, after or inside a node
@@ -716,11 +753,14 @@ const stepSchema = z.strictObject({
   // A drag step with hold: true presses on its target (for a palette drag, on the tile of args.entry), moves to its
   // drop and keeps the button down; the steps after it run during the drag. The drag ends at a later step on the same
   // drag door with target null, drop null and hold false (a release where the pointer is), or at drag.cancel.
+  // A panel drag (a number field's label scrubbed) is pressed on the control its arguments stand for, never on a node:
+  // with no hold of its door before it, its step with target null is a whole drag, pressed, moved and released.
   // Optional: absent is false.
   hold: z.boolean().optional(),
   // The characters the runner types with the real keyboard after the step's door has run; "\n" presses Enter (the
-  // edited text, the link prompt, the rename field) and U+2028, the line separator, presses Shift+Enter (a line break
-  // typed in a text field). Optional: absent is null.
+  // edited text, the link prompt, the rename field), U+2028, the line separator, presses Shift+Enter (a line break
+  // typed in a text field) and "\t" presses Tab (the focus leaves a field, a text area that keeps what it holds when
+  // it is left). Optional: absent is null.
   type: z.string().nullable().optional(),
   // The button the step presses in the confirmation its command asks (a command with `confirmation` in the manifest,
   // such as File › Open over a page that holds work): "confirm" or "cancel". A step that leaves a confirmation
@@ -756,6 +796,13 @@ export const scenarioSchema = z.strictObject({
     // environment.zoomLevels, which the runner sets through View › Zoom before the steps, so only once the feature
     // zoom-keyboard-buttons is built (manifest:check rule zoom).
     zoom: z.union([z.literal('fit'), z.number().int().positive()]),
+    // the browser's storage before the steps (optional: absent is as the fixture leaves it): "corrupt-current-record"
+    // makes the record autosave saved for the fixture unreadable, and reloads the editor (spec
+    // autosave-corruption-recovery)
+    storage: z.enum(['corrupt-current-record']).optional(),
+    // the editor's other tabs (optional: absent is none): "another-tab-editing" opens one first, which opens the fixture
+    // and saves it, so the scenario's tab reads it (spec multi-tab-guard)
+    tabs: z.enum(['another-tab-editing']).optional(),
   }),
   // run in order after the fixture is loaded; exactly one is the action step
   steps: z.array(stepSchema).min(1),

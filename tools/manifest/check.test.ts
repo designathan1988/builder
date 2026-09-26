@@ -4,7 +4,7 @@ import { normaliseChord } from '../../src/manifest/chord.ts';
 import { createCssMatcher } from '../../src/manifest/css.ts';
 import { generatedCompatSchema, generatedCssSchema, generatedHtmlSchema, propertiesFileSchema } from '../../src/manifest/schema.ts';
 import { loadManifest, registrationsIn } from './load.ts';
-import { PLANTS, ownGenerated, plantDeleteScenarios, plantRenderScenario, planted, type Plant } from './plants.ts';
+import { PLANTS, ownGenerated, plantDeleteScenarios, plantRenderScenario, planted, unbuildZoom, type Plant } from './plants.ts';
 
 const loaded = loadManifest();
 
@@ -13,7 +13,7 @@ describe('manifest:check', () => {
     expect(loaded.problems).toEqual([]);
     const result = checkManifest(loaded.input);
     expect(result.problems).toEqual([]);
-    expect(result.summary?.features).toBe(179);
+    expect(result.summary?.features).toBe(180);
   });
 
   it('has a planted fixture for every rule', () => {
@@ -391,16 +391,12 @@ describe('manifest:check', () => {
   });
 
   it('lets a scenario start at a zoom level once zoom-keyboard-buttons is built, and at "fit" before', () => {
-    const zoomCommands = ['view.zoomIn', 'view.zoomOut', 'view.zoomReset', 'view.zoomTo', 'view.zoomFit'];
+    // built as the real manifest now is; before it, its commands made unbuilt (unbuildZoom)
     const at = (zoom: unknown, built: boolean) =>
       valid((m) => {
+        if (!built) unbuildZoom(m);
         const [remove] = plantDeleteScenarios(m);
         (remove.setup as Record<string, unknown>).zoom = zoom;
-        if (!built) return;
-        m.registered = { ...m.registered, handler: [...m.registered.handler, ...zoomCommands] };
-        for (const r of (m.files['references.json'] as { references: { kind: string; id: string; status: string }[] }).references) {
-          if (r.kind === 'handler' && zoomCommands.includes(r.id)) r.status = 'registered';
-        }
       }).map((p) => p.rule);
     expect(at('fit', false)).toEqual([]);
     expect(at(50, false)).toEqual(['zoom']);

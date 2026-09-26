@@ -4,11 +4,13 @@
 // or NOT_AVAILABLE_YET while its feature is not built: every door of such a command is drawn disabled with
 // "not available yet", and dispatching it changes nothing.
 import type { CommandArgs } from '../../generated/commands.ts';
-import type { CommandId, FeatureId, MessageId, PredicateId } from '../../generated/ids.ts';
+import type { ActionId, CommandId, FeatureId, MessageId, PredicateId } from '../../generated/ids.ts';
 import type { DocumentJson, Selection } from '../document/model.ts';
 import type { ModelRules } from '../document/validate.ts';
 import type { Patch } from '../history/transaction.ts';
 import type { Clock } from '../ports/clock.ts';
+import type { ClipboardWrite } from '../ports/clipboard.ts';
+import type { CssSupport } from '../ports/css.ts';
 import type { DownloadFile } from '../ports/download.ts';
 import type { IdGenerator } from '../ports/ids.ts';
 import type { Layout } from '../ports/layout.ts';
@@ -34,14 +36,17 @@ export function message(key: MessageId, params: Readonly<Record<string, MessageP
 export type Outcome<Ui> =
   // patches to the document (one transaction), the selection after them, the editor state after them, a message,
   // and a file for the person (the store hands it to the download port once the command has run)
-  | { readonly kind: 'change'; readonly patches?: readonly Patch[]; readonly selection?: Selection; readonly ui?: Ui; readonly message?: Message; readonly download?: DownloadFile }
+  | { readonly kind: 'change'; readonly patches?: readonly Patch[]; readonly selection?: Selection; readonly ui?: Ui; readonly message?: Message; readonly download?: DownloadFile; readonly clipboard?: ClipboardWrite; readonly editing?: 'take-over' }
   // the command cannot run now: nothing changes and the status bar says why
   | { readonly kind: 'refused'; readonly message: Message }
   // history.undo and history.redo: the store walks its history
   | { readonly kind: 'undo' }
   | { readonly kind: 'redo' }
   // project.open: another project replaces the document; the selection and the history start empty
-  | { readonly kind: 'load'; readonly document: DocumentJson; readonly message?: Message };
+  | { readonly kind: 'load'; readonly document: DocumentJson; readonly message?: Message }
+  // the person is asked first (a command whose manifest entry has a confirmation): the store holds the dispatch
+  // until the answer, and runs it again with `confirmed` once the person confirms
+  | { readonly kind: 'confirm' };
 
 export interface HandlerContext<Ui> {
   readonly state: StoreState<Ui>;
@@ -54,6 +59,17 @@ export interface HandlerContext<Ui> {
   words(key: MessageId): string;
   // where the canvas draws the nodes of the page it shows, for a handler that acts on what a gesture covers (the marquee)
   readonly layout: Layout;
+  // whether the browser takes a value for a property, for a handler that writes a value a person typed (style.set)
+  readonly css: CssSupport;
+  // the class the editor makes the style target (spec shared-style-classes), whose styles a style write goes to while
+  // every selected element lists it (core/design/classes.ts targetClass); none when absent: the elements themselves
+  readonly styleClass?: string | null;
+  // whether the person confirmed this run, answering the confirmation the command asked (outcome `confirm`); absent
+  // (a context built outside the store, a unit test's) is not confirmed
+  readonly confirmed?: boolean;
+  // a saved version's document by its revision, as autosave kept it (spec autosave-corruption-recovery); undefined when
+  // there is no such version or no store of versions
+  version?(revision: string): unknown;
 }
 
 export interface RegisteredHandler<Id extends CommandId, Ui> {
@@ -61,15 +77,19 @@ export interface RegisteredHandler<Id extends CommandId, Ui> {
   // A method, so a core handler written for any editor state (Ui = never) fits every table.
   run(context: HandlerContext<Ui>, args: CommandArgs[Id]): Outcome<Ui>;
   // Whether a door with these arguments stands for the state the store holds now (a checked theme, a pressed panel
-  // toggle); a command whose doors stand for no state has none. The command's owner knows it, beside its handler.
-  current?(state: StoreState<Ui>, args: Readonly<Record<string, unknown>>): boolean;
+  // toggle); a command whose doors stand for no state has none. The command's owner knows it, beside its handler, and
+  // may read the model's rules for it (the alignment matrix: the composite it writes).
+  current?(state: StoreState<Ui>, args: Readonly<Record<string, unknown>>, rules?: ModelRules): boolean;
+  // The words a door's label fills in for the state the store holds now ("Create {tag} inside": the tag of the
+  // selected element's natural child); a command whose label fills in nothing has none.
+  labelParams?(state: StoreState<Ui>, rules: ModelRules): Readonly<Record<string, string>>;
 }
 
 // manifest:check reads `registerHandler('<id>'` to mark the id registered in references.json.
 export function registerHandler<Id extends CommandId, Ui = never>(
   command: Id,
   run: (context: HandlerContext<Ui>, args: CommandArgs[Id]) => Outcome<Ui>,
-  current?: (state: StoreState<Ui>, args: Readonly<Record<string, unknown>>) => boolean,
+  current?: (state: StoreState<Ui>, args: Readonly<Record<string, unknown>>, rules?: ModelRules) => boolean,
 ): RegisteredHandler<Id, Ui> {
   return current === undefined ? { command, run } : { command, run, current };
 }
@@ -124,3 +144,32 @@ export type PredicateTable<Ui> = { readonly [Id in PredicateId]?: RegisteredPred
 
 // The predicate of every command that is always available.
 export const always = registerPredicate('always', () => true);
+
+// A coupling's condition (properties.json couplings[].condition.predicate, a closed list): whether it holds for the
+// value the element holds for the condition's property and the one its parent holds (undefined: none of its own).
+// manifest:check reads `registerCondition('<id>'` as a predicate registered.
+export interface RegisteredCondition {
+  readonly id: PredicateId;
+  holds(own: string | undefined, parent: string | undefined, values: readonly string[]): boolean;
+}
+export function registerCondition(id: PredicateId, holds: RegisteredCondition['holds']): RegisteredCondition {
+  return Object.freeze({ id, holds });
+}
+
+// A coupling's action (properties.json couplings[].effect.action, a closed list): what it does to the declarations a
+// write of the element is about to make (property → CSS text), given the trigger's property and the effect's.
+// manifest:check reads `registerAction('<id>'`.
+export interface RegisteredAction {
+  readonly id: ActionId;
+  apply(values: Record<string, string>, trigger: string, effect: { readonly property: string; readonly value: string | null }, scene: CouplingScene): void;
+}
+// What an action sees besides the element's declarations: the declarations the write makes of the element's parent
+// (setParentValue fills them in), and where the element lies now (keepVisualPlace): its margin edge from its parent's
+// padding edge, or from the viewport, in page px; null when nothing measures the page.
+export interface CouplingScene {
+  readonly parent: Record<string, string>;
+  place(within: 'parent' | 'viewport'): { readonly left: number; readonly top: number } | null;
+}
+export function registerAction(id: ActionId, apply: RegisteredAction['apply']): RegisteredAction {
+  return Object.freeze({ id, apply });
+}

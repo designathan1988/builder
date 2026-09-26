@@ -11,8 +11,14 @@ export type { NodeId };
 // The version of the saved format; it is carried from the first save (autosave-restore).
 export const DOCUMENT_VERSION = 1;
 
-// property → its stored CSS text
-export type Declarations = { readonly [P in PropertyId]?: string };
+// One layer of a structured value (a shadow): its typed fields, by the ids of its structure (properties.json
+// structures: a length or a colour as CSS text, a flag as a boolean).
+export type StructuredLayer = { readonly [field: string]: string | boolean };
+// What a node stores for a property: its CSS text, or the layers of a structured value (first painted on top), which
+// only the output turns into CSS (a hidden layer stays in the document, out of the CSS).
+export type StoredValue = string | readonly StructuredLayer[];
+// property → what it stores
+export type Declarations = { readonly [P in PropertyId]?: StoredValue };
 // breakpoint → state → declarations: a value belongs to one breakpoint and one state
 export type Styles = { readonly [B in BreakpointId]?: { readonly [S in StateId]?: Declarations } };
 export type AttributeValue = string | number | boolean;
@@ -40,6 +46,35 @@ export interface DocNode {
   // anything inside it, adds to it, or toggles a flag inside it; it can still be selected. True, absent while it is
   // unlocked. A page's root is never locked.
   readonly locked?: true;
+  // the person's own attributes (feature element-attributes-aria: aria-*, data-*, role…), name → value, written as
+  // they are; absent while there are none. Never an event handler (on…) nor an attribute of the editor's own.
+  readonly customAttributes?: { readonly [name: string]: string };
+  // the root of an instance of a component names its component (core/design/components.ts, spec reusable-components);
+  // absent on any other element
+  readonly component?: string;
+  // every element of an instance: the place of the definition element it comes from, the child indexes from the
+  // definition's root ([] for the root); absent on any other element
+  readonly componentPart?: readonly number[];
+  // a page's root only: the page's manual guides (core/page/guides.ts, spec guides-manual), each named by its axis and a
+  // number, at a page px position, locked or not; absent while the page has none. Never exported.
+  readonly guides?: readonly Guide[];
+  // a page's root only: the settings of its layout grids set in Guides & Grids (core/page/grid.ts, spec
+  // workspace-settings-dialog), each grid's settings a person set; a setting absent takes its default of
+  // interactions.json; absent while none is set. Never exported.
+  readonly grid?: GridSettings;
+}
+
+export interface GridSettings {
+  readonly columns?: { readonly count?: number; readonly width?: number; readonly gutter?: number; readonly margin?: number };
+  readonly rows?: { readonly height?: number; readonly gutter?: number };
+  readonly dots?: { readonly spacing?: number };
+}
+
+export interface Guide {
+  readonly id: string;
+  readonly axis: 'horizontal' | 'vertical';
+  readonly at: number;
+  readonly locked?: true;
 }
 
 export interface Page {
@@ -53,6 +88,26 @@ export interface Page {
 export interface DocumentJson {
   readonly version: typeof DOCUMENT_VERSION;
   readonly pages: readonly Page[];
+  // the colours saved with the project, in the order they were saved (core/design/colors.ts); absent while none is
+  readonly swatches?: readonly string[];
+  // the project's design tokens, CSS variables named var(--name) in styles (core/design/tokens.ts); absent while none is
+  readonly tokens?: readonly { readonly name: string; readonly kind: string; readonly value: string }[];
+  // the project's style classes, in the order they were made: a name an element lists in its classes and the styles
+  // every element with it takes (core/design/classes.ts); absent while none is
+  readonly classes?: readonly StyleClass[];
+  // the project's components, in the order they were made: a unique name and its definition, a tree of elements whose
+  // instances are placed in pages (core/design/components.ts); absent while none is
+  readonly components?: readonly ComponentDefinition[];
+}
+
+export interface ComponentDefinition {
+  readonly name: string;
+  readonly tree: DocNode;
+}
+
+export interface StyleClass {
+  readonly name: string;
+  readonly styles: Styles;
 }
 
 // The selected nodes, the primary first. Empty when nothing is selected.
@@ -78,6 +133,15 @@ export function createEmptyDocument(ids: IdGenerator, names: EmptyProjectNames, 
       },
     ],
   };
+}
+
+// Whether a document is the empty project, whatever its names and ids: one page whose root holds no element and
+// carries no attribute, class or style. Replacing it loses nothing (File › Open asks no confirmation over it).
+export function isEmptyProject(doc: DocumentJson): boolean {
+  const [page, ...others] = doc.pages;
+  if (page === undefined || others.length > 0) return false;
+  const root = page.tree;
+  return root.children.length === 0 && Object.keys(root.attributes).length === 0 && root.classes.length === 0 && Object.keys(root.styles).length === 0;
 }
 
 // Every node of a tree, the root first, in document order.

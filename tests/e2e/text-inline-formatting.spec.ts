@@ -9,7 +9,7 @@
 // its door; the document, the selection and the history are
 // read through the read-only test port, the page through the frame, the saved work after a reload.
 import fs from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
 import { control, openMenu, runDoor, runs } from './door.ts';
 
 const FIXTURE = 'manifest/features/fixtures/aurora.json';

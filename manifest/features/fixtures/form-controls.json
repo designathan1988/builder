@@ -1,0 +1,67 @@
+{
+  "version": 1,
+  "pages": [
+    {
+      "id": "p-home",
+      "name": "Home",
+      "file": "index.html",
+      "tree": {
+        "id": "n-page",
+        "type": "page",
+        "name": "Page",
+        "tag": "body",
+        "attributes": {},
+        "classes": [],
+        "styles": {},
+        "text": null,
+        "children": [
+          {
+            "id": "n-select",
+            "type": "select",
+            "name": "Select",
+            "tag": "select",
+            "attributes": {},
+            "classes": [],
+            "styles": {},
+            "text": null,
+            "children": [
+              {
+                "id": "n-option-1",
+                "type": "option",
+                "name": "Option",
+                "tag": "option",
+                "attributes": {},
+                "classes": [],
+                "styles": {},
+                "text": "Option",
+                "children": []
+              },
+              {
+                "id": "n-option-2",
+                "type": "option",
+                "name": "Option 2",
+                "tag": "option",
+                "attributes": {},
+                "classes": [],
+                "styles": {},
+                "text": "Option",
+                "children": []
+              },
+              {
+                "id": "n-option-3",
+                "type": "option",
+                "name": "Option 3",
+                "tag": "option",
+                "attributes": {},
+                "classes": [],
+                "styles": {},
+                "text": "Option",
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

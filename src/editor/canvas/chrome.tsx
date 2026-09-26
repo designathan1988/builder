@@ -30,22 +30,59 @@ import { locate, type DocNode, type DocumentJson, type NodeId } from '../../core
 import { heldHand, type HandState } from '../../core/structure/hand.ts';
 import type { MessageId } from '../../generated/ids.ts';
 import { elementIcon, manifest } from '../../manifest/runtime.ts';
-import { Icon } from '../doors/door.tsx';
+import { Icon, isDoorBuilt } from '../doors/door.tsx';
 import { GLYPHS } from '../doors/placement.ts';
 import type { DropProposal } from '../drag/drop.ts';
-import { band, drag, ghostReturn, hover, type DragView, type GhostReturn } from '../input/pointer.ts';
+import { band, drag, ghostReturn, hover, lastDrop, measuring, type DragView, type GhostReturn, type Inserting, type SideView } from '../input/pointer.ts';
 import { useEditorState } from '../store.ts';
 import { useT } from '../text.ts';
-import { canvasFrame, contentBoxes, flowAxis, nodeBox } from './coordinates.ts';
+import { canvasFrame, contentBoxes, flowAxis, holdsNode, innerBox, nodeBox } from './coordinates.ts';
 import { TextToolbar } from './text-toolbar.tsx';
+import { EditHandles } from './edit-handles.tsx';
+import { editMode, EDIT_MODES } from './edit-mode.ts';
+
+// no Edit on canvas mode: canvas.setEditMode's first value
+const NO_MODE = EDIT_MODES[0];
+import { ViewOverlays } from './view-overlays.tsx';
+import { GridOverlay } from './grid-overlay.tsx';
 
 // the palette's entries by id: the element a creation drag inserts and the words that name it
+// the resize handles (spec resize-handles): the doors of the resize gesture, one per handle, drawn on the one selected
+// element that can be resized (not the page, not locked, shown), each pressed outside the element
+// (the resize gesture: the one whose Shift keeps the aspect ratio, interactions.json)
+const RESIZE_GESTURE = manifest.interactions.gestures.find((g) => g.modifiers.some((m) => m.meaning === 'keep-aspect-ratio'))?.id;
+const RESIZE_HANDLES = manifest.doors.filter((d) => d.door.kind === 'canvas-handle' && d.door.gesture === RESIZE_GESTURE);
+// the rotation handle (spec rotation-handle): outside the selection's top-right corner, dragged by the pointer owner
+const ROTATE_GESTURE = manifest.interactions.gestures.find((g) => g.modifiers.some((m) => m.meaning === 'snap-to-15-degree-steps'))?.id;
+const ROTATE_HANDLE = manifest.doors.find((d) => d.door.kind === 'canvas-handle' && d.door.gesture === ROTATE_GESTURE) ?? null;
+const handlePoint = (handle: string, b: { x: number; y: number; width: number; height: number }) => {
+  const side = handle.slice(handle.lastIndexOf('-') + 1);
+  return { left: b.x + (side.includes('w') ? 0 : side.includes('e') ? b.width : b.width / 2), top: b.y + (side.includes('n') ? 0 : side.includes('s') ? b.height : b.height / 2) };
+};
+
 const PALETTE = new Map(manifest.elements.palette.flatMap((g) => g.entries.map((e) => [e.id, e] as const)));
+
+// What a creation drag inserts, as its words and its ghost show it: a palette entry's label and its element's icon, or
+// a component's name and its tile's icon (spec reusable-components); null for a tile that stands for neither.
+function insertingLook(inserting: Inserting): { readonly name: { readonly key: MessageId } | string; readonly icon: string; readonly id: string } | null {
+  const entry = inserting.args.entry;
+  const item = typeof entry === 'string' ? PALETTE.get(entry) : undefined;
+  if (item !== undefined) return { name: { key: item.labelKey as MessageId }, icon: elementIcon(item.element) ?? GLYPHS.folder, id: item.id };
+  const component = inserting.args.component;
+  if (typeof component === 'string') return { name: component, icon: inserting.tile.door.icon ?? GLYPHS.folder, id: component };
+  return null;
+}
 // where a creation drag's ghost sits from the pointer, in screen pixels (interactions.json)
 const GHOST_OFFSET = ((): readonly [number, number] => {
   const value = manifest.interactions.constants.find((c) => c.id === 'drag.ghostOffset')?.value;
   if (!Array.isArray(value) || typeof value[0] !== 'number' || typeof value[1] !== 'number') throw new Error('interactions.json has no pair drag.ghostOffset');
   return [value[0], value[1]];
+})();
+// how long the elements a drop placed flash (interactions.json drop.flashDuration)
+const FLASH_MS = (() => {
+  const value = manifest.interactions.constants.find((c) => c.id === 'drop.flashDuration')?.value;
+  if (typeof value !== 'number') throw new Error('interactions.json has no number drop.flashDuration');
+  return value;
 })();
 // how long the ghost of a cancelled creation drag takes to go back to its tile: halfway between the bounds of
 // interactions.json (spec drag-level-keys-escape, Problems in Pager 4: 150 to 250 ms)
@@ -58,7 +95,7 @@ const GHOST_RETURN_MS = ((): number => {
 
 // What the drop indicator draws: the drag in progress (pointer.ts), or the aim of the keyboard's hand, which has no
 // pointer and no ghost (and climbs no level of a drag).
-type DropView = Pick<DragView, 'dragged' | 'inserting' | 'proposal' | 'refusal' | 'levels'>;
+type DropView = Pick<DragView, 'dragged' | 'inserting' | 'proposal' | 'refusal' | 'levels' | 'side'> & { readonly at: DragView['at'] | null };
 
 // The words of the drag in progress (DESIGN.md "Canvas", drag): what its drop label reads, and, for a palette tile's
 // creation drag, the status bar too (spec palette-drag-insert, Problems in Pager 1 and 2). Over the dragged nodes'
@@ -70,6 +107,8 @@ type DropView = Pick<DragView, 'dragged' | 'inserting' | 'proposal' | 'refusal' 
 // climbed, never the keys pressed.
 export function dragWords(document: DocumentJson, view: DropView): Message | null {
   const { proposal, dragged, inserting, refusal, levels } = view;
+  // a confirmed side drop names the wrapper it creates, or the refusal its wrap would meet
+  if (view.side?.armed === true) return view.side.refusal ?? sideWords(document, view.side, dragged, inserting);
   if (proposal === null) return inserting !== null ? message('status.drop.outsidePage') : null;
   // the refusal its drop would meet (a creation drag's, the hand's aim), else the dragged nodes' own subtree
   if (refusal !== null) return refusal;
@@ -81,11 +120,28 @@ export function dragWords(document: DocumentJson, view: DropView): Message | nul
     const where = { parent: receiver.name, position: proposal.index + 1, count: siblings.length + dragged.length };
     return levels > 0 ? message('canvas.dropTargetLevel', { ...where, levels }) : message('canvas.dropTarget', where);
   }
-  const labelKey = PALETTE.get(inserting)?.labelKey;
-  const element = labelKey === undefined ? inserting : { key: labelKey as MessageId };
+  const element = insertingLook(inserting)?.name ?? '';
   if (siblings.length === 0) return message('canvas.insertInto', { element, parent: receiver.name });
   const where = { element, position: proposal.index + 1, count: siblings.length + 1, parent: receiver.name };
   return levels > 0 ? message('canvas.insertTargetLevel', { ...where, levels }) : message('canvas.insertTarget', where);
+}
+
+// What a confirmed side drop reads: "Create a row: Paragraph beside Card" (a Column in a row parent).
+function sideWords(document: DocumentJson, side: SideView, dragged: readonly NodeId[], inserting: Inserting | null): Message {
+  const target = locate(document, side.offer.target)?.node.name ?? '';
+  const first = dragged[0] === undefined ? null : (locate(document, dragged[0])?.node.name ?? null);
+  const looked = inserting === null ? null : insertingLook(inserting);
+  const name = looked !== null ? looked.name : dragged.length > 1 ? String(dragged.length) : (first ?? '');
+  return message(side.offer.wrapper === 'row' ? 'canvas.drop.sideRow' : 'canvas.drop.sideColumn', { name, target });
+}
+
+// Where an insertion line is drawn: its place and its length; its thickness is the class's (across or down).
+const lineStyle = (b: Box): CSSProperties => (b.height === 0 ? { left: b.x, top: b.y, width: b.width } : { left: b.x, top: b.y, height: b.height });
+
+// The line of a confirmed side drop: along the target's side edge, on the side the dragged element goes.
+export function sideLine(target: Box, side: SideView['offer']): Box {
+  if (side.wrapper === 'row') return { x: side.side === 'before' ? target.x : target.x + target.width, y: target.y, width: 0, height: target.height };
+  return { x: target.x, y: side.side === 'before' ? target.y : target.y + target.height, width: target.width, height: 0 };
 }
 
 export interface Box {
@@ -105,8 +161,58 @@ interface Layout {
   readonly toolbar: { readonly x: number; readonly y: number } | null;
   // the marquee's band while one is drawn (pointer.ts)
   readonly band: Box | null;
+  // where the rotation handle of the one selected node goes (rotateSpot)
+  readonly rotate: { readonly x: number; readonly y: number } | null;
+  // the hovered element's size in CSS px, drawn below its hover outline (spec hover-measure)
+  readonly hoverSize: { readonly x: number; readonly y: number; readonly width: number; readonly height: number } | null;
+  // while Alt is held, the distances from the selection to the hovered element, each a line and its length in CSS px
+  readonly distances: readonly Distance[];
 }
-const EMPTY: Layout = { selected: [], union: null, hovered: null, label: null, toolbar: null, band: null };
+
+interface Distance {
+  readonly box: Box;
+  readonly value: number;
+}
+
+// The distances Alt measures (spec hover-measure, Problems in Pager 2), in the chrome's screen px, each with its length
+// in CSS px (screen px divided by the zoom): over an ancestor of the selection, from the selection to the ancestor's
+// inner edges (its padding box); over any other element, between the nearest edges of the two on each axis where they
+// do not overlap, at the middle of what they share on the other axis, else of the selection.
+function distancesOf(selected: Box, other: Box, inner: Box | null, zoom: number): Distance[] {
+  const css = (px: number) => Math.round(px / zoom);
+  const midX = selected.x + selected.width / 2;
+  const midY = selected.y + selected.height / 2;
+  if (inner !== null) {
+    const right = selected.x + selected.width;
+    const bottom = selected.y + selected.height;
+    return [
+      { box: { x: midX, y: inner.y, width: 0, height: selected.y - inner.y }, value: css(selected.y - inner.y) },
+      { box: { x: midX, y: bottom, width: 0, height: inner.y + inner.height - bottom }, value: css(inner.y + inner.height - bottom) },
+      { box: { x: inner.x, y: midY, width: selected.x - inner.x, height: 0 }, value: css(selected.x - inner.x) },
+      { box: { x: right, y: midY, width: inner.x + inner.width - right, height: 0 }, value: css(inner.x + inner.width - right) },
+    ].filter((d) => d.value > 0);
+  }
+  const shared = (a0: number, a1: number, b0: number, b1: number, fallback: number) => (Math.max(a0, b0) < Math.min(a1, b1) ? (Math.max(a0, b0) + Math.min(a1, b1)) / 2 : fallback);
+  const out: Distance[] = [];
+  const y = shared(selected.y, selected.y + selected.height, other.y, other.y + other.height, midY);
+  if (other.x >= selected.x + selected.width) out.push({ box: { x: selected.x + selected.width, y, width: other.x - selected.x - selected.width, height: 0 }, value: css(other.x - selected.x - selected.width) });
+  else if (other.x + other.width <= selected.x) out.push({ box: { x: other.x + other.width, y, width: selected.x - other.x - other.width, height: 0 }, value: css(selected.x - other.x - other.width) });
+  const x = shared(selected.x, selected.x + selected.width, other.x, other.x + other.width, midX);
+  if (other.y >= selected.y + selected.height) out.push({ box: { x, y: selected.y + selected.height, width: 0, height: other.y - selected.y - selected.height }, value: css(other.y - selected.y - selected.height) });
+  else if (other.y + other.height <= selected.y) out.push({ box: { x, y: other.y + other.height, width: 0, height: selected.y - other.y - other.height }, value: css(selected.y - other.y - other.height) });
+  return out;
+}
+
+// The rotation handle's place (spec rotation-handle): a fixed screen distance outside the box's top-right corner, held
+// inside the canvas (the chrome is clipped to it): inside the corner on a side where outside would leave it, and at
+// the canvas's edge when even the corner lies beyond it (a turned element's box can be larger than the page)
+function rotateSpot(box: Box, area: { readonly width: number; readonly height: number }, size: number, gap: number): { readonly x: number; readonly y: number } {
+  const outside = { x: box.x + box.width + gap, y: box.y - gap - size };
+  const x = outside.x + size <= area.width ? outside.x : box.x + box.width - gap - size;
+  const y = outside.y >= 0 ? outside.y : box.y + gap;
+  return { x: Math.min(Math.max(x, 0), area.width - size), y: Math.min(Math.max(y, 0), area.height - size) };
+}
+const EMPTY: Layout = { selected: [], union: null, hovered: null, label: null, toolbar: null, band: null, rotate: null, hoverSize: null, distances: [] };
 
 // the smallest box around every box given; null for none
 export function unionOf(boxes: readonly Box[]): Box | null {
@@ -124,6 +230,14 @@ const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b)
 
 // Where the label of a box goes: the first free place in the rule's order, all in screen pixels; a place is free
 // when it lies on the canvas and covers no page content. With none free it goes below.
+// The selection's label: always above its element (DESIGN.md "Label rule", the user's decision), held inside the
+// canvas at its top and at its sides.
+export function placeAbove(box: Box, size: { readonly width: number; readonly height: number }, gap: number, canvas: Box): { box: Box; placement: Placement } {
+  const x = Math.max(canvas.x, Math.min(box.x, canvas.x + canvas.width - size.width));
+  const y = Math.max(canvas.y, box.y - gap - size.height);
+  return { placement: 'above', box: { x, y, ...size } };
+}
+
 export function placeLabel(box: Box, size: { readonly width: number; readonly height: number }, gap: number, content: readonly Box[], canvas: Box): { box: Box; placement: Placement } {
   const places: { box: Box; placement: Placement }[] = [
     { placement: 'above', box: { x: box.x, y: box.y - gap - size.height, ...size } },
@@ -167,7 +281,7 @@ interface DropLayout {
 // dragged, the aim is a slot inside its receiver, and the move's refusal of the aim, if any, is the drop's.
 export function handDrop(hand: HandState): DropView {
   const { parent, index } = hand.aim;
-  return { dragged: [hand.held], inserting: null, proposal: { parent, index, placement: 'inside', reference: parent, refused: false }, refusal: hand.refusal, levels: 0 };
+  return { dragged: [hand.held], inserting: null, proposal: { parent, index, placement: 'inside', reference: parent, refused: false }, refusal: hand.refusal, levels: 0, side: null, at: null };
 }
 
 // The drop indicator of the drag in progress (spec drag-reorder-canvas, "Visual feedback", and Problems in Pager 3):
@@ -183,8 +297,11 @@ function DropIndicator({ view }: { readonly view: DropView }) {
   const label = useRef<HTMLDivElement>(null);
   const [layout, setLayout] = useState<DropLayout | null>(null);
   const { dragged } = view;
-  const refusedHere = view.refusal !== null;
+  const armed = view.side?.armed === true ? view.side : null;
+  const refusedHere = armed !== null ? armed.refusal !== null : view.refusal !== null;
   const proposal = useMemo(() => (view.proposal !== null && refusedHere ? { ...view.proposal, refused: true } : view.proposal), [view.proposal, refusedHere]);
+  const sideTarget = armed?.offer.target ?? null;
+  const sideOffer = armed?.offer ?? null;
   const words = dragWords(document, view);
   const receiver = proposal === null ? null : (locate(document, proposal.parent)?.node ?? null);
   const siblings = receiver === null ? [] : receiver.children.filter((c) => !dragged.includes(c.id));
@@ -203,11 +320,13 @@ function DropIndicator({ view }: { readonly view: DropView }) {
       const origin = layer.current?.getBoundingClientRect();
       if (iframe && origin) {
         const local = (b: Box | null): Box | null => (b === null ? null : { x: b.x - origin.x, y: b.y - origin.y, width: b.width, height: b.height });
-        const box = local(nodeBox(iframe, proposal.parent));
+        // a confirmed side drop: the target is the receiver, the line runs along its side edge
+        const target = sideTarget === null ? null : local(nodeBox(iframe, sideTarget));
+        const box = target ?? local(nodeBox(iframe, proposal.parent));
         const reference = anchor === null ? null : local(nodeBox(iframe, anchor.reference));
         const next = anchor?.neighbour == null ? null : local(nodeBox(iframe, anchor.neighbour));
-        if (box && (anchor === null || reference)) {
-          const line = anchor !== null && reference ? dropLine(flowAxis(iframe, proposal.parent), box, reference, next, anchor.placement) : null;
+        if (box && (target !== null || anchor === null || reference)) {
+          const line = target !== null && sideOffer !== null ? sideLine(target, sideOffer) : anchor !== null && reference ? dropLine(flowAxis(iframe, proposal.parent), box, reference, next, anchor.placement) : null;
           const size = label.current ? { width: label.current.offsetWidth, height: label.current.offsetHeight } : null;
           const gap = parseFloat(getComputedStyle(layer.current as HTMLDivElement).getPropertyValue('--space-2')) || 0;
           const content = contentBoxes(iframe).map((b) => local(b) as Box);
@@ -220,16 +339,16 @@ function DropIndicator({ view }: { readonly view: DropView }) {
     };
     request = requestAnimationFrame(measure);
     return () => cancelAnimationFrame(request);
-  }, [proposal, dragged, document]);
+  }, [proposal, dragged, document, sideTarget, sideOffer]);
 
   if (proposal === null || receiver === null) return <div ref={layer} className="chrome__drop" />;
   const at = (b: Box): CSSProperties => ({ left: b.x, top: b.y, width: b.width, height: b.height });
   // refused over the dragged subtree; into a container that shows no line (it has no other child); or between siblings
-  const state = proposal.refused ? 'refused' : lineAnchor(proposal, siblings.map((c) => c.id)) === null ? 'into' : 'between';
+  const state = proposal.refused ? 'refused' : armed !== null ? 'side' : lineAnchor(proposal, siblings.map((c) => c.id)) === null ? 'into' : 'between';
   return (
     <div ref={layer} className="chrome__drop" data-chrome="drop">
       {layout ? <div className={`chrome__receiver is-${state}`} data-chrome="drop-receiver" data-state={state} style={at(layout.receiver)} /> : null}
-      {layout?.line ? <div className="chrome__drop-line" data-chrome="drop-line" style={at(layout.line)} /> : null}
+      {layout?.line ? <div className={`chrome__drop-line is-${layout.line.height === 0 ? 'across' : 'down'}${proposal.refused ? ' is-refused' : ''}`} data-chrome="drop-line" style={lineStyle(layout.line)} /> : null}
       <div
         ref={label}
         className={`chrome__label${layout?.label ? '' : ' is-measuring'}${proposal.refused ? ' is-refused' : ''}`}
@@ -248,16 +367,86 @@ function DropIndicator({ view }: { readonly view: DropView }) {
 // stage or the page), so a creation drag never looks like the move of an element of the same name. Drawn over the
 // whole window (a portal on the body), never a pointer target; refused (off the page, or where the element is
 // refused) it wears the refusal's colour.
-function Ghost({ entry, at, refused, ref }: { readonly entry: string; readonly at: { readonly x: number; readonly y: number }; readonly refused: boolean; readonly ref?: Ref<HTMLDivElement> }) {
+function Ghost({ inserting, at, refused, note = null, ref }: { readonly inserting: Inserting; readonly at: { readonly x: number; readonly y: number }; readonly refused: boolean; readonly note?: GhostNote | null; readonly ref?: Ref<HTMLDivElement> }) {
   const t = useT();
-  const item = PALETTE.get(entry);
-  if (item === undefined) return null;
+  const looked = insertingLook(inserting);
+  if (looked === null) return null;
   return createPortal(
-    <div ref={ref} className={`chrome-ghost${refused ? ' is-refused' : ''}`} data-chrome="ghost" data-entry={entry} style={{ left: at.x + GHOST_OFFSET[0], top: at.y + GHOST_OFFSET[1] }}>
-      <Icon name={elementIcon(item.element) ?? GLYPHS.folder} size="sm" />
-      <span className="chrome-ghost__label">{t(item.labelKey as MessageId)}</span>
+    <div className="chrome-ghost-stack" style={{ left: at.x + GHOST_OFFSET[0], top: at.y + GHOST_OFFSET[1] }}>
+      <div ref={ref} className={`chrome-ghost${refused ? ' is-refused' : ''}`} data-chrome="ghost" data-entry={looked.id}>
+        <Icon name={looked.icon} size="sm" />
+        <span className="chrome-ghost__label">{typeof looked.name === 'string' ? looked.name : t(looked.name.key)}</span>
+      </div>
+      <Note note={note} />
     </div>,
     document.body,
+  );
+}
+
+// What the ghost says under its chip about a side drop (spec drag-layout, row 5): offered, how to confirm it (a hint);
+// confirmed, what the release creates (the pill, with the wrapper's glyph), or the refusal its wrap would meet.
+export interface GhostNote {
+  readonly kind: 'hint' | 'pill';
+  readonly words: Message;
+  readonly wrapper: 'row' | 'column';
+  readonly refused: boolean;
+}
+function Note({ note }: { readonly note: GhostNote | null }) {
+  const t = useT();
+  if (note === null) return null;
+  return (
+    <div className={`chrome__${note.kind}${note.refused ? ' is-refused' : ''}`} data-chrome={note.kind === 'pill' ? 'side-pill' : 'side-hint'}>
+      {note.kind === 'pill' ? <Icon name={note.wrapper === 'row' ? GLYPHS.sideRow : GLYPHS.sideColumn} size="sm" /> : null}
+      {t(note.words.key, note.words.params)}
+    </div>
+  );
+}
+// the note of the drag in progress: the side drop it offers or has confirmed, if any
+export function ghostNote(document: DocumentJson, view: DragView): GhostNote | null {
+  const side = view.side;
+  if (side === null) return null;
+  if (!side.armed) return { kind: 'hint', words: message('canvas.drop.sideHint'), wrapper: side.offer.wrapper, refused: false };
+  return { kind: 'pill', words: side.refusal ?? sideWords(document, side, view.dragged, view.inserting), wrapper: side.offer.wrapper, refused: side.refusal !== null };
+}
+
+// The ghost of an element drag (spec drag-layout, row 4): the dragged element's icon and name ("3 elements" for
+// several) beside the pointer, as a creation drag's ghost, while the element itself keeps its place, outlined dashed.
+function MovingGhost({ dragged, at, refused, note }: { readonly dragged: readonly NodeId[]; readonly at: { readonly x: number; readonly y: number }; readonly refused: boolean; readonly note: GhostNote | null }) {
+  const t = useT();
+  const first = useEditorState((s) => (dragged[0] === undefined ? null : (locate(s.document, dragged[0])?.node ?? null)));
+  if (first === null) return null;
+  return createPortal(
+    <div className="chrome-ghost-stack" style={{ left: at.x + GHOST_OFFSET[0], top: at.y + GHOST_OFFSET[1] }}>
+      <div className={`chrome-ghost${refused ? ' is-refused' : ''}`} data-chrome="ghost" data-node={first.id}>
+        <Icon name={elementIcon(first.type) ?? GLYPHS.folder} size="sm" />
+        <span className="chrome-ghost__label">{dragged.length > 1 ? t('canvas.selectedCount', { count: dragged.length }) : first.name}</span>
+      </div>
+      <Note note={note} />
+    </div>,
+    document.body,
+  );
+}
+
+// The elements a drop has just placed flash for drop.flashDuration (spec drag-layout, row 10): an outline in the drop
+// colour that fades, drawn over each of them; at once gone when the person asks for reduced motion.
+function DropFlash() {
+  const drop = useSyncExternalStore(lastDrop.subscribe, lastDrop.get);
+  const [boxes, setBoxes] = useState<{ readonly id: number; readonly boxes: readonly Box[] } | null>(null);
+  const layer = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    if (drop === null) return;
+    const iframe = canvasFrame();
+    const origin = layer.current?.parentElement?.getBoundingClientRect();
+    if (!iframe || !origin) return;
+    const found = drop.nodes.map((id) => nodeBox(iframe, id)).filter((b): b is Box => b !== null).map((b) => ({ x: b.x - origin.x, y: b.y - origin.y, width: b.width, height: b.height }));
+    setBoxes({ id: drop.id, boxes: found });
+    const done = setTimeout(() => setBoxes((now) => (now?.id === drop.id ? null : now)), FLASH_MS);
+    return () => clearTimeout(done);
+  }, [drop]);
+  return (
+    <div ref={layer} className="chrome__flashes">
+      {boxes?.boxes.map((b, i) => <div key={`${boxes.id}-${i}`} className="chrome__flash" data-chrome="drop-flash" style={{ left: b.x, top: b.y, width: b.width, height: b.height, animationDuration: `${FLASH_MS}ms` }} />)}
+    </div>
   );
 }
 
@@ -290,7 +479,7 @@ function ReturningGhost({ view }: { readonly view: GhostReturn }) {
       way.cancel();
     };
   }, [view]);
-  return back ? null : <Ghost ref={ghost} entry={view.entry} at={view.from} refused={false} />;
+  return back ? null : <Ghost ref={ghost} inserting={view.inserting} at={view.from} refused={false} />;
 }
 
 // Where a selected node is drawn: itself, or, when it or an ancestor is hidden (spec hide-element, Problems in Pager
@@ -321,9 +510,25 @@ export function CanvasChrome() {
   const hand = useEditorState(heldHand);
   const aiming = useMemo(() => (hand === null ? null : handDrop(hand)), [hand]);
   const dropping: DropView | null = dragging ?? aiming;
+  // what the ghost says under its chip about a side drop
+  const documentNow = useEditorState((s) => s.document);
+  const note = dragging === null ? null : ghostNote(documentNow, dragging);
   // the primary selected node, read as the store holds it (a node object is replaced only when it changes)
   const node = useEditorState((s) => (s.selection[0] === undefined ? null : (locate(s.document, s.selection[0])?.node ?? null)));
+  // the one selected element can be resized: not the page, not locked (itself or an ancestor), shown
+  const resizable = useEditorState((s) => {
+    if (s.selection.length !== 1 || s.selection[0] === undefined) return false;
+    for (let at = locate(s.document, s.selection[0]), first = true; at !== null; at = at.parent === null ? null : locate(s.document, at.parent.id), first = false) {
+      if (first && at.parent === null) return false;
+      if (at.node.locked === true || at.node.hidden === true) return false;
+    }
+    return true;
+  });
   const hovered = useSyncExternalStore(hover.subscribe, hover.get);
+  // Alt held: the distances from the selection to the hovered element are drawn (spec hover-measure)
+  const altHeld = useSyncExternalStore(measuring.subscribe, measuring.get);
+  // an Edit on canvas mode is on (canvas/edit-mode.ts)
+  const editingOnCanvas = useEditorState((s) => editMode(s.ui) !== NO_MODE);
   const drawnBand = useSyncExternalStore(band.subscribe, band.get);
   // the text edited in place (text-edit.ts): its outline and label wear the text editing mode, so the edit never looks
   // like a plain selection (spec text-edit-inline, Problems in Pager 2; DESIGN.md "Canvas", text)
@@ -363,30 +568,50 @@ export function CanvasChrome() {
           placedToolbar = null;
         } else if (key !== placedFor) {
           const gap = parseFloat(getComputedStyle(layer.current as HTMLDivElement).getPropertyValue('--space-2')) || 0;
-          const content = contentBoxes(iframe).map((b) => local(b) as Box);
-          // while a text is edited in place, its toolbar sits above its label and the two are placed as one, by the
-          // label rule, in free space (DESIGN.md "Canvas", text)
+          // the selection's label always above its element; while a text is edited in place, its toolbar sits above
+          // its label and the two are placed as one (DESIGN.md "Canvas", text)
           const whole = tools === null ? size : { width: Math.max(size.width, tools.width), height: tools.height + gap + size.height };
-          const spot = placeLabel(first, whole, gap, content, { x: 0, y: 0, width: origin.width, height: origin.height });
+          const spot = placeAbove(first, whole, gap, { x: 0, y: 0, width: origin.width, height: origin.height });
           placed = tools === null ? spot : { placement: spot.placement, box: { x: spot.box.x, y: spot.box.y + tools.height + gap, ...size } };
           placedToolbar = tools === null ? null : { x: spot.box.x, y: spot.box.y };
         }
         placedFor = key;
         const hoveredBox = hovered !== null && !selection.includes(hovered as (typeof selection)[number]) ? local(nodeBox(iframe, hovered)) : null;
-        const next: Layout = { selected, union, hovered: hoveredBox, label: placed, toolbar: placedToolbar, band: local(drawnBand) };
+        const style = getComputedStyle(layer.current as HTMLDivElement);
+        const single = selection.length === 1 ? selected[0] : undefined;
+        const rotate = single === undefined ? null : rotateSpot(single, origin, parseFloat(style.getPropertyValue('--space-6')) || 0, parseFloat(style.getPropertyValue('--space-4')) || 0);
+        // the hovered element's size in CSS px, and, with Alt held, its distances to the one selected element
+        const zoom = iframe.currentCSSZoom > 0 ? iframe.currentCSSZoom : 1;
+        const hoverSize = hoveredBox === null ? null : { x: hoveredBox.x, y: hoveredBox.y + hoveredBox.height, width: Math.round(hoveredBox.width / zoom), height: Math.round(hoveredBox.height / zoom) };
+        const ancestor = hovered !== null && single !== undefined && selection[0] !== undefined && holdsNode(iframe, hovered, selection[0]);
+        const inner = ancestor && hovered !== null ? local(innerBox(iframe, hovered)) : null;
+        const distances = altHeld && hoveredBox !== null && single !== undefined ? distancesOf(single, hoveredBox, inner, zoom) : [];
+        const next: Layout = { selected, union, hovered: hoveredBox, label: placed, toolbar: placedToolbar, band: local(drawnBand), rotate, hoverSize, distances };
         setLayout((before) => (same(before, next) ? before : next));
       }
       request = requestAnimationFrame(measure);
     };
     request = requestAnimationFrame(measure);
     return () => cancelAnimationFrame(request);
-  }, [selection, targets, hovered, node, drawnBand, editing]);
+  }, [selection, targets, hovered, node, drawnBand, editing, altHeld]);
 
   const at = (b: Box): CSSProperties => ({ left: b.x, top: b.y, width: b.width, height: b.height });
   const shown = selection.length === 0 && hovered === null && drawnBand === null ? EMPTY : layout;
   return (
     <div className="chrome" ref={layer} data-canvas-chrome>
+      <GridOverlay />
+      <ViewOverlays />
       {shown.hovered ? <div className="chrome__hover" data-chrome="hover" style={at(shown.hovered)} /> : null}
+      {shown.hoverSize ? (
+        <div className="chrome__size" data-chrome="hover-size" style={{ left: shown.hoverSize.x, top: shown.hoverSize.y }}>
+          {t('canvas.measure.size', { width: shown.hoverSize.width, height: shown.hoverSize.height })}
+        </div>
+      ) : null}
+      {shown.distances.map((d, i) => (
+        <div key={i} className={`chrome__distance chrome__distance--${d.box.width === 0 ? 'down' : 'across'}`} data-chrome="distance" data-value={d.value} style={at(d.box)}>
+          <span className="chrome__distance-label">{t('canvas.measure.distance', { value: d.value })}</span>
+        </div>
+      ))}
       {drawnBand !== null && shown.band ? <div className="chrome__band" data-chrome="band" style={at(shown.band)} /> : null}
       {shown.selected.map((b, i) => (
         <div
@@ -397,9 +622,24 @@ export function CanvasChrome() {
         />
       ))}
       {dropping ? <DropIndicator view={dropping} /> : null}
-      {dragging?.inserting != null ? <Ghost entry={dragging.inserting} at={dragging.at} refused={dragging.proposal === null || dragging.refusal !== null} /> : null}
+      {dragging?.inserting != null ? <Ghost inserting={dragging.inserting} at={dragging.at} refused={dragging.side?.armed === true ? dragging.side.refusal !== null : dragging.proposal === null || dragging.refusal !== null} note={note} /> : null}
+      {dragging !== null && dragging.inserting === null && dragging.dragged.length > 0 ? <MovingGhost dragged={dragging.dragged} at={dragging.at} refused={dragging.side?.armed === true ? dragging.side.refusal !== null : dragging.proposal === null || dragging.proposal.refused} note={note} /> : null}
+      <DropFlash />
       {returning !== null && dragging === null ? <ReturningGhost key={returning.id} view={returning} /> : null}
       {shown.union && selection.length > 1 ? <div className="chrome__union" data-chrome="union" style={at(shown.union)} /> : null}
+      {/* the resize handles, but while an Edit on canvas mode draws its own (edit-handles.tsx) */}
+      {resizable && shown.selected[0] && !dropping && !editing && !editingOnCanvas
+        ? RESIZE_HANDLES.filter(isDoorBuilt).map((entry) => {
+            const handle = entry.door.kind === 'canvas-handle' ? entry.door.handle : '';
+            const box = shown.selected[0] as Box;
+            return <div key={entry.ref} className="chrome__handle" data-door={entry.ref} data-resize-handle={handle} data-chrome="handle" style={handlePoint(handle, box)} />;
+          })
+        : null}
+      {resizable && shown.selected[0] && !dropping && !editing && !editingOnCanvas && ROTATE_HANDLE !== null && isDoorBuilt(ROTATE_HANDLE) ? (
+        <div className="chrome__rotate" data-door={ROTATE_HANDLE.ref} data-rotate-handle="" data-chrome="handle" title={t(ROTATE_HANDLE.door.labelKey as MessageId)} style={shown.rotate === null ? undefined : { left: shown.rotate.x, top: shown.rotate.y }} />
+      ) : null}
+      {/* the handles of the Edit on canvas mode on the one selected element (edit-handles.tsx) */}
+      {resizable && shown.selected[0] && node !== null && !dropping && !editing ? <EditHandles node={node.id} box={shown.selected[0]} /> : null}
       {selection.length > 1 ? (
         <div
           ref={label}

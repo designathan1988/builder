@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { bindingFor, chordHint, chordOf } from './keymap.ts';
+import { bindingFor, chordHint, chordOf, heldKeyBinding } from './keymap.ts';
 
 const key = (init: Partial<KeyboardEvent> & { key: string; code: string }): KeyboardEvent =>
   ({ ctrlKey: false, altKey: false, shiftKey: false, metaKey: false, ...init }) as KeyboardEvent;
@@ -31,6 +31,22 @@ describe('the keymap', () => {
     expect(bindingFor('text-editing', 'Ctrl+B')?.command.id).toBe('text.toggleBold');
     expect(bindingFor('text-editing', 'Ctrl+K')?.command.id).toBe('text.editLink');
     expect(bindingFor('text-editing', 'Ctrl+Shift+K')?.command.id).toBe('commandBar.open');
+  });
+
+  it('keeps a number field’s keys in the field, and runs its arrows with the keys their gesture gives a meaning', () => {
+    expect(bindingFor('number-field', 'Enter')?.command.id).toBe('style.set');
+    expect(bindingFor('number-field', 'Escape')?.command.id).toBe('field.cancel');
+    // Delete, Backspace and Ctrl+Z are the input's own: no door of the canvas or of the history
+    expect(bindingFor('number-field', 'Delete')).toBeNull();
+    expect(bindingFor('number-field', 'Backspace')).toBeNull();
+    expect(bindingFor('number-field', 'Ctrl+Z')).toBeNull();
+    const shiftUp = heldKeyBinding('number-field', key({ key: 'ArrowUp', code: 'ArrowUp', shiftKey: true }));
+    expect([shiftUp?.entry.ref, shiftUp?.modifier]).toEqual(['field.step#key-arrow-up-in-number-field', 'Shift']);
+    expect(heldKeyBinding('number-field', key({ key: 'ArrowDown', code: 'ArrowDown', altKey: true }))?.modifier).toBe('Alt');
+    // a key the gesture gives no meaning, two keys held, or a door without a gesture: nothing
+    expect(heldKeyBinding('number-field', key({ key: 'ArrowUp', code: 'ArrowUp', ctrlKey: true }))).toBeNull();
+    expect(heldKeyBinding('number-field', key({ key: 'ArrowUp', code: 'ArrowUp', shiftKey: true, altKey: true }))).toBeNull();
+    expect(heldKeyBinding('number-field', key({ key: 'PageUp', code: 'PageUp', shiftKey: true }))).toBeNull();
   });
 
   it('shows a command’s global shortcut as its hint', () => {

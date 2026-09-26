@@ -17,10 +17,9 @@
 import { execFile } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
 import { shortcutRuns } from '../../src/editor/input/shortcut-rule.ts';
 import { isFeatureBuilt } from '../../src/app/features.ts';
-import { FEATURE_COMMANDS } from '../../src/generated/commands.ts';
 import type { FeatureId } from '../../src/generated/ids.ts';
 import { FEATURES, blockers, registered } from '../../tools/runner/scenarios.ts';
 import { DOOR_ANNOTATION, UNAVAILABLE_ANNOTATION, runDoor } from './door.ts';
@@ -42,7 +41,7 @@ const PALETTE_FEATURE = new Map(
 );
 // a shortcut a user can press now: the keymap's own rule (src/editor/input/shortcut-rule.ts), on the manifest's data
 const runs = (c: Command, d: Command['entryPoints'][number]) =>
-  d.kind === 'shortcut' && shortcutRuns({ command: c.id, introducedBy: c.introducedBy, feature: d.feature }, (id) => BUILT.has(id), FEATURE_COMMANDS);
+  d.kind === 'shortcut' && shortcutRuns({ command: c.id, introducedBy: c.introducedBy, feature: d.feature }, (id) => BUILT.has(id), (feature) => isFeatureBuilt(feature as FeatureId));
 
 interface Listed {
   readonly specs?: readonly { readonly title: string; readonly tests: readonly { readonly annotations: readonly { readonly type: string; readonly description?: string }[] }[] }[];
@@ -52,7 +51,10 @@ interface Listed {
 async function annotated(): Promise<Map<string, Set<string>>> {
   const cli = path.join('node_modules', '@playwright', 'test', 'cli.js');
   const listed = await new Promise<string>((resolve, reject) =>
-    execFile(process.execPath, [cli, 'test', '--list', '--reporter=json'], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }, (error, stdout) => (error ? reject(error) : resolve(stdout))),
+    // every test of the suite, also when this run is a limited validation (its selection must not narrow the list)
+    execFile(process.execPath, [cli, 'test', '--list', '--reporter=json'], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, env: { ...process.env, E2E_SELECTION: '' } }, (error, stdout) =>
+      error ? reject(error) : resolve(stdout),
+    ),
   );
   const report = JSON.parse(listed) as { suites: Listed[] };
   const found = new Map<string, Set<string>>();
@@ -73,7 +75,7 @@ test('every feature registered as built has scenarios that can all run', () => {
   console.log(`census: ${FEATURES.filter(registered).length} features registered as built, each with scenarios that can all run`);
 });
 
-test('every working command is proven by a browser test, and no door looks usable without a command', async ({ browser }, testInfo) => {
+test('every working command is proven by a browser test, and no door looks usable without a command', async ({ browser, impact }, testInfo) => {
   // it visits every state a built door leads to, each from a fresh profile: a new browser context
   test.setTimeout(120_000);
   // Playwright's list of the suite, read while the states are visited
@@ -89,7 +91,8 @@ test('every working command is proven by a browser test, and no door looks usabl
   const read = async (page: Page, state: Map<string, boolean>) => {
     const seen = await page.evaluate(() => {
       const CONTROL = 'button, input, select, textarea, [role^="menuitem"], [role="treeitem"], [role="tab"], [tabindex]';
-      const usable = (el: Element) => el.getAttribute('aria-disabled') !== 'true' && !el.matches(':disabled');
+      // a control under a modal (the rest of the window while the colour picker is open) is inert: nobody can use it
+      const usable = (el: Element) => el.getAttribute('aria-disabled') !== 'true' && !el.matches(':disabled') && el.closest('[inert]') === null;
       return [...document.querySelectorAll('[data-door]')].map((el) => {
         const controls = el.matches(CONTROL) ? [el] : [...el.querySelectorAll(CONTROL)].filter((c) => c.closest('[data-door]') === el);
         return { ref: el.getAttribute('data-door') ?? '', args: el.getAttribute('data-args'), control: controls.length > 0, enabled: controls.some(usable) };
@@ -123,8 +126,9 @@ test('every working command is proven by a browser test, and no door looks usabl
     const buttons = page.locator('.menu-button[data-menu]');
     for (let m = 0; m < (await buttons.count()); m += 1) {
       await page.keyboard.press('Escape');
-      // a menu button of a region the state hides (the canvas toolbar under a maximised dock) is not there to open
-      if (!(await buttons.nth(m).isVisible())) continue;
+      // a menu button of a region the state hides (the canvas toolbar under a maximised dock) is not there to open, nor
+      // one under a modal (inert)
+      if (!(await buttons.nth(m).isVisible()) || (await buttons.nth(m).evaluate((el) => el.closest('[inert]') !== null))) continue;
       await buttons.nth(m).click();
       await read(page, state);
       const subs = page.locator('.menu__sub > [aria-haspopup="menu"]');
@@ -134,10 +138,19 @@ test('every working command is proven by a browser test, and no door looks usabl
       }
     }
     await page.keyboard.press('Escape');
+    // the quick panel beside the selection draws its doors once its chip opens it (no door: DESIGN.md, data-local)
+    const chip = page.locator('[data-quick-panel-chip][aria-expanded="false"]');
+    if ((await chip.count()) > 0 && (await chip.isVisible()) && (await chip.evaluate((el) => el.closest('[inert]') === null))) {
+      await chip.click();
+      await page.locator('[data-quick-panel-chip][aria-expanded="true"]').waitFor();
+      await read(page, state);
+      await page.locator('[data-quick-panel-chip][aria-expanded="true"]').click();
+    }
     return { state, screen };
   };
   const commandOf = (ref: string) => ref.split('#')[0] ?? '';
   const KIND = new Map<string, string>(COMMANDS.flatMap((c) => c.entryPoints.map((d) => [`${c.id}#${d.id}`, d.kind] as const)));
+  const TEXT_FIELD = new Set<string>(COMMANDS.flatMap((c) => c.entryPoints.filter((d) => d.kind === 'inspector-field' && (d as { drawnAs?: string }).drawnAs === 'field').map((d) => `${c.id}#${d.id}`)));
 
   // Every place a built door can open: from a fresh profile, each door of a built command that is drawn enabled (and
   // each shortcut of one) is run once, from the first state it was seen in, and the state it leads to is read the same
@@ -151,8 +164,11 @@ test('every working command is proven by a browser test, and no door looks usabl
   // one path: a fresh browser context, the path's doors run in order, then the state it reaches read
   const visit = async (path: readonly string[]) => {
     const context = await browser.newContext({ ...(baseURL !== undefined ? { baseURL } : {}), viewport: { width: 1440, height: 900 } });
+    let collectCoverage: () => Promise<void> = async () => {};
     try {
       const page = await context.newPage();
+      // what this state's page executes is part of what the census depends on (tests/support/test.ts)
+      collectCoverage = await impact.track(page);
       await page.goto('/');
       await expect(page.locator('.workbench')).toBeVisible();
       // a door drawn once per item (a Layers row, an Insert tile) is run on its first item
@@ -160,7 +176,9 @@ test('every working command is proven by a browser test, and no door looks usabl
       const read = await readState(page);
       states += 1;
       if (read === null) return;
-      const leads = (ref: string) => read.screen.has(ref) || KIND.get(ref) === 'menu';
+      // a text field of the inspector leads nowhere by a click (it takes the focus; only typing changes anything, and
+      // the census types nothing): it is read in every state, and not run to reach a new one
+      const leads = (ref: string) => (read.screen.has(ref) || KIND.get(ref) === 'menu') && !TEXT_FIELD.has(ref);
       const next = [...[...read.state].filter(([ref, enabled]) => enabled && BUILT.has(commandOf(ref)) && leads(ref)).map(([ref]) => ref), ...(path.length === 0 ? shortcuts : [])];
       for (const ref of next) {
         if (explored.has(ref)) continue;
@@ -168,6 +186,7 @@ test('every working command is proven by a browser test, and no door looks usabl
         queue.push([...path, ref]);
       }
     } finally {
+      await collectCoverage();
       await context.close();
     }
   };

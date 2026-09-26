@@ -19,13 +19,13 @@
 // them to fail on an assertion.
 import fs from 'node:fs';
 import path from 'node:path';
-import { expect, test, type Download, type Page } from '@playwright/test';
+import { expect, test, type Download, type Locator, type Page } from '../../tests/support/test.ts';
 import { isFeatureBuilt } from '../../src/app/features.ts';
 import { shortcutRuns } from '../../src/editor/input/shortcut-rule.ts';
-import { FEATURE_COMMANDS } from '../../src/generated/commands.ts';
 import type { FeatureId } from '../../src/generated/ids.ts';
 import { EMPTY_FIXTURE, applyDiff, matchDocument, resolveNode, type DiffOp } from '../../src/manifest/scenario.ts';
-import { control, door as doorData, keys, modifiedControl, openMenu, runDoor, type Door } from '../../tests/e2e/door.ts';
+import { control, door as doorData, inQuickPanel, keys, modifiedControl, openMenu, openQuickPanel, runDoor, standingControl, type Door } from '../../tests/e2e/door.ts';
+import { openEditor } from '../../tests/support/editor.ts';
 import { unzip } from './unzip.ts';
 
 type Measure = 'x' | 'y' | 'width' | 'height';
@@ -42,10 +42,12 @@ interface Step {
   readonly action: boolean;
   readonly hold?: boolean;
   readonly type?: string | null;
+  // the button the step presses in the confirmation its command asks
+  readonly answer?: 'confirm' | 'cancel' | null;
 }
 interface Scenario {
   readonly id: string;
-  readonly setup: { fixture: string; selection: string[]; context: string; breakpoint: string; state: string; locale: string; viewport: string; zoom: 'fit' | number };
+  readonly setup: { fixture: string; selection: string[]; context: string; breakpoint: string; state: string; locale: string; viewport: string; zoom: 'fit' | number; storage?: 'corrupt-current-record'; tabs?: 'another-tab-editing' };
   readonly steps: readonly Step[];
   readonly doors: readonly string[];
   readonly expect: {
@@ -59,7 +61,7 @@ interface Scenario {
     } | null;
     editor: { regions: { region: string; measure: Measure; relation: Relation; value: number; reference: string | null }[]; computed: { region: string; property: string; value: string }[] } | null;
     persistence: { document: 'same' | null; preferences: 'same' | null; selection?: 'same' | null } | null;
-    // the files inside the archive the steps downloaded last: each holds every `present` text and no `absent` one
+    // the files inside the archive the action step handed out: each holds every `present` text and no `absent` one
     export: { files: { path: string; present: string[]; absent: string[] }[] } | null;
   };
   readonly refusals: { key: string }[];
@@ -93,19 +95,40 @@ const COMMANDS = fs
     (f) =>
       (
         read(path.join('manifest/commands', f)) as {
-          commands: { id: string; introducedBy: string; args: Record<string, { type: string }>; refusals: string[]; availability: { refusalKey: string | null }; entryPoints: Door[] }[];
+          commands: { id: string; introducedBy: string; args: Record<string, { type: string }>; refusals: string[]; availability: { refusalKey: string | null }; history: { undoable: boolean }; entryPoints: Door[] }[];
         }
       ).commands,
   );
+// a document with its pages' and their roots' ids left out, so a match does not compare them
+function withoutPageIds(document: unknown): unknown {
+  const doc = document as { pages?: { id?: unknown; tree?: { id?: unknown } }[] };
+  if (!Array.isArray(doc.pages)) return document;
+  return {
+    ...doc,
+    pages: doc.pages.map((page) => {
+      const { id: _page, tree, ...rest } = page;
+      void _page;
+      if (tree === undefined) return rest;
+      const { id: _root, ...root } = tree;
+      void _root;
+      return { ...rest, tree: root };
+    }),
+  };
+}
 const BASE_BREAKPOINT = properties.breakpoints.find((b) => b.base)?.id;
 const BASE_STATE = properties.states.find((s) => s.pseudo === null)?.id;
 const CONTENT = new Map(elements.elements.map((e) => [e.id, e.content]));
 const DRAG_THRESHOLD = interactions.constants.find((c) => c.id === 'drag.threshold')?.value;
+// Ctrl+wheel multiplies the zoom by exp(−deltaY × this) per event (spec zoom-wheel-pan)
+const WHEEL_FACTOR = Number(interactions.constants.find((c) => c.id === 'zoom.wheelFactor')?.value);
 // how far inside a child's edge the runner points to reach its escape band: half the band's floor, in screen pixels
 const ESCAPE_FLOOR = interactions.constants.find((c) => c.id === 'drop.escapeBandFloor')?.value;
 const EDGE_INSET = typeof ESCAPE_FLOOR === 'number' ? ESCAPE_FLOOR / 2 : 3;
 const commandOf = (ref: string) => ref.split('#')[0] ?? '';
 const argTypes = (ref: string) => COMMANDS.find((c) => c.id === commandOf(ref))?.args ?? {};
+// whether a door's command takes what the system clipboard holds (clipboard.paste): its door reads the clipboard, which
+// the browser answers later, and runs the command then
+const readsClipboard = (ref: string) => Object.values(argTypes(ref)).some((arg) => arg.type === 'clipboard');
 
 // the first door of a command whose own arguments set `arg` to `value` (the breakpoint tab of Tablet, the zoom item 200)
 function settingDoor(command: string, arg: string, value: unknown): string {
@@ -149,6 +172,8 @@ const WALK_UP_DOOR = shortcutIn('selection.walkParent', 'canvas');
 const BACK_TO_CANVAS_DOOR = shortcutIn('focus.canvas', 'layers-tree');
 const UNDO_DOOR = 'history.undo#toolbar-top-bar';
 const REDO_DOOR = 'history.redo#toolbar-top-bar';
+// a modal dialog's close button (DESIGN.md "Regions": dialog)
+const DIALOG_CLOSE_DOOR = 'ui.dismiss#dialog-close';
 
 // When a refusal is checked: right after its refused step, the action step when its command can refuse with that key
 // (its manifest refusals or its availability's refusal key), else the last step after it whose command can (a Delete
@@ -192,7 +217,7 @@ const doorWorks = (ref: string) => {
   const command = COMMANDS.find((c) => c.id === commandOf(ref));
   const d = doorData(ref);
   if (command === undefined || !BUILT.has(command.id)) return false;
-  return d.kind !== 'shortcut' || shortcutRuns({ command: command.id, introducedBy: command.introducedBy, feature: d.feature }, (id) => BUILT.has(id), FEATURE_COMMANDS);
+  return d.kind !== 'shortcut' || shortcutRuns({ command: command.id, introducedBy: command.introducedBy, feature: d.feature }, (id) => BUILT.has(id), (feature) => isFeatureBuilt(feature as FeatureId));
 };
 // Whether a feature is registered as built (the feature table).
 export const registered = (f: Feature) => isFeatureBuilt(f.id as FeatureId);
@@ -240,6 +265,38 @@ const port = (page: Page) =>
     if (!p) throw new Error('the test port is missing');
     return { document: p.document(), selection: p.selection(), history: p.history() };
   });
+
+// The preferences the editor applies, read from what it draws: its language (the document element's lang), its theme
+// (data-theme, absent while it follows the system), the inspector sections it draws collapsed, the canvas zoom and
+// what the Layers rows show beside their names (layers-row-details). Comparing these before and after a reload proves the editor
+// restores its preferences; comparing the stored text with itself would not (the editor writes the preferences only
+// when a command changes them).
+const SECTION_TOGGLE = 'inspector.toggleSection';
+const appliedPreferences = (page: Page) =>
+  page.evaluate(
+    (toggle) => ({
+      locale: document.documentElement.lang,
+      theme: document.documentElement.dataset.theme ?? 'system',
+      collapsed: [...document.querySelectorAll(`[data-door^="${toggle}#"][aria-expanded="false"]`)].map((el) => (JSON.parse(el.getAttribute('data-args') ?? '{}') as { section?: string }).section ?? ''),
+      // the canvas zoom: the CSS zoom of the page's frame (Fit mode refits to the same stage after the reload)
+      // and the view switches the canvas draws (Outlines, Zones)
+      outlines: document.querySelector('[data-region="canvas-outlines"]') !== null,
+      zones: document.querySelector('[data-region="canvas-zones"]') !== null,
+      zoom: getComputedStyle(document.querySelector('.frame__page') ?? document.body).zoom,
+      // the inspector's mode: the segment pressed (Essentials only, All properties)
+      inspectorMode: document.querySelector('[data-door^="inspector.setMode#"][aria-pressed="true"]')?.getAttribute('data-door') ?? null,
+      // null while no Layers tree is drawn (another sidebar view is shown): its rows are then compared with nothing
+      rowDetails: document.querySelector('[data-region="layers-row"]') === null ? null : [...document.querySelectorAll('[data-region="layers-row-details"]')].map((el) => el.textContent),
+    }),
+    SECTION_TOGGLE,
+  );
+// the preferences applied after a reload, with the Layers rows left out when either side draws none, and the
+// inspector's mode when either side draws no Style tab (another tab, or no inspector)
+const appliedAgain = async (page: Page, before: Awaited<ReturnType<typeof appliedPreferences>>) => {
+  const now = await appliedPreferences(page);
+  const rows = now.rowDetails === null || before.rowDetails === null ? { ...now, rowDetails: before.rowDetails } : now;
+  return rows.inspectorMode === null || before.inspectorMode === null ? { ...rows, inspectorMode: before.inspectorMode } : rows;
+};
 
 const compare = (actual: number, relation: Relation, expected: number) =>
   relation === 'equals' ? Math.abs(actual - expected) <= 0.5 : relation === 'less-than' ? actual < expected : actual > expected;
@@ -496,6 +553,33 @@ async function canvasDropPoint(page: Page, document: unknown, drop: Drop, index:
   return found;
 }
 
+// Where a side drop lands (a canvas-drag door of the side-band zone, spec drag-layout row 5): inside the side strip of
+// its reference, 3 screen pixels from the edge of the drop's side, across its middle: the left or the right edge when
+// the reference's parent lays its children vertically, the top or the bottom in a row.
+async function sideDropPoint(page: Page, document: unknown, drop: Drop): Promise<Point> {
+  const reference = nodeAt(document, drop.reference);
+  await frameElement(page, reference.id, drop.reference);
+  const found = await page.evaluate(
+    ({ id, placement }) => {
+      const iframe = window.document.querySelector<HTMLIFrameElement>('.frame__page');
+      const el = iframe?.contentDocument?.querySelector(`[data-node="${id}"]`);
+      const view = iframe?.contentWindow;
+      if (!iframe || !el || !view || !el.parentElement) return 'the canvas does not draw it';
+      const style = view.getComputedStyle(el.parentElement);
+      const row = style.display.includes('flex') && !style.flexDirection.startsWith('column');
+      const zoom = iframe.currentCSSZoom;
+      const frame = iframe.getBoundingClientRect();
+      const r = el.getBoundingClientRect();
+      const box = { x: frame.left + r.left * zoom, y: frame.top + r.top * zoom, w: r.width * zoom, h: r.height * zoom };
+      const before = placement === 'before';
+      return row ? { x: box.x + box.w / 2, y: before ? box.y + 3 : box.y + box.h - 3 } : { x: before ? box.x + 3 : box.x + box.w - 3, y: box.y + box.h / 2 };
+    },
+    { id: reference.id, placement: drop.placement },
+  );
+  if (typeof found === 'string') throw new Error(`side drop ${drop.placement} ${drop.reference}: ${found}`);
+  return found;
+}
+
 // Where a marquee's band ends (a drag from the empty area): inside its reference, on the point nearest the
 // reference's centre that hits it rather than a child, so the band runs from the press to there.
 async function marqueeEndPoint(page: Page, document: unknown, drop: Drop): Promise<Point> {
@@ -516,10 +600,26 @@ async function layersDropPoint(page: Page, document: unknown, drop: Drop): Promi
 
 // The tile a palette drag is pressed on (palette-drag-insert): the door of the same command drawn as a palette tile,
 // whose control stands for the step's entry.
+// The palette tile a creation drag presses: its own command's tile, else the palette's (element.insert's), which every
+// drag from a tile starts from (a side drop's wrapBeside has no tile of its own).
 function paletteTileDoor(ref: string): string {
-  const found = COMMANDS.find((c) => c.id === commandOf(ref))?.entryPoints.find((d) => d.kind === 'panel-control' && d.control === 'tile');
-  if (!found) throw new Error(`step ${ref}: its command has no palette tile to press`);
-  return `${commandOf(ref)}#${found.id}`;
+  const own = COMMANDS.find((c) => c.id === commandOf(ref))?.entryPoints.find((d) => d.kind === 'panel-control' && d.control === 'tile');
+  if (own) return `${commandOf(ref)}#${own.id}`;
+  for (const c of COMMANDS) for (const d of c.entryPoints) if (d.kind === 'panel-control' && d.control === 'tile') return `${c.id}#${d.id}`;
+  throw new Error(`step ${ref}: no palette tile to press`);
+}
+
+// A component's tile (spec reusable-components): the drag source of components.insertInstance, the door of the same
+// command drawn as the tile of that control
+const COMPONENT_TILE = 'component-tile';
+// a positioned element's free drag (spec absolute-free-drag): the source of position.move's canvas-drag door
+const POSITIONED_ELEMENT = 'positioned-element';
+// the guide drags (spec guides-manual): out of the top or the left ruler, or of a guide
+const GUIDE_SOURCES: readonly string[] = ['top-ruler', 'left-ruler', 'guide'];
+function tileDoorOf(ref: string, control: string): string {
+  const own = COMMANDS.find((c) => c.id === commandOf(ref))?.entryPoints.find((d) => d.kind === 'panel-control' && d.control === control);
+  if (own === undefined) throw new Error(`step ${ref}: no ${control} to press`);
+  return `${commandOf(ref)}#${own.id}`;
 }
 
 const MODIFIER_KEY: Record<string, string> = { Ctrl: 'Control', Shift: 'Shift', Alt: 'Alt', Meta: 'Meta' };
@@ -535,11 +635,64 @@ const EDIT_CONTEXT = 'text-editing';
 // the key context of the keyboard's hand (interactions.json): while it holds an element, the canvas's keys are its
 // own (keymap.ts), and the canvas draws its aim as a drop (spec hand-keyboard-move)
 const HAND_CONTEXT = 'hand';
+// the key context of a dialog (interactions.json), which an open dialog names
+const DIALOG_CONTEXT = 'dialog';
 // the key context of the canvas (interactions.json), which the frame's page and the page body name
 const CANVAS_CONTEXT = 'canvas';
 // the key context of the inspector's text field (interactions.json), which the field names: its keys (Enter, Escape)
 // act on what the field holds (spec inspector-panel)
 const FIELD_TEXT_CONTEXT = 'element-text-field';
+// the key context of a number field of the inspector (interactions.json), which its input names: its keys (Enter,
+// Escape, the arrows, PageUp and PageDown) act on the field's property and the text it holds (spec
+// inspector-number-fields)
+const NUMBER_FIELD_CONTEXT = 'number-field';
+// A step's `modifier` argument (a number field's step or scrub: Shift, Alt) is the key held while its door runs, and
+// a panel drag's `distance` argument is the pointer's horizontal travel in screen pixels; neither is something the
+// drawn control stands for.
+const MODIFIER_ARG = 'modifier';
+const TRAVEL_ARG = 'distance';
+const heldKey = (step: Step): string | undefined => {
+  const modifier = step.args[MODIFIER_ARG];
+  return typeof modifier === 'string' ? MODIFIER_KEY[modifier] : undefined;
+};
+// Sets the step's arguments in the inputs of the form a button submits, named after them, with the real mouse and
+// keyboard: a list ticks the checkboxes whose values it holds and unticks the others; a number or a text is typed in
+// place of what its field held. False, touching nothing, when the button submits no form or an argument names none of
+// its inputs.
+async function fillForm(page: Page, button: Locator, args: Record<string, unknown>): Promise<boolean> {
+  if (Object.keys(args).length === 0 || (await button.count()) !== 1 || (await button.getAttribute('type')) !== 'submit') return false;
+  const form = button.locator('xpath=ancestor::form[1]');
+  if ((await form.count()) !== 1) return false;
+  for (const name of Object.keys(args)) if ((await form.locator(`[name="${name}"]`).count()) === 0) return false;
+  for (const [name, value] of Object.entries(args)) {
+    const inputs = form.locator(`[name="${name}"]`);
+    if (Array.isArray(value)) {
+      for (let i = 0; i < (await inputs.count()); i += 1) {
+        const box = inputs.nth(i);
+        const want = value.includes(await box.getAttribute('value'));
+        if ((await box.isChecked()) !== want) await box.click();
+      }
+    } else {
+      const field = inputs.first();
+      await field.click();
+      await page.keyboard.press('Control+A');
+      await page.keyboard.press('Backspace');
+      await page.keyboard.type(String(value));
+    }
+  }
+  return true;
+}
+const withoutGestureArgs = (args: Record<string, unknown>) => Object.fromEntries(Object.entries(args).filter(([name]) => name !== MODIFIER_ARG && name !== TRAVEL_ARG));
+// the control of the colour picker's eyedropper (manifest style.set#color-picker-eyedropper)
+const EYEDROPPER_CONTROL = 'eyedropper';
+// the gestures of the Edit on canvas handles (interactions.json), which the runner drags by the value they make
+const EDIT_GESTURES: readonly string[] = ['spacing-band', 'property-handle', 'shadow-handle'];
+// the gestures of the canvas handles that are clicked, not dragged (interactions.json): the anchor tabs
+const CLICK_HANDLES: readonly string[] = ['anchor-tab'];
+// the rotation handle's gesture (interactions.json): the one whose Shift snaps the angle to steps
+const ROTATE_GESTURE = interactions.gestures.find((g) => g.modifiers.some((m) => m.meaning === 'snap-to-15-degree-steps'))?.id;
+// what a step's `type` writes for Tab (schema.ts stepSchema)
+const TAB = '\t';
 // what a step's `type` writes for Shift+Enter (schema.ts stepSchema): U+2028, the line separator
 const LINE_BREAK = ' ';
 
@@ -573,6 +726,9 @@ async function focusControlFor(page: Page, ref: string, args: Record<string, unk
   const drawn = COMMANDS.find((c) => c.id === command)?.entryPoints.map((d) => `${command}#${d.id}`) ?? [];
   const candidates = [];
   for (const other of drawn) if ((await control(page, other, { args }).count()) === 1) candidates.push(control(page, other, { args }));
+  // no control of the command stands for them: the one control of another door that does (a canvas handle, whose arrows
+  // are handle.step's)
+  if (candidates.length === 0 && (await standingControl(page, args).count()) === 1) candidates.push(standingControl(page, args));
   const target = candidates[0];
   if (candidates.length !== 1 || target === undefined) throw new Error(`${ref}: ${candidates.length} controls of ${command} stand for ${JSON.stringify(args)}, not one`);
   const focused = () => target.evaluate((el) => el === document.activeElement);
@@ -603,12 +759,28 @@ async function rowInsteadOfCanvas(page: Page, ref: string, document: unknown, no
   return true;
 }
 
-async function runStep(page: Page, step: Step, ref: string, held: { current: Held | null }, action = false) {
+// The file a step's file argument hands the browser's file chooser (schema.ts, stepSchema): a fixture's JSON, the file
+// the steps downloaded last (File › Save project's archive), or a project.json holding the given text.
+async function chosenFile(value: string, downloads: readonly Download[]): Promise<{ name: string; mimeType: string; buffer: Buffer }> {
+  const fixture = /^fixture:(.+)$/.exec(value)?.[1];
+  if (fixture !== undefined) return { name: `${fixture}.json`, mimeType: 'application/json', buffer: fs.readFileSync(path.join('manifest/features/fixtures', `${fixture}.json`)) };
+  if (value === 'download') {
+    const last = downloads.at(-1);
+    if (last === undefined) throw new Error('the step opens the last download, and nothing was downloaded');
+    return { name: last.suggestedFilename(), mimeType: 'application/zip', buffer: fs.readFileSync(await last.path()) };
+  }
+  if (value.startsWith('json:')) return { name: 'project.json', mimeType: 'application/json', buffer: Buffer.from(value.slice('json:'.length), 'utf8') };
+  throw new Error(`file argument ${value}: it is not fixture:<id>, download or json:<text>`);
+}
+
+async function runStep(page: Page, step: Step, ref: string, held: { current: Held | null }, action = false, downloads: readonly Download[] = []) {
   const d = doorData(ref);
   // a key of the text edited in place needs the focus in the edited text, before anything else of the step
   if (d.kind === 'shortcut' && d.context === EDIT_CONTEXT) expect((await focusedContexts(page))[0], `step ${ref}: the focus is in the text edited in place`).toBe(EDIT_CONTEXT);
   // a key of the inspector's text field needs the focus in that field, which a step before it typed into
   if (d.kind === 'shortcut' && d.context === FIELD_TEXT_CONTEXT) expect((await focusedContexts(page))[0], `step ${ref}: the focus is in the text field`).toBe(FIELD_TEXT_CONTEXT);
+  // a key of a number field needs the focus in that field's input, which a step before it typed into
+  if (d.kind === 'shortcut' && d.context === NUMBER_FIELD_CONTEXT) expect((await focusedContexts(page))[0], `step ${ref}: the focus is in a number field`).toBe(NUMBER_FIELD_CONTEXT);
   // a key of the hand needs the focus on the canvas and an element in the hand, whose aim the canvas draws as a drop
   if (d.kind === 'shortcut' && d.context === HAND_CONTEXT) {
     expect((await focusedContexts(page))[0], `step ${ref}: the focus is on the canvas`).toBe('canvas');
@@ -628,9 +800,31 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
   }
   const { document } = await port(page);
   const args = resolveArgs(ref, step.args, document);
-  // the arguments a drawn control stands for, beyond those its door fixes
-  const own = Object.fromEntries(Object.entries(args).filter(([name]) => !(name in d.args)));
+  // a file argument is what the step hands the file chooser the door opens, never what a control stands for
+  const fileArg = Object.entries(argTypes(ref)).find(([, a]) => a.type === 'file')?.[0];
+  const fileValue = fileArg === undefined ? undefined : step.args[fileArg];
+  const chooser = typeof fileValue === 'string' ? page.waitForEvent('filechooser') : null;
+  // what the status bar said before a file is chosen: the command, which reads the file after the chooser closes, has
+  // run once it says something else or asks its confirmation
+  const saidBefore = chooser === null ? null : await page.getByRole('status').textContent();
+  // the arguments a drawn control stands for, beyond those its door fixes; of an object argument both give, the keys
+  // its door does not fix (the keymap joins the two: a gradient stop's { edit: { stop } } with its key's edit)
+  const isObject = (v: unknown): v is Record<string, unknown> => v !== null && typeof v === 'object' && !Array.isArray(v);
+  const own = Object.fromEntries(
+    Object.entries(args).flatMap(([name, value]): [string, unknown][] => {
+      const fixed = (d.args as Record<string, unknown>)[name];
+      if (name === fileArg) return [];
+      if (!(name in d.args)) return [[name, value]];
+      if (!isObject(fixed) || !isObject(value)) return [];
+      const rest = Object.entries(value).filter(([key]) => !(key in fixed));
+      return rest.length === 0 ? [] : [[name, Object.fromEntries(rest)]];
+    }),
+  );
   const target = step.target === null ? null : nodeAt(document, step.target);
+  // a door of the quick panel (its fields, More actions, its grip) is reached by opening the panel from its chip, which
+  // is no door; a field of it is typed into like an inspector field, a button of it clicked like a panel control
+  if (inQuickPanel(d)) await openQuickPanel(page);
+  const quickField = d.kind === 'quick-panel' && (await control(page, ref).locator('input, textarea').count()) > 0;
 
   if (d.kind === 'canvas-click' && d.target !== 'stage-outside-page' && step.target !== null && (await rowInsteadOfCanvas(page, ref, document, step.target, action))) {
     // reached through the node's Layers row
@@ -645,6 +839,169 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
     if (at === null) throw new Error(`step ${ref}: a click on ${d.target ?? 'the canvas'} needs a target`);
     const button = d.button === 'secondary' ? 'right' : 'left';
     await withModifier(page, d.modifier, () => (d.count === 2 ? page.mouse.dblclick(at.x, at.y, { button }) : page.mouse.click(at.x, at.y, { button })));
+  } else if (d.kind === 'canvas-wheel') {
+    // a wheel over the step's node, with the door's modifier held: Ctrl+wheel's factor is the notch
+    // exp(−deltaY × zoom.wheelFactor) gives; a pan's travel (dx, dy) is the page's, so the wheel turns the other way
+    // (Shift turns it down, as a mouse without a horizontal wheel does)
+    if (target === null || step.target === null) throw new Error(`step ${ref}: a wheel acts over the node it names`);
+    const at = await nodePoint(page, target.id, isRoot(document, step.target), step.target);
+    const factor = typeof args.factor === 'number' ? args.factor : null;
+    const dx = typeof args.dx === 'number' ? args.dx : 0;
+    const dy = typeof args.dy === 'number' ? args.dy : 0;
+    const deltaX = factor === null && d.modifier === null ? -dx : 0;
+    const deltaY = factor !== null ? -Math.log(factor) / WHEEL_FACTOR : d.modifier === 'Shift' ? -dx : -dy;
+    const key = d.modifier ? MODIFIER_KEY[d.modifier] : undefined;
+    await page.mouse.move(at.x, at.y);
+    if (key) await page.keyboard.down(key);
+    await page.mouse.wheel(deltaX, deltaY);
+    if (key) await page.keyboard.up(key);
+  } else if (d.kind === 'canvas-handle' && held.current !== null && held.current.door === ref && step.target === null) {
+    // the release of the held handle, where the pointer is
+    await page.mouse.up();
+    held.current = null;
+  } else if (d.kind === 'canvas-handle' && EDIT_GESTURES.includes(d.gesture ?? '')) {
+    // a spacing band of the Edit on canvas mode (canvas/edit-handles.tsx), drawn once per side: pressed at its middle and
+    // dragged along the way that grows it (its data-normal) by the travel that makes the step's value from the value
+    // it starts from (its data-start), times the zoom, with the step's key held (Shift: all four sides; Alt: the
+    // opposite too), and released. A step that types (and names no value to drag to) clicks the band, which opens its
+    // typed field, and types there.
+    if (step.hold === true || step.drop !== null) throw new Error(`step ${ref}: a band's drag is whole: it neither drops nor holds`);
+    // (a gap band is drawn once per gap: the first)
+    const band = page.locator(`[data-canvas-overlay] [data-door="${ref}"]`).first();
+    await expect(band, `step ${ref}: the band is drawn`).toBeVisible();
+    const box = await band.boundingBox();
+    if (box === null) throw new Error(`step ${ref}: the band is not laid out`);
+    const from = { x: Math.round(box.x + box.width / 2), y: Math.round(box.y + box.height / 2) };
+    if (typeof step.type === 'string') {
+      await page.mouse.click(from.x, from.y);
+    } else {
+      const facts = await band.evaluate((el) => ({
+        valueArg: el.getAttribute('data-value-arg') ?? '',
+        start: Number(el.getAttribute('data-start')),
+        normal: (el.getAttribute('data-normal') ?? '0,0').split(',').map(Number),
+        shadow: el.getAttribute('data-shadow'),
+        startX: Number(el.getAttribute('data-start-x')),
+        startY: Number(el.getAttribute('data-start-y')),
+        zoom: el.ownerDocument.querySelector<HTMLIFrameElement>('.frame__page')?.currentCSSZoom ?? 1,
+      }));
+      // a shadow handle moves by the layer's X and Y (offset) or its blur that the step's edit names; any other handle
+      // by the value the step names, in the argument the handle says its value goes in (value; a border's width)
+      const shadowEdit = facts.shadow !== null && args.edit !== null && typeof args.edit === 'object' ? (args.edit as Record<string, unknown>) : null;
+      const length = (value: unknown) => (typeof value === 'string' ? Number.parseFloat(value) : Number.NaN);
+      const named = args[facts.valueArg];
+      const [dx, dy] =
+        shadowEdit !== null
+          ? facts.shadow === 'offset'
+            ? [(length(shadowEdit.x) - facts.startX) * facts.zoom, (length(shadowEdit.y) - facts.startY) * facts.zoom]
+            : [(length(shadowEdit.blur) - facts.start) * facts.zoom, 0]
+          : [(length(named) - facts.start) * facts.zoom * (facts.normal[0] ?? 0), (length(named) - facts.start) * facts.zoom * (facts.normal[1] ?? 0)];
+      if (!Number.isFinite(dx) || !Number.isFinite(dy)) throw new Error(`step ${ref}: a handle's drag names the value it makes`);
+      const key = heldKey(step);
+      await page.mouse.move(from.x, from.y);
+      if (key !== undefined) await page.keyboard.down(key);
+      await page.mouse.down();
+      await page.mouse.move(from.x + dx, from.y + dy, { steps: 12 });
+      await page.mouse.up();
+      if (key !== undefined) await page.keyboard.up(key);
+    }
+  } else if (d.kind === 'canvas-handle' && d.gesture === ROTATE_GESTURE) {
+    // the rotation handle (spec rotation-handle): pressed at its middle and moved along the circle around the selected
+    // element's centre by the turn from the angle it holds to the step's, then released
+    const handle = page.locator(`[data-canvas-overlay] [data-door="${ref}"]`);
+    await expect(handle, `step ${ref}: the handle is drawn`).toBeVisible();
+    const box = await handle.boundingBox();
+    if (box === null) throw new Error(`step ${ref}: the handle is not laid out`);
+    const facts = await page.evaluate(() => {
+      const iframe = window.document.querySelector<HTMLIFrameElement>('.frame__page');
+      const selected = (window as unknown as { __builderTestPort?: { selection: () => string[] } }).__builderTestPort?.selection()[0];
+      const element = selected === undefined ? null : iframe?.contentDocument?.querySelector(`[data-node="${selected}"]`);
+      if (!iframe || !element || !iframe.contentWindow) return null;
+      const frame = iframe.getBoundingClientRect();
+      const style = getComputedStyle(iframe);
+      const zoom = iframe.currentCSSZoom;
+      const r = element.getBoundingClientRect();
+      const left = frame.left + (parseFloat(style.borderLeftWidth) + parseFloat(style.paddingLeft)) * zoom;
+      const top = frame.top + (parseFloat(style.borderTopWidth) + parseFloat(style.paddingTop)) * zoom;
+      return { x: left + (r.left + r.width / 2) * zoom, y: top + (r.top + r.height / 2) * zoom, rotate: iframe.contentWindow.getComputedStyle(element).rotate };
+    });
+    if (facts === null) throw new Error(`step ${ref}: no element is selected on the canvas`);
+    const wanted = typeof args.value === 'string' ? parseFloat(args.value) : Number.NaN;
+    if (!Number.isFinite(wanted)) throw new Error(`step ${ref}: the step names the angle it turns to`);
+    const held = facts.rotate === 'none' ? 0 : parseFloat(facts.rotate);
+    const turn = ((((wanted - held + 180) % 360) + 360) % 360) - 180;
+    const from = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+    const radius = Math.hypot(from.x - facts.x, from.y - facts.y);
+    const start = Math.atan2(from.y - facts.y, from.x - facts.x);
+    await page.mouse.move(from.x, from.y);
+    await page.mouse.down();
+    const steps = 24;
+    for (let i = 1; i <= steps; i += 1) {
+      const angle = start + ((turn * Math.PI) / 180) * (i / steps);
+      await page.mouse.move(facts.x + radius * Math.cos(angle), facts.y + radius * Math.sin(angle));
+    }
+    await page.mouse.up();
+  } else if (d.kind === 'canvas-handle' && CLICK_HANDLES.includes(d.gesture ?? '')) {
+    // a tab of the selection clicked (an anchor tab, spec absolute-anchors): pressed and released at its middle, where
+    // the canvas draws it
+    const tab = page.locator(`[data-door="${ref}"]`);
+    await expect(tab, `step ${ref}: the tab is drawn`).toBeVisible();
+    await expect(tab, `step ${ref}: the tab takes a click`).toBeEnabled();
+    await tab.click();
+  } else if (d.kind === 'canvas-handle') {
+    // a handle of the one selected element, dragged by the travel that gives the size the step asks: its width and
+    // height are the element's declared size (its content under content-box), so the travel is the difference between
+    // that border box and the one drawn now, on the handle's sides, times the zoom
+    const handle = page.locator(`[data-canvas-overlay] [data-door="${ref}"]`);
+    await expect(handle, `step ${ref}: the handle is drawn`).toBeVisible();
+    const box = await handle.boundingBox();
+    if (box === null) throw new Error(`step ${ref}: the handle is not laid out`);
+    const basis = await page.evaluate(() => {
+      const iframe = window.document.querySelector<HTMLIFrameElement>('.frame__page');
+      const selected = (window as unknown as { __builderTestPort?: { selection: () => string[] } }).__builderTestPort?.selection()[0];
+      const element = selected === undefined ? null : iframe?.contentDocument?.querySelector(`[data-node="${selected}"]`);
+      if (!iframe || !element || !iframe.contentWindow) return null;
+      const style = iframe.contentWindow.getComputedStyle(element);
+      const px = (value: string) => parseFloat(value) || 0;
+      const r = element.getBoundingClientRect();
+      return {
+        width: r.width,
+        height: r.height,
+        extraX: px(style.paddingLeft) + px(style.paddingRight) + px(style.borderLeftWidth) + px(style.borderRightWidth),
+        extraY: px(style.paddingTop) + px(style.paddingBottom) + px(style.borderTopWidth) + px(style.borderBottomWidth),
+        contentBox: style.boxSizing === 'content-box',
+        zoom: iframe.currentCSSZoom,
+      };
+    });
+    if (basis === null) throw new Error(`step ${ref}: no element is selected on the canvas`);
+    const side = (d.handle ?? '').slice((d.handle ?? '').lastIndexOf('-') + 1);
+    const wanted = (value: unknown, extra: number) => (typeof value === 'string' ? parseFloat(value) + (basis.contentBox ? extra : 0) : null);
+    const width = wanted(args.width, basis.extraX);
+    const height = wanted(args.height, basis.extraY);
+    const dx = width === null ? 0 : side.includes('e') ? width - basis.width : side.includes('w') ? basis.width - width : 0;
+    const dy = height === null ? 0 : side.includes('s') ? height - basis.height : side.includes('n') ? basis.height - height : 0;
+    const from = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+    // the key the step holds (Ctrl: no snapping) is pressed once the handle is taken, as a person holds it during the drag
+    const key = heldKey(step);
+    await page.mouse.move(from.x, from.y);
+    await page.mouse.down();
+    if (key !== undefined) await page.keyboard.down(key);
+    await page.mouse.move(from.x + dx * basis.zoom, from.y + dy * basis.zoom, { steps: 12 });
+    if (step.hold === true) held.current = { door: ref };
+    else await page.mouse.up();
+    if (key !== undefined) await page.keyboard.up(key);
+  } else if (d.kind === 'canvas-drag' && d.gesture === 'space-pan') {
+    // a pan: pressed over the step's node with Space held (or with the middle button) and moved by the page's travel
+    if (target === null || step.target === null) throw new Error(`step ${ref}: a pan starts over the node it names`);
+    const from = await nodePoint(page, target.id, isRoot(document, step.target), step.target);
+    const dx = typeof args.dx === 'number' ? args.dx : 0;
+    const dy = typeof args.dy === 'number' ? args.dy : 0;
+    const button = d.source === 'middle-button' ? 'middle' : 'left';
+    await page.mouse.move(from.x, from.y);
+    if (d.source === 'space-held') await page.keyboard.down('Space');
+    await page.mouse.down({ button });
+    await page.mouse.move(from.x + dx, from.y + dy, { steps: 8 });
+    await page.mouse.up({ button });
+    if (d.source === 'space-held') await page.keyboard.up('Space');
   } else if (d.kind === 'canvas-drag' || d.kind === 'layers-drag') {
     if (held.current !== null && held.current.door === ref && step.target === null && step.drop === null && step.hold !== true) {
       // the release of the held drag, where the pointer is
@@ -659,12 +1016,73 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
       const on = await controlPoint(page, layersRowRef, { target: target?.id });
       await page.mouse.move(on.x, on.y, { steps: 4 });
       await page.waitForTimeout(dwell + 150);
+    } else if (d.source !== undefined && GUIDE_SOURCES.includes(d.source)) {
+      // a guide drag (spec guides-manual): out of a ruler, pressed at its middle, to where the page's coordinate is the
+      // step's place on the guide's axis; a guide pressed on its line, to its new place over the page or onto its own
+      // ruler (its zone own-ruler)
+      const facts = await page.evaluate(() => {
+        const iframe = window.document.querySelector<HTMLIFrameElement>('.frame__page');
+        if (!iframe?.contentWindow) return null;
+        const f = iframe.getBoundingClientRect();
+        const style = getComputedStyle(iframe);
+        const zoom = iframe.currentCSSZoom;
+        return { left: f.left + (parseFloat(style.borderLeftWidth) + parseFloat(style.paddingLeft)) * zoom, top: f.top + (parseFloat(style.borderTopWidth) + parseFloat(style.paddingTop)) * zoom, zoom, scrollX: iframe.contentWindow.scrollX, scrollY: iframe.contentWindow.scrollY };
+      });
+      if (facts === null) throw new Error(`step ${ref}: the canvas has no page`);
+      const middle = async (selector: string) => {
+        const box = await page.locator(selector).boundingBox();
+        if (box === null) throw new Error(`step ${ref}: ${selector} is not drawn`);
+        return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+      };
+      const guideId = typeof args.guide === 'string' ? args.guide : null;
+      // a guide pressed must be drawn: a step fails on that assertion, never on a timeout
+      if (d.source === 'guide') await expect(page.locator(`[data-guide="${guideId ?? ''}"]`), `step ${ref}: the guide is drawn`).toBeVisible();
+      const axis = d.source === 'top-ruler' ? 'horizontal' : d.source === 'left-ruler' ? 'vertical' : await page.locator(`[data-guide="${guideId ?? ''}"]`).getAttribute('data-axis');
+      const from = d.source === 'guide' ? await middle(`[data-guide="${guideId ?? ''}"]`) : await middle(`[data-ruler="${axis ?? ''}"]`);
+      const at = typeof args.at === 'number' ? args.at : null;
+      const to =
+        d.zone === 'own-ruler'
+          ? await middle(`[data-ruler="${axis ?? ''}"]`)
+          : at === null
+            ? null
+            : axis === 'horizontal'
+              ? { x: from.x, y: facts.top + (at - facts.scrollY) * facts.zoom }
+              : { x: facts.left + (at - facts.scrollX) * facts.zoom, y: from.y };
+      if (to === null) throw new Error(`step ${ref}: a guide drag over the page names its place`);
+      const threshold = typeof DRAG_THRESHOLD === 'number' ? DRAG_THRESHOLD : 4;
+      await page.mouse.move(from.x, from.y);
+      await page.mouse.down();
+      await page.mouse.move(from.x + (axis === 'vertical' ? threshold + 2 : 0), from.y + (axis === 'horizontal' ? threshold + 2 : 0), { steps: 3 });
+      await page.mouse.move(to.x, to.y, { steps: 12 });
+      await page.mouse.up();
+    } else if (d.source === POSITIONED_ELEMENT) {
+      // the free drag of a positioned element (spec absolute-free-drag): pressed on the step's target where an element
+      // drag presses it, moved past the threshold and then by the step's travel in page px times the zoom, released
+      if (target === null || step.target === null) throw new Error(`step ${ref}: a free drag names its target`);
+      const dx = step.args.dx;
+      const dy = step.args.dy;
+      if (typeof dx !== 'number' || typeof dy !== 'number') throw new Error(`step ${ref}: a free drag names its dx and dy`);
+      const from = await elementDragPoint(page, document, step.target);
+      const zoom = await page.locator('.frame__page').evaluate((frame) => (frame as HTMLIFrameElement).currentCSSZoom);
+      const threshold = typeof DRAG_THRESHOLD === 'number' ? DRAG_THRESHOLD : 4;
+      await page.mouse.move(from.x, from.y);
+      await page.mouse.down();
+      await page.mouse.move(from.x + threshold + 2, from.y, { steps: 3 });
+      // the key the step holds (Ctrl: no snapping) is pressed once the drag has begun: pressed with the press, it would
+      // make the press a Ctrl+click on the element
+      const key = heldKey(step);
+      if (key !== undefined) await page.keyboard.down(key);
+      await page.mouse.move(from.x + dx * zoom, from.y + dy * zoom, { steps: 12 });
+      await page.mouse.up();
+      if (key !== undefined) await page.keyboard.up(key);
     } else {
       if (step.drop === null) throw new Error(`step ${ref}: a drag names its drop`);
       const from =
         d.source === 'palette-tile'
           ? await controlPoint(page, paletteTileDoor(ref), { entry: args.entry })
-          : d.source === 'layers-row' && target !== null
+          : d.source === COMPONENT_TILE
+            ? await controlPoint(page, tileDoorOf(ref, COMPONENT_TILE), { component: args.component })
+            : d.source === 'layers-row' && target !== null
             ? await controlPoint(page, layersRowRef, { target: target.id })
             : target !== null && step.target !== null && d.source === 'canvas-element'
               ? await elementDragPoint(page, document, step.target)
@@ -677,7 +1095,9 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
           ? await layersDropPoint(page, document, step.drop)
           : d.source === 'empty-area'
             ? await marqueeEndPoint(page, document, step.drop)
-            : await canvasDropPoint(page, document, step.drop, typeof step.args.index === 'number' ? step.args.index : null);
+            : d.zone === 'side-band'
+              ? await sideDropPoint(page, document, step.drop)
+              : await canvasDropPoint(page, document, step.drop, typeof step.args.index === 'number' ? step.args.index : null);
       // a gesture's modifier stands for the mode the step asks (the marquee's Shift adds to the selection)
       const gesture = interactions.gestures.find((g) => g.id === d.gesture);
       const mode = typeof step.args.mode === 'string' ? step.args.mode : null;
@@ -699,42 +1119,68 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
     // the hand (asserted above too) acts at the hand's aim: its arguments (Enter: element.moveTo's parent and index)
     // are where the steps before it aimed, which the document diff checks as well. A key of the inspector's text field
     // (asserted above) acts on the field: its arguments (the node, the text) are what the field holds
-    if (d.context !== EDIT_CONTEXT && d.context !== HAND_CONTEXT && d.context !== FIELD_TEXT_CONTEXT && Object.keys(own).length > 0) {
-      await focusControlFor(page, ref, own);
+    // (a key held with it, the step's modifier, is no argument a control stands for)
+    const standsFor = withoutGestureArgs(own);
+    if (d.context !== EDIT_CONTEXT && d.context !== HAND_CONTEXT && d.context !== FIELD_TEXT_CONTEXT && d.context !== NUMBER_FIELD_CONTEXT && Object.keys(standsFor).length > 0) {
+      await focusControlFor(page, ref, standsFor);
       // the control the key acts on lies in the door's key context (a palette tile in the palette's)
       const chain = await focusedContexts(page);
       if (d.context !== undefined && !chain.includes(d.context)) throw new Error(`step ${ref}: the focus is in ${chain[0] ?? 'nothing'}, the door waits in ${d.context}`);
     }
     if (d.chord === undefined) throw new Error(`shortcut ${ref} has no chord`);
-    await page.keyboard.press(keys(d.chord));
+    // the key the step holds with it (Shift+ArrowUp in a number field)
+    const key = heldKey(step);
+    await page.keyboard.press(key === undefined ? keys(d.chord) : `${key}+${keys(d.chord)}`);
     if (held.current !== null && ref === CANCEL_DOOR) held.current = { ...held.current, cancelled: true };
-  } else if (d.kind === 'inspector-field' || (d.kind === 'panel-control' && d.drawnAs === 'field')) {
+  } else if (d.kind === 'inspector-field' || quickField || (d.kind === 'panel-control' && d.drawnAs === 'field')) {
     // A field. An inspector field is drawn once, for the selection, so its control is the door's only one: its
     // arguments are what it acts on (the selection, by its adapter) and what the step types, which the document diff
     // checks. A panel field is drawn once per node (a Layers row's name field, while its node is renamed): its control
-    // is the one that stands for the step's node arguments. A field not shown (a tab not chosen, a node not renamed)
+    // stands for every argument of the step but the one text argument it keeps (its data-args name the others: a
+    // custom attribute's value field stands for its name, the add field for the empty value it adds). A field not shown (a tab not chosen, a node not renamed)
     // fails the step on an assertion. The runner clicks the field's editable element (an input, a text area, an
     // editable element; the control itself when it is one) and selects what it holds with Control+A (a field keeps its
-    // own keys). An inspector field then takes the step's `type` below ("\n" is Enter); a panel field takes the step's
-    // one argument that names no node (the text its door's command keeps), typed in place of what it held and kept
-    // with Enter.
+    // own keys). An inspector field then takes the step's `type` below ("\n" is Enter); a panel field takes the text
+    // argument it keeps, typed in place of what it held and kept with Enter.
     if (step.hold === true || step.drop !== null) throw new Error(`step ${ref}: a field neither drops nor holds`);
+    // an inspector field drawn as one button per value (keyword buttons: text-align) with nothing to type: the button
+    // that stands for the step's value is clicked
+    const valueButton = d.kind === 'inspector-field' && typeof step.type !== 'string' ? control(page, ref, { args: own }) : null;
+    if (valueButton !== null && (await valueButton.count()) === 1) {
+      await valueButton.click();
+      return;
+    }
     const types = argTypes(ref);
     const text = d.kind === 'panel-control' ? Object.entries(own).filter(([name]) => types[name]?.type !== 'node') : null;
-    const value = text?.[0]?.[1];
-    if (text !== null && (text.length !== 1 || typeof value !== 'string' || typeof step.type === 'string')) throw new Error(`step ${ref}: a panel field takes one text argument typed into it and no \`type\`, not ${JSON.stringify(Object.fromEntries(text))}`);
-    const field = text === null ? control(page, ref) : control(page, ref, { args: Object.fromEntries(Object.entries(own).filter(([name]) => types[name]?.type === 'node')) });
+    const standing = (keptName: string) => control(page, ref, { args: Object.fromEntries(Object.entries(own).filter(([name]) => name !== keptName)) });
+    let kept: [string, unknown] | undefined;
+    for (const candidate of text ?? []) {
+      const found = standing(candidate[0]);
+      if ((await found.count()) === 1 && !Object.hasOwn(JSON.parse((await found.getAttribute('data-args')) ?? '{}') as object, candidate[0])) kept = candidate;
+    }
+    const value = kept?.[1];
+    // (a number argument, a grid setting's value, is typed as its decimal)
+    if (text !== null && (kept === undefined || (typeof value !== 'string' && typeof value !== 'number') || typeof step.type === 'string')) throw new Error(`step ${ref}: a panel field keeps the one text argument its control does not stand for, typed into it, and takes no \`type\`; none of ${JSON.stringify(Object.fromEntries(text))} is`);
+    const field = text === null || kept === undefined ? control(page, ref) : standing(kept[0]);
     await expect(field, `step ${ref}: its control is drawn`).toBeVisible();
     const editable = field.locator('input, textarea, [contenteditable="true"], [contenteditable="plaintext-only"]');
     const typedInto = (await editable.count()) > 0 ? editable.first() : field;
+    // a field that takes nothing now (disabled: its gradient not there yet) fails the step on an assertion, never on
+    // the click's timeout
+    await expect(typedInto, `step ${ref}: its field takes input`).toBeEnabled();
     await typedInto.click();
+    // a slider (the colour picker's hue and alpha): the click at its middle sets it; the value that makes is what the
+    // step names and the document diff checks, and nothing is typed
+    if (await typedInto.evaluate((el) => el instanceof HTMLInputElement && el.type === 'range')) return;
+    // a field with nothing to type into (the gradient bar: a click adds a stop where it lands) takes the click alone
+    if (!(await typedInto.evaluate((el) => el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement || (el instanceof HTMLElement && el.isContentEditable)))) return;
     await page.keyboard.press('Control+A');
-    if (typeof value === 'string') {
+    if (typeof value === 'string' || typeof value === 'number') {
       await page.keyboard.press('Backspace');
-      if (value !== '') await page.keyboard.type(value);
+      if (value !== '') await page.keyboard.type(String(value));
       await page.keyboard.press('Enter');
     }
-  } else if (d.kind === 'toolbar' || d.kind === 'menu' || d.kind === 'panel-control' || d.kind === 'context-menu') {
+  } else if (d.kind === 'toolbar' || d.kind === 'menu' || d.kind === 'panel-control' || d.kind === 'context-menu' || d.kind === 'quick-panel') {
     // a control drawn only in some states (the toast's Undo after a delete, an item of the open context menu) fails the
     // step on an assertion that says it is not drawn, never on the click's timeout. The control is the one runDoor
     // clicks: a panel control's door with a key held (a Layers row's Shift+click) or pressed with the secondary button
@@ -742,18 +1188,122 @@ async function runStep(page: Page, step: Step, ref: string, held: { current: Hel
     // names no argument for it (a row's name, whose double-click renames the selection the first click made) is the
     // part of the row of the step's target: sidebar.tsx writes each part's row node as `target`.
     const clicked = modifiedControl(ref)?.drawn ?? ref;
-    const standsFor = d.kind === 'panel-control' && d.panel === 'layers' && Object.keys(own).length === 0 && target !== null ? { target: target.id } : own;
-    if (d.kind === 'toolbar' || d.kind === 'panel-control' || d.kind === 'context-menu') await expect(control(page, clicked, { args: standsFor }), `step ${ref}: its control is drawn`).toBeVisible();
-    await runDoor(page, ref, { args: standsFor });
+    const plain = d.kind === 'panel-control' && d.panel === 'layers' && Object.keys(own).length === 0 && target !== null ? { target: target.id } : withoutGestureArgs(own);
+    // an area (the colour picker's) stands for part of its step's arguments: the press gives the rest (the colour at the
+    // point runDoor presses), which the document diff checks
+    // the colour picker's eyedropper stands for its property: the colour is the one the browser's EyeDropper answers,
+    // which the runner makes the step's value, as a person picks it on the screen (the browser's own eyedropper waits
+    // for a pointer the test does not move)
+    const asksBrowser = d.kind === 'panel-control' && d.control === EYEDROPPER_CONTROL;
+    if (asksBrowser) {
+      const picked = own.value;
+      if (typeof picked !== 'string') throw new Error(`step ${ref}: the eyedropper's step names the colour it picks`);
+      await page.evaluate((hex) => {
+        (window as unknown as { EyeDropper: unknown }).EyeDropper = class {
+          open() {
+            return Promise.resolve({ sRGBHex: hex });
+          }
+        };
+      }, picked);
+    }
+    const areaStands = (d.kind === 'panel-control' && d.drawnAs === 'area') || asksBrowser ? ((await control(page, clicked).count()) === 1 ? Object.keys(JSON.parse((await control(page, clicked).getAttribute('data-args')) ?? '{}') as object) : null) : null;
+    const standsFor = areaStands === null ? plain : Object.fromEntries(Object.entries(plain).filter(([name]) => areaStands.includes(name)));
+    // A control that opens a field for a text argument (Save the styles as a class: the class's name) stands for the
+    // other arguments: the step types that argument (its `type`, then Enter). While no control stands for them all, the
+    // opener is clicked, the field it opens must take the focus, and the typing below fills it; the opener is not
+    // clicked again.
+    // A dialog's button that keeps what its form holds (Snap settings' Apply) stands for no argument itself: the step's
+    // arguments are set first, as a person sets them, in the form's inputs named after them (a list: the checkboxes
+    // whose values it holds ticked, the others not; a number or a text typed in place of what the field held), then the
+    // button is clicked.
+    // (a travel `distance` is a panel drag's gesture, never a form's: the arguments are the step's own but its held key)
+    if (d.kind === 'panel-control' && d.drawnAs === 'button' && (await fillForm(page, control(page, clicked), Object.fromEntries(Object.entries(own).filter(([name]) => name !== MODIFIER_ARG))))) {
+      await control(page, clicked).click();
+      return;
+    }
+    // (a number argument, a guide's place, is typed as its decimal)
+    const typedArg = typeof step.type === 'string' ? Object.entries(standsFor).find(([, v]) => ((typeof v === 'string' && v !== '') || typeof v === 'number') && step.type === `${String(v)}\n`)?.[0] : undefined;
+    if (d.kind === 'panel-control' && typedArg !== undefined && (await control(page, clicked, { args: standsFor }).count()) === 0) {
+      const others = Object.fromEntries(Object.entries(standsFor).filter(([name]) => name !== typedArg));
+      const opener = control(page, clicked, { args: others }).and(page.locator('[aria-haspopup]'));
+      await expect(opener, `step ${ref}: its control is drawn`).toBeVisible();
+      await expect(opener, `step ${ref}: its control takes a click`).not.toHaveAttribute('aria-disabled', 'true');
+      await opener.click();
+      await expect(page.locator(':focus'), `step ${ref}: the field its control opens takes the typing`).toBeEditable();
+    } else {
+      // A control that opens the list of its values (a number field's unit menu) stands for fewer arguments than its
+      // step names: while no control stands for them all, the one that opens a list and stands for part of them is
+      // clicked first, then the item that stands for them all.
+      if ((d.kind === 'panel-control' || d.kind === 'quick-panel') && (await control(page, clicked, { args: standsFor }).count()) === 0) {
+        const openers = page.locator(`[data-door="${clicked}"][aria-haspopup]`);
+        const at = await openers.evaluateAll(
+          (els, want) => els.findIndex((el) => Object.entries(JSON.parse(el.getAttribute('data-args') ?? '{}') as Record<string, unknown>).every(([name, value]) => JSON.stringify(want[name]) === JSON.stringify(value))),
+          standsFor,
+        );
+        if (at >= 0) await openers.nth(at).click();
+      }
+      if (d.kind === 'toolbar' || d.kind === 'panel-control' || d.kind === 'context-menu' || d.kind === 'quick-panel') await expect(control(page, clicked, { args: standsFor }), `step ${ref}: its control is drawn`).toBeVisible();
+      // a quick panel control that takes nothing now (an Edit on canvas mode with nothing to edit) fails the step on an
+      // assertion, never on the click's timeout
+      if (d.kind === 'quick-panel') await expect(control(page, clicked, { args: standsFor }), `step ${ref}: its control takes a click`).toBeEnabled();
+      // a toolbar or panel control drawn unavailable (a field's Reset with nothing to reset) fails the step on an assertion,
+      // never on the click's timeout
+      if (d.kind === 'toolbar' || d.kind === 'panel-control') await expect(control(page, clicked, { args: standsFor }), `step ${ref}: its control takes a click`).not.toHaveAttribute('aria-disabled', 'true');
+      // the key the step holds with the click (Shift on a number field's step button)
+      const key = heldKey(step);
+      if (key !== undefined) await control(page, clicked, { args: standsFor }).click({ modifiers: [key as 'Shift' | 'Alt' | 'Control' | 'Meta'] });
+      else await runDoor(page, ref, { args: standsFor });
+    }
+  } else if (d.kind === 'panel-drag') {
+    // A panel drag (a number field's label scrubbed): pressed at the middle of the control that stands for the step's
+    // arguments (rounded to whole pixels, so its travel is exact), moved `distance` screen pixels to the right (left
+    // when negative) with the step's key held, and released, or held across the next steps; a later step on the same
+    // door with nothing held after it releases a held one.
+    if (held.current !== null && held.current.door === ref && step.hold !== true) {
+      await page.mouse.up();
+      held.current = null;
+    } else {
+      if (held.current !== null) throw new Error(`step ${ref}: a drag is held; only its release may follow`);
+      const travel = step.args[TRAVEL_ARG];
+      if (typeof travel !== 'number') throw new Error(`step ${ref}: a panel drag names its ${TRAVEL_ARG}`);
+      const middle = await controlPoint(page, ref, withoutGestureArgs(own));
+      const from = { x: Math.round(middle.x), y: Math.round(middle.y) };
+      const key = heldKey(step);
+      await page.mouse.move(from.x, from.y);
+      if (key !== undefined) await page.keyboard.down(key);
+      await page.mouse.down();
+      await page.mouse.move(from.x + travel, from.y, { steps: 10 });
+      if (step.hold === true) held.current = { door: ref };
+      else await page.mouse.up();
+      if (key !== undefined) await page.keyboard.up(key);
+    }
   } else {
     throw new Error(`step ${ref}: the runner cannot run a ${d.kind} door yet`);
   }
+  // the file the door asked for, chosen as a person chooses it
+  if (chooser !== null) {
+    await (await chooser).setFiles(await chosenFile(fileValue as string, downloads));
+    await expect
+      .poll(async () => (await page.locator('[data-confirmation-dialog]').count()) > 0 || (await page.getByRole('status').textContent()) !== saidBefore, { message: `step ${ref}: the command reads the chosen file` })
+      .toBe(true);
+  }
+  // the confirmation the command asks, answered as the step says; none may be left waiting
+  const dialog = page.locator('[data-confirmation-dialog]');
+  if (step.answer === 'confirm' || step.answer === 'cancel') {
+    await expect(dialog, `step ${ref}: a confirmation asks`).toBeVisible();
+    await dialog.locator(`[data-confirmation="${step.answer}"]`).click();
+    await expect(dialog, `step ${ref}: the answer closes the confirmation`).toHaveCount(0);
+  } else await expect(dialog, `step ${ref}: no confirmation waits for an answer the step does not give`).toHaveCount(0);
   // the characters the step types with the real keyboard ("\n" is Enter); U+2028, the line separator, is Shift+Enter,
-  // the line break a person types in a text field
+  // the line break a person types in a text field; "\t" is Tab, the key that leaves a field (the keyboard's type would
+  // write a tab character into a text area)
   if (typeof step.type === 'string') {
-    for (const [i, part] of step.type.split(LINE_BREAK).entries()) {
+    for (const [i, line] of step.type.split(LINE_BREAK).entries()) {
       if (i > 0) await page.keyboard.press('Shift+Enter');
-      if (part !== '') await page.keyboard.type(part);
+      for (const [j, part] of line.split(TAB).entries()) {
+        if (j > 0) await page.keyboard.press('Tab');
+        if (part !== '') await page.keyboard.type(part);
+      }
     }
   }
 }
@@ -762,9 +1312,22 @@ async function setUp(page: Page, s: Scenario): Promise<unknown> {
   const viewport = environment.viewports.find((v) => v.id === s.setup.viewport);
   if (!viewport) throw new Error(`no viewport ${s.setup.viewport}`);
   await page.setViewportSize({ width: viewport.width, height: viewport.height });
-  await page.goto('/');
-  await page.evaluate(() => window.localStorage.clear());
-  await page.reload();
+  // another tab of the editor open first, editing, with the fixture opened there and saved (spec multi-tab-guard):
+  // the scenario's tab opens second, reading the saved project
+  if (s.setup.tabs === 'another-tab-editing') {
+    const other = await page.context().newPage();
+    await other.setViewportSize({ width: viewport.width, height: viewport.height });
+    await openEditor(other);
+    if (s.setup.fixture !== EMPTY_FIXTURE) {
+      await openMenu(other, 'file');
+      const chooser = other.waitForEvent('filechooser');
+      await other.locator('[data-door="project.open#menu-file"]').click();
+      await (await chooser).setFiles(path.join('manifest/features/fixtures', `${s.setup.fixture}.json`));
+      await expect(other.locator('[data-save-state]'), 'the other tab saved the fixture').toHaveAttribute('data-save-state', 'saved');
+    }
+    await page.bringToFront();
+  }
+  await openEditor(page);
   await expect(page.locator('.workbench')).toBeVisible();
   // the system clipboard as the editor reads it (a paste in the text edited in place, spec text-inline-formatting):
   // allowed, as a person allows it once when the browser asks, and empty, whatever an earlier test in this browser
@@ -774,7 +1337,11 @@ async function setUp(page: Page, s: Scenario): Promise<unknown> {
   if (s.setup.locale !== environment.locales.default) await runDoor(page, settingDoor('preferences.setLanguage', 'locale', s.setup.locale));
   // the editor shows the setup's language, whether a door switched it or it is the default
   await expect.poll(() => uiLocale(page), { message: `setup locale ${s.setup.locale}` }).toBe(s.setup.locale);
-  if (s.setup.fixture !== EMPTY_FIXTURE) {
+  if (s.setup.fixture !== EMPTY_FIXTURE && s.setup.tabs === 'another-tab-editing') {
+    // the fixture the other tab opened and saved, which this tab reads
+    const fixture = read(path.join('manifest/features/fixtures', `${s.setup.fixture}.json`));
+    await expect.poll(async () => (await port(page)).document, { message: `this tab reads ${s.setup.fixture}, saved by the other tab` }).toEqual(fixture);
+  } else if (s.setup.fixture !== EMPTY_FIXTURE) {
     // File › Open, with the browser's file chooser, as a user opens a project
     await openMenu(page, 'file');
     const chooser = page.waitForEvent('filechooser');
@@ -784,6 +1351,30 @@ async function setUp(page: Page, s: Scenario): Promise<unknown> {
     await expect.poll(async () => (await port(page)).document, { message: `File › Open loads ${s.setup.fixture}` }).toEqual(fixture);
   }
   await expectCanvasDraws(page, s.setup.fixture === EMPTY_FIXTURE ? 'at the start' : 'after File › Open');
+  // the saved record made unreadable once autosave has saved the fixture, and the editor started again on it (spec
+  // autosave-corruption-recovery): the versions it keeps are the ones the editor wrote
+  if (s.setup.storage === 'corrupt-current-record') {
+    await expect(page.locator('[data-save-state]'), 'autosave saved the fixture').toHaveAttribute('data-save-state', 'saved');
+    await page.evaluate(
+      () =>
+        new Promise<void>((resolve, reject) => {
+          const open = indexedDB.open('work');
+          open.onerror = () => reject(open.error);
+          open.onsuccess = () => {
+            const tx = open.result.transaction('projects', 'readwrite');
+            tx.objectStore('projects').put({ revision: 1000, format: 1, document: 'this is not a project', selection: [] }, 'current');
+            tx.oncomplete = () => {
+              open.result.close();
+              window.localStorage.removeItem('work-journal');
+              resolve();
+            };
+            tx.onerror = () => reject(tx.error);
+          };
+        }),
+    );
+    await page.reload();
+    await expect(page.locator('.workbench')).toBeVisible();
+  }
   const loaded = (await port(page)).document;
   // the selection, clicked on the canvas as a person selects: the first node, then each other added. A node its
   // children cover whole has no point of its own on the canvas; a person reaches it another way (spec select-click,
@@ -822,6 +1413,11 @@ async function setUp(page: Page, s: Scenario): Promise<unknown> {
   ] as const) {
     if (value !== base) await runDoor(page, settingDoor(command, arg, value));
   }
+  // the dialog context: a dialog the editor opened at its start (the recovery dialog) holds the focus
+  if (s.setup.context === DIALOG_CONTEXT) {
+    expect(await page.evaluate(() => document.activeElement?.closest('[data-key-context="dialog"]') !== null && document.activeElement !== null), 'setup context dialog: an open dialog holds the focus').toBe(true);
+    return loaded;
+  }
   // the global context: no control holds the focus
   if (s.setup.context !== 'global') throw new Error(`setup context ${s.setup.context}: no door brings the focus there yet`);
   expect(await page.evaluate(() => document.activeElement === null || document.activeElement === document.body), 'setup context global: no control holds the focus').toBe(true);
@@ -842,9 +1438,17 @@ export function registerScenarioTests(): void {
           // each refusal is checked right after its refused step (refusalCheck), against the document just before it
           const refusalsAt = s.refusals.map((refusal) => ({ refusal, ...refusalCheck(s, refusal.key) }));
           const before = new Map<number, unknown>();
+          // the downloads the steps before the action made: the export terminal reads the archive the action hands out
+          let downloadsBeforeAction = 0;
           for (const [index, step] of s.steps.entries()) {
             if (refusalsAt.some((r) => r.unchangedFrom === index)) before.set(index, (await port(page)).document);
-            await runStep(page, step, step.action ? door : step.door, held, step.action);
+            if (step.action) downloadsBeforeAction = downloads.length;
+            // a step whose command reads the clipboard is done once the command has run, which it always says in the
+            // status bar (pasted, nothing to paste, the clipboard denied)
+            const ref = step.action ? door : step.door;
+            const said = readsClipboard(ref) ? await page.getByRole('status').textContent() : null;
+            await runStep(page, step, ref, held, step.action, downloads);
+            if (said !== null) await expect.poll(() => page.getByRole('status').textContent(), { message: `step ${ref}: the command runs once the clipboard is read` }).not.toBe(said);
             // a refusal names its key; the words it fills in ("No next sibling in {parent}.") are those of the feedback
             // of the same key
             for (const { refusal, unchangedFrom } of refusalsAt.filter((r) => r.after === index)) {
@@ -865,7 +1469,12 @@ export function registerScenarioTests(): void {
           // the document diff and the selection, through the test port
           const expected = applyDiff(fixture, s.expect.document);
           if ('error' in expected && expected.error) throw new Error(String(expected.error));
-          expect(matchDocument(after.document, (expected as { document: unknown }).document), 'document').toEqual([]);
+          // An action whose command records no history and changes the document replaces it whole (File › Open): the
+          // page and its root come with the ids the opened project gives them, which the diff does not name (the user's
+          // decision, project-open-json), so they are not compared; everything else is.
+          const replacing = COMMANDS.find((c) => c.id === commandOf(door))?.history.undoable === false;
+          const compared = replacing ? withoutPageIds((expected as { document: unknown }).document) : (expected as { document: unknown }).document;
+          expect(matchDocument(after.document, compared), 'document').toEqual([]);
           expect(after.selection, 'selection').toEqual(s.expect.selection.map((p) => idOf(after.document, p)));
           expect(after.history.undoSteps, 'history: undo steps').toBe(s.expect.history.undoSteps);
 
@@ -909,12 +1518,12 @@ export function registerScenarioTests(): void {
             }
           }
 
-          // the files inside the archive the steps downloaded last (File › Save project, the export), read as any unzip
-          // tool reads them
+          // the files inside the archive the action step handed out (File › Save project, the export), read as any unzip
+          // tool reads them: the first download after the action began, never one a step before it made
           const exported = s.expect.export;
           if (exported !== null) {
-            await expect.poll(() => downloads.length, 'a file was downloaded').toBeGreaterThan(0);
-            const saved = await (downloads.at(-1) as Download).path();
+            await expect.poll(() => downloads.length, 'the action downloaded a file').toBeGreaterThan(downloadsBeforeAction);
+            const saved = await (downloads[downloadsBeforeAction] as Download).path();
             const files = unzip(fs.readFileSync(saved));
             for (const f of exported.files) {
               const data = files.get(f.path);
@@ -927,6 +1536,9 @@ export function registerScenarioTests(): void {
 
           // undo and redo restore the document through their doors
           if (s.expect.history.undoSteps > 0) {
+            // a modal dialog still open (Guides & Grids) keeps the top bar out of reach: a person closes it first, with its
+            // close button (closing it changes nothing in the document nor in the history)
+            if ((await page.locator('[role="dialog"][aria-modal="true"]').count()) > 0) await runDoor(page, DIALOG_CLOSE_DOOR);
             for (let i = 0; i < s.expect.history.undoSteps; i += 1) await runDoor(page, UNDO_DOOR);
             expect(matchDocument((await port(page)).document, fixture), 'undo restores').toEqual([]);
             for (let i = 0; i < s.expect.history.undoSteps; i += 1) await runDoor(page, REDO_DOOR);
@@ -936,10 +1548,20 @@ export function registerScenarioTests(): void {
           const persistence = s.expect.persistence;
           if (persistence) {
             const stored = await page.evaluate(() => window.localStorage.getItem('preferences'));
+            const applied = await appliedPreferences(page);
+            if (persistence.preferences === 'same') {
+              // what is stored is what the editor shows: its language and its theme
+              const kept = JSON.parse(stored ?? 'null') as { locale?: string; theme?: string } | null;
+              expect({ locale: kept?.locale, theme: kept?.theme }, 'the stored preferences are those the editor shows').toEqual({ locale: applied.locale, theme: applied.theme });
+            }
             await page.reload();
             await expect(page.locator('.workbench')).toBeVisible();
             if (persistence.document === 'same') expect(matchDocument((await port(page)).document, after.document), 'document after reload').toEqual([]);
-            if (persistence.preferences === 'same') expect(await page.evaluate(() => window.localStorage.getItem('preferences')), 'preferences after reload').toBe(stored);
+            if (persistence.preferences === 'same') {
+              expect(await page.evaluate(() => window.localStorage.getItem('preferences')), 'preferences after reload').toBe(stored);
+              // the reloaded editor applies them: the same language, theme and collapsed sections as before the reload
+              await expect.poll(() => appliedAgain(page, applied), { message: 'the editor applies after the reload the preferences it had before' }).toEqual(applied);
+            }
             if (persistence.selection === 'same') expect((await port(page)).selection, 'selection after reload').toEqual(after.selection);
           }
         });

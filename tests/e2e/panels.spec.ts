@@ -4,7 +4,8 @@
 // canvas tools) stay enabled.
 import fs from 'node:fs';
 import path from 'node:path';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
+import { openEditor } from '../support/editor.ts';
 
 const EMPTY = ['checks', 'shortcuts'];
 const BUILT = ['explorer', 'elements', 'variables', 'layers', 'inspector', 'workbench', 'timeline', 'canvas-tools'];
@@ -35,11 +36,32 @@ async function control(page: Page, door: (typeof panelDoors)[number]) {
   return page.locator(`[data-door="${door.ref}"]`);
 }
 
+// what a door could change: every region of the window and where it lies, the stored preferences, and the document,
+// the selection and the history (read through the read-only test port)
+const snapshot = (page: Page) =>
+  page.evaluate(() => {
+    const p = (window as unknown as Record<string, { document: () => unknown; selection: () => unknown; history: () => unknown }>).__builderTestPort;
+    if (!p) throw new Error('the test port is missing');
+    return {
+      document: p.document(),
+      selection: p.selection(),
+      history: p.history(),
+      regions: [...document.querySelectorAll('[data-region]')].map((el) => {
+        const r = el.getBoundingClientRect();
+        return `${el.getAttribute('data-region')} ${r.x} ${r.y} ${r.width} ${r.height}`;
+      }),
+      // the columns of the window, which carry no region of their own
+      columns: ['.sidebar', '.centre', '.inspector', '.workbench'].map((selector) => {
+        const r = document.querySelector(selector)?.getBoundingClientRect();
+        return r === undefined ? `${selector} absent` : `${selector} ${r.x} ${r.y} ${r.width} ${r.height}`;
+      }),
+      stored: window.localStorage.getItem('preferences'),
+    };
+  });
+
 test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/');
-  await page.evaluate(() => window.localStorage.clear());
-  await page.reload();
+  await openEditor(page);
 });
 
 test('a door that only opens a panel without its content is disabled with "not available yet" and changes nothing', async ({ page }) => {
@@ -47,13 +69,13 @@ test('a door that only opens a panel without its content is disabled with "not a
   // Help › Keyboard shortcuts and View › Checks
   expect(empty.map((d) => d.ref).sort()).toEqual(['workspace.setPanelOpen#menu-help-shortcuts', 'workspace.setPanelOpen#menu-view-checks']);
   for (const door of empty) {
-    const before = { sidebar: await page.locator('.sidebar').boundingBox(), centre: await page.locator('.centre').boundingBox(), styles: await page.locator('[data-region="styles"]').count() };
+    const before = await snapshot(page);
     const button = await control(page, door);
     await expect(button, door.ref).toHaveAttribute('aria-disabled', 'true');
     await expect(button, door.ref).toHaveAttribute('title', /not available yet/);
     await button.click({ force: true });
     await page.keyboard.press('Escape');
-    expect({ sidebar: await page.locator('.sidebar').boundingBox(), centre: await page.locator('.centre').boundingBox(), styles: await page.locator('[data-region="styles"]').count() }, door.ref).toEqual(before);
+    expect(await snapshot(page), door.ref).toEqual(before);
   }
 });
 

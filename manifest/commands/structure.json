@@ -397,6 +397,26 @@
             "fields": []
           },
           "args": {}
+        },
+        {
+          "id": "key-escape-in-color-picker",
+          "kind": "shortcut",
+          "feature": "color-picker",
+          "chord": "Escape",
+          "context": "color-picker",
+          "gesture": null,
+          "labelKey": "command.drag.cancel",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
         }
       ]
     },
@@ -886,6 +906,109 @@
           },
           "adapter": {
             "selection": "roots-same-parent",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": "element.wrapBeside",
+      "labelKey": "command.wrapBeside",
+      "owner": "src/core/structure/wrap.ts",
+      "introducedBy": "drag-side-wrap",
+      "args": {
+        "target": {
+          "type": "node",
+          "values": [],
+          "optional": false
+        },
+        "side": {
+          "type": "enum",
+          "values": [
+            "before",
+            "after"
+          ],
+          "optional": false
+        },
+        "wrapper": {
+          "type": "enum",
+          "values": [
+            "row",
+            "column"
+          ],
+          "optional": false
+        },
+        "entry": {
+          "type": "palette-entry",
+          "values": [],
+          "optional": true
+        }
+      },
+      "availability": {
+        "predicate": "always",
+        "refusalKey": null
+      },
+      "refusals": [
+        "status.wrap.root",
+        "status.refused.intoItself",
+        "status.refused.onlyAccepts",
+        "status.refused.requiresParent",
+        "status.refused.interactiveInside",
+        "status.refused.formInForm",
+        "status.refused.singleChild",
+        "status.refused.labelOneControl",
+        "status.refused.noChildren",
+        "status.refused.notInside",
+        "status.locked.move",
+        "status.locked.insert",
+        "status.locked.byAncestor"
+      ],
+      "confirmation": null,
+      "history": {
+        "undoable": true,
+        "coalesce": "none",
+        "undoRestoresSelection": "before-command",
+        "transaction": "per-gesture",
+        "noChange": "no-entry"
+      },
+      "entryPoints": [
+        {
+          "id": "canvas-drag-canvas-element-side-band",
+          "kind": "canvas-drag",
+          "feature": "drag-side-wrap",
+          "source": "canvas-element",
+          "zone": "side-band",
+          "gesture": "element-drag",
+          "labelKey": "command.wrapBeside",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "roots",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "canvas-drag-palette-tile-side-band",
+          "kind": "canvas-drag",
+          "feature": "drag-side-wrap",
+          "source": "palette-tile",
+          "zone": "side-band",
+          "gesture": "palette-drag",
+          "labelKey": "command.wrapBeside",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": "none",
+          "adapter": {
+            "selection": "primary",
             "offers": null,
             "writes": [],
             "fields": []

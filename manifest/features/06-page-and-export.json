@@ -1049,7 +1049,7 @@
       "dependsOn": [
         "color-picker"
       ],
-      "spec": null,
+      "spec": "spec/behavior/css-variables-tokens.md",
       "intent": {
         "title": "Design tokens as CSS variables",
         "steps": [
@@ -1063,7 +1063,1166 @@
           "The export writes the variables in :root and uses var(--name) where they are used."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "new-variable-makes-a-colour-variable",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-styles",
+              "args": {
+                "panel": "variables",
+                "open": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "tokens.create#variables-add",
+              "args": {
+                "kind": "color",
+                "name": "color-1",
+                "value": "#000000"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "tokens.create#variables-add"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@tokens",
+                "value": [
+                  {
+                    "name": "color-1",
+                    "kind": "color",
+                    "value": "#000000"
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.tokens.created",
+                  "params": {
+                    "name": "color-1"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "new-variable-makes-a-size-and-a-font-size-variable",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-styles",
+              "args": {
+                "panel": "variables",
+                "open": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "tokens.create#variables-add",
+              "args": {
+                "kind": "length",
+                "name": "length-1",
+                "value": "16px"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "tokens.create#variables-add",
+              "args": {
+                "kind": "font-size",
+                "name": "font-size-1",
+                "value": "16px"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "tokens.create#variables-add"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@tokens",
+                "value": [
+                  {
+                    "name": "length-1",
+                    "kind": "length",
+                    "value": "16px"
+                  },
+                  {
+                    "name": "font-size-1",
+                    "kind": "font-size",
+                    "value": "16px"
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.tokens.created",
+                  "params": {
+                    "name": "font-size-1"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-styles-view-opens-from-the-menu-and-the-activity-bar",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#menu-view-variables",
+              "args": {
+                "panel": "variables",
+                "open": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "tokens.create#variables-add",
+              "args": {
+                "kind": "color",
+                "name": "color-1",
+                "value": "#000000"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "workspace.setPanelOpen#menu-view-variables",
+            "workspace.setPanelOpen#toolbar-activity-bar-styles"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@tokens",
+                "value": [
+                  {
+                    "name": "color-1",
+                    "kind": "color",
+                    "value": "#000000"
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.tokens.created",
+                  "params": {
+                    "name": "color-1"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-changed-variable-changes-the-element-that-uses-it",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-styles",
+              "args": {
+                "panel": "variables",
+                "open": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "tokens.create#variables-add",
+              "args": {
+                "kind": "color",
+                "name": "color-1",
+                "value": "#000000"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.set#inspector-background-color",
+              "args": {
+                "property": "background-color",
+                "value": "var(--color-1)"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "var(--color-1)\n"
+            },
+            {
+              "door": "tokens.update#variables-value-field",
+              "args": {
+                "token": "color-1",
+                "value": "#ff0000"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "tokens.update#variables-value-field"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@tokens",
+                "value": [
+                  {
+                    "name": "color-1",
+                    "kind": "color",
+                    "value": "#ff0000"
+                  }
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/background-color",
+                "value": "var(--color-1)"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 3,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero",
+                  "property": "background-color",
+                  "value": "rgb(255, 0, 0)"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.tokens.updated",
+                  "params": {
+                    "name": "color-1",
+                    "value": "#ff0000"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-renamed-variable-renames-its-uses",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-styles",
+              "args": {
+                "panel": "variables",
+                "open": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "tokens.create#variables-add",
+              "args": {
+                "kind": "color",
+                "name": "color-1",
+                "value": "#000000"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.set#inspector-background-color",
+              "args": {
+                "property": "background-color",
+                "value": "var(--color-1)"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "var(--color-1)\n"
+            },
+            {
+              "door": "tokens.rename#variables-name-field",
+              "args": {
+                "token": "color-1",
+                "name": "brand"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "tokens.rename#variables-name-field"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@tokens",
+                "value": [
+                  {
+                    "name": "brand",
+                    "kind": "color",
+                    "value": "#000000"
+                  }
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/background-color",
+                "value": "var(--brand)"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 3,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero",
+                  "property": "background-color",
+                  "value": "rgb(0, 0, 0)"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.tokens.renamed",
+                  "params": {
+                    "from": "color-1",
+                    "to": "brand"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "an-unused-variable-is-deleted",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-styles",
+              "args": {
+                "panel": "variables",
+                "open": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "tokens.create#variables-add",
+              "args": {
+                "kind": "color",
+                "name": "color-1",
+                "value": "#000000"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "tokens.delete#variables-delete",
+              "args": {
+                "token": "color-1"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "tokens.delete#variables-delete"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.tokens.deleted",
+                  "params": {
+                    "name": "color-1"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-variable-in-use-is-not-deleted",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-styles",
+              "args": {
+                "panel": "variables",
+                "open": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "tokens.create#variables-add",
+              "args": {
+                "kind": "color",
+                "name": "color-1",
+                "value": "#000000"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.set#inspector-background-color",
+              "args": {
+                "property": "background-color",
+                "value": "var(--color-1)"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "var(--color-1)\n"
+            },
+            {
+              "door": "tokens.delete#variables-delete",
+              "args": {
+                "token": "color-1"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "tokens.delete#variables-delete"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@tokens",
+                "value": [
+                  {
+                    "name": "color-1",
+                    "kind": "color",
+                    "value": "#000000"
+                  }
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/background-color",
+                "value": "var(--color-1)"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.tokens.inUse",
+                  "params": {
+                    "name": "color-1",
+                    "count": 1
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": [
+            {
+              "key": "status.tokens.inUse",
+              "document": "unchanged"
+            }
+          ]
+        },
+        {
+          "id": "a-name-taken-is-refused",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-styles",
+              "args": {
+                "panel": "variables",
+                "open": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "tokens.create#variables-add",
+              "args": {
+                "kind": "color",
+                "name": "color-1",
+                "value": "#000000"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "tokens.create#variables-add",
+              "args": {
+                "kind": "color",
+                "name": "color-2",
+                "value": "#000000"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "tokens.rename#variables-name-field",
+              "args": {
+                "token": "color-2",
+                "name": "color-1"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "tokens.rename#variables-name-field"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@tokens",
+                "value": [
+                  {
+                    "name": "color-1",
+                    "kind": "color",
+                    "value": "#000000"
+                  },
+                  {
+                    "name": "color-2",
+                    "kind": "color",
+                    "value": "#000000"
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.tokens.nameTaken",
+                  "params": {
+                    "name": "color-1"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": [
+            {
+              "key": "status.tokens.nameTaken",
+              "document": "unchanged"
+            }
+          ]
+        },
+        {
+          "id": "a-name-that-is-no-css-name-is-refused",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-styles",
+              "args": {
+                "panel": "variables",
+                "open": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "tokens.create#variables-add",
+              "args": {
+                "kind": "color",
+                "name": "color-1",
+                "value": "#000000"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "tokens.rename#variables-name-field",
+              "args": {
+                "token": "color-1",
+                "name": "1st colour"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "tokens.rename#variables-name-field"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@tokens",
+                "value": [
+                  {
+                    "name": "color-1",
+                    "kind": "color",
+                    "value": "#000000"
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.tokens.badName",
+                  "params": {
+                    "name": "1st colour"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": [
+            {
+              "key": "status.tokens.badName",
+              "document": "unchanged"
+            }
+          ]
+        },
+        {
+          "id": "a-value-the-kind-does-not-take-is-refused",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-styles",
+              "args": {
+                "panel": "variables",
+                "open": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "tokens.create#variables-add",
+              "args": {
+                "kind": "color",
+                "name": "color-1",
+                "value": "#000000"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "tokens.update#variables-value-field",
+              "args": {
+                "token": "color-1",
+                "value": "wide"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "tokens.update#variables-value-field"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@tokens",
+                "value": [
+                  {
+                    "name": "color-1",
+                    "kind": "color",
+                    "value": "#000000"
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.tokens.invalidValue",
+                  "params": {
+                    "value": "wide",
+                    "kind": "colour"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": [
+            {
+              "key": "status.tokens.invalidValue",
+              "document": "unchanged"
+            }
+          ]
+        },
+        {
+          "id": "the-export-declares-the-variables-in-root",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-styles",
+              "args": {
+                "panel": "variables",
+                "open": "toggle"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "tokens.create#variables-add",
+              "args": {
+                "kind": "color",
+                "name": "color-1",
+                "value": "#000000"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.set#inspector-background-color",
+              "args": {
+                "property": "background-color",
+                "value": "var(--color-1)"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "var(--color-1)\n"
+            },
+            {
+              "door": "project.export#toolbar-top-bar-export",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.export#toolbar-top-bar-export"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/@tokens",
+                "value": [
+                  {
+                    "name": "color-1",
+                    "kind": "color",
+                    "value": "#000000"
+                  }
+                ]
+              },
+              {
+                "op": "set",
+                "path": "/Page/Hero/@styles/desktop/base/background-color",
+                "value": "var(--color-1)"
+              }
+            ],
+            "selection": [
+              "/Page/Hero"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": null,
+            "editor": null,
+            "persistence": null,
+            "export": {
+              "files": [
+                {
+                  "path": "css/styles.css",
+                  "present": [
+                    ":root {",
+                    "  --color-1: #000000;",
+                    ".hero {",
+                    "  background-color: var(--color-1);"
+                  ],
+                  "absent": [
+                    "[data-"
+                  ]
+                }
+              ]
+            }
+          },
+          "refusals": []
+        }
+      ]
     },
     {
       "id": "export-bem-css",
@@ -1075,7 +2234,7 @@
       "dependsOn": [
         "export-zip"
       ],
-      "spec": null,
+      "spec": "spec/behavior/export-bem-css.md",
       "intent": {
         "title": "Exported CSS uses readable BEM classes and is deterministic",
         "steps": [
@@ -1091,7 +2250,320 @@
           "Styles set with the Element chip are written as a readable BEM class derived from the element's name, on that element only: an element of class .card named 'Plano assinatura' gets .card--plano-assinatura; a numeric suffix is added only on a collision (.card--plano-assinatura-2); the class is never a hash, never an #id selector and never a style attribute."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "a-styled-element-inside-a-styled-block-gets-a-bem-element-class",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "style.set#inspector-font-size",
+              "args": {
+                "property": "font-size",
+                "value": "32px"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "32\n"
+            },
+            {
+              "door": "project.export#toolbar-top-bar-export",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.export#toolbar-top-bar-export"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Title/@styles/desktop/base/font-size",
+                "value": "32px"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.export.done",
+                  "params": {
+                    "file": "site.zip"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": {
+              "files": [
+                {
+                  "path": "index.html",
+                  "present": [
+                    "<section class=\"hero\">",
+                    "<h1 class=\"hero__title\">Welcome to Aurora</h1>"
+                  ],
+                  "absent": [
+                    "class=\"title\"",
+                    "id=\""
+                  ]
+                },
+                {
+                  "path": "css/styles.css",
+                  "present": [
+                    ".hero__title {\n  font-size: 32px;\n}",
+                    ".hero {"
+                  ],
+                  "absent": [
+                    "#",
+                    "[data-"
+                  ]
+                }
+              ]
+            }
+          },
+          "refusals": []
+        },
+        {
+          "id": "an-author-class-with-styles-of-its-own-gets-a-modifier",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Plans/Grid/CardA"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "style.set#inspector-width",
+              "args": {
+                "property": "width",
+                "value": "200px"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "200\n"
+            },
+            {
+              "door": "project.export#toolbar-top-bar-export",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.export#toolbar-top-bar-export"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/CardA/@styles/desktop/base/width",
+                "value": "200px"
+              }
+            ],
+            "selection": [
+              "/Page/Plans/Grid/CardA"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.export.done",
+                  "params": {
+                    "file": "site.zip"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": {
+              "files": [
+                {
+                  "path": "index.html",
+                  "present": [
+                    "<article class=\"card card--carda\">",
+                    "<article class=\"card\">"
+                  ],
+                  "absent": []
+                },
+                {
+                  "path": "css/styles.css",
+                  "present": [
+                    ".card--carda {\n  width: 200px;\n}"
+                  ],
+                  "absent": [
+                    ".card {"
+                  ]
+                }
+              ]
+            }
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-name-used-twice-gets-a-numeric-suffix",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Plans/Grid/CardA/CardATitle"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": 100
+          },
+          "steps": [
+            {
+              "door": "layers.startRename#key-f2-in-canvas",
+              "args": {},
+              "target": "/Page/Plans/Grid/CardA/CardATitle",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.rename#layers-row-name-field",
+              "args": {
+                "target": "/Page/Plans/Grid/CardA/CardATitle",
+                "name": "Hero"
+              },
+              "target": "/Page/Plans/Grid/CardA/CardATitle",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "style.set#inspector-font-size",
+              "args": {
+                "property": "font-size",
+                "value": "20px"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": "20\n"
+            },
+            {
+              "door": "project.export#toolbar-top-bar-export",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.export#toolbar-top-bar-export"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/CardA/CardATitle/@name",
+                "value": "Hero"
+              },
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/CardA/Hero/@styles/desktop/base/font-size",
+                "value": "20px"
+              }
+            ],
+            "selection": [
+              "/Page/Plans/Grid/CardA/Hero"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.export.done",
+                  "params": {
+                    "file": "site.zip"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": {
+              "files": [
+                {
+                  "path": "index.html",
+                  "present": [
+                    "<section class=\"hero\">",
+                    "<h3 class=\"hero-2\">"
+                  ],
+                  "absent": []
+                },
+                {
+                  "path": "css/styles.css",
+                  "present": [
+                    ".hero {",
+                    ".hero-2 {\n  font-size: 20px;\n}"
+                  ],
+                  "absent": []
+                }
+              ]
+            }
+          },
+          "refusals": []
+        }
+      ]
     }
   ]
 }

@@ -1,25 +1,28 @@
 // The centre column (DESIGN.md "Regions" and "Canvas"): the file tabs, the canvas toolbar with the Canvas / Split /
 // Code switch, the rulers, and the frame with its breakpoint tabs along the cascade from the base breakpoint, and the
-// page's iframe (src/editor/canvas/frame.tsx) at the zoom that fits the frame to the stage.
-import { useContext, useEffect, useRef, useState, type CSSProperties } from 'react';
+// page's iframe (src/editor/canvas/frame.tsx) at the camera's zoom (src/editor/view/camera.ts): the chosen one, or in
+// Fit mode the one that fits the frame to the stage; the frame is placed at the camera's pan.
+import { useContext, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react';
 import type { MessageId } from '../../generated/ids.ts';
 import { manifest, type DoorEntry } from '../../manifest/runtime.ts';
 import { CanvasFrame } from '../canvas/frame.tsx';
+import { Rulers } from '../canvas/rulers.tsx';
 import { DoorControl, Icon } from '../doors/door.tsx';
 import { MenuButton } from '../doors/menu.tsx';
 import { doorSlots, partOf, slotsIn } from '../doors/placement.ts';
 import { useEditorState } from '../store.ts';
+import { FIT_MARGIN, fitZoom, panOf, registerStage } from '../view/camera.ts';
+import { activeBreakpoint } from '../view/breakpoints.ts';
+import { activeState } from '../view/style-state.ts';
+import { panState } from '../input/pointer.ts';
 import { isPanelOpen } from '../workspace/panels.ts';
 import { useT } from '../text.ts';
 import { ReportFitZoom, Slots, useFitZoom } from './slots.tsx';
+import { QuickPanel } from '../canvas/quick-panel.tsx';
+import { AnchorTabs } from '../canvas/anchor-tabs.tsx';
 
 const BREAKPOINTS = manifest.properties.breakpoints;
-const BASE = BREAKPOINTS.find((b) => b.base) ?? BREAKPOINTS[0];
 const PAGE_ICON = manifest.elements.elements.find((e) => e.tag === 'body')?.icon ?? null;
-// the frame's distance from the left ruler (DESIGN.md "Canvas"), read from its token
-const FRAME_GAP_TOKEN = '--space-9';
-// ruler numbers every 200 page pixels (design/final)
-const RULER_STEP = 200;
 
 const drawnAs = (entry: DoorEntry): string | null => (entry.door.kind === 'toolbar' || entry.door.kind === 'panel-control' ? entry.door.drawnAs : null);
 
@@ -80,31 +83,6 @@ function CanvasToolbar() {
   );
 }
 
-function Rulers({ width, gap }: { readonly width: number; readonly gap: number }) {
-  const zoom = useFitZoom();
-  const marks: number[] = [];
-  for (let at = 0; at <= (BASE?.width ?? 0); at += RULER_STEP) marks.push(at);
-  return (
-    <>
-      <div className="ruler ruler--corner" />
-      <div className="ruler ruler--x" style={{ '--zoom': zoom } as CSSProperties}>
-        {marks.map((m) => (
-          <span key={m} className="ruler__mark" style={{ left: gap + m * zoom }}>
-            {m}
-          </span>
-        ))}
-      </div>
-      <div className="ruler ruler--y" style={{ '--zoom': zoom } as CSSProperties}>
-        {marks.filter((m) => m * zoom < width).map((m) => (
-          <span key={m} className="ruler__mark" style={{ top: m * zoom }}>
-            {m}
-          </span>
-        ))}
-      </div>
-    </>
-  );
-}
-
 function BreakpointTabs() {
   const t = useT();
   const byId = new Map(BREAKPOINTS.map((b) => [b.id, b]));
@@ -133,36 +111,68 @@ function BreakpointTabs() {
   );
 }
 
+// While a state other than Base is edited (spec state-styles), a badge over the frame names it: "Editing Hover".
+function StateBadge() {
+  const t = useT();
+  const state = useEditorState((s) => activeState(s.ui));
+  if (state.pseudo === null) return null;
+  return (
+    <div className="canvas-state-badge" data-canvas-badge="state">
+      {t('canvas.badge.editingState', { state: t(state.labelKey as MessageId) })}
+    </div>
+  );
+}
+
 export function CanvasColumn() {
   const stage = useRef<HTMLDivElement>(null);
-  const [size, setSize] = useState({ width: 0, height: 0, gap: 0 });
-  useEffect(() => {
+  const [size, setSize] = useState({ width: 0, height: 0 });
+  // measured before the first paint, so the canvas never shows an unfitted frame (at zoom 1) before it fits: a layout
+  // read right after the editor appears must see the fitted canvas; the observer then follows every later resize
+  useLayoutEffect(() => {
     const element = stage.current;
     if (!element) return;
-    const gap = parseFloat(getComputedStyle(element).getPropertyValue(FRAME_GAP_TOKEN)) || 0;
+    const first = element.getBoundingClientRect();
+    const style = getComputedStyle(element);
+    const width = first.width - (parseFloat(style.paddingLeft) || 0) - (parseFloat(style.paddingRight) || 0) - (parseFloat(style.borderLeftWidth) || 0) - (parseFloat(style.borderRightWidth) || 0);
+    const height = first.height - (parseFloat(style.paddingTop) || 0) - (parseFloat(style.paddingBottom) || 0) - (parseFloat(style.borderTopWidth) || 0) - (parseFloat(style.borderBottomWidth) || 0);
+    setSize({ width, height });
     const observer = new ResizeObserver(([entry]) => {
-      if (entry) setSize({ width: entry.contentRect.width, height: entry.contentRect.height, gap });
+      if (entry) setSize({ width: entry.contentRect.width, height: entry.contentRect.height });
     });
     observer.observe(element);
     return () => observer.disconnect();
   }, []);
-  // the zoom that fits the base breakpoint's width, with the frame's gap on both sides
-  const zoom = size.width > 0 && BASE ? Math.max(0.1, (size.width - 2 * size.gap) / BASE.width) : 1;
+  // the camera's zoom: the chosen one, or the one that fits the base breakpoint's width with the fit margin on both
+  // sides; the stage's width is reported to the camera, whose handlers pivot and fit on it
+  const chosen = useEditorState((s) => s.ui.preferences.zoom);
+  // the page's width: the active breakpoint's (view/breakpoints.ts)
+  const pageWidth = useEditorState((s) => activeBreakpoint(s.ui).width);
+  const zoom = chosen !== undefined ? chosen / 100 : fitZoom(size.width, pageWidth);
+  const pan = useEditorState((s) => panOf(s.ui, zoom, size.width));
+  useLayoutEffect(() => registerStage(stage.current), []);
   const report = useContext(ReportFitZoom);
-  useEffect(() => report(zoom), [report, zoom]);
+  useLayoutEffect(() => report(zoom), [report, zoom]);
+  // Space held over the stage, or a pan in progress: the grab cursor (spec zoom-wheel-pan)
+  const panning = useSyncExternalStore(panState.subscribe, panState.get);
+  const rulersHidden = useEditorState((s) => s.ui.preferences.rulersHidden === true);
   return (
     <>
       <main className="centre" data-key-context="canvas">
         <FileTabs />
         <CanvasToolbar />
-        <div className="stage-wrap">
-          <Rulers width={size.height} gap={size.gap} />
+        <div className={`stage-wrap${rulersHidden ? ' stage-wrap--no-rulers' : ''}`}>
+          <Rulers />
           {/* the stage around the page: a press here is on no node (pointer.ts) */}
-          <div className="stage" ref={stage} data-canvas-stage>
-            <div className="frame" style={{ width: (BASE?.width ?? 0) * zoom }}>
+          <div className={`stage${panning !== 'idle' ? ` stage--${panning}` : ''}`} ref={stage} data-canvas-stage>
+            <div className="frame" style={{ width: pageWidth * zoom, left: FIT_MARGIN + pan }}>
               <BreakpointTabs />
-              <CanvasFrame width={BASE?.width ?? 0} zoom={zoom} />
+              <StateBadge />
+              <CanvasFrame width={pageWidth} zoom={zoom} />
             </div>
+            {/* the quick panel of the selection, over the stage (canvas/quick-panel.tsx) */}
+            <QuickPanel stage={stage} />
+            {/* the anchor tabs of a positioned selection (canvas/anchor-tabs.tsx) */}
+            <AnchorTabs stage={stage} />
           </div>
         </div>
       </main>

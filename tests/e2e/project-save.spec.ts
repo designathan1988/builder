@@ -3,7 +3,7 @@
 // time carries; project.json is exactly the document the test port reads. The archives are the browser's downloads,
 // read by the runner's own unzip (tools/runner/unzip.ts).
 import fs from 'node:fs';
-import { expect, test, type Download, type Page } from '@playwright/test';
+import { expect, test, type Download, type Page } from '../support/test.ts';
 import { unzip } from '../../tools/runner/unzip.ts';
 import { openMenu, runDoor, runs } from './door.ts';
 
@@ -29,6 +29,14 @@ function withoutTimes(archive: Buffer): Buffer {
   return out;
 }
 
+// the modification time of the archive's first entry (its local header's MS-DOS time and date, in UTC), in ms
+function savedAt(archive: Buffer): number {
+  if (archive.readUInt32LE(0) !== 0x04034b50) throw new Error('the archive does not start with a local header');
+  const time = archive.readUInt16LE(10);
+  const date = archive.readUInt16LE(12);
+  return Date.UTC(1980 + (date >> 9), ((date >> 5) & 15) - 1, date & 31, time >> 11, (time >> 5) & 63, (time & 31) * 2);
+}
+
 test('the same document saved twice gives the same archive apart from its time, and project.json is the document', runs('project.open#menu-file', SAVE), async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/');
@@ -39,11 +47,17 @@ test('the same document saved twice gives the same archive apart from its time, 
   await (await chooser).setFiles({ name: 'aurora.json', mimeType: 'application/json', buffer: fs.readFileSync(FIXTURE) });
   await expect(page.frameLocator('.frame__page').locator('[data-node="n-intro"]')).toHaveCount(1);
 
+  const firstFrom = Date.now();
   const first = await save(page);
+  const firstTo = Date.now();
   // two seconds later: the next DOS time step, so the times differ and only they do
   await page.waitForTimeout(2100);
   const second = await save(page);
+  expect(second.equals(first), 'the archives carry the time they were saved at').toBe(false);
   expect(withoutTimes(second).equals(withoutTimes(first)), 'the archives differ only in their times').toBe(true);
+  // the time written is the moment of the save, to the format's two seconds
+  const at = savedAt(first);
+  expect(at >= firstFrom - 2000 && at <= firstTo + 2000, `saved at ${new Date(at).toISOString()}, between ${new Date(firstFrom).toISOString()} and ${new Date(firstTo).toISOString()}`).toBe(true);
 
   const files = unzip(first);
   expect([...files.keys()]).toEqual(['project.json']);

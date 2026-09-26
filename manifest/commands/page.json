@@ -179,6 +179,84 @@
           "args": {}
         },
         {
+          "id": "inspector-page-grid-columns",
+          "kind": "inspector-field",
+          "drawnAs": "field",
+          "feature": "layout-grid-overlay",
+          "property": null,
+          "composite": null,
+          "recipe": null,
+          "attribute": "gridColumns",
+          "control": "field",
+          "labelKey": "command.setPageSetting",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 46
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-page-grid-rows",
+          "kind": "inspector-field",
+          "drawnAs": "field",
+          "feature": "layout-grid-overlay",
+          "property": null,
+          "composite": null,
+          "recipe": null,
+          "attribute": "gridRows",
+          "control": "field",
+          "labelKey": "command.setPageSetting",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 47
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
+          "id": "inspector-page-grid-dots",
+          "kind": "inspector-field",
+          "drawnAs": "field",
+          "feature": "layout-grid-overlay",
+          "property": null,
+          "composite": null,
+          "recipe": null,
+          "attribute": "gridDots",
+          "control": "field",
+          "labelKey": "command.setPageSetting",
+          "faceLabelKey": null,
+          "icon": null,
+          "disabledReasonKey": "common.notAvailableYet",
+          "placement": {
+            "region": "inspector-settings",
+            "order": 48
+          },
+          "adapter": {
+            "selection": "none",
+            "offers": null,
+            "writes": [],
+            "fields": []
+          },
+          "args": {}
+        },
+        {
           "id": "inspector-page-description",
           "kind": "inspector-field",
           "drawnAs": "field",
@@ -194,7 +272,7 @@
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
-            "order": 46
+            "order": 49
           },
           "adapter": {
             "selection": "none",
@@ -220,7 +298,7 @@
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
-            "order": 47
+            "order": 50
           },
           "adapter": {
             "selection": "none",
@@ -246,7 +324,7 @@
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
-            "order": 48
+            "order": 51
           },
           "adapter": {
             "selection": "none",
@@ -272,7 +350,7 @@
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
-            "order": 49
+            "order": 52
           },
           "adapter": {
             "selection": "none",
@@ -298,7 +376,7 @@
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
-            "order": 50
+            "order": 53
           },
           "adapter": {
             "selection": "none",
@@ -324,7 +402,7 @@
           "disabledReasonKey": "common.notAvailableYet",
           "placement": {
             "region": "inspector-settings",
-            "order": 51
+            "order": 54
           },
           "adapter": {
             "selection": "none",

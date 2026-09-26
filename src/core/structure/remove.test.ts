@@ -10,8 +10,10 @@ import { EMPTY_HISTORY, type HistoryState } from '../history/history.ts';
 import { applyPatches, type Transaction } from '../history/transaction.ts';
 import { manualClock } from '../ports/clock.ts';
 import { sequentialIds } from '../ports/ids.ts';
+import { anyCss } from '../ports/css.ts';
 import { noLayout } from '../ports/layout.ts';
 import { deleteCommand, followsDelete } from './remove.ts';
+import { deepFreeze } from '../store/store.ts';
 
 const RULES = rulesFromManifest(manifest.elements, manifest.properties, manifest.html);
 const node = (id: string, type: string, tag: string, fields: Partial<DocNode> = {}): DocNode => ({ id: id as NodeId, type: type as DocNode['type'], name: id, tag, attributes: {}, classes: [], styles: {}, text: null, children: [], ...fields });
@@ -41,6 +43,7 @@ function run(selection: string[]) {
     words: (key: MessageId) => translate('en', key),
     // deleting measures nothing on the canvas
     layout: noLayout,
+    css: anyCss,
   } satisfies HandlerContext<never>;
   return deleteCommand.run(context, {} as never);
 }
@@ -51,6 +54,9 @@ const after = (selection: string[]) => {
   const applied = applyPatches(DOC, outcome.patches ?? []);
   return { tree: outline(applied.document.pages[0]?.tree as DocNode), selection: outcome.selection, message: outcome.message, restored: applyPatches(applied.document, applied.inverses).document };
 };
+
+// every handler runs on a frozen document, as the store commits it: a change in place throws
+deepFreeze(DOC);
 
 describe('element.delete (src/core/structure/remove.ts)', () => {
   it('removes the node with its subtree and selects the next sibling, else the previous one, else the parent', () => {

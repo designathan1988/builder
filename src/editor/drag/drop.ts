@@ -172,3 +172,104 @@ export function proposeDrop(
   if (!m) return null;
   return place(at.node.id, m.pos < m.extent * z.leafSplit ? 'before' : 'after');
 }
+
+// The side drop (spec drag-layout, row 5; wrap-row-column, "Side band"): over an element that fills its parent's cross
+// axis, a pointer in one of its side strips offers to put what the drag brings beside it, in a new Row (the parent
+// lays its children vertically: the strips are the element's left and right) or a new Column (a row parent: its top
+// and bottom). Positioning stays the drop everywhere else (the user's correction: a drag positions first). The element
+// is the deepest node under the pointer outside the dragged nodes, and only it: an ancestor's edge never offers a side
+// drop (the pointer over a child is over that child); never the page root, never a child of a grid or of a wrapping
+// flex. In screen pixels: at least wrap.sideTargetMin long across, filling wrap.sideFill of its parent, the strip
+// min(wrap.sideBandMax, wrap.sideBandFraction × that length) from the edge, and clear of the two other edges by
+// min(wrap.sideEdgeExclusion, a quarter of the element). The pointer owner confirms the offer (wrap.sideDwell, none:
+// at once) before a release wraps.
+export interface SideOffer {
+  readonly target: NodeId;
+  readonly side: 'before' | 'after';
+  readonly wrapper: 'row' | 'column';
+}
+
+export interface SideSpace {
+  box(id: NodeId): Box | null;
+  flow(id: NodeId): 'vertical' | 'horizontal' | null;
+}
+
+export interface SideZones {
+  readonly bandMax: number;
+  readonly bandFraction: number;
+  readonly targetMin: number;
+  readonly fill: number;
+  readonly edgeExclusion: number;
+}
+export const SIDE_ZONES: SideZones = {
+  bandMax: constant('wrap.sideBandMax'),
+  bandFraction: constant('wrap.sideBandFraction'),
+  targetMin: constant('wrap.sideTargetMin'),
+  fill: constant('wrap.sideFill'),
+  edgeExclusion: constant('wrap.sideEdgeExclusion'),
+};
+// how long the pointer stays in the same side band before its offer is confirmed, in milliseconds
+export const SIDE_DWELL = constant('wrap.sideDwell');
+
+export function offerSide(document: DocumentJson, dragged: readonly NodeId[], under: readonly string[], point: { readonly x: number; readonly y: number }, space: SideSpace, z: SideZones = SIDE_ZONES): SideOffer | null {
+  const moving = new Set<string>();
+  for (const id of dragged) {
+    const at = locate(document, id);
+    if (at) for (const inner of walk(at.node)) moving.add(inner.id);
+  }
+  const hit = under.find((id) => !moving.has(id));
+  const at = hit === undefined ? null : locate(document, hit as NodeId);
+  // an element right in the page root (a section, a header: a band of the page) takes no side drop: near its edge the
+  // drop goes into it or beside it in the page, as everywhere
+  if (at?.parent && locate(document, at.parent.id)?.parent != null) {
+    const flow = space.flow(at.parent.id);
+    const box = space.box(at.node.id);
+    const parent = space.box(at.parent.id);
+    if (flow === null || box === null || parent === null) return null;
+    const across = flow === 'vertical' ? box.width : box.height;
+    const room = flow === 'vertical' ? parent.width : parent.height;
+    if (across < z.targetMin || across < z.fill * room) return null;
+    // along the side bands' axis: the pointer's place across the element; the other axis keeps clear of its edges
+    const pos = flow === 'vertical' ? point.x - box.x : point.y - box.y;
+    const other = flow === 'vertical' ? point.y - box.y : point.x - box.x;
+    const otherExtent = flow === 'vertical' ? box.height : box.width;
+    // the other edges keep clear, by at most a quarter of the element, so a low element (a line of text) keeps its zones
+    const clear = Math.min(z.edgeExclusion, otherExtent / 4);
+    if (other < clear || other > otherExtent - clear || pos < 0 || pos > across) return null;
+    const band = Math.min(z.bandMax, z.bandFraction * across);
+    const wrapper = flow === 'vertical' ? 'row' : 'column';
+    if (pos <= band) return { target: at.node.id, side: 'before', wrapper };
+    if (pos >= across - band) return { target: at.node.id, side: 'after', wrapper };
+  }
+  return null;
+}
+
+// A drop on a Layers row (spec layers-drag, "Hit zones"): where the pointer is down the row, as a fraction of its
+// height. The page root's row takes the drop inside, at its end; a container row is before its node in its top
+// layers.dropBefore, after it below layers.dropAfter, inside it (at its end) between; a leaf row splits at
+// layers.dropLeafSplit. A row of the dragged nodes' own subtree is refused, as on the canvas.
+export interface RowZones {
+  readonly before: number;
+  readonly after: number;
+  readonly leafSplit: number;
+}
+export const ROW_ZONES: RowZones = { before: constant('layers.dropBefore'), after: constant('layers.dropAfter'), leafSplit: constant('layers.dropLeafSplit') };
+
+export function rowDrop(document: DocumentJson, isContainer: (type: string) => boolean, dragged: readonly NodeId[], row: NodeId, at: number, z: RowZones = ROW_ZONES): DropProposal | null {
+  const target = locate(document, row);
+  if (target === null) return null;
+  for (const id of dragged) {
+    const moving = locate(document, id);
+    if (moving && [...walk(moving.node)].some((n) => n.id === row)) return { parent: row, index: 0, placement: 'inside', reference: row, refused: true };
+  }
+  const inside = (): DropProposal => ({ parent: row, index: target.node.children.filter((c) => !dragged.includes(c.id)).length, placement: 'inside', reference: row, refused: false });
+  if (target.parent === null) return inside();
+  const beside = (placement: 'before' | 'after'): DropProposal | null => {
+    const parent = target.parent;
+    if (parent === null) return null;
+    const siblings = parent.children.filter((c) => !dragged.includes(c.id));
+    return { parent: parent.id, index: siblings.findIndex((c) => c.id === row) + (placement === 'after' ? 1 : 0), placement, reference: row, refused: false };
+  };
+  if (isContainer(target.node.type)) return at < z.before ? beside('before') : at > z.after ? beside('after') : inside();
+  return beside(at < z.leafSplit ? 'before' : 'after');
+}

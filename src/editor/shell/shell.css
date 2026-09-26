@@ -147,6 +147,26 @@ kbd {
   color: var(--color-accent);
 }
 
+/* an on/off switch (drawnAs toggle: a table's caption, head and foot): outlined, and filled with the accent while on */
+.door--toggle {
+  padding: 0 var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.door--toggle.is-current,
+.door--toggle.is-current:not(.is-unavailable):hover {
+  border-color: var(--color-accent);
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+
+.field-row.field-row--toggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
 .door--button {
   padding: 0 var(--space-5);
   color: var(--color-text);
@@ -517,6 +537,56 @@ kbd {
   color: var(--color-text-subtle);
 }
 
+/* a drag's drop on a Layers row (spec layers-drag): a line in the drop colour on the row's top or bottom edge,
+   starting at the indentation of the level it inserts into (Problems in Pager 5); inside a row, its outline; refused,
+   the danger colour; the receiving parent's row tinted in the target colour */
+.row--tree[data-drop-position='before']::after,
+.row--tree[data-drop-position='after']::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  left: calc(var(--space-2) + var(--depth) * var(--space-5));
+  height: 0;
+  outline: 1.5px solid var(--color-canvas-drop);
+  pointer-events: none;
+}
+
+.row--tree[data-drop-position='before']::after {
+  top: 0;
+}
+
+.row--tree[data-drop-position='after']::after {
+  bottom: 0;
+}
+
+.row--tree[data-drop-position='inside'] {
+  outline: 2px solid var(--color-canvas-drop);
+  outline-offset: -2px;
+}
+
+.row--tree[data-drop-position='refused'] {
+  outline: 2px solid var(--color-danger);
+  outline-offset: -2px;
+}
+
+/* a row that matches the Layers search (spec layers-search): its name in the accent colour */
+.row--tree.is-match .row__name {
+  color: var(--color-accent);
+  font-weight: var(--weight-semibold);
+}
+
+.layers__search {
+  padding: var(--space-2) var(--space-4);
+}
+
+.layers__search .search {
+  width: 100%;
+}
+
+.row--tree.is-receiving {
+  background: color-mix(in srgb, var(--color-canvas-target) 12%, transparent);
+}
+
 .row {
   --depth: 0;
   position: relative;
@@ -688,6 +758,47 @@ kbd {
   color: var(--color-text-muted);
 }
 
+/* the Elements panel's densities (palette.setDensity): a list of rows with the tag, two or three columns of tiles,
+   or a grid of icons whose label is the tooltip */
+.insert--list .tiles {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.insert--list .tile {
+  flex-direction: row;
+  justify-content: flex-start;
+  height: var(--size-target-min);
+  padding: 0 var(--space-2);
+}
+
+.tile__tag {
+  margin-left: auto;
+  color: var(--color-text-subtle);
+  font-family: var(--font-mono);
+}
+
+.insert--three-columns .tiles {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.insert--icons .tiles {
+  grid-template-columns: repeat(auto-fill, minmax(var(--size-target-min), 1fr));
+}
+
+.insert--icons .tile {
+  height: var(--size-target-min);
+}
+
+.insert--icons .tile__label {
+  display: none;
+}
+
+.insert__matches {
+  margin: var(--space-2) 0 0;
+  color: var(--color-text-subtle);
+  font-size: var(--fs-caption);
+}
+
 /* ---------------------------------------------------------------- centre: file tabs, canvas toolbar, stage */
 
 .workbench {
@@ -786,6 +897,16 @@ kbd {
   font: var(--fw-caption) var(--fs-micro) / var(--lh-micro) var(--font-ui);
 }
 
+/* the rulers hidden (view.toggleRulers): their tracks close, the stage takes the whole area */
+.ruler[hidden] {
+  display: none;
+}
+
+.stage-wrap--no-rulers {
+  grid-template-columns: 0 minmax(0, 1fr);
+  grid-template-rows: 0 minmax(0, 1fr);
+}
+
 .ruler--corner {
   border-right: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
@@ -793,19 +914,71 @@ kbd {
 
 .ruler--x {
   border-bottom: 1px solid var(--color-border);
-  background-image: repeating-linear-gradient(90deg, var(--color-border-strong) 0 1px, transparent 1px calc(var(--space-8) * var(--zoom)));
-  background-size: 100% var(--space-3);
-  background-repeat: no-repeat;
-  background-position: var(--space-9) bottom;
 }
 
 .ruler--y {
   grid-row: 2;
   border-right: 1px solid var(--color-border);
-  background-image: repeating-linear-gradient(180deg, var(--color-border-strong) 0 1px, transparent 1px calc(var(--space-8) * var(--zoom)));
-  background-size: var(--space-3) 100%;
-  background-repeat: no-repeat;
-  background-position: right var(--size-frame-tabs);
+}
+
+/* a tick: short, a labelled one longer (spec rulers) */
+.ruler__tick {
+  position: absolute;
+  bottom: 0;
+  width: 0;
+  height: var(--space-2);
+  border-left: 1px solid var(--color-border-strong);
+}
+
+.ruler__tick.is-major {
+  height: var(--space-4);
+}
+
+.ruler--y .ruler__tick {
+  right: 0;
+  bottom: auto;
+  width: var(--space-2);
+  height: 0;
+  border-top: 1px solid var(--color-border-strong);
+  border-left: 0;
+}
+
+.ruler--y .ruler__tick.is-major {
+  width: var(--space-4);
+}
+
+/* the primary selected element's extent, and the pointer's place */
+.ruler__selection {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: color-mix(in srgb, var(--color-canvas-selection) 24%, transparent);
+  pointer-events: none;
+}
+
+.ruler--y .ruler__selection {
+  right: 0;
+  left: 0;
+  bottom: auto;
+}
+
+.ruler__pointer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  border-left: 1px solid var(--color-canvas-selection);
+  pointer-events: none;
+}
+
+.ruler--y .ruler__pointer {
+  right: 0;
+  left: 0;
+  bottom: auto;
+  width: auto;
+  height: 0;
+  border-top: 1px solid var(--color-canvas-selection);
+  border-left: 0;
 }
 
 .ruler__mark {
@@ -815,18 +988,29 @@ kbd {
 }
 
 .ruler--y .ruler__mark {
-  top: auto;
   left: 0;
   writing-mode: vertical-rl;
   rotate: 180deg;
-  translate: 0 calc(var(--size-frame-tabs) - var(--space-1));
+  translate: 0 calc(-100% - var(--space-1));
 }
 
 .stage {
   position: relative;
+  grid-area: 2 / 2;
   min-width: 0;
   min-height: 0;
   overflow: hidden;
+}
+
+/* Space held over the stage arms the pan; a pan in progress grabs (spec zoom-wheel-pan) */
+.stage--armed,
+.stage--armed * {
+  cursor: grab;
+}
+
+.stage--panning,
+.stage--panning * {
+  cursor: grabbing;
 }
 
 .frame {
@@ -913,6 +1097,173 @@ kbd {
   position: absolute;
 }
 
+/* a resize handle (spec resize-handles, Problems in Pager 5): a hit area beside the selection's corner or edge
+   centre, outside the element (so a press on the element itself, or on its label, never starts a resize), with the
+   dot drawn on the corner or edge centre (--handle-x, --handle-y: the anchor inside the hit area) in the handle colour
+   with the selection colour's ring; the dot grows under the pointer */
+.chrome__handle {
+  --handle-x: 50%;
+  --handle-y: 50%;
+  position: absolute;
+  width: var(--space-6);
+  height: var(--space-6);
+  pointer-events: auto;
+}
+
+.chrome__handle::after {
+  content: '';
+  position: absolute;
+  top: var(--handle-y);
+  left: var(--handle-x);
+  width: var(--space-4);
+  height: var(--space-4);
+  border-radius: var(--radius-pill);
+  background: var(--color-canvas-handle);
+  outline: 1.5px solid var(--color-canvas-selection);
+  translate: -50% -50%;
+}
+
+.chrome__handle:hover::after {
+  scale: 1.25;
+}
+
+/* the rotation handle (spec rotation-handle): a round handle outside the selection's top-right corner, at a fixed
+   screen distance, whose cursor says it turns the element; drawn over the selection's label, which a narrow element's
+   label reaches */
+.chrome__rotate {
+  position: absolute;
+  z-index: 1;
+  width: var(--space-6);
+  height: var(--space-6);
+  border: 1.5px solid var(--color-canvas-selection);
+  border-radius: var(--radius-pill);
+  background: var(--color-canvas-handle);
+  cursor: grab;
+  pointer-events: auto;
+}
+
+.chrome__rotate:active {
+  cursor: grabbing;
+}
+
+.chrome__handle[data-resize-handle$='-n'] {
+  --handle-x: 50%;
+  --handle-y: 100%;
+  translate: -50% -100%;
+}
+
+.chrome__handle[data-resize-handle$='-s'] {
+  --handle-x: 50%;
+  --handle-y: 0%;
+  translate: -50% 0;
+}
+
+.chrome__handle[data-resize-handle$='-e'] {
+  --handle-x: 0%;
+  --handle-y: 50%;
+  translate: 0 -50%;
+}
+
+.chrome__handle[data-resize-handle$='-w'] {
+  --handle-x: 100%;
+  --handle-y: 50%;
+  translate: -100% -50%;
+}
+
+.chrome__handle[data-resize-handle$='-nw'] {
+  --handle-x: 100%;
+  --handle-y: 100%;
+  translate: -100% -100%;
+}
+
+.chrome__handle[data-resize-handle$='-ne'] {
+  --handle-x: 0%;
+  --handle-y: 100%;
+  translate: 0 -100%;
+}
+
+.chrome__handle[data-resize-handle$='-sw'] {
+  --handle-x: 100%;
+  --handle-y: 0%;
+  translate: -100% 0;
+}
+
+.chrome__handle[data-resize-handle$='-se'] {
+  --handle-x: 0%;
+  --handle-y: 0%;
+  translate: 0 0;
+}
+
+.chrome__handle[data-resize-handle$='-n'],
+.chrome__handle[data-resize-handle$='-s'] {
+  cursor: ns-resize;
+}
+
+.chrome__handle[data-resize-handle$='-e'],
+.chrome__handle[data-resize-handle$='-w'] {
+  cursor: ew-resize;
+}
+
+.chrome__handle[data-resize-handle$='-nw'],
+.chrome__handle[data-resize-handle$='-se'] {
+  cursor: nwse-resize;
+}
+
+.chrome__handle[data-resize-handle$='-ne'],
+.chrome__handle[data-resize-handle$='-sw'] {
+  cursor: nesw-resize;
+}
+
+/* the layout grids (spec layout-grid-overlay): translucent bands and dots over the page, never hiding it */
+.chrome__grids {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.chrome__grid-column,
+.chrome__grid-row {
+  position: absolute;
+  background: color-mix(in srgb, var(--color-canvas-measure) 10%, transparent);
+}
+
+.chrome__grid-row {
+  background: color-mix(in srgb, var(--color-canvas-gap) 10%, transparent);
+}
+
+.chrome__grid-dots {
+  /* the dots' spacing on the screen, set by the canvas from grid.dotSpacing at the zoom */
+  --grid-dot: var(--space-9);
+  position: absolute;
+  background-image: radial-gradient(circle, color-mix(in srgb, var(--color-text-subtle) 60%, transparent) 1px, transparent 1.5px);
+  background-size: var(--grid-dot) var(--grid-dot);
+}
+
+/* the view switches (spec canvas-outlines-zones): a dashed box around every element; a container's padding tinted in
+   the padding colour and an empty container's content marked as a drop area */
+.chrome__view {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.chrome__outline {
+  position: absolute;
+  outline: 1px dashed var(--color-border-strong);
+  outline-offset: -1px;
+}
+
+.chrome__zone {
+  position: absolute;
+  background: color-mix(in srgb, var(--color-canvas-padding) 22%, transparent);
+}
+
+.chrome__zone--empty {
+  background: repeating-linear-gradient(45deg, color-mix(in srgb, var(--color-canvas-drop) 28%, transparent) 0 var(--space-1), transparent var(--space-1) var(--space-3));
+  outline: 1px dashed var(--color-canvas-drop);
+  outline-offset: -1px;
+}
+
 .chrome__selection {
   outline: 2px solid var(--color-canvas-selection);
 }
@@ -926,6 +1277,120 @@ kbd {
 /* thinner than the selection's */
 .chrome__hover {
   outline: 1px solid var(--color-canvas-hover);
+}
+
+/* a manual guide (src/editor/canvas/guides.tsx, spec guides-manual): a 1 px line in the guide colour across the page,
+   with a wider band to press, its value at the ruler's end; a locked guide is dashed */
+.guide {
+  position: absolute;
+  pointer-events: auto;
+  outline: none;
+}
+
+.guide::before {
+  content: '';
+  position: absolute;
+  border: 0 solid var(--color-accent);
+}
+
+.guide--horizontal {
+  left: 0;
+  right: 0;
+  height: var(--space-3);
+  translate: 0 -50%;
+  cursor: row-resize;
+}
+
+.guide--horizontal::before {
+  left: 0;
+  right: 0;
+  top: 50%;
+  border-top-width: 1px;
+}
+
+.guide--vertical {
+  top: 0;
+  bottom: 0;
+  width: var(--space-3);
+  translate: -50% 0;
+  cursor: col-resize;
+}
+
+.guide--vertical::before {
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  border-left-width: 1px;
+}
+
+.guide.is-locked::before {
+  border-style: dashed;
+  opacity: 0.5;
+}
+
+.guide:focus-visible::before {
+  border-color: var(--color-focus);
+  outline: 1px solid var(--color-focus);
+}
+
+.guide__value {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0 var(--space-1);
+  border-radius: var(--radius-sm);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-body) var(--font-mono);
+}
+
+/* the ruler's hint while a guide dragged over it would be deleted */
+.ruler__hint {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--color-danger);
+  color: var(--color-on-accent);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-body) var(--font-ui);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* the hovered element's size in CSS px, below its hover outline (spec hover-measure) */
+.chrome__size {
+  position: absolute;
+  margin-top: var(--space-1);
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--color-canvas-hover);
+  color: var(--color-on-canvas-hover);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-body) var(--font-mono);
+  white-space: nowrap;
+}
+
+/* a distance Alt measures from the selection (spec hover-measure): a line in the measure colour and its length */
+.chrome__distance {
+  position: absolute;
+  display: grid;
+  place-items: center;
+}
+
+.chrome__distance--across {
+  border-top: 1px dashed var(--color-canvas-measure);
+}
+
+.chrome__distance--down {
+  border-left: 1px dashed var(--color-canvas-measure);
+}
+
+.chrome__distance-label {
+  padding: 0 var(--space-1);
+  border-radius: var(--radius-sm);
+  background: var(--color-canvas-measure);
+  color: var(--color-on-canvas-hover);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-body) var(--font-mono);
+  white-space: nowrap;
 }
 
 /* the marquee's band (spec marquee-select): a 1 px accent border and a 16 % accent fill */
@@ -1090,13 +1555,23 @@ kbd {
   position: absolute;
 }
 
+/* the receiving parent (spec drag-layout, row 3): outlined in the target colour, with a soft fill of it, so the
+   parent and the position (the line, in the drop colour) never look alike */
 .chrome__receiver {
-  outline: 1px solid var(--color-canvas-drop);
+  outline: 2px solid var(--color-canvas-target);
+  background: color-mix(in srgb, var(--color-canvas-target) 7%, transparent);
 }
 
 /* into a container with no other child: its outline alone, dashed, no line (drag-drop-inside) */
 .chrome__receiver.is-into {
-  outline: 1.5px dashed var(--color-canvas-drop);
+  outline: 2px dashed var(--color-canvas-drop);
+  background: color-mix(in srgb, var(--color-canvas-drop) 12%, transparent);
+}
+
+/* a confirmed side drop (drag-layout, row 5): the element the new wrapper takes, outlined and tinted in the drop colour */
+.chrome__receiver.is-side {
+  outline: 2px solid var(--color-canvas-drop);
+  background: color-mix(in srgb, var(--color-canvas-drop) 10%, transparent);
 }
 
 /* over the dragged element's own subtree: refused, in the danger colour (drag-drop-inside, Problems in Pager 1) */
@@ -1110,16 +1585,123 @@ kbd {
   outline: 1px solid var(--color-danger);
 }
 
+/* the insertion line: its box lies on the gap, and it is drawn 3 px thick around it in the drop colour, with a round
+   cap at each end, across the gap (along a vertical flow) or down it (along a row) */
 .chrome__drop-line {
   border-radius: var(--radius-pill);
   outline: 1.5px solid var(--color-canvas-drop);
 }
 
+.chrome__drop-line::before,
+.chrome__drop-line::after {
+  content: '';
+  position: absolute;
+  width: var(--space-5);
+  height: var(--space-5);
+  border: 2px solid var(--color-canvas-drop);
+  border-radius: var(--radius-pill);
+  background: var(--color-canvas-handle);
+}
+
+.chrome__drop-line.is-across::before {
+  top: calc(var(--space-5) / -2);
+  left: calc(var(--space-5) / -2);
+}
+
+.chrome__drop-line.is-across::after {
+  top: calc(var(--space-5) / -2);
+  right: calc(var(--space-5) / -2);
+}
+
+.chrome__drop-line.is-down::before {
+  top: calc(var(--space-5) / -2);
+  left: calc(var(--space-5) / -2);
+}
+
+.chrome__drop-line.is-down::after {
+  bottom: calc(var(--space-5) / -2);
+  left: calc(var(--space-5) / -2);
+}
+
+.chrome__drop-line.is-refused {
+  outline-color: var(--color-danger);
+}
+
+/* the side drop's hint beside the pointer, and the pill of a confirmed side drop (drag-layout, row 5) */
+.chrome__hint,
+.chrome__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-ui);
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: var(--shadow-2);
+}
+
+.chrome__hint {
+  background: var(--color-surface-raised);
+  color: var(--color-text-muted);
+  outline: 1px solid var(--color-border);
+}
+
+.chrome__pill {
+  background: var(--color-canvas-drop);
+  color: var(--color-on-canvas-band);
+}
+
+.chrome__pill.is-refused {
+  background: var(--color-danger);
+}
+
+/* the elements a drop placed flash (drag-layout, row 10) */
+.chrome__flashes {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.chrome__flash {
+  position: absolute;
+  outline: 2px solid var(--color-canvas-drop);
+  background: color-mix(in srgb, var(--color-canvas-drop) 18%, transparent);
+  animation-name: chrome-flash;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+
+@keyframes chrome-flash {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chrome__flash {
+    display: none;
+  }
+}
+
 /* the ghost of a palette tile's creation drag (palette-drag-insert, Problems in Pager 4): the element's icon and name
    beside the pointer, over every region of the window, never a pointer target */
-.chrome-ghost {
+/* the ghost and, under it, what it says about a side drop, together beside the pointer */
+.chrome-ghost-stack {
   position: fixed;
   z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+  pointer-events: none;
+}
+
+.chrome-ghost {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
@@ -1221,6 +1803,131 @@ kbd {
   display: flex;
   align-items: center;
   gap: var(--space-2);
+}
+
+.selector-bar__targets {
+  flex-wrap: wrap;
+}
+
+/* the target chips (src/editor/shell/class-bar.tsx): Element, then each class with its ×; the target pressed; + Class
+   dashed */
+.target-chip-group {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-sunken);
+}
+
+.target-chip {
+  display: inline-flex;
+  align-items: center;
+  height: var(--size-target-min);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-sunken);
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.target-chip--class {
+  border: 0;
+  font-family: var(--font-mono);
+}
+
+.target-chip.is-current,
+.target-chip-group:has(.target-chip.is-current) {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font-weight: var(--weight-semibold);
+}
+
+.target-chip-group:has(.target-chip.is-current) .target-chip__remove {
+  color: var(--color-on-accent);
+}
+
+.target-chip__remove {
+  display: inline-grid;
+  place-items: center;
+  width: var(--size-target-min);
+  height: var(--size-target-min);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: none;
+  color: var(--color-text-subtle);
+}
+
+.target-chip--add {
+  border-style: dashed;
+  background: none;
+  color: var(--color-text-muted);
+}
+
+/* the list and the name field + Class and Save the styles as a class open */
+.class-popup {
+  position: relative;
+}
+
+.class-popup__panel {
+  position: absolute;
+  z-index: 6;
+  top: 100%;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  min-width: calc(var(--space-10) * 5);
+  padding: var(--space-1);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-2);
+}
+
+.class-popup__item {
+  padding: var(--space-2) var(--space-4);
+  border: 0;
+  background: none;
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  text-align: start;
+  cursor: pointer;
+}
+
+.class-popup__form {
+  padding: var(--space-1);
+}
+
+.affects {
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  color: var(--color-text-subtle);
+}
+
+/* a field's value that comes from one of the element's classes (spec shared-style-classes) */
+.field-origin {
+  padding: 0 var(--space-2);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-mono);
+  color: var(--color-text-muted);
+}
+
+/* the Styles view's classes, read-only: each name and how many elements have it */
+.style-classes__row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-4);
+}
+
+.style-classes__name {
+  font-family: var(--font-mono);
+}
+
+.style-classes__count {
+  color: var(--color-text-muted);
+  font-size: var(--fs-caption);
 }
 
 .state-picker .menu-button {
@@ -1327,6 +2034,17 @@ kbd {
   flex: 1;
 }
 
+/* a group too narrow for its names (the Insert densities): each segment shows its icon; its name is its tooltip and
+   accessible name */
+.segmented--icons .door {
+  justify-content: center;
+  min-width: 0;
+}
+
+.segmented--icons .door__label {
+  display: none;
+}
+
 .inspector-sections {
   display: flex;
   flex-direction: column;
@@ -1365,6 +2083,11 @@ kbd {
 .field-row--wide {
   grid-template-columns: minmax(0, 1fr);
   gap: var(--space-2);
+}
+
+/* a field with its own action after it (a custom attribute's value and its remove button) */
+.field-row.field-row--action {
+  grid-template-columns: calc(var(--space-10) * 3 + var(--space-2)) minmax(0, 1fr) auto;
 }
 
 .input--area {
@@ -1423,6 +2146,61 @@ kbd {
   align-items: center;
   justify-content: space-between;
   cursor: not-allowed;
+}
+
+/* the field component (DESIGN.md "Component regions": field): the input, the unit menu, the step buttons (shown while
+   the field is hovered or holds the focus), the reset; its label is the scrub handle */
+.input-wrap--number {
+  gap: var(--space-1);
+}
+
+.field-row__label--scrub {
+  cursor: ew-resize;
+  user-select: none;
+}
+
+.field__unit-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  height: var(--size-control);
+  padding: 0 var(--space-2);
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: none;
+  color: var(--color-text-muted);
+}
+
+.field__unit-button:not([aria-disabled="true"]):hover {
+  background: var(--color-surface-hover);
+}
+
+.field__unit-value {
+  font-family: var(--font-mono);
+}
+
+.field__menu {
+  right: 0;
+  left: auto;
+  min-width: 0;
+  max-height: calc(var(--size-row) * 12);
+  overflow-y: auto;
+}
+
+.input-wrap--number .door--icon-button {
+  width: var(--size-control);
+  min-width: 0;
+  height: var(--size-control);
+  flex: none;
+}
+
+.field__step {
+  opacity: 0;
+}
+
+.field-row:hover .field__step,
+.field-row:focus-within .field__step {
+  opacity: 1;
 }
 
 .swatch {
@@ -1497,6 +2275,13 @@ kbd {
   color: var(--color-text-muted);
 }
 
+/* the box's link (all four sides as one value), in its top-right corner */
+.box__link {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
 .box__side {
   width: var(--space-10);
   height: var(--size-control);
@@ -1524,6 +2309,24 @@ kbd {
 .box__side--inline-end {
   grid-column: 3;
   grid-row: 2;
+}
+
+/* a linked box's one field for its four sides, where its top side was */
+.box__side--all {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+/* a side's input fills its place in the box */
+.box__input {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text);
+  font: inherit;
+  text-align: center;
 }
 
 .box__core {
@@ -1706,4 +2509,976 @@ kbd {
   color: var(--color-text);
   white-space: nowrap;
   translate: -50% 0;
+}
+
+/* a colour field's swatch (color-picker): the colour over a checkerboard, which shows through a translucent one */
+.swatch,
+.picker__swatch {
+  --swatch-colour: var(--color-surface);
+  background:
+    linear-gradient(var(--swatch-colour), var(--swatch-colour)),
+    repeating-conic-gradient(var(--color-border) 0 25%, var(--color-surface) 0 50%) 0 0 / var(--space-4) var(--space-4);
+}
+
+.field__swatch.door {
+  flex: none;
+  padding: var(--space-0);
+  border: 0;
+  background: none;
+}
+
+.field__swatch.door:not(.is-unavailable) {
+  cursor: pointer;
+}
+
+/* the colour picker (DESIGN.md "Component regions": color-picker): a popover beside the inspector, level with the
+   field it opened from, over a shield that takes every click outside it */
+.picker-shield {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+}
+
+.picker {
+  --picker-top: var(--space-10);
+  position: absolute;
+  top: var(--picker-top);
+  right: calc(var(--size-inspector) + var(--space-4));
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  width: calc(var(--size-inspector) + var(--space-7));
+  padding: var(--space-6) var(--space-7);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-3);
+  color: var(--color-text);
+  font: var(--fw-body) var(--fs-body) / var(--lh-body) var(--font-ui);
+}
+
+.picker__header {
+  font: var(--fw-title) var(--fs-title) / var(--lh-title) var(--font-ui);
+}
+
+.picker__swatches {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.picker__swatch {
+  flex: 1;
+  height: var(--space-9);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+}
+
+button.picker__swatch {
+  padding: var(--space-0);
+  cursor: pointer;
+}
+
+.picker__area {
+  --picker-area: none;
+  position: relative;
+  height: calc(var(--space-10) * 5 + var(--space-4));
+  border-radius: var(--radius-sm);
+  background: var(--picker-area);
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.picker__area:focus-within {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.picker__dot {
+  --dot-x: 0%;
+  --dot-y: 0%;
+  position: absolute;
+  top: var(--dot-y);
+  left: var(--dot-x);
+  width: var(--space-6);
+  height: var(--space-6);
+  border: 2px solid var(--color-surface);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-1);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.picker__strip {
+  --picker-strip: none;
+  display: block;
+  height: var(--space-6);
+  border-radius: var(--radius-pill);
+  background: var(--picker-strip);
+}
+
+.picker__strip--alpha {
+  background:
+    var(--picker-strip),
+    repeating-conic-gradient(var(--color-border) 0 25%, var(--color-surface) 0 50%) 0 0 / var(--space-4) var(--space-4);
+}
+
+.picker__range {
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: var(--space-0);
+  appearance: none;
+  background: none;
+  cursor: pointer;
+}
+
+.picker__range::-webkit-slider-thumb {
+  width: var(--space-6);
+  height: var(--space-6);
+  border: 2px solid var(--color-surface);
+  border-radius: var(--radius-pill);
+  background: none;
+  box-shadow: var(--shadow-1);
+  appearance: none;
+}
+
+.picker__label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  color: var(--color-text-muted);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-ui);
+}
+
+.picker__channels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.picker__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+/* a cell of the alignment matrix (props-flex-container): a button, its dot accented while it stands for what the
+   element holds */
+.matrix__cell.door {
+  padding: var(--space-0);
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: none;
+}
+
+.matrix__cell.door:not(.is-unavailable) {
+  cursor: pointer;
+}
+
+.matrix__cell.door:not(.is-unavailable):hover::before {
+  background: var(--color-text-muted);
+}
+
+.matrix__cell.door.is-current::before {
+  width: var(--space-3);
+  height: var(--space-3);
+  background: var(--color-accent);
+}
+
+/* the gradient editor (spec gradient-editor): the bar paints the gradient over a checkerboard, its stops under it */
+.gradient__track {
+  padding-bottom: var(--space-7);
+}
+
+.gradient__bar {
+  --gradient-preview: none;
+  position: relative;
+  height: var(--space-9);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background:
+    var(--gradient-preview),
+    repeating-conic-gradient(var(--color-border) 0 25%, var(--color-surface) 0 50%) 0 0 / var(--space-4) var(--space-4);
+  cursor: copy;
+}
+
+.gradient__bar[aria-disabled='true'] {
+  cursor: default;
+}
+
+.gradient__stop {
+  --stop-at: 0%;
+  --stop-colour: var(--color-surface);
+  position: absolute;
+  top: calc(100% + var(--space-2));
+  left: var(--stop-at);
+  width: var(--space-6);
+  height: var(--space-6);
+  padding: var(--space-0);
+  border: 2px solid var(--color-surface);
+  border-radius: var(--radius-pill);
+  background: var(--stop-colour);
+  box-shadow: var(--shadow-1);
+  transform: translateX(-50%);
+  cursor: ew-resize;
+}
+
+.gradient__stop.is-current {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+/* the shadow editor (spec shadow-editor): the rows of the layers, the light pad with its centre and its handle */
+.shadow__none {
+  margin: var(--space-0);
+  color: var(--color-text-muted);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-ui);
+}
+
+.shadow__rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: var(--space-0);
+  padding: var(--space-0);
+  list-style: none;
+}
+
+.shadow__row {
+  width: 100%;
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: var(--fw-code) var(--fs-caption) / var(--lh-caption) var(--font-mono);
+  text-align: left;
+  cursor: pointer;
+}
+
+.shadow__row.is-current {
+  border-color: var(--color-accent);
+}
+
+.shadow__row.is-hidden {
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+
+.shadow__pad {
+  position: relative;
+  height: calc(var(--space-10) * 3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background:
+    linear-gradient(var(--color-border), var(--color-border)) 50% 0 / 1px 100% no-repeat,
+    linear-gradient(var(--color-border), var(--color-border)) 0 50% / 100% 1px no-repeat,
+    var(--color-surface-sunken);
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.shadow__pad:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.shadow__pad.is-unavailable {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.shadow__handle {
+  --light-x: 0px;
+  --light-y: 0px;
+  position: absolute;
+  top: calc(50% + var(--light-y));
+  left: calc(50% + var(--light-x));
+  width: var(--space-6);
+  height: var(--space-6);
+  border: 2px solid var(--color-surface);
+  border-radius: var(--radius-pill);
+  background: var(--color-accent);
+  box-shadow: var(--shadow-1);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+/* where a value comes from (spec inspector-provenance-reset): a field whose element holds a value of its own has a dot
+   before its label; the others show the value inherited or the default, muted; a section's header counts its values */
+[data-region='inspector-style'] .field-row.is-set > .field-row__label::before {
+  content: '';
+  display: inline-block;
+  width: var(--space-2);
+  height: var(--space-2);
+  margin-right: var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--color-accent);
+  vertical-align: middle;
+}
+
+[data-region='inspector-style'] .field-row:not(.is-set) .input {
+  color: var(--color-text-muted);
+}
+
+.inspector-section__count {
+  margin-left: var(--space-3);
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  font: var(--fw-micro) var(--fs-micro) / var(--lh-micro) var(--font-ui);
+}
+
+/* the mode's segments and, beside them, Add a property with its list (spec inspector-add-property) */
+.inspector-mode {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.inspector-mode > .segmented {
+  flex: 1;
+}
+
+.add-property {
+  position: relative;
+}
+
+.add-property__menu {
+  position: absolute;
+  top: calc(100% + var(--space-2));
+  right: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: calc(var(--size-inspector) - var(--space-9));
+  max-height: calc(var(--space-10) * 10);
+  padding: var(--space-3);
+  overflow-y: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-2);
+}
+
+.add-property__none {
+  margin: var(--space-0);
+  color: var(--color-text-muted);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-ui);
+}
+
+.add-property__item.door {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+/* the quick panel over the stage (src/editor/canvas/quick-panel.tsx): a chip beside the selection, which opens the
+   panel of its fields in two columns */
+.quick-panel-chip,
+.quick-panel {
+  position: absolute;
+  z-index: 5;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-2);
+}
+
+/* the anchor tabs of a positioned selection (src/editor/canvas/anchor-tabs.tsx): round, hollow while the edge is free,
+   filled once anchored */
+.anchor-tab-place {
+  position: absolute;
+  z-index: 5;
+  display: block;
+}
+
+.anchor-tab {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 2px solid var(--color-canvas-selection);
+  border-radius: var(--radius-pill);
+  background: var(--color-canvas-handle);
+  cursor: pointer;
+}
+
+.anchor-tab.is-current {
+  background: var(--color-canvas-selection);
+}
+
+.anchor-tab__dot {
+  display: none;
+}
+
+/* the inspector's anchor control: per axis, the start edge, the centre, the end edge and both edges */
+.anchor-control__rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.anchor-control__item {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.quick-panel-chip {
+  display: grid;
+  place-items: center;
+  width: var(--space-9);
+  height: var(--space-9);
+  padding: 0;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.quick-panel-chip:hover,
+.quick-panel__close:hover {
+  color: var(--color-text);
+}
+
+.quick-panel-chip.is-measuring,
+.quick-panel.is-measuring {
+  visibility: hidden;
+}
+
+.quick-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: calc(var(--size-inspector) * 2);
+  padding: var(--space-2) var(--space-4) var(--space-4);
+}
+
+.quick-panel__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.quick-panel__grip {
+  display: grid;
+  place-items: center;
+  width: var(--space-9);
+  height: var(--space-9);
+  color: var(--color-text-muted);
+  cursor: grab;
+}
+
+.quick-panel__grip.is-unavailable {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.quick-panel__close {
+  display: grid;
+  place-items: center;
+  width: var(--space-9);
+  height: var(--space-9);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.quick-panel__fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-1) var(--space-6);
+}
+
+.quick-panel__fields .field-row {
+  grid-template-columns: calc(var(--space-10) * 2) minmax(0, 1fr);
+}
+
+.quick-panel__action {
+  justify-content: flex-start;
+}
+
+.quick-panel__actions {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.quick-panel__actions .door {
+  height: var(--space-9);
+  padding: 0 var(--space-2);
+}
+
+/* a button of the bar that shows an icon keeps its words for assistive technology only */
+.quick-panel__actions .door:has(.icon) .door__label {
+  position: absolute;
+  width: var(--space-0);
+  height: var(--space-0);
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* the colour picker's note that the colour lies outside sRGB (color-picker-oklch) */
+.picker__warning {
+  margin: 0;
+  color: var(--color-warning);
+  font-size: var(--fs-caption);
+}
+
+/* the colour picker's saved and recent colours and the eyedropper (color-swatches-eyedropper) */
+.picker__library {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.picker__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.picker__saved {
+  display: inline-flex;
+  align-items: center;
+}
+
+.picker__chip {
+  width: var(--space-8);
+  height: var(--space-8);
+  padding: 0;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--swatch-colour);
+  cursor: pointer;
+}
+
+/* the bands of Edit on canvas's Padding and Margin modes (src/editor/canvas/edit-handles.tsx): tinted, dragged */
+.chrome__band {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  background: var(--color-canvas-selection);
+  opacity: 0.35;
+  pointer-events: auto;
+  cursor: ns-resize;
+}
+
+.chrome__band:hover {
+  opacity: 0.55;
+}
+
+.chrome__band--padding {
+  background: var(--color-canvas-padding);
+}
+
+.chrome__band--margin {
+  background: var(--color-canvas-margin);
+}
+
+.chrome__handle-value {
+  padding: 0 var(--space-1);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-raised);
+  color: var(--color-text);
+  font-size: var(--fs-caption);
+  pointer-events: none;
+}
+
+.chrome__band-field {
+  position: absolute;
+  width: calc(var(--space-10) * 2);
+  pointer-events: auto;
+}
+
+/* the quick panel's Edit on canvas menu */
+.quick-panel__menu {
+  position: relative;
+}
+
+.quick-panel__options {
+  position: absolute;
+  z-index: 6;
+  top: 100%;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  min-width: calc(var(--space-10) * 4);
+  padding: var(--space-1);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-2);
+}
+
+.quick-panel__option {
+  padding: var(--space-2) var(--space-4);
+  border: 0;
+  background: none;
+  color: var(--color-text);
+  text-align: start;
+  cursor: pointer;
+}
+
+.quick-panel__option.is-current {
+  font-weight: var(--weight-semibold);
+}
+
+.quick-panel__option.is-unavailable {
+  color: var(--color-text-muted);
+  cursor: default;
+}
+
+.chrome__band[data-normal$=",0"] {
+  cursor: ew-resize;
+}
+
+/* a direct handle of Edit on canvas (radius, border): a round handle, labelled with its value beside it */
+.chrome__direct {
+  position: absolute;
+  border-radius: var(--radius-pill);
+  background: var(--color-canvas-handle);
+  outline: 1.5px solid var(--color-canvas-selection);
+  pointer-events: auto;
+  cursor: grab;
+}
+
+.chrome__direct .chrome__handle-value {
+  position: absolute;
+  top: 100%;
+  left: 100%;
+  white-space: nowrap;
+}
+
+.chrome__band:focus-visible,
+.chrome__direct:focus-visible {
+  outline: 2px solid var(--color-focus);
+  opacity: 1;
+}
+
+/* the project's variables in the Styles view (src/editor/shell/variables.tsx) */
+.variables__new {
+  position: relative;
+}
+
+.variables__kinds {
+  position: absolute;
+  z-index: 6;
+  top: 100%;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  min-width: calc(var(--space-10) * 4);
+  padding: var(--space-1);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-2);
+}
+
+.variables__group-title {
+  padding: var(--space-2) var(--space-4) var(--space-1);
+  color: var(--color-text-muted);
+  font-size: var(--fs-caption);
+}
+
+.variables__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-4);
+}
+
+.variables__kind {
+  padding: var(--space-2) var(--space-4);
+  border: 0;
+  background: none;
+  color: var(--color-text);
+  text-align: start;
+  cursor: pointer;
+}
+
+/* a dialog (DESIGN.md "Regions": guides-grids-dialog): a modal centred over a scrim that takes every click outside it */
+.dialog-shield {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-scrim);
+}
+
+.dialog {
+  display: flex;
+  flex-direction: column;
+  width: calc(var(--size-inspector) * 1.6);
+  max-height: calc(100vh - var(--space-10) * 2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-3);
+  color: var(--color-text);
+  font: var(--fw-body) var(--fs-body) / var(--lh-body) var(--font-ui);
+}
+
+.dialog:focus-visible {
+  outline: 2px solid var(--color-focus);
+}
+
+.dialog__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-5) var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.dialog__title {
+  margin: 0;
+  font: var(--fw-dialog) var(--fs-dialog) / var(--lh-dialog) var(--font-ui);
+}
+
+.dialog__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-6);
+  overflow: auto;
+}
+
+/* Guides & Grids: its sections, switches, guides and grid fields */
+.guides-grids__title {
+  margin: 0 0 var(--space-3);
+  color: var(--color-text-muted);
+  font: var(--fw-overline) var(--fs-overline) / var(--lh-overline) var(--font-ui);
+  letter-spacing: var(--ls-overline);
+  text-transform: uppercase;
+  cursor: help;
+}
+
+.guides-grids__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.guides-grids__add {
+  position: relative;
+  display: inline-flex;
+  gap: var(--space-2);
+}
+
+.guides-grids__place .input {
+  width: calc(var(--space-10) * 2);
+}
+
+.guides-grids__guides {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.guides-grids__guide {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.guides-grids__at {
+  margin-left: auto;
+  font: var(--fw-code) var(--fs-code) / var(--lh-code) var(--font-mono);
+}
+
+.guides-grids__none {
+  width: 100%;
+  margin: 0;
+  color: var(--color-text-subtle);
+}
+
+.guides-grids__fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.guides-grids__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.guides-grids__label {
+  color: var(--color-text-muted);
+  font: var(--fw-caption) var(--fs-caption) / var(--lh-caption) var(--font-ui);
+}
+
+.dialog__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}
+
+/* Snap settings: the targets in two columns, then the distance */
+.snap-settings__targets {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.snap-settings__targets legend {
+  grid-column: 1 / -1;
+  padding: 0;
+}
+
+.snap-settings__target {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* a snap line (src/editor/canvas/snap-lines.tsx, spec snap-while-moving): dashed, from the moving element to the target
+   it snapped to, the target outlined */
+.snap-line {
+  position: absolute;
+  pointer-events: none;
+  border: 0 dashed var(--color-canvas-target);
+}
+
+.snap-line--x {
+  border-left-width: 1px;
+}
+
+.snap-line--y {
+  border-top-width: 1px;
+}
+
+.snap-target {
+  position: absolute;
+  pointer-events: none;
+  outline: 1px dashed var(--color-canvas-target);
+}
+
+/* an equal gap (spec smart-guides): a solid mark across the gap with its value in page px */
+.equal-gap {
+  position: absolute;
+  pointer-events: none;
+  border: 0 solid var(--color-canvas-measure);
+}
+
+.equal-gap--x {
+  border-top-width: 1px;
+}
+
+.equal-gap--y {
+  border-left-width: 1px;
+}
+
+.equal-gap__value {
+  position: absolute;
+  top: calc(var(--space-6) * -1);
+  left: 50%;
+  translate: -50% 0;
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-xs);
+  background: var(--color-canvas-measure);
+  color: var(--color-on-canvas-band);
+  font: var(--fw-micro) var(--fs-micro) / var(--lh-micro) var(--font-ui);
+}
+
+/* a command's confirmation (confirmation.tsx): a modal box in the middle of the window over the scrim */
+.confirmation {
+  position: fixed;
+  inset: 0;
+  z-index: 85;
+  display: grid;
+  place-items: center;
+}
+
+.confirmation__scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--color-scrim);
+}
+
+.confirmation__box {
+  position: relative;
+  display: grid;
+  gap: var(--space-4);
+  max-width: calc(var(--size-inspector) * 1.3);
+  padding: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-3);
+}
+
+.confirmation__message {
+  margin: 0;
+  color: var(--color-text);
+  font: var(--fw-dialog) var(--fs-dialog) / var(--lh-dialog) var(--font-ui);
+}
+
+.confirmation__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}
+
+/* the recovery dialog (recovery.tsx): its hint above the versions */
+.recovery__hint {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+/* the tab guard (tab-guard.tsx): a bar across the top of the window while this tab only reads the project */
+.tab-guard {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-5);
+  border: 1px solid var(--color-warning);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-2);
+  color: var(--color-text);
+  translate: -50% 0;
+}
+
+/* the state edited (canvas.tsx StateBadge, spec state-styles): a badge at the right of the frame's tab row */
+.canvas-state-badge {
+  position: absolute;
+  top: var(--space-1);
+  right: var(--space-2);
+  z-index: 2;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--color-mode-state);
+  color: var(--color-on-mode-state);
+  font: var(--fw-label) var(--fs-label) / var(--lh-label) var(--font-ui);
 }

@@ -7,7 +7,7 @@
 // elementAt finds at the point the overlay received must be the one the page lays out there. screenBox must match the
 // box Chrome painted for the element.
 import fs from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
 
 type Coordinates = typeof import('../../src/editor/canvas/coordinates.ts');
 

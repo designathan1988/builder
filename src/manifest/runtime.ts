@@ -78,6 +78,20 @@ function load(): Manifest {
 
 export const manifest: Manifest = load();
 
+// A number constant of interactions.json, by its id (the one reader: the camera, the pointer owner, the chrome)
+export function numberConstant(id: string): number {
+  const value = manifest.interactions.constants.find((c) => c.id === id)?.value;
+  if (typeof value !== 'number') throw new Error(`interactions.json has no number ${id}`);
+  return value;
+}
+
+// a constant of two numbers (an offset, a range: its lowest and highest)
+export function pairConstant(id: string): readonly [number, number] {
+  const value = manifest.interactions.constants.find((c) => c.id === id)?.value;
+  if (!Array.isArray(value) || typeof value[0] !== 'number' || typeof value[1] !== 'number') throw new Error(`interactions.json has no pair ${id}`);
+  return [value[0], value[1]];
+}
+
 export function commandOf(id: CommandId): Command & { readonly id: CommandId } {
   const command = manifest.commandById.get(id);
   if (!command) throw new Error(`unknown command ${id}`);

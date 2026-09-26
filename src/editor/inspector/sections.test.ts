@@ -56,7 +56,7 @@ describe('collapsed sections (inspector/sections.ts)', () => {
 
   it('takes only a section of the inspector', () => {
     const s = store();
-    expect(() => s.dispatch('inspector.toggleSection', { section: 'nope' })).toThrow();
+    expect(() => s.dispatch('inspector.toggleSection', { section: 'nope' })).toThrow(/the inspector has no section nope/);
     expect(collapsedSections(s.getState().ui)).toEqual([]);
   });
 });

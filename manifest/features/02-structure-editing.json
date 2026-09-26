@@ -5158,6 +5158,449 @@
       ]
     },
     {
+      "id": "drag-side-wrap",
+      "titleKey": "feature.dragSideWrap",
+      "commands": [
+        "element.wrapBeside"
+      ],
+      "dependsOn": [
+        "drag-reorder-canvas",
+        "wrap-row-column",
+        "palette-drag-insert"
+      ],
+      "spec": "spec/behavior/drag-layout.md",
+      "intent": {
+        "title": "Drop beside an element to put both side by side in a new Row or Column",
+        "steps": [
+          "Drag a Paragraph over the left side band of a full-width Card and stay there, or press Alt.",
+          "Release.",
+          "Drag the Image tile from the Elements panel to the right side band of a Heading, stay, release."
+        ],
+        "expected": [
+          "Until the offer is confirmed the indicator shows the ordinary drop and a hint; confirmed, a line along the side edge, the target outlined and a pill \"Create a row with 2 columns\".",
+          "The release puts both in a new Row (display flex, row) at the target's place, the dragged element on the side it was dropped; one undo step; the Row selected.",
+          "In a row parent the side bands are its top and bottom and the wrapper is a Column."
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "a-drop-at-the-left-edge-of-the-title-puts-the-intro-beside-it-in-a-row",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "element.wrapBeside#canvas-drag-canvas-element-side-band",
+              "args": {
+                "target": "/Page/Hero/Title",
+                "side": "before",
+                "wrapper": "row"
+              },
+              "target": "/Page/Hero/Intro",
+              "drop": {
+                "placement": "before",
+                "reference": "/Page/Hero/Title"
+              },
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.wrapBeside#canvas-drag-canvas-element-side-band"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@children",
+                "value": [
+                  {
+                    "type": "div",
+                    "name": "Row",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "display": "flex",
+                          "flex-direction": "row"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "paragraph",
+                        "name": "Intro",
+                        "tag": "p",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Fresh coffee, roasted every week.",
+                        "children": []
+                      },
+                      {
+                        "type": "heading",
+                        "name": "Title",
+                        "tag": "h1",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Welcome to Aurora",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "div",
+                    "name": "Actions",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Row"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Row",
+                  "property": "display",
+                  "value": "flex"
+                },
+                {
+                  "node": "/Page/Hero/Row",
+                  "property": "flex-direction",
+                  "value": "row"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.wrappedBeside",
+                  "params": {
+                    "wrapper": "Row",
+                    "name": "Intro",
+                    "target": "Title",
+                    "styles": "display: flex; flex-direction: row"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-drop-at-the-right-edge-of-the-intro-puts-the-title-after-it-in-a-row",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "element.wrapBeside#canvas-drag-canvas-element-side-band",
+              "args": {
+                "target": "/Page/Hero/Intro",
+                "side": "after",
+                "wrapper": "row"
+              },
+              "target": "/Page/Hero/Title",
+              "drop": {
+                "placement": "after",
+                "reference": "/Page/Hero/Intro"
+              },
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.wrapBeside#canvas-drag-canvas-element-side-band"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@children",
+                "value": [
+                  {
+                    "type": "div",
+                    "name": "Row",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "display": "flex",
+                          "flex-direction": "row"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "paragraph",
+                        "name": "Intro",
+                        "tag": "p",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Fresh coffee, roasted every week.",
+                        "children": []
+                      },
+                      {
+                        "type": "heading",
+                        "name": "Title",
+                        "tag": "h1",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Welcome to Aurora",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "div",
+                    "name": "Actions",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Row"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Row",
+                  "property": "display",
+                  "value": "flex"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.wrappedBeside",
+                  "params": {
+                    "wrapper": "Row",
+                    "name": "Title",
+                    "target": "Intro",
+                    "styles": "display: flex; flex-direction: row"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "a-heading-tile-dropped-at-the-right-edge-of-the-intro-goes-beside-it-in-a-row",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.wrapBeside#canvas-drag-palette-tile-side-band",
+              "args": {
+                "entry": "heading",
+                "target": "/Page/Hero/Intro",
+                "side": "after",
+                "wrapper": "row"
+              },
+              "target": null,
+              "drop": {
+                "placement": "after",
+                "reference": "/Page/Hero/Intro"
+              },
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.wrapBeside#canvas-drag-palette-tile-side-band"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@children",
+                "value": [
+                  {
+                    "type": "heading",
+                    "name": "Title",
+                    "tag": "h1",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Welcome to Aurora",
+                    "children": []
+                  },
+                  {
+                    "type": "div",
+                    "name": "Row",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "display": "flex",
+                          "flex-direction": "row"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "paragraph",
+                        "name": "Intro",
+                        "tag": "p",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Fresh coffee, roasted every week.",
+                        "children": []
+                      },
+                      {
+                        "type": "heading",
+                        "name": "Heading",
+                        "tag": "h2",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "New heading",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "div",
+                    "name": "Actions",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Row"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Row",
+                  "property": "display",
+                  "value": "flex"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.wrappedBeside",
+                  "params": {
+                    "wrapper": "Row",
+                    "name": "Heading",
+                    "target": "Intro",
+                    "styles": "display: flex; flex-direction: row"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
+    },
+    {
       "id": "context-menu",
       "titleKey": "feature.contextMenu",
       "commands": [
@@ -5915,6 +6358,15 @@
               "action": true,
               "hold": false,
               "type": null
+            },
+            {
+              "door": "selection.clear#key-escape-in-canvas",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
             }
           ],
           "doors": [
@@ -5923,9 +6375,7 @@
           ],
           "expect": {
             "document": [],
-            "selection": [
-              "/Page/Hero/Intro"
-            ],
+            "selection": [],
             "history": {
               "undoSteps": 0,
               "undoRestores": true,
@@ -5942,7 +6392,12 @@
                   "reference": "/Page/Hero/Title"
                 }
               ],
-              "feedback": []
+              "feedback": [
+                {
+                  "key": "status.selection.cleared",
+                  "params": {}
+                }
+              ]
             },
             "editor": null,
             "persistence": null,
@@ -9080,29 +9535,98 @@
               "action": true,
               "hold": false,
               "type": null
+            },
+            {
+              "door": "hand.aimPrevious#key-shift-arrow-down-in-hand",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.moveTo#key-enter-in-hand",
+              "args": {
+                "parent": "/Page/Hero",
+                "index": 0
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
             }
           ],
           "doors": [
             "hand.take#key-m-in-canvas"
           ],
           "expect": {
-            "document": [],
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@children",
+                "value": [
+                  {
+                    "type": "paragraph",
+                    "name": "Intro",
+                    "tag": "p",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Fresh coffee, roasted every week.",
+                    "children": []
+                  },
+                  {
+                    "type": "heading",
+                    "name": "Title",
+                    "tag": "h1",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Welcome to Aurora",
+                    "children": []
+                  },
+                  {
+                    "type": "div",
+                    "name": "Actions",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
             "selection": [
               "/Page/Hero/Intro"
             ],
             "history": {
-              "undoSteps": 0,
+              "undoSteps": 1,
               "undoRestores": true,
               "redoRestores": true
             },
             "render": {
               "computed": [],
-              "geometry": [],
+              "geometry": [
+                {
+                  "node": "/Page/Hero/Intro",
+                  "measure": "y",
+                  "relation": "less-than",
+                  "value": 0,
+                  "reference": "/Page/Hero/Title"
+                }
+              ],
               "feedback": [
                 {
-                  "key": "status.hand.holding",
+                  "key": "status.moved",
                   "params": {
-                    "name": "Intro"
+                    "name": "Intro",
+                    "position": 1,
+                    "count": 3,
+                    "parent": "Hero"
                   }
                 }
               ]
@@ -9280,6 +9804,15 @@
               "action": true,
               "hold": false,
               "type": null
+            },
+            {
+              "door": "selection.walkNextSibling#key-arrow-right-in-canvas",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
             }
           ],
           "doors": [
@@ -9288,7 +9821,7 @@
           "expect": {
             "document": [],
             "selection": [
-              "/Page/Hero/Intro"
+              "/Page/Hero/Actions"
             ],
             "history": {
               "undoSteps": 0,
@@ -9300,8 +9833,10 @@
               "geometry": [],
               "feedback": [
                 {
-                  "key": "status.hand.dropped",
-                  "params": {}
+                  "key": "status.selected",
+                  "params": {
+                    "name": "Actions"
+                  }
                 }
               ]
             },
@@ -9422,6 +9957,15 @@
               "action": true,
               "hold": false,
               "type": null
+            },
+            {
+              "door": "text.cancelEdit#key-escape-in-text-editing",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
             }
           ],
           "doors": [
@@ -9443,8 +9987,10 @@
               "geometry": [],
               "feedback": [
                 {
-                  "key": "status.textEdit.editing",
-                  "params": {}
+                  "key": "status.textEdit.cancelled",
+                  "params": {
+                    "name": "Intro"
+                  }
                 }
               ]
             },
@@ -9634,6 +10180,15 @@
               "action": true,
               "hold": false,
               "type": null
+            },
+            {
+              "door": "text.startEdit#key-enter-in-canvas",
+              "args": {},
+              "target": "/Page/Hero/Intro",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
             }
           ],
           "doors": [
@@ -9654,10 +10209,8 @@
               "geometry": [],
               "feedback": [
                 {
-                  "key": "status.textEdit.cancelled",
-                  "params": {
-                    "name": "Intro"
-                  }
+                  "key": "status.textEdit.editing",
+                  "params": {}
                 }
               ]
             },

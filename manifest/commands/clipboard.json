@@ -12,7 +12,8 @@
         "refusalKey": "refusal.nothingSelected"
       },
       "refusals": [
-        "status.clipboard.denied"
+        "status.clipboard.denied",
+        "status.copy.root"
       ],
       "confirmation": null,
       "history": {
@@ -109,7 +110,13 @@
       "labelKey": "command.paste",
       "owner": "src/core/clipboard/clipboard.ts",
       "introducedBy": "clipboard-copy-paste",
-      "args": {},
+      "args": {
+        "clipboard": {
+          "type": "clipboard",
+          "values": [],
+          "optional": false
+        }
+      },
       "availability": {
         "predicate": "always",
         "refusalKey": null

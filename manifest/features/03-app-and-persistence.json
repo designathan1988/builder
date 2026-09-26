@@ -42,7 +42,2130 @@
           "The menu opens with Enter or ArrowDown, moves with the arrow keys, closes with Escape and returns focus to the logo button."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "copy-from-the-edit-menu",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "selection.select#layers-row",
+              "args": {
+                "target": "/Page/Hero/Intro"
+              },
+              "target": "/Page/Hero/Intro",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "clipboard.copy#menu-edit",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "contextMenu.open#canvas-right-click-element-or-page",
+              "args": {
+                "target": "/Page/Hero/Actions"
+              },
+              "target": "/Page/Hero/Actions",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "clipboard.paste#context-menu",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "clipboard.copy#menu-edit"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Actions/@children",
+                "value": [
+                  {
+                    "type": "paragraph",
+                    "name": "Intro 2",
+                    "tag": "p",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Fresh coffee, roasted every week.",
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Actions/Intro 2"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.pasted.inside",
+                  "params": {
+                    "name": "Intro 2",
+                    "parent": "Actions",
+                    "position": 1,
+                    "count": 1
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "paste-from-the-edit-menu",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "clipboard.copy#key-ctrl-c-in-global",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "selection.select#canvas-click-element-or-page",
+              "args": {
+                "target": "/Page/Hero/Actions"
+              },
+              "target": "/Page/Hero/Actions",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "clipboard.paste#menu-edit",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "clipboard.paste#menu-edit"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Actions/@children",
+                "value": [
+                  {
+                    "type": "heading",
+                    "name": "Title 2",
+                    "tag": "h1",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Welcome to Aurora",
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Actions/Title 2"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [
+                {
+                  "node": "/Page/Hero/Actions/Title 2",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": "/Page/Hero/Intro"
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.pasted.inside",
+                  "params": {
+                    "name": "Title 2",
+                    "parent": "Actions",
+                    "position": 1,
+                    "count": 1
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "undo-from-the-edit-menu",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "paragraph"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "selection.select#canvas-click-element-or-page",
+              "args": {
+                "target": "/Page/Hero/Intro"
+              },
+              "target": "/Page/Hero/Intro",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "history.undo#menu-edit",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "history.undo#menu-edit"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [
+                {
+                  "node": "/Page/Hero/Intro",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": "/Page/Hero/Title"
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.undone",
+                  "params": {}
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "redo-from-the-edit-menu",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "paragraph"
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "selection.select#canvas-click-element-or-page",
+              "args": {
+                "target": "/Page/Hero/Intro"
+              },
+              "target": "/Page/Hero/Intro",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "history.undo#key-ctrl-z-in-global",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "history.redo#menu-edit",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "history.redo#menu-edit"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@children",
+                "value": [
+                  {
+                    "type": "heading",
+                    "name": "Title",
+                    "tag": "h1",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Welcome to Aurora",
+                    "children": []
+                  },
+                  {
+                    "type": "paragraph",
+                    "name": "Paragraph",
+                    "tag": "p",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "A freshly created paragraph.",
+                    "children": []
+                  },
+                  {
+                    "type": "paragraph",
+                    "name": "Intro",
+                    "tag": "p",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Fresh coffee, roasted every week.",
+                    "children": []
+                  },
+                  {
+                    "type": "div",
+                    "name": "Actions",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Paragraph"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [
+                {
+                  "node": "/Page/Hero/Paragraph",
+                  "measure": "y",
+                  "relation": "less-than",
+                  "value": 0,
+                  "reference": "/Page/Hero/Intro"
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.redone",
+                  "params": {}
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "start-rename-from-the-arrange-menu",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "layers.startRename#menu-arrange",
+              "args": {},
+              "target": "/Page/Hero/Intro",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.rename#layers-row-name-field",
+              "args": {
+                "target": "/Page/Hero/Intro",
+                "name": "Lead"
+              },
+              "target": "/Page/Hero/Intro",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "layers.startRename#menu-arrange"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/Intro/@name",
+                "value": "Lead"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Lead"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.renamed",
+                  "params": {
+                    "old": "Intro",
+                    "name": "Lead"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "clear-from-the-edit-menu",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "selection.clear#menu-edit",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "selection.clear#menu-edit"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.selection.cleared",
+                  "params": {}
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "select-all-in-container-from-the-edit-menu",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Plans/Grid/CardB"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "selection.selectAllInContainer#menu-edit",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "selection.selectAllInContainer#menu-edit"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [
+              "/Page/Plans/Grid/CardA",
+              "/Page/Plans/Grid/CardB",
+              "/Page/Plans/Grid/CardC"
+            ],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.selection.count",
+                  "params": {
+                    "count": 3
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "move-up-from-the-arrange-menu",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Actions"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "element.moveUp#menu-arrange",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.moveUp#menu-arrange"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@children",
+                "value": [
+                  {
+                    "type": "heading",
+                    "name": "Title",
+                    "tag": "h1",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Welcome to Aurora",
+                    "children": []
+                  },
+                  {
+                    "type": "div",
+                    "name": "Actions",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  },
+                  {
+                    "type": "paragraph",
+                    "name": "Intro",
+                    "tag": "p",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Fresh coffee, roasted every week.",
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Actions"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [
+                {
+                  "node": "/Page/Hero/Actions",
+                  "measure": "y",
+                  "relation": "less-than",
+                  "value": 0,
+                  "reference": "/Page/Hero/Intro"
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.moved",
+                  "params": {
+                    "name": "Actions",
+                    "position": 2,
+                    "count": 3,
+                    "parent": "Hero"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "move-down-from-the-arrange-menu",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "element.moveDown#menu-arrange",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.moveDown#menu-arrange"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@children",
+                "value": [
+                  {
+                    "type": "paragraph",
+                    "name": "Intro",
+                    "tag": "p",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Fresh coffee, roasted every week.",
+                    "children": []
+                  },
+                  {
+                    "type": "heading",
+                    "name": "Title",
+                    "tag": "h1",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Welcome to Aurora",
+                    "children": []
+                  },
+                  {
+                    "type": "div",
+                    "name": "Actions",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [
+                {
+                  "node": "/Page/Hero/Title",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": "/Page/Hero/Intro"
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.moved",
+                  "params": {
+                    "name": "Title",
+                    "position": 2,
+                    "count": 3,
+                    "parent": "Hero"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "wrap-row-from-the-arrange-menu",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "element.wrapRow#menu-arrange",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.wrapRow#menu-arrange"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@children",
+                "value": [
+                  {
+                    "type": "heading",
+                    "name": "Title",
+                    "tag": "h1",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Welcome to Aurora",
+                    "children": []
+                  },
+                  {
+                    "type": "div",
+                    "name": "Row",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "display": "flex",
+                          "flex-direction": "row"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "paragraph",
+                        "name": "Intro",
+                        "tag": "p",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Fresh coffee, roasted every week.",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "div",
+                    "name": "Actions",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Row"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Hero/Row",
+                  "property": "display",
+                  "value": "flex"
+                },
+                {
+                  "node": "/Page/Hero/Row",
+                  "property": "flex-direction",
+                  "value": "row"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.wrapped",
+                  "params": {
+                    "name": "Intro",
+                    "wrapper": "Row",
+                    "styles": "display: flex; flex-direction: row"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "wrap-column-from-the-arrange-menu",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Plans/Grid/CardB"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "element.wrapColumn#menu-arrange",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.wrapColumn#menu-arrange"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@children",
+                "value": [
+                  {
+                    "type": "article",
+                    "name": "CardA",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardATitle",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Monthly",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "div",
+                    "name": "Column",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "display": "flex",
+                          "flex-direction": "column"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "article",
+                        "name": "CardB",
+                        "tag": "article",
+                        "attributes": {},
+                        "classes": [
+                          "card"
+                        ],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "heading",
+                            "name": "CardBTitle",
+                            "tag": "h3",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "Weekly",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardC",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Plans/Grid/Column"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [
+                {
+                  "node": "/Page/Plans/Grid/Column",
+                  "property": "display",
+                  "value": "flex"
+                },
+                {
+                  "node": "/Page/Plans/Grid/Column",
+                  "property": "flex-direction",
+                  "value": "column"
+                }
+              ],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.wrapped",
+                  "params": {
+                    "name": "CardB",
+                    "wrapper": "Column",
+                    "styles": "display: flex; flex-direction: column"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "nest-into-previous-from-the-arrange-menu",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Plans/Grid/CardB"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "element.nestIntoPrevious#menu-arrange",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.nestIntoPrevious#menu-arrange"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@children",
+                "value": [
+                  {
+                    "type": "article",
+                    "name": "CardA",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardATitle",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Monthly",
+                        "children": []
+                      },
+                      {
+                        "type": "article",
+                        "name": "CardB",
+                        "tag": "article",
+                        "attributes": {},
+                        "classes": [
+                          "card"
+                        ],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "heading",
+                            "name": "CardBTitle",
+                            "tag": "h3",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "Weekly",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardC",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Plans/Grid/CardA/CardB"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [
+                {
+                  "node": "/Page/Plans/Grid/CardA/CardB",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": "/Page/Plans/Grid/CardA/CardATitle"
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.movedInto",
+                  "params": {
+                    "name": "CardB",
+                    "receiver": "CardA",
+                    "position": 2,
+                    "count": 2
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "promote-from-the-arrange-menu",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Plans/Grid/CardA/CardATitle"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "element.promote#menu-arrange",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.promote#menu-arrange"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@children",
+                "value": [
+                  {
+                    "type": "article",
+                    "name": "CardA",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  },
+                  {
+                    "type": "heading",
+                    "name": "CardATitle",
+                    "tag": "h3",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Monthly",
+                    "children": []
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardB",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardBTitle",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Weekly",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardC",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Plans/Grid/CardATitle"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [
+                {
+                  "node": "/Page/Plans/Grid/CardATitle",
+                  "measure": "y",
+                  "relation": "less-than",
+                  "value": 0,
+                  "reference": "/Page/Plans/Grid/CardB"
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.moved",
+                  "params": {
+                    "name": "CardATitle",
+                    "position": 2,
+                    "count": 4,
+                    "parent": "Grid"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "duplicate-from-the-edit-menu",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Plans/Grid/CardA"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "element.duplicate#menu-edit",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.duplicate#menu-edit"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Plans/Grid/@children",
+                "value": [
+                  {
+                    "type": "article",
+                    "name": "CardA",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardATitle",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Monthly",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardA 2",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardATitle 2",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Monthly",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardB",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardBTitle",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Weekly",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardC",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Plans/Grid/CardA 2"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [
+                {
+                  "node": "/Page/Plans/Grid/CardA 2",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": "/Page/Plans/Grid/CardA"
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.duplicated",
+                  "params": {
+                    "name": "CardA",
+                    "copy": "CardA 2"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "delete-from-the-edit-menu",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "element.delete#menu-edit",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.delete#menu-edit"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "remove",
+                "path": "/Page/Hero/Intro"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Actions"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [
+                {
+                  "node": "/Page/Hero/Actions",
+                  "measure": "y",
+                  "relation": "greater-than",
+                  "value": 0,
+                  "reference": "/Page/Hero/Title"
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.deleted",
+                  "params": {
+                    "name": "Intro"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "unwrap-from-the-arrange-menu",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "selection.select#layers-row",
+              "args": {
+                "target": "/Page/Plans/Grid"
+              },
+              "target": "/Page/Plans/Grid",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.unwrap#menu-arrange",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.unwrap#menu-arrange"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Plans/@children",
+                "value": [
+                  {
+                    "type": "article",
+                    "name": "CardA",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardATitle",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Monthly",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardB",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "CardBTitle",
+                        "tag": "h3",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Weekly",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "article",
+                    "name": "CardC",
+                    "tag": "article",
+                    "attributes": {},
+                    "classes": [
+                      "card"
+                    ],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  },
+                  {
+                    "type": "list",
+                    "name": "Perks",
+                    "tag": "ul",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "listItem",
+                        "name": "PerkOne",
+                        "tag": "li",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "paragraph",
+                            "name": "PerkOneText",
+                            "tag": "p",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "Free delivery",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "name": "PerkTwo",
+                        "tag": "li",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "paragraph",
+                            "name": "PerkTwoText",
+                            "tag": "p",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": "Pause anytime",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Plans/CardA",
+              "/Page/Plans/CardB",
+              "/Page/Plans/CardC"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [
+                {
+                  "node": "/Page/Plans/CardC",
+                  "measure": "y",
+                  "relation": "less-than",
+                  "value": 0,
+                  "reference": "/Page/Plans/Perks"
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.unwrapped",
+                  "params": {
+                    "name": "Grid"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "take-from-the-arrange-menu",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "hand.take#menu-arrange",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "hand.aimPrevious#key-shift-arrow-down-in-hand",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.moveTo#key-enter-in-hand",
+              "args": {
+                "parent": "/Page/Hero",
+                "index": 0
+              },
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "hand.take#menu-arrange"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/Hero/@children",
+                "value": [
+                  {
+                    "type": "paragraph",
+                    "name": "Intro",
+                    "tag": "p",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Fresh coffee, roasted every week.",
+                    "children": []
+                  },
+                  {
+                    "type": "heading",
+                    "name": "Title",
+                    "tag": "h1",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": "Welcome to Aurora",
+                    "children": []
+                  },
+                  {
+                    "type": "div",
+                    "name": "Actions",
+                    "tag": "div",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [
+                {
+                  "node": "/Page/Hero/Intro",
+                  "measure": "y",
+                  "relation": "less-than",
+                  "value": 0,
+                  "reference": "/Page/Hero/Title"
+                }
+              ],
+              "feedback": [
+                {
+                  "key": "status.moved",
+                  "params": {
+                    "name": "Intro",
+                    "position": 1,
+                    "count": 3,
+                    "parent": "Hero"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "set-panel-open-inspector-from-the-view-menu",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#menu-view-inspector",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "workspace.setPanelOpen#menu-view-inspector"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.panel.closed",
+                  "params": {
+                    "panel": "Inspector"
+                  }
+                }
+              ]
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "file-tabs",
+                  "measure": "x",
+                  "relation": "equals",
+                  "value": 264,
+                  "reference": null
+                },
+                {
+                  "region": "file-tabs",
+                  "measure": "width",
+                  "relation": "equals",
+                  "value": 1176,
+                  "reference": null
+                },
+                {
+                  "region": "top-bar",
+                  "measure": "width",
+                  "relation": "equals",
+                  "value": 1440,
+                  "reference": null
+                },
+                {
+                  "region": "status-bar",
+                  "measure": "y",
+                  "relation": "equals",
+                  "value": 876,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-view-menu-opens-the-elements-panel",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#menu-view-elements",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "workspace.setPanelOpen#menu-view-elements"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.panel.opened",
+                  "params": {
+                    "panel": "Elements"
+                  }
+                }
+              ]
+            },
+            "editor": {
+              "regions": [
+                {
+                  "region": "insert",
+                  "measure": "width",
+                  "relation": "greater-than",
+                  "value": 200,
+                  "reference": null
+                }
+              ],
+              "computed": []
+            },
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-view-menu-closes-the-layers-section",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#menu-view-layers",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "workspace.setPanelOpen#menu-view-layers"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.panel.closed",
+                  "params": {
+                    "panel": "Layers"
+                  }
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
     },
     {
       "id": "ui-language",
@@ -234,7 +2357,8 @@
       "dependsOn": [
         "autosave-restore"
       ],
-      "spec": null,
+      "spec": "spec/behavior/unsaved-work-guard.md",
+      "toothProof": "src/editor/persistence/autosave.ts",
       "intent": {
         "title": "Never lose an edit that is not yet saved",
         "steps": [
@@ -248,7 +2372,93 @@
           "If IndexedDB refuses a write, the status bar reads 'Not saved' [status.save.notSaved] with the reason and the change stays in memory until a later write succeeds."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "a-section-inserted-is-there-after-an-immediate-reload",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "workspace.setPanelOpen#toolbar-activity-bar-insert",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.insert#elements-tile",
+              "args": {
+                "entry": "section"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.insert#elements-tile"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "section",
+                    "name": "Section",
+                    "tag": "section",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "padding-top": "56px",
+                          "padding-right": "40px",
+                          "padding-bottom": "56px",
+                          "padding-left": "40px"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": []
+                  }
+                ]
+              }
+            ],
+            "selection": [
+              "/Page/Section"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": null,
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
     },
     {
       "id": "autosave-crash-recovery",
@@ -257,7 +2467,8 @@
       "dependsOn": [
         "autosave-restore"
       ],
-      "spec": null,
+      "spec": "spec/behavior/autosave-crash-recovery.md",
+      "toothProof": "src/editor/persistence/autosave.ts",
       "intent": {
         "title": "Keep saved versions and restore the work after a crash",
         "steps": [
@@ -269,7 +2480,76 @@
           "After the crash the last saved document is restored and a notice says the work was recovered."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "two-deletes-are-kept-after-a-reload",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "element.delete#key-delete-in-canvas",
+              "args": {},
+              "target": "/Page/Hero/Intro",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.delete#key-delete-in-canvas",
+              "args": {},
+              "target": "/Page/Hero/Actions",
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "element.delete#key-delete-in-canvas"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "remove",
+                "path": "/Page/Hero/Intro"
+              },
+              {
+                "op": "remove",
+                "path": "/Page/Hero/Actions"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Title"
+            ],
+            "history": {
+              "undoSteps": 2,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": null,
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
     },
     {
       "id": "new-blank-page",
@@ -278,7 +2558,7 @@
         "project.newBlankPage"
       ],
       "dependsOn": [],
-      "spec": null,
+      "spec": "spec/behavior/new-blank-page.md",
       "intent": {
         "title": "Start over with a new blank page",
         "steps": [
@@ -293,7 +2573,205 @@
           "The status bar reads that a blank page was created and the blank page is autosaved."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "start-over-after-confirming",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "element.delete#key-delete-in-canvas",
+              "args": {},
+              "target": "/Page/Hero/Intro",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "project.newBlankPage#menu-file",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null,
+              "answer": "confirm"
+            }
+          ],
+          "doors": [
+            "project.newBlankPage#menu-file"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": []
+              }
+            ],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.project.blankPage",
+                  "params": {}
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "cancel-keeps-the-page",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [
+              "/Page/Hero/Intro"
+            ],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "element.delete#key-delete-in-canvas",
+              "args": {},
+              "target": "/Page/Hero/Intro",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "project.newBlankPage#menu-file",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null,
+              "answer": "cancel"
+            }
+          ],
+          "doors": [
+            "project.newBlankPage#menu-file"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "remove",
+                "path": "/Page/Hero/Intro"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Actions"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.confirmation.cancelled",
+                  "params": {}
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        },
+        {
+          "id": "the-empty-project-starts-over-without-asking",
+          "setup": {
+            "fixture": "empty",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit"
+          },
+          "steps": [
+            {
+              "door": "project.newBlankPage#menu-file",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.newBlankPage#menu-file"
+          ],
+          "expect": {
+            "document": [],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.project.blankPage",
+                  "params": {}
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": null,
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
     },
     {
       "id": "autosave-corruption-recovery",
@@ -304,7 +2782,7 @@
       "dependsOn": [
         "autosave-crash-recovery"
       ],
-      "spec": null,
+      "spec": "spec/behavior/autosave-corruption-recovery.md",
       "intent": {
         "title": "Recover from a corrupted saved project",
         "steps": [
@@ -318,7 +2796,277 @@
           "Until something is restored or a new page is started, autosave does not overwrite the corrupted record."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "restore-brings-back-the-saved-version",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "dialog",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit",
+            "storage": "corrupt-current-record"
+          },
+          "steps": [
+            {
+              "door": "project.restoreVersion#recovery-dialog-restore",
+              "args": {
+                "version": "1"
+              },
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.restoreVersion#recovery-dialog-restore"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "set",
+                "path": "/Page/@children",
+                "value": [
+                  {
+                    "type": "section",
+                    "name": "Hero",
+                    "tag": "section",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {
+                      "desktop": {
+                        "base": {
+                          "padding-top": "56px",
+                          "padding-right": "40px",
+                          "padding-bottom": "56px",
+                          "padding-left": "40px"
+                        }
+                      }
+                    },
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "heading",
+                        "name": "Title",
+                        "tag": "h1",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Welcome to Aurora",
+                        "children": []
+                      },
+                      {
+                        "type": "paragraph",
+                        "name": "Intro",
+                        "tag": "p",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Fresh coffee, roasted every week.",
+                        "children": []
+                      },
+                      {
+                        "type": "div",
+                        "name": "Actions",
+                        "tag": "div",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "section",
+                    "name": "Plans",
+                    "tag": "section",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "div",
+                        "name": "Grid",
+                        "tag": "div",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "article",
+                            "name": "CardA",
+                            "tag": "article",
+                            "attributes": {},
+                            "classes": [
+                              "card"
+                            ],
+                            "styles": {},
+                            "text": null,
+                            "children": [
+                              {
+                                "type": "heading",
+                                "name": "CardATitle",
+                                "tag": "h3",
+                                "attributes": {},
+                                "classes": [],
+                                "styles": {},
+                                "text": "Monthly",
+                                "children": []
+                              }
+                            ]
+                          },
+                          {
+                            "type": "article",
+                            "name": "CardB",
+                            "tag": "article",
+                            "attributes": {},
+                            "classes": [
+                              "card"
+                            ],
+                            "styles": {},
+                            "text": null,
+                            "children": [
+                              {
+                                "type": "heading",
+                                "name": "CardBTitle",
+                                "tag": "h3",
+                                "attributes": {},
+                                "classes": [],
+                                "styles": {},
+                                "text": "Weekly",
+                                "children": []
+                              }
+                            ]
+                          },
+                          {
+                            "type": "article",
+                            "name": "CardC",
+                            "tag": "article",
+                            "attributes": {},
+                            "classes": [
+                              "card"
+                            ],
+                            "styles": {},
+                            "text": null,
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "type": "list",
+                        "name": "Perks",
+                        "tag": "ul",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": null,
+                        "children": [
+                          {
+                            "type": "listItem",
+                            "name": "PerkOne",
+                            "tag": "li",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": null,
+                            "children": [
+                              {
+                                "type": "paragraph",
+                                "name": "PerkOneText",
+                                "tag": "p",
+                                "attributes": {},
+                                "classes": [],
+                                "styles": {},
+                                "text": "Free delivery",
+                                "children": []
+                              }
+                            ]
+                          },
+                          {
+                            "type": "listItem",
+                            "name": "PerkTwo",
+                            "tag": "li",
+                            "attributes": {},
+                            "classes": [],
+                            "styles": {},
+                            "text": null,
+                            "children": [
+                              {
+                                "type": "paragraph",
+                                "name": "PerkTwoText",
+                                "tag": "p",
+                                "attributes": {},
+                                "classes": [],
+                                "styles": {},
+                                "text": "Pause anytime",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "footer",
+                    "name": "Footer",
+                    "tag": "footer",
+                    "attributes": {},
+                    "classes": [],
+                    "styles": {},
+                    "text": null,
+                    "children": [
+                      {
+                        "type": "paragraph",
+                        "name": "Note",
+                        "tag": "p",
+                        "attributes": {},
+                        "classes": [],
+                        "styles": {},
+                        "text": "Aurora Coffee",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "selection": [],
+            "history": {
+              "undoSteps": 0,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": {
+              "computed": [],
+              "geometry": [],
+              "feedback": [
+                {
+                  "key": "status.save.restored",
+                  "params": {}
+                }
+              ]
+            },
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
     },
     {
       "id": "multi-tab-guard",
@@ -329,7 +3077,7 @@
       "dependsOn": [
         "autosave-restore"
       ],
-      "spec": null,
+      "spec": "spec/behavior/multi-tab-guard.md",
       "intent": {
         "title": "Only one tab edits the project at a time",
         "steps": [
@@ -344,7 +3092,82 @@
           "A read-only tab refuses every document command with a status message, so autosave from two tabs never interleaves."
         ]
       },
-      "scenarios": []
+      "scenarios": [
+        {
+          "id": "taking-over-lets-this-tab-edit",
+          "setup": {
+            "fixture": "aurora",
+            "selection": [],
+            "context": "global",
+            "breakpoint": "desktop",
+            "state": "base",
+            "locale": "en",
+            "viewport": "desktop-1440",
+            "zoom": "fit",
+            "tabs": "another-tab-editing"
+          },
+          "steps": [
+            {
+              "door": "project.takeOverEditing#tab-guard-take-over",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": true,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "selection.select#layers-row",
+              "args": {
+                "target": "/Page/Hero/Intro"
+              },
+              "target": "/Page/Hero/Intro",
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            },
+            {
+              "door": "element.delete#key-delete-in-layers-tree",
+              "args": {},
+              "target": null,
+              "drop": null,
+              "action": false,
+              "hold": false,
+              "type": null
+            }
+          ],
+          "doors": [
+            "project.takeOverEditing#tab-guard-take-over"
+          ],
+          "expect": {
+            "document": [
+              {
+                "op": "remove",
+                "path": "/Page/Hero/Intro"
+              }
+            ],
+            "selection": [
+              "/Page/Hero/Actions"
+            ],
+            "history": {
+              "undoSteps": 1,
+              "undoRestores": true,
+              "redoRestores": true
+            },
+            "render": null,
+            "editor": null,
+            "persistence": {
+              "reload": "immediate",
+              "document": "same",
+              "preferences": null,
+              "selection": null
+            },
+            "export": null
+          },
+          "refusals": []
+        }
+      ]
     },
     {
       "id": "project-save-json",

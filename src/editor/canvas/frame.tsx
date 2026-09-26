@@ -5,14 +5,17 @@
 // for keys on the frame's window (the page itself still carries no event handler or event attribute), and the frame
 // is not aria-hidden, as it holds the focus. The frame is scaled with the standard CSS zoom (Chrome 128+), so
 // the page lays out at its breakpoint's width and the stage shows it at the canvas zoom.
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { PageRenderer, renderModelFromManifest } from '../../core/render/render.ts';
 import { applyInlineChange, plainText, type TextRange } from '../../core/text/inline.ts';
 import { manifest } from '../../manifest/runtime.ts';
+import { activeState } from '../view/style-state.ts';
 import { installKeymap } from '../input/keymap.ts';
 import { useEditorState, useStore } from '../store.ts';
 import { CanvasChrome } from './chrome.tsx';
-import { registerFrame } from './coordinates.ts';
+import { Guides } from './guides.tsx';
+import { SnapLines } from './snap-lines.tsx';
+import { keepPagePoint, registerFrame, scrollPageBy } from './coordinates.ts';
 import { TEXT_EDITING, openLinkPrompt, registerEditReader } from './text-edit.ts';
 
 const MODEL = renderModelFromManifest(manifest.elements, manifest.properties, manifest.interactions);
@@ -22,6 +25,8 @@ const PAGE = '<!doctype html><html><head><meta charset="utf-8"></head><body></bo
 export function CanvasFrame({ width, zoom }: { readonly width: number; readonly zoom: number }) {
   const store = useStore();
   const view = useRef<HTMLDivElement>(null);
+  // the overlay over the page, where the chrome and the guides are drawn
+  const overlay = useRef<HTMLDivElement>(null);
   const iframe = useRef<HTMLIFrameElement>(null);
   // a layout measure (the height the view leaves the page), not editor state
   const [height, setHeight] = useState(0);
@@ -98,10 +103,24 @@ export function CanvasFrame({ width, zoom }: { readonly width: number; readonly 
         prompting = open;
       };
       const stopEdit = store.subscribe(followEdit);
+      // a closed Details or Dialog is drawn open while it or something inside it is selected (editor-only)
+      const reveal = () => renderer.reveal(store.getState().document, store.getState().selection);
+      const stopReveal = store.subscribe(reveal);
+      reveal();
+      // the selected elements drawn as if the state the editor edits held (editor-only, spec state-styles)
+      const preview = () => {
+        const s = store.getState();
+        const state = activeState(s.ui);
+        renderer.previewState(s.document, s.selection, state.pseudo === null ? null : state.id);
+      };
+      const stopPreview = store.subscribe(preview);
+      preview();
       const stopReader = registerEditReader(() => renderer.editedContent());
       followEdit();
       stop = () => {
         stopDocument();
+        stopReveal();
+        stopPreview();
         stopEdit();
         stopReader();
         stopKeys();
@@ -118,11 +137,30 @@ export function CanvasFrame({ width, zoom }: { readonly width: number; readonly 
 
   useEffect(() => registerFrame(iframe.current), []);
 
+  // a new zoom keeps the page point under its pivot there, the middle of the view without one (the camera keeps the
+  // horizontal place); a pan's scroll of the page is carried out once
+  const shown = useRef(zoom);
+  const pivot = useEditorState((s) => s.ui.camera.pivot);
+  useLayoutEffect(() => {
+    const frame = iframe.current;
+    if (frame && shown.current !== zoom) keepPagePoint(frame, shown.current, zoom, pivot !== null ? pivot.y - frame.getBoundingClientRect().top : height / 2);
+    shown.current = zoom;
+  }, [zoom, height, pivot]);
+  const scroll = useEditorState((s) => s.ui.camera.scroll);
+  const scrolled = useRef(scroll.count);
+  useLayoutEffect(() => {
+    const frame = iframe.current;
+    if (frame && scroll.count !== scrolled.current) scrollPageBy(frame, scroll.by);
+    scrolled.current = scroll.count;
+  }, [scroll]);
+
   return (
     <div className="frame__view" ref={view}>
       <iframe ref={iframe} className="frame__page" srcDoc={PAGE} sandbox="allow-same-origin" tabIndex={-1} aria-hidden={editing ? undefined : true} style={{ width, height: zoom > 0 ? height / zoom : 0, zoom }} />
-      <div className="frame__overlay" data-canvas-overlay>
+      <div className="frame__overlay" data-canvas-overlay ref={overlay}>
         <CanvasChrome />
+        <Guides overlay={overlay} />
+        <SnapLines overlay={overlay} />
       </div>
     </div>
   );

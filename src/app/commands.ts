@@ -4,6 +4,18 @@
 // type error (src/app/commands.typecheck.ts proves it). The order is the manifest's.
 import { NOT_AVAILABLE_YET, always, type CommandTable, type PredicateTable } from '../core/commands/registry.ts';
 import { setLinkCommand } from '../core/elements/link.ts';
+import { removeCustomAttributeCommand, setAttributeCommand, setClassesCommand, setCustomAttributeCommand, setIdCommand } from '../core/elements/attributes.ts';
+import { copyCommand, pasteCommand } from '../core/clipboard/clipboard.ts';
+import { setEmbedMarkupCommand } from '../core/elements/embed.ts';
+import { setSvgMarkupCommand } from '../core/elements/svg.ts';
+import { removeSwatchCommand, saveSwatchCommand } from '../core/design/colors.ts';
+import { createToken, deleteToken, renameToken, updateToken } from '../core/design/tokens.ts';
+import { applyClassCommand, createClassCommand, detachClassCommand } from '../core/design/classes.ts';
+import { createComponentCommand, detachInstanceCommand, insertInstanceCommand, instanceSelected } from '../core/design/components.ts';
+import { setStyleTarget } from '../editor/inspector/style-target.ts';
+import { setInputTypeCommand, setLabelTargetCommand } from '../core/elements/inputs.ts';
+import { addPartCommand, movePartCommand, removePartCommand, togglePartCommand } from '../core/elements/parts.ts';
+import { addColumnAfterCommand, addColumnEndCommand, addRowAfterCommand, cellSelected, inTable, removeColumnCommand, removeRowCommand } from '../core/elements/table.ts';
 import { setTagCommand } from '../core/elements/tag.ts';
 import { canRedo, canUndo, redoCommand, undoCommand } from '../core/history/history.ts';
 import { toggleHiddenCommand, toggleLockCommand } from '../core/nodes/flags.ts';
@@ -26,22 +38,55 @@ import {
 } from '../core/selection/selection.ts';
 import { duplicateCommand } from '../core/structure/duplicate.ts';
 import { handCommands } from '../core/structure/hand.ts';
-import { insertCommand } from '../core/structure/insert.ts';
+import { createNaturalChildCommand, hasNaturalChild, insertCommand } from '../core/structure/insert.ts';
 import { canNestIntoPrevious, moveDownCommand, moveToCommand, moveUpCommand, nestIntoPreviousCommand, promoteCommand } from '../core/structure/move.ts';
 import { deleteCommand } from '../core/structure/remove.ts';
-import { canUnwrap, unwrapCommand, wrapColumnCommand, wrapRowCommand } from '../core/structure/wrap.ts';
+import { canUnwrap, unwrapCommand, wrapBesideCommand, wrapColumnCommand, wrapRowCommand } from '../core/structure/wrap.ts';
+import { setCustomDeclarationsCommand } from '../core/style/custom.ts';
+import { setStyleCommand } from '../core/style/set.ts';
+import { setSpacingCommand } from '../core/style/spacing.ts';
+import { exportProject } from '../core/export/export.ts';
+import { setBackgroundImageCommand } from '../core/style/background-image.ts';
+import { flexOrGridContainer, setAlignmentCommand } from '../core/style/alignment.ts';
+import { setBorderCommand, setRadiusCommand } from '../core/style/border.ts';
+import { movePositionedCommand, positionedSelection, setPositionModeCommand } from '../core/geometry/position.ts';
+import { setAnchorsCommand } from '../core/geometry/anchors.ts';
+import { alignCommand, distributeCommand } from '../core/geometry/align.ts';
+import { createGuideCommand, deleteGuideCommand, moveGuideCommand, toggleGuideLockCommand } from '../core/page/guides.ts';
+import { setFilterCommand } from '../core/style/filter.ts';
+import { setTransformCommand } from '../core/style/transform.ts';
+import { setShadowsCommand } from '../core/style/shadows.ts';
+import { resetAllCommand, resetValueCommand } from '../core/style/reset.ts';
+import { applyColorPicker, cancelColorPicker, openColorPicker, setColorChannel, setColorFormat } from '../editor/inspector/color-picker.ts';
+import { toggleSpacingLink } from '../editor/inspector/spacing.ts';
 import { setTextCommand } from '../core/text/text.ts';
 import { cancelEdit, editLink, insertLineBreak, pasteText, selectAllText, singleTextSelection, startEdit, toggleBold, toggleItalic } from '../editor/canvas/text-edit.ts';
 import { cancelDrag, levelDown, levelUp } from '../editor/drag/drag-session.ts';
 import { focusActivate, focusFirst, focusLast, focusNext, focusPrevious } from '../editor/focus/focus.ts';
 import { startRename } from '../editor/layers/rename.ts';
-import { setExpanded } from '../editor/layers/tree.ts';
+import { collapseAll, collapseOrFocusParent, expandAll, expandOrFocusChild, search, setExpanded, setRowDetails } from '../editor/layers/tree.ts';
+import { pan, zoomAt, zoomFit, zoomIn, zoomOut, zoomReset, zoomToLevel } from '../editor/view/camera.ts';
+import { resizeCommand } from '../core/geometry/resize.ts';
+import { toggleEqualSpacing, toggleGuidesVisible, toggleOutlines, toggleRulers, toggleSmartGuides, toggleZones } from '../editor/view/overlays.ts';
+import { openDialog } from '../editor/workspace/dialogs.ts';
+import { setBreakpoint } from '../editor/view/breakpoints.ts';
+import { setStyleState } from '../editor/view/style-state.ts';
+import { newBlankPage } from '../core/project/project.ts';
+import { restoreVersion } from '../core/project/recovery.ts';
+import { takeOverEditing } from '../core/project/tab-guard.ts';
+import { setSnapEnabled, setSnapSettings } from '../editor/view/snap.ts';
+import { setGridSettings, toggleColumns, toggleDots, toggleRows } from '../core/page/grid.ts';
 import { contextMenuOpen } from '../editor/menus/context-menu.ts';
 import { dismiss } from '../editor/menus/overlays.ts';
+import { setDensity, toggleGroup } from '../editor/palette/palette.ts';
 import { setLanguage, setTheme } from '../editor/preferences/preferences.ts';
 import type { EditorUi } from '../editor/state.ts';
 import { openPageProperties } from '../editor/inspector/page-properties.ts';
-import { toggleSection } from '../editor/inspector/sections.ts';
+import { cancelField, scrubField, setFieldUnit, stepField } from '../editor/inspector/number-field.ts';
+import { revealField, toggleSection, setMode } from '../editor/inspector/sections.ts';
+import { setOffset } from '../editor/quick-panel/quick-panel.ts';
+import { setEditMode } from '../editor/canvas/edit-mode.ts';
+import { stepHandle } from '../editor/canvas/handles.ts';
 import { setActiveTab, setWorkbenchState } from '../editor/workspace/layout.ts';
 import { collapseDocks, setPanelOpen, toggleInspector, toggleLeftDock } from '../editor/workspace/panels.ts';
 
@@ -62,45 +107,45 @@ export const COMMANDS = {
   'timeline.pause': NOT_AVAILABLE_YET,
   'timeline.stop': NOT_AVAILABLE_YET,
   'timeline.toggleLoop': NOT_AVAILABLE_YET,
-  'clipboard.copy': NOT_AVAILABLE_YET,
-  'clipboard.paste': NOT_AVAILABLE_YET,
+  'clipboard.copy': copyCommand,
+  'clipboard.paste': pasteCommand,
   'clipboard.cut': NOT_AVAILABLE_YET,
   'clipboard.copyStyle': NOT_AVAILABLE_YET,
   'clipboard.pasteStyle': NOT_AVAILABLE_YET,
-  'colors.saveSwatch': NOT_AVAILABLE_YET,
-  'colors.removeSwatch': NOT_AVAILABLE_YET,
-  'tokens.create': NOT_AVAILABLE_YET,
-  'tokens.update': NOT_AVAILABLE_YET,
-  'tokens.rename': NOT_AVAILABLE_YET,
-  'tokens.delete': NOT_AVAILABLE_YET,
-  'classes.create': NOT_AVAILABLE_YET,
-  'classes.apply': NOT_AVAILABLE_YET,
-  'classes.detach': NOT_AVAILABLE_YET,
-  'inspector.setStyleTarget': NOT_AVAILABLE_YET,
-  'components.create': NOT_AVAILABLE_YET,
-  'components.insertInstance': NOT_AVAILABLE_YET,
-  'components.detach': NOT_AVAILABLE_YET,
+  'colors.saveSwatch': saveSwatchCommand,
+  'colors.removeSwatch': removeSwatchCommand,
+  'tokens.create': createToken,
+  'tokens.update': updateToken,
+  'tokens.rename': renameToken,
+  'tokens.delete': deleteToken,
+  'classes.create': createClassCommand,
+  'classes.apply': applyClassCommand,
+  'classes.detach': detachClassCommand,
+  'inspector.setStyleTarget': setStyleTarget,
+  'components.create': createComponentCommand,
+  'components.insertInstance': insertInstanceCommand,
+  'components.detach': detachInstanceCommand,
   'element.setTag': setTagCommand,
-  'element.setAttribute': NOT_AVAILABLE_YET,
-  'element.setId': NOT_AVAILABLE_YET,
-  'element.setClasses': NOT_AVAILABLE_YET,
+  'element.setAttribute': setAttributeCommand,
+  'element.setId': setIdCommand,
+  'element.setClasses': setClassesCommand,
   'element.setLink': setLinkCommand,
-  'element.setInputType': NOT_AVAILABLE_YET,
-  'element.setLabelTarget': NOT_AVAILABLE_YET,
-  'element.setCustomAttribute': NOT_AVAILABLE_YET,
-  'element.removeCustomAttribute': NOT_AVAILABLE_YET,
-  'element.setSvgMarkup': NOT_AVAILABLE_YET,
-  'element.setEmbedMarkup': NOT_AVAILABLE_YET,
+  'element.setInputType': setInputTypeCommand,
+  'element.setLabelTarget': setLabelTargetCommand,
+  'element.setCustomAttribute': setCustomAttributeCommand,
+  'element.removeCustomAttribute': removeCustomAttributeCommand,
+  'element.setSvgMarkup': setSvgMarkupCommand,
+  'element.setEmbedMarkup': setEmbedMarkupCommand,
   'element.applyHtml': NOT_AVAILABLE_YET,
-  'parts.toggle': NOT_AVAILABLE_YET,
-  'parts.add': NOT_AVAILABLE_YET,
-  'parts.move': NOT_AVAILABLE_YET,
-  'parts.remove': NOT_AVAILABLE_YET,
-  'table.addColumnAfter': NOT_AVAILABLE_YET,
-  'table.addColumnEnd': NOT_AVAILABLE_YET,
-  'table.removeColumn': NOT_AVAILABLE_YET,
-  'table.addRowAfter': NOT_AVAILABLE_YET,
-  'table.removeRow': NOT_AVAILABLE_YET,
+  'parts.toggle': togglePartCommand,
+  'parts.add': addPartCommand,
+  'parts.move': movePartCommand,
+  'parts.remove': removePartCommand,
+  'table.addColumnAfter': addColumnAfterCommand,
+  'table.addColumnEnd': addColumnEndCommand,
+  'table.removeColumn': removeColumnCommand,
+  'table.addRowAfter': addRowAfterCommand,
+  'table.removeRow': removeRowCommand,
   'interactions.add': NOT_AVAILABLE_YET,
   'interactions.update': NOT_AVAILABLE_YET,
   'interactions.remove': NOT_AVAILABLE_YET,
@@ -128,14 +173,14 @@ export const COMMANDS = {
   'focus.previousRegion': NOT_AVAILABLE_YET,
   'focus.canvas': NOT_AVAILABLE_YET,
   'ui.dismiss': dismiss,
-  'position.setMode': NOT_AVAILABLE_YET,
-  'geometry.resize': NOT_AVAILABLE_YET,
-  'position.move': NOT_AVAILABLE_YET,
-  'position.setAnchors': NOT_AVAILABLE_YET,
-  'position.align': NOT_AVAILABLE_YET,
-  'position.distribute': NOT_AVAILABLE_YET,
-  'handle.step': NOT_AVAILABLE_YET,
-  'canvas.setEditMode': NOT_AVAILABLE_YET,
+  'position.setMode': setPositionModeCommand,
+  'geometry.resize': resizeCommand,
+  'position.move': movePositionedCommand,
+  'position.setAnchors': setAnchorsCommand,
+  'position.align': alignCommand,
+  'position.distribute': distributeCommand,
+  'handle.step': stepHandle,
+  'canvas.setEditMode': setEditMode,
   'history.undo': undoCommand,
   'history.redo': redoCommand,
   'layers.startRename': startRename,
@@ -145,14 +190,14 @@ export const COMMANDS = {
   'element.setLayerColor': NOT_AVAILABLE_YET,
   'page.openProperties': openPageProperties,
   'page.setSetting': setPageSettingCommand,
-  'project.newBlankPage': NOT_AVAILABLE_YET,
-  'project.restoreVersion': NOT_AVAILABLE_YET,
-  'project.takeOverEditing': NOT_AVAILABLE_YET,
+  'project.newBlankPage': newBlankPage,
+  'project.restoreVersion': restoreVersion,
+  'project.takeOverEditing': takeOverEditing,
   'project.save': saveProject,
   'project.open': openProject,
   'project.openFolder': NOT_AVAILABLE_YET,
   'project.importHtml': NOT_AVAILABLE_YET,
-  'project.export': NOT_AVAILABLE_YET,
+  'project.export': exportProject,
   'selection.select': selectCommand,
   'selection.clear': clearSelectionCommand,
   'selection.add': addCommand,
@@ -173,35 +218,42 @@ export const COMMANDS = {
   'element.moveDown': moveDownCommand,
   'element.wrapRow': wrapRowCommand,
   'element.wrapColumn': wrapColumnCommand,
+  'element.wrapBeside': wrapBesideCommand,
   'element.nestIntoPrevious': nestIntoPreviousCommand,
   'element.promote': promoteCommand,
   'element.duplicate': duplicateCommand,
   'element.delete': deleteCommand,
   'element.unwrap': unwrapCommand,
-  'element.createNaturalChild': NOT_AVAILABLE_YET,
+  'element.createNaturalChild': createNaturalChildCommand,
   'hand.take': HAND.take,
   'hand.aimNext': HAND.aimNext,
   'hand.aimPrevious': HAND.aimPrevious,
   'hand.climb': HAND.climb,
   'hand.descend': HAND.descend,
   'hand.drop': HAND.drop,
-  'style.set': NOT_AVAILABLE_YET,
-  'style.setSpacing': NOT_AVAILABLE_YET,
-  'inspector.toggleSpacingLink': NOT_AVAILABLE_YET,
-  'style.setBorder': NOT_AVAILABLE_YET,
-  'style.setRadius': NOT_AVAILABLE_YET,
-  'style.setBackgroundImage': NOT_AVAILABLE_YET,
-  'style.setShadows': NOT_AVAILABLE_YET,
-  'style.setFilter': NOT_AVAILABLE_YET,
-  'style.setTransform': NOT_AVAILABLE_YET,
-  'style.setAlignment': NOT_AVAILABLE_YET,
-  'style.setCustomDeclarations': NOT_AVAILABLE_YET,
+  'style.set': setStyleCommand,
+  'style.setSpacing': setSpacingCommand,
+  'inspector.toggleSpacingLink': toggleSpacingLink,
+  'colorPicker.open': openColorPicker,
+  'colorPicker.setFormat': setColorFormat,
+  'colorPicker.setChannel': setColorChannel,
+  'colorPicker.apply': applyColorPicker,
+  'colorPicker.cancel': cancelColorPicker,
+  'style.setBorder': setBorderCommand,
+  'style.setRadius': setRadiusCommand,
+  'style.setBackgroundImage': setBackgroundImageCommand,
+  'style.setShadows': setShadowsCommand,
+  'style.setFilter': setFilterCommand,
+  'style.setTransform': setTransformCommand,
+  'style.setAlignment': setAlignmentCommand,
+  'style.setCustomDeclarations': setCustomDeclarationsCommand,
   'style.applyCssRule': NOT_AVAILABLE_YET,
-  'style.reset': NOT_AVAILABLE_YET,
-  'style.resetAll': NOT_AVAILABLE_YET,
-  'field.step': NOT_AVAILABLE_YET,
-  'field.scrub': NOT_AVAILABLE_YET,
-  'field.setUnit': NOT_AVAILABLE_YET,
+  'style.reset': resetValueCommand,
+  'style.resetAll': resetAllCommand,
+  'field.step': stepField,
+  'field.scrub': scrubField,
+  'field.setUnit': setFieldUnit,
+  'field.cancel': cancelField,
   'text.startEdit': startEdit,
   'text.set': setTextCommand,
   'text.cancelEdit': cancelEdit,
@@ -211,35 +263,35 @@ export const COMMANDS = {
   'text.editLink': editLink,
   'text.paste': pasteText,
   'text.selectAll': selectAllText,
-  'view.zoomIn': NOT_AVAILABLE_YET,
-  'view.zoomOut': NOT_AVAILABLE_YET,
-  'view.zoomReset': NOT_AVAILABLE_YET,
-  'view.zoomTo': NOT_AVAILABLE_YET,
-  'view.zoomFit': NOT_AVAILABLE_YET,
-  'view.zoomAt': NOT_AVAILABLE_YET,
-  'view.pan': NOT_AVAILABLE_YET,
-  'view.setBreakpoint': NOT_AVAILABLE_YET,
+  'view.zoomIn': zoomIn,
+  'view.zoomOut': zoomOut,
+  'view.zoomReset': zoomReset,
+  'view.zoomTo': zoomToLevel,
+  'view.zoomFit': zoomFit,
+  'view.zoomAt': zoomAt,
+  'view.pan': pan,
+  'view.setBreakpoint': setBreakpoint,
   'view.setEditorView': NOT_AVAILABLE_YET,
-  'view.setStyleState': NOT_AVAILABLE_YET,
+  'view.setStyleState': setStyleState,
   'view.enterPreview': NOT_AVAILABLE_YET,
   'view.exitPreview': NOT_AVAILABLE_YET,
-  'view.toggleOutlines': NOT_AVAILABLE_YET,
-  'view.toggleZones': NOT_AVAILABLE_YET,
-  'view.toggleRulers': NOT_AVAILABLE_YET,
-  'view.toggleSmartGuides': NOT_AVAILABLE_YET,
-  'view.toggleEqualSpacing': NOT_AVAILABLE_YET,
-  'grid.toggleColumns': NOT_AVAILABLE_YET,
-  'grid.toggleRows': NOT_AVAILABLE_YET,
-  'grid.toggleDots': NOT_AVAILABLE_YET,
-  'grid.setSettings': NOT_AVAILABLE_YET,
-  'guides.create': NOT_AVAILABLE_YET,
-  'guides.move': NOT_AVAILABLE_YET,
-  'guides.delete': NOT_AVAILABLE_YET,
-  'guides.toggleLock': NOT_AVAILABLE_YET,
-  'guides.toggleVisible': NOT_AVAILABLE_YET,
-  'snap.setEnabled': NOT_AVAILABLE_YET,
-  'snap.setSettings': NOT_AVAILABLE_YET,
-  'workspace.openDialog': NOT_AVAILABLE_YET,
+  'view.toggleOutlines': toggleOutlines,
+  'view.toggleZones': toggleZones,
+  'view.toggleRulers': toggleRulers,
+  'view.toggleSmartGuides': toggleSmartGuides,
+  'view.toggleEqualSpacing': toggleEqualSpacing,
+  'grid.toggleColumns': toggleColumns,
+  'grid.toggleRows': toggleRows,
+  'grid.toggleDots': toggleDots,
+  'grid.setSettings': setGridSettings,
+  'guides.create': createGuideCommand,
+  'guides.move': moveGuideCommand,
+  'guides.delete': deleteGuideCommand,
+  'guides.toggleLock': toggleGuideLockCommand,
+  'guides.toggleVisible': toggleGuidesVisible,
+  'snap.setEnabled': setSnapEnabled,
+  'snap.setSettings': setSnapSettings,
+  'workspace.openDialog': openDialog,
   'workspace.setPanelOpen': setPanelOpen,
   'workspace.toggleLeftDock': toggleLeftDock,
   'workspace.toggleInspector': toggleInspector,
@@ -250,24 +302,25 @@ export const COMMANDS = {
   'workspace.setActiveTab': setActiveTab,
   'workspace.resizeSplitter': NOT_AVAILABLE_YET,
   'workspace.movePanel': NOT_AVAILABLE_YET,
-  'quickPanel.setOffset': NOT_AVAILABLE_YET,
+  'quickPanel.setOffset': setOffset,
   'preferences.setLanguage': setLanguage,
   'preferences.setTheme': setTheme,
   'commandBar.open': NOT_AVAILABLE_YET,
-  'palette.toggleGroup': NOT_AVAILABLE_YET,
-  'palette.setDensity': NOT_AVAILABLE_YET,
+  'palette.toggleGroup': toggleGroup,
+  'palette.setDensity': setDensity,
   'layers.setExpanded': setExpanded,
-  'layers.collapseAll': NOT_AVAILABLE_YET,
-  'layers.expandAll': NOT_AVAILABLE_YET,
-  'layers.expandOrFocusChild': NOT_AVAILABLE_YET,
-  'layers.collapseOrFocusParent': NOT_AVAILABLE_YET,
-  'layers.setRowDetails': NOT_AVAILABLE_YET,
+  'layers.collapseAll': collapseAll,
+  'layers.expandAll': expandAll,
+  'layers.expandOrFocusChild': expandOrFocusChild,
+  'layers.collapseOrFocusParent': collapseOrFocusParent,
+  'layers.setRowDetails': setRowDetails,
+  'layers.search': search,
   'inspector.toggleSection': toggleSection,
-  'inspector.setMode': NOT_AVAILABLE_YET,
-  'inspector.reveal': NOT_AVAILABLE_YET,
+  'inspector.setMode': setMode,
+  'inspector.reveal': revealField,
   'codePanel.copyPane': NOT_AVAILABLE_YET,
   'codePanel.downloadPane': NOT_AVAILABLE_YET,
 } as const satisfies CommandTable<EditorUi>;
 
 // The availability predicates code has registered; a built command's predicate must be here (createStore checks it).
-export const PREDICATES = { always, canUndo, canRedo, hasSelection, singleSelection, singleTextSelection, canUnwrap, canNestIntoPrevious } as const satisfies PredicateTable<EditorUi>;
+export const PREDICATES = { always, canUndo, canRedo, hasSelection, singleSelection, singleTextSelection, canUnwrap, canNestIntoPrevious, cellSelected, inTable, hasNaturalChild, flexOrGridContainer, instanceSelected, positionedSelection } as const satisfies PredicateTable<EditorUi>;

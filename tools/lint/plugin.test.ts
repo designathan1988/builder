@@ -112,6 +112,7 @@ tsx.run('builder/no-manifest-id', builder.rules['no-manifest-id'], {
   valid: [
     'const x = registerHandler("selection.select", run);',
     'const p = registerPredicate("hasSelection", test);',
+    'const c = registerCodec("font-weight", codec);',
     'type Theme = CommandArgs["preferences.setTheme"]["theme"];',
     'const tab = doorSlots("file-tabs").find((d) => d.door.drawnAs === "item");',
     'const side = "block-start";',
@@ -123,6 +124,7 @@ tsx.run('builder/no-manifest-id', builder.rules['no-manifest-id'], {
     { code: 'const d = <div data-door="ui.dismiss#overlay-backdrop" />;', errors: [{ messageId: 'id' }] },
     { code: 'dispatch(`element.insert`, args);', errors: [{ messageId: 'id' }] },
     { code: 'const h = other("selection.select", run);', errors: [{ messageId: 'id' }] },
+    { code: 'const c = registerCodec(codec, "font-weight");', errors: [{ messageId: 'id' }] },
   ],
 });
 

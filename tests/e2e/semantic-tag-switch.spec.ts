@@ -6,7 +6,7 @@
 // tag again; a kept tag survives an immediate reload and the canvas draws it (Problems in Pager 1, 2, 5, 6). The
 // document, the selection and the history are read through the read-only test port; the page through the frame.
 import fs from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../support/test.ts';
 import { control, openMenu, runDoor, runs } from './door.ts';
 
 const FIXTURE = 'manifest/features/fixtures/aurora.json';

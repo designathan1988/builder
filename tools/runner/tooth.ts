@@ -48,7 +48,9 @@ interface Outcome {
 
 // The scenario tests whose titles match `grep`, run with these commands' handlers (or this module) made no-ops.
 function runSwitchedOff(commands: readonly string[], module: string, grep: string): Outcome[] {
-  const env = { ...process.env, TOOTH_COMMANDS: commands.join(','), TOOTH_MODULE: module, E2E_PORT: process.env.TOOTH_PORT ?? '5390' };
+  // a run with the feature switched off records nothing in the dependency map (tests/support/test.ts), and never runs a
+  // limited selection
+  const env = { ...process.env, TOOTH_COMMANDS: commands.join(','), TOOTH_MODULE: module, E2E_PORT: process.env.TOOTH_PORT ?? '5390', E2E_RECORD: '0', E2E_SELECTION: '' };
   const run = spawnSync(process.execPath, [cli, 'test', 'tests/e2e/scenarios.spec.ts', '--grep', grep, '--reporter=json', '--output', '.cache/pw-tooth'], { env, encoding: 'utf8', maxBuffer: 256 * 1024 * 1024 });
   const report = JSON.parse(run.stdout) as { suites: Listed[] };
   const outcomes: Outcome[] = [];

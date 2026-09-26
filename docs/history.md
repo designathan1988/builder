@@ -754,3 +754,83 @@ How to run:
 
 Fragile / worth knowing:
 - `reference/` has its own HTML entries. `vite.config.ts` restricts `optimizeDeps.entries` to `index.html` and does not watch `reference/`. Without that, Vite's dependency scan crawls Brickflow and complains about missing packages.
+
+## PROGRESS.md state moved here (2026-09-26)
+
+- Drag and drop (moved first by the user): spec/behavior/drag-layout.md gathers what a professional builder's drag does
+  (Webflow, Elementor, Framer, Pager). Built: ghost chip for element drags, receiver in the target colour, 3 px line,
+  a side drop in a narrow strip of the element under the pointer (drag-side-wrap, element.wrapBeside), autoscroll, drop
+  flash, selection label always above; Layers keyboard (layers-keyboard-navigation).
+- Finding 38 (resolved by the user, 2026-09-25): the style scenarios start at zoom 100.
+- Finding 9 (inspector-fields.spec.ts: wrong drawnAs data passes) still stands; the spec now also found the button
+  rows moving their data-door (fixed in the inspector).
+
+## 2026-09-26: group 04 finished (quick-panel, multi-select-edit, color-picker-oklch, color-swatches-eyedropper) and elements-svg-shapes
+
+- quick-panel: 27 scenarios, tooth 35/35 (.cache/logs/e2e-tooth-quick-panel-*); spec tests quick-panel.spec.ts
+  (offset kept after a reload, fields that apply) with manual tooth (-off-/-on- logs).
+- elements-svg-shapes: 14 scenarios, tooth 14/14; unit tests svg.test.ts (sanitizer, viewBox, geometry, content model).
+- multi-select-edit: 3 scenarios, tooth 6/6; spec test multi-select-edit.spec.ts (Mixed) with manual tooth.
+- color-picker-oklch: 5 scenarios, tooth 5/5; unit tests color.test.ts; spec test color-picker-oklch.spec.ts with tooth.
+- color-swatches-eyedropper: 5 scenarios, tooth 5/5.
+- Fixed on the way: computedValues threw on a recipe id (line-clamp) at every frame (test + tooth in
+  props-typography-advanced.spec.ts); the chip placed before its label covered neighbours for a frame.
+- Block check: .cache/logs/check-group04-final-040624.log; the 29 quick panel runs it failed passed after the chip was
+  held inside the stage.
+
+## 2026-09-26: groups 05 (canvas handles), 06 (css-variables-tokens) and 07 (props-element-specific, shared-style-classes)
+
+- Edit on canvas (canvas/edit-mode.ts, canvas/handles.ts, canvas/edit-handles.tsx): spacing-handles tooth 14/14
+  (.cache/logs/e2e-tooth-spacing-handles-042857.log), radius-border-gap-handles 12/12 (-044139), shadow-handles 4/4
+  (-044726) plus a manual pointer tooth; spacing-handles.spec.ts (bands, Escape keeps the selection).
+- css-variables-tokens: 12 scenarios, tooth 12/12 (e2e-tooth-css-variables-tokens-045632.log), manual var() tooth.
+- props-element-specific: spec written from Pager (catalogue.js:419-434); 10 scenarios, tooth 10/10
+  (e2e-tooth-pes-051302.log); spec test props-element-specific.spec.ts (a kind's field only on its kind, Add a property
+  too) with manual tooth (e2e-tooth-pes-filter-off/-on-*); unit tests applies.test.ts (predicates, three codecs).
+- shared-style-classes: spec written (Pager keeps classStyles per page with no control and writes them after the
+  element rules); 10 scenarios, tooth 10/10 (e2e-tooth-classes-053325.log); manual teeth for the write redirect
+  (-redirect-off/-on-) and the sheet order after a reload (-order-off-053518/-on-053529, the spec test's second test).
+  The runner gained one rule: a control that opens a field for the text argument its step types.
+- The export stylesheet parts the :root and class blocks from the element rules with a blank line, as between rules.
+- Block check: .cache/logs/check-group05-07-053557.log: static green, 1162 passed, 5 failed: open findings 39, 41 x2
+  and the new 44 x2 (waiting-panels' premise gone). The app used by hand: a class saved, applied, styled as the target,
+  named on a field with the Element target, counted in the Styles view; a list's marker fields only on the list.
+
+## 2026-09-26: decisions moved out of PROGRESS.md (still in force)
+
+- Custom CSS declarations accept the properties of properties.json only; Copy refuses the root. The hand's keys act
+  with the focus in Layers too. Specs were missing for 17 block-1 features: their scenarios follow the intent.
+- The user: no surgical pointing; the label always above; style scenarios at zoom 100 (fitted where at 100 the element
+  lies outside the view: SVG, anchors, rotation). Guides are named axis-n; the page's root holds them (/@guides).
+- A shortcut runs when its command is built and its feature introduces the command or is registered. The census does
+  not click inspector text fields to explore and counts inert controls as not usable.
+
+## 2026-09-26: groups 08-10 (templates and components, panels, view and positioning)
+
+- 08 reusable-components; 10 absolute-free-drag, absolute-nudge, absolute-anchors, align-distribute, rotation-handle,
+  guides-manual, workspace-settings-dialog (shell/dialog.tsx, shell/guides-grids.tsx, core/page/grid-settings.ts),
+  snap-toggle-settings (editor/view/snap.ts, shell/snap-settings.tsx), snap-while-moving (core/geometry/snap.ts,
+  canvas/snapping.ts, canvas/snap-lines.tsx), smart-guides (equal gaps, hints, two switches): scenarios pass, teeth
+  shown (logs wsd-*, snap-*, swm-*, smart-* in .cache/logs).
+- Runner rules added: numbers in typed fields; an aria-modal dialog is closed before the undo check; a dialog's Apply
+  button fills its form's named inputs; a resize or free drag holds the step's key once the gesture began.
+- Block check: .cache/logs/check-group08-10-082416.log: static green, 1260 passed, 8 failed (findings 39, 41x2, 44x2,
+  45x2, 47). Visual pass in the app: Guides & Grids (6 columns drawn), Snap button, Snap settings kept.
+
+## 2026-09-26: decisions moved out of PROGRESS.md (still in force)
+
+- Dialogs are modal (shell/dialog.tsx): the runner closes an open one before its undo check. Snap settings' Cancel is
+  the dialog's close button; Apply closes it. Snap targets: an element's edges/centres need Elements + Edges/Centers;
+  ruler ticks and grid lines snap only while shown; smart guides and equal spacing are on by default. Two scenarios
+  of snap-toggle-settings and six of snap-while-moving were corrected before their first commit (a stored preference
+  first; the kept selection), never after a pass.
+
+## 2026-09-26: group 03 leftovers
+
+- app-menu, project-open-json (port of wip/project-open-json 7aa66f9), new-blank-page, unsaved-work-guard,
+  autosave-crash-recovery, autosave-corruption-recovery, multi-tab-guard: scenarios pass, teeth shown (.cache/logs).
+- Runner: file argument handed to the chooser and waited for; confirmation answered; setup storage
+  (corrupt-current-record), tabs (another-tab-editing), context dialog.
+- Block check: .cache/logs/check-group03-091000.log: static green, 1298 passed, 9 failed (findings + one runner race
+  since fixed, .cache/logs/open-json-rerun-091601.log 27/27). Visual pass: New blank page asks and Cancel keeps; a
+  second tab reads, Take over editing moves the lock.

@@ -7,6 +7,11 @@
       "owner": "src/core/geometry/position.ts",
       "introducedBy": "props-position",
       "args": {
+        "property": {
+          "type": "property",
+          "values": [],
+          "optional": false
+        },
         "mode": {
           "type": "enum",
           "values": [
@@ -24,7 +29,9 @@
         "refusalKey": null
       },
       "refusals": [
-        "status.locked.edit"
+        "status.value.invalid",
+        "status.locked.edit",
+        "status.locked.byAncestor"
       ],
       "confirmation": null,
       "history": {
@@ -115,6 +122,15 @@
         "top": {
           "type": "string",
           "values": [],
+          "optional": true
+        },
+        "modifier": {
+          "type": "enum",
+          "values": [
+            "Shift",
+            "Alt",
+            "Ctrl"
+          ],
           "optional": true
         }
       },
@@ -323,6 +339,11 @@
           "type": "number",
           "values": [],
           "optional": false
+        },
+        "modifier": {
+          "type": "enum",
+          "values": ["Shift", "Ctrl"],
+          "optional": true
         }
       },
       "availability": {
@@ -472,7 +493,9 @@
             "top",
             "bottom",
             "horizontal-center",
-            "vertical-center"
+            "vertical-center",
+            "horizontal-stretch",
+            "vertical-stretch"
           ],
           "optional": false
         },
@@ -1397,6 +1420,11 @@
             "decrease"
           ],
           "optional": false
+        },
+        "handle": {
+          "type": "string",
+          "values": [],
+          "optional": true
         }
       },
       "availability": {
