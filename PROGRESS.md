@@ -3,9 +3,10 @@
 ## Codex lane
 
 - 2026-09-26: Worktree `builder-codex`, branch `codex`; first commit `4a49cc1` adds the lane instructions.
-- 7.1 contract in progress: Settings sections, type-specific fields, closed input types, class management and the audited validation/grammar rules.
+- 7.1 baseline reproduced in the in-app browser from 92bb39b: flat Settings, blank Button type, invalid attributes/values, stale link data, class target, Label/Select, inline text and missing fields. Evidence: `.cache/logs/uso-7.1-20260926-1459/antes/`.
+- 7.1a current app: General/Link/Attributes for a link and `submit` default on a button in Desktop/Phone at 100%/Fit; undo/redo, reload and adjacent drag checked, zero console errors. Evidence: `.cache/logs/uso-7.1a-20260926-1519/`.
 - Previous Settings layout: one flat attribute list; new layout: manifest-driven General, Link, Image, Accessibility, SEO and Attributes sections.
-- No code or browser result has been claimed for 7.1 yet. Next: finish the contract, scenarios, code and item proof before pushing.
+- 7.1a proof: `settings-organized.spec.ts` passed; disabled section mapping failed immediately on the expected sections, restored mapping passed; `e2e:tooth elements-form-structure` failed 10/10 with handlers off. One deferred 7.1c class-registry write restored the old Classes scenario; 32 other nearby scenarios and 36 form/media/page scenarios passed. Logs in `.cache/logs/`; 7.1a is ready for commit/push.
 
 At most 60 lines: state, the user's pending decisions, open findings. History and proofs: `docs/history.md`.
 
